@@ -1,11 +1,8 @@
-#ifndef NEURAL_NETWORK_H
-#define NEURAL_NETWORK_H
-
-#include "activationFunction.h"
+#pragma once
+#include "neuralNetwork/layer/layer.h"
+#include "neuralNetwork/layer/perceptron/activationFunction/activationFunction.h"
 #include <boost/serialization/access.hpp>
-#include "test.h"
 #include "statisticAnalysis.h"
-#include "layer.h"
 
 class NeuralNetwork : public StatisticAnalysis
 {
@@ -100,5 +97,3 @@ public:
 	{
 	}
 };
-
-#endif // NEURAL_NETWORK_H

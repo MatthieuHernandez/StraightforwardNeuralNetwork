@@ -1,8 +1,19 @@
 #include <algorithm>
 #include <vector>
 #include "Data.h"
-
 using namespace std;
+
+Data::Data(std::vector<std::vector<float>> trainingInputs,
+           std::vector<std::vector<float>> trainingLabels,
+           std::vector<std::vector<float>> testingInputs,
+           std::vector<std::vector<float>> testingLabels)
+{
+	this->sets[training].inputs = trainingInputs;
+	this->sets[training].labels = trainingLabels;
+	this->sets[testing].inputs = testingInputs;
+	this->sets[testing].labels = testingLabels;
+
+}
 
 void Data::loadData()
 {
@@ -41,12 +52,12 @@ void Data::unshuffle()
 
 vector<float>& Data::getTrainingData(const int index)
 {
-	return this->sets[training].data[indexes[index]];
+	return this->sets[training].inputs[indexes[index]];
 }
 
 vector<float>& Data::getTestingData(const int index)
 {
-	return this->sets[testing].data[index];
+	return this->sets[testing].inputs[index];
 }
 
 vector<float>& Data::getTrainingOutputs(const int index)

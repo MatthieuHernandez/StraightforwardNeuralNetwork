@@ -17,18 +17,12 @@ class Data
 {
 protected:
 	std::vector<int> indexes;
-
 	void clearData();
 
 public:
-
-	void shuffle();
-	void unshuffle();
-
+	problemType problem;
 	int sizeOfData{}; // size of one data, equal to size of neural network inputs
 	int numberOfLabel{}; // the number of class, equal to size of neural network outputs
-
-	problemType problem;
 
 	struct Set
 	{
@@ -38,8 +32,15 @@ public:
 		std::vector<std::vector<float>> labels{};
 	} sets[2];
 
+	Data(std::vector<std::vector<float>> trainingInputs,
+	     std::vector<std::vector<float>> trainingLabels,
+	     std::vector<std::vector<float>> testingInputs,
+	     std::vector<std::vector<float>> testingLabels);
 	virtual ~Data() = default;
 	virtual void loadData() = 0;
+
+	void shuffle();
+	void unshuffle();
 
 	virtual std::vector<float>& getTrainingData(const int index);
 	virtual std::vector<float>& getTestingData(const int index);

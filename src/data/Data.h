@@ -32,12 +32,12 @@ public:
 		std::vector<std::vector<float>> labels{};
 	} sets[2];
 
-	Data(std::vector<std::vector<float>> trainingInputs,
-	     std::vector<std::vector<float>> trainingLabels,
-	     std::vector<std::vector<float>> testingInputs,
-	     std::vector<std::vector<float>> testingLabels);
+	Data(std::vector<std::vector<float>>& trainingInputs,
+	     std::vector<std::vector<float>>& trainingLabels,
+	     std::vector<std::vector<float>>& testingInputs,
+	     std::vector<std::vector<float>>& testingLabels);
+
 	virtual ~Data() = default;
-	virtual void loadData() = 0;
 
 	void shuffle();
 	void unshuffle();

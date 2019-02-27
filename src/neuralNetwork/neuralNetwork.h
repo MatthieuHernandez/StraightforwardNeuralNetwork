@@ -1,7 +1,6 @@
 #pragma once
-#include "neuralNetwork/layer/layer.h"
-#include "neuralNetwork/layer/perceptron/activationFunction/activationFunction.h"
-#include <boost/serialization/access.hpp>
+#include "layer/layer.h"
+#include "layer/perceptron/activationFunction/activationFunction.h"
 #include "statisticAnalysis.h"
 
 class NeuralNetwork : public StatisticAnalysis

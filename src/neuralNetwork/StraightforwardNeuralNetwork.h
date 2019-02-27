@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include "neuralNetwork/neuralNetwork.h"
-#include "neuralNetwork/layer/perceptron/activationFunction/activationFunction.h"
+#include "neuralNetwork.h"
+#include "../data/StraightforwardData.h" // Do not remove
+#include "layer/perceptron/activationFunction/activationFunction.h"
 
 namespace snn
 {
@@ -20,8 +21,8 @@ namespace snn
 		                             float momentum = 0.0f);
 		~StraightforwardNeuralNetwork() = default;
 
-		float getGlobalClusteringRate() const;
-		float getWeightedClusteringRate() const;
-		float getF1Score() const;
+		//float getGlobalClusteringRate() const;
+		//float getWeightedClusteringRate() const;
+		//float getF1Score() const;
 	};
 }

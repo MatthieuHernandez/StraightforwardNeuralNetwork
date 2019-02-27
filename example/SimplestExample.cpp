@@ -1,11 +1,10 @@
-#include "neuralNetwork/StraightforwardNeuralNetwork.h"
-#include <vector>
+#include "../src/neuralNetwork/StraightforwardNeuralNetwork.h"
 #include <thread>
 
 using namespace std;
 using namespace chrono;
 /*
-* This is the simpliest example how to use this library*
+* This is the simpliest example how to use this library
 * In this neural network return 3 ouputs AND, NAND, OR, XOR logical operator of 2 inputs.
 * For more explaination go to wiki
 */
@@ -14,7 +13,7 @@ int main()
 	vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 	vector<vector<float>> expectedOutput = {{0, 1, 0, 0}, {0, 1, 1, 1}, {0, 1, 1, 1}, {1, 0, 1, 0}};
 
-	snn::DataInput data(inputData, expectedOutput);
+	snn::StraightforwardData data(regression,inputData, expectedOutput);
 
 	snn::StraightforwardNeuralNetwork neuralNetwork(vector<float>{2, 10, 10, 4});
 

@@ -1,10 +1,13 @@
 #include "DataForClassification.h"
-
 using namespace std;
 
-DataForClassification::DataForClassification()
+DataForClassification::DataForClassification(std::vector<std::vector<float>>& trainingInputs,
+                                             std::vector<std::vector<float>>& trainingLabels,
+                                             std::vector<std::vector<float>>& testingInputs,
+                                             std::vector<std::vector<float>>& testingLabels)
+	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels)
 {
-	problem = classification;
+	this->problem = classification;
 }
 
 int DataForClassification::getTrainingLabel(const int index)

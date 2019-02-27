@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <cstdlib>
-#include "activationFunction.h"
+#include "activationFunction/activationFunction.h"
 
-static int randomBetween(const int a, const int b) // WARNING TO : b excluded
+static int randomBetween(const int a, const int b)
 {
 	return rand() % (b - a) + a;
 }

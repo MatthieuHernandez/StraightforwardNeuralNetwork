@@ -3,21 +3,15 @@
 #include "Data.h"
 using namespace std;
 
-Data::Data(std::vector<std::vector<float>> trainingInputs,
-           std::vector<std::vector<float>> trainingLabels,
-           std::vector<std::vector<float>> testingInputs,
-           std::vector<std::vector<float>> testingLabels)
+Data::Data(std::vector<std::vector<float>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels,
+           std::vector<std::vector<float>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels)
 {
 	this->sets[training].inputs = trainingInputs;
 	this->sets[training].labels = trainingLabels;
 	this->sets[testing].inputs = testingInputs;
 	this->sets[testing].labels = testingLabels;
-
-}
-
-void Data::loadData()
-{
-	unshuffle();
 }
 
 void Data::clearData()
@@ -32,7 +26,7 @@ void Data::clearData()
 
 void Data::shuffle()
 {
-	rand();
+	//rand();
 	if (indexes.empty())
 	{
 		indexes.resize(sets[training].size);

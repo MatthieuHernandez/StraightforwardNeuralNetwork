@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <boost/serialization/access.hpp>
+#include "../externalLibrary/Boost_1_68_0/boost/serialization/access.hpp"
 
 struct binaryClassification
 {

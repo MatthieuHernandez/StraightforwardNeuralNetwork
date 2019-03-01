@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 #include "neuralNetwork.h"
-#include "../data/StraightforwardData.h" // Do not remove
+#include "../data/StraightforwardData.h" // Do not removegb
 #include "layer/perceptron/activationFunction/activationFunction.h"
 
 namespace snn
 {
-	class StraightforwardNeuralNetwork final : protected NeuralNetwork
+	class StraightforwardNeuralNetwork final : public NeuralNetwork
 	{
 	private :
 
@@ -21,8 +21,15 @@ namespace snn
 		                             float momentum = 0.0f);
 		~StraightforwardNeuralNetwork() = default;
 
-		//float getGlobalClusteringRate() const;
-		//float getWeightedClusteringRate() const;
-		//float getF1Score() const;
+		void trainingStart(StraightforwardData data);
+		void trainingStop();
+
+		std::vector<float> computeOutput(std::vector<float> inputs);
+		int computeCluster(std::vector<float> inputs);
+
+
+		float getGlobalClusteringRate() const;
+		float getWeightedClusteringRate() const;
+		float getF1Score() const;
 	};
 }

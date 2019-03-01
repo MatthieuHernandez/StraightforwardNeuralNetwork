@@ -1,6 +1,6 @@
 #include "StraightforwardData.h"
-#include "data/DataForClassification.h"
-#include "data/DataForRegression.h"
+#include "DataForClassification.h"
+#include "DataForRegression.h"
 using namespace std;
 using namespace snn;
 

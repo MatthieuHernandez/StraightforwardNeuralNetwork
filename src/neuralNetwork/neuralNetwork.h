@@ -41,7 +41,7 @@ private :
 	void serialize(Archive& ar, unsigned version);
 
 
-public :
+protected :
 
 	NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	              const std::vector<activationFunctionType>& activationFunctionByLayer,
@@ -72,21 +72,23 @@ public :
 	int isValid();
 	int getLastError() const;
 
-	void setLearningRate(float learningRate);
-	float getLearningRate() const;
-	void setMomentum(float value);
-	float getMomentum() const;
-
 	Layer* getLayer(int layerNumber);
-	int getNumberOfInputs() const;
-	int getNumberOfHiddenLayers() const;
-	int getNumberOfNeuronsInLayer(int layerNumber) const;
-	activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
-	int getNumberOfOutputs() const;
 
 	NeuralNetwork& operator=(const NeuralNetwork& neuralNetwork);
 	bool operator==(const NeuralNetwork& neuralNetwork) const;
 	bool operator!=(const NeuralNetwork& neuralNetwork) const;
+
+public:
+	void setLearningRate(float learningRate);
+	float getLearningRate() const;
+	void setMomentum(float value);
+
+	float getMomentum() const;
+	int getNumberOfInputs() const;
+	int getNumberOfHiddenLayers() const;
+	int getNumberOfNeuronsInLayer(int layerNumber) const;	
+	activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
+	int getNumberOfOutputs() const;
 };
 
 class notImplementedException : public std::exception

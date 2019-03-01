@@ -45,15 +45,13 @@ protected:
 	                               float separator);
 	void insertTestWithClassNumber(const std::vector<float>& outputs, int classNumber);
 
-
-public:
-
 	StatisticAnalysis() = default;
 	StatisticAnalysis(int numberOfCluster);
 	virtual ~StatisticAnalysis() = default;
 
 	void startTesting();
 
+public:
 	float getGlobalClusteringRate() const;
 	float getWeightedClusteringRate() const;
 	float getF1Score() const;

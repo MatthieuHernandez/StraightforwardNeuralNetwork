@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <vector>
 #include "Data.h"
+#include <random>
 using namespace std;
 
 Data::Data(std::vector<std::vector<float>>& trainingInputs,
@@ -26,7 +27,6 @@ void Data::clearData()
 
 void Data::shuffle()
 {
-	//rand();
 	if (indexes.empty())
 	{
 		indexes.resize(sets[training].size);
@@ -34,7 +34,9 @@ void Data::shuffle()
 			indexes[i] = i;
 	}
 
-	random_shuffle(indexes.begin(), indexes.end());
+	std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(indexes.begin(), indexes.end(), g);
 }
 
 void Data::unshuffle()

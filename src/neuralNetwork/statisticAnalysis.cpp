@@ -1,4 +1,4 @@
-#include "StatisticAnalysis.h"
+#include "statisticAnalysis.h"
 
 
 StatisticAnalysis::StatisticAnalysis(int numberOfCluster)

@@ -1,6 +1,6 @@
 #pragma once
 #include "layer.h"
-#include "perceptron.h"
+#include "perceptron/perceptron.h"
 #include <boost/serialization/base_object.hpp>
 
 class AllToAll : public Layer
@@ -35,4 +35,3 @@ void AllToAll::serialize(Archive& ar, const unsigned version)
 	boost::serialization::void_cast_register<AllToAll, Layer>();
 	ar & boost::serialization::base_object<Layer>(*this);
 }
-

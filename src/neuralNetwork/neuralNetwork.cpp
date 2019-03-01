@@ -1,4 +1,3 @@
-#include "neuralNetwork.h"
 #include <ctime>
 //#include <omp.h>
 #include <fstream>
@@ -6,8 +5,9 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
-#include "alltoall.h"
 #pragma warning(pop)
+#include "neuralNetwork.h"
+#include "layer/alltoall.h"
 
 using namespace std;
 

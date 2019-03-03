@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "neuralNetwork.h"
-#include "../data/StraightforwardData.h" // Do not removegb
+#include "../data/StraightforwardData.h" // Do not remove
 #include "layer/perceptron/activationFunction/activationFunction.h"
 
 namespace snn
@@ -9,6 +9,18 @@ namespace snn
 	class StraightforwardNeuralNetwork final : public NeuralNetwork
 	{
 	private :
+
+		bool stop = true;
+		int currentIndex = 0;
+		int numberOfIteration = 0;
+		float clusteringRate = -1.0f;
+		float clusteringRateMax = -1.0f;
+		float weightedClusteringRate = -1.0f;
+		float weightedClusteringRateMax = -1.0f;
+		float f1Score = -1.0f;
+		float f1ScoreMax = -1.0f;
+
+		void train();
 
 
 	public:

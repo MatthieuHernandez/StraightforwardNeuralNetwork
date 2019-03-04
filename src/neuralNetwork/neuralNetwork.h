@@ -53,7 +53,7 @@ protected :
 	NeuralNetwork() = default;
 	~NeuralNetwork() = default;
 
-	void train(const std::vector<float>& inputs, const std::vector<float>& desired);
+	void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 	std::vector<float> output(const std::vector<float>& inputs);
 
 	void evaluateForRegressionProblemWithPrecision(const std::vector<float>& inputs,

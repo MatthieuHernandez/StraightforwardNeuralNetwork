@@ -34,7 +34,7 @@ void NeuralNetwork::evaluateForClassificationProblem(const vector<float>& inputs
 	this->insertTestWithClassNumber(this->outputs, classNumber);
 }
 
-void NeuralNetwork::train(const vector<float>& inputs, const vector<float>& desired)
+void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)
 {
 	backpropagationAlgorithm(inputs, desired);
 }

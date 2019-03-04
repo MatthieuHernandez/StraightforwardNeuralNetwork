@@ -10,7 +10,7 @@ namespace snn
 	{
 	private :
 
-		bool stop = true;
+		bool isTraining = true;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		float clusteringRate = -1.0f;
@@ -19,8 +19,11 @@ namespace snn
 		float weightedClusteringRateMax = -1.0f;
 		float f1Score = -1.0f;
 		float f1ScoreMax = -1.0f;
+		int numberOfTrainingsBetweenTwoEvaluations = 0;
 
-		void train();
+		void train(StraightforwardData &data);
+		//void trainOnce();
+		void evaluate(StraightforwardData &straightforwardData);
 
 
 	public:
@@ -33,7 +36,7 @@ namespace snn
 		                             float momentum = 0.0f);
 		~StraightforwardNeuralNetwork() = default;
 
-		void trainingStart(StraightforwardData data);
+		void trainingStart(StraightforwardData &data);
 		void trainingStop();
 
 		std::vector<float> computeOutput(std::vector<float> inputs);

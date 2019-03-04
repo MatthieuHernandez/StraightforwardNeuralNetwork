@@ -33,30 +33,67 @@ int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
 	throw std::exception();
 }
 
-void StraightforwardNeuralNetwork::trainingStart(StraightforwardData data)
+void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
 {
-	std::thread thread(&StraightforwardNeuralNetwork::train, this);
+	std::thread thread(&StraightforwardNeuralNetwork::train, this, data);
 	thread.join();
 }
 
-void StraightforwardNeuralNetwork::train()
+void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
 {
-	this->stop = false;
-	int numberOfIteration = 0;
+	this->isTraining = false;
+	Data data = *straightforwardData.data;
 
-	for (numberOfIteration = 0; !(this->stop); numberOfIteration++)
+	for (this->numberOfIteration = 0; this->isTraining; this->numberOfIteration++)
 	{
-		/*this->evaluate(stop, *autoSave, autoSaveFileName);
-		emit updateNumberOfIteration();
-		data->shuffle();
+		this->evaluate(straightforwardData);
+		//emit updateNumberOfIteration();
+		straightforwardData.data->shuffle();
 
-		for (outputs.currentIndex = 0; outputs.currentIndex < this->inputs.numberOfTrainbyRating && !(* stop ) ;  
-		outputs . 
- 			      currentIndex ++ ) 
- 			 { 
- 				 neuralNetwork -> train ( data -> getTrainingData ( outputs . currentIndex ) , 
- 				                      data -> getTrainingOutputs ( outputs . currentIndex ) ) ; 
- 			 } */
+		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->isTraining;
+		     currentIndex ++)
+		{
+			this->trainOnce(data.getTrainingData(currentIndex),
+			                data.getTrainingOutputs(currentIndex));
+		}
+	}
+}
+
+/*void StraightforwardNeuralNetwork::trainOnce()
+{
+	this->train();
+}*/
+
+void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
+{
+	Data data = *straightforwardData.data;
+
+	this->startTesting();
+	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
+	{
+		if (!this->isTraining)
+			return;
+		if (data.problem == classification)
+		{
+			this->evaluateForClassificationProblem(
+				data.getTestingData(this->currentIndex),
+				data.getTestingLabel(this->currentIndex));
+		}
+		else
+		{
+			this->evaluateForRegressionProblemSeparateByValue(
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), 0.0f);
+		}
+	}
+	this->clusteringRate = this->getGlobalClusteringRate();
+	this->weightedClusteringRate = this->getWeightedClusteringRate();
+	this->f1Score = this->getF1Score();
+	if (this->clusteringRate > this->clusteringRateMax)
+	{
+		this->clusteringRateMax = this->clusteringRate;
+		/*if (autoSave)
+			this->autoSave(autoSaveFileName);*/
 	}
 }
 

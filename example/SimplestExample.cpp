@@ -29,7 +29,10 @@ int main()
 
 	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it
 
-	if (output == expectedOutput[0])
+	if (output[0] - expectedOutput[0][0] < std::abs(0.4)
+	 && output[1] - expectedOutput[0][1] < std::abs(0.4)
+	 && output[2] - expectedOutput[0][2] < std::abs(0.4)
+	 && output[3] - expectedOutput[0][3] < std::abs(0.4))
 		return EXIT_SUCCESS; // the neural network has learned
 	else
 		return EXIT_FAILURE;

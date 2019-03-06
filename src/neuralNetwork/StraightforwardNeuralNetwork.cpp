@@ -25,7 +25,7 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int
 
 std::vector<float> StraightforwardNeuralNetwork::computeOutput(std::vector<float> inputs)
 {
-	throw std::exception();
+	return this->output(inputs);
 }
 
 int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
@@ -35,22 +35,24 @@ int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
 
 void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
 {
-	std::thread thread(&StraightforwardNeuralNetwork::train, this, data);
-	thread.join();
+	this->trainingStop();
+	this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
+	this->thread.detach();
 }
 
 void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
 {
-	this->isTraining = false;
+	this->wantToStopTraining = false;
 	Data data = *straightforwardData.data;
+	this->numberOfTrainingsBetweenTwoEvaluations =  data.sets[training].size;
 
-	for (this->numberOfIteration = 0; this->isTraining; this->numberOfIteration++)
+	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
 		this->evaluate(straightforwardData);
 		//emit updateNumberOfIteration();
 		straightforwardData.data->shuffle();
 
-		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->isTraining;
+		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
 		     currentIndex ++)
 		{
 			this->trainOnce(data.getTrainingData(currentIndex),
@@ -59,11 +61,6 @@ void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardDat
 	}
 }
 
-/*void StraightforwardNeuralNetwork::trainOnce()
-{
-	this->train();
-}*/
-
 void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
 {
 	Data data = *straightforwardData.data;
@@ -71,7 +68,7 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 	this->startTesting();
 	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
 	{
-		if (!this->isTraining)
+		if (this->wantToStopTraining)
 			return;
 		if (data.problem == classification)
 		{
@@ -100,5 +97,11 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 
 void StraightforwardNeuralNetwork::trainingStop()
 {
-	throw std::exception();
+	this->wantToStopTraining = true;
+	if(this->thread.joinable())
+		this->thread.join();
+	this->clusteringRate = 0.0f;
+	this->clusteringRateMax = 0.0f;
+	this->currentIndex = 0;
+	this->numberOfIteration = 0;
 }

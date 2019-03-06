@@ -19,11 +19,13 @@ int main()
 	snn::StraightforwardNeuralNetwork neuralNetwork(vector<int>{2, 10, 10, 4});
 
 	neuralNetwork.trainingStart(data);
-	this_thread::sleep_for(seconds(5)); // train neural network during 5 seconds on parallel thread
+	this_thread::sleep_for(seconds(15)); // train neural network during 15 seconds on parallel thread
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate();
-	printf("accuracy = %f.2", accuracy);
+
+	printf("accuracy = %.2f", accuracy);
+	getchar();
 
 	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it
 

@@ -29,3 +29,10 @@ int DataForClassification::getTestingLabel(const int index)
 	}
 	throw exception("wrong label");
 }
+
+vector<float>& DataForClassification::getTestingOutputs(const int index)
+{
+	// Should never be called
+	throw exception();
+}
+

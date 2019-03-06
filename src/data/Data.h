@@ -49,7 +49,7 @@ public:
 	virtual int getTestingLabel(const int) { throw std::exception(); }
 
 	virtual std::vector<float>& getTrainingOutputs(const int index);
-	virtual std::vector<float>& getTestingOutputs(const int) { throw std::exception(); }
+	virtual std::vector<float>& getTestingOutputs(const int) = 0;
 
 	std::vector<float>& getData(set set, const int index);
 	std::vector<float>& getOutputs(set set, const int index);

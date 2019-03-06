@@ -13,6 +13,11 @@ Data::Data(std::vector<std::vector<float>>& trainingInputs,
 	this->sets[training].labels = trainingLabels;
 	this->sets[testing].inputs = testingInputs;
 	this->sets[testing].labels = testingLabels;
+
+	this->sizeOfData = trainingInputs.back().size();
+	this->numberOfLabel = trainingLabels.back().size();;
+	this->sets[training].size = trainingLabels.size();
+	this->sets[testing].size = testingLabels.size();
 }
 
 void Data::clearData()

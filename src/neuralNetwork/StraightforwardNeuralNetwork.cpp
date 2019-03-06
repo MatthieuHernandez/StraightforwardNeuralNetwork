@@ -43,55 +43,51 @@ void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
 void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
 {
 	this->wantToStopTraining = false;
-	Data data = *straightforwardData.data;
-	this->numberOfTrainingsBetweenTwoEvaluations =  data.sets[training].size;
+	Data *data = straightforwardData.data;
+	this->numberOfTrainingsBetweenTwoEvaluations =  data->sets[training].size;
 
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
 		this->evaluate(straightforwardData);
 		//emit updateNumberOfIteration();
-		straightforwardData.data->shuffle();
+		data->shuffle();
 
 		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
 		     currentIndex ++)
 		{
-			this->trainOnce(data.getTrainingData(currentIndex),
-			                data.getTrainingOutputs(currentIndex));
+			this->trainOnce(data->getTrainingData(currentIndex),
+			                data->getTrainingOutputs(currentIndex));
 		}
 	}
 }
 
 void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
 {
-	Data data = *straightforwardData.data;
-
+	Data *data = straightforwardData.data;
 	this->startTesting();
-	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
+	for (currentIndex = 0; currentIndex < data->sets[testing].size; currentIndex++)
 	{
 		if (this->wantToStopTraining)
 			return;
-		if (data.problem == classification)
+		if (data->problem == classification)
 		{
 			this->evaluateForClassificationProblem(
-				data.getTestingData(this->currentIndex),
-				data.getTestingLabel(this->currentIndex));
+				data->getTestingData(this->currentIndex),
+				data->getTestingLabel(this->currentIndex));
 		}
 		else
 		{
 			this->evaluateForRegressionProblemSeparateByValue(
-				data.getTestingData(this->currentIndex),
-				data.getTestingOutputs(this->currentIndex), 0.0f);
+				data->getTestingData(this->currentIndex),
+				data->getTestingOutputs(this->currentIndex), 0.5f);
 		}
 	}
-	this->clusteringRate = this->getGlobalClusteringRate();
-	this->weightedClusteringRate = this->getWeightedClusteringRate();
-	this->f1Score = this->getF1Score();
-	if (this->clusteringRate > this->clusteringRateMax)
+	/*if (this->clusteringRate > this->clusteringRateMax)
 	{
 		this->clusteringRateMax = this->clusteringRate;
-		/*if (autoSave)
-			this->autoSave(autoSaveFileName);*/
-	}
+		if (autoSave)
+			this->autoSave(autoSaveFileName);
+	}*/
 }
 
 
@@ -100,8 +96,7 @@ void StraightforwardNeuralNetwork::trainingStop()
 	this->wantToStopTraining = true;
 	if(this->thread.joinable())
 		this->thread.join();
-	this->clusteringRate = 0.0f;
-	this->clusteringRateMax = 0.0f;
+	//this->clusteringRateMax = 0.0f;
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
 }

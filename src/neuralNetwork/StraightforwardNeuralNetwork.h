@@ -16,11 +16,8 @@ namespace snn
 		bool wantToStopTraining = true;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
-		float clusteringRate = -1.0f;
 		float clusteringRateMax = -1.0f;
-		float weightedClusteringRate = -1.0f;
 		float weightedClusteringRateMax = -1.0f;
-		float f1Score = -1.0f;
 		float f1ScoreMax = -1.0f;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
 

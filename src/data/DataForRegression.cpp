@@ -1,11 +1,6 @@
 #include "DataForRegression.h"
 using namespace std;
 
-vector<float>& DataForRegression::getTestingOutputs(const int index)
-{
-	return this->sets[testing].labels[index];
-}
-
 DataForRegression::DataForRegression(std::vector<std::vector<float>>& trainingInputs,
                                      std::vector<std::vector<float>>& trainingLabels,
                                      std::vector<std::vector<float>>& testingInputs,
@@ -14,3 +9,9 @@ DataForRegression::DataForRegression(std::vector<std::vector<float>>& trainingIn
 {
 	this->problem = regression;
 }
+
+vector<float>& DataForRegression::getTestingOutputs(const int index)
+{
+	return this->sets[testing].labels[index];
+}
+

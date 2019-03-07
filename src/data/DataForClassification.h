@@ -1,7 +1,7 @@
 #pragma once
 #include "Data.h"
 
-class DataForClassification : public Data
+class DataForClassification : public snn::Data
 {
 private:
 	int getTrainingLabel(const int index) override;

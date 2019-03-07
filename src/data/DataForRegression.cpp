@@ -1,5 +1,6 @@
 #include "DataForRegression.h"
 using namespace std;
+using namespace snn;
 
 DataForRegression::DataForRegression(std::vector<std::vector<float>>& trainingInputs,
                                      std::vector<std::vector<float>>& trainingLabels,

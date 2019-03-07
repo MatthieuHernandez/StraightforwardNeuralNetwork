@@ -1,8 +1,8 @@
 #pragma once
-#include <vector>
 #include "neuralNetwork.h"
 #include "../data/StraightforwardData.h" // Do not remove
 #include "layer/perceptron/activationFunction/activationFunction.h"
+#include <vector>
 #include <thread>
 
 namespace snn
@@ -16,10 +16,10 @@ namespace snn
 		bool wantToStopTraining = true;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
+		int numberOfTrainingsBetweenTwoEvaluations = 0;
 		float clusteringRateMax = -1.0f;
 		float weightedClusteringRateMax = -1.0f;
 		float f1ScoreMax = -1.0f;
-		int numberOfTrainingsBetweenTwoEvaluations = 0;
 
 		void train(StraightforwardData& data);
 		//void trainOnce();
@@ -42,9 +42,14 @@ namespace snn
 		std::vector<float> computeOutput(std::vector<float> inputs);
 		int computeCluster(std::vector<float> inputs);
 
+		bool isTraining() const { return wantToStopTraining; }
 
 		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
 		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }
 		float getF1Score() const { return this->NeuralNetwork::getF1Score(); }
+
+		int getCurrentIndex() const { return currentIndex; }
+		int getNumberOfIteration() const { return numberOfIteration; }
+		int getNumberOfTrainingsBetweenTwoEvaluations() const{ return numberOfTrainingsBetweenTwoEvaluations; }
 	};
 }

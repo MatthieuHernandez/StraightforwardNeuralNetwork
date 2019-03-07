@@ -1,7 +1,7 @@
 #pragma once
 #include "Data.h"
 
-class DataForRegression : public Data
+class DataForRegression : public snn::Data
 {
 private:
 	std::vector<float>& getTestingOutputs(const int index) override;

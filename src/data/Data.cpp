@@ -3,6 +3,7 @@
 #include "Data.h"
 #include <random>
 using namespace std;
+using namespace snn;
 
 Data::Data(std::vector<std::vector<float>>& trainingInputs,
            std::vector<std::vector<float>>& trainingLabels,

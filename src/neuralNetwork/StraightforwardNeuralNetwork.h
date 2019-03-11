@@ -44,12 +44,19 @@ namespace snn
 
 		bool isTraining() const { return wantToStopTraining; }
 
+		void saveAs(std::string fileName) const { return this->saveAs(fileName); }
+
+		static StraightforwardNeuralNetwork& loadFrom(std::string fileName)
+		{
+			return dynamic_cast<StraightforwardNeuralNetwork&>(NeuralNetwork::loadFrom(fileName));
+		}
+
 		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
 		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }
 		float getF1Score() const { return this->NeuralNetwork::getF1Score(); }
 
 		int getCurrentIndex() const { return currentIndex; }
 		int getNumberOfIteration() const { return numberOfIteration; }
-		int getNumberOfTrainingsBetweenTwoEvaluations() const{ return numberOfTrainingsBetweenTwoEvaluations; }
+		int getNumberOfTrainingsBetweenTwoEvaluations() const { return numberOfTrainingsBetweenTwoEvaluations; }
 	};
 }

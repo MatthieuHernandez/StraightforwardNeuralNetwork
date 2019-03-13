@@ -17,14 +17,12 @@ namespace snn
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
-		float clusteringRateMax = -1.0f;
-		float weightedClusteringRateMax = -1.0f;
-		float f1ScoreMax = -1.0f;
+		//float clusteringRateMax = -1.0f;
+		//float weightedClusteringRateMax = -1.0f;
+		//float f1ScoreMax = -1.0f;
 
 		void train(StraightforwardData& data);
 		//void trainOnce();
-		void evaluate(StraightforwardData& straightforwardData);
-
 
 	public:
 
@@ -34,10 +32,14 @@ namespace snn
 		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
 		                             float learningRate = 0.05f,
 		                             float momentum = 0.0f);
+
 		~StraightforwardNeuralNetwork() = default;
+		StraightforwardNeuralNetwork(const snn::StraightforwardNeuralNetwork&) = default;
 
 		void trainingStart(StraightforwardData& data);
 		void trainingStop();
+
+		void evaluate(StraightforwardData& straightforwardData);
 
 		std::vector<float> computeOutput(std::vector<float> inputs);
 		int computeCluster(std::vector<float> inputs);
@@ -55,8 +57,18 @@ namespace snn
 		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }
 		float getF1Score() const { return this->NeuralNetwork::getF1Score(); }
 
-		int getCurrentIndex() const { return currentIndex; }
-		int getNumberOfIteration() const { return numberOfIteration; }
-		int getNumberOfTrainingsBetweenTwoEvaluations() const { return numberOfTrainingsBetweenTwoEvaluations; }
+		int getCurrentIndex() const { return this->currentIndex; }
+		int getNumberOfIteration() const { return this->numberOfIteration; }
+		int getNumberOfTrainingsBetweenTwoEvaluations() const { return this->numberOfTrainingsBetweenTwoEvaluations; }
+
+		void setNumberOfTrainingsBetweenTwoEvaluations(int value)
+		{
+			this->numberOfTrainingsBetweenTwoEvaluations = value;
+		}
+
+		StraightforwardNeuralNetwork& operator=(const StraightforwardNeuralNetwork& neuralNetwork)
+		{
+			return static_cast<StraightforwardNeuralNetwork&>(this->NeuralNetwork::operator=(neuralNetwork));
+		};
 	};
 }

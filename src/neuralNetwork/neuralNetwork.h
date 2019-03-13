@@ -3,7 +3,8 @@
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include "statisticAnalysis.h"
 
-class NeuralNetwork : public StatisticAnalysis
+class 
+NeuralNetwork : public StatisticAnalysis
 {
 private :
 

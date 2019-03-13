@@ -14,7 +14,7 @@ int main()
 	vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 	vector<vector<float>> expectedOutput = {{0, 1, 0, 0}, {0, 1, 1, 1}, {0, 1, 1, 1}, {1, 0, 1, 0}};
 
-	snn::StraightforwardData data(regression, inputData, expectedOutput);
+	snn::StraightforwardData data(snn::regression, inputData, expectedOutput);
 
 	snn::StraightforwardNeuralNetwork neuralNetwork(vector<int>{2, 10, 4});
 

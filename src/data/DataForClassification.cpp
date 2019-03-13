@@ -1,5 +1,6 @@
 #include "DataForClassification.h"
 using namespace std;
+using namespace snn;
 
 DataForClassification::DataForClassification(std::vector<std::vector<float>>& trainingInputs,
                                              std::vector<std::vector<float>>& trainingLabels,

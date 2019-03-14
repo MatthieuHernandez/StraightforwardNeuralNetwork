@@ -23,6 +23,12 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int
 {
 }
 
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
+	: NeuralNetwork(neuralNetwork)
+{
+	this->operator=(neuralNetwork);
+}
+
 std::vector<float> StraightforwardNeuralNetwork::computeOutput(std::vector<float> inputs)
 {
 	return this->output(inputs);
@@ -43,8 +49,8 @@ void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
 void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
 {
 	this->wantToStopTraining = false;
-	Data *data = straightforwardData.data;
-	this->numberOfTrainingsBetweenTwoEvaluations =  data->sets[training].size;
+	Data* data = straightforwardData.data;
+	this->numberOfTrainingsBetweenTwoEvaluations = data->sets[training].size;
 
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
@@ -63,7 +69,7 @@ void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardDat
 
 void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
 {
-	Data *data = straightforwardData.data;
+	Data* data = straightforwardData.data;
 	this->startTesting();
 	for (currentIndex = 0; currentIndex < data->sets[testing].size; currentIndex++)
 	{
@@ -94,9 +100,31 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 void StraightforwardNeuralNetwork::trainingStop()
 {
 	this->wantToStopTraining = true;
-	if(this->thread.joinable())
+	if (this->thread.joinable())
 		this->thread.join();
 	//this->clusteringRateMax = 0.0f;
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
+}
+
+StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(StraightforwardNeuralNetwork& neuralNetwork)
+{
+	this->trainingStop();
+	neuralNetwork.trainingStop();
+
+	this->NeuralNetwork::operator=(neuralNetwork);
+	this->currentIndex = neuralNetwork.currentIndex;
+	this->numberOfIteration = neuralNetwork.numberOfIteration;
+	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
+	return *this;
+};
+
+bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
+{
+	return this->NeuralNetwork::operator==(neuralNetwork);
+}
+
+bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const
+{
+	return this->NeuralNetwork::operator!=(neuralNetwork);
 }

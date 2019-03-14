@@ -9,7 +9,7 @@ Perceptron* Layer::getNeuron(int neuronNumber)
 
 
 
-Layer& Layer::equal(const Layer& layer)
+Layer& Layer::operator=(const Layer& layer)
 {
 	this->numberOfInputs = layer.numberOfInputs;
 	this->numberOfNeurons = layer.numberOfNeurons;

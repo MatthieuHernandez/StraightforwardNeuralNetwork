@@ -39,8 +39,8 @@ public:
 	Perceptron* getNeuron(int neuronNumber);
 	virtual LayerType getType() const = 0;
 
-	virtual Layer& equal(const Layer& layer) = 0;
 	virtual bool operator==(const Layer& layer) const;
+	virtual Layer& operator=(const Layer& layer) = 0;
 	virtual bool operator!=(const Layer& layer) const;
 };
 

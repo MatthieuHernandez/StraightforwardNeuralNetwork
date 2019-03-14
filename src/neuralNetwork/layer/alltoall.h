@@ -24,7 +24,7 @@ public :
 
 	LayerType getType() const override;
 
-	Layer& equal(const Layer& layer) override;
+	Layer& operator=(const Layer& layer) override;
 	bool operator==(const AllToAll& layer) const;
 	bool operator!=(const AllToAll& layer) const;
 };

@@ -54,7 +54,6 @@ protected :
 	NeuralNetwork() = default;
 	~NeuralNetwork() = default;
 
-	void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 	std::vector<float> output(const std::vector<float>& inputs);
 
 	void evaluateForRegressionProblemWithPrecision(const std::vector<float>& inputs,
@@ -73,13 +72,13 @@ protected :
 	int isValid();
 	int getLastError() const;
 
-	Layer* getLayer(int layerNumber);
-
 	NeuralNetwork& operator=(const NeuralNetwork& neuralNetwork);
 	bool operator==(const NeuralNetwork& neuralNetwork) const;
 	bool operator!=(const NeuralNetwork& neuralNetwork) const;
 
 public:
+	void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
+
 	void setLearningRate(float learningRate);
 	float getLearningRate() const;
 	void setMomentum(float value);
@@ -88,6 +87,7 @@ public:
 	int getNumberOfInputs() const;
 	int getNumberOfHiddenLayers() const;
 	int getNumberOfNeuronsInLayer(int layerNumber) const;	
+	Layer* getLayer(int layerNumber);
 	activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
 	int getNumberOfOutputs() const;
 };

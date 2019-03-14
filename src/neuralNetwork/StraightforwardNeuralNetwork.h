@@ -4,6 +4,7 @@
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include <vector>
 #include <thread>
+#include <boost/serialization/base_object.hpp>
 
 namespace snn
 {
@@ -22,7 +23,10 @@ namespace snn
 		//float f1ScoreMax = -1.0f;
 
 		void train(StraightforwardData& data);
-		//void trainOnce();
+
+		friend class boost::serialization::access;
+		template <class Archive>
+		void serialize(Archive& ar, unsigned version);
 
 	public:
 
@@ -33,8 +37,11 @@ namespace snn
 		                             float learningRate = 0.05f,
 		                             float momentum = 0.0f);
 
+		
+		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
+
+		StraightforwardNeuralNetwork() = default;
 		~StraightforwardNeuralNetwork() = default;
-		StraightforwardNeuralNetwork(const snn::StraightforwardNeuralNetwork&) = default;
 
 		void trainingStart(StraightforwardData& data);
 		void trainingStop();
@@ -66,9 +73,15 @@ namespace snn
 			this->numberOfTrainingsBetweenTwoEvaluations = value;
 		}
 
-		StraightforwardNeuralNetwork& operator=(const StraightforwardNeuralNetwork& neuralNetwork)
-		{
-			return static_cast<StraightforwardNeuralNetwork&>(this->NeuralNetwork::operator=(neuralNetwork));
-		};
+		StraightforwardNeuralNetwork& operator=(StraightforwardNeuralNetwork& neuralNetwork);
+		bool operator==(const StraightforwardNeuralNetwork& neuralNetwork) const;
+		bool operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const;
 	};
+
+	template <class Archive>
+	void StraightforwardNeuralNetwork::serialize(Archive& ar, const unsigned version)
+	{
+		boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
+		ar & boost::serialization::base_object<NeuralNetwork>(*this);
+	}
 }

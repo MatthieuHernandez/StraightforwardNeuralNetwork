@@ -71,9 +71,9 @@ LayerType AllToAll::getType() const
 	return allToAll;
 }
 
-Layer& AllToAll::equal(const Layer& layer)
+Layer& AllToAll::operator=(const Layer& layer)
 {
-	return this->Layer::equal(layer);
+	return this->Layer::operator=(layer);
 }
 
 bool AllToAll::operator==(const AllToAll& layer) const

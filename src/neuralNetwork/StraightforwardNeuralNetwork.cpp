@@ -1,6 +1,14 @@
 #include "StraightforwardNeuralNetwork.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include <thread>
+#include <fstream>
+#pragma warning(push, 0)
+#include <boost/serialization/base_object.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#pragma warning(pop)
+using namespace std;
 using namespace snn;
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork)
@@ -105,6 +113,25 @@ void StraightforwardNeuralNetwork::trainingStop()
 	//this->clusteringRateMax = 0.0f;
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
+}
+
+
+void StraightforwardNeuralNetwork::saveAs(std::string filePath)
+{
+	ofstream file(filePath);
+	boost::archive::text_oarchive binaryFile(file);
+	binaryFile << this;
+	std::ofstream ofs("filename");
+	boost::archive::text_oarchive oa(ofs);
+}
+
+StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(std::string filePath)
+{
+	StraightforwardNeuralNetwork* neuralNetwork{};
+	ifstream file(filePath, ios::binary);
+	boost::archive::text_iarchive binaryFile(file);
+	binaryFile >> neuralNetwork;
+	return *neuralNetwork;
 }
 
 StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(StraightforwardNeuralNetwork& neuralNetwork)

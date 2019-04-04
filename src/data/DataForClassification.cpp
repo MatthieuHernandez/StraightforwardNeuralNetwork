@@ -6,9 +6,8 @@ DataForClassification::DataForClassification(std::vector<std::vector<float>>& tr
                                              std::vector<std::vector<float>>& trainingLabels,
                                              std::vector<std::vector<float>>& testingInputs,
                                              std::vector<std::vector<float>>& testingLabels)
-	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels)
+	: Data(classification, trainingInputs, trainingLabels, testingInputs, testingLabels)
 {
-	this->problem = classification;
 }
 
 int DataForClassification::getTrainingLabel(const int index)
@@ -36,4 +35,3 @@ vector<float>& DataForClassification::getTestingOutputs(const int index)
 	// Should never be called
 	throw exception();
 }
-

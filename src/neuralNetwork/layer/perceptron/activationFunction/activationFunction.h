@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../../externalLibrary/Boost_1_68_0/boost/serialization/access.hpp"
+#include <boost/serialization/access.hpp>
 
 enum activationFunctionType
 {
@@ -16,11 +16,9 @@ private :
 
 	friend class boost::serialization::access;
 	template <class Archive>
-	void serialize(Archive& ar, const unsigned int version);
-
+	void serialize(Archive& ar, unsigned version);
 
 public :
-
 	//static std::vector<ActivationFunction*> listOfActivationFunction;
 
 	ActivationFunction() = default;

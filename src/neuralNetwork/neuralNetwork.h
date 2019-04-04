@@ -1,5 +1,6 @@
 #pragma once
 #include "layer/layer.h"
+#include "layer/alltoall.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include "statisticAnalysis.h"
 
@@ -7,7 +8,6 @@ class
 NeuralNetwork : public StatisticAnalysis
 {
 private :
-
 	static bool isTheFirst;
 	static void initialize();
 
@@ -43,7 +43,6 @@ private :
 
 
 protected :
-
 	NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	              const std::vector<activationFunctionType>& activationFunctionByLayer,
 	              float learningRate = 0.05f,
@@ -65,9 +64,6 @@ protected :
 	void evaluateForClassificationProblem(const std::vector<float>& inputs, int classNumber);
 
 	void addANeuron(int layerNumber);
-
-	void saveAs(std::string filePath);
-	static NeuralNetwork& loadFrom(std::string filePath);
 
 	int isValid();
 	int getLastError() const;
@@ -91,6 +87,30 @@ public:
 	activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
 	int getNumberOfOutputs() const;
 };
+
+template <class Archive>
+void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
+{
+	boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
+	ar & boost::serialization::base_object<StatisticAnalysis>(*this);
+	ar & this->maxOutputIndex;
+	ar & this->lastError;
+	ar & this->learningRate;
+	ar & this->error;
+	ar & this->momentum;
+	ar & this->numberOfHiddenLayers;
+	ar & this->numberOfLayers;
+	ar & this->numberOfInput;
+	ar & this->numberOfOutputs;
+	ar & this->structureOfNetwork;
+	ar & this->activationFunctionByLayer;
+	ar & this->errors;
+	ar & this->outputs;
+	ar & this->numberOfInput;
+
+	ar.template register_type<AllToAll>();
+	ar & layers;
+}
 
 class notImplementedException : public std::exception
 {

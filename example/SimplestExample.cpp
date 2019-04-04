@@ -22,9 +22,9 @@ int main()
 	this_thread::sleep_for(seconds(5)); // train neural network during 5 seconds on parallel thread
 	neuralNetwork.trainingStop();
 
-	float accuracy = neuralNetwork.getGlobalClusteringRate();
+	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100;
 
-	printf("accuracy = %.2f%%", accuracy * 100); // Should be 100%
+	printf("accuracy = %.2f%%", accuracy); // Should be 100%
 	getchar();
 
 	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it

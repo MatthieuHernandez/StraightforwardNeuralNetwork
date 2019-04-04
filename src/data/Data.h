@@ -34,7 +34,8 @@ namespace snn
 			std::vector<std::vector<float>> labels{};
 		} sets[2];
 
-		Data(std::vector<std::vector<float>>& trainingInputs,
+		Data(problemType type,
+			 std::vector<std::vector<float>>& trainingInputs,
 		     std::vector<std::vector<float>>& trainingLabels,
 		     std::vector<std::vector<float>>& testingInputs,
 		     std::vector<std::vector<float>>& testingLabels);

@@ -6,12 +6,12 @@
 #include <thread>
 #include <boost/serialization/base_object.hpp>
 
+
 namespace snn
 {
 	class StraightforwardNeuralNetwork final : public NeuralNetwork
 	{
 	private :
-
 		std::thread thread;
 
 		bool wantToStopTraining = true;
@@ -26,10 +26,9 @@ namespace snn
 
 		friend class boost::serialization::access;
 		template <class Archive>
-		void serialize(Archive& ar, unsigned version);
+		void serialize(Archive& ar, const unsigned int version);
 
 	public:
-
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork);
 
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
@@ -37,7 +36,7 @@ namespace snn
 		                             float learningRate = 0.05f,
 		                             float momentum = 0.0f);
 
-		
+
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
 
 		StraightforwardNeuralNetwork() = default;
@@ -53,12 +52,8 @@ namespace snn
 
 		bool isTraining() const { return wantToStopTraining; }
 
-		void saveAs(std::string fileName) const { return this->saveAs(fileName); }
-
-		static StraightforwardNeuralNetwork& loadFrom(std::string fileName)
-		{
-			return dynamic_cast<StraightforwardNeuralNetwork&>(NeuralNetwork::loadFrom(fileName));
-		}
+		void saveAs(std::string fileName);
+		static StraightforwardNeuralNetwork& loadFrom(std::string fileName);
 
 		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
 		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }

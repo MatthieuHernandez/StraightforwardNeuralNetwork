@@ -10,14 +10,11 @@ enum LayerType
 class Layer
 {
 private :
-
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive& ar, unsigned version);
 
-
 protected:
-
 	int numberOfInputs = 0;
 	int numberOfNeurons = 0;
 	std::vector<float> errors;
@@ -26,10 +23,7 @@ protected:
 	float learningRate = 0;
 	float momentum = 0;
 
-
 public:
-
-
 	virtual ~Layer() = default;
 
 	virtual std::vector<float>& output(const std::vector<float>& inputs) = 0;

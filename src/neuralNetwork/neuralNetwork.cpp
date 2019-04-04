@@ -1,9 +1,6 @@
 #include <ctime>
 //#include <omp.h>
-#include <fstream>
 #pragma warning(push, 0)
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #pragma warning(pop)
 #include "neuralNetwork.h"
@@ -126,48 +123,6 @@ void NeuralNetwork::addANeuron(int)
 	}*/
 }
 
-void NeuralNetwork::saveAs(std::string filePath)
-{
-	ofstream file(filePath);
-	boost::archive::text_oarchive binaryFile(file);
-	binaryFile << this;
-	std::ofstream ofs("filename");
-	boost::archive::text_oarchive oa(ofs);
-}
-
-NeuralNetwork& NeuralNetwork::loadFrom(std::string filePath)
-{
-	NeuralNetwork* neuralNetwork{};
-	ifstream file(filePath, ios::binary);
-	boost::archive::text_iarchive binaryFile(file);
-	binaryFile >> neuralNetwork;
-	return *neuralNetwork;
-}
-
-template <class Archive>
-void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
-{
-	boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
-	ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-	ar & this->maxOutputIndex;
-	ar & this->lastError;
-	ar & this->learningRate;
-	ar & this->error;
-	ar & this->momentum;
-	ar & this->numberOfHiddenLayers;
-	ar & this->numberOfLayers;
-	ar & this->numberOfInput;
-	ar & this->numberOfOutputs;
-	ar & this->structureOfNetwork;
-	ar & this->activationFunctionByLayer;
-	ar & this->errors;
-	ar & this->outputs;
-	ar & this->numberOfInput;
-
-	ar.template register_type<AllToAll>();
-	ar & layers;
-}
-
 int NeuralNetwork::isValid()
 {
 	//TODO: rework isValid
@@ -267,7 +222,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 		if (layer->getType() == allToAll)
 		{
 			AllToAll* newlayer = new AllToAll();
-			newlayer->equal(*layer);
+			newlayer->operator=(*layer);
 			this->layers.push_back(newlayer);
 		}
 		else

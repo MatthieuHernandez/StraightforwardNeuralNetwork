@@ -144,7 +144,7 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 	this->numberOfIteration = neuralNetwork.numberOfIteration;
 	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 	return *this;
-};
+}
 
 bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
 {

@@ -52,9 +52,9 @@ protected:
 	void startTesting();
 
 public:
-	float getGlobalClusteringRate() const;
-	float getWeightedClusteringRate() const;
-	float getF1Score() const;
+	virtual float getGlobalClusteringRate() const;
+	virtual float getWeightedClusteringRate() const;
+	virtual float getF1Score() const;
 
 	StatisticAnalysis& operator=(const StatisticAnalysis& sa) = default;
 	bool operator==(const StatisticAnalysis& sa) const;

@@ -1,5 +1,6 @@
 #pragma once
 #include "perceptron/perceptron.h"
+#include <boost/serialization/access.hpp>
 
 
 enum LayerType

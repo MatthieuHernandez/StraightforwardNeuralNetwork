@@ -2,6 +2,7 @@
 #include "neuralNetwork.h"
 #include "../data/StraightforwardData.h" // Do not remove
 #include "layer/perceptron/activationFunction/activationFunction.h"
+#include <string>
 #include <vector>
 #include <thread>
 #include <boost/serialization/base_object.hpp>
@@ -29,7 +30,7 @@ namespace snn
 		void serialize(Archive& ar, const unsigned int version);
 
 	public:
-		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork);
+		explicit StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork);
 
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
 		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
@@ -52,8 +53,8 @@ namespace snn
 
 		bool isTraining() const { return wantToStopTraining; }
 
-		void saveAs(std::string fileName);
-		static StraightforwardNeuralNetwork& loadFrom(std::string fileName);
+		void saveAs(std::string filePath);
+		static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
 		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
 		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }

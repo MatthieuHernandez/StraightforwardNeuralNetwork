@@ -124,7 +124,7 @@ void Perceptron::setWeights(const vector<float>& weights)
 	this->weights = weights;
 }
 
-ActivationFunction* Perceptron::getActivationFunction()
+ActivationFunction* Perceptron::getActivationFunction() const
 {
 	return this->activationFunction;
 }

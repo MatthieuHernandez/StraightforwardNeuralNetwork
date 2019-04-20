@@ -49,7 +49,7 @@ public :
 	void addAWeight();
 	int isValid();
 
-	ActivationFunction* getActivationFunction();
+	ActivationFunction* getActivationFunction() const;
 
 	std::vector<float> getWeights() const;
 	void setWeights(const std::vector<float>& weights);

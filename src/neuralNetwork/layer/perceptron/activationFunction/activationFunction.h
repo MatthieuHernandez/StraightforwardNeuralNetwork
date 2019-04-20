@@ -22,7 +22,7 @@ public :
 	//static std::vector<ActivationFunction*> listOfActivationFunction;
 
 	ActivationFunction() = default;
-	ActivationFunction(const ActivationFunction& activationFunction);
+	ActivationFunction(const ActivationFunction& activationFunction) = default;
 	virtual ~ActivationFunction() = default;
 	static void initialize();
 	static ActivationFunction* create(activationFunctionType type);

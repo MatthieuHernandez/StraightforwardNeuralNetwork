@@ -41,6 +41,8 @@ namespace snn
 		     std::vector<std::vector<float>>& testingLabels);
 
 		virtual ~Data() = default;
+	
+		void normalization(float min, float max);
 
 		void shuffle();
 		void unshuffle();

@@ -1,12 +1,6 @@
 #pragma once
 #include <vector>
-#include <cstdlib>
 #include "activationFunction/activationFunction.h"
-
-static int randomBetween(const int a, const int b)
-{
-	return rand() % (b - a) + a;
-}
 
 class Perceptron
 {

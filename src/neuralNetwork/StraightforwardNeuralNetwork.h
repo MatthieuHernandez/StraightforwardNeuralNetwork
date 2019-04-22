@@ -7,7 +7,6 @@
 #include <thread>
 #include <boost/serialization/base_object.hpp>
 
-
 namespace snn
 {
 	class StraightforwardNeuralNetwork final : public NeuralNetwork

@@ -1,6 +1,6 @@
+#include <iostream>
 #include "perceptron.h"
 #include "../../../tools/Tools.h"
-#include <iostream>
 
 using namespace std;
 using namespace snn;
@@ -44,7 +44,7 @@ Perceptron::Perceptron(const Perceptron& perceptron)
 float Perceptron::randomInitializeWeight() const
 {
 	const float valueMax = 2.4f / sqrt(static_cast<float>(this->numberOfInputs));
-	return tools::randomBetween(-valueMax, -valueMax);
+	return Tools::randomBetween(-valueMax, valueMax);
 }
 
 float Perceptron::output(const vector<float>& inputs)

@@ -63,7 +63,6 @@ void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardDat
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
 		this->evaluate(straightforwardData);
-		//emit updateNumberOfIteration();
 		data->shuffle();
 
 		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
@@ -96,6 +95,7 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 				data->getTestingOutputs(this->currentIndex), 0.5f);
 		}
 	}
+	this->stopTesting();
 	/*if (this->clusteringRate > this->clusteringRateMax)
 	{
 		this->clusteringRateMax = this->clusteringRate;

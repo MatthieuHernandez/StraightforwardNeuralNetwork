@@ -36,13 +36,13 @@ void NeuralNetwork::evaluateForClassificationProblem(const vector<float>& inputs
 
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)
 {
-	backpropagationAlgorithm(inputs, desired);
+	this->backpropagationAlgorithm(inputs, desired);
 }
 
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired)
 {
 	this->outputs = this->output(inputs);
-	auto errors = calculateError(this->outputs, desired);
+	this->errors = calculateError(this->outputs, desired);
 
 	for (int l = numberOfLayers - 1; l > 0; --l)
 	{

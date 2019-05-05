@@ -1,4 +1,3 @@
-#include "../../tools/Tools.cpp"
 #include <algorithm>
 #include <vector>
 #include "Data.h"
@@ -41,39 +40,42 @@ void Data::normalization(float min, float max)
 {
 	try
 	{
-		vector<vector<float>> inputsTraining = *&this->sets[training].inputs;
-		vector<vector<float>> inputsTesting = *&this->sets[testing].inputs;
+		vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
+		vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
 
 		for (int j = 0; j < this->sizeOfData; j++)
 		{
-			float minValueOfVector = inputsTraining[1][j];
-			float maxValueOfVector = inputsTraining[1][j];
+			float minValueOfVector = (*inputsTraining)[0][j];
+			float maxValueOfVector = (*inputsTraining)[0][j];
 
-			for (int i = 1; i < inputsTraining.size(); i++)
+			for (int i = 1; i < (*inputsTraining).size(); i++)
 			{
-				if (inputsTraining[i][j] < minValueOfVector)
+				if ((*inputsTraining)[i][j] < minValueOfVector)
 				{
-					minValueOfVector = inputsTraining[i][j];
+					minValueOfVector = (*inputsTraining)[i][j];
 				}
-				else if (inputsTraining[i][j] > maxValueOfVector)
+				else if ((*inputsTraining)[i][j] > maxValueOfVector)
 				{
-					maxValueOfVector = inputsTraining[i][j];
+					maxValueOfVector = (*inputsTraining)[i][j];
 				}
 			}
 
-			for (int i = 0; i < inputsTraining.size(); i++)
+			for (int i = 0; i < (*inputsTraining).size(); i++)
 			{
-				inputsTraining[i][j] = (inputsTraining[i][j] - minValueOfVector) / (maxValueOfVector - minValueOfVector);
-				inputsTraining[i][j] = inputsTraining[i][j] * (max - min) + min;
+				(*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / (maxValueOfVector -
+					minValueOfVector
+				);
+				(*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
 			}
-			for (int i = 0; i < inputsTesting.size(); i++)
+			for (int i = 0; i < (*inputsTesting).size(); i++)
 			{
-				inputsTesting[i][j] = (inputsTesting[i][j] - minValueOfVector) / (maxValueOfVector - minValueOfVector);
-				inputsTesting[i][j] = inputsTesting[i][j] * (max - min) + min;
+				(*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / (maxValueOfVector -
+					minValueOfVector);
+				(*inputsTesting)[i][j] = (*inputsTesting)[i][j] * (max - min) + min;
 			}
 		}
 	}
-	catch (exception e)
+	catch (std::exception e)
 	{
 		throw std::exception("Normalization of input data failed");
 	}
@@ -88,8 +90,8 @@ void Data::shuffle()
 			indexes[i] = i;
 	}
 
-	std::random_device rd;
-	std::mt19937 g(rd());
+	random_device rd;
+	mt19937 g(rd());
 	std::shuffle(indexes.begin(), indexes.end(), g);
 }
 

@@ -5,6 +5,7 @@ StatisticAnalysis::StatisticAnalysis(int numberOfCluster)
 {
 	clusters.resize(numberOfCluster);
 	this->startTesting();
+
 }
 
 void StatisticAnalysis::startTesting()
@@ -20,6 +21,13 @@ void StatisticAnalysis::startTesting()
 	numberOfDataMisclassified = 0;
 }
 
+void StatisticAnalysis::stopTesting()
+{
+	this->globalClusteringRate = this->computeGlobalClusteringRate();
+	this->weightedClusteringRate = this->computeWeightedClusteringRate();
+	this->f1Score = this->computeF1Score();
+}
+
 void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& outputs,
                                                 const std::vector<float>& desiredOutputs,
                                                 float precision)
@@ -32,12 +40,12 @@ void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& output
 			clusters[i].falsePositive ++;
 			classifiedWell = false;
 		}
-		else if (outputs[i] <= desiredOutputs[i] - precision)
+		else if (outputs[i] < desiredOutputs[i] - precision)
 		{
 			clusters[i].falseNegative ++;
 			classifiedWell = false;
 		}
-		else if (outputs[i] > desiredOutputs[i])
+		else if (outputs[i] >= desiredOutputs[i])
 		{
 			clusters[i].trueNegative ++;
 		}
@@ -123,12 +131,12 @@ void StatisticAnalysis::insertTestWithClassNumber(const std::vector<float>& outp
 	}
 }
 
-float StatisticAnalysis::getGlobalClusteringRate() const
+float StatisticAnalysis::computeGlobalClusteringRate()
 {
 	return numberOfDataWellClassified / (numberOfDataWellClassified + numberOfDataMisclassified);
 }
 
-float StatisticAnalysis::getWeightedClusteringRate() const
+float StatisticAnalysis::computeWeightedClusteringRate()
 {
 	float weightedClusteringRate = 0;
 	for (const auto c : clusters)
@@ -142,10 +150,9 @@ float StatisticAnalysis::getWeightedClusteringRate() const
 	return weightedClusteringRate / clusters.size();
 }
 
-float StatisticAnalysis::getF1Score() const
+float StatisticAnalysis::computeF1Score()
 {
 	float f1Score = 0;
-
 	for (const auto c : clusters)
 	{
 		if (c.truePositive > 0)
@@ -156,6 +163,21 @@ float StatisticAnalysis::getF1Score() const
 		}
 	}
 	return 2.0f * f1Score / clusters.size();
+}
+
+float StatisticAnalysis::getGlobalClusteringRate() const
+{
+	return globalClusteringRate;
+}
+
+float StatisticAnalysis::getWeightedClusteringRate() const
+{
+	return weightedClusteringRate;
+}
+
+float StatisticAnalysis::getF1Score() const
+{
+	return  f1Score;
 }
 
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const

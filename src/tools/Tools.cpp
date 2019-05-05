@@ -2,20 +2,20 @@
 #include <cstdlib>
 
 using namespace std;
-using namespace snn::tools;
+using namespace snn;
 
-int snn::tools::randomBetween(const int min, const int max) // [min; max[
+int Tools::randomBetween(const int min, const int max) // [min; max[
 {
 	return rand() % (max - min) + min;
 }
 
-float snn::tools::randomBetween(const float min, const float max)
+float Tools::randomBetween(const float min, const float max)
 {
 	return rand() / static_cast<float>(RAND_MAX) * (max - min) + min;
 }
 
 template <typename T>
-T snn::tools::getMinValue(vector<T> vector)
+T Tools::getMinValue(vector<T> vector)
 {
 	if (vector.size() > 1)
 	{
@@ -34,7 +34,7 @@ T snn::tools::getMinValue(vector<T> vector)
 }
 
 template <typename T>
-T snn::tools::getMaxValue(vector<T> vector)
+T Tools::getMaxValue(vector<T> vector)
 {
 	if (vector.size() > 1)
 	{

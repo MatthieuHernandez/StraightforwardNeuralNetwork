@@ -1,15 +1,19 @@
 #pragma once
 #include <vector>
 
-namespace snn::tools
+namespace snn
 {
-	int randomBetween(const int min, const int max);
+	class Tools
+	{
+	public:
+		static int randomBetween(const int min, const int max);
 
-	float randomBetween(const float min, const float max);
+		static float randomBetween(const float min, const float max);
 
-	template <typename T>
-	T getMinValue(std::vector<T> vector);
+		template <typename T>
+		static T getMinValue(std::vector<T> vector);
 
-	template <typename T>
-	T getMaxValue(std::vector<T> vector);
+		template <typename T>
+		static T getMaxValue(std::vector<T> vector);
+	};
 }

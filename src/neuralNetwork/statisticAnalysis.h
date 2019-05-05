@@ -11,7 +11,7 @@ struct binaryClassification
 
 	bool operator==(const binaryClassification&) const
 	{
-		return truePositive && trueNegative && falsePositive && falseNegative;
+		return true;
 	};
 
 	template <typename Archive>
@@ -36,6 +36,9 @@ private:
 	float numberOfDataWellClassified{};
 	float numberOfDataMisclassified{};
 
+	float globalClusteringRate = 0;
+	float weightedClusteringRate = 0;
+	float f1Score = 0;
 
 protected:
 
@@ -45,11 +48,16 @@ protected:
 	                               float separator);
 	void insertTestWithClassNumber(const std::vector<float>& outputs, int classNumber);
 
+	float computeGlobalClusteringRate();
+	float computeWeightedClusteringRate();
+	float computeF1Score();
+
 	StatisticAnalysis() = default;
 	StatisticAnalysis(int numberOfCluster);
 	virtual ~StatisticAnalysis() = default;
 
 	void startTesting();
+	void stopTesting();
 
 public:
 	virtual float getGlobalClusteringRate() const;

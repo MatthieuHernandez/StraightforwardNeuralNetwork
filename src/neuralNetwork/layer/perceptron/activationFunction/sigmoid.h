@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "activationFunction.h"
-#include <limits>
 #include <string>
 #include <cassert>
 

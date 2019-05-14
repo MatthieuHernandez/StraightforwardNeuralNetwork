@@ -1,6 +1,7 @@
 #pragma once
 #include "neuralNetwork.h"
-#include "../data/StraightforwardData.h" // Do not remove
+#include "../data/StraightforwardData.h"
+#include "StraightforwardOption.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include <string>
 #include <vector>
@@ -18,9 +19,6 @@ namespace snn
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
-		//float clusteringRateMax = -1.0f;
-		//float weightedClusteringRateMax = -1.0f;
-		//float f1ScoreMax = -1.0f;
 
 		void train(StraightforwardData& data);
 
@@ -33,14 +31,15 @@ namespace snn
 
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
 		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
-		                             float learningRate = 0.05f,
-		                             float momentum = 0.0f);
+									 StraightforwardOption& option);
 
 
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
 
 		StraightforwardNeuralNetwork() = default;
 		~StraightforwardNeuralNetwork() = default;
+
+		StraightforwardOption option;
 
 		void trainingStart(StraightforwardData& data);
 		void trainingStop();

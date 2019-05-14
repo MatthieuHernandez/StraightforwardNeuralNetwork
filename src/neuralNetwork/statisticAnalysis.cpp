@@ -5,7 +5,6 @@ StatisticAnalysis::StatisticAnalysis(int numberOfCluster)
 {
 	clusters.resize(numberOfCluster);
 	this->startTesting();
-
 }
 
 void StatisticAnalysis::startTesting()
@@ -23,9 +22,25 @@ void StatisticAnalysis::startTesting()
 
 void StatisticAnalysis::stopTesting()
 {
-	this->globalClusteringRate = this->computeGlobalClusteringRate();
-	this->weightedClusteringRate = this->computeWeightedClusteringRate();
-	this->f1Score = this->computeF1Score();
+	float newGlobalClusteringRate = this->computeGlobalClusteringRate();
+	float newWeightedClusteringRate = this->computeWeightedClusteringRate();
+	float newF1Score = this->computeF1Score();
+
+	this->globalClusteringRateIsBetterThanPreviously = newGlobalClusteringRate > this->globalClusteringRate;
+	if (this->globalClusteringRateIsBetterThanPreviously)
+		this->globalClusteringRateMax = newGlobalClusteringRate;
+
+	this->weightedClusteringRateIsBetterThanPreviously = newWeightedClusteringRate > this->weightedClusteringRate;
+	if (this->weightedClusteringRateIsBetterThanPreviously)
+		this->weightedClusteringRateMax = newWeightedClusteringRate;
+
+	this->f1ScoreIsBetterThanPreviously = newF1Score > this->f1Score;
+	if (this->f1ScoreIsBetterThanPreviously)
+		this->f1Score = newF1Score;
+
+	this->globalClusteringRate = newGlobalClusteringRate;
+	this->weightedClusteringRate = newWeightedClusteringRate;
+	this->f1Score = newF1Score;
 }
 
 void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& outputs,
@@ -167,23 +182,23 @@ float StatisticAnalysis::computeF1Score()
 
 float StatisticAnalysis::getGlobalClusteringRate() const
 {
-	return globalClusteringRate;
+	return this->globalClusteringRate;
 }
 
 float StatisticAnalysis::getWeightedClusteringRate() const
 {
-	return weightedClusteringRate;
+	return this->weightedClusteringRate;
 }
 
 float StatisticAnalysis::getF1Score() const
 {
-	return  f1Score;
+	return f1Score;
 }
 
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
 {
 	return this->clusters == sa.clusters
-		&& this->numberOfDataWellClassified == sa.numberOfDataWellClassified 
+		&& this->numberOfDataWellClassified == sa.numberOfDataWellClassified
 		&& this->numberOfDataMisclassified == sa.numberOfDataMisclassified;
 }
 

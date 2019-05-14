@@ -1,4 +1,5 @@
 #include "StraightforwardNeuralNetwork.h"
+#include "StraightforwardOption.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include <thread>
 #include <fstream>
@@ -22,13 +23,13 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
                                                            const std::vector<activationFunctionType>&
                                                            activationFunctionByLayer,
-                                                           float learningRate,
-                                                           float momentum)
+														   StraightforwardOption& option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                learningRate,
-	                learningRate)
+	                option.learningRate,
+	                option.momentum)
 {
+	this->option = option;
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
@@ -96,12 +97,10 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 		}
 	}
 	this->stopTesting();
-	/*if (this->clusteringRate > this->clusteringRateMax)
+	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
 	{
-		this->clusteringRateMax = this->clusteringRate;
-		if (autoSave)
-			this->autoSave(autoSaveFileName);
-	}*/
+			this->saveAs(option.saveFilePath);
+	}
 }
 
 
@@ -110,7 +109,6 @@ void StraightforwardNeuralNetwork::trainingStop()
 	this->wantToStopTraining = true;
 	if (this->thread.joinable())
 		this->thread.join();
-	//this->clusteringRateMax = 0.0f;
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
 }

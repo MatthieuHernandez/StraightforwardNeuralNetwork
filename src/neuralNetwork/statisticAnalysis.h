@@ -27,7 +27,6 @@ struct binaryClassification
 class StatisticAnalysis
 {
 private:
-
 	friend class boost::serialization::access;
 	template <class Archive>
 	void serialize(Archive& ar, unsigned version);
@@ -40,8 +39,12 @@ private:
 	float weightedClusteringRate = 0;
 	float f1Score = 0;
 
-protected:
+	float globalClusteringRateMax = -1.0f;
+	float weightedClusteringRateMax = -1.0f;
+	float f1ScoreMax = -1.0f;
 
+
+protected:
 	void insertTestWithPrecision(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
 	                             float precision);
 	void insertTestSeparateByValue(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
@@ -58,6 +61,10 @@ protected:
 
 	void startTesting();
 	void stopTesting();
+
+	bool globalClusteringRateIsBetterThanPreviously = false;
+	bool weightedClusteringRateIsBetterThanPreviously = false;
+	bool f1ScoreIsBetterThanPreviously = false;
 
 public:
 	virtual float getGlobalClusteringRate() const;

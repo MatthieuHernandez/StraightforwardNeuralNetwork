@@ -12,6 +12,7 @@ namespace snn
 	enum problemType
 	{
 		classification = 0,
+		multipleClassification = 2,
 		regression = 1
 	};
 

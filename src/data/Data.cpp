@@ -38,7 +38,7 @@ void Data::clearData()
 
 void Data::normalization(float min, float max)
 {
-	/*try
+	try
 	{
 		vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
 		vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
@@ -78,7 +78,7 @@ void Data::normalization(float min, float max)
 	catch (std::exception e)
 	{
 		throw std::exception("Normalization of input data failed");
-	}*/
+	}
 }
 
 void Data::shuffle()

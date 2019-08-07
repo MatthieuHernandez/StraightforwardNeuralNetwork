@@ -94,6 +94,10 @@ void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforward
 			this->evaluateForRegressionProblemSeparateByValue(
 				data->getTestingData(this->currentIndex),
 				data->getTestingOutputs(this->currentIndex), 0.5f);
+
+			this->evaluateForRegressionProblemWithPrecision(
+				data->getTestingData(this->currentIndex),
+				data->getTestingOutputs(this->currentIndex), 0.5f);
 		}
 	}
 	this->stopTesting();

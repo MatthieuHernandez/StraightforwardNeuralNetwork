@@ -41,7 +41,7 @@ int simpleExampleClassification2()
 	snn::StraightforwardData data(snn::regression, inputData, expectedOutput);
 
 	snn::StraightforwardOption option;
-	snn::StraightforwardNeuralNetwork neuralNetwork({3, 8, 1}, {sigmoid, sigmoid}, option);
+	snn::StraightforwardNeuralNetwork neuralNetwork({3, 8, 1}, {tanH, sigmoid}, option);
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(4s); // train neural network during 4 seconds on parallel thread
@@ -52,7 +52,7 @@ int simpleExampleClassification2()
 	printf("accuracy = %.2f%%", accuracy); // Should be 100%
 	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it
 
-	if (output[0] - 0.333 < std::abs(0.1f))
+	if (output[0] - expectedOutput[0][0] < std::abs(0.1f))
 	 {
 		 printf("WHAT ???");
 		return EXIT_SUCCESS; // the neural network has learned
@@ -60,7 +60,7 @@ int simpleExampleClassification2()
 	else
 	{
 
-		printf("\n%.2f - %.2f = %.2f\n", output[0], expectedOutput[0][0], std::abs(0.3f));
+		printf("\n%.2f - %.2f < %.2f\n", output[0], expectedOutput[0][0], std::abs(0.1f));
 		return EXIT_FAILURE;
 	}
 }

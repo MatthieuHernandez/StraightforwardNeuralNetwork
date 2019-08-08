@@ -9,13 +9,6 @@ namespace snn
 		training = 1
 	};
 
-	enum problemType
-	{
-		classification = 0,
-		multipleClassification = 2,
-		regression = 1
-	};
-
 	class Data
 	{
 	protected:
@@ -23,7 +16,6 @@ namespace snn
 		void clearData();
 
 	public:
-		problemType problem;
 		int sizeOfData{}; // size of one data, equal to size of neural network inputs
 		int numberOfLabel{}; // the number of class, equal to size of neural network outputs
 
@@ -35,8 +27,7 @@ namespace snn
 			std::vector<std::vector<float>> labels{};
 		} sets[2];
 
-		Data(problemType type,
-			 std::vector<std::vector<float>>& trainingInputs,
+		Data(std::vector<std::vector<float>>& trainingInputs,
 		     std::vector<std::vector<float>>& trainingLabels,
 		     std::vector<std::vector<float>>& testingInputs,
 		     std::vector<std::vector<float>>& testingLabels);

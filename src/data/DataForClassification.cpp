@@ -6,7 +6,7 @@ DataForClassification::DataForClassification(std::vector<std::vector<float>>& tr
                                              std::vector<std::vector<float>>& trainingLabels,
                                              std::vector<std::vector<float>>& testingInputs,
                                              std::vector<std::vector<float>>& testingLabels)
-	: Data(classification, trainingInputs, trainingLabels, testingInputs, testingLabels)
+	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels)
 {
 }
 

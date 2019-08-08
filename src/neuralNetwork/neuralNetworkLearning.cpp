@@ -14,20 +14,20 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs)
 }
 
 void NeuralNetwork::evaluateForRegressionProblemWithPrecision(
-	const vector<float>& inputs, const vector<float>& desired, float precision)
+	const vector<float>& inputs, const vector<float>& desired, const float precision)
 {
 	this->outputs = this->output(inputs);
 	this->insertTestWithPrecision(this->outputs, desired, precision);
 }
 
 void NeuralNetwork::evaluateForRegressionProblemSeparateByValue(
-	const vector<float>& inputs, const vector<float>& desired, float separator)
+	const vector<float>& inputs, const vector<float>& desired, const float separator)
 {
 	this->outputs = this->output(inputs);
 	this->insertTestSeparateByValue(this->outputs, desired, separator);
 }
 
-void NeuralNetwork::evaluateForClassificationProblem(const vector<float>& inputs, int classNumber)
+void NeuralNetwork::evaluateForClassificationProblem(const vector<float>& inputs, const int classNumber)
 {
 	maxOutputValue = -1;
 	this->outputs = this->output(inputs);

@@ -5,13 +5,11 @@
 using namespace std;
 using namespace snn;
 
-Data::Data(problemType type,
-           std::vector<std::vector<float>>& trainingInputs,
+Data::Data(std::vector<std::vector<float>>& trainingInputs,
            std::vector<std::vector<float>>& trainingLabels,
            std::vector<std::vector<float>>& testingInputs,
            std::vector<std::vector<float>>& testingLabels)
 {
-	this->problem = type;
 	this->sets[training].inputs = trainingInputs;
 	this->sets[training].labels = trainingLabels;
 	this->sets[testing].inputs = testingInputs;
@@ -36,14 +34,14 @@ void Data::clearData()
 }
 
 
-void Data::normalization(float min, float max)
+void Data::normalization(const float min, const float max)
 {
 	try
 	{
 		vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
 		vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
 
-		for (int j = 0; j < this->sizeOfData; j++)
+		for (auto j = 0; j < this->sizeOfData; j++)
 		{
 			float minValueOfVector = (*inputsTraining)[0][j];
 			float maxValueOfVector = (*inputsTraining)[0][j];
@@ -60,14 +58,14 @@ void Data::normalization(float min, float max)
 				}
 			}
 
-			for (int i = 0; i < (*inputsTraining).size(); i++)
+			for (auto i = 0; i < (*inputsTraining).size(); i++)
 			{
 				(*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / (maxValueOfVector -
 					minValueOfVector
 				);
 				(*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
 			}
-			for (int i = 0; i < (*inputsTesting).size(); i++)
+			for (auto i = 0; i < (*inputsTesting).size(); i++)
 			{
 				(*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / (maxValueOfVector -
 					minValueOfVector);
@@ -115,6 +113,11 @@ vector<float>& Data::getTestingData(const int index)
 vector<float>& Data::getTrainingOutputs(const int index)
 {
 	return this->sets[training].labels[indexes[index]];
+}
+
+vector<float>& Data::getTestingOutputs(const int index)
+{
+	return this->sets[testing].labels[index];
 }
 
 std::vector<float>& Data::getData(set set, const int index)

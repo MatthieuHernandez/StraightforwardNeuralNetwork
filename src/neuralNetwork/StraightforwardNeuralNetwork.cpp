@@ -48,56 +48,55 @@ int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
 	throw std::exception();
 }
 
-void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
+void StraightforwardNeuralNetwork::trainingStart(Data& data)
 {
 	this->trainingStop();
 	this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 	this->thread.detach();
 }
 
-void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
+void StraightforwardNeuralNetwork::train(Data& data)
 {
 	this->wantToStopTraining = false;
-	Data* data = straightforwardData.data;
-	this->numberOfTrainingsBetweenTwoEvaluations = data->sets[training].size;
+	this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
 
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
-		this->evaluate(straightforwardData);
-		data->shuffle();
+		this->evaluate(data);
+		data.shuffle();
 
 		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
 		     currentIndex ++)
 		{
-			this->trainOnce(data->getTrainingData(currentIndex),
-			                data->getTrainingOutputs(currentIndex));
+			this->trainOnce(data.getTrainingData(currentIndex),
+			                data.getTrainingOutputs(currentIndex));
 		}
 	}
 }
 
-void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
+void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
-	Data* data = straightforwardData.data;
 	this->startTesting();
 	for (currentIndex = 0; currentIndex < data->sets[testing].size; currentIndex++)
 	{
 		if (this->wantToStopTraining)
 			return;
-		if (data->problem == classification)
+
+		if (typeid(data) == typeid(DataForClassification)) // create point on evaluateForClassificationProblem inside Data ? freindly ?
 		{
 			this->evaluateForClassificationProblem(
-				data->getTestingData(this->currentIndex),
-				data->getTestingLabel(this->currentIndex));
+				data.getTestingData(this->currentIndex),
+				data.getTestingLabel(this->currentIndex));
 		}
 		else
 		{
 			this->evaluateForRegressionProblemSeparateByValue(
-				data->getTestingData(this->currentIndex),
-				data->getTestingOutputs(this->currentIndex), 0.5f);
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), 0.5f);
 
 			this->evaluateForRegressionProblemWithPrecision(
-				data->getTestingData(this->currentIndex),
-				data->getTestingOutputs(this->currentIndex), 0.5f);
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), 0.5f);
 		}
 	}
 	this->stopTesting();

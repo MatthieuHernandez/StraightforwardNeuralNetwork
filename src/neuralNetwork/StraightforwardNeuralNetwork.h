@@ -1,6 +1,6 @@
 #pragma once
 #include "neuralNetwork.h"
-#include "../data/StraightforwardData.h"
+#include "../data/Data.h"
 #include "StraightforwardOption.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
 #include <string>
@@ -20,7 +20,7 @@ namespace snn
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
 
-		void train(StraightforwardData& data);
+		void train(Data& data);
 
 		friend class boost::serialization::access;
 		template <class Archive>
@@ -41,10 +41,10 @@ namespace snn
 
 		StraightforwardOption option;
 
-		void trainingStart(StraightforwardData& data);
+		void trainingStart(Data& data);
 		void trainingStop();
 
-		void evaluate(StraightforwardData& straightforwardData);
+		void evaluate(Data& straightforwardData);
 
 		std::vector<float> computeOutput(std::vector<float> inputs);
 		int computeCluster(std::vector<float> inputs);

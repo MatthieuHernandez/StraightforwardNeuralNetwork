@@ -43,7 +43,7 @@ void StatisticAnalysis::stopTesting()
 	this->f1Score = newF1Score;
 }
 
-void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& outputs,
+void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outputs,
                                                 const std::vector<float>& desiredOutputs,
                                                 float precision)
 {
@@ -75,7 +75,7 @@ void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& output
 		numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::insertTestSeparateByValue(const std::vector<float>& outputs,
+void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
                                                   const std::vector<float>& desiredOutputs,
                                                   float separator)
 {
@@ -107,7 +107,7 @@ void StatisticAnalysis::insertTestSeparateByValue(const std::vector<float>& outp
 		numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::insertTestWithClassNumber(const std::vector<float>& outputs, int classNumber)
+void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber)
 {
 	float separator = 0.5f;
 	float maxOutputValue = -1;

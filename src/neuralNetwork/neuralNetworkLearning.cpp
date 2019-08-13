@@ -17,21 +17,21 @@ void NeuralNetwork::evaluateForRegressionProblemWithPrecision(
 	const vector<float>& inputs, const vector<float>& desired, const float precision)
 {
 	this->outputs = this->output(inputs);
-	this->insertTestWithPrecision(this->outputs, desired, precision);
+	this->evaluateOnceForRegression(this->outputs, desired, precision);
 }
 
 void NeuralNetwork::evaluateForRegressionProblemSeparateByValue(
 	const vector<float>& inputs, const vector<float>& desired, const float separator)
 {
 	this->outputs = this->output(inputs);
-	this->insertTestSeparateByValue(this->outputs, desired, separator);
+	this->evaluateOnceForMultipleClassification(this->outputs, desired, separator);
 }
 
 void NeuralNetwork::evaluateForClassificationProblem(const vector<float>& inputs, const int classNumber)
 {
 	maxOutputValue = -1;
 	this->outputs = this->output(inputs);
-	this->insertTestWithClassNumber(this->outputs, classNumber);
+	this->evaluateOnceForClassification(this->outputs, classNumber);
 }
 
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)

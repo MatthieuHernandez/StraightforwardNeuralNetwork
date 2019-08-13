@@ -21,6 +21,7 @@ namespace snn
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
 
 		void train(Data& data);
+		void (* selectEvaluationFunction(Data& data))(std::vector<float>, int);
 
 		friend class boost::serialization::access;
 		template <class Archive>

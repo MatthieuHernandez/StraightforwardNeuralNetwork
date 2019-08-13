@@ -45,11 +45,11 @@ private:
 
 
 protected:
-	void insertTestWithPrecision(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
+	void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
 	                             float precision);
-	void insertTestSeparateByValue(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
+	void evaluateOnceForMultipleClassification(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
 	                               float separator);
-	void insertTestWithClassNumber(const std::vector<float>& outputs, int classNumber);
+	void evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber);
 
 	float computeGlobalClusteringRate();
 	float computeWeightedClusteringRate();

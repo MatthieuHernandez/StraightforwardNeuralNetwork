@@ -8,6 +8,9 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include "../data/DataForClassification.h"
+#include "../data/DataForRegression.h"
+#include "../data/DataForMultipleClassification.h"
 #pragma warning(pop)
 using namespace std;
 using namespace snn;
@@ -76,34 +79,43 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
 void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
+	auto evaluation = this->selectEvaluationFunction(data);
+
 	this->startTesting();
-	for (currentIndex = 0; currentIndex < data->sets[testing].size; currentIndex++)
+	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
 	{
 		if (this->wantToStopTraining)
 			return;
 
-		if (typeid(data) == typeid(DataForClassification)) // create point on evaluateForClassificationProblem inside Data ? freindly ?
-		{
-			this->evaluateForClassificationProblem(
-				data.getTestingData(this->currentIndex),
-				data.getTestingLabel(this->currentIndex));
-		}
-		else
-		{
-			this->evaluateForRegressionProblemSeparateByValue(
-				data.getTestingData(this->currentIndex),
-				data.getTestingOutputs(this->currentIndex), 0.5f);
-
-			this->evaluateForRegressionProblemWithPrecision(
-				data.getTestingData(this->currentIndex),
-				data.getTestingOutputs(this->currentIndex), 0.5f);
-		}
+		this->evaluation(
+			data.getTestingData(this->currentIndex),
+			data.getTestingLabel(this->currentIndex));
 	}
 	this->stopTesting();
 	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
 	{
 			this->saveAs(option.saveFilePath);
 	}
+}
+
+
+inline
+void (* StraightforwardNeuralNetwork::selectEvaluationFunction(Data& data))(vector<float>, int)
+{
+	if(typeid(Data) == typeid(DataForRegression))
+	{
+		return &this->evaluateOnceForRegression;
+	}
+	if(typeid(Data) == typeid(DataForMultipleClassification))
+	{
+		return &this->evaluateOnceForMultipleClassification;
+	}
+	if(typeid(Data) == typeid(DataForClassification))
+	{
+		return &this->evaluateOnceForClassification;
+	}
+
+	throw exception("wrong Data typeid");
 }
 
 

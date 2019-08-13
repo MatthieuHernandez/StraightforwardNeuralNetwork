@@ -8,8 +8,26 @@ using namespace snn;
 Data::Data(std::vector<std::vector<float>>& trainingInputs,
            std::vector<std::vector<float>>& trainingLabels,
            std::vector<std::vector<float>>& testingInputs,
-           std::vector<std::vector<float>>& testingLabels)
+           std::vector<std::vector<float>>& testingLabels,
+           float value)
 {
+	this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value);
+}
+
+Data::Data(std::vector<std::vector<float>>& inputs,
+           std::vector<std::vector<float>>& labels,
+           float value)
+{
+	this->initialize(inputs, labels, inputs, labels, value);
+}
+
+void Data::initialize(std::vector<std::vector<float>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels,
+           std::vector<std::vector<float>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels,
+           float value)
+{
+	this->value = value;
 	this->sets[training].inputs = trainingInputs;
 	this->sets[training].labels = trainingLabels;
 	this->sets[testing].inputs = testingInputs;

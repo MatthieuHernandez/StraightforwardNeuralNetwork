@@ -3,7 +3,7 @@
 
 namespace snn
 {
-	class DataForClassification : public snn::Data
+	class DataForClassification : public Data
 	{
 	private:
 		int getTrainingLabel(const int index) override;

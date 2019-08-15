@@ -1,7 +1,9 @@
 #pragma once
 #include "layer.h"
 #include "perceptron/perceptron.h"
+#pragma warning(push, 0) 
 #include <boost/serialization/base_object.hpp>
+#pragma warning(pop)
 
 class AllToAll : public Layer
 {

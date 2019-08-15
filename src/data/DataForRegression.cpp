@@ -17,3 +17,8 @@ DataForRegression::DataForRegression(std::vector<std::vector<float>>& inputs,
 	: Data(inputs, labels, precision)
 {
 }
+
+vector<float>& DataForRegression::getTestingOutputs(const int index)
+{
+	return this->sets[testing].labels[index];
+}

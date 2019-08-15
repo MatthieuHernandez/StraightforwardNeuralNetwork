@@ -1,4 +1,5 @@
 #include "DataForMultipleClassification.h"
+#include "DataForRegression.h"
 using namespace std;
 using namespace snn;
 
@@ -16,4 +17,9 @@ DataForMultipleClassification::DataForMultipleClassification(std::vector<std::ve
                                                              float separator)
 	: Data(inputs, labels, separator)
 {
+}
+
+vector<float>& DataForMultipleClassification::getTestingOutputs(const int index)
+{
+	return this->sets[testing].labels[index];
 }

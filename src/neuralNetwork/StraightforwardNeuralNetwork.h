@@ -1,12 +1,11 @@
 #pragma once
+#include <string>
+#include <vector>
+#include <thread>
 #include "neuralNetwork.h"
 #include "../data/Data.h"
 #include "StraightforwardOption.h"
 #include "layer/perceptron/activationFunction/activationFunction.h"
-#include <string>
-#include <vector>
-#include <thread>
-#include <boost/serialization/base_object.hpp>
 
 namespace snn
 {
@@ -21,7 +20,14 @@ namespace snn
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
 
 		void train(Data& data);
-		void (* selectEvaluationFunction(Data& data))(std::vector<float>, int);
+
+		
+		typedef void (StraightforwardNeuralNetwork::* evaluationFunctionPtr)(Data& data);
+
+		static evaluationFunctionPtr selectEvaluationFunction(Data& data);
+		void evaluateOnceForRegression(Data& data);
+		void evaluateOnceForMultipleClassification(Data& data);
+		void evaluateOnceForClassification(Data& data);
 
 		friend class boost::serialization::access;
 		template <class Archive>
@@ -32,7 +38,7 @@ namespace snn
 
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
 		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
-									 StraightforwardOption& option);
+		                             StraightforwardOption& option);
 
 
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
@@ -54,10 +60,6 @@ namespace snn
 
 		void saveAs(std::string filePath);
 		static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
-
-		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
-		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }
-		float getF1Score() const { return this->NeuralNetwork::getF1Score(); }
 
 		int getCurrentIndex() const { return this->currentIndex; }
 		int getNumberOfIteration() const { return this->numberOfIteration; }

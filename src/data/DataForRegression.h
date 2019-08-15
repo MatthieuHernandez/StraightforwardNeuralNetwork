@@ -3,7 +3,7 @@
 
 namespace snn
 {
-	class DataForRegression : public snn::Data
+	class DataForRegression : public Data
 	{
 	private:
 		std::vector<float>& getTestingOutputs(const int index) override;

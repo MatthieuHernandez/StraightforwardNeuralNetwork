@@ -133,11 +133,6 @@ vector<float>& Data::getTrainingOutputs(const int index)
 	return this->sets[training].labels[indexes[index]];
 }
 
-vector<float>& Data::getTestingOutputs(const int index)
-{
-	return this->sets[testing].labels[index];
-}
-
 std::vector<float>& Data::getData(set set, const int index)
 {
 	if (set == training)

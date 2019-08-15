@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
+#pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
+#pragma warning(pop)
 
 struct binaryClassification
 {
@@ -45,10 +47,12 @@ private:
 
 
 protected:
+
 	void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
-	                             float precision);
-	void evaluateOnceForMultipleClassification(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
-	                               float separator);
+	                               float precision);
+	void evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
+	                                           const std::vector<float>& desiredOutputs,
+	                                           float separator);
 	void evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber);
 
 	float computeGlobalClusteringRate();
@@ -67,9 +71,9 @@ protected:
 	bool f1ScoreIsBetterThanPreviously = false;
 
 public:
-	virtual float getGlobalClusteringRate() const;
-	virtual float getWeightedClusteringRate() const;
-	virtual float getF1Score() const;
+	float getGlobalClusteringRate() const;
+	float getWeightedClusteringRate() const;
+	float getF1Score() const;
 
 	StatisticAnalysis& operator=(const StatisticAnalysis& sa) = default;
 	bool operator==(const StatisticAnalysis& sa) const;

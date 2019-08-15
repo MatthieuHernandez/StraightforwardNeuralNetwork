@@ -1,17 +1,16 @@
-#include "StraightforwardNeuralNetwork.h"
-#include "StraightforwardOption.h"
-#include "layer/perceptron/activationFunction/activationFunction.h"
 #include <thread>
 #include <fstream>
 #pragma warning(push, 0)
-#include <boost/serialization/base_object.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#pragma warning(pop)
+#include "StraightforwardNeuralNetwork.h"
+#include "StraightforwardOption.h"
 #include "../data/DataForClassification.h"
 #include "../data/DataForRegression.h"
 #include "../data/DataForMultipleClassification.h"
-#pragma warning(pop)
+
 using namespace std;
 using namespace snn;
 
@@ -79,7 +78,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
 void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
-	auto evaluation = this->selectEvaluationFunction(data);
+	const auto evaluation = selectEvaluationFunction(data);
 
 	this->startTesting();
 	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
@@ -87,9 +86,7 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 		if (this->wantToStopTraining)
 			return;
 
-		this->evaluation(
-			data.getTestingData(this->currentIndex),
-			data.getTestingLabel(this->currentIndex));
+		std::invoke(evaluation, this, data);
 	}
 	this->stopTesting();
 	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
@@ -98,24 +95,47 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 	}
 }
 
-
 inline
-void (* StraightforwardNeuralNetwork::selectEvaluationFunction(Data& data))(vector<float>, int)
+StraightforwardNeuralNetwork::evaluationFunctionPtr StraightforwardNeuralNetwork::selectEvaluationFunction(Data& data)
 {
-	if(typeid(Data) == typeid(DataForRegression))
+	if(typeid(data) == typeid(DataForRegression))
 	{
-		return &this->evaluateOnceForRegression;
+		return &StraightforwardNeuralNetwork::evaluateOnceForRegression;
 	}
-	if(typeid(Data) == typeid(DataForMultipleClassification))
+	if(typeid(data) == typeid(DataForMultipleClassification))
 	{
-		return &this->evaluateOnceForMultipleClassification;
+		return &StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification;
 	}
-	if(typeid(Data) == typeid(DataForClassification))
+	if(typeid(data) == typeid(DataForClassification))
 	{
-		return &this->evaluateOnceForClassification;
+		return &StraightforwardNeuralNetwork::evaluateOnceForClassification;
 	}
 
 	throw exception("wrong Data typeid");
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForRegression(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForRegression(
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), data.getValue());
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForMultipleClassification(
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), data.getValue());
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForClassification(
+				data.getTestingData(this->currentIndex),
+				data.getTestingLabel(this->currentIndex));
 }
 
 

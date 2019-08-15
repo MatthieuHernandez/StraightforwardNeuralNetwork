@@ -11,7 +11,6 @@ private :
 	static bool isTheFirst;
 	static void initialize();
 
-	float maxOutputValue{};
 	int maxOutputIndex{};
 	int lastError{};
 	float learningRate{};
@@ -55,13 +54,13 @@ protected :
 
 	std::vector<float> output(const std::vector<float>& inputs);
 
-	void evaluateForRegressionProblemWithPrecision(const std::vector<float>& inputs,
+	void evaluateOnceForRegression(const std::vector<float>& inputs,
 	                                                              const std::vector<float>& desired,
-	                                                              float precision = 0.5f);
-	void evaluateForRegressionProblemSeparateByValue(const std::vector<float>& inputs,
+	                                                              float precision);
+	void evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
 	                                                                const std::vector<float>& desired,
-	                                                                float separator = 0.0f);
-	void evaluateForClassificationProblem(const std::vector<float>& inputs, int classNumber);
+	                                                                float separator);
+	void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
 
 	void addANeuron(int layerNumber);
 

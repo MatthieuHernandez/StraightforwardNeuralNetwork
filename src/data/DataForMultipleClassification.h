@@ -3,11 +3,9 @@
 
 namespace snn
 {
-	class DataForMultipleClassification : public snn::Data
+	class DataForMultipleClassification : public Data
 	{
 	private:
-		int getTrainingLabel(const int index) override;
-		int getTestingLabel(const int index) override;
 		std::vector<float>& getTestingOutputs(const int index) override;
 
 	public:

@@ -52,6 +52,8 @@ namespace snn
 		void shuffle();
 		void unshuffle();
 
+		[[nodiscard]] float getValue() const {return value;}
+
 		virtual std::vector<float>& getTrainingData(const int index);
 		virtual std::vector<float>& getTestingData(const int index);
 

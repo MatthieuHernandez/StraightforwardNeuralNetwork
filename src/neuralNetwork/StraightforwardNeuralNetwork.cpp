@@ -59,8 +59,8 @@ void StraightforwardNeuralNetwork::trainingStart(Data& data)
 
 void StraightforwardNeuralNetwork::train(Data& data)
 {
-	this->wantToStopTraining = false;
 	this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
+	this->wantToStopTraining = false;
 
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{

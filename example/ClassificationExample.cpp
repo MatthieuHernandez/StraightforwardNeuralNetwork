@@ -26,7 +26,7 @@ int classificationExample()
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 
-	printf("accuracy = %.2f%%", accuracy); // Should be 100%
+	printf("accuracy = %.2f%% \n", accuracy); // Should be 100%
 	int computedClass = neuralNetwork.computeCluster(inputData[0]); // consult neural network to test it
 
 	if (computedClass - expectedOutput[0][0] < std::abs(0.3f))

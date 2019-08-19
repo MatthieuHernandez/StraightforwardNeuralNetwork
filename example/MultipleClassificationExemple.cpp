@@ -26,7 +26,7 @@ int multipleClassificationExample()
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 
-	printf("accuracy = %.2f%%", accuracy); // Should be 100%
+	printf("accuracy = %.2f%% \n", accuracy); // Should be 100%
 	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it
 
 	if (std::abs(output[0]) - expectedOutput[0][0] < 0.5f

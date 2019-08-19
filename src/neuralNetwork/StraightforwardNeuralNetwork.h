@@ -14,7 +14,7 @@ namespace snn
 	private :
 		std::thread thread;
 
-		bool wantToStopTraining = true;
+		bool wantToStopTraining = false;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;

@@ -20,8 +20,6 @@ AllToAll::AllToAll(const int numberOfInputs,
 	this->learningRate = learningRate;
 	this->momentum = momentum;
 	this->neurons.reserve(numberOfNeurons);
-	this->outputs.resize(numberOfNeurons);
-	this->errors.resize(numberOfInputs);
 
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
@@ -29,8 +27,9 @@ AllToAll::AllToAll(const int numberOfInputs,
 	}
 }
 
-vector<float>& AllToAll::output(const vector<float>& inputs)
+vector<float> AllToAll::output(const vector<float>& inputs)
 {
+	vector<float> outputs(this->numberOfNeurons); // copy in heap on save in RAM, what is faster ?
 	//#pragma omp parallel for TODO : inputs is shared
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
@@ -39,9 +38,9 @@ vector<float>& AllToAll::output(const vector<float>& inputs)
 	return outputs;
 }
 
-vector<float>& AllToAll::backOutput(vector<float>& inputsError)
+vector<float> AllToAll::backOutput(vector<float>& inputsError)
 {
-
+	vector<float> errors(this->numberOfInputs);
 	//#pragma omp parallel for
 	for (int n = 0; n < numberOfInputs; ++n)
 	{

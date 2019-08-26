@@ -13,9 +13,10 @@ For more explication go to wiki
 int multipleClassificationExample()
 {
 	vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
-	vector<vector<float>> expectedOutput = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
+	vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
-	snn::DataForMultipleClassification data(inputData, expectedOutput);
+	float separator = 0.5f;
+	snn::DataForMultipleClassification data(inputData, expectedOutputs, separator);
 
 	snn::StraightforwardOption option;
 	snn::StraightforwardNeuralNetwork neuralNetwork({2, 8, 3}, {sigmoid, sigmoid}, option);
@@ -25,13 +26,13 @@ int multipleClassificationExample()
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+	vector<float> output = neuralNetwork.computeOutput(data.getData(snn::training, 0)); // consult neural network to test it
+	vector<float> expectedOutput = data.getOutputs(snn::training, 0);
 
-	printf("accuracy = %.2f%% \n", accuracy); // Should be 100%
-	vector<float> output = neuralNetwork.computeOutput(inputData[0]); // consult neural network to test it
-
-	if (std::abs(output[0]) - expectedOutput[0][0] < 0.5f
-		&& std::abs(output[1]) - expectedOutput[0][1] < 0.5f
-		&& std::abs(output[2]) - expectedOutput[0][2] < 0.5f)
+	if (accuracy == 100
+		&& output[0] < separator
+		&& output[1] > separator
+		&& output[2] < separator)
 	{
 		return EXIT_SUCCESS; // the neural network has learned
 	}

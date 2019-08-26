@@ -44,8 +44,8 @@ void StatisticAnalysis::stopTesting()
 }
 
 void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outputs,
-                                                const std::vector<float>& desiredOutputs,
-                                                float precision)
+                                                  const std::vector<float>& desiredOutputs,
+                                                  float precision)
 {
 	bool classifiedWell = true;
 	for (int i = 0; i < clusters.size(); i++)
@@ -76,8 +76,8 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
 }
 
 void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
-                                                  const std::vector<float>& desiredOutputs,
-                                                  float separator)
+                                                              const std::vector<float>& desiredOutputs,
+                                                              float separator)
 {
 	bool classifiedWell = true;
 	for (int i = 0; i < clusters.size(); i++)
@@ -109,6 +109,7 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
 
 void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber)
 {
+	//TODO: Use separator from Data
 	float separator = 0.5f;
 	float maxOutputValue = -1;
 	int maxOutputIndex = -1;
@@ -137,13 +138,9 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
 		}
 	}
 	if (maxOutputIndex == classNumber)
-	{
 		numberOfDataWellClassified++;
-	}
 	else
-	{
 		numberOfDataMisclassified++;
-	}
 }
 
 float StatisticAnalysis::computeGlobalClusteringRate()

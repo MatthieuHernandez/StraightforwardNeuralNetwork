@@ -46,7 +46,6 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	this->error = 0;
 
 	errors.resize(numberOfOutputs);
-	outputs.resize(numberOfOutputs);
 
 	layers.reserve(numberOfLayers);
 	for (unsigned int l = 1; l < structureOfNetwork.size(); ++l)
@@ -213,7 +212,6 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 	this->structureOfNetwork = neuralNetwork.structureOfNetwork;
 	this->activationFunctionByLayer = neuralNetwork.activationFunctionByLayer;
 	this->errors = neuralNetwork.errors;
-	this->outputs = neuralNetwork.outputs;
 
 	this->layers.clear();
 	this->layers.reserve(neuralNetwork.layers.size());
@@ -246,8 +244,7 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 		&& this->structureOfNetwork == neuralNetwork.structureOfNetwork
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
 		&& this->layers.size() == neuralNetwork.layers.size()
-		&& this->errors == neuralNetwork.errors
-		&& this->outputs == neuralNetwork.outputs);
+		&& this->errors == neuralNetwork.errors);
 
 	if (equal)
 		for (int l = 0; l < numberOfLayers; l++)

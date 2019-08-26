@@ -13,23 +13,24 @@ For more explication go to wiki.
 int classificationExample()
 {
 	vector<vector<float>> inputData = {{-0.1, 0.8, -0.6}, {0.2, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {0.9, -0.5, 0.7}, {-0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
-	vector<vector<float>> expectedOutput = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
+	vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
-	snn::DataForClassification data(inputData, expectedOutput);
+	snn::DataForClassification data(inputData, expectedOutputs);
 
 	snn::StraightforwardOption option;
-	snn::StraightforwardNeuralNetwork neuralNetwork({3, 7, 2});
+	snn::StraightforwardNeuralNetwork neuralNetwork({3, 5, 2});
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(4s); // train neural network during 2 seconds on parallel thread
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
-
-	printf("accuracy = %.2f%% \n", accuracy); // Should be 100%
-	int computedClass = neuralNetwork.computeCluster(inputData[0]); // consult neural network to test it
-
-	if (computedClass - expectedOutput[0][0] < std::abs(0.3f))
-		return EXIT_SUCCESS;
+	int classNumber = neuralNetwork.computeCluster(data.getData(snn::training, 0)); // consult neural network to test it
+	int expectedClassNumber = data.getLabel(snn::training, 0); // return position of neuron with highest output
+	if (accuracy == 100
+		&& classNumber == expectedClassNumber)
+	{
+		return EXIT_SUCCESS; // the neural network has learned
+	}
 	return EXIT_FAILURE;
 }

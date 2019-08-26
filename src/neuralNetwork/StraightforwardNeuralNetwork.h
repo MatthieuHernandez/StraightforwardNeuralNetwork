@@ -53,8 +53,8 @@ namespace snn
 
 		void evaluate(Data& straightforwardData);
 
-		std::vector<float> computeOutput(std::vector<float> inputs);
-		int computeCluster(std::vector<float> inputs);
+		std::vector<float> computeOutput(const std::vector<float>& inputs);
+		int computeCluster(const std::vector<float>& inputs);
 
 		bool isTraining() const { return wantToStopTraining; }
 

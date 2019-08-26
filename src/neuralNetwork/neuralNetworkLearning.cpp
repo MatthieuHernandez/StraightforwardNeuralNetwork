@@ -4,7 +4,7 @@ using namespace std;
 
 vector<float> NeuralNetwork::output(const vector<float>& inputs)
 {
-	this->outputs = layers[0]->output(inputs);
+	auto outputs = layers[0]->output(inputs);
 
 	for (int l = 1; l < numberOfLayers; ++l)
 	{
@@ -16,21 +16,21 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs)
 void NeuralNetwork::evaluateOnceForRegression(
 	const vector<float>& inputs, const vector<float>& desired, const float precision)
 {
-	this->outputs = this->output(inputs);
-	this->StatisticAnalysis::evaluateOnceForRegression(this->outputs, desired, precision);
+	const auto outputs = this->output(inputs);
+	this->StatisticAnalysis::evaluateOnceForRegression(outputs, desired, precision);
 }
 
 void NeuralNetwork::evaluateOnceForMultipleClassification(
 	const vector<float>& inputs, const vector<float>& desired, const float separator)
 {
-	this->outputs = this->output(inputs);
-	this->StatisticAnalysis::evaluateOnceForMultipleClassification(this->outputs, desired, separator);
+	const auto outputs = this->output(inputs);
+	this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
 }
 
 void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber)
 {
-	this->outputs = this->output(inputs);
-	this->StatisticAnalysis::evaluateOnceForClassification(this->outputs, classNumber);
+	const auto outputs = this->output(inputs);
+	this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber);
 }
 
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)
@@ -40,8 +40,8 @@ void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& 
 
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired)
 {
-	this->outputs = this->output(inputs);
-	this->errors = calculateError(this->outputs, desired);
+	const auto outputs = this->output(inputs);
+	this->errors = calculateError(outputs, desired);
 
 	for (int l = numberOfLayers - 1; l > 0; --l)
 	{

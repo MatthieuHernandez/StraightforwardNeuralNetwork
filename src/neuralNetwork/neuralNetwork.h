@@ -29,7 +29,6 @@ private :
 	std::vector<Layer*> layers{};
 
 	std::vector<float> errors{};
-	std::vector<float> outputs{};
 
 	void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
 	std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired);
@@ -52,7 +51,7 @@ protected :
 	NeuralNetwork() = default;
 	~NeuralNetwork() = default;
 
-	std::vector<float> output(const std::vector<float>& inputs);
+	[[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
 
 	void evaluateOnceForRegression(const std::vector<float>& inputs,
 	                                                              const std::vector<float>& desired,
@@ -104,7 +103,6 @@ void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
 	ar & this->structureOfNetwork;
 	ar & this->activationFunctionByLayer;
 	ar & this->errors;
-	ar & this->outputs;
 	ar & this->numberOfInput;
 
 	ar.template register_type<AllToAll>();

@@ -14,16 +14,16 @@
 using namespace std;
 using namespace snn;
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork)
 	: NeuralNetwork(structureOfNetwork,
-	                std::vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
+	                vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
 	                0.05f,
 	                0.0f)
 {
 }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
-                                                           const std::vector<activationFunctionType>&
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork,
+                                                           const vector<activationFunctionType>&
                                                            activationFunctionByLayer,
 														   StraightforwardOption& option)
 	: NeuralNetwork(structureOfNetwork,
@@ -40,14 +40,42 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeural
 	this->operator=(neuralNetwork);
 }
 
-std::vector<float> StraightforwardNeuralNetwork::computeOutput(std::vector<float> inputs)
+vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs)
 {
 	return this->output(inputs);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
+int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 {
-	throw std::exception();
+	auto output = this->output(inputs);
+
+	float separator = 0.5f;
+	float maxOutputValue = -1;
+	int maxOutputIndex = -1;
+	for (int i = 0; i < clusters.size(); i++)
+	{
+		if (maxOutputValue < output[i])
+		{
+			maxOutputValue = output[i];
+			maxOutputIndex = i;
+		}
+		if (i == classNumber && output[i] > separator)
+		{
+			clusters[i].truePositive ++;
+		}
+		else if (i == classNumber && output[i] <= separator)
+		{
+			clusters[i].falseNegative ++;
+		}
+		else if (output[i] > separator)
+		{
+			clusters[i].falsePositive ++;
+		}
+		else if (output[i] <= separator)
+		{
+			clusters[i].trueNegative ++;
+		}
+	}
 }
 
 void StraightforwardNeuralNetwork::trainingStart(Data& data)
@@ -84,7 +112,10 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
 	{
 		if (this->wantToStopTraining)
+		{
+			this->stopTesting();
 			return;
+		}
 
 		std::invoke(evaluation, this, data);
 	}

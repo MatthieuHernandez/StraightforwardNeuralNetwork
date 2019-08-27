@@ -26,8 +26,7 @@ int multipleClassificationExample()
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
-	vector<float> output = neuralNetwork.computeOutput(data.getData(snn::training, 0)); // consult neural network to test it
-	vector<float> expectedOutput = data.getOutputs(snn::training, 0);
+	vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it
 
 	if (accuracy == 100
 		&& output[0] < separator

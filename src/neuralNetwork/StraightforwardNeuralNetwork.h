@@ -24,7 +24,7 @@ namespace snn
 		
 		typedef void (StraightforwardNeuralNetwork::* evaluationFunctionPtr)(Data& data);
 
-		static evaluationFunctionPtr selectEvaluationFunction(Data& data);
+		evaluationFunctionPtr selectEvaluationFunction(Data& data);
 		void evaluateOnceForRegression(Data& data);
 		void evaluateOnceForMultipleClassification(Data& data);
 		void evaluateOnceForClassification(Data& data);

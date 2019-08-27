@@ -47,35 +47,18 @@ vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& i
 
 int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 {
-	auto output = this->output(inputs);
-
-	float separator = 0.5f;
-	float maxOutputValue = -1;
+	const auto outputs = this->output(inputs);
+	float maxOutputValue = -2;
 	int maxOutputIndex = -1;
-	for (int i = 0; i < clusters.size(); i++)
+	for (int i = 0; i < outputs.size(); i++)
 	{
-		if (maxOutputValue < output[i])
+		if (maxOutputValue < outputs[i])
 		{
-			maxOutputValue = output[i];
+			maxOutputValue = outputs[i];
 			maxOutputIndex = i;
 		}
-		if (i == classNumber && output[i] > separator)
-		{
-			clusters[i].truePositive ++;
-		}
-		else if (i == classNumber && output[i] <= separator)
-		{
-			clusters[i].falseNegative ++;
-		}
-		else if (output[i] > separator)
-		{
-			clusters[i].falsePositive ++;
-		}
-		else if (output[i] <= separator)
-		{
-			clusters[i].trueNegative ++;
-		}
 	}
+	return maxOutputIndex;
 }
 
 void StraightforwardNeuralNetwork::trainingStart(Data& data)
@@ -135,6 +118,7 @@ StraightforwardNeuralNetwork::evaluationFunctionPtr StraightforwardNeuralNetwork
 	}
 	if(typeid(data) == typeid(DataForMultipleClassification))
 	{
+		this->separator = data.getValue();
 		return &StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification;
 	}
 	if(typeid(data) == typeid(DataForClassification))

@@ -45,7 +45,6 @@ private:
 	float weightedClusteringRateMax = -1.0f;
 	float f1ScoreMax = -1.0f;
 
-
 protected:
 
 	void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
@@ -69,6 +68,8 @@ protected:
 	bool globalClusteringRateIsBetterThanPreviously = false;
 	bool weightedClusteringRateIsBetterThanPreviously = false;
 	bool f1ScoreIsBetterThanPreviously = false;
+
+	float separator = 0.5f;
 
 public:
 	float getGlobalClusteringRate() const;

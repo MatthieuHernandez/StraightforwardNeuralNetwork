@@ -109,9 +109,7 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
 
 void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber)
 {
-	//TODO: Use separator from Data
-	float separator = 0.5f;
-	float maxOutputValue = -1;
+	float maxOutputValue = -2;
 	int maxOutputIndex = -1;
 	for (int i = 0; i < clusters.size(); i++)
 	{
@@ -120,19 +118,19 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
 			maxOutputValue = outputs[i];
 			maxOutputIndex = i;
 		}
-		if (i == classNumber && outputs[i] > separator)
+		if (i == classNumber && outputs[i] > this->separator)
 		{
 			clusters[i].truePositive ++;
 		}
-		else if (i == classNumber && outputs[i] <= separator)
+		else if (i == classNumber && outputs[i] <= this->separator)
 		{
 			clusters[i].falseNegative ++;
 		}
-		else if (outputs[i] > separator)
+		else if (outputs[i] > this->separator)
 		{
 			clusters[i].falsePositive ++;
 		}
-		else if (outputs[i] <= separator)
+		else if (outputs[i] <= this->separator)
 		{
 			clusters[i].trueNegative ++;
 		}

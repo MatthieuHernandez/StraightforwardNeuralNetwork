@@ -1,5 +1,7 @@
 #include "statisticAnalysis.h"
 
+using namespace snn;
+using namespace internal;
 
 StatisticAnalysis::StatisticAnalysis(int numberOfCluster)
 {
@@ -20,9 +22,32 @@ void StatisticAnalysis::startTesting()
 	numberOfDataMisclassified = 0;
 }
 
-void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& outputs,
-                                                const std::vector<float>& desiredOutputs,
-                                                float precision)
+void StatisticAnalysis::stopTesting()
+{
+	float newGlobalClusteringRate = this->computeGlobalClusteringRate();
+	float newWeightedClusteringRate = this->computeWeightedClusteringRate();
+	float newF1Score = this->computeF1Score();
+
+	this->globalClusteringRateIsBetterThanPreviously = newGlobalClusteringRate > this->globalClusteringRate;
+	if (this->globalClusteringRateIsBetterThanPreviously)
+		this->globalClusteringRateMax = newGlobalClusteringRate;
+
+	this->weightedClusteringRateIsBetterThanPreviously = newWeightedClusteringRate > this->weightedClusteringRate;
+	if (this->weightedClusteringRateIsBetterThanPreviously)
+		this->weightedClusteringRateMax = newWeightedClusteringRate;
+
+	this->f1ScoreIsBetterThanPreviously = newF1Score > this->f1Score;
+	if (this->f1ScoreIsBetterThanPreviously)
+		this->f1Score = newF1Score;
+
+	this->globalClusteringRate = newGlobalClusteringRate;
+	this->weightedClusteringRate = newWeightedClusteringRate;
+	this->f1Score = newF1Score;
+}
+
+void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outputs,
+                                                  const std::vector<float>& desiredOutputs,
+                                                  float precision)
 {
 	bool classifiedWell = true;
 	for (int i = 0; i < clusters.size(); i++)
@@ -32,12 +57,12 @@ void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& output
 			clusters[i].falsePositive ++;
 			classifiedWell = false;
 		}
-		else if (outputs[i] <= desiredOutputs[i] - precision)
+		else if (outputs[i] < desiredOutputs[i] - precision)
 		{
 			clusters[i].falseNegative ++;
 			classifiedWell = false;
 		}
-		else if (outputs[i] > desiredOutputs[i])
+		else if (outputs[i] >= desiredOutputs[i])
 		{
 			clusters[i].trueNegative ++;
 		}
@@ -52,9 +77,9 @@ void StatisticAnalysis::insertTestWithPrecision(const std::vector<float>& output
 		numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::insertTestSeparateByValue(const std::vector<float>& outputs,
-                                                  const std::vector<float>& desiredOutputs,
-                                                  float separator)
+void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
+                                                              const std::vector<float>& desiredOutputs,
+                                                              float separator)
 {
 	bool classifiedWell = true;
 	for (int i = 0; i < clusters.size(); i++)
@@ -84,10 +109,9 @@ void StatisticAnalysis::insertTestSeparateByValue(const std::vector<float>& outp
 		numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::insertTestWithClassNumber(const std::vector<float>& outputs, int classNumber)
+void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber)
 {
-	float separator = 0.5f;
-	float maxOutputValue = -1;
+	float maxOutputValue = -2;
 	int maxOutputIndex = -1;
 	for (int i = 0; i < clusters.size(); i++)
 	{
@@ -96,39 +120,35 @@ void StatisticAnalysis::insertTestWithClassNumber(const std::vector<float>& outp
 			maxOutputValue = outputs[i];
 			maxOutputIndex = i;
 		}
-		if (i == classNumber && outputs[i] > separator)
+		if (i == classNumber && outputs[i] > this->separator)
 		{
 			clusters[i].truePositive ++;
 		}
-		else if (i == classNumber && outputs[i] <= separator)
+		else if (i == classNumber && outputs[i] <= this->separator)
 		{
 			clusters[i].falseNegative ++;
 		}
-		else if (outputs[i] > separator)
+		else if (outputs[i] > this->separator)
 		{
 			clusters[i].falsePositive ++;
 		}
-		else if (outputs[i] <= separator)
+		else if (outputs[i] <= this->separator)
 		{
 			clusters[i].trueNegative ++;
 		}
 	}
 	if (maxOutputIndex == classNumber)
-	{
 		numberOfDataWellClassified++;
-	}
 	else
-	{
 		numberOfDataMisclassified++;
-	}
 }
 
-float StatisticAnalysis::getGlobalClusteringRate() const
+float StatisticAnalysis::computeGlobalClusteringRate()
 {
 	return numberOfDataWellClassified / (numberOfDataWellClassified + numberOfDataMisclassified);
 }
 
-float StatisticAnalysis::getWeightedClusteringRate() const
+float StatisticAnalysis::computeWeightedClusteringRate()
 {
 	float weightedClusteringRate = 0;
 	for (const auto c : clusters)
@@ -142,10 +162,9 @@ float StatisticAnalysis::getWeightedClusteringRate() const
 	return weightedClusteringRate / clusters.size();
 }
 
-float StatisticAnalysis::getF1Score() const
+float StatisticAnalysis::computeF1Score()
 {
 	float f1Score = 0;
-
 	for (const auto c : clusters)
 	{
 		if (c.truePositive > 0)
@@ -158,10 +177,25 @@ float StatisticAnalysis::getF1Score() const
 	return 2.0f * f1Score / clusters.size();
 }
 
+float StatisticAnalysis::getGlobalClusteringRate() const
+{
+	return this->globalClusteringRate;
+}
+
+float StatisticAnalysis::getWeightedClusteringRate() const
+{
+	return this->weightedClusteringRate;
+}
+
+float StatisticAnalysis::getF1Score() const
+{
+	return f1Score;
+}
+
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
 {
 	return this->clusters == sa.clusters
-		&& this->numberOfDataWellClassified == sa.numberOfDataWellClassified 
+		&& this->numberOfDataWellClassified == sa.numberOfDataWellClassified
 		&& this->numberOfDataMisclassified == sa.numberOfDataMisclassified;
 }
 

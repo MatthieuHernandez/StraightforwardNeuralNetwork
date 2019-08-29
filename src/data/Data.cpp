@@ -5,13 +5,29 @@
 using namespace std;
 using namespace snn;
 
-Data::Data(problemType type,
-		   std::vector<std::vector<float>>& trainingInputs,
+Data::Data(std::vector<std::vector<float>>& trainingInputs,
            std::vector<std::vector<float>>& trainingLabels,
            std::vector<std::vector<float>>& testingInputs,
-           std::vector<std::vector<float>>& testingLabels)
+           std::vector<std::vector<float>>& testingLabels,
+           float value)
 {
-	this->problem = type;
+	this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value);
+}
+
+Data::Data(std::vector<std::vector<float>>& inputs,
+           std::vector<std::vector<float>>& labels,
+           float value)
+{
+	this->initialize(inputs, labels, inputs, labels, value);
+}
+
+void Data::initialize(std::vector<std::vector<float>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels,
+           std::vector<std::vector<float>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels,
+           float value)
+{
+	this->value = value;
 	this->sets[training].inputs = trainingInputs;
 	this->sets[training].labels = trainingLabels;
 	this->sets[testing].inputs = testingInputs;
@@ -21,6 +37,8 @@ Data::Data(problemType type,
 	this->numberOfLabel = static_cast<int>(trainingLabels.back().size());;
 	this->sets[training].size = static_cast<int>(trainingLabels.size());
 	this->sets[testing].size = static_cast<int>(testingLabels.size());
+
+	this->normalization(-1, 1);
 }
 
 void Data::clearData()
@@ -33,6 +51,52 @@ void Data::clearData()
 	this->sets[testing].size = 0;
 }
 
+
+void Data::normalization(const float min, const float max)
+{
+	try
+	{
+		vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
+		vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
+
+		for (auto j = 0; j < this->sizeOfData; j++)
+		{
+			float minValueOfVector = (*inputsTraining)[0][j];
+			float maxValueOfVector = (*inputsTraining)[0][j];
+
+			for (int i = 1; i < (*inputsTraining).size(); i++)
+			{
+				if ((*inputsTraining)[i][j] < minValueOfVector)
+				{
+					minValueOfVector = (*inputsTraining)[i][j];
+				}
+				else if ((*inputsTraining)[i][j] > maxValueOfVector)
+				{
+					maxValueOfVector = (*inputsTraining)[i][j];
+				}
+			}
+
+			for (auto i = 0; i < (*inputsTraining).size(); i++)
+			{
+				(*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / (maxValueOfVector -
+					minValueOfVector
+				);
+				(*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
+			}
+			for (auto i = 0; i < (*inputsTesting).size(); i++)
+			{
+				(*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / (maxValueOfVector -
+					minValueOfVector);
+				(*inputsTesting)[i][j] = (*inputsTesting)[i][j] * (max - min) + min;
+			}
+		}
+	}
+	catch (std::exception e)
+	{
+		throw std::exception("Normalization of input data failed");
+	}
+}
+
 void Data::shuffle()
 {
 	if (indexes.empty())
@@ -42,15 +106,15 @@ void Data::shuffle()
 			indexes[i] = i;
 	}
 
-	std::random_device rd;
-	std::mt19937 g(rd());
+	random_device rd;
+	mt19937 g(rd());
 	std::shuffle(indexes.begin(), indexes.end(), g);
 }
 
 void Data::unshuffle()
 {
 	indexes.resize(sets[training].size);
-	for (int i = 0; i < static_cast<int>(indexes.size()); i++)
+	for (int i = 0; i < static_cast<int>(indexes.size()); ++i)
 		indexes[i] = i;
 }
 

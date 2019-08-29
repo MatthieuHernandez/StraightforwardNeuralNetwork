@@ -1,34 +1,38 @@
-#include "StraightforwardNeuralNetwork.h"
-#include "layer/perceptron/activationFunction/activationFunction.h"
 #include <thread>
 #include <fstream>
 #pragma warning(push, 0)
-#include <boost/serialization/base_object.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #pragma warning(pop)
+#include "StraightforwardNeuralNetwork.h"
+#include "StraightforwardOption.h"
+#include "../data/DataForClassification.h"
+#include "../data/DataForRegression.h"
+#include "../data/DataForMultipleClassification.h"
+
 using namespace std;
 using namespace snn;
+using namespace internal;
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork)
 	: NeuralNetwork(structureOfNetwork,
-	                std::vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
+	                vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
 	                0.05f,
 	                0.0f)
 {
 }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
-                                                           const std::vector<activationFunctionType>&
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork,
+                                                           const vector<activationFunctionType>&
                                                            activationFunctionByLayer,
-                                                           float learningRate,
-                                                           float momentum)
+														   StraightforwardOption& option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                learningRate,
-	                learningRate)
+	                option.learningRate,
+	                option.momentum)
 {
+	this->option = option;
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
@@ -37,71 +41,117 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeural
 	this->operator=(neuralNetwork);
 }
 
-std::vector<float> StraightforwardNeuralNetwork::computeOutput(std::vector<float> inputs)
+vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs)
 {
 	return this->output(inputs);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(std::vector<float> inputs)
+int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 {
-	throw std::exception();
+	const auto outputs = this->output(inputs);
+	float maxOutputValue = -2;
+	int maxOutputIndex = -1;
+	for (int i = 0; i < outputs.size(); i++)
+	{
+		if (maxOutputValue < outputs[i])
+		{
+			maxOutputValue = outputs[i];
+			maxOutputIndex = i;
+		}
+	}
+	return maxOutputIndex;
 }
 
-void StraightforwardNeuralNetwork::trainingStart(StraightforwardData& data)
+void StraightforwardNeuralNetwork::trainingStart(Data& data)
 {
 	this->trainingStop();
 	this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 	this->thread.detach();
 }
 
-void StraightforwardNeuralNetwork::train(StraightforwardData& straightforwardData)
+void StraightforwardNeuralNetwork::train(Data& data)
 {
+	this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
 	this->wantToStopTraining = false;
-	Data* data = straightforwardData.data;
-	this->numberOfTrainingsBetweenTwoEvaluations = data->sets[training].size;
 
 	for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
 	{
-		this->evaluate(straightforwardData);
-		//emit updateNumberOfIteration();
-		data->shuffle();
+		this->evaluate(data);
+		data.shuffle();
 
 		for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
 		     currentIndex ++)
 		{
-			this->trainOnce(data->getTrainingData(currentIndex),
-			                data->getTrainingOutputs(currentIndex));
+			this->trainOnce(data.getTrainingData(currentIndex),
+			                data.getTrainingOutputs(currentIndex));
 		}
 	}
 }
 
-void StraightforwardNeuralNetwork::evaluate(StraightforwardData& straightforwardData)
+void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
-	Data* data = straightforwardData.data;
+	const auto evaluation = selectEvaluationFunction(data);
+
 	this->startTesting();
-	for (currentIndex = 0; currentIndex < data->sets[testing].size; currentIndex++)
+	for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
 	{
 		if (this->wantToStopTraining)
+		{
+			this->stopTesting();
 			return;
-		if (data->problem == classification)
-		{
-			this->evaluateForClassificationProblem(
-				data->getTestingData(this->currentIndex),
-				data->getTestingLabel(this->currentIndex));
 		}
-		else
-		{
-			this->evaluateForRegressionProblemSeparateByValue(
-				data->getTestingData(this->currentIndex),
-				data->getTestingOutputs(this->currentIndex), 0.5f);
-		}
+
+		std::invoke(evaluation, this, data);
 	}
-	/*if (this->clusteringRate > this->clusteringRateMax)
+	this->stopTesting();
+	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
 	{
-		this->clusteringRateMax = this->clusteringRate;
-		if (autoSave)
-			this->autoSave(autoSaveFileName);
-	}*/
+			this->saveAs(option.saveFilePath);
+	}
+}
+
+inline
+StraightforwardNeuralNetwork::evaluationFunctionPtr StraightforwardNeuralNetwork::selectEvaluationFunction(Data& data)
+{
+	if(typeid(data) == typeid(DataForRegression))
+	{
+		return &StraightforwardNeuralNetwork::evaluateOnceForRegression;
+	}
+	if(typeid(data) == typeid(DataForMultipleClassification))
+	{
+		this->separator = data.getValue();
+		return &StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification;
+	}
+	if(typeid(data) == typeid(DataForClassification))
+	{
+		return &StraightforwardNeuralNetwork::evaluateOnceForClassification;
+	}
+
+	throw exception("wrong Data typeid");
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForRegression(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForRegression(
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), data.getValue());
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForMultipleClassification(
+				data.getTestingData(this->currentIndex),
+				data.getTestingOutputs(this->currentIndex), data.getValue());
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
+{
+	this->NeuralNetwork::evaluateOnceForClassification(
+				data.getTestingData(this->currentIndex),
+				data.getTestingLabel(this->currentIndex));
 }
 
 
@@ -110,7 +160,6 @@ void StraightforwardNeuralNetwork::trainingStop()
 	this->wantToStopTraining = true;
 	if (this->thread.joinable())
 		this->thread.join();
-	//this->clusteringRateMax = 0.0f;
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
 }

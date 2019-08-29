@@ -1,7 +1,10 @@
-#include "perceptron.h"
 #include <iostream>
+#include "perceptron.h"
+#include "../../../tools/Tools.h"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
 
 Perceptron::~Perceptron()
 {
@@ -41,8 +44,8 @@ Perceptron::Perceptron(const Perceptron& perceptron)
 
 float Perceptron::randomInitializeWeight() const
 {
-	const float rangeMax = 2.4f / sqrt(static_cast<float>(this->numberOfInputs));
-	return (rand() / static_cast<float>(RAND_MAX) * 2.0f - 1.0f) * rangeMax;
+	const float valueMax = 2.4f / sqrt(static_cast<float>(this->numberOfInputs));
+	return Tools::randomBetween(-valueMax, valueMax);
 }
 
 float Perceptron::output(const vector<float>& inputs)

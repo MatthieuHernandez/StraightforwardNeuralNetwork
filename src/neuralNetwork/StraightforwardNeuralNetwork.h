@@ -1,29 +1,33 @@
 #pragma once
-#include "neuralNetwork.h"
-#include "../data/StraightforwardData.h" // Do not remove
-#include "layer/perceptron/activationFunction/activationFunction.h"
 #include <string>
 #include <vector>
 #include <thread>
-#include <boost/serialization/base_object.hpp>
-
+#include "neuralNetwork.h"
+#include "../data/Data.h"
+#include "StraightforwardOption.h"
+#include "layer/perceptron/activationFunction/activationFunction.h"
 
 namespace snn
 {
-	class StraightforwardNeuralNetwork final : public NeuralNetwork
+	class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 	{
 	private :
 		std::thread thread;
 
-		bool wantToStopTraining = true;
+		bool wantToStopTraining = false;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
-		//float clusteringRateMax = -1.0f;
-		//float weightedClusteringRateMax = -1.0f;
-		//float f1ScoreMax = -1.0f;
 
-		void train(StraightforwardData& data);
+		void train(Data& data);
+
+		
+		typedef void (StraightforwardNeuralNetwork::* evaluationFunctionPtr)(Data& data);
+
+		evaluationFunctionPtr selectEvaluationFunction(Data& data);
+		void evaluateOnceForRegression(Data& data);
+		void evaluateOnceForMultipleClassification(Data& data);
+		void evaluateOnceForClassification(Data& data);
 
 		friend class boost::serialization::access;
 		template <class Archive>
@@ -34,8 +38,7 @@ namespace snn
 
 		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
 		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
-		                             float learningRate = 0.05f,
-		                             float momentum = 0.0f);
+		                             StraightforwardOption& option);
 
 
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
@@ -43,22 +46,20 @@ namespace snn
 		StraightforwardNeuralNetwork() = default;
 		~StraightforwardNeuralNetwork() = default;
 
-		void trainingStart(StraightforwardData& data);
+		StraightforwardOption option;
+
+		void trainingStart(Data& data);
 		void trainingStop();
 
-		void evaluate(StraightforwardData& straightforwardData);
+		void evaluate(Data& straightforwardData);
 
-		std::vector<float> computeOutput(std::vector<float> inputs);
-		int computeCluster(std::vector<float> inputs);
+		std::vector<float> computeOutput(const std::vector<float>& inputs);
+		int computeCluster(const std::vector<float>& inputs);
 
 		bool isTraining() const { return wantToStopTraining; }
 
 		void saveAs(std::string filePath);
 		static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
-
-		float getGlobalClusteringRate() const { return this->NeuralNetwork::getGlobalClusteringRate(); }
-		float getWeightedClusteringRate() const { return this->NeuralNetwork::getWeightedClusteringRate(); }
-		float getF1Score() const { return this->NeuralNetwork::getF1Score(); }
 
 		int getCurrentIndex() const { return this->currentIndex; }
 		int getNumberOfIteration() const { return this->numberOfIteration; }

@@ -5,8 +5,15 @@ using namespace snn;
 DataForClassification::DataForClassification(std::vector<std::vector<float>>& trainingInputs,
                                              std::vector<std::vector<float>>& trainingLabels,
                                              std::vector<std::vector<float>>& testingInputs,
-                                             std::vector<std::vector<float>>& testingLabels)
-	: Data(classification, trainingInputs, trainingLabels, testingInputs, testingLabels)
+                                             std::vector<std::vector<float>>& testingLabels,
+                                             float separator)
+	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
+{
+}
+
+DataForClassification::DataForClassification(std::vector<std::vector<float>>& inputs,
+                                             std::vector<std::vector<float>>& labels, float separator)
+	: Data(inputs, labels, separator)
 {
 }
 

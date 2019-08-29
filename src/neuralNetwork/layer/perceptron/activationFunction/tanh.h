@@ -1,21 +1,24 @@
 ﻿#pragma once
 #include "activationFunction.h"
 
-class TanH : public ActivationFunction
+namespace snn::internal
 {
-private :
-
-	activationFunctionType getType() const override { return tanH; }
-
-public:
-
-	float function(const float x) const override
+	class TanH : public ActivationFunction
 	{
-		return tanh(x);
-	}
+	private :
 
-	float derivative(const float x) const override
-	{
-		return 1 - pow(tanh(x), 2);
-	}
-};
+		activationFunctionType getType() const override { return tanH; }
+
+	public:
+
+		float function(const float x) const override
+		{
+			return tanh(x);
+		}
+
+		float derivative(const float x) const override
+		{
+			return 1 - pow(tanh(x), 2);
+		}
+	};
+}

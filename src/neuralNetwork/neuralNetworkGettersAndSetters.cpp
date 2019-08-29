@@ -1,5 +1,8 @@
 #include "neuralNetwork.h"
 
+using namespace snn;
+using namespace internal;
+
 //=====================================================================
 //  Getters and setters
 //=====================================================================

@@ -13,6 +13,7 @@
 
 using namespace std;
 using namespace snn;
+using namespace internal;
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork)
 	: NeuralNetwork(structureOfNetwork,

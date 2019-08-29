@@ -9,7 +9,7 @@
 
 namespace snn
 {
-	class StraightforwardNeuralNetwork final : public NeuralNetwork
+	class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 	{
 	private :
 		std::thread thread;

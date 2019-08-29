@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace chrono;
+using namespace snn;
 
 /*
 This is the simplest example how to use this library
@@ -16,13 +17,13 @@ int multipleClassificationExample()
 	vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
 	float separator = 0.5f;
-	snn::DataForMultipleClassification data(inputData, expectedOutputs, separator);
+	DataForMultipleClassification data(inputData, expectedOutputs, separator);
 
-	snn::StraightforwardOption option;
-	snn::StraightforwardNeuralNetwork neuralNetwork({2, 8, 3}, {sigmoid, sigmoid}, option);
+	StraightforwardOption option;
+	StraightforwardNeuralNetwork neuralNetwork({2, 8, 3}, {sigmoid, sigmoid}, option);
 
 	neuralNetwork.trainingStart(data);
-	this_thread::sleep_for(4s); // train neural network during 4 seconds on parallel thread
+	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;

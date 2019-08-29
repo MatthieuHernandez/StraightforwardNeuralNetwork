@@ -7,6 +7,8 @@
 #include "layer/alltoall.h"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
 
 bool NeuralNetwork::isTheFirst = true;
 

@@ -1,5 +1,7 @@
 #include "statisticAnalysis.h"
 
+using namespace snn;
+using namespace internal;
 
 StatisticAnalysis::StatisticAnalysis(int numberOfCluster)
 {

@@ -27,10 +27,12 @@ namespace snn
 		StraightforwardOption& operator=(const StraightforwardOption& option) = default;
 	};
 
-
 	template <class Archive>
 	void StraightforwardOption::serialize(Archive& ar, const unsigned version)
 	{
 		ar & this->autoSaveWhenBetter;
+		ar & this->saveFilePath;
+		ar & this->learningRate;
+		ar & this->momentum;
 	}
 }

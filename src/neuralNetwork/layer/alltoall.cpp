@@ -5,9 +5,11 @@
 #include <boost/serialization/base_object.hpp>
 #pragma warning(pop)
 
-BOOST_CLASS_EXPORT(AllToAll);
-
 using namespace std;
+using namespace snn;
+using namespace internal;
+
+BOOST_CLASS_EXPORT(AllToAll);
 
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,

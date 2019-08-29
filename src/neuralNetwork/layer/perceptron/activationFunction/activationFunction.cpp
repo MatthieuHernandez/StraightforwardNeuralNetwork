@@ -8,6 +8,8 @@
 #include <exception>
 
 using namespace std;
+using namespace snn;
+using namespace internal;
 
 //vector<ActivationFunction*> ActivationFunction::listOfActivationFunction;
 

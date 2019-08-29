@@ -114,7 +114,7 @@ void Data::shuffle()
 void Data::unshuffle()
 {
 	indexes.resize(sets[training].size);
-	for (int i = 0; i < static_cast<int>(indexes.size()); i++)
+	for (int i = 0; i < static_cast<int>(indexes.size()); ++i)
 		indexes[i] = i;
 }
 

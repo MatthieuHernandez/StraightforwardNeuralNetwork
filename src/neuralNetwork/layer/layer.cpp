@@ -1,6 +1,8 @@
 #include "layer.h"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
 
 Perceptron* Layer::getNeuron(int neuronNumber)
 {

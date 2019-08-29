@@ -1,6 +1,8 @@
 ﻿#include "neuralNetwork.h"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
 
 vector<float> NeuralNetwork::output(const vector<float>& inputs)
 {

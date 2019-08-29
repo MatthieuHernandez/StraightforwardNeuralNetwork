@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace snn;
+using namespace internal;
 
 Perceptron::~Perceptron()
 {

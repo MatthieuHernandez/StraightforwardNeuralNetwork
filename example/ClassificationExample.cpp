@@ -4,6 +4,7 @@
 
 using namespace std;
 using namespace chrono;
+using namespace snn;
 
 /*
 This is a simple example how to use neural network for a classification problem.
@@ -15,13 +16,13 @@ int classificationExample()
 	vector<vector<float>> inputData = {{-0.1, 0.8, -0.6}, {0.2, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {0.9, -0.5, 0.7}, {-0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
 	vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
-	snn::DataForClassification data(inputData, expectedOutputs);
+	DataForClassification data(inputData, expectedOutputs);
 
-	snn::StraightforwardOption option;
-	snn::StraightforwardNeuralNetwork neuralNetwork({3, 5, 2});
+	StraightforwardOption option;
+	StraightforwardNeuralNetwork neuralNetwork({3, 5, 2});
 
 	neuralNetwork.trainingStart(data);
-	this_thread::sleep_for(4s); // train neural network during 2 seconds on parallel thread
+	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;

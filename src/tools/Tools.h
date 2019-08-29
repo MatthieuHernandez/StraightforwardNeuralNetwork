@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-namespace snn
+namespace snn::internal
 {
 	class Tools
 	{

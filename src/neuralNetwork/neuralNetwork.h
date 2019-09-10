@@ -13,10 +13,8 @@ namespace snn::internal
 		static void initialize();
 
 		int maxOutputIndex{};
-		int lastError{};
 		float learningRate{};
 
-		float error{};
 		float momentum{};
 
 		int numberOfHiddenLayers{};
@@ -29,10 +27,8 @@ namespace snn::internal
 
 		std::vector<Layer*> layers{};
 
-		std::vector<float> errors{};
-
 		void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
-		std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired);
+		std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
 		void resetAllNeurons();
 
@@ -64,7 +60,6 @@ namespace snn::internal
 
 		void addANeuron(int layerNumber);
 
-		int isValid();
 		int getLastError() const;
 
 		NeuralNetwork& operator=(const NeuralNetwork& neuralNetwork);
@@ -73,6 +68,8 @@ namespace snn::internal
 
 	public:
 		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
+		
+		int isValid() const;
 
 		void setLearningRate(float learningRate);
 		float getLearningRate() const;
@@ -93,9 +90,7 @@ namespace snn::internal
 		boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
 		ar & boost::serialization::base_object<StatisticAnalysis>(*this);
 		ar & this->maxOutputIndex;
-		ar & this->lastError;
 		ar & this->learningRate;
-		ar & this->error;
 		ar & this->momentum;
 		ar & this->numberOfHiddenLayers;
 		ar & this->numberOfLayers;
@@ -103,7 +98,6 @@ namespace snn::internal
 		ar & this->numberOfOutputs;
 		ar & this->structureOfNetwork;
 		ar & this->activationFunctionByLayer;
-		ar & this->errors;
 		ar & this->numberOfInput;
 
 		ar.template register_type<AllToAll>();

@@ -31,7 +31,8 @@ int regressionExample()
 	vector<float> expectedOutput = data.getOutputs(snn::testing, 0);
 
 	if (accuracy == 100
-		&& abs(output[0] - expectedOutput[0]) < precision)
+		&& abs(output[0] - expectedOutput[0]) < precision
+		&& neuralNetwork.isValid() == 0)
 	{
 		return EXIT_SUCCESS; // the neural network has learned
 	}

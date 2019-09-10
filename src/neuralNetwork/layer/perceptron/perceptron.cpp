@@ -92,27 +92,20 @@ void Perceptron::addAWeight()
 	weights.push_back(randomInitializeWeight());
 }
 
-int Perceptron::isValid()
+int Perceptron::isValid() const
 {
-	if (bias != 1 && bias != 0)
+	if (this->bias != 1)
+		return 301;
+
+	if (this->numberOfInputs != weights.size()
+		|| this->numberOfInputs < 1
+		|| this->numberOfInputs > 1000000)
 	{
-		cout << bias << endl;
-		return 4;
+		return 302;
 	}
-	if (numberOfInputs < 1 || numberOfInputs != static_cast<int>(weights.size()))
-	{
-		cout << numberOfInputs << endl;
-		cout << weights.size() << endl;
-		cout << "" << endl;
-		return 6;
-	}
-	for (int w = 0; w < numberOfInputs; w++)
-	{
-		if (weights[w] < -100000 || weights[w] > 10000)
-		{
-			return 7;
-		}
-	}
+	for (auto weight : weights)
+		if (weight < -100000 || weight > 10000)
+			return 303;
 
 	return 0;
 }
@@ -192,4 +185,3 @@ bool Perceptron::operator!=(const Perceptron& perceptron) const
 {
 	return !this->operator==(perceptron);
 }
-

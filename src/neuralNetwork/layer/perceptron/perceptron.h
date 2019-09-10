@@ -43,7 +43,8 @@ namespace snn::internal
 		void train(const std::vector<float>& inputs, float error);
 
 		void addAWeight();
-		int isValid();
+
+		int isValid() const;
 
 		ActivationFunction* getActivationFunction() const;
 

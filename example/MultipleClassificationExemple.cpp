@@ -32,7 +32,8 @@ int multipleClassificationExample()
 	if (accuracy == 100
 		&& output[0] < separator
 		&& output[1] > separator
-		&& output[2] < separator)
+		&& output[2] < separator
+		&& neuralNetwork.isValid() == 0)
 	{
 		return EXIT_SUCCESS; // the neural network has learned
 	}

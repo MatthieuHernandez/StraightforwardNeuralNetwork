@@ -26,6 +26,8 @@ namespace snn::internal
 		std::vector<float> backOutput(std::vector<float>& inputsError) override;
 		void train(std::vector<float>& inputsError) override;
 
+		int isValid() const override;
+
 		LayerType getType() const override;
 
 		Layer& operator=(const Layer& layer) override;

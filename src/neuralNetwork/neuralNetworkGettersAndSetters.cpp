@@ -19,14 +19,7 @@ float NeuralNetwork::getLearningRate() const
 
 void NeuralNetwork::setMomentum(const float value)
 {
-    if(value >= 0.0f && value <= 1.0f)
-    {
-        this->momentum = value;
-    }
-    else
-    {
-		lastError = 16;
-    }
+	this->momentum = value;
 }
 
 float NeuralNetwork::getMomentum() const

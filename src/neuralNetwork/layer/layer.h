@@ -33,6 +33,8 @@ namespace snn::internal
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;
 		virtual void train(std::vector<float>& inputsError) = 0;
 
+		virtual int isValid() const;
+
 		Perceptron* getNeuron(int neuronNumber);
 		virtual LayerType getType() const = 0;
 

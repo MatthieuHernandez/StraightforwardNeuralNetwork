@@ -43,7 +43,7 @@ void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& 
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired)
 {
 	const auto outputs = this->output(inputs);
-	this->errors = calculateError(outputs, desired);
+	auto errors = calculateError(outputs, desired);
 
 	for (int l = numberOfLayers - 1; l > 0; --l)
 	{
@@ -52,17 +52,19 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 	layers[0]->train(errors);
 }
 
-inline vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired)
+inline 
+vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
-	for (int n = 0; n < numberOfOutputs; ++n)
+	auto errors = new vector<float>(numberOfOutputs, 0);
+	for (int n = 0; n < errors->size(); ++n)
 	{
 		if (desired[n] != -1.0f)
 		{
 			float e = desired[n] - outputs[n];
-			this->errors[n] = e * abs(e);
+			(*errors)[n] = e * abs(e);
 		}
 		else
-			this->errors[n] = 0;
+			(*errors)[n] = 0;
 	}
-	return this->errors;
+	return *errors;
 }

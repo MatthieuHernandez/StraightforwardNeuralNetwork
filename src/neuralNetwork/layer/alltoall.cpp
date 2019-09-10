@@ -67,6 +67,11 @@ void AllToAll::train(vector<float>& inputsError)
 	}
 }
 
+int AllToAll::isValid() const
+{
+	return this->Layer::isValid();
+}
+
 LayerType AllToAll::getType() const
 {
 	return allToAll;

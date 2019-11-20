@@ -1,4 +1,4 @@
-#include "DataForClassification.h"
+#include "DataForClassification.hpp"
 using namespace std;
 using namespace snn;
 

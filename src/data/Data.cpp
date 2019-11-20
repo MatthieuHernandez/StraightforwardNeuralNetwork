@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <vector>
-#include "Data.h"
+#include "Data.hpp"
 #include <random>
 using namespace std;
 using namespace snn;

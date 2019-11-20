@@ -1,5 +1,5 @@
-#include "../src/neuralNetwork/StraightforwardNeuralNetwork.h"
-#include "../src/data/DataForMultipleClassification.h"
+#include "../src/neuralNetwork/StraightforwardNeuralNetwork.hpp"
+#include "../src/data/DataForMultipleClassification.hpp"
 #include <thread>
 
 using namespace std;

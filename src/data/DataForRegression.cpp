@@ -1,4 +1,4 @@
-#include "DataForRegression.h"
+#include "DataForRegression.hpp"
 using namespace std;
 using namespace snn;
 

@@ -109,7 +109,7 @@ void Data::shuffle()
 
 	random_device rd;
 	mt19937 g(rd());
-	shuffle(indexes.begin(), indexes.end(), g);
+	std::shuffle(indexes.begin(), indexes.end(), g);
 }
 
 void Data::unshuffle()

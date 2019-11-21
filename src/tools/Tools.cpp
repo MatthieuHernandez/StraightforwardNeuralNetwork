@@ -32,7 +32,7 @@ T Tools::getMinValue(vector<T> vector)
 		}
 		return minValue;
 	}
-	throw exception("Vector is empty.");
+	throw runtime_error("Vector is empty");
 }
 
 template <typename T>
@@ -51,5 +51,5 @@ T Tools::getMaxValue(vector<T> vector)
 		}
 		return maxValue;
 	}
-	throw exception("Vector is empty.");
+	throw runtime_error("Vector is empty");
 }

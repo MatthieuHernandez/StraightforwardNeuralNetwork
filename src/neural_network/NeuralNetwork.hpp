@@ -104,10 +104,10 @@ namespace snn::internal
 		ar & layers;
 	}
 
-	class notImplementedException : public std::exception
+	class notImplementedException : public std::runtime_error
 	{
 	public:
-		notImplementedException() : std::exception("Function not yet implemented")
+		notImplementedException() : std::runtime_error("Function not yet implemented")
 		{
 		}
 	};

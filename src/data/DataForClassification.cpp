@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "DataForClassification.hpp"
 using namespace std;
 using namespace snn;
@@ -24,7 +25,7 @@ int DataForClassification::getTrainingLabel(const int index)
 		if (this->sets[training].labels[indexes[index]][i] == 1)
 			return i;
 	}
-	throw exception("wrong label");
+	throw runtime_error("wrong label");
 }
 
 int DataForClassification::getTestingLabel(const int index)
@@ -34,7 +35,7 @@ int DataForClassification::getTestingLabel(const int index)
 		if (this->sets[testing].labels[index][i] == 1)
 			return i;
 	}
-	throw exception("wrong label");
+	throw std:runtime_error("wrong label");
 }
 
 vector<float>& DataForClassification::getTestingOutputs(const int index)

@@ -179,7 +179,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 			this->layers.push_back(newLayer);
 		}
 		else
-			throw exception();
+			throw runtime_error("Wrong layer type");
 	}
 
 	return *this;

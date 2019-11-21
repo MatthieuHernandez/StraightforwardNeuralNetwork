@@ -14,7 +14,7 @@ SOURCES = src/tools/Tools.cpp \
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -g
+CXXFLAGS += -g -std=c++17
 
 all: StraightforwardNeuralNetwork
 

@@ -1,30 +1,31 @@
 #include <algorithm>
+#include <stdexcept>
+#include <random>
 #include <vector>
 #include "Data.hpp"
-#include <random>
 using namespace std;
 using namespace snn;
 
-Data::Data(std::vector<std::vector<float>>& trainingInputs,
-           std::vector<std::vector<float>>& trainingLabels,
-           std::vector<std::vector<float>>& testingInputs,
-           std::vector<std::vector<float>>& testingLabels,
+Data::Data(vector<vector<float>>& trainingInputs,
+           vector<vector<float>>& trainingLabels,
+           vector<vector<float>>& testingInputs,
+           vector<vector<float>>& testingLabels,
            float value)
 {
 	this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value);
 }
 
-Data::Data(std::vector<std::vector<float>>& inputs,
-           std::vector<std::vector<float>>& labels,
+Data::Data(vector<vector<float>>& inputs,
+           vector<vector<float>>& labels,
            float value)
 {
 	this->initialize(inputs, labels, inputs, labels, value);
 }
 
-void Data::initialize(std::vector<std::vector<float>>& trainingInputs,
-           std::vector<std::vector<float>>& trainingLabels,
-           std::vector<std::vector<float>>& testingInputs,
-           std::vector<std::vector<float>>& testingLabels,
+void Data::initialize(vector<vector<float>>& trainingInputs,
+           vector<vector<float>>& trainingLabels,
+           vector<vector<float>>& testingInputs,
+           vector<vector<float>>& testingLabels,
            float value)
 {
 	this->value = value;
@@ -91,9 +92,9 @@ void Data::normalization(const float min, const float max)
 			}
 		}
 	}
-	catch (std::exception e)
+	catch (exception e)
 	{
-		throw std::exception("Normalization of input data failed");
+		throw runtime_error("Normalization of input data failed");
 	}
 }
 
@@ -108,7 +109,7 @@ void Data::shuffle()
 
 	random_device rd;
 	mt19937 g(rd());
-	std::shuffle(indexes.begin(), indexes.end(), g);
+	shuffle(indexes.begin(), indexes.end(), g);
 }
 
 void Data::unshuffle()
@@ -133,7 +134,7 @@ vector<float>& Data::getTrainingOutputs(const int index)
 	return this->sets[training].labels[indexes[index]];
 }
 
-std::vector<float>& Data::getData(set set, const int index)
+vector<float>& Data::getData(set set, const int index)
 {
 	if (set == training)
 		return this->getTrainingData(index);
@@ -141,7 +142,7 @@ std::vector<float>& Data::getData(set set, const int index)
 	return this->getTestingData(index);
 }
 
-std::vector<float>& Data::getOutputs(set set, const int index)
+vector<float>& Data::getOutputs(set set, const int index)
 {
 	if (set == training)
 		return this->getTrainingOutputs(index);

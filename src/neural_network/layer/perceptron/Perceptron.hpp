@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "activationFunction/activationFunction.hpp"
+#include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {

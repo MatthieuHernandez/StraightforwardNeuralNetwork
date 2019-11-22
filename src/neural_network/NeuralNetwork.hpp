@@ -1,8 +1,8 @@
 #pragma once
-#include "layer/layer.hpp"
-#include "layer/alltoall.hpp"
-#include "layer/perceptron/activationFunction/activationFunction.hpp"
-#include "statisticAnalysis.hpp"
+#include "layer/Layer.hpp"
+#include "layer/AllToAll.hpp"
+#include "layer/perceptron/activation_function/ActivationFunction.hpp"
+#include "StatisticAnalysis.hpp"
 
 namespace snn::internal
 {
@@ -103,12 +103,4 @@ namespace snn::internal
 		ar.template register_type<AllToAll>();
 		ar & layers;
 	}
-
-	class notImplementedException : public std::runtime_error
-	{
-	public:
-		notImplementedException() : std::runtime_error("Function not yet implemented")
-		{
-		}
-	};
 }

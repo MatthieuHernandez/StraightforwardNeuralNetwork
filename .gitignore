@@ -2,3 +2,4 @@
 /src/externalLibrary/
 *.o
 *.obj
+/src/external_library/*

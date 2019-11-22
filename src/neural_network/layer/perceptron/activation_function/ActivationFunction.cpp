@@ -1,11 +1,12 @@
 #include <cmath>
-#include "activationFunction.hpp"
-#include "sigmoid.hpp"
-#include "improvedSigmoid.hpp"
-#include "tanh.hpp"
+#include <stdexcept>
+
+#include "ActivationFunction.hpp"
+#include "Sigmoid.hpp"
+#include "ImprovedSigmoid.hpp"
+#include "Tanh.hpp"
 #include "ReLU.hpp"
-#include "gaussian.hpp"
-#include <exception>
+#include "Gaussian.hpp"
 
 using namespace std;
 using namespace snn;
@@ -39,7 +40,7 @@ ActivationFunction* ActivationFunction::create(activationFunctionType type)
 		case gaussian:
 			return new Gaussian();
 		default:
-			throw std::exception();
+			throw std::runtime_error("This type of activation function doesn't exist.");
 	}
 }
 

@@ -35,7 +35,7 @@ int DataForClassification::getTestingLabel(const int index)
 		if (this->sets[testing].labels[index][i] == 1)
 			return i;
 	}
-	throw std:runtime_error("wrong label");
+	throw runtime_error("wrong label");
 }
 
 vector<float>& DataForClassification::getTestingOutputs(const int index)

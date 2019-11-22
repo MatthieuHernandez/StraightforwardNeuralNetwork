@@ -5,6 +5,7 @@
 #pragma warning(pop)
 #include "neuralNetwork.hpp"
 #include "layer/alltoall.hpp"
+#include "../Tools/ExtendedExpection.hpp"
 #include <iostream>
 
 using namespace std;
@@ -74,7 +75,7 @@ NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
 void NeuralNetwork::resetAllNeurons()
 {
 	// TODO: rework function resetAllNeurons
-	throw notImplementedException();
+	throw NotImplementedException();
 	/*for(int i = 0; i < neurons.size(); i++)
 	{
 	    for(int j = 0; j < neurons[i].size(); j++)
@@ -87,7 +88,7 @@ void NeuralNetwork::resetAllNeurons()
 void NeuralNetwork::addANeuron(int)
 {
 	// TODO: rework function addANeuron
-	throw notImplementedException();
+	throw NotImplementedException();
 	/*results[layerNumber].push_back(0);
 	errors[layerNumber].push_back(0);
 	outputs.push_back(0);

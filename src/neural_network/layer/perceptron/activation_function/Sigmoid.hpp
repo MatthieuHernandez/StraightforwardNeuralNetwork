@@ -1,7 +1,8 @@
 ﻿#pragma once
-#include "activationFunction.hpp"
-#include <string>
 #include <cassert>
+#include <cmath>
+#include <string>
+#include "activationFunction.hpp"
 
 namespace snn::internal
 {
@@ -17,7 +18,7 @@ namespace snn::internal
 		float function(const float x) const override
 		{
 			float result = 1.0f / (1.0f + exp(-x));
-			if (isnan(result))
+			if (std::isnan(result))
 			{
 				if (x > 0)
 					return 1;
@@ -29,9 +30,9 @@ namespace snn::internal
 		float derivative(const float x) const override
 		{
 			float result = exp(-x) / pow((exp(-x) + 1.0f), 2);
-			if (isnan(result))
+			if (std::isnan(result))
 				return 0.0f;
-			assert(!isnan(result));
+			assert(!std::isnan(result));
 			return result;
 		}
 	};

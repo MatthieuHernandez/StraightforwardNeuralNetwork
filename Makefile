@@ -20,8 +20,11 @@ BOOST_DIR = src/external_library/boost_1_71_0/
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -std=c++17 -I $(BOOST_DIR)
 
-all: StraightforwardNeuralNetwork
+all: clean
+    #StraightforwardNeuralNetwork
 
 #subsystem: $(MAKE) -C ${BOOST_DIR}
 
 StraightforwardNeuralNetwork: $(OBJECTS)
+
+clean: ;rm -r *.o

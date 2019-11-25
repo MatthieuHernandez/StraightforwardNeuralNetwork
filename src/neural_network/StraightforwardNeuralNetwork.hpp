@@ -5,7 +5,7 @@
 #include "neuralNetwork.hpp"
 #include "../data/Data.hpp"
 #include "StraightforwardOption.hpp"
-#include "layer/perceptron/activationFunction/activationFunction.hpp"
+#include "layer/perceptron/activation_function/activationFunction.hpp"
 
 namespace snn
 {

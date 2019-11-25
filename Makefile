@@ -13,18 +13,16 @@ SOURCES = src/tools/Tools.cpp \
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-BOOST_DIR = src/external_library/boost_1_71_0/
+BOOST_DIR = src/external_library/boost_1_71_0
 
 #VPATH += :$(BOOST_DIR)
 
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -std=c++17 -I $(BOOST_DIR)
 
-all: clean
-    #StraightforwardNeuralNetwork
-
-#subsystem: $(MAKE) -C ${BOOST_DIR}
+all: clean \
+    StraightforwardNeuralNetwork
 
 StraightforwardNeuralNetwork: $(OBJECTS)
 
-clean: ;rm -r *.o
+clean: ;find . -type f -name '*.o' -delete

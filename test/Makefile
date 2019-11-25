@@ -16,19 +16,12 @@ PROJECT_DIR = ..
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-#subsystem: 
-#	$(MAKE) -C $(PROJECT_DIR)
-#
-# variable BOOST_DIR
-
 BOOST_DIR = $(PROJECT_DIR)/src/external_library/boost_1_71_0/
 
-CXXFLAGS += -g -std=c++17 -I $(PROJECT_DIR)/src -I $(GTEST_DIR)/include -I $(GTEST_DIR)/include -I $(BOOST_DIR)
+CXXFLAGS += -g -std=c++17 -I $(PROJECT_DIR)/src -I $(GTEST_DIR)/include -I $(BOOST_DIR)
 
 all: Step1 \
-	BuildProject \
 	Step2 \
-	BuildGoogleTest \
 	Step3 \
 	BuildUnitTests \
 
@@ -37,4 +30,4 @@ BuildProject: ;$(MAKE) -C $(PROJECT_DIR)
 Step2: ;@echo "Step 2 : Build GoogleTest library"
 BuildGoogleTest: ;$(MAKE) -C $(GTEST_DIR)
 Step3: ;@echo "Step 3 : Build unit test"
-BuildUnitTests: $(OBJECTS) 
+BuildUnitTests: $(OBJECTS)

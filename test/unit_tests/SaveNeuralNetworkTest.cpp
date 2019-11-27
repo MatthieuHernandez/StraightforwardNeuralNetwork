@@ -13,8 +13,8 @@ TEST(SaveNeuralNetwork, EqualTest)
 	optionA.learningRate = 0.03f;
 	optionA.momentum = 0.78f;
 	StraightforwardOption optionC;
-	optionB.learningRate = 0.03f;
-	optionB.momentum = 0.78f;
+	optionC.learningRate = 0.03f;
+	optionC.momentum = 0.78f;
 	StraightforwardNeuralNetwork A(structureOfNetwork, activationFunctionByLayer, optionA);
 	StraightforwardNeuralNetwork C(structureOfNetwork, activationFunctionByLayer, optionC);
 	StraightforwardNeuralNetwork B = A;
@@ -25,7 +25,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 	EXPECT_TRUE(A.option == B.option) << "A.option == B.option";
 	EXPECT_TRUE(&(A.option) != &(B.option)) << "A.option != B.option";
 	EXPECT_TRUE(A != C) << "A != C"; // Test A == C with same seed
-	
+
 	//EXPECT_TRUE(*A.getLayer(0) == *B.getLayer(0)) << "Value : A.layers[0] == B.layers[0]";
 	//EXPECT_TRUE(A.getLayer(0) != B.getLayer(0)) << "Address : A.layers[0] != B.layers[0]";
 
@@ -48,7 +48,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 
 	EXPECT_TRUE(A == B) << "A == B";
 
-	A.evaluateOnceForRegression(inputs, desired);
+	A.trainOnce(inputs, desired);
 
 	EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
 }
@@ -57,11 +57,14 @@ TEST(SaveNeuralNetwork, Save)
 {
 	const vector<int> structureOfNetwork {5, 20, 10, 3};
 	const vector<activationFunctionType> activationFunctionByLayer{iSigmoid, tanH, sigmoid};
-	NeuralNetwork A(structureOfNetwork, activationFunctionByLayer, 0.03f, 0.78f);
+	StraightforwardOption option;
+	option.learningRate = 0.03f;
+	option.momentum = 0.78f;
+	StraightforwardNeuralNetwork A(structureOfNetwork, activationFunctionByLayer, option);
 
 	A.saveAs("./testSave.bin");
 
-	NeuralNetwork B = NeuralNetwork::loadFrom("./testSave.bin");
+	StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.bin");
 
 	EXPECT_TRUE(A == B) << "A == B";
 }

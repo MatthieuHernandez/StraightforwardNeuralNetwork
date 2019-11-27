@@ -1,4 +1,3 @@
-#pragma once
 #include "GTestTools.hpp"
 
 TEST(DISABLED_TestCaseName, TestName) 

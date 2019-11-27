@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "layer/Layer.hpp"
 #include "layer/AllToAll.hpp"
 #include "layer/perceptron/activation_function/ActivationFunction.hpp"
@@ -25,7 +26,7 @@ namespace snn::internal
 		std::vector<int> structureOfNetwork{};
 		std::vector<snn::activationFunctionType> activationFunctionByLayer{};
 
-		std::vector<Layer*> layers{};
+		std::vector<std::unique_ptr<Layer>> layers{};
 
 		void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
 		std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
@@ -79,7 +80,7 @@ namespace snn::internal
 		int getNumberOfInputs() const;
 		int getNumberOfHiddenLayers() const;
 		int getNumberOfNeuronsInLayer(int layerNumber) const;
-		Layer* getLayer(int layerNumber);
+		Layer& getLayer(int layerNumber);
 		activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
 		int getNumberOfOutputs() const;
 	};

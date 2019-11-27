@@ -31,11 +31,6 @@ float NeuralNetwork::getMomentum() const
 //  Only getters
 //=====================================================================
 
-Layer* NeuralNetwork::getLayer(const int layerNumber)
-{
-    return this->layers[layerNumber];
-}
-
 int NeuralNetwork::getNumberOfInputs() const
 {
     return this->numberOfInput;

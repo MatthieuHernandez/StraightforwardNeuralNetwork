@@ -20,11 +20,6 @@ int Layer::isValid() const
 	return 0;
 }
 
-Perceptron& Layer::getNeuron(int neuronNumber)
-{
-	return this->neurons[neuronNumber];
-}
-
 Layer& Layer::operator=(const Layer& layer)
 {
 	this->numberOfInputs = layer.numberOfInputs;

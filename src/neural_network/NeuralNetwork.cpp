@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <ctime>
+#include <iostream>
 //#include <omp.h>
 #pragma warning(push, 0)
 #include <boost/serialization/vector.hpp>
@@ -6,7 +8,6 @@
 #include "neuralNetwork.hpp"
 #include "layer/alltoall.hpp"
 #include "../Tools/ExtendedExpection.hpp"
-#include <iostream>
 
 using namespace std;
 using namespace snn;
@@ -50,12 +51,11 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	layers.reserve(numberOfLayers);
 	for (unsigned int l = 1; l < structureOfNetwork.size(); ++l)
 	{
-		Layer* layer(new AllToAll(structureOfNetwork[l - 1],
+		layers.emplace_back(new AllToAll(structureOfNetwork[l - 1],
 		                          structureOfNetwork[l],
 		                          this->activationFunctionByLayer[l - 1],
 		                          learningRate,
 		                          momentum));
-		layers.push_back(layer);
 	}
 
 	int err = this->isValid();
@@ -177,7 +177,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 		{
 			auto newLayer = new AllToAll();
 			newLayer->operator=(*layer);
-			this->layers.push_back(newLayer);
+			this->layers.emplace_back(newLayer);
 		}
 		else
 			throw runtime_error("Wrong layer type");
@@ -188,7 +188,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-	bool equal = this->maxOutputIndex == neuralNetwork.maxOutputIndex
+	bool isEqual = this->maxOutputIndex == neuralNetwork.maxOutputIndex
 		&& this->learningRate == neuralNetwork.learningRate
 		&& this->momentum == neuralNetwork.momentum
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
@@ -197,15 +197,9 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
 		&& this->structureOfNetwork == neuralNetwork.structureOfNetwork
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
-		&& this->layers.size() == neuralNetwork.layers.size();
-
-	if (equal)
-		for (int l = 0; l < numberOfLayers; l++)
-		{
-			if (*this->layers[l] != *neuralNetwork.layers[l])
-				equal = false;
-		}
-	return equal;
+		&& equal(this->layers.begin(), this->layers.end(),
+		         neuralNetwork.layers.begin(), neuralNetwork.layers.end());
+	return isEqual;
 }
 
 bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const

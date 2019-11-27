@@ -31,7 +31,7 @@ Perceptron::Perceptron(const int numberOfInputs,
 
 
 	this->weights.resize(numberOfInputs);
-	for (auto&& w : weights)
+	for (auto& w : weights)
 	{
 		w = randomInitializeWeight();
 	}
@@ -104,7 +104,7 @@ int Perceptron::isValid() const
 	{
 		return 302;
 	}
-	for (auto weight : weights)
+	for (auto& weight : weights)
 		if (weight < -100000 || weight > 10000)
 			return 303;
 

@@ -52,7 +52,7 @@ vector<float> AllToAll::backOutput(vector<float>& inputsError)
 	//#pragma omp parallel for
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
-		auto result = neurons[n].backOutput(inputsError[n]);
+		auto& result = neurons[n].backOutput(inputsError[n]);
 		for (int r = 0; r < numberOfInputs; ++r)
 			errors[r] += result[r];
 	}

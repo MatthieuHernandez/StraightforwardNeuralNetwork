@@ -35,7 +35,7 @@ namespace snn::internal
 
 		virtual int isValid() const;
 
-		Perceptron* getNeuron(int neuronNumber);
+		Perceptron& getNeuron(int neuronNumber);
 		virtual LayerType getType() const = 0;
 
 		virtual bool operator==(const Layer& layer) const;

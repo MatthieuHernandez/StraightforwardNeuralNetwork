@@ -3,17 +3,17 @@
 using namespace std;
 using namespace snn;
 
-DataForClassification::DataForClassification(std::vector<std::vector<float>>& trainingInputs,
-                                             std::vector<std::vector<float>>& trainingLabels,
-                                             std::vector<std::vector<float>>& testingInputs,
-                                             std::vector<std::vector<float>>& testingLabels,
+DataForClassification::DataForClassification(std::vector<std::vector<float>> trainingInputs,
+                                             std::vector<std::vector<float>> trainingLabels,
+                                             std::vector<std::vector<float>> testingInputs,
+                                             std::vector<std::vector<float>> testingLabels,
                                              float separator)
 	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
 {
 }
 
-DataForClassification::DataForClassification(std::vector<std::vector<float>>& inputs,
-                                             std::vector<std::vector<float>>& labels, float separator)
+DataForClassification::DataForClassification(std::vector<std::vector<float>> inputs,
+                                             std::vector<std::vector<float>> labels, float separator)
 	: Data(inputs, labels, separator)
 {
 }
@@ -38,7 +38,7 @@ int DataForClassification::getTestingLabel(const int index)
 	throw runtime_error("wrong label");
 }
 
-vector<float>& DataForClassification::getTestingOutputs(const int index)
+const vector<float>& DataForClassification::getTestingOutputs(const int index)
 {
 	// Should never be called
 	throw exception();

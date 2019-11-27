@@ -20,7 +20,7 @@ void NeuralNetwork::initialize()
 	rand();
 	ActivationFunction::initialize();
 
-	//const auto numberOfCore = omp_get_num_procs();
+	//int auto numberOfCore = omp_get_num_procs();
 	//omp_set_num_threads(numberOfCore * 2);
 	//omp_set_num_threads(128);
 
@@ -58,10 +58,10 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 		layers.push_back(layer);
 	}
 
-	auto err = this->isValid();
+	int err = this->isValid();
 	if (err != 0)
 	{
-		auto message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
+		string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
 		throw runtime_error(message);
 	}
 }
@@ -150,7 +150,7 @@ int NeuralNetwork::isValid() const
 
 	for (auto& layer : this->layers)
 	{
-		auto err = layer->isValid();
+		int err = layer->isValid();
 		if(err != 0)
 			return err;
 	}
@@ -171,7 +171,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 
 	this->layers.clear();
 	this->layers.reserve(neuralNetwork.layers.size());
-	for (const auto& layer : neuralNetwork.layers)
+	for (auto& layer : neuralNetwork.layers)
 	{
 		if (layer->getType() == allToAll)
 		{
@@ -188,7 +188,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-	auto equal(this->maxOutputIndex == neuralNetwork.maxOutputIndex
+	bool equal = this->maxOutputIndex == neuralNetwork.maxOutputIndex
 		&& this->learningRate == neuralNetwork.learningRate
 		&& this->momentum == neuralNetwork.momentum
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
@@ -197,7 +197,7 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
 		&& this->structureOfNetwork == neuralNetwork.structureOfNetwork
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
-		&& this->layers.size() == neuralNetwork.layers.size());
+		&& this->layers.size() == neuralNetwork.layers.size();
 
 	if (equal)
 		for (int l = 0; l < numberOfLayers; l++)

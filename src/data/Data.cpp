@@ -60,7 +60,7 @@ void Data::normalization(const float min, const float max)
 		vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
 		vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
 
-		for (auto j = 0; j < this->sizeOfData; j++)
+		for (int j = 0; j < this->sizeOfData; j++)
 		{
 			float minValueOfVector = (*inputsTraining)[0][j];
 			float maxValueOfVector = (*inputsTraining)[0][j];
@@ -77,14 +77,14 @@ void Data::normalization(const float min, const float max)
 				}
 			}
 
-			for (auto i = 0; i < (*inputsTraining).size(); i++)
+			for (int i = 0; i < (*inputsTraining).size(); i++)
 			{
 				(*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / (maxValueOfVector -
 					minValueOfVector
 				);
 				(*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
 			}
-			for (auto i = 0; i < (*inputsTesting).size(); i++)
+			for (int i = 0; i < (*inputsTesting).size(); i++)
 			{
 				(*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / (maxValueOfVector -
 					minValueOfVector);
@@ -119,22 +119,22 @@ void Data::unshuffle()
 		indexes[i] = i;
 }
 
-vector<float>& Data::getTrainingData(const int index)
+const vector<float>& Data::getTrainingData(const int index)
 {
 	return this->sets[training].inputs[indexes[index]];
 }
 
-vector<float>& Data::getTestingData(const int index)
+const vector<float>& Data::getTestingData(const int index)
 {
 	return this->sets[testing].inputs[index];
 }
 
-vector<float>& Data::getTrainingOutputs(const int index)
+const vector<float>& Data::getTrainingOutputs(const int index)
 {
 	return this->sets[training].labels[indexes[index]];
 }
 
-vector<float>& Data::getData(set set, const int index)
+const vector<float>& Data::getData(set set, const int index)
 {
 	if (set == training)
 		return this->getTrainingData(index);
@@ -142,7 +142,7 @@ vector<float>& Data::getData(set set, const int index)
 	return this->getTestingData(index);
 }
 
-vector<float>& Data::getOutputs(set set, const int index)
+const vector<float>& Data::getOutputs(set set, const int index)
 {
 	if (set == training)
 		return this->getTrainingOutputs(index);

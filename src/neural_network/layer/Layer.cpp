@@ -13,16 +13,16 @@ int Layer::isValid() const
 
 	for (auto& neuron : this->neurons)
 	{
-		auto err = neuron.isValid();
+		int err = neuron.isValid();
 		if(err != 0)
 			return err;
 	}
 	return 0;
 }
 
-Perceptron* Layer::getNeuron(int neuronNumber)
+Perceptron& Layer::getNeuron(int neuronNumber)
 {
-	return &this->neurons[neuronNumber];
+	return this->neurons[neuronNumber];
 }
 
 Layer& Layer::operator=(const Layer& layer)

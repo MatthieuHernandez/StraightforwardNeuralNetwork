@@ -54,17 +54,17 @@ namespace snn
 
 		[[nodiscard]] float getValue() const {return value;}
 
-		virtual std::vector<float>& getTrainingData(const int index);
-		virtual std::vector<float>& getTestingData(const int index);
+		[[nodiscard]] virtual const std::vector<float>& getTrainingData(const int index);
+		[[nodiscard]] virtual const std::vector<float>& getTestingData(const int index);
 
-		virtual int getTrainingLabel(const int) { throw std::exception(); }
-		virtual int getTestingLabel(const int) { throw std::exception(); }
+		[[nodiscard]] virtual int getTrainingLabel(const int) { throw std::exception(); }
+		[[nodiscard]] virtual int getTestingLabel(const int) { throw std::exception(); }
 
-		virtual std::vector<float>& getTrainingOutputs(const int index);
-		virtual std::vector<float>& getTestingOutputs(const int) = 0;
+		[[nodiscard]] virtual const std::vector<float>& getTrainingOutputs(const int index);
+		[[nodiscard]] virtual const std::vector<float>& getTestingOutputs(const int) = 0;
 
-		std::vector<float>& getData(set set, const int index);
-		std::vector<float>& getOutputs(set set, const int index);
-		int getLabel(set set, const int index);
+		[[nodiscard]] const std::vector<float>& getData(set set, const int index);
+		[[nodiscard]] const std::vector<float>& getOutputs(set set, const int index);
+		[[nodiscard]] int getLabel(set set, const int index);
 	};
 }

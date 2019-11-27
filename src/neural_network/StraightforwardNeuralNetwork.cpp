@@ -24,9 +24,8 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& st
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork,
-                                                           const vector<activationFunctionType>&
-                                                           activationFunctionByLayer,
-														   StraightforwardOption& option)
+                                                           const vector<activationFunctionType>& activationFunctionByLayer,
+                                                           StraightforwardOption& option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
 	                option.learningRate,

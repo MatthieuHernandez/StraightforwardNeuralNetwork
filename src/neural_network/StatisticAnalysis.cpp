@@ -151,7 +151,7 @@ float StatisticAnalysis::computeGlobalClusteringRate()
 float StatisticAnalysis::computeWeightedClusteringRate()
 {
 	float weightedClusteringRate = 0;
-	for (const auto c : clusters)
+	for (const auto& c : clusters)
 	{
 		const float numerator = c.truePositive;
 		const float denominator = c.truePositive + c.falsePositive;
@@ -165,7 +165,7 @@ float StatisticAnalysis::computeWeightedClusteringRate()
 float StatisticAnalysis::computeF1Score()
 {
 	float f1Score = 0;
-	for (const auto c : clusters)
+	for (const auto& c : clusters)
 	{
 		if (c.truePositive > 0)
 		{

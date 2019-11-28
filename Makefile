@@ -25,4 +25,4 @@ all: clean \
 
 StraightforwardNeuralNetwork: $(OBJECTS)
 
-clean: ;find . -type f -name '*.o' -delete
+clean: ;find ./src -type f -name '*.o' -delete

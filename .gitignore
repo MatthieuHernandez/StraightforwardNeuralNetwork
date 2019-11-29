@@ -1,5 +1,12 @@
 /.vscode/
-/src/externalLibrary/
+external_library/
+*.a
 *.o
 *.obj
-/src/external_library/*
+
+# Ignore cmake generated directories and files.
+generated/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+MakeFile

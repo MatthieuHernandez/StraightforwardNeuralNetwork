@@ -1,5 +1,6 @@
-#include <thread>
 #include <fstream>
+#include <thread>
+#include <stdexcept>
 #pragma warning(push, 0)
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -15,7 +16,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork)
 	: NeuralNetwork(structureOfNetwork,
 	                vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
 	                0.05f,
@@ -23,9 +24,9 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& st
 {
 }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const vector<int>& structureOfNetwork,
-                                                           const vector<activationFunctionType>& activationFunctionByLayer,
-                                                           StraightforwardOption& option)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork,
+                                                           vector<activationFunctionType> activationFunctionByLayer,
+                                                           StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
 	                option.learningRate,
@@ -126,7 +127,7 @@ StraightforwardNeuralNetwork::evaluationFunctionPtr StraightforwardNeuralNetwork
 		return &StraightforwardNeuralNetwork::evaluateOnceForClassification;
 	}
 
-	throw exception("wrong Data typeid");
+	throw runtime_error("wrong Data typeid");
 }
 
 inline

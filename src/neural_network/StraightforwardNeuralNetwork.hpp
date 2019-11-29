@@ -34,11 +34,11 @@ namespace snn
 		void serialize(Archive& ar, const unsigned int version);
 
 	public:
-		explicit StraightforwardNeuralNetwork(const std::vector<int> structureOfNetwork);
+		explicit StraightforwardNeuralNetwork(std::vector<int> structureOfNetwork);
 
-		StraightforwardNeuralNetwork(const std::vector<int>& structureOfNetwork,
-		                             const std::vector<activationFunctionType>& activationFunctionByLayer,
-		                             StraightforwardOption& option);
+		StraightforwardNeuralNetwork(std::vector<int> structureOfNetwork,
+		                             std::vector<activationFunctionType> activationFunctionByLayer,
+		                             StraightforwardOption option);
 
 
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);

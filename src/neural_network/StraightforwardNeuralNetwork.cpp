@@ -170,7 +170,7 @@ void StraightforwardNeuralNetwork::saveAs(std::string filePath)
 	ofstream file(filePath);
 	boost::archive::text_oarchive binaryFile(file);
 	binaryFile << this;
-	std::ofstream ofs("filename");
+	std::ofstream ofs(filePath);
 	boost::archive::text_oarchive oa(ofs);
 }
 

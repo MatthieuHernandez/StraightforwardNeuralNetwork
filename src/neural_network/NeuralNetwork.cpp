@@ -1,13 +1,12 @@
 #include <algorithm>
 #include <ctime>
 #include <iostream>
-//#include <omp.h>
-#pragma warning(push, 0)
+//#pragma warning(push, 0)
 #include <boost/serialization/vector.hpp>
-#pragma warning(pop)
-#include "neuralNetwork.hpp"
-#include "layer/alltoall.hpp"
-#include "../Tools/ExtendedExpection.hpp"
+//#pragma warning(pop)
+#include "NeuralNetwork.hpp"
+#include "layer/AllToAll.hpp"
+#include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

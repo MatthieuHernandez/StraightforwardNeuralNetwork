@@ -10,11 +10,14 @@ file(GLOB SOURCES
     "unit_tests/*.cpp"
 )
 
-add_executable(Test ${SOURCES})
+add_executable(Test.out ${SOURCES})
 
 add_subdirectory(googletest-release-1.10.0)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(Test gtest StraightforwardNeuralNetwork)
+add_subdirectory(.. subdir)
 
+include_directories(../src src)
+include_directories(../src/external_library/boost_1_71_0_minimal)
 
-install(TARGETS Test DESTINATION bin)
+target_link_libraries(Test.out gtest StraightforwardNeuralNetwork)
+
+install(TARGETS Test.out DESTINATION bin)

@@ -20,23 +20,9 @@ file(GLOB SOURCES
     "src/neural_network/layer/perceptron/activation_function/*.cpp"
 )
 
-set(Boost_DEBUG 1)
-set(Boost_USE_STATIC_LIBS ON)
-#set(Boost_USE_MULTITHREADED ON)
-
-set(BOOST_ROOT src/external_library/boost_1_71_0)
-set(BOOST_INCLUDEDIR src/external_library/boost_1_71_0)
-set(BOOST_LIBRARYDIR src/external_library/boost_1_71_0/stage/lib)
-
-find_package(Boost 1.71.0 REQUIRED REQUIRED serialization)
-if(NOT Boost_FOUND)
-    execute_process(COMMAND git --version)
-    message( SEND_ERROR "Copy boost 1.71.0 in src/external_library")
-endif()
-
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIR})
+include_directories(src/external_library/boost_1_71_0_minimal)
+add_subdirectory(src/external_library/boost_1_71_0_minimal/libs/serialization)
 
 add_library(StraightforwardNeuralNetwork ${SOURCES})
 
-target_link_libraries(StraightforwardNeuralNetwork ${Boost_LIBRARIES} )
+target_link_libraries(StraightforwardNeuralNetwork Boost)

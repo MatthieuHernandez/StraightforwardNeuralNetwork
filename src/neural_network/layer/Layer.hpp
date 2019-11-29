@@ -1,5 +1,6 @@
 #pragma once
 #pragma warning(push, 0)
+#include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #pragma warning(pop)
 #include "perceptron/perceptron.hpp"

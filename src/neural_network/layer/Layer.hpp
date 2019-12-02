@@ -22,12 +22,16 @@ namespace snn::internal
 	protected:
 		int numberOfInputs = 0;
 		int numberOfNeurons = 0;
+
+		const LayerOption* option;
+
 		std::vector<float> errors;
 		std::vector<Perceptron> neurons;
-		float learningRate = 0;
-		float momentum = 0;
 
 	public:
+		virtual Layer(const int numberOfInputs,
+                      const int numberOfNeurons,
+                      LayerOption* option)
 		virtual ~Layer() = default;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
@@ -46,11 +50,10 @@ namespace snn::internal
 	template <class Archive>
 	void Layer::serialize(Archive& ar, unsigned version)
 	{
+		ar & this->option;
 		ar & this->numberOfInputs;
 		ar & this->numberOfNeurons;
 		ar & this->errors;
-		ar & this->learningRate;
-		ar & this->momentum;
 		ar & this->neurons;
 	}
 }

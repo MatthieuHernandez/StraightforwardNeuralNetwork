@@ -14,13 +14,9 @@ BOOST_CLASS_EXPORT(AllToAll);
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
                    activationFunctionType function,
-                   float learningRate,
-                   float momentum)
+                   LayerOption& option)
+	: Layer(numberOfInputs, numberOfNeurons, option)
 {
-	this->numberOfInputs = numberOfInputs;
-	this->numberOfNeurons = numberOfNeurons;
-	this->learningRate = learningRate;
-	this->momentum = momentum;
 	this->neurons.reserve(numberOfNeurons);
 
 	for (int n = 0; n < numberOfNeurons; ++n)
@@ -31,8 +27,7 @@ AllToAll::AllToAll(const int numberOfInputs,
 
 vector<float> AllToAll::output(const vector<float>& inputs)
 {
-	vector<float> outputs(this->numberOfNeurons); // copy in heap on save in RAM, what is faster ?
-	//#pragma omp parallel for TODO : inputs is shared
+	vector<float> outputs(this->numberOfNeurons);
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
 		outputs[n] = neurons[n].output(inputs);
@@ -43,13 +38,11 @@ vector<float> AllToAll::output(const vector<float>& inputs)
 vector<float> AllToAll::backOutput(vector<float>& inputsError)
 {
 	vector<float> errors(this->numberOfInputs);
-	//#pragma omp parallel for
 	for (int n = 0; n < numberOfInputs; ++n)
 	{
 		errors[n] = 0;
 	}
 
-	//#pragma omp parallel for
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
 		auto& result = neurons[n].backOutput(inputsError[n]);

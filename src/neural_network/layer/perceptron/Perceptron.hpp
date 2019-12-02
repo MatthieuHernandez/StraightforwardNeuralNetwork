@@ -10,8 +10,8 @@ namespace snn::internal
 	private :
 
 		const int numberOfInputs{};
-		float const * const  learningRate{};
-		float const * const  momentum{};
+
+		const PerceptronOption* option;
 
 		std::vector<float> weights;
 		float bias{};
@@ -68,14 +68,13 @@ namespace snn::internal
 	template <class Archive>
 	void Perceptron::serialize(Archive& ar, const unsigned int version)
 	{
+		ar & option;
 		ar & weights;
 		ar & previousDeltaWeights;
 		ar & lastInputs;
 		ar & errors;
 		ar & lastOutput;
 		ar & numberOfInputs;
-		ar & learningRate;
-		ar & momentum;
 		ar & bias;
 		ar & aFunctionType;
 		this->activationFunction = ActivationFunction::create(aFunctionType);

@@ -15,8 +15,7 @@ namespace snn::internal
 
 		int maxOutputIndex{};
 
-		float* learningRate;
-		float* momentum;
+		const NeuralNetworkOption* option;
 
 		int numberOfHiddenLayers{};
 		int numberOfLayers{};

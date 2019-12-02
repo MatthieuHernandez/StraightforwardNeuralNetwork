@@ -14,9 +14,9 @@ Perceptron::~Perceptron()
 
 Perceptron::Perceptron(const int numberOfInputs,
                        activationFunctionType activationFunction,
-                       float const * const learningRate,
-                       float const * const momentum)
+                       NeuronOption* option)
 {
+	this->option = option;
 	this->numberOfInputs = numberOfInputs;
 	this->learningRate = learningRate;
 	this->momentum = momentum;
@@ -169,14 +169,13 @@ Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 
 bool Perceptron::operator==(const Perceptron& perceptron) const
 {
-	return this->weights == perceptron.weights
+	return *this->option = *option
+		&& this->weights == perceptron.weights
 		&& this->previousDeltaWeights == perceptron.previousDeltaWeights
 		&& this->lastInputs == perceptron.lastInputs
 		&& this->errors == perceptron.errors
 		&& this->lastOutput == perceptron.lastOutput
 		&& this->numberOfInputs == perceptron.numberOfInputs
-		&& this->learningRate == perceptron.learningRate
-		&& this->momentum == perceptron.momentum
 		&& this->bias == perceptron.bias
 		&& this->aFunctionType == perceptron.aFunctionType
 		&& *this->activationFunction == *perceptron.activationFunction;

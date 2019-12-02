@@ -29,8 +29,7 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structure
                                                            StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                option.learningRate,
-	                option.momentum)
+	                option)
 {
 	this->option = option;
 }

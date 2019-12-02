@@ -29,8 +29,7 @@ void NeuralNetwork::initialize()
 
 NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
                              const std::vector<activationFunctionType>& activationFunctionByLayer,
-                             float& learningRate,
-                             float& momentum) : StatisticAnalysis(structureOfNetwork.back())
+                             NeuralNetworkOption& option) : StatisticAnalysis(structureOfNetwork.back())
 {
 	if (isTheFirst)
 		this->initialize();
@@ -38,14 +37,12 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	this->structureOfNetwork = structureOfNetwork;
 	this->activationFunctionByLayer = activationFunctionByLayer;
 
-	this->learningRate = &learningRate;
-	this->momentum = &momentum;
+	this->option = &option;
 
 	this->numberOfLayers = static_cast<int>(structureOfNetwork.size()) - 1;
 	this->numberOfHiddenLayers = static_cast<int>(structureOfNetwork.size()) - 2;
 	this->numberOfInput = structureOfNetwork[0];
 	this->numberOfOutputs = structureOfNetwork.back();
-
 
 	layers.reserve(numberOfLayers);
 	for (unsigned int l = 1; l < structureOfNetwork.size(); ++l)
@@ -84,10 +81,10 @@ int NeuralNetwork::isValid() const
 	|| this->numberOfLayers != numberOfHiddenLayers + 1)
 		return 102;
 
-	if (*learningRate <= 0.0f || *learningRate >= 1.0f)
+	if (option->learningRate <= 0.0f || option->learningRate >= 1.0f)
 		return 103;
 
-	if (*momentum < 0.0f || *momentum > 1.0f)
+	if (option->momentum < 0.0f || option->momentum > 1.0f)
 		return 104;
 
 	for (auto& layer : this->layers)
@@ -102,8 +99,7 @@ int NeuralNetwork::isValid() const
 NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 {
 	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
-	this->learningRate = neuralNetwork.learningRate;
-	this->momentum = neuralNetwork.momentum;
+	this->option = neuralNetwork.option;
 	this->numberOfHiddenLayers = neuralNetwork.numberOfHiddenLayers;
 	this->numberOfLayers = neuralNetwork.numberOfLayers;
 	this->numberOfInput = neuralNetwork.numberOfInput;
@@ -131,8 +127,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
 	bool isEqual = this->maxOutputIndex == neuralNetwork.maxOutputIndex
-		&& *this->learningRate == *neuralNetwork.learningRate
-		&& *this->momentum == *neuralNetwork.momentum
+		&& this->option == neuralNetwork->option
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
 		&& this->numberOfInput == neuralNetwork.numberOfInput

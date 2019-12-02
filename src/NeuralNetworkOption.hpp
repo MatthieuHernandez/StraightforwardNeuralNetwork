@@ -1,12 +1,11 @@
 #pragma once
-#include <string>
 #pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
 #pragma warning(pop)
 
-namespace snn
+namespace snn::internal
 {
-	class StraightforwardOption : NeuralNetworkOption
+	class NeuralNetworkOption : LayerOption
 	{
 	private:
 		friend class boost::serialization::access;
@@ -15,11 +14,8 @@ namespace snn
 
 	public:
 
-		bool autoSaveWhenBetter = false;
-		std::string saveFilePath = "save.snn";
-
-		StraightforwardOption() = default;
-		~StraightforwardOption() = default;
+		NeuralNetworkOption() = default;
+		~NeuralNetworkOption() = default;
 
 		bool operator==(const StraightforwardOption& option) const;
 		StraightforwardOption& operator=(const StraightforwardOption& option) = default;
@@ -28,9 +24,7 @@ namespace snn
 	template <class Archive>
 	void StraightforwardOption::serialize(Archive& ar, const unsigned version)
 	{
-		ar & this->autoSaveWhenBetter;
-		ar & this->saveFilePath;
-		boost::serialization::void_cast_register<StraightforwardOption, NeuralNetworkOption>();
-		ar & boost::serialization::base_object<NeuralNetworkOption>(*this);
+		boost::serialization::void_cast_register<NeuralNetworkOption, LayerOption>();
+		ar & boost::serialization::base_object<LayerOption>(*this);
 	}
 }

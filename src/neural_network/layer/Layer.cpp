@@ -4,6 +4,13 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
+Layer::Layer(const int numberOfInputs,
+             const int numberOfNeurons,
+             LayerOption* option)
+{
+	this->option = option;
+}
+
 int Layer::isValid() const
 {
 	if(this->neurons.size() != this->numberOfNeurons
@@ -22,6 +29,7 @@ int Layer::isValid() const
 
 Layer& Layer::operator=(const Layer& layer)
 {
+	this->option = layer.option;
 	this->numberOfInputs = layer.numberOfInputs;
 	this->numberOfNeurons = layer.numberOfNeurons;
 	this->errors = layer.errors;
@@ -33,12 +41,11 @@ Layer& Layer::operator=(const Layer& layer)
 
 bool Layer::operator==(const Layer& layer) const
 {
-	return this->numberOfInputs == layer.numberOfInputs
+	return this->option = layer.option;
+		&& this->numberOfInputs == layer.numberOfInputs
 		&& this->numberOfNeurons == layer.numberOfNeurons
 		&& this->errors == layer.errors
-		&& this->neurons == layer.neurons
-		&& this->learningRate == layer.learningRate
-		&& this->momentum == layer.momentum;
+		&& this->neurons == layer.neurons;
 }
 
 bool Layer::operator!=(const Layer& layer) const

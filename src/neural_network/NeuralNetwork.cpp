@@ -1,9 +1,6 @@
 #include <algorithm>
 #include <ctime>
 #include <iostream>
-//#pragma warning(push, 0)
-#include <boost/serialization/vector.hpp>
-//#pragma warning(pop)
 #include "NeuralNetwork.hpp"
 #include "layer/AllToAll.hpp"
 #include "../tools/ExtendedExpection.hpp"
@@ -19,11 +16,6 @@ void NeuralNetwork::initialize()
 	srand(static_cast<int>(time(nullptr)));
 	rand();
 	ActivationFunction::initialize();
-
-	//int auto numberOfCore = omp_get_num_procs();
-	//omp_set_num_threads(numberOfCore * 2);
-	//omp_set_num_threads(128);
-
 	isTheFirst = false;
 }
 

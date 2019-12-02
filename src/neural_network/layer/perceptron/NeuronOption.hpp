@@ -21,7 +21,7 @@ namespace snn::internal
 		~NeuronOption() = default;
 
 		bool operator==(const NeuronOption& option) const;
-		NeuronOption& operator=(const NeuronOption& option) = default;
+		NeuronOption& operator=(const NeuronOption& option);
 	};
 
 	template <class Archive>

@@ -24,7 +24,7 @@ namespace snn
 		~StraightforwardOption() = default;
 
 		bool operator==(const StraightforwardOption& option) const;
-		StraightforwardOption& operator=(const StraightforwardOption& option) = default;
+		StraightforwardOption& operator=(const StraightforwardOption& option);
 	};
 
 	template <class Archive>

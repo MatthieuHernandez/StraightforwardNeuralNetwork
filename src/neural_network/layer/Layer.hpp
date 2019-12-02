@@ -30,8 +30,8 @@ namespace snn::internal
 		std::vector<Perceptron> neurons;
 
 	public:
-		Layer(const int numberOfInputs,
-              const int numberOfNeurons,
+		Layer(int numberOfInputs,
+              int numberOfNeurons,
               LayerOption* option);
 		Layer() = default;
 		virtual ~Layer() = default;

@@ -2,6 +2,7 @@
 #include "layer.hpp"
 #include "perceptron/perceptron.hpp"
 #pragma warning(push, 0)
+#include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #pragma warning(pop)
 

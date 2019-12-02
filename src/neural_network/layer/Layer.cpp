@@ -4,8 +4,8 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-Layer::Layer(const int numberOfInputs,
-             const int numberOfNeurons,
+Layer::Layer(int numberOfInputs,
+             int numberOfNeurons,
              LayerOption* option)
 {
 	this->numberOfInputs = numberOfInputs;
@@ -36,14 +36,12 @@ Layer& Layer::operator=(const Layer& layer)
 	this->numberOfNeurons = layer.numberOfNeurons;
 	this->errors = layer.errors;
 	this->neurons = layer.neurons;
-	this->learningRate = layer.learningRate;
-	this->momentum = layer.momentum;
 	return *this;
 }
 
 bool Layer::operator==(const Layer& layer) const
 {
-	return this->option = layer.option;
+	return this->option == layer.option
 		&& this->numberOfInputs == layer.numberOfInputs
 		&& this->numberOfNeurons == layer.numberOfNeurons
 		&& this->errors == layer.errors

@@ -10,7 +10,7 @@ namespace snn::internal
 	{
 	private :
 
-		const int numberOfInputs{};
+		int numberOfInputs{};
 
 		NeuronOption* option;
 

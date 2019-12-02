@@ -20,7 +20,7 @@ namespace snn::internal
 		~LayerOption() = default;
 
 		bool operator==(const LayerOption& option) const;
-		LayerOption& operator=(const LayerOption& option) = default;
+		LayerOption& operator=(const LayerOption& option);
 	};
 
 	template <class Archive>

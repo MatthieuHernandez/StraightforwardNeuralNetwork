@@ -20,7 +20,7 @@ namespace snn::internal
 		~NeuralNetworkOption() = default;
 
 		bool operator==(const NeuralNetworkOption& option) const;
-		NeuralNetworkOption& operator=(const NeuralNetworkOption& option) = default;
+		NeuralNetworkOption& operator=(const NeuralNetworkOption& option);
 	};
 
 	template <class Archive>

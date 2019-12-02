@@ -1,11 +1,13 @@
 #pragma once
 #pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #pragma warning(pop)
+#include "perceptron/NeuronOption.hpp"
 
 namespace snn::internal
 {
-	class LayerOption : NeuronOption
+	class LayerOption : public NeuronOption
 	{
 	private:
 		friend class boost::serialization::access;
@@ -17,12 +19,12 @@ namespace snn::internal
 		LayerOption() = default;
 		~LayerOption() = default;
 
-		bool operator==(const StraightforwardOption& option) const;
-		StraightforwardOption& operator=(const StraightforwardOption& option) = default;
+		bool operator==(const LayerOption& option) const;
+		LayerOption& operator=(const LayerOption& option) = default;
 	};
 
 	template <class Archive>
-	void StraightforwardOption::serialize(Archive& ar, const unsigned version)
+	void LayerOption::serialize(Archive& ar, const unsigned version)
 	{
 		boost::serialization::void_cast_register<LayerOption, NeuronOption>();
 		ar & boost::serialization::base_object<NeuronOption>(*this);

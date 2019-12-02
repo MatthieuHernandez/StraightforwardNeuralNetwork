@@ -14,14 +14,14 @@ BOOST_CLASS_EXPORT(AllToAll);
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
                    activationFunctionType function,
-                   LayerOption& option)
+                   LayerOption* option)
 	: Layer(numberOfInputs, numberOfNeurons, option)
 {
 	this->neurons.reserve(numberOfNeurons);
 
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
-		this->neurons.emplace_back(numberOfInputs, function, learningRate, momentum);
+		this->neurons.emplace_back(numberOfInputs, function, option);
 	}
 }
 

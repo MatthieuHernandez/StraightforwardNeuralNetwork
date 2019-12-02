@@ -17,15 +17,15 @@ namespace snn::internal
 		float learningRate = 0.05f;
 		float momentum = 0.0f;
 
-		LayerOption() = default;
-		~LayerOption() = default;
+		NeuronOption() = default;
+		~NeuronOption() = default;
 
-		bool operator==(const LayerOption& option) const;
-		LayerOption& operator=(const LayerOption& option) = default;
+		bool operator==(const NeuronOption& option) const;
+		NeuronOption& operator=(const NeuronOption& option) = default;
 	};
 
 	template <class Archive>
-	void LayerOption::serialize(Archive& ar, const unsigned version)
+	void NeuronOption::serialize(Archive& ar, const unsigned version)
 	{
 		ar & this->learningRate;
 		ar & this->momentum;

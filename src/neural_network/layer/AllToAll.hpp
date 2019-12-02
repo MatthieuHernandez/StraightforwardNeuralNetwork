@@ -20,8 +20,7 @@ namespace snn::internal
 
 		AllToAll() = default;
 		~AllToAll() = default;
-		AllToAll(int numberOfInputs, int numberOfNeurons, activationFunctionType function, float learningRate,
-		         float momentum);
+		AllToAll(int numberOfInputs, int numberOfNeurons, activationFunctionType function, LayerOption* option);
 		std::vector<float> output(const std::vector<float>& inputs) override;
 		std::vector<float> backOutput(std::vector<float>& inputsError) override;
 		void train(std::vector<float>& inputsError) override;

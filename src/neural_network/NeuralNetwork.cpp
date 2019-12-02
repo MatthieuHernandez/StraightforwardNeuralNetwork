@@ -29,7 +29,7 @@ void NeuralNetwork::initialize()
 
 NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
                              const std::vector<activationFunctionType>& activationFunctionByLayer,
-                             NeuralNetworkOption& option) : StatisticAnalysis(structureOfNetwork.back())
+                             NeuralNetworkOption* option) : StatisticAnalysis(structureOfNetwork.back())
 {
 	if (isTheFirst)
 		this->initialize();
@@ -37,7 +37,7 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	this->structureOfNetwork = structureOfNetwork;
 	this->activationFunctionByLayer = activationFunctionByLayer;
 
-	this->option = &option;
+	this->option = option;
 
 	this->numberOfLayers = static_cast<int>(structureOfNetwork.size()) - 1;
 	this->numberOfHiddenLayers = static_cast<int>(structureOfNetwork.size()) - 2;
@@ -50,8 +50,7 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 		layers.emplace_back(new AllToAll(structureOfNetwork[l - 1],
 		                          structureOfNetwork[l],
 		                          this->activationFunctionByLayer[l - 1],
-		                          learningRate,
-		                          momentum));
+		                          option));
 	}
 
 	int err = this->isValid();
@@ -127,7 +126,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
 	bool isEqual = this->maxOutputIndex == neuralNetwork.maxOutputIndex
-		&& this->option == neuralNetwork->option
+		&& this->option == neuralNetwork.option
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
 		&& this->numberOfInput == neuralNetwork.numberOfInput

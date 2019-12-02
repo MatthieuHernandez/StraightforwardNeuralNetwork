@@ -2,11 +2,13 @@
 #include <string>
 #pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #pragma warning(pop)
+#include "NeuralNetworkOption.hpp"
 
 namespace snn
 {
-	class StraightforwardOption : NeuralNetworkOption
+	class StraightforwardOption : public internal::NeuralNetworkOption
 	{
 	private:
 		friend class boost::serialization::access;

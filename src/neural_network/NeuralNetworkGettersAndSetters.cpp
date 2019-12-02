@@ -4,31 +4,7 @@ using namespace snn;
 using namespace internal;
 
 //=====================================================================
-//  Getters and setters
-//=====================================================================
-
-void NeuralNetwork::setLearningRate(const float learningRate)
-{
-    this->learningRate = learningRate;
-}
-
-float NeuralNetwork::getLearningRate() const
-{
-    return learningRate;
-}
-
-void NeuralNetwork::setMomentum(const float value)
-{
-	this->momentum = value;
-}
-
-float NeuralNetwork::getMomentum() const
-{
-    return this->momentum;
-}
-
-//=====================================================================
-//  Only getters
+//  Getters
 //=====================================================================
 
 int NeuralNetwork::getNumberOfInputs() const

@@ -3,6 +3,7 @@
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #pragma warning(pop)
+#include "LayerOption.hpp"
 #include "perceptron/perceptron.hpp"
 
 namespace snn::internal
@@ -23,15 +24,16 @@ namespace snn::internal
 		int numberOfInputs = 0;
 		int numberOfNeurons = 0;
 
-		const LayerOption* option;
+		LayerOption* option;
 
 		std::vector<float> errors;
 		std::vector<Perceptron> neurons;
 
 	public:
-		virtual Layer(const int numberOfInputs,
-                      const int numberOfNeurons,
-                      LayerOption* option)
+		Layer(const int numberOfInputs,
+              const int numberOfNeurons,
+              LayerOption* option);
+		Layer() = default;
 		virtual ~Layer() = default;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;

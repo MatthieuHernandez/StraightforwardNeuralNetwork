@@ -3,8 +3,8 @@
 #include <vector>
 #include <thread>
 #include "neuralNetwork.hpp"
-#include "../data/Data.hpp"
 #include "StraightforwardOption.hpp"
+#include "../data/Data.hpp"
 #include "layer/perceptron/activation_function/activationFunction.hpp"
 
 namespace snn

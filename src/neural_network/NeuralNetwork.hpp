@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "NeuralNetworkOption.hpp"
 #include "layer/Layer.hpp"
 #include "layer/AllToAll.hpp"
 #include "layer/perceptron/activation_function/ActivationFunction.hpp"
@@ -15,7 +16,7 @@ namespace snn::internal
 
 		int maxOutputIndex{};
 
-		const NeuralNetworkOption* option;
+		NeuralNetworkOption* option;
 
 		int numberOfHiddenLayers{};
 		int numberOfLayers{};
@@ -37,9 +38,8 @@ namespace snn::internal
 
 	protected :
 		NeuralNetwork(const std::vector<int>& structureOfNetwork,
-		              const std::vector<activationFunctionType>& activationFunctionByLayer,
-		              float learningRate = 0.05f,
-		              float momentum = 0.0f);
+					  const std::vector<activationFunctionType>& activationFunctionByLayer,
+					  NeuralNetworkOption* option);
 
 		NeuralNetwork(const NeuralNetwork& neuralNetwork);
 
@@ -67,11 +67,6 @@ namespace snn::internal
 		
 		int isValid() const;
 
-		void setLearningRate(float learningRate);
-		float getLearningRate() const;
-		void setMomentum(float value);
-
-		float getMomentum() const;
 		int getNumberOfInputs() const;
 		int getNumberOfHiddenLayers() const;
 		int getNumberOfNeuronsInLayer(int layerNumber) const;
@@ -85,9 +80,8 @@ namespace snn::internal
 	{
 		boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
 		ar & boost::serialization::base_object<StatisticAnalysis>(*this);
+		ar & this->option;
 		ar & this->maxOutputIndex;
-		ar & this->learningRate;
-		ar & this->momentum;
 		ar & this->numberOfHiddenLayers;
 		ar & this->numberOfLayers;
 		ar & this->numberOfInput;

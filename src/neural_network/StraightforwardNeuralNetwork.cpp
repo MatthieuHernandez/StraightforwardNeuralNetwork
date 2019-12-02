@@ -17,10 +17,9 @@ using namespace snn;
 using namespace internal;
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork)
-	: NeuralNetwork(structureOfNetwork,
+	: StraightforwardNeuralNetwork(structureOfNetwork,
 	                vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
-	                0.05f,
-	                0.0f)
+	                StraightforwardOption())
 {
 }
 
@@ -29,7 +28,7 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structure
                                                            StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                option)
+	                &option)
 {
 	this->option = option;
 }

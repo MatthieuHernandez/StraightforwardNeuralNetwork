@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include "NeuronOption.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
@@ -11,7 +12,7 @@ namespace snn::internal
 
 		const int numberOfInputs{};
 
-		const PerceptronOption* option;
+		NeuronOption* option;
 
 		std::vector<float> weights;
 		float bias{};
@@ -36,7 +37,7 @@ namespace snn::internal
 
 		Perceptron() = default;
 		~Perceptron();
-		Perceptron(int numberOfInputs, activationFunctionType activationFunction, float& learningRate, float& momentum);
+		Perceptron(int numberOfInputs, activationFunctionType activationFunction, NeuronOption* option);
 		Perceptron(const Perceptron& perceptron);
 
 		std::vector<float>& backOutput(float error);
@@ -68,15 +69,15 @@ namespace snn::internal
 	template <class Archive>
 	void Perceptron::serialize(Archive& ar, const unsigned int version)
 	{
-		ar & option;
-		ar & weights;
-		ar & previousDeltaWeights;
-		ar & lastInputs;
-		ar & errors;
-		ar & lastOutput;
-		ar & numberOfInputs;
-		ar & bias;
-		ar & aFunctionType;
+		ar & this->option;
+		ar & this->weights;
+		ar & this->previousDeltaWeights;
+		ar & this->lastInputs;
+		ar & this->errors;
+		ar & this->lastOutput;
+		ar & this->numberOfInputs;
+		ar & this->bias;
+		ar & this->aFunctionType;
 		this->activationFunction = ActivationFunction::create(aFunctionType);
 	}
 }

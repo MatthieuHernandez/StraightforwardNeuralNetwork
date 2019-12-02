@@ -8,6 +8,8 @@ Layer::Layer(const int numberOfInputs,
              const int numberOfNeurons,
              LayerOption* option)
 {
+	this->numberOfInputs = numberOfInputs;
+	this->numberOfNeurons = numberOfNeurons;
 	this->option = option;
 }
 

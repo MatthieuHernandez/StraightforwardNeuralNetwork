@@ -14,9 +14,9 @@ namespace snn::internal
 		static void initialize();
 
 		int maxOutputIndex{};
-		float learningRate{};
 
-		float momentum{};
+		float* learningRate;
+		float* momentum;
 
 		int numberOfHiddenLayers{};
 		int numberOfLayers{};
@@ -30,8 +30,6 @@ namespace snn::internal
 
 		void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
 		std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
-
-		void resetAllNeurons();
 
 		friend class boost::serialization::access;
 		template <class Archive>
@@ -58,8 +56,6 @@ namespace snn::internal
 		                                           const std::vector<float>& desired,
 		                                           float separator);
 		void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
-
-		void addANeuron(int layerNumber);
 
 		int getLastError() const;
 

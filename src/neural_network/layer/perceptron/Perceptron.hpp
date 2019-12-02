@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include "activation_function/ActivationFunction.hpp"
 
@@ -8,18 +9,18 @@ namespace snn::internal
 	{
 	private :
 
+		const int numberOfInputs{};
+		float const * const  learningRate{};
+		float const * const  momentum{};
+
 		std::vector<float> weights;
+		float bias{};
+
 		std::vector<float> previousDeltaWeights;
 		std::vector<float> lastInputs;
 		std::vector<float> errors;
 
 		float lastOutput{};
-
-		int numberOfInputs{};
-
-		float learningRate{};
-		float momentum{};
-		float bias{};
 
 		activationFunctionType aFunctionType{};
 		ActivationFunction* activationFunction = nullptr;
@@ -35,7 +36,7 @@ namespace snn::internal
 
 		Perceptron() = default;
 		~Perceptron();
-		Perceptron(int numberOfInputs, activationFunctionType activationFunction, float learningRate, float momentum);
+		Perceptron(int numberOfInputs, activationFunctionType activationFunction, float& learningRate, float& momentum);
 		Perceptron(const Perceptron& perceptron);
 
 		std::vector<float>& backOutput(float error);

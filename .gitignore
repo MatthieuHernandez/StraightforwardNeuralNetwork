@@ -5,6 +5,7 @@ boost_1_71_0/
 *.obj
 *.bin
 *.out
+*.snn
 
 # Ignore cmake generated directories and files.
 generated/

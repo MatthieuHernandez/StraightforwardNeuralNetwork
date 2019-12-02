@@ -14,8 +14,8 @@ Perceptron::~Perceptron()
 
 Perceptron::Perceptron(const int numberOfInputs,
                        activationFunctionType activationFunction,
-                       const float learningRate,
-                       const float momentum)
+                       float const * const learningRate,
+                       float const * const momentum)
 {
 	this->numberOfInputs = numberOfInputs;
 	this->learningRate = learningRate;

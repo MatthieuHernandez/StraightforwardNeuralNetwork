@@ -1,4 +1,4 @@
-# execute this from build directory : cmake -G"Unix Makefiles" ./.. 
+# execute this from build directory : cmake -G"Unix Makefiles" ./..
 cmake_minimum_required(VERSION 3.0)
 
 project(Test)

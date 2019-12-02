@@ -189,6 +189,7 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 	neuralNetwork.trainingStop();
 
 	this->NeuralNetwork::operator=(neuralNetwork);
+	this->option = neuralNetwork.option;
 	this->currentIndex = neuralNetwork.currentIndex;
 	this->numberOfIteration = neuralNetwork.numberOfIteration;
 	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
@@ -197,10 +198,10 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 
 bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
 {
-	return this->NeuralNetwork::operator==(neuralNetwork);
+	return this->NeuralNetwork::operator==(neuralNetwork) && this->option == neuralNetwork.option;
 }
 
 bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const
 {
-	return this->NeuralNetwork::operator!=(neuralNetwork);
+	return !this->operator==(neuralNetwork);
 }

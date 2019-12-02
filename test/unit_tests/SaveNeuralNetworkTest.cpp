@@ -62,9 +62,9 @@ TEST(SaveNeuralNetwork, Save)
 	option.momentum = 0.78f;
 	StraightforwardNeuralNetwork A(structureOfNetwork, activationFunctionByLayer, option);
 
-	A.saveAs("./testSave.bin");
+	A.saveAs("./testSave.snn");
 
-	StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.bin");
+	StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
 
 	EXPECT_TRUE(A == B) << "A == B";
 }

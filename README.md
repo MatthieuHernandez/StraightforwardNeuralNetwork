@@ -3,7 +3,8 @@
 
 ## Installation
 
-To compile this library you need to [boost library 1.69.0](https://github.com/boostorg/boost/releases/tag/boost-1.69.0).
+To compile this library execute `cmake -G"Unix Makefiles" ./..  && make` from StraightforwardNeuralNetwork/build
+To run test exectute `cmake -G"Unix Makefiles" ./.. && make && ./Test.out` from StraightforwardNeuralNetwork/test/build
 
 ## Documentation
 

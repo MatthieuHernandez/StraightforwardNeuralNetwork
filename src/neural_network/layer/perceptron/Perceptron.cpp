@@ -27,7 +27,6 @@ Perceptron::Perceptron(const int numberOfInputs,
 	this->aFunctionType = activationFunction;
 	this->activationFunction = ActivationFunction::create(activationFunction);
 
-
 	this->weights.resize(numberOfInputs);
 	for (auto& w : weights)
 	{

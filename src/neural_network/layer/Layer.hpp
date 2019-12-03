@@ -24,8 +24,6 @@ namespace snn::internal
 		int numberOfInputs = 0;
 		int numberOfNeurons = 0;
 
-		LayerOption* option;
-
 		std::vector<float> errors;
 		std::vector<Perceptron> neurons;
 
@@ -35,6 +33,8 @@ namespace snn::internal
               LayerOption* option);
 		Layer() = default;
 		virtual ~Layer() = default;
+
+		LayerOption* option;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;

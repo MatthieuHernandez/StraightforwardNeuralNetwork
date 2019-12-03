@@ -23,6 +23,8 @@ int Layer::isValid() const
 	for (auto& neuron : this->neurons)
 	{
 		int err = neuron.isValid();
+		if(this->option != neuron.option)
+			return 1001;
 		if(err != 0)
 			return err;
 	}

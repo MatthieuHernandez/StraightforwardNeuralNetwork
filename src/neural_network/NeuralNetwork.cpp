@@ -81,6 +81,8 @@ int NeuralNetwork::isValid() const
 	for (auto& layer : this->layers)
 	{
 		int err = layer->isValid();
+		if(this->option != layer->option)
+			return 1001;
 		if(err != 0)
 			return err;
 	}
@@ -97,7 +99,6 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
 	this->structureOfNetwork = neuralNetwork.structureOfNetwork;
 	this->activationFunctionByLayer = neuralNetwork.activationFunctionByLayer;
-
 	this->layers.clear();
 	this->layers.reserve(neuralNetwork.layers.size());
 	for (auto& layer : neuralNetwork.layers)
@@ -117,7 +118,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-	bool isEqual = this->maxOutputIndex == neuralNetwork.maxOutputIndex
+	return this->maxOutputIndex == neuralNetwork.maxOutputIndex
 		&& this->option == neuralNetwork.option
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
@@ -127,7 +128,6 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
 		&& equal(this->layers.begin(), this->layers.end(),
 		         neuralNetwork.layers.begin(), neuralNetwork.layers.end());
-	return isEqual;
 }
 
 bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const

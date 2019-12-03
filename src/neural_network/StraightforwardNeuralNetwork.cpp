@@ -28,9 +28,14 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structure
                                                            StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                &option)
+	                this->OptionConstructor(option))
+{
+}
+
+inline StraightforwardOption* StraightforwardNeuralNetwork::OptionConstructor(StraightforwardOption& option)
 {
 	this->option = option;
+	return &this->option;
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)

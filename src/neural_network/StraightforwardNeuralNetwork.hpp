@@ -29,6 +29,8 @@ namespace snn
 		void evaluateOnceForMultipleClassification(Data& data);
 		void evaluateOnceForClassification(Data& data);
 
+		StraightforwardOption* OptionConstructor(StraightforwardOption& option);
+
 		friend class boost::serialization::access;
 		template <class Archive>
 		void serialize(Archive& ar, const unsigned int version);

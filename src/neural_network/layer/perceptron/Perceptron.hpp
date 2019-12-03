@@ -12,8 +12,6 @@ namespace snn::internal
 
 		int numberOfInputs{};
 
-		NeuronOption* option;
-
 		std::vector<float> weights;
 		float bias{};
 
@@ -39,6 +37,8 @@ namespace snn::internal
 		~Perceptron();
 		Perceptron(int numberOfInputs, activationFunctionType activationFunction, NeuronOption* option);
 		Perceptron(const Perceptron& perceptron);
+
+		NeuronOption* option;
 
 		std::vector<float>& backOutput(float error);
 		float output(const std::vector<float>& inputs);

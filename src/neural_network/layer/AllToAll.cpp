@@ -21,7 +21,7 @@ AllToAll::AllToAll(const int numberOfInputs,
 
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
-		this->neurons.emplace_back(numberOfInputs, function, option);
+		this->neurons.emplace_back(numberOfInputs, function, this->option);
 	}
 }
 

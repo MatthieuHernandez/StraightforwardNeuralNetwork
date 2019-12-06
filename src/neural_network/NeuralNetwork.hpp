@@ -18,11 +18,8 @@ namespace snn::internal
 		static void initialize();
 
 		int maxOutputIndex{};
-
-		NeuralNetworkOption* option;
-
 		int numberOfHiddenLayers{};
-		int numberOfLayers{};
+		int numberOfLayers;
 		int numberOfInput{};
 		int numberOfOutputs{};
 
@@ -40,14 +37,17 @@ namespace snn::internal
 
 
 	protected :
+
 		NeuralNetwork(const std::vector<int>& structureOfNetwork,
 					  const std::vector<activationFunctionType>& activationFunctionByLayer,
-					  NeuralNetworkOption* option);
+					  NeuralNetworkOption* option = nullptr);
 
 		NeuralNetwork(const NeuralNetwork& neuralNetwork);
 
 		NeuralNetwork() = default;
 		~NeuralNetwork() = default;
+
+		NeuralNetworkOption* option;
 
 		[[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
 
@@ -66,6 +66,7 @@ namespace snn::internal
 		bool operator!=(const NeuralNetwork& neuralNetwork) const;
 
 	public:
+
 		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 		
 		int isValid() const;

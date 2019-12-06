@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <thread>
-#include "neuralNetwork.hpp"
 #include "StraightforwardOption.hpp"
+#include "neuralNetwork.hpp"
 #include "../data/Data.hpp"
 #include "layer/perceptron/activation_function/activationFunction.hpp"
 
@@ -21,15 +21,12 @@ namespace snn
 
 		void train(Data& data);
 
-		
 		typedef void (StraightforwardNeuralNetwork::* evaluationFunctionPtr)(Data& data);
 
 		evaluationFunctionPtr selectEvaluationFunction(Data& data);
 		void evaluateOnceForRegression(Data& data);
 		void evaluateOnceForMultipleClassification(Data& data);
 		void evaluateOnceForClassification(Data& data);
-
-		StraightforwardOption* OptionConstructor(StraightforwardOption& option);
 
 		friend class boost::serialization::access;
 		template <class Archive>

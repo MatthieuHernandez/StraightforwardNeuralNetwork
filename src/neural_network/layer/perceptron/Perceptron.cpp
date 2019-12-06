@@ -150,7 +150,7 @@ int Perceptron::getNumberOfInputs() const
 
 Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 {
-	this->option = option;
+	this->option = *(&perceptron.option);
 	this->weights = perceptron.weights;
 	this->previousDeltaWeights = perceptron.previousDeltaWeights;
 	this->lastInputs = perceptron.lastInputs;

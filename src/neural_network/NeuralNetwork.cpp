@@ -26,10 +26,10 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 	if (isTheFirst)
 		this->initialize();
 
+	option != nullptr ? this->option = option : this->option = new NeuralNetworkOption();
+
 	this->structureOfNetwork = structureOfNetwork;
 	this->activationFunctionByLayer = activationFunctionByLayer;
-
-	this->option = option;
 
 	this->numberOfLayers = static_cast<int>(structureOfNetwork.size()) - 1;
 	this->numberOfHiddenLayers = static_cast<int>(structureOfNetwork.size()) - 2;
@@ -42,14 +42,7 @@ NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
 		layers.emplace_back(new AllToAll(structureOfNetwork[l - 1],
 		                          structureOfNetwork[l],
 		                          this->activationFunctionByLayer[l - 1],
-		                          option));
-	}
-
-	int err = this->isValid();
-	if (err != 0)
-	{
-		string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
-		throw runtime_error(message);
+		                          this->option));
 	}
 }
 
@@ -82,7 +75,7 @@ int NeuralNetwork::isValid() const
 	{
 		int err = layer->isValid();
 		if(this->option != layer->option)
-			return 1001;
+			return 10019;
 		if(err != 0)
 			return err;
 	}

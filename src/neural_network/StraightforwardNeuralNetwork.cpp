@@ -28,14 +28,16 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structure
                                                            StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,
-	                this->OptionConstructor(option))
-{
-}
-
-inline StraightforwardOption* StraightforwardNeuralNetwork::OptionConstructor(StraightforwardOption& option)
+	                nullptr)
 {
 	this->option = option;
-	return &this->option;
+	*this->NeuralNetwork::option = *(&this->option);
+	int err = this->isValid();
+	if (err != 0)
+	{
+		string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
+		throw runtime_error(message);
+	}
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
@@ -190,12 +192,11 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 {
 	this->trainingStop();
 	neuralNetwork.trainingStop();
-
-	this->NeuralNetwork::operator=(neuralNetwork);
 	this->option = neuralNetwork.option;
 	this->currentIndex = neuralNetwork.currentIndex;
 	this->numberOfIteration = neuralNetwork.numberOfIteration;
 	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
+	this->NeuralNetwork::operator=(neuralNetwork);
 	return *this;
 }
 

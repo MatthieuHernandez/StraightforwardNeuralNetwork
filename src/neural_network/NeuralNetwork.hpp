@@ -67,9 +67,9 @@ namespace snn::internal
 
 	public:
 
-		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
-		
 		int isValid() const;
+
+		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 
 		int getNumberOfInputs() const;
 		int getNumberOfHiddenLayers() const;
@@ -93,7 +93,6 @@ namespace snn::internal
 		ar & this->structureOfNetwork;
 		ar & this->activationFunctionByLayer;
 		ar & this->numberOfInput;
-
 		ar.template register_type<AllToAll>();
 		ar & layers;
 	}

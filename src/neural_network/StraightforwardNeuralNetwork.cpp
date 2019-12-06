@@ -169,6 +169,13 @@ void StraightforwardNeuralNetwork::trainingStop()
 	this->numberOfIteration = 0;
 }
 
+int StraightforwardNeuralNetwork::isValid() const
+{
+	if(&this->option == this->NeuralNetwork::option)
+		return 1001;
+	return this->NeuralNetwork::isValid();
+}
+
 
 void StraightforwardNeuralNetwork::saveAs(std::string filePath)
 {
@@ -181,7 +188,7 @@ void StraightforwardNeuralNetwork::saveAs(std::string filePath)
 
 StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(std::string filePath)
 {
-	StraightforwardNeuralNetwork* neuralNetwork{};
+	StraightforwardNeuralNetwork* neuralNetwork = new StraightforwardNeuralNetwork();
 	ifstream file(filePath, ios::binary);
 	boost::archive::text_iarchive binaryFile(file);
 	binaryFile >> neuralNetwork;

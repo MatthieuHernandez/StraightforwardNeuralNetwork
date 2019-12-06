@@ -1,6 +1,10 @@
 #pragma once
 #include <memory>
 #include <vector>
+#pragma warning(push, 0)
+#include <boost/serialization/access.hpp>
+#pragma warning(pop)
+
 #include "NeuronOption.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
@@ -69,15 +73,15 @@ namespace snn::internal
 	template <class Archive>
 	void Perceptron::serialize(Archive& ar, const unsigned int version)
 	{
-		ar & this->option;
-		ar & this->weights;
-		ar & this->previousDeltaWeights;
-		ar & this->lastInputs;
-		ar & this->errors;
-		ar & this->lastOutput;
-		ar & this->numberOfInputs;
-		ar & this->bias;
-		ar & this->aFunctionType;
-		this->activationFunction = ActivationFunction::create(aFunctionType);
+		//ar & this->option;
+		//ar & this->weights;
+		//ar & this->previousDeltaWeights;
+		//ar & this->lastInputs;
+		//ar & this->errors;
+		//ar & this->lastOutput;
+		//ar & this->numberOfInputs;
+		//ar & this->bias;
+		//ar & this->aFunctionType;
+		//this->activationFunction = ActivationFunction::create(aFunctionType);
 	}
 }

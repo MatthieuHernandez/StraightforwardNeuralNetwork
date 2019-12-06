@@ -24,7 +24,7 @@ int Layer::isValid() const
 	{
 		int err = neuron.isValid();
 		if(this->option != neuron.option)
-			return 10018;
+			return 1001;
 		if(err != 0)
 			return err;
 	}
@@ -43,7 +43,7 @@ Layer& Layer::operator=(const Layer& layer)
 
 bool Layer::operator==(const Layer& layer) const
 {
-	return this->option == layer.option
+	return *this->option == *layer.option
 		&& this->numberOfInputs == layer.numberOfInputs
 		&& this->numberOfNeurons == layer.numberOfNeurons
 		&& this->errors == layer.errors

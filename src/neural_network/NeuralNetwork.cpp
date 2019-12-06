@@ -75,7 +75,7 @@ int NeuralNetwork::isValid() const
 	{
 		int err = layer->isValid();
 		if(this->option != layer->option)
-			return 10019;
+			return 1001;
 		if(err != 0)
 			return err;
 	}
@@ -112,15 +112,23 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
 	return this->maxOutputIndex == neuralNetwork.maxOutputIndex
-		&& this->option == neuralNetwork.option
+		&& *this->option == *neuralNetwork.option
 		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
 		&& this->numberOfInput == neuralNetwork.numberOfInput
 		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
 		&& this->structureOfNetwork == neuralNetwork.structureOfNetwork
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
-		&& equal(this->layers.begin(), this->layers.end(),
-		         neuralNetwork.layers.begin(), neuralNetwork.layers.end());
+		&& [=] () {
+			for (int l = 0; l < numberOfLayers; l++)
+			{
+				if (*this->layers[l] != *neuralNetwork.layers[l])
+					return false;
+			}
+			return true;
+		}();
+		//&& equal(this->layers.begin(), this->layers.end(),
+		//         neuralNetwork.layers.begin(), neuralNetwork.layers.end());
 }
 
 bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const

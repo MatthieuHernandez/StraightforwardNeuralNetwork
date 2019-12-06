@@ -30,9 +30,9 @@ namespace snn
 	template <class Archive>
 	void StraightforwardOption::serialize(Archive& ar, const unsigned version)
 	{
-		ar & this->autoSaveWhenBetter;
-		ar & this->saveFilePath;
 		boost::serialization::void_cast_register<StraightforwardOption, NeuralNetworkOption>();
 		ar & boost::serialization::base_object<NeuralNetworkOption>(*this);
+		ar & this->autoSaveWhenBetter;
+		ar & this->saveFilePath;
 	}
 }

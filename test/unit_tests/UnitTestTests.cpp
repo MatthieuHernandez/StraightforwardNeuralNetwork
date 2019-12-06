@@ -1,11 +1,11 @@
 #include "GTestTools.hpp"
 
-TEST(DISABLED_TestCaseName, TestName) 
+TEST(TestCaseName, Test_1) 
 {
   EXPECT_EQ(1, 1);
 }
 
-TEST(DISABLED_TestCaseName, TestName2)
+TEST(TestCaseName, Test_2)
 {
 	EXPECT_TRUE(true) << "message test";
 }

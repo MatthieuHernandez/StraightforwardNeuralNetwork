@@ -47,6 +47,8 @@ namespace snn
 
 		StraightforwardOption option;
 
+		int isValid() const;
+
 		void trainingStart(Data& data);
 		void trainingStop();
 
@@ -79,5 +81,6 @@ namespace snn
 	{
 		boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
 		ar & boost::serialization::base_object<NeuralNetwork>(*this);
+		ar & this->option;
 	}
 }

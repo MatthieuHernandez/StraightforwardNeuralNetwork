@@ -165,7 +165,7 @@ Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 
 bool Perceptron::operator==(const Perceptron& perceptron) const
 {
-	return this->option == option
+	return *this->option == *option
 		&& this->weights == perceptron.weights
 		&& this->previousDeltaWeights == perceptron.previousDeltaWeights
 		&& this->lastInputs == perceptron.lastInputs

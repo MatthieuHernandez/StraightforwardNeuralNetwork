@@ -182,13 +182,13 @@ void StraightforwardNeuralNetwork::saveAs(std::string filePath)
 	ofstream file(filePath);
 	boost::archive::text_oarchive binaryFile(file);
 	binaryFile << this;
-	std::ofstream ofs(filePath);
+	std::ofstream ofs("filename");
 	boost::archive::text_oarchive oa(ofs);
 }
 
 StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(std::string filePath)
 {
-	StraightforwardNeuralNetwork* neuralNetwork = new StraightforwardNeuralNetwork();
+	StraightforwardNeuralNetwork* neuralNetwork;
 	ifstream file(filePath, ios::binary);
 	boost::archive::text_iarchive binaryFile(file);
 	binaryFile >> neuralNetwork;

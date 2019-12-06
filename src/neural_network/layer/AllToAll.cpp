@@ -17,8 +17,6 @@ AllToAll::AllToAll(const int numberOfInputs,
                    LayerOption* option)
 	: Layer(numberOfInputs, numberOfNeurons, option)
 {
-	this->neurons.reserve(numberOfNeurons);
-
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
 		this->neurons.emplace_back(numberOfInputs, function, this->option);

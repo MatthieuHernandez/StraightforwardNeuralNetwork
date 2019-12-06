@@ -8,9 +8,10 @@ Layer::Layer(int numberOfInputs,
              int numberOfNeurons,
              LayerOption* option)
 {
+	this->option = option;
 	this->numberOfInputs = numberOfInputs;
 	this->numberOfNeurons = numberOfNeurons;
-	this->option = option;
+	this->neurons.reserve(numberOfNeurons);
 }
 
 int Layer::isValid() const

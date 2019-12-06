@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #pragma warning(push, 0)
+#include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
 #pragma warning(pop)
 

@@ -1,8 +1,11 @@
 #include "layer.hpp"
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(Layer)
 
 Layer::Layer(int numberOfInputs,
              int numberOfNeurons,

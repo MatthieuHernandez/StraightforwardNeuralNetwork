@@ -4,10 +4,13 @@
 #include "NeuralNetwork.hpp"
 #include "layer/AllToAll.hpp"
 #include "../tools/ExtendedExpection.hpp"
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(NeuralNetwork)
 
 bool NeuralNetwork::isTheFirst = true;
 

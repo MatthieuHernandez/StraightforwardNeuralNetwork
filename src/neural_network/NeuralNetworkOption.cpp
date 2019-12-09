@@ -1,7 +1,10 @@
 #include "NeuralNetworkOption.hpp"
+#include <boost/serialization/export.hpp>
 
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(NeuralNetworkOption)
 
 NeuralNetworkOption& NeuralNetworkOption::operator=(const NeuralNetworkOption& option)
 {

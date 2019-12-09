@@ -41,7 +41,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 
 	EXPECT_TRUE(A != C); // Test A == C with same seed
 
-	/*const vector<float> inputs {1.5, 0.75, -0.25, 0, 0};
+	const vector<float> inputs {1.5, 0.75, -0.25, 0, 0};
 	const vector<float> desired {1, 0, 0.5, 0};
 
 	A.trainOnce(inputs, desired);
@@ -54,7 +54,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 
 	A.trainOnce(inputs, desired);
 
-	EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";*/
+	EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
 }
 
 TEST(SaveNeuralNetwork, Save)
@@ -70,5 +70,5 @@ TEST(SaveNeuralNetwork, Save)
 
 	StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
 
-	//EXPECT_TRUE(A == B) << "A == B";
+	EXPECT_TRUE(A == B);
 }

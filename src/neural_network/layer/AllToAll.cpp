@@ -9,7 +9,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(AllToAll);
+BOOST_CLASS_EXPORT(AllToAll)
 
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,

@@ -2,6 +2,7 @@
 #include <thread>
 #include <stdexcept>
 #pragma warning(push, 0)
+#include <boost/serialization/export.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
@@ -15,6 +16,8 @@
 using namespace std;
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork)
 	: StraightforwardNeuralNetwork(structureOfNetwork,
@@ -111,7 +114,7 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 	this->stopTesting();
 	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
 	{
-			this->saveAs(option.saveFilePath);
+			this->saveAs(option.autoSaveFilePath);
 	}
 }
 
@@ -177,21 +180,20 @@ int StraightforwardNeuralNetwork::isValid() const
 }
 
 
-void StraightforwardNeuralNetwork::saveAs(std::string filePath)
+void StraightforwardNeuralNetwork::saveAs(string filePath)
 {
-	ofstream file(filePath);
-	boost::archive::text_oarchive binaryFile(file);
-	binaryFile << this;
-	std::ofstream ofs("filename");
-	boost::archive::text_oarchive oa(ofs);
+	option.autoSaveFilePath = filePath;
+	ofstream ofs(filePath);
+	boost::archive::text_oarchive archive(ofs);
+	archive << this;
 }
 
-StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(std::string filePath)
+StraightforwardNeuralNetwork StraightforwardNeuralNetwork::loadFrom(string filePath)
 {
 	StraightforwardNeuralNetwork* neuralNetwork;
-	ifstream file(filePath, ios::binary);
-	boost::archive::text_iarchive binaryFile(file);
-	binaryFile >> neuralNetwork;
+	ifstream ifs(filePath);
+	boost::archive::text_iarchive archive(ifs);
+	archive >> neuralNetwork;
 	return *neuralNetwork;
 }
 

@@ -1,7 +1,10 @@
 #include "NeuronOption.hpp"
 
+#include <boost/serialization/export.hpp>
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(NeuronOption)
 
 NeuronOption& NeuronOption::operator=(const NeuronOption& option)
 {

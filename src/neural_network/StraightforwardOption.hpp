@@ -18,7 +18,7 @@ namespace snn
 	public:
 
 		bool autoSaveWhenBetter = false;
-		std::string saveFilePath = "save.snn";
+		std::string autoSaveFilePath = "AutoSave.snn";
 
 		StraightforwardOption() = default;
 		~StraightforwardOption() = default;
@@ -33,6 +33,6 @@ namespace snn
 		boost::serialization::void_cast_register<StraightforwardOption, NeuralNetworkOption>();
 		ar & boost::serialization::base_object<NeuralNetworkOption>(*this);
 		ar & this->autoSaveWhenBetter;
-		ar & this->saveFilePath;
+		ar & this->autoSaveFilePath;
 	}
 }

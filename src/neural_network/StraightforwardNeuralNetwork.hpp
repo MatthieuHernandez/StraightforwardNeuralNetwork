@@ -60,7 +60,7 @@ namespace snn
 		bool isTraining() const { return wantToStopTraining; }
 
 		void saveAs(std::string filePath);
-		static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
+		static StraightforwardNeuralNetwork loadFrom(std::string filePath);
 
 		int getCurrentIndex() const { return this->currentIndex; }
 		int getNumberOfIteration() const { return this->numberOfIteration; }

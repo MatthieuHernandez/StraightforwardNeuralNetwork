@@ -1,18 +1,19 @@
-#include "DataForClassification.h"
+#include <stdexcept>
+#include "DataForClassification.hpp"
 using namespace std;
 using namespace snn;
 
-DataForClassification::DataForClassification(std::vector<std::vector<float>>& trainingInputs,
-                                             std::vector<std::vector<float>>& trainingLabels,
-                                             std::vector<std::vector<float>>& testingInputs,
-                                             std::vector<std::vector<float>>& testingLabels,
+DataForClassification::DataForClassification(std::vector<std::vector<float>> trainingInputs,
+                                             std::vector<std::vector<float>> trainingLabels,
+                                             std::vector<std::vector<float>> testingInputs,
+                                             std::vector<std::vector<float>> testingLabels,
                                              float separator)
 	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
 {
 }
 
-DataForClassification::DataForClassification(std::vector<std::vector<float>>& inputs,
-                                             std::vector<std::vector<float>>& labels, float separator)
+DataForClassification::DataForClassification(std::vector<std::vector<float>> inputs,
+                                             std::vector<std::vector<float>> labels, float separator)
 	: Data(inputs, labels, separator)
 {
 }
@@ -24,7 +25,7 @@ int DataForClassification::getTrainingLabel(const int index)
 		if (this->sets[training].labels[indexes[index]][i] == 1)
 			return i;
 	}
-	throw exception("wrong label");
+	throw runtime_error("wrong label");
 }
 
 int DataForClassification::getTestingLabel(const int index)
@@ -34,10 +35,10 @@ int DataForClassification::getTestingLabel(const int index)
 		if (this->sets[testing].labels[index][i] == 1)
 			return i;
 	}
-	throw exception("wrong label");
+	throw runtime_error("wrong label");
 }
 
-vector<float>& DataForClassification::getTestingOutputs(const int index)
+const vector<float>& DataForClassification::getTestingOutputs(const int index)
 {
 	// Should never be called
 	throw exception();

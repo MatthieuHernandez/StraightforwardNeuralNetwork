@@ -1,1 +1,15 @@
-/src/externalLibrary/
+.vscode/
+boost_1_71_0/
+*.a
+*.o
+*.obj
+*.bin
+*.out
+*.snn
+
+# Ignore cmake generated directories and files.
+generated/
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+MakeFile

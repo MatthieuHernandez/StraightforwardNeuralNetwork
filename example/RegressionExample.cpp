@@ -1,5 +1,5 @@
-#include "../src/neuralNetwork/StraightforwardNeuralNetwork.h"
-#include "../src/data/DataForRegression.h"
+#include "../src/neuralNetwork/StraightforwardNeuralNetwork.hpp"
+#include "../src/data/DataForRegression.hpp"
 #include <thread>
 
 using namespace std;

@@ -1,4 +1,4 @@
-#include "../src/neuralNetwork/StraightforwardNeuralNetwork.hpp"
+#include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
 #include "../src/data/DataForClassification.hpp"
 #include <thread>
 

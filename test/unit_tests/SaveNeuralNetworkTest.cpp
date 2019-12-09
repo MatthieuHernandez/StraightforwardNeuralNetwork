@@ -3,7 +3,6 @@
 
 using namespace std;
 using namespace snn;
-// ReSharper disable CppInconsistentNaming CppLocalVariableMayBeConst CppUseAuto
 
 TEST(SaveNeuralNetwork, EqualTest)
 {

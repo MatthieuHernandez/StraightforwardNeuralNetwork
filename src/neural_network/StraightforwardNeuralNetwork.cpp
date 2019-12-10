@@ -1,12 +1,10 @@
 #include <fstream>
 #include <thread>
 #include <stdexcept>
-#pragma warning(push, 0)
 #include <boost/serialization/export.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
-#pragma warning(pop)
 #include "StraightforwardNeuralNetwork.hpp"
 #include "StraightforwardOption.hpp"
 #include "../data/DataForClassification.hpp"

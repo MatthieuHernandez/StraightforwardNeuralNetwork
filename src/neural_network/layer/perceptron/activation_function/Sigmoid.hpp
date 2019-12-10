@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <string>
-#include "activationFunction.hpp"
+#include "ActivationFunction.hpp"
 
 namespace snn::internal
 {

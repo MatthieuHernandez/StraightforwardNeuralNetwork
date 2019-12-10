@@ -1,10 +1,8 @@
 #pragma once
-#include "layer.hpp"
-#include "perceptron/perceptron.hpp"
-#pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#pragma warning(pop)
+#include "Layer.hpp"
+#include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {

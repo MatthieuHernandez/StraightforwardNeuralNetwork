@@ -1,6 +1,6 @@
 #include <cmath>
 #include <iostream>
-#include "perceptron.hpp"
+#include "Perceptron.hpp"
 #include "../../../tools/Tools.hpp"
 
 using namespace std;

@@ -1,5 +1,5 @@
 #include <boost/serialization/export.hpp>
-#include "layer.hpp"
+#include "Layer.hpp"
 
 using namespace std;
 using namespace snn;

@@ -5,7 +5,7 @@
 #include <boost/serialization/access.hpp>
 #pragma warning(pop)
 #include "LayerOption.hpp"
-#include "perceptron/perceptron.hpp"
+#include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {

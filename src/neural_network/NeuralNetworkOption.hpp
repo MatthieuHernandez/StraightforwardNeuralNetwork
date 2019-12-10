@@ -1,8 +1,6 @@
 #pragma once
-#pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#pragma warning(pop)
 #include "layer/LayerOption.hpp"
 
 namespace snn::internal

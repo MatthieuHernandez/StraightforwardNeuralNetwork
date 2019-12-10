@@ -1,5 +1,5 @@
-#include "NeuralNetworkOption.hpp"
 #include <boost/serialization/export.hpp>
+#include "NeuralNetworkOption.hpp"
 
 using namespace snn;
 using namespace internal;

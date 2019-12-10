@@ -1,4 +1,4 @@
-#include "statisticAnalysis.hpp"
+#include "StatisticAnalysis.hpp"
 
 using namespace snn;
 using namespace internal;

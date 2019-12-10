@@ -1,9 +1,7 @@
-#include "alltoall.hpp"
 #include <omp.h>
-#pragma warning(push, 0) 
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
-#pragma warning(pop)
+#include "AllToAll.hpp"
 
 using namespace std;
 using namespace snn;

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "activationFunction.hpp"
+#include "ActivationFunction.hpp"
 
 namespace snn::internal
 {

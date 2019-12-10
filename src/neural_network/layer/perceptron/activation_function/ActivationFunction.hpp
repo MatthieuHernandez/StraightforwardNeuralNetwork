@@ -1,7 +1,5 @@
 #pragma once
-#pragma warning(push, 0)
 #include <boost/serialization/access.hpp>
-#pragma warning(pop)
 
 namespace snn
 {

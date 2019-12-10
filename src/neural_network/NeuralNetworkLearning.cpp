@@ -1,4 +1,4 @@
-﻿#include "neuralNetwork.hpp"
+﻿#include "NeuralNetwork.hpp"
 
 using namespace std;
 using namespace snn;

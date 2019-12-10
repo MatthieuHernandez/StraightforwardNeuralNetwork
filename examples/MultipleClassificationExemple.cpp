@@ -1,6 +1,6 @@
+#include <thread>
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
 #include "../src/data/DataForMultipleClassification.hpp"
-#include <thread>
 
 using namespace std;
 using namespace chrono;

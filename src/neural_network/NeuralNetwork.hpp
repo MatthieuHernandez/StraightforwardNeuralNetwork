@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
-#pragma warning(push, 0)
 #include <boost/serialization/vector.hpp>
-#pragma warning(pop)
 #include "NeuralNetworkOption.hpp"
 #include "layer/Layer.hpp"
 #include "layer/AllToAll.hpp"

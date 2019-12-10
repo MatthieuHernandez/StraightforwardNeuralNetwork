@@ -1,6 +1,6 @@
+#include <boost/serialization/export.hpp>
 #include "NeuronOption.hpp"
 
-#include <boost/serialization/export.hpp>
 using namespace snn;
 using namespace internal;
 

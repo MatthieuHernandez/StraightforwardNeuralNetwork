@@ -1,5 +1,5 @@
-#include "LayerOption.hpp"
 #include <boost/serialization/export.hpp>
+#include "LayerOption.hpp"
 
 using namespace snn;
 using namespace internal;

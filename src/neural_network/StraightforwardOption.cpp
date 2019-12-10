@@ -1,5 +1,5 @@
-#include "StraightforwardOption.hpp"
 #include <boost/serialization/export.hpp>
+#include "StraightforwardOption.hpp"
 
 using namespace snn;
 using namespace internal;

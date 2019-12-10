@@ -13,7 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: cmake
-      run: cd ./StraightforwardNeuralNetwork/test/build && cmake -G"Unix Makefiles" ./..
+      run: echo ls
+      run: cd ./StraightforwardNeuralNetwork/test/build
+      run: cmake -G"Unix Makefiles" ./..
     - name: make check
       run: make check
     - name: execute tests

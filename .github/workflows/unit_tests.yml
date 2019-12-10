@@ -1,0 +1,26 @@
+name: Unit tests Linux/Windows
+
+on: [push]
+
+jobs:
+  unit-tests:
+    name: Build and run unit tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: CMake
+      run: |
+        cd ./test
+        mkdir build
+        cd ./build
+        cmake -G"Unix Makefiles" ./..
+    - name: make
+      run: |
+        cd ./test/build
+        make
+    - name: execute unit tests
+      run: ./test/build/Test.out

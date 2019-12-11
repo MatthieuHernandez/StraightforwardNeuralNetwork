@@ -7,11 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-Perceptron::~Perceptron()
-{
-	delete this->activationFunction;
-}
-
 Perceptron::Perceptron(const int numberOfInputs,
                        activationFunctionType activationFunction,
                        NeuronOption* option)
@@ -25,7 +20,7 @@ Perceptron::Perceptron(const int numberOfInputs,
 	lastOutput = 0;
 
 	this->aFunctionType = activationFunction;
-	this->activationFunction = ActivationFunction::create(activationFunction);
+	this->activationFunction = ActivationFunction::get(activationFunction);
 
 	this->weights.resize(numberOfInputs);
 	for (auto& w : weights)
@@ -159,7 +154,7 @@ Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 	this->numberOfInputs = perceptron.numberOfInputs;
 	this->bias = perceptron.bias;
 	this->aFunctionType = perceptron.aFunctionType;
-	this->activationFunction = ActivationFunction::create(perceptron.activationFunction->getType());
+	this->activationFunction = perceptron.activationFunction;
 	return *this;
 }
 

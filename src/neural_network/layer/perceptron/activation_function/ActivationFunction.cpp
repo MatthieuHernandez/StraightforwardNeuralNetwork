@@ -11,22 +11,22 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-vector<ActivationFunction*> ActivationFunction::listOfActivationFunction;
+vector<ActivationFunction*> ActivationFunction::activationFunctions;
 
 void ActivationFunction::initialize()
 {
-	listOfActivationFunction.reserve(4);
+	activationFunctions.reserve(4);
 
-	listOfActivationFunction.push_back(new Sigmoid());
-	listOfActivationFunction.push_back(new ImprovedSigmoid());
-	listOfActivationFunction.push_back(new TanH());
-	listOfActivationFunction.push_back(new ReLU());
-	listOfActivationFunction.push_back(new Gaussian());
+	activationFunctions.push_back(new Sigmoid());
+	activationFunctions.push_back(new ImprovedSigmoid());
+	activationFunctions.push_back(new TanH());
+	activationFunctions.push_back(new ReLU());
+	activationFunctions.push_back(new Gaussian());
 }
 
-ActivationFunction* ActivationFunction::create(activationFunctionType type)
+ActivationFunction* ActivationFunction::get(activationFunctionType type)
 {
-	return listOfActivationFunction[type];
+	return activationFunctions[type];
 }
 
 bool ActivationFunction::operator==(const ActivationFunction& activationFunction) const

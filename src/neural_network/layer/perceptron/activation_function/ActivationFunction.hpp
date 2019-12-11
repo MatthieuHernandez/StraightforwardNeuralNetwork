@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <boost/serialization/access.hpp>
 
 namespace snn
@@ -23,13 +24,13 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	public :
-		static std::vector<ActivationFunction*> listOfActivationFunction;
+		static std::vector<ActivationFunction*> activationFunctions;
 
 		ActivationFunction() = default;
 		ActivationFunction(const ActivationFunction& activationFunction) = default;
 		virtual ~ActivationFunction() = default;
 		static void initialize();
-		static ActivationFunction* create(activationFunctionType type);
+		static ActivationFunction* get(activationFunctionType type);
 
 		virtual float function(const float) const = 0;
 		virtual float derivative(const float) const = 0;

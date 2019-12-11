@@ -27,7 +27,7 @@ namespace snn::internal
 		float lastOutput{};
 
 		activationFunctionType aFunctionType{};
-		ActivationFunction* activationFunction = nullptr;
+		ActivationFunction* activationFunction;
 
 		float randomInitializeWeight() const;
 
@@ -39,7 +39,7 @@ namespace snn::internal
 	public :
 
 		Perceptron() = default;
-		~Perceptron();
+		~Perceptron() = default;
 		Perceptron(int numberOfInputs, activationFunctionType activationFunction, NeuronOption* option);
 		Perceptron(const Perceptron& perceptron);
 
@@ -83,6 +83,6 @@ namespace snn::internal
 		ar & this->numberOfInputs;
 		ar & this->bias;
 		ar & this->aFunctionType;
-		this->activationFunction = ActivationFunction::create(aFunctionType);
+		this->activationFunction = ActivationFunction::get(aFunctionType);
 	}
 }

@@ -23,7 +23,7 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	public :
-		//static std::vector<ActivationFunction*> listOfActivationFunction;
+		static std::vector<ActivationFunction*> listOfActivationFunction;
 
 		ActivationFunction() = default;
 		ActivationFunction(const ActivationFunction& activationFunction) = default;

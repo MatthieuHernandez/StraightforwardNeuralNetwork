@@ -4,7 +4,7 @@
 using namespace std;
 using namespace snn;
 
-TEST(SaveNeuralNetwork, EqualTest)
+TEST(SaveNeuralNetwork, DISABLED_EqualTest)
 {
 	const vector<int> structureOfNetwork {5, 20, 10, 3};
 	const vector<activationFunctionType> activationFunctionByLayer{iSigmoid, tanH, sigmoid};
@@ -24,10 +24,10 @@ TEST(SaveNeuralNetwork, EqualTest)
 	EXPECT_TRUE(A == B);
 	EXPECT_TRUE(&A != &B);
 
-	EXPECT_TRUE(&A != &B) << "&A != &B";
+	EXPECT_TRUE(&A != &B);
 
-	EXPECT_TRUE(A.option == B.option) << "A.option == B.option";
-	EXPECT_TRUE(&(A.option) != &(B.option)) << "A.option != B.option";
+	EXPECT_TRUE(A.option == B.option);
+	EXPECT_TRUE(&(A.option) != &(B.option));
 
 	//EXPECT_TRUE(*A.getLayer(0) == *B.getLayer(0)) << "Value : A.layers[0] == B.layers[0]";
 	//EXPECT_TRUE(A.getLayer(0) != B.getLayer(0)) << "Address : A.layers[0] != B.layers[0]";
@@ -56,7 +56,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 	EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)
+TEST(SaveNeuralNetwork, DISABLED_Save)
 {
 	const vector<int> structureOfNetwork {5, 20, 10, 3};
 	const vector<activationFunctionType> activationFunctionByLayer{iSigmoid, tanH, sigmoid};

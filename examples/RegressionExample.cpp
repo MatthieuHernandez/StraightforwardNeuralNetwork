@@ -1,6 +1,6 @@
 #include <thread>
-#include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
-#include "../src/data/DataForRegression.hpp"
+#include "neural_network/StraightforwardNeuralNetwork.hpp"
+#include "data/DataForRegression.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -17,10 +17,10 @@ int regressionExample()
 	vector<vector<float>> expectedOutputs = {{0.333}, {0.666}, {0.666}, {0.666}, {0}, {1}};
 
 	float precision = 0.1f;
-	snn::DataForRegression data(inputData, expectedOutputs, precision);
+	DataForRegression data(inputData, expectedOutputs, precision);
 
-	snn::StraightforwardOption option;
-	snn::StraightforwardNeuralNetwork neuralNetwork({3, 5, 1}, {sigmoid, sigmoid}, option);
+	StraightforwardOption option;
+	StraightforwardNeuralNetwork neuralNetwork({3, 5, 1}, {sigmoid, sigmoid}, option);
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(2s); // train neural network during 2 seconds on parallel thread

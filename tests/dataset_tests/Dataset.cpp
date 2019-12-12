@@ -1,0 +1,4 @@
+Dataset::Dataset()
+{
+    this->loadData();
+}

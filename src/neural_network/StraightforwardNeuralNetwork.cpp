@@ -1,3 +1,4 @@
+#include <functional>
 #include <fstream>
 #include <thread>
 #include <stdexcept>

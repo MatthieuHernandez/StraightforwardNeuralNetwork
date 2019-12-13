@@ -1,6 +1,4 @@
 #include <fstream>
-#include <vector>
-#include "Tools.hpp"
 
 using namespace std;
 using namespace snn;

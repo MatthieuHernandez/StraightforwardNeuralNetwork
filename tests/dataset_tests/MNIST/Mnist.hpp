@@ -1,10 +1,11 @@
 #pragma once
 #include "../Dataset.hpp"
+#include "Tools.hpp"
 
 class Mnist final : public Dataset
 {
 private :
     void loadData() override;
-    void readImages(std::ifstream& Images);
-    void readLabels(std::ifstream& labels);
+    vector2D<float> readImages(std::ifstream& Images);
+    vector2D<float> readLabels(std::ifstream& labels);
 };

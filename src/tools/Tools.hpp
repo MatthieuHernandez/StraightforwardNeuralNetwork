@@ -1,6 +1,14 @@
 #pragma once
 #include <vector>
 
+namespace snn
+{
+	template <T>
+	using std::vector<std::vector<T>> = vector2D<T>;
+
+	template <T>
+	using std::vector<std::vector<std::vector<T>>> = vector3D<T>;
+}
 namespace snn::internal
 {
 	class Tools

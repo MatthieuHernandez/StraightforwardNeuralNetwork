@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "Tools.hpp"
+
 using namespace std;
 using namespace snn;
 using namespace internal;

@@ -1,4 +1,7 @@
-class Mnist : public Dataset
+#pragma once
+#include "../Dataset.hpp"
+
+class Mnist final : public Dataset
 {
 private :
     void loadData() override;

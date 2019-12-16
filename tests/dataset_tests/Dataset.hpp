@@ -1,19 +1,14 @@
 #include <memory>
-
-enum set
-{
-    testing = 0,
-    training = 1
-};
+#include "../../src/data/Data.hpp"
 
 class Dataset
 {
 public:
-     std::unique_ptr<Data> data;
+     std::unique_ptr<snn::Data> data;
 
      Dataset();
      ~Dataset() = default;
 
 protected:
-    virtual loadData() = 0;
+    virtual void loadData() = 0;
 };

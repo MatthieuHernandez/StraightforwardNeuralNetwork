@@ -1,6 +1,5 @@
 #pragma once
-#include "../Dataset.h"
-#include "Tools.hpp"
+#include "../Dataset.hpp"
 
 class CIFAR_10 final : public Dataset
 {

@@ -1,4 +1,6 @@
 #include <fstream>
+#include "Cifar10.hpp"
+#include "../../../src/tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;
@@ -30,7 +32,7 @@ vector2D<float> CIFAR_10::readImages(string[] filePaths, int size, vector2D<floa
 
 void CIFAR_10::readImages(string filePath, vector2D<float>& images, vector2D<float>& labels)
 {
-    static constexpr sizeOfData = 32*32*3;
+    static constexpr int sizeOfData = 32*32*3;
     ifstream file;
     file.open(filePaths[i], ios::in | ios::binary);
 

@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "Iris.hpp"
+#include "../../../src/tools/Tools.hpp"
 
 using namespace std;
 

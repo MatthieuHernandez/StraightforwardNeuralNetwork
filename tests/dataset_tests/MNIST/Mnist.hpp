@@ -1,6 +1,5 @@
 #pragma once
 #include "../Dataset.hpp"
-#include "Tools.hpp"
 
 class Mnist final : public Dataset
 {

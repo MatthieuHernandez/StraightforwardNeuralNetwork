@@ -1,6 +1,7 @@
 #include <fstream>
 #include <vector>
-#include "Tools.hpp"
+#include "Mnist.hpp"
+#include "../../../src/tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;

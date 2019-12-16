@@ -1,4 +1,4 @@
-﻿#include "GTestTools.hpp"
+﻿#include "../GTestTools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 
 using namespace std;

@@ -1,13 +1,14 @@
 #pragma once
 #include <vector>
+#include "ExtendedExpection.hpp"
 
 namespace snn
 {
-	template <T>
-	using std::vector<std::vector<T>> = vector2D<T>;
+	template <typename T>
+	using vector2D = std::vector<std::vector<T>>;
 
-	template <T>
-	using std::vector<std::vector<std::vector<T>>> = vector3D<T>;
+	template <typename T>
+	using vector3D = std::vector<std::vector<std::vector<T>>>;
 }
 namespace snn::internal
 {

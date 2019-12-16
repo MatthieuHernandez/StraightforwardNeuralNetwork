@@ -1,12 +1,12 @@
 #include <memory>
-#include "../../src/data/Data.hpp"
+#include "data/Data.hpp"
 
 class Dataset
 {
 public:
      std::unique_ptr<snn::Data> data;
 
-     Dataset();
+     Dataset() = default;
      ~Dataset() = default;
 
 protected:

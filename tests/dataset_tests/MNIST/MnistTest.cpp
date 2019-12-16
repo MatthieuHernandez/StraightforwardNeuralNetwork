@@ -1,24 +1,21 @@
-#pragma once
-#include "../../GTestTools.h"
+#include "../../GTestTools.hpp"
 #include "Mnist.hpp"
 
 using namespace std;
 
 class MnistTest : public testing::Test
 {
-protected:
+protected :
+    MnistTest()
+    {
+        dataset = new Mnist();
+    }
 
-	MnistTest()
-	{
-		data = new Mnist();
-	}
-
-public:
-
-	Data* data;
+public :
+    Dataset* dataset;
 };
 
 TEST_F(MnistTest, loadData)
 {
-    ASSERT_NE(Data, nullptr);
+    ASSERT_FALSE(dataset->data);
 }

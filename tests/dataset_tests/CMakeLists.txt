@@ -1,13 +1,13 @@
 file(GLOB SOURCES
-    "*.h"
+    "*.hpp"
     "*.cpp"
-    "CIFAR-10/*.h"
+    "CIFAR-10/*.hpp"
     "CIFAR-10/*.cpp"
-    "Iris/*.h"
+    "Iris/*.hpp"
     "Iris/*.cpp"
-    "MNIST/*.h"
+    "MNIST/*.hpp"
     "MNIST/*.cpp"
-    "Wine/*.h"
+    "Wine/*.hpp"
     "Wine/*.cpp"
 )
 

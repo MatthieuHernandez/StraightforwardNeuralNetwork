@@ -1,13 +1,19 @@
 #include <fstream>
 #include "Cifar10.hpp"
-#include "../../../src/tools/Tools.hpp"
+#include "data/DataForClassification.hpp"
 
 using namespace std;
 using namespace snn;
+using namespace internal;
 
-void CIFAR_10::loadData()
+Cifar10::Cifar10()
 {
-    const string filePaths[6] =
+    this->loadData();
+}
+
+void Cifar10::loadData()
+{
+    string filePaths[] =
     {
         "./data_batch_1.bin",
         "./data_batch_2.bin",
@@ -15,26 +21,32 @@ void CIFAR_10::loadData()
         "./data_batch_4.bin",
         "./data_batch_5.bin"
     };
+    string testFilePaths[] =
+    {
+        "./test_batch.bin"
+    };
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;
     vector2D<float> trainingInputs = this->readImages(filePaths, 5, trainingLabels);
-    vector2D<float> testingInputs = this->readImages("./test_batch.bin", 1, testingLabels);
+    vector2D<float> testingInputs = this->readImages(testFilePaths, 1, testingLabels);
+
+    this->data = make_unique<DataForClassification>(trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
-vector2D<float> CIFAR_10::readImages(string[] filePaths, int size, vector2D<float>& labels)
+vector2D<float> Cifar10::readImages(string filePaths[], int size, vector2D<float>& labels)
 {
     vector2D<float> images;
-    image.reserve(size * 10000);
+    images.reserve(size * 10000);
     for (int i = 0; i < size; i++)
-        this->readImages(path, images, labels);
+        this->readImages(filePaths[i], images, labels);
     return images;
 }
 
-void CIFAR_10::readImages(string filePath, vector2D<float>& images, vector2D<float>& labels)
+void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<float>& labels)
 {
     static constexpr int sizeOfData = 32*32*3;
     ifstream file;
-    file.open(filePaths[i], ios::in | ios::binary);
+    file.open(filePath, ios::in | ios::binary);
 
     if (!file.is_open())
         throw FileOpeningFailed();

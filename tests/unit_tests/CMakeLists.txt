@@ -1,5 +1,5 @@
 file(GLOB SOURCES
-    "*.h"
+    "*.hpp"
     "*.cpp"
 )
 

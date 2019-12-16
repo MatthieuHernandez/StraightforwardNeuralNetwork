@@ -1,5 +1,4 @@
-#pragma once
-#include "../../GTestTools.h"
+#include "../../GTestTools.hpp"
 #include "Cifar10.hpp"
 
 using namespace std;
@@ -7,18 +6,16 @@ using namespace std;
 class Cifar10Test : public testing::Test
 {
 protected:
-
-	Cifar10Test()
-	{
-		data = new Cifar10();
-	}
+    Cifar10Test()
+    {
+        dataset = new Cifar10();
+    }
 
 public:
-
-	Data* data;
+    Dataset* dataset;
 };
 
 TEST_F(Cifar10Test, loadData)
 {
-    ASSERT_NE(Data, nullptr);
+    ASSERT_FALSE(dataset->data);
 }

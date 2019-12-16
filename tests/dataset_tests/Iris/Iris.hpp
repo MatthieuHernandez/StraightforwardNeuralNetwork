@@ -1,9 +1,12 @@
 #pragma once
 #include "../Dataset.hpp"
 
-class Iris final : public DataSet
+class Iris final : public Dataset
 {
-public:
-	void loadData() override;
+public :
+    Iris();
+
+private :
+    void loadData() override;
 };
 

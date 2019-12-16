@@ -13,3 +13,13 @@ CMakeFiles/
 *.cmake
 CMakeCache.txt
 MakeFile
+
+# Ignore copy of datasets.
+**/CIFAR-10/*.bin
+**/CIFAR-10/*.txt
+**/CIFAR-10/*.html
+**/Iris/*.data
+**/Iris/*.names
+**/MNIST/*ubyte
+**/Wine/*.data
+**/Wine/*.names

@@ -1,5 +1,4 @@
-#pragma once
-#include "../../GTestTools.h"
+#include "../../GTestTools.hpp"
 #include "Iris.hpp"
 
 using namespace std;
@@ -7,18 +6,16 @@ using namespace std;
 class IrisTest : public testing::Test
 {
 protected:
-
-	IrisTest()
-	{
-		data = new Iris();
-	}
+    IrisTest()
+    {
+        dataset = new Iris();
+    }
 
 public:
-
-	Data* data;
+    Dataset* dataset;
 };
 
 TEST_F(IrisTest, loadData)
 {
-    ASSERT_NE(Data, nullptr);
+    ASSERT_FALSE(dataset->data);
 }

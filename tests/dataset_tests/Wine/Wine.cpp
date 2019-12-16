@@ -1,13 +1,22 @@
 #include <fstream>
 #include <vector>
 #include "Wine.hpp"
+#include "data/DataForClassification.hpp"
+#include "tools/Tools.hpp"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
+
+Wine::Wine()
+{
+    this->loadData();
+}
 
 void Wine::loadData()
 {
-    vector<vector<float>> data;
-    Vector<vector<float>> labels;
+    vector2D<float> data;
+    vector2D<float> labels;
 
     string line;
     ifstream file("../wine.data.txt");
@@ -23,7 +32,7 @@ void Wine::loadData()
         vector<float> label;
         vector<float> values;
 
-        float value = itoa(line.substr(0, line.find(',')));
+        float value = atof(line.substr(0, line.find(',')).c_str());
         
         label.resize(3, 0);
         label[value] = 1;
@@ -31,13 +40,14 @@ void Wine::loadData()
 
         while (line != line.substr(line.find(',') + 1))
         {
-            value = itoa(line.substr(0, line.find(',')));
+            value = atof(line.substr(0, line.find(',')).c_str());
             values.push_back(value);
             line = line.substr(line.find(',') + 1);
         }
-        values.push_back(line.substr(0, line.find(',')));
+        value = atof(line.substr(0, line.find(',')).c_str());
+        values.push_back(value);
         data.push_back(values);
     }
     file.close();
-    this-> data = new DataForClassification(data, labels);
+    this->data = make_unique<DataForClassification>(data, labels);
 }

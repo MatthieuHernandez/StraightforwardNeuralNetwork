@@ -1,24 +1,21 @@
-#pragma once
-#include "../../GTestTools.h"
+#include "../../GTestTools.hpp"
 #include "Wine.hpp"
 
 using namespace std;
 
 class WineTest : public testing::Test
 {
-protected:
+protected :
+    WineTest()
+    {
+        dataset = new Wine();
+    }
 
-	WineTest()
-	{
-		data = new Wine();
-	}
-
-public:
-
-	Data* data;
+public :
+    Dataset* dataset;
 };
 
 TEST_F(WineTest, loadData)
 {
-    ASSERT_NE(Data, nullptr);
+    ASSERT_FALSE(dataset->data);
 }

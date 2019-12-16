@@ -2,20 +2,29 @@
 #include <string>
 #include <fstream>
 #include "Iris.hpp"
-#include "../../../src/tools/Tools.hpp"
+#include "tools/Tools.hpp"
+#include "data/DataForClassification.hpp"
 
 using namespace std;
+using namespace snn;
+using namespace internal;
+
+Iris::Iris()
+{
+    this->loadData();
+}
 
 void Iris::loadData()
 {
-    vector<vector<float>> data;
-    Vector<vector<float>> labels;
+    vector2D<float> data;
+    vector2D<float> labels;
 
     string line;
     ifstream file("./iris.data");
     int count = 0;
+    int size = 150;
     vector<vector<string>> individuals;
-    individuals.reserve(this->size);
+    individuals.reserve(size);
     const vector<string> temp;
 
     if (!file.is_open())
@@ -34,17 +43,17 @@ void Iris::loadData()
         count++;
     }
     file.close();
-    data.resize(this->size);
-    labels.resize(this->size);
-    for (int i = 0; i < this->size; i++)
+    data.resize(size);
+    labels.resize(size);
+    for (int i = 0; i < size; i++)
     {
-        data[i].resize(this->sizeOfData);
-        labels[i].resize(this->numberOfLabel);
+        data[i].resize(4);
+        labels[i].resize(3);
     }
 
-    for (int i = 0; i < this->size; i++)
+    for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < this->sizeOfData; j++)
+        for (int j = 0; j < 4; j++)
             data[i][j] = stof(individuals[i][j]);
 
         if (individuals[i][4] == "setosa")
@@ -68,5 +77,5 @@ void Iris::loadData()
         else
             throw runtime_error("Cannot load iris data set");
     }
-    this-> data = new DataForClassification(data, labels);
+    this->data = make_unique<DataForClassification>(data, labels);
 }

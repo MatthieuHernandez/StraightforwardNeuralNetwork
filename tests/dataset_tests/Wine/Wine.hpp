@@ -3,6 +3,9 @@
 
 class Wine final : public Dataset
 {
-public:
-	void loadData() override;
+public :
+    Wine();
+
+private :
+    void loadData() override;
 };

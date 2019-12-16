@@ -1,7 +1,9 @@
 #include "../../GTestTools.hpp"
+#include "data/Data.hpp"
 #include "Wine.hpp"
 
 using namespace std;
+using namespace snn;
 
 class WineTest : public testing::Test
 {
@@ -17,5 +19,5 @@ public :
 
 TEST_F(WineTest, loadData)
 {
-    ASSERT_FALSE(dataset->data);
+    ASSERT_TRUE(dataset->data);
 }

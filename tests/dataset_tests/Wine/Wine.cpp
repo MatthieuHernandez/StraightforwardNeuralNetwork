@@ -19,7 +19,7 @@ void Wine::loadData()
     vector2D<float> labels;
 
     string line;
-    ifstream file("../wine.data.txt");
+    ifstream file("./Wine/wine.data");
     
     if (!file.is_open())
         throw FileOpeningFailed();

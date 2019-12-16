@@ -13,10 +13,10 @@ Mnist::Mnist()
 
 void Mnist::loadData()
 {
-    vector2D<float> trainingInputs = this->readImages("./train-images.idx3-ubyte", 60000);
-    vector2D<float> trainingLabels = this->readLabels("./train-labels.idx1-ubyte", 60000);
-    vector2D<float> testingInputs = this->readImages("./t10k-images.idx3-ubyte", 10000);
-    vector2D<float> testingLabels = this->readLabels("./t10k-labels.idx1-ubyte", 10000);
+    vector2D<float> trainingInputs = this->readImages("./MNIST/train-images.idx3-ubyte", 60000);
+    vector2D<float> trainingLabels = this->readLabels("./MNIST/train-labels.idx1-ubyte", 60000);
+    vector2D<float> testingInputs = this->readImages("./MNIST/t10k-images.idx3-ubyte", 10000);
+    vector2D<float> testingLabels = this->readLabels("./MNIST/t10k-labels.idx1-ubyte", 10000);
 
     this->data = make_unique<DataForClassification>(trainingInputs, trainingLabels, testingInputs, testingLabels);
 }

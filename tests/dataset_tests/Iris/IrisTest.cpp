@@ -17,5 +17,5 @@ public:
 
 TEST_F(IrisTest, loadData)
 {
-    ASSERT_FALSE(dataset->data);
+    ASSERT_TRUE(dataset->data);
 }

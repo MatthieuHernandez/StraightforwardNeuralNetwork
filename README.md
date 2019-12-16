@@ -15,11 +15,11 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 
 ## Installation
 
-* To compile the library run `cmake -G"Unix Makefiles" ./..  && make` from `StraightforwardNeuralNetwork/build`.
+* To compile the library run `cmake -G"Unix Makefiles" ./..  && make` from `StraightforwardNeuralNetwork/build`
 
-* To run unit tests exectute `StraightforwardNeuralNetwork/build/tests/units_tests/UnitTests.out`
+* To run unit tests exectute `./tests/unit_tests/UnitTests.out` from `StraightforwardNeuralNetwork/build`
 
-* To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `StraightforwardNeuralNetwork/build/tests/dataset_tests/DatasetTests.out`
+* To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `./tests/dataset_tests/DatasetTests.out` from `StraightforwardNeuralNetwork/build`
 
 ## License
 

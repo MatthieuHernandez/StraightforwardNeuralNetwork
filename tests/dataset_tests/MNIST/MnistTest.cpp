@@ -1,8 +1,10 @@
-#include "../../GTestTools.hpp"
-#include "data/Data.hpp"
+#include <thread>
+#include "../../ExtendedGTest.hpp"
+#include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "Mnist.hpp"
 
 using namespace std;
+using namespace chrono;
 using namespace snn;
 
 class MnistTest : public testing::Test
@@ -18,7 +20,7 @@ public :
     unique_ptr<Data> data;
 };
 
-TEST_F(MnistTest, loadData)
+TEST_F(MnistTest, DISABLED_loadData)
 {
     ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 784);

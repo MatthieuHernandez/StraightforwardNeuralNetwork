@@ -35,7 +35,7 @@ void Wine::loadData()
         float value = atof(line.substr(0, line.find(',')).c_str());
         
         label.resize(3, 0);
-        label[value] = 1;
+        label[value-1] = 1;
         labels.push_back(label);
         line = line.substr(line.find(',') + 1);
         while (line != line.substr(line.find(',') + 1))

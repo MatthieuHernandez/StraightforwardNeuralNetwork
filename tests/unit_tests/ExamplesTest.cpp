@@ -1,4 +1,4 @@
-#include "../GTestTools.hpp"
+#include "../ExtendedGTest.hpp"
 #include "../../examples/ClassificationExample.cpp"
 #include "../../examples/MultipleClassificationExemple.cpp"
 #include "../../examples/RegressionExample.cpp"

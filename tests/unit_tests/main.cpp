@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../GTestTools.hpp"
+#include "../ExtendedGTest.hpp"
 
 int main(int ac, char* av[])
 {

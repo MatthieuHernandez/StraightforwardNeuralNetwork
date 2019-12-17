@@ -13,6 +13,6 @@ file(GLOB SOURCES
 
 add_executable(DatasetTests.out ${SOURCES})
 
-target_link_libraries(DatasetTests.out gtest StraightforwardNeuralNetwork)
+target_link_libraries(DatasetTests.out GTestExtended StraightforwardNeuralNetwork)
 
 install(TARGETS DatasetTests.out DESTINATION bin)

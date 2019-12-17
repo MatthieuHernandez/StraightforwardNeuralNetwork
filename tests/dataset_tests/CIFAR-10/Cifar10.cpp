@@ -61,7 +61,10 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         if (!file.eof())
             labels.back()[c] = 1.0;
         else
+        {
             labels.resize(labels.size() - 1);
+            break;
+        }
 
         const vector<float> imageTemp;
         images.push_back(imageTemp);

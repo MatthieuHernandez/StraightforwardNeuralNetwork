@@ -36,23 +36,23 @@ vector2D<float> Mnist::readImages(string filePath, int size)
     int shift = 0;
     for (int i = 0; !file.eof(); i++)
     {
-        vector<float> imageTemp;
+        const vector<float> imageTemp;
         images.push_back(imageTemp);
         images.back().reserve(sizeOfData);
-        if (!file.eof())
-            for (int j = 0; !file.eof() && j < sizeOfData;)
+        for (int j = 0; !file.eof() && j < sizeOfData;)
+        {
+            c = file.get();
+            if (shift > 15)
             {
-                c = file.get();
-
-                if (shift > 15)
-                {
-                    float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
-                    images.back().push_back(value);
-                    j++;
-                }
-                else
-                    shift ++;
+                float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
+                images.back().push_back(value);
+                j++;
             }
+            else
+                shift ++;
+        }
+        if (images.back().size() != sizeOfData)
+            images.resize(images.size() - 1);
     }
     file.close();
     return images;
@@ -69,17 +69,22 @@ vector2D<float> Mnist::readLabels(string filePath, int size)
         throw FileOpeningFailed();
 
     unsigned char c;
+    int shift = 0;
     for (int i = 0; !file.eof(); i++)
     {
         c = file.get();
+        if (shift > 7)
+        {
+            vector<float> labelsTemp(10, 0);
+            labels.push_back(labelsTemp);
 
-        vector<float> labelsTemp(10, 0);
-        labels.push_back(labelsTemp);
-
-        if (!file.eof())
-            labels.back()[c] = 1.0;
+            if (!file.eof())
+                labels.back()[c] = 1.0;
+            else
+                labels.resize(labels.size() - 1);
+        }
         else
-            labels.resize(labels.size() - 1);
+            shift ++;
     }
     file.close();
     return labels;

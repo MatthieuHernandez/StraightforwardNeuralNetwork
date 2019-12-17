@@ -37,7 +37,7 @@ void Wine::loadData()
         label.resize(3, 0);
         label[value] = 1;
         labels.push_back(label);
-
+        line = line.substr(line.find(',') + 1);
         while (line != line.substr(line.find(',') + 1))
         {
             value = atof(line.substr(0, line.find(',')).c_str());

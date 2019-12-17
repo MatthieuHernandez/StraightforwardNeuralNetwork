@@ -10,14 +10,21 @@ class Cifar10Test : public testing::Test
 protected :
     Cifar10Test()
     {
-        dataset = new Cifar10();
+        Cifar10 dataset;
+        data = move(dataset.data);
     }
 
 public :
-    Dataset* dataset;
+    unique_ptr<Data> data;
 };
 
-TEST_F(Cifar10Test, loadData)
+TEST_F(Cifar10Test, DISABLED_loadData)
 {
-    ASSERT_TRUE(dataset->data);
+    ASSERT_TRUE(data);
+    ASSERT_EQ(data->sizeOfData, 3072);
+    ASSERT_EQ(data->numberOfLabel, 10);
+    ASSERT_EQ(data->sets[training].inputs.size(), 50000);
+    ASSERT_EQ(data->sets[training].labels.size(), 50000);
+    ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
+    ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }

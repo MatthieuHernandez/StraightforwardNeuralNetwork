@@ -31,7 +31,7 @@ TEST_F(MnistTest, loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(MnistTest, trainNeuralNetwork)
+TEST_F(MnistTest, DISABLED_trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({784, 150, 70, 10});
     neuralNetwork.trainingStart(*data);

@@ -31,7 +31,7 @@ TEST_F(Cifar10Test, loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(Cifar10Test, trainNeuralNetwork)
+TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({3072, 200, 80, 10});
     neuralNetwork.trainingStart(*data);

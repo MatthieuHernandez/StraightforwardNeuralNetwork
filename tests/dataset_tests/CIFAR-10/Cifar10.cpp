@@ -15,15 +15,15 @@ void Cifar10::loadData()
 {
     string filePaths[] =
     {
-        "./CIFAR-10/data_batch_1.bin",
-        "./CIFAR-10/data_batch_2.bin",
-        "./CIFAR-10/data_batch_3.bin",
-        "./CIFAR-10/data_batch_4.bin",
-        "./CIFAR-10/data_batch_5.bin"
+        "./datasets/CIFAR-10/data_batch_1.bin",
+        "./datasets/CIFAR-10/data_batch_2.bin",
+        "./datasets/CIFAR-10/data_batch_3.bin",
+        "./datasets/CIFAR-10/data_batch_4.bin",
+        "./datasets/CIFAR-10/data_batch_5.bin"
     };
     string testFilePaths[] =
     {
-        "./CIFAR-10/test_batch.bin"
+        "./datasets/CIFAR-10/test_batch.bin"
     };
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;

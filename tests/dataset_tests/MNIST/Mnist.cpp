@@ -42,7 +42,7 @@ vector2D<float> Mnist::readImages(string filePath, int size)
         for (int j = 0; !file.eof() && j < sizeOfData;)
         {
             c = file.get();
-            if (shift > 15)
+            if (shift >= 16)
             {
                 float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
                 images.back().push_back(value);
@@ -73,15 +73,14 @@ vector2D<float> Mnist::readLabels(string filePath, int size)
     for (int i = 0; !file.eof(); i++)
     {
         c = file.get();
-        if (shift > 7)
+        if (shift >= 8)
         {
-            vector<float> labelsTemp(10, 0);
-            labels.push_back(labelsTemp);
-
             if (!file.eof())
+            {
+                vector<float> labelsTemp(10, 0);
+                labels.push_back(labelsTemp);
                 labels.back()[c] = 1.0;
-            else
-                labels.resize(labels.size() - 1);
+            }
         }
         else
             shift ++;

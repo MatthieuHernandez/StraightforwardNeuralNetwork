@@ -37,7 +37,6 @@ TEST_F(WineTest, trainNeuralNetwork)
     neuralNetwork.trainingStart(*data);
     this_thread::sleep_for(3s);
     neuralNetwork.trainingStop();
-    const auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    //PRINT_LOG("accuracy = " + to_string(accuracy));
-    ASSERT_TRUE(accuracy > 0.98);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 1.0);
 }

@@ -22,4 +22,6 @@ jobs:
         cd ./build
         make
     - name: execute unit tests
-      run: ./build/test/Test.out
+      run: |
+        cd ./build
+      ./tests/unit_tests/UnitTests.out

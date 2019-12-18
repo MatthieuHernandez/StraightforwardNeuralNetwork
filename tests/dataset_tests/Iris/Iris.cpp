@@ -20,7 +20,7 @@ void Iris::loadData()
     vector2D<float> labels;
 
     string line;
-    ifstream file("./Iris/iris.data");
+    ifstream file("./Iris/bezdekIris.data");
     int size = 0;
     vector2D<string> individuals;
     individuals.reserve(150);

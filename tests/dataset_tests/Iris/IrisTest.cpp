@@ -33,11 +33,10 @@ TEST_F(IrisTest, loadData)
 
 TEST_F(IrisTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({4, 25, 3});
+    StraightforwardNeuralNetwork neuralNetwork({4, 15, 5, 3});
     neuralNetwork.trainingStart(*data);
-    this_thread::sleep_for(3s);
+    this_thread::sleep_for(2s);
     neuralNetwork.trainingStop();
-    const auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    //PRINT_LOG("accuracy = " + to_string(accuracy));
-    ASSERT_TRUE(accuracy > 0.98);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.98);
 }

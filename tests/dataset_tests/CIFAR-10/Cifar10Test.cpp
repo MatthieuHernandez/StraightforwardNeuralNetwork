@@ -20,7 +20,7 @@ public :
     unique_ptr<Data> data;
 };
 
-TEST_F(Cifar10Test, DISABLED_loadData)
+TEST_F(Cifar10Test, loadData)
 {
     ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 3072);
@@ -31,7 +31,16 @@ TEST_F(Cifar10Test, DISABLED_loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
+TEST_F(Cifar10Test, trainNeuralNetwork)
 {
-
+    StraightforwardNeuralNetwork neuralNetwork({3072, 200, 80, 10});
+    neuralNetwork.trainingStart(*data);
+    float accuracy = 0;
+    for(int i = 0; i < 300 && accuracy < 0.30; i++)
+    {
+        accuracy = neuralNetwork.getGlobalClusteringRate();
+        this_thread::sleep_for(1s);
+    }
+    neuralNetwork.trainingStop();
+    ASSERT_ACCURACY(accuracy, 0.30);
 }

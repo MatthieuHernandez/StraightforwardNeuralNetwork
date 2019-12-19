@@ -1,12 +1,6 @@
 # StraightforwardNeuralNetwork
 **Straightforward Neural Network** is an open source software simple neural network library in C++
 
-## Installation
-
-To compile the library execute `cmake -G"Unix Makefiles" ./..  && make` from StraightforwardNeuralNetwork/build.
-
-To run test exectute `./test/Test.out` from StraightforwardNeuralNetwork/build.
-
 ## Documentation
 
 You can see documentation on [Wiki](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki).
@@ -18,6 +12,14 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 | Mnist        | http://yann.lecun.com/exdb/mnist/            | 98.32%   | 230                |
 | Wine         | https://archive.ics.uci.edu/ml/datasets/wine | 100%     | 28                 |
 | Iris         | https://archive.ics.uci.edu/ml/datasets/iris | 100%     | 12                 |
+
+## Installation
+
+* To compile the library run `cmake -G"Unix Makefiles" ./..  && make` from `StraightforwardNeuralNetwork/build`
+
+* To run unit tests exectute `./tests/unit_tests/UnitTests.out` from `StraightforwardNeuralNetwork/build`
+
+* To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `./tests/dataset_tests/DatasetTests.out` from `StraightforwardNeuralNetwork/build`
 
 ## License
 

@@ -9,4 +9,12 @@ namespace snn::internal
 		{
 		}
 	};
+
+	class FileOpeningFailed : public std::runtime_error
+	{
+	public:
+		FileOpeningFailed() : std::runtime_error("Cannot open file")
+		{
+		}
+	};
 }

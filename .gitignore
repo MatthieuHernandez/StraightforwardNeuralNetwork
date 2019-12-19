@@ -11,5 +11,9 @@ boost_1_71_0/
 generated/
 CMakeFiles/
 *.cmake
+!internal_utils.cmake
 CMakeCache.txt
 MakeFile
+
+# Ignore copy of datasets.
+build/datasets/

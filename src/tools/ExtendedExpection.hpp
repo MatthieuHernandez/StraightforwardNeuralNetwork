@@ -5,7 +5,7 @@ namespace snn::internal
 	class NotImplementedException : public std::runtime_error
 	{
 	public:
-		NotImplementedException() : std::runtime_error("Function not yet implemented")
+		NotImplementedException(string functionName = "Function") : std::runtime_error(functionName + " not yet implemented")
 		{
 		}
 	};

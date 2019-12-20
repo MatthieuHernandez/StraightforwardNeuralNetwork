@@ -13,7 +13,7 @@ Cifar10::Cifar10()
 
 void Cifar10::loadData()
 {
-    string filePaths[] =
+    const string filePaths[] =
     {
         "./datasets/CIFAR-10/data_batch_1.bin",
         "./datasets/CIFAR-10/data_batch_2.bin",
@@ -21,7 +21,7 @@ void Cifar10::loadData()
         "./datasets/CIFAR-10/data_batch_4.bin",
         "./datasets/CIFAR-10/data_batch_5.bin"
     };
-    string testFilePaths[] =
+    const string testFilePaths[] =
     {
         "./datasets/CIFAR-10/test_batch.bin"
     };

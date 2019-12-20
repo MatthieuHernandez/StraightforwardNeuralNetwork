@@ -7,11 +7,6 @@
 
 namespace snn::internal
 {
-	enum LayerType
-	{
-		allToAll = 0
-	};
-
 	class Layer
 	{
 	private :

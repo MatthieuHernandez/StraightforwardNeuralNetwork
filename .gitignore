@@ -1,4 +1,5 @@
-.vscode/
+.vs/
+.vcx/
 boost_1_71_0/
 *.a
 *.o

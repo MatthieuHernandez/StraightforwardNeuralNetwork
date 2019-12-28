@@ -2,6 +2,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
+#include "LayerType.hpp"
 #include "LayerOption.hpp"
 #include "perceptron/Perceptron.hpp"
 
@@ -22,22 +23,22 @@ namespace snn::internal
 		std::vector<Perceptron> neurons;
 
 	public:
-		Layer(int numberOfInputs,
+		Layer(layerType type,
+              int numberOfInputs,
               int numberOfNeurons,
               LayerOption* option);
-		Layer() = default;
-		virtual ~Layer() = default;
+
+        Layer() = default;
+        virtual ~Layer() = default;
 
 		LayerOption* option;
+		static const layerType type;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;
 		virtual void train(std::vector<float>& inputsError) = 0;
 
-		virtual int isValid() const;
-
-		virtual LayerType getType() const = 0;
-
+        [[nodiscard]] virtual int isValid() const;
 		virtual bool operator==(const Layer& layer) const;
 		virtual Layer& operator=(const Layer& layer) = 0;
 		virtual bool operator!=(const Layer& layer) const;

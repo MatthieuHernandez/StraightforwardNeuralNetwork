@@ -1,6 +1,9 @@
+#include "LayerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
 
-static std::unique_ptr<Layer> build(LayerModel)
+using namespace std;
+
+static unique_ptr<Layer> build(LayerModel)
 {
     switch (LayerModel.type)
     {
@@ -13,7 +16,7 @@ static std::unique_ptr<Layer> build(LayerModel)
     }
 }
 
-static std::vector<std::unique_ptr<Layer>> build(LayerModel)
+static vector<unique_ptr<Layer>> build(LayerModel)
 {
 
 }

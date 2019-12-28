@@ -1,4 +1,5 @@
 #include <memory>
+
 namespace snn
 {
     extern LayerModel AlltoAll(int NumberOfNeurons);

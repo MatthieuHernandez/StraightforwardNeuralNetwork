@@ -9,14 +9,12 @@ namespace snn::internal
 	class AllToAll : public Layer
 	{
 	private :
-
 		friend class boost::serialization::access;
 		template <class Archive>
 		void serialize(Archive& ar, unsigned version);
 
 
 	public :
-
 		AllToAll() = default;
 		~AllToAll() = default;
 		AllToAll(int numberOfInputs, int numberOfNeurons, activationFunctionType function, LayerOption* option);
@@ -25,8 +23,6 @@ namespace snn::internal
 		void train(std::vector<float>& inputsError) override;
 
 		int isValid() const override;
-
-		LayerType getType() const override;
 
 		Layer& operator=(const Layer& layer) override;
 		bool operator==(const AllToAll& layer) const;

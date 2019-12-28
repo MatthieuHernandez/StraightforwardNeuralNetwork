@@ -1,9 +1,14 @@
-struct LayerModel
+#pragma once
+#include "LayerType.hpp"
+namespace snn::internal
 {
-    const LayerType type,
-    const int numberOfNeurons,
-    const int numberOfRecurences,
-    const int numberOfConvolution,
-    const int sizeOfConvolutionMatrix,
-    const int sizeOfInputs[3]
-};
+    struct LayerModel
+    {
+        const layerType type;
+        const int numberOfNeurons;
+        const int numberOfRecurrences;
+        const int numberOfConvolution;
+        const int sizeOfConvolutionMatrix;
+        const int sizeOfInputs[3];
+    };
+}

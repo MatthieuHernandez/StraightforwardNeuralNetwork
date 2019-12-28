@@ -99,7 +99,7 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 	this->layers.reserve(neuralNetwork.layers.size());
 	for (auto& layer : neuralNetwork.layers)
 	{
-		if (layer->getType() == allToAll)
+		if (layer->type == allToAll)
 		{
 			auto newLayer = new AllToAll();
 			newLayer->operator=(*layer);

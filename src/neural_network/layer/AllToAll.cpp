@@ -1,4 +1,3 @@
-#include <omp.h>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "AllToAll.hpp"
@@ -13,7 +12,7 @@ AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
                    activationFunctionType function,
                    LayerOption* option)
-	: Layer(numberOfInputs, numberOfNeurons, option)
+	: Layer(allToAll, numberOfInputs, numberOfNeurons, option)
 {
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
@@ -59,11 +58,6 @@ void AllToAll::train(vector<float>& inputsError)
 int AllToAll::isValid() const
 {
 	return this->Layer::isValid();
-}
-
-LayerType AllToAll::getType() const
-{
-	return allToAll;
 }
 
 Layer& AllToAll::operator=(const Layer& layer)

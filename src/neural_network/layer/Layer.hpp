@@ -16,9 +16,6 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	protected:
-		int numberOfInputs = 0;
-		int numberOfNeurons = 0;
-
 		std::vector<float> errors;
 		std::vector<Perceptron> neurons;
 
@@ -31,8 +28,11 @@ namespace snn::internal
         Layer() = default;
         virtual ~Layer() = default;
 
-		LayerOption* option;
-		static const layerType type;
+        LayerOption* option;
+        static const layerType type;
+
+        const int numberOfInputs;
+        const int numberOfNeurons;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;

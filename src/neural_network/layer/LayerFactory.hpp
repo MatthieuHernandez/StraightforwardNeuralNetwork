@@ -1,12 +1,14 @@
 #include <memory>
+#include "LayerModel.hpp"
+#include "Layer.hpp"
 
 namespace snn
 {
-    extern LayerModel AlltoAll(int NumberOfNeurons);
+    extern internal::LayerModel AllToAll(int numberOfNeurons);
 
-    extern LayerModel Recurrent(int NumberOfNeurons,  int numberOfRecurences);
+    extern internal::LayerModel Recurrent(int numberOfNeurons,  int numberOfRecurrences);
 
-    extern LayerModel Convolution2D(int numberOfConvolution, sizeOfConvolutionMatrix, sizeOfInputs[3]);
+    extern internal::LayerModel Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3]);
 }
 
 namespace snn::internal
@@ -14,9 +16,11 @@ namespace snn::internal
     class LayerFactory 
     {
     private :
-        static std::unique_ptr<Layer> build(LayerModel);
+        static std::unique_ptr<Layer> build(LayerModel model);
+        static std::unique_ptr<Layer> copy(std::unique_ptr<Layer> layer);
 
     public :
-        static std::vector<std::unique_ptr<Layer>> build(LayerModel);
+        static std::vector<std::unique_ptr<Layer>> build(std::vector<LayerModel>& models);
+        static std::vector<std::unique_ptr<Layer>> copy(std::vector<std::unique_ptr<Layer>> layers);
     };
 }

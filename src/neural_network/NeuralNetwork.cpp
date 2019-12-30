@@ -3,8 +3,9 @@
 #include <iostream>
 #include <boost/serialization/export.hpp>
 #include "NeuralNetwork.hpp"
-#include "layer/AllToAll.hpp"
+#include "layer/LayerModel.hpp"
 #include "../tools/ExtendedExpection.hpp"
+#include "layer/LayerFactory.hpp"
 
 using namespace std;
 using namespace snn;
@@ -22,31 +23,20 @@ void NeuralNetwork::initialize()
 	isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(const std::vector<int>& structureOfNetwork,
-                             const std::vector<activationFunctionType>& activationFunctionByLayer,
-                             NeuralNetworkOption* option) : StatisticAnalysis(structureOfNetwork.back())
+NeuralNetwork::NeuralNetwork(std::vector<LayerModel>& models)
 {
 	if (isTheFirst)
 		this->initialize();
 
 	option != nullptr ? this->option = option : this->option = new NeuralNetworkOption();
 
-	this->structureOfNetwork = structureOfNetwork;
 	this->activationFunctionByLayer = activationFunctionByLayer;
 
-	this->numberOfLayers = static_cast<int>(structureOfNetwork.size()) - 1;
-	this->numberOfHiddenLayers = static_cast<int>(structureOfNetwork.size()) - 2;
-	this->numberOfInput = structureOfNetwork[0];
-	this->numberOfOutputs = structureOfNetwork.back();
-
-	layers.reserve(numberOfLayers);
-	for (unsigned int l = 1; l < structureOfNetwork.size(); ++l)
-	{
-		layers.emplace_back(new AllToAll(structureOfNetwork[l - 1],
-		                          structureOfNetwork[l],
-		                          this->activationFunctionByLayer[l - 1],
-		                          this->option));
-	}
+	this->layers = LayerFactory::build(models);
+	
+	this->numberOfLayers = static_cast<int>(this->layers.size()) - 1;
+	this->numberOfInput = this->layers[0]->numberOfInputs;
+	this->numberOfOutputs = this->layers.back()->numberOfNeurons;
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
@@ -63,9 +53,9 @@ int NeuralNetwork::isValid() const
 		return 101;
 
 	if (this->numberOfLayers < 1 
-	|| this->numberOfHiddenLayers > 1000
+	|| this->numberOfLayers > 1000
 	|| this->numberOfLayers != this->layers.size()
-	|| this->numberOfLayers != numberOfHiddenLayers + 1)
+	|| this->numberOfLayers)
 		return 102;
 
 	if (option->learningRate <= 0.0f || option->learningRate >= 1.0f)
@@ -89,26 +79,13 @@ NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 {
 	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
 	this->option = neuralNetwork.option;
-	this->numberOfHiddenLayers = neuralNetwork.numberOfHiddenLayers;
 	this->numberOfLayers = neuralNetwork.numberOfLayers;
 	this->numberOfInput = neuralNetwork.numberOfInput;
 	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
-	this->structureOfNetwork = neuralNetwork.structureOfNetwork;
 	this->activationFunctionByLayer = neuralNetwork.activationFunctionByLayer;
 	this->layers.clear();
 	this->layers.reserve(neuralNetwork.layers.size());
-	for (auto& layer : neuralNetwork.layers)
-	{
-		if (layer->type == allToAll)
-		{
-			auto newLayer = new AllToAll();
-			newLayer->operator=(*layer);
-			this->layers.emplace_back(newLayer);
-		}
-		else
-			throw runtime_error("Wrong layer type");
-	}
-
+	this->layers = LayerFactory::copy(neuralNetwork.layers);
 	return *this;
 }
 
@@ -116,11 +93,9 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
 	return this->maxOutputIndex == neuralNetwork.maxOutputIndex
 		&& *this->option == *neuralNetwork.option
-		&& this->numberOfHiddenLayers == neuralNetwork.numberOfHiddenLayers
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
 		&& this->numberOfInput == neuralNetwork.numberOfInput
 		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
-		&& this->structureOfNetwork == neuralNetwork.structureOfNetwork
 		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
 		&& [=] () {
 			for (int l = 0; l < numberOfLayers; l++)

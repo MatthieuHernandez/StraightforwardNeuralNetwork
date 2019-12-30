@@ -3,9 +3,10 @@
 #include <boost/serialization/vector.hpp>
 #include "NeuralNetworkOption.hpp"
 #include "layer/Layer.hpp"
-#include "layer/AllToAll.hpp"
+#include "layer/LayerModel.hpp"
 #include "layer/perceptron/activation_function/ActivationFunction.hpp"
 #include "StatisticAnalysis.hpp"
+
 
 namespace snn::internal
 {
@@ -33,12 +34,8 @@ namespace snn::internal
 		template <class Archive>
 		void serialize(Archive& ar, unsigned version);
 
-
 	protected :
-
-		NeuralNetwork(const std::vector<int>& structureOfNetwork,
-					  const std::vector<activationFunctionType>& activationFunctionByLayer,
-					  NeuralNetworkOption* option = nullptr);
+		NeuralNetwork(const std::vector<LayerModel>& models);
 
 		NeuralNetwork(const NeuralNetwork& neuralNetwork);
 
@@ -64,7 +61,6 @@ namespace snn::internal
 		bool operator!=(const NeuralNetwork& neuralNetwork) const;
 
 	public:
-
 		int isValid() const;
 
 		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);

@@ -7,7 +7,7 @@ namespace snn::internal
 	{
 	private :
 
-		activationFunctionType getType() const override { return reLU; }
+		activationFunction getType() const override { return reLU; }
 
 	public :
 		float function(const float x) const override

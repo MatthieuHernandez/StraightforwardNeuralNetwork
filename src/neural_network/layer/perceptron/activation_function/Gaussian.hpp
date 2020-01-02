@@ -7,7 +7,7 @@ namespace snn::internal
 	{
 	private :
 
-		virtual activationFunctionType getType() const { return gaussian; }
+		virtual activationFunction getType() const { return gaussian; }
 
 	public :
 

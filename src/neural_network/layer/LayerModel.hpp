@@ -5,6 +5,7 @@ namespace snn::internal
     struct LayerModel
     {
         const layerType type;
+        const activationFunction activationFunction;
         const int numberOfNeurons;
         const int numberOfRecurrences;
         const int numberOfConvolution;

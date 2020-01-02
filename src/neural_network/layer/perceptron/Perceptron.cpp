@@ -13,7 +13,7 @@ Perceptron::~Perceptron()
 }
 
 Perceptron::Perceptron(const int numberOfInputs,
-                       activationFunctionType activationFunction,
+                       activationFunction activationFunction,
                        NeuronOption* option)
 {
 	this->option = option;

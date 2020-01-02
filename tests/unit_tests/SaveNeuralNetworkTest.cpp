@@ -7,7 +7,7 @@ using namespace snn;
 TEST(SaveNeuralNetwork, EqualTest)
 {
 	const vector<int> structureOfNetwork {5, 20, 10, 3};
-	const vector<activationFunctionType> activationFunctionByLayer{iSigmoid, tanH, sigmoid};
+	const vector<activationFunction> activationFunctionByLayer{iSigmoid, tanh, sigmoid};
 	StraightforwardOption optionA;
 	optionA.learningRate = 0.03f;
 	optionA.momentum = 0.78f;
@@ -59,7 +59,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 TEST(SaveNeuralNetwork, Save)
 {
 	const vector<int> structureOfNetwork {5, 20, 10, 3};
-	const vector<activationFunctionType> activationFunctionByLayer{iSigmoid, tanH, sigmoid};
+	const vector<activationFunction> activationFunctionByLayer{iSigmoid, tanh, sigmoid};
 	StraightforwardOption option;
 	option.learningRate = 0.03f;
 	option.momentum = 0.78f;

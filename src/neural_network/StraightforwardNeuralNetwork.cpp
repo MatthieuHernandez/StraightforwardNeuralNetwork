@@ -18,15 +18,8 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork)
-	: StraightforwardNeuralNetwork(structureOfNetwork,
-	                vector<activationFunctionType>(structureOfNetwork.size() - 1, sigmoid),
-	                StraightforwardOption())
-{
-}
-
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork,
-                                                           vector<activationFunctionType> activationFunctionByLayer,
+                                                           vector<activationFunction> activationFunctionByLayer,
                                                            StraightforwardOption option)
 	: NeuralNetwork(structureOfNetwork,
 	                activationFunctionByLayer,

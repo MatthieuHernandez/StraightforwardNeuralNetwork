@@ -23,7 +23,7 @@ namespace snn::internal
 		int numberOfOutputs{};
 
 		std::vector<int> structureOfNetwork{};
-		std::vector<snn::activationFunctionType> activationFunctionByLayer{};
+		std::vector<snn::activationFunction> activationFunctionByLayer{};
 
 		std::vector<std::unique_ptr<Layer>> layers{};
 
@@ -69,7 +69,7 @@ namespace snn::internal
 		int getNumberOfHiddenLayers() const;
 		int getNumberOfNeuronsInLayer(int layerNumber) const;
 		Layer& getLayer(int layerNumber);
-		activationFunctionType getActivationFunctionInLayer(int layerNumber) const;
+		activationFunction getActivationFunctionInLayer(int layerNumber) const;
 		int getNumberOfOutputs() const;
 	};
 

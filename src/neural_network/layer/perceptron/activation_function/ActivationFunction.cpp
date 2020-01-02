@@ -19,12 +19,12 @@ void ActivationFunction::initialize()
 
 	listOfActivationFunction.push_back(new Sigmoid());
 	listOfActivationFunction.push_back(new ImprovedSigmoid());
-	listOfActivationFunction.push_back(new TanH());
+	listOfActivationFunction.push_back(new Tanh());
 	listOfActivationFunction.push_back(new ReLU());
 	listOfActivationFunction.push_back(new Gaussian());*/
 }
 
-ActivationFunction* ActivationFunction::create(activationFunctionType type)
+ActivationFunction* ActivationFunction::create(activationFunction type)
 {
 	switch (type)
 	{
@@ -32,8 +32,8 @@ ActivationFunction* ActivationFunction::create(activationFunctionType type)
 			return new Sigmoid();
 		case iSigmoid:
 			return new ImprovedSigmoid();
-		case tanH:
-			return new TanH();
+		case tanh:
+			return new Tanh();
 		case reLU:
 			return new ReLU();
 		case gaussian:

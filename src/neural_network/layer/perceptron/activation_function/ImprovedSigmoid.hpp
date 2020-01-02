@@ -7,7 +7,7 @@ namespace snn::internal
 	{
 	private :
 
-		activationFunctionType getType() const override { return iSigmoid; }
+		activationFunction getType() const override { return iSigmoid; }
 
 	public:
 

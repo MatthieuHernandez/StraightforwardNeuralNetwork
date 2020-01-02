@@ -10,7 +10,7 @@ BOOST_CLASS_EXPORT(AllToAll)
 
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
-                   activationFunctionType function,
+                   activationFunction function,
                    LayerOption* option)
 	: Layer(allToAll, numberOfInputs, numberOfNeurons, option)
 {

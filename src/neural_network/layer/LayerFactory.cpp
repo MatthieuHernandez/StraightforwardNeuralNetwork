@@ -6,7 +6,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerModel AllToAll(int numberOfNeurons)
+LayerModel AllToAll(int numberOfNeurons, activationFunction activation)
 {
     LayerModel model
     {
@@ -16,7 +16,7 @@ LayerModel AllToAll(int numberOfNeurons)
     return model;
 }
 
-LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences)
+LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
 {
     LayerModel model
     {
@@ -27,7 +27,7 @@ LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences)
     return model;
 }
 
-LayerModel Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3])
+LayerModel Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3], activationFunction activation)
 {
     LayerModel model
     {

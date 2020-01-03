@@ -23,24 +23,19 @@ void NeuralNetwork::initialize()
 	isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(std::vector<LayerModel>& models)
+NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
 {
 	if (isTheFirst)
 		this->initialize();
 
-	option != nullptr ? this->option = option : this->option = new NeuralNetworkOption();
-
-	this->activationFunctionByLayer = activationFunctionByLayer;
-
-	this->layers = LayerFactory::build(models);
-	
-	this->numberOfLayers = static_cast<int>(this->layers.size()) - 1;
-	this->numberOfInput = this->layers[0]->numberOfInputs;
+	this->numberOfInput;
+	LayerFactory::build(this->layers, this->numberOfInput, models, &this->learningRate, &this->momentum);
+	this->numberOfLayers = static_cast<int>(this->layers.size());
 	this->numberOfOutputs = this->layers.back()->numberOfNeurons;
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
-	: StatisticAnalysis(neuralNetwork.getNumberOfOutputs())
+	: StatisticAnalysis(neuralNetwork.numberOfOutputs)
 {
 	this->operator=(neuralNetwork);
 }
@@ -58,17 +53,15 @@ int NeuralNetwork::isValid() const
 	|| this->numberOfLayers)
 		return 102;
 
-	if (option->learningRate <= 0.0f || option->learningRate >= 1.0f)
+	if (this->learningRate <= 0.0f || this->learningRate >= 1.0f)
 		return 103;
 
-	if (option->momentum < 0.0f || option->momentum > 1.0f)
+	if (this->momentum < 0.0f || this->momentum > 1.0f)
 		return 104;
 
 	for (auto& layer : this->layers)
 	{
 		int err = layer->isValid();
-		if(this->option != layer->option)
-			return 1001;
 		if(err != 0)
 			return err;
 	}
@@ -78,25 +71,25 @@ int NeuralNetwork::isValid() const
 NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
 {
 	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
-	this->option = neuralNetwork.option;
+	this->learningRate = neuralNetwork.learningRate;
+	this->momentum = neuralNetwork.momentum;
 	this->numberOfLayers = neuralNetwork.numberOfLayers;
 	this->numberOfInput = neuralNetwork.numberOfInput;
 	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
-	this->activationFunctionByLayer = neuralNetwork.activationFunctionByLayer;
 	this->layers.clear();
 	this->layers.reserve(neuralNetwork.layers.size());
-	this->layers = LayerFactory::copy(neuralNetwork.layers);
+	LayerFactory::copy(this->layers, neuralNetwork.layers);
 	return *this;
 }
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
 	return this->maxOutputIndex == neuralNetwork.maxOutputIndex
-		&& *this->option == *neuralNetwork.option
+		&& this->learningRate == neuralNetwork.learningRate
+		&& this->momentum == neuralNetwork.momentum
 		&& this->numberOfLayers == neuralNetwork.numberOfLayers
 		&& this->numberOfInput == neuralNetwork.numberOfInput
 		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
-		&& this->activationFunctionByLayer == neuralNetwork.activationFunctionByLayer
 		&& [=] () {
 			for (int l = 0; l < numberOfLayers; l++)
 			{
@@ -105,8 +98,6 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 			}
 			return true;
 		}();
-		//&& equal(this->layers.begin(), this->layers.end(),
-		//         neuralNetwork.layers.begin(), neuralNetwork.layers.end());
 }
 
 bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const

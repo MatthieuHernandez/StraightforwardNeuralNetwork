@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include "NeuralNetworkOption.hpp"
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
+#include "layer/AllToAll.hpp"
 #include "layer/perceptron/activation_function/ActivationFunction.hpp"
 #include "StatisticAnalysis.hpp"
 
@@ -16,17 +16,6 @@ namespace snn::internal
 		static bool isTheFirst;
 		static void initialize();
 
-		int maxOutputIndex{};
-		int numberOfHiddenLayers{};
-		int numberOfLayers;
-		int numberOfInput{};
-		int numberOfOutputs{};
-
-		std::vector<int> structureOfNetwork{};
-		std::vector<snn::activationFunction> activationFunctionByLayer{};
-
-		std::vector<std::unique_ptr<Layer>> layers{};
-
 		void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
 		std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
@@ -35,14 +24,14 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	protected :
-		NeuralNetwork(const std::vector<LayerModel>& models);
+		NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
 
 		NeuralNetwork(const NeuralNetwork& neuralNetwork);
 
 		NeuralNetwork() = default;
 		~NeuralNetwork() = default;
 
-		NeuralNetworkOption* option;
+		int maxOutputIndex;
 
 		[[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
 
@@ -61,16 +50,19 @@ namespace snn::internal
 		bool operator!=(const NeuralNetwork& neuralNetwork) const;
 
 	public:
+
+		// use copy constructor instead of operator=()
+		/*const*/ int numberOfLayers;
+		/*const*/ int numberOfInput;
+		/*const*/ int numberOfOutputs;
+
+		float learningRate = 0.05f;
+		float momentum = 0.0f;
+
+		std::vector<std::unique_ptr<Layer>> layers{};
 		int isValid() const;
 
 		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
-
-		int getNumberOfInputs() const;
-		int getNumberOfHiddenLayers() const;
-		int getNumberOfNeuronsInLayer(int layerNumber) const;
-		Layer& getLayer(int layerNumber);
-		activationFunction getActivationFunctionInLayer(int layerNumber) const;
-		int getNumberOfOutputs() const;
 	};
 
 	template <class Archive>
@@ -78,16 +70,14 @@ namespace snn::internal
 	{
 		boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
 		ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-		ar & this->option;
+		ar & this->learningRate;
+		ar & this->momentum;
 		ar & this->maxOutputIndex;
-		ar & this->numberOfHiddenLayers;
 		ar & this->numberOfLayers;
 		ar & this->numberOfInput;
 		ar & this->numberOfOutputs;
-		ar & this->structureOfNetwork;
-		ar & this->activationFunctionByLayer;
 		ar & this->numberOfInput;
-		ar.template register_type<AllToAll>();
+		ar.template register_type<internal::AllToAll>();
 		ar & layers;
 	}
 }

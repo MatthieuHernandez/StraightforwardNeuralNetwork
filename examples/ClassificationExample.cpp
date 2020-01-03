@@ -18,8 +18,7 @@ int classificationExample()
 
 	DataForClassification data(inputData, expectedOutputs);
 
-	StraightforwardOption option;
-	StraightforwardNeuralNetwork neuralNetwork({3, 5, 2});
+	StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(5), AllToAll(2)});
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread

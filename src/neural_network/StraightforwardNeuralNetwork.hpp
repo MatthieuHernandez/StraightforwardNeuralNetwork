@@ -2,9 +2,10 @@
 #include <string>
 #include <vector>
 #include <thread>
-#include "StraightforwardOption.hpp"
 #include "NeuralNetwork.hpp"
 #include "../data/Data.hpp"
+#include "layer/LayerModel.hpp"
+#include "layer/LayerFactory.hpp"
 #include "layer/perceptron/activation_function/ActivationFunction.hpp"
 
 namespace snn
@@ -33,14 +34,15 @@ namespace snn
 		void serialize(Archive& ar, const unsigned int version);
 
 	public:
-		StraightforwardNeuralNetwork(std::vector<LayerModel>& models);
+		StraightforwardNeuralNetwork(int numberOfInputs, std::vector<internal::LayerModel> models);
 
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
 
 		StraightforwardNeuralNetwork() = default;
 		~StraightforwardNeuralNetwork() = default;
 
-		StraightforwardOption option;
+		bool autoSaveWhenBetter = false;
+		std::string autoSaveFilePath = "AutoSave.snn";
 
 		int isValid() const;
 
@@ -76,6 +78,7 @@ namespace snn
 	{
 		boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
 		ar & boost::serialization::base_object<NeuralNetwork>(*this);
-		ar & this->option;
+		ar & this->autoSaveFilePath;
+		ar & this->autoSaveWhenBetter;
 	}
 }

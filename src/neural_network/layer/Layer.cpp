@@ -9,10 +9,8 @@ BOOST_CLASS_EXPORT(Layer)
 
 Layer::Layer(layerType type,
              int numberOfInputs,
-             int numberOfNeurons,
-             LayerOption* option)
+             int numberOfNeurons)
 {
-    this->option = option;
     this->numberOfInputs = numberOfInputs;
     this->numberOfNeurons = numberOfNeurons;
     this->neurons.reserve(numberOfNeurons);
@@ -28,8 +26,6 @@ int Layer::isValid() const
     for (auto& neuron : this->neurons)
     {
         int err = neuron.isValid();
-        if(this->option != neuron.option)
-            return 1001;
         if(err != 0)
             return err;
     }
@@ -38,7 +34,6 @@ int Layer::isValid() const
 
 Layer& Layer::operator=(const Layer& layer)
 {
-	this->option = *(&layer.option);
 	this->numberOfInputs = layer.numberOfInputs;
 	this->numberOfNeurons = layer.numberOfNeurons;
 	this->errors = layer.errors;
@@ -48,8 +43,7 @@ Layer& Layer::operator=(const Layer& layer)
 
 bool Layer::operator==(const Layer& layer) const
 {
-	return *this->option == *layer.option
-		&& this->numberOfInputs == layer.numberOfInputs
+	return this->numberOfInputs == layer.numberOfInputs
 		&& this->numberOfNeurons == layer.numberOfNeurons
 		&& this->errors == layer.errors
 		&& this->neurons == layer.neurons;

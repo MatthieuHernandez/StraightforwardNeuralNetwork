@@ -3,11 +3,11 @@
 
 namespace snn::internal
 {
-	class ReLU : public ActivationFunction // WARNING : bad function, if sum < 0 at start, neuron will never learn
+	class RectifiedLinearUnit : public ActivationFunction // WARNING : bad function, if sum < 0 at start, neuron will never learn
 	{
 	private :
 
-		activationFunction getType() const override { return reLU; }
+		activationFunction getType() const override { return ReLU; }
 
 	public :
 		float function(const float x) const override

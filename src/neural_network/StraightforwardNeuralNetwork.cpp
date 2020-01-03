@@ -7,7 +7,6 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
-#include "StraightforwardOption.hpp"
 #include "../data/DataForClassification.hpp"
 #include "../data/DataForRegression.hpp"
 #include "../data/DataForMultipleClassification.hpp"
@@ -18,15 +17,9 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<int> structureOfNetwork,
-                                                           vector<activationFunction> activationFunctionByLayer,
-                                                           StraightforwardOption option)
-	: NeuralNetwork(structureOfNetwork,
-	                activationFunctionByLayer,
-	                nullptr)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(int numberOfInputs, vector<LayerModel> models)
+	: NeuralNetwork(numberOfInputs, models)
 {
-	this->option = option;
-	*this->NeuralNetwork::option = *(&this->option);
 	int err = this->isValid();
 	if (err != 0)
 	{
@@ -104,9 +97,9 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 		std::invoke(evaluation, this, data);
 	}
 	this->stopTesting();
-	if (this->option.autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
+	if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
 	{
-			this->saveAs(option.autoSaveFilePath);
+			this->saveAs(autoSaveFilePath);
 	}
 }
 
@@ -166,15 +159,13 @@ void StraightforwardNeuralNetwork::trainingStop()
 
 int StraightforwardNeuralNetwork::isValid() const
 {
-	if(&this->option == this->NeuralNetwork::option)
-		return 1001;
 	return this->NeuralNetwork::isValid();
 }
 
 
 void StraightforwardNeuralNetwork::saveAs(string filePath)
 {
-	option.autoSaveFilePath = filePath;
+	this->autoSaveFilePath = filePath;
 	ofstream ofs(filePath);
 	boost::archive::text_oarchive archive(ofs);
 	archive << this;
@@ -193,7 +184,8 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 {
 	this->trainingStop();
 	neuralNetwork.trainingStop();
-	this->option = neuralNetwork.option;
+	this->autoSaveFilePath = neuralNetwork.autoSaveFilePath;
+	this->autoSaveWhenBetter = neuralNetwork.autoSaveWhenBetter;
 	this->currentIndex = neuralNetwork.currentIndex;
 	this->numberOfIteration = neuralNetwork.numberOfIteration;
 	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
@@ -203,7 +195,9 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(Straightfo
 
 bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
 {
-	return this->NeuralNetwork::operator==(neuralNetwork) && this->option == neuralNetwork.option;
+	return this->NeuralNetwork::operator==(neuralNetwork) 
+	&& this->autoSaveFilePath == neuralNetwork.autoSaveFilePath
+	&& this->autoSaveWhenBetter == neuralNetwork.autoSaveWhenBetter;
 }
 
 bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const

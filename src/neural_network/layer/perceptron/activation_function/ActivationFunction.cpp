@@ -34,8 +34,8 @@ ActivationFunction* ActivationFunction::create(activationFunction type)
 			return new ImprovedSigmoid();
 		case tanh:
 			return new Tanh();
-		case reLU:
-			return new ReLU();
+		case ReLU:
+			return new RectifiedLinearUnit();
 		case gaussian:
 			return new Gaussian();
 		default:

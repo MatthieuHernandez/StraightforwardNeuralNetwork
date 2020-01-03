@@ -19,8 +19,7 @@ int multipleClassificationExample()
 	float separator = 0.5f;
 	DataForMultipleClassification data(inputData, expectedOutputs, separator);
 
-	StraightforwardOption option;
-	StraightforwardNeuralNetwork neuralNetwork({2, 8, 3}, {sigmoid, sigmoid}, option);
+	StraightforwardNeuralNetwork neuralNetwork(2, {AllToAll(8), AllToAll(3)});
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread

@@ -1,12 +1,8 @@
 #pragma once
 #include <memory>
 #include <vector>
-#pragma warning(push, 0)
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
-#pragma warning(pop)
-
-#include "NeuronOption.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
@@ -18,32 +14,33 @@ namespace snn::internal
 		int numberOfInputs{};
 
 		std::vector<float> weights;
-		float bias{};
+		float bias;
 
 		std::vector<float> previousDeltaWeights;
 		std::vector<float> lastInputs;
 		std::vector<float> errors;
 
-		float lastOutput{};
+		float lastOutput;
 
-		activationFunction aFunctionType{};
-		ActivationFunction* activationFunction = nullptr;
+		float* learningRate;
+		float* momentum;
+
+		activationFunction activation;
+		ActivationFunction* outputFunction;
 
 		float randomInitializeWeight() const;
 
 		friend class boost::serialization::access;
 		template <class Archive>
-		void serialize(Archive& ar, const unsigned int version);;
+		void serialize(Archive& ar, const unsigned int version);
 
 
 	public :
 
 		Perceptron() = default;
 		~Perceptron();
-		Perceptron(int numberOfInputs, activationFunction activationFunction, NeuronOption* option);
+		Perceptron(int numberOfInputs, activationFunction activation, float* learningRate, float* momentum);
 		Perceptron(const Perceptron& perceptron);
-
-		NeuronOption* option;
 
 		std::vector<float>& backOutput(float error);
 		float output(const std::vector<float>& inputs);
@@ -52,8 +49,6 @@ namespace snn::internal
 		void addAWeight();
 
 		int isValid() const;
-
-		ActivationFunction* getActivationFunction() const;
 
 		std::vector<float> getWeights() const;
 		void setWeights(const std::vector<float>& weights);
@@ -74,7 +69,8 @@ namespace snn::internal
 	template <class Archive>
 	void Perceptron::serialize(Archive& ar, const unsigned int version)
 	{
-		ar & this->option;
+		ar & *this->learningRate;
+		ar & *this->momentum;
 		ar & this->weights;
 		ar & this->previousDeltaWeights;
 		ar & this->lastInputs;
@@ -82,7 +78,7 @@ namespace snn::internal
 		ar & this->lastOutput;
 		ar & this->numberOfInputs;
 		ar & this->bias;
-		ar & this->aFunctionType;
-		this->activationFunction = ActivationFunction::create(aFunctionType);
+		ar & this->activation;
+		this->outputFunction = ActivationFunction::create(activation);
 	}
 }

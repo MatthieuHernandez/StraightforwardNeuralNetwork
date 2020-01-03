@@ -10,13 +10,14 @@ BOOST_CLASS_EXPORT(AllToAll)
 
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
-                   activationFunction function,
-                   LayerOption* option)
-	: Layer(allToAll, numberOfInputs, numberOfNeurons, option)
+                   activationFunction activation,
+                   float* learningRate,
+                   float* momentum)
+	: Layer(allToAll, numberOfInputs, numberOfNeurons)
 {
 	for (int n = 0; n < numberOfNeurons; ++n)
 	{
-		this->neurons.emplace_back(numberOfInputs, function, this->option);
+		this->neurons.emplace_back(numberOfInputs, activation, learningRate, momentum);
 	}
 }
 

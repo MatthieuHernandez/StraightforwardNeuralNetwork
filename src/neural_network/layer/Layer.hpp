@@ -3,7 +3,6 @@
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "LayerType.hpp"
-#include "LayerOption.hpp"
 #include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
@@ -17,22 +16,21 @@ namespace snn::internal
 
 	protected:
 		std::vector<float> errors;
-		std::vector<Perceptron> neurons;
 
 	public:
-		Layer(layerType type,
+        Layer(layerType type,
               int numberOfInputs,
-              int numberOfNeurons,
-              LayerOption* option);
+              int numberOfNeurons);
 
         Layer() = default;
         virtual ~Layer() = default;
 
-        LayerOption* option;
         static const layerType type;
 
-        const int numberOfInputs;
-        const int numberOfNeurons;
+        /*const*/ int numberOfInputs;
+        /*const*/ int numberOfNeurons;
+
+		std::vector<Perceptron> neurons;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;
@@ -47,7 +45,6 @@ namespace snn::internal
 	template <class Archive>
 	void Layer::serialize(Archive& ar, unsigned version)
 	{
-		ar & this->option;
 		ar & this->numberOfInputs;
 		ar & this->numberOfNeurons;
 		ar & this->errors;

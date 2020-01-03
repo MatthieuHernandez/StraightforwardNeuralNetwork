@@ -8,7 +8,7 @@ namespace snn
 		sigmoid = 0,
 		iSigmoid,
 		tanh,
-		reLU,
+		ReLU,
 		gaussian
 	};
 }

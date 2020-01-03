@@ -9,23 +9,25 @@ using namespace internal;
 
 Perceptron::~Perceptron()
 {
-	delete this->activationFunction;
+    delete this->outputFunction;
 }
 
 Perceptron::Perceptron(const int numberOfInputs,
-                       activationFunction activationFunction,
-                       NeuronOption* option)
+                       activationFunction activation,
+                       float* learningRate,
+                       float* momentum)
 {
-	this->option = option;
+	this->learningRate = learningRate;
+	this->momentum = momentum;
 	this->numberOfInputs = numberOfInputs;
 
 	this->previousDeltaWeights.resize(numberOfInputs, 0);
 	this->lastInputs.resize(numberOfInputs, 0);
 	this->errors.resize(numberOfInputs, 0);
-	lastOutput = 0;
+	this->lastOutput = 0;
 
-	this->aFunctionType = activationFunction;
-	this->activationFunction = ActivationFunction::create(activationFunction);
+	this->activation = activation;
+	this->outputFunction = ActivationFunction::create(this->activation);
 
 	this->weights.resize(numberOfInputs);
 	for (auto& w : weights)
@@ -56,13 +58,13 @@ float Perceptron::output(const vector<float>& inputs)
 	}
 	sum += bias;
 	lastOutput = sum;
-	sum = activationFunction->function(sum);
+	sum = outputFunction->function(sum);
 	return sum;
 }
 
 std::vector<float>& Perceptron::backOutput(float error)
 {
-	error = error * activationFunction->derivative(lastOutput);
+	error = error * outputFunction->derivative(lastOutput);
 
 	this->train(lastInputs, error);
 
@@ -77,10 +79,10 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 {
 	for (int w = 0; w < numberOfInputs; ++w)
 	{
-		auto deltaWeights = option->learningRate * error * inputs[w];
-		deltaWeights += option->momentum * previousDeltaWeights[w];
+		auto deltaWeights = *this->learningRate * error * inputs[w];
+		deltaWeights += *this->momentum * this->previousDeltaWeights[w];
 		weights[w] += deltaWeights;
-		previousDeltaWeights[w] = deltaWeights;
+		this->previousDeltaWeights[w] = deltaWeights;
 	}
 }
 
@@ -118,11 +120,6 @@ void Perceptron::setWeights(const vector<float>& weights)
 	this->weights = weights;
 }
 
-ActivationFunction* Perceptron::getActivationFunction() const
-{
-	return this->activationFunction;
-}
-
 float Perceptron::getWeight(const int w) const
 {
 	return weights[w];
@@ -150,7 +147,6 @@ int Perceptron::getNumberOfInputs() const
 
 Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 {
-	this->option = *(&perceptron.option);
 	this->weights = perceptron.weights;
 	this->previousDeltaWeights = perceptron.previousDeltaWeights;
 	this->lastInputs = perceptron.lastInputs;
@@ -158,23 +154,22 @@ Perceptron& Perceptron::operator=(const Perceptron& perceptron)
 	this->lastOutput = perceptron.lastOutput;
 	this->numberOfInputs = perceptron.numberOfInputs;
 	this->bias = perceptron.bias;
-	this->aFunctionType = perceptron.aFunctionType;
-	this->activationFunction = ActivationFunction::create(perceptron.activationFunction->getType());
+	this->activation = perceptron.activation;
+	this->outputFunction = ActivationFunction::create(perceptron.activation);
 	return *this;
 }
 
 bool Perceptron::operator==(const Perceptron& perceptron) const
 {
-	return *this->option == *option
-		&& this->weights == perceptron.weights
+	return this->weights == perceptron.weights
 		&& this->previousDeltaWeights == perceptron.previousDeltaWeights
 		&& this->lastInputs == perceptron.lastInputs
 		&& this->errors == perceptron.errors
 		&& this->lastOutput == perceptron.lastOutput
 		&& this->numberOfInputs == perceptron.numberOfInputs
 		&& this->bias == perceptron.bias
-		&& this->aFunctionType == perceptron.aFunctionType
-		&& *this->activationFunction == *perceptron.activationFunction;
+		&& this->activation == perceptron.activation
+		&& *this->outputFunction == *perceptron.outputFunction;
 }
 
 bool Perceptron::operator!=(const Perceptron& perceptron) const

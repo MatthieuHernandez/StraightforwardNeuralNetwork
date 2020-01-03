@@ -6,49 +6,57 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerModel AllToAll(int numberOfNeurons, activationFunction activation)
+LayerModel snn::AllToAll(int numberOfNeurons, activationFunction activation)
 {
     LayerModel model
     {
         allToAll,
+        activation,
         numberOfNeurons
     };
     return model;
 }
 
-LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
+LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
 {
     LayerModel model
     {
         recurrent,
+        activation,
+        -1,
         numberOfNeurons,
         numberOfRecurrences,
     };
     return model;
 }
 
-LayerModel Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3], activationFunction activation)
+LayerModel snn::Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3], activationFunction activation)
 {
     LayerModel model
     {
         convolution2D,
+        activation,
+        -1,
         -1,
         -1,
         numberOfConvolution,
         sizeOfConvolutionMatrix,
-    {sizeOfInputs[0], sizeOfInputs[1], sizeOfInputs[2]}
+        {sizeOfInputs[0], sizeOfInputs[1], sizeOfInputs[2]}
     };
     return model;
 }
 
-
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel model)
+unique_ptr<Layer> LayerFactory::build(LayerModel model, float* learningRate, float* momentum)
 {
     switch (model.type)
     {
         case allToAll:
-            return make_unique<AllToAll>();
+            return make_unique<AllToAll>(model.numberOfInputs,
+                                        model.numberOfNeurons,
+                                        model.activation,
+                                        learningRate,
+                                        momentum);
 
         default:
             throw NotImplementedException("Layer");
@@ -56,25 +64,24 @@ unique_ptr<Layer> LayerFactory::build(LayerModel model)
 
 }
 
-inline
-vector<unique_ptr<Layer>> LayerFactory::build(vector<LayerModel>& models)
+void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, vector<LayerModel>& models, float* learningRate, float* momentum)
 {
-    vector<unique_ptr<Layer>> layers;
+    int currentNumberofInputs = numberOfInputs;
     for(auto&& model : models)
     {
-        layers.push_back(build(model));
+        layers.push_back(build(model, learningRate, momentum));
+        currentNumberofInputs = model.numberOfNeurons;
     }
-    return layers;
 }
 
 inline
-unique_ptr<Layer> LayerFactory::copy(unique_ptr<Layer> layer)
+unique_ptr<Layer> LayerFactory::copy(const unique_ptr<Layer>& layer)
 {
     if (typeid(layer) == typeid(AllToAll))
     {
         auto newLayer = make_unique<AllToAll>();
         newLayer->operator=(*layer);
-        return newLayer;
+        return move(newLayer);
     }
     else
     {
@@ -82,14 +89,10 @@ unique_ptr<Layer> LayerFactory::copy(unique_ptr<Layer> layer)
     }
 }
 
-inline
-vector<unique_ptr<Layer>> LayerFactory::copy(vector<unique_ptr<Layer>> layers)
+void LayerFactory::copy(vector<unique_ptr<Layer>>& copiedLayers, const vector<unique_ptr<Layer>>& layersToCopy)
 {
-    vector<unique_ptr<Layer>> copiedLayers;
-    for (auto&& layer : layers)
+    for (auto& layer : layersToCopy)
     {
-        auto copiedLayer = copy(std::move(layer));
-        copiedLayers.push_back(copiedLayer);
-	}
-    return copiedLayers;
+        copiedLayers.push_back(copy(layer));
+    }
 }

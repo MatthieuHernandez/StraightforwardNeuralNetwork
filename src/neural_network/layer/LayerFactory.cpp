@@ -23,7 +23,6 @@ LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activati
     {
         recurrent,
         activation,
-        -1,
         numberOfNeurons,
         numberOfRecurrences,
     };
@@ -38,7 +37,6 @@ LayerModel snn::Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatr
         activation,
         -1,
         -1,
-        -1,
         numberOfConvolution,
         sizeOfConvolutionMatrix,
         {sizeOfInputs[0], sizeOfInputs[1], sizeOfInputs[2]}
@@ -47,12 +45,12 @@ LayerModel snn::Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatr
 }
 
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel model, float* learningRate, float* momentum)
+unique_ptr<Layer> LayerFactory::build(LayerModel model, int numberOfInputs, float* learningRate, float* momentum)
 {
     switch (model.type)
     {
         case allToAll:
-            return make_unique<AllToAll>(model.numberOfInputs,
+            return make_unique<AllToAll>(numberOfInputs,
                                         model.numberOfNeurons,
                                         model.activation,
                                         learningRate,
@@ -69,7 +67,7 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, 
     int currentNumberofInputs = numberOfInputs;
     for(auto&& model : models)
     {
-        layers.push_back(build(model, learningRate, momentum));
+        layers.push_back(build(model, currentNumberofInputs, learningRate, momentum));
         currentNumberofInputs = model.numberOfNeurons;
     }
 }
@@ -77,7 +75,7 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, 
 inline
 unique_ptr<Layer> LayerFactory::copy(const unique_ptr<Layer>& layer)
 {
-    if (typeid(layer) == typeid(AllToAll))
+    if (typeid(*layer) == typeid(AllToAll))
     {
         auto newLayer = make_unique<AllToAll>();
         newLayer->operator=(*layer);

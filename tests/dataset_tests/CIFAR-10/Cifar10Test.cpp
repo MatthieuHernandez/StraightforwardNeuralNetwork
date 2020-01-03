@@ -33,7 +33,13 @@ TEST_F(Cifar10Test, loadData)
 
 TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({3072, 200, 80, 10});
+    StraightforwardNeuralNetwork neuralNetwork(
+        3072,
+        { 
+            AllToAll(200),
+            AllToAll(80),
+            AllToAll(10)
+        });
     neuralNetwork.trainingStart(*data);
     float accuracy = 0;
     for(int i = 0; i < 300 && accuracy < 0.30; i++)

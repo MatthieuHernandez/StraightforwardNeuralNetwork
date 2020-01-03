@@ -17,11 +17,11 @@ namespace snn::internal
     class LayerFactory 
     {
     private :
-        static std::unique_ptr<Layer> build(LayerModel model, float* learningRate, float* momentum);
+        static std::unique_ptr<Layer> build(LayerModel model, int numberOfInputs, float* learningRate, float* momentum);
         static std::unique_ptr<Layer> copy(const std::unique_ptr<Layer>& layer);
 
     public :
-        static void build(std::vector<std::unique_ptr<Layer>>& layers, int numberOfInput, std::vector<LayerModel>& models, float* learningRate, float* momentum);
+        static void build(std::vector<std::unique_ptr<Layer>>& layers, int numberOfInputs, std::vector<LayerModel>& models, float* learningRate, float* momentum);
         static void copy(std::vector<std::unique_ptr<Layer>>& copiedLayers, const std::vector<std::unique_ptr<Layer>>& layersToCopy);
     };
 }

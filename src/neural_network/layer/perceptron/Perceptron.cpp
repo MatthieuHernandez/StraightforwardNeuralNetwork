@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include "Perceptron.hpp"
 #include "../../../tools/Tools.hpp"
 

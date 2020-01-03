@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <ctime>
-#include <iostream>
 #include <boost/serialization/export.hpp>
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
@@ -28,7 +27,7 @@ NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
 	if (isTheFirst)
 		this->initialize();
 
-	this->numberOfInput;
+	this->numberOfInput = numberOfInputs;
 	LayerFactory::build(this->layers, this->numberOfInput, models, &this->learningRate, &this->momentum);
 	this->numberOfLayers = static_cast<int>(this->layers.size());
 	this->numberOfOutputs = this->layers.back()->numberOfNeurons;
@@ -49,8 +48,7 @@ int NeuralNetwork::isValid() const
 
 	if (this->numberOfLayers < 1 
 	|| this->numberOfLayers > 1000
-	|| this->numberOfLayers != this->layers.size()
-	|| this->numberOfLayers)
+	|| this->numberOfLayers != this->layers.size())
 		return 102;
 
 	if (this->learningRate <= 0.0f || this->learningRate >= 1.0f)

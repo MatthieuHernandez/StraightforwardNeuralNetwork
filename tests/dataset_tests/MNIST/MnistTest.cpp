@@ -33,7 +33,13 @@ TEST_F(MnistTest, loadData)
 
 TEST_F(MnistTest, DISABLED_trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({784, 150, 70, 10});
+    StraightforwardNeuralNetwork neuralNetwork(
+        784,
+        {
+            AllToAll(150),
+            AllToAll(70),
+            AllToAll(10)
+        });
     neuralNetwork.trainingStart(*data);
     float accuracy = 0;
     for(int i = 0; i < 180 && accuracy < 0.91; i++)

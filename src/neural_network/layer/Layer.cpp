@@ -34,22 +34,22 @@ int Layer::isValid() const
 
 Layer& Layer::operator=(const Layer& layer)
 {
-	this->numberOfInputs = layer.numberOfInputs;
-	this->numberOfNeurons = layer.numberOfNeurons;
-	this->errors = layer.errors;
-	this->neurons = layer.neurons;
-	return *this;
+    this->numberOfInputs = layer.numberOfInputs;
+    this->numberOfNeurons = layer.numberOfNeurons;
+    this->errors = layer.errors;
+    this->neurons = layer.neurons;
+    return *this;
 }
 
 bool Layer::operator==(const Layer& layer) const
 {
-	return this->numberOfInputs == layer.numberOfInputs
-		&& this->numberOfNeurons == layer.numberOfNeurons
-		&& this->errors == layer.errors
-		&& this->neurons == layer.neurons;
+    return this->numberOfInputs == layer.numberOfInputs
+        && this->numberOfNeurons == layer.numberOfNeurons
+        && this->errors == layer.errors
+        && this->neurons == layer.neurons;
 }
 
 bool Layer::operator!=(const Layer& layer) const
 {
-	return !this->operator==(layer);
+    return !this->operator==(layer);
 }

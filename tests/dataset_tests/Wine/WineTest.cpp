@@ -33,7 +33,13 @@ TEST_F(WineTest, loadData)
 
 TEST_F(WineTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({13, 20, 8, 3});
+    StraightforwardNeuralNetwork neuralNetwork(
+        13,
+        {
+            AllToAll(20),
+            AllToAll(8),
+            AllToAll(3)
+        });
     neuralNetwork.trainingStart(*data);
     this_thread::sleep_for(3s);
     neuralNetwork.trainingStop();

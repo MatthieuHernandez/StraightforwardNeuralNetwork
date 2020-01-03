@@ -3,8 +3,6 @@
 #include "../../examples/MultipleClassificationExemple.cpp"
 #include "../../examples/RegressionExample.cpp"
 
-#include "neural_network/layer/LayerFactory.hpp"
-
 TEST(Exemples, classification)
 {
     ASSERT_EQ(classificationExample(), EXIT_SUCCESS);

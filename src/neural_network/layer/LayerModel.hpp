@@ -8,7 +8,6 @@ namespace snn::internal
     {
         const layerType type;
         const activationFunction activation;
-        const int numberOfInputs;
         const int numberOfNeurons;
         const int numberOfRecurrences;
         const int numberOfConvolution;

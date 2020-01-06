@@ -2,16 +2,16 @@
 #include "LayerType.hpp"
 #include "perceptron/activation_function/ActivationFunction.hpp"
 
-namespace snn::internal
+namespace snn
 {
     struct LayerModel
     {
-        const layerType type;
-        const activationFunction activation;
-        const int numberOfNeurons;
-        const int numberOfRecurrences;
-        const int numberOfConvolution;
-        const int sizeOfConvolutionMatrix;
-        const int sizeOfInputs[3];
+        layerType type;
+        activationFunction activation;
+        int numberOfNeurons;
+        int numberOfRecurrences;
+        int numberOfConvolution;
+        int sizeOfConvolutionMatrix;
+        int sizeOfInputs[3];
     };
 }

@@ -8,7 +8,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 {
 	auto structureOfNetwork = {
 		AllToAll(20, iSigmoid),
-		AllToAll(10, tanh),
+		AllToAll(10, snn::tanh),
 		AllToAll(3, sigmoid)
 	};
 	StraightforwardNeuralNetwork A(5, structureOfNetwork);
@@ -58,7 +58,7 @@ TEST(SaveNeuralNetwork, Save)
 {
 	StraightforwardNeuralNetwork A(5, {
 		AllToAll(20, ReLU),
-		AllToAll(10, tanh),
+		AllToAll(10, snn::tanh),
 		AllToAll(3, sigmoid)
 	});
 	A.learningRate = 0.03f;

@@ -4,7 +4,6 @@
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/AllToAll.hpp"
-#include "layer/perceptron/activation_function/ActivationFunction.hpp"
 #include "StatisticAnalysis.hpp"
 
 

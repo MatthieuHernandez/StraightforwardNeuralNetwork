@@ -8,7 +8,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs)
 {
 	auto outputs = layers[0]->output(inputs);
 
-	for (int l = 1; l < numberOfLayers; ++l)
+	for (int l = 1; l < this->layers.size(); ++l)
 	{
 		outputs = layers[l]->output(outputs);
 	}
@@ -45,7 +45,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 	const auto outputs = this->output(inputs);
 	auto errors = calculateError(outputs, desired);
 
-	for (int l = numberOfLayers - 1; l > 0; --l)
+	for (int l = this->layers.size() - 1; l > 0; --l)
 	{
 		errors = layers[l]->backOutput(errors);
 	}
@@ -55,7 +55,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 inline 
 vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
-	auto errors = new vector<float>(numberOfOutputs, 0);
+	auto errors = new vector<float>(this->layers.size(), 0);
 	for (int n = 0; n < errors->size(); ++n)
 	{
 		if (desired[n] != -1.0f)

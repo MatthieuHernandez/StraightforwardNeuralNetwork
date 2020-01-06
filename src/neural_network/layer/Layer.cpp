@@ -12,15 +12,14 @@ Layer::Layer(layerType type,
              int numberOfNeurons)
 {
     this->numberOfInputs = numberOfInputs;
-    this->numberOfNeurons = numberOfNeurons;
     this->neurons.reserve(numberOfNeurons);
 }
 
 int Layer::isValid() const
 {
-    if(this->neurons.size() != this->numberOfNeurons
-        || this->numberOfNeurons < 1
-        || this->numberOfNeurons > 1000000)
+    if (this->neurons.size() != this->getNumberOfNeurons()
+     || this->getNumberOfNeurons() < 1
+     || this->getNumberOfNeurons() > 1000000)
         return 201;
 
     for (auto& neuron : this->neurons)
@@ -32,15 +31,24 @@ int Layer::isValid() const
     return 0;
 }
 
+int Layer::getNumberOfInputs() const
+{
+    return this->numberOfInputs;
+}
+
+int Layer::getNumberOfNeurons() const
+{
+    return this->neurons.size();
+}
+
 bool Layer::operator==(const Layer& layer) const
 {
     return this->numberOfInputs == layer.numberOfInputs
-        && this->numberOfNeurons == layer.numberOfNeurons
         && this->errors == layer.errors
         && this->neurons == layer.neurons;
 }
 
 bool Layer::operator!=(const Layer& layer) const
 {
-    return !this->operator==(layer);
+    return !(*this == layer);
 }

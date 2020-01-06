@@ -201,5 +201,5 @@ bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
 
 bool StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const
 {
-	return !this->operator==(sa);
+	return !(*this == sa);
 }

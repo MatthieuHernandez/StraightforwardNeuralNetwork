@@ -30,8 +30,8 @@ unique_ptr<Layer> AllToAll::clone() const
 
 vector<float> AllToAll::output(const vector<float>& inputs)
 {
-	vector<float> outputs(this->numberOfNeurons);
-	for (int n = 0; n < numberOfNeurons; ++n)
+	vector<float> outputs(this->neurons.size());
+	for (int n = 0; n < this->neurons.size(); ++n)
 	{
 		outputs[n] = neurons[n].output(inputs);
 	}
@@ -46,7 +46,7 @@ vector<float> AllToAll::backOutput(vector<float>& inputsError)
 		errors[n] = 0;
 	}
 
-	for (int n = 0; n < numberOfNeurons; ++n)
+	for (int n = 0; n < this->neurons.size(); ++n)
 	{
 		auto& result = neurons[n].backOutput(inputsError[n]);
 		for (int r = 0; r < numberOfInputs; ++r)
@@ -57,7 +57,7 @@ vector<float> AllToAll::backOutput(vector<float>& inputsError)
 
 void AllToAll::train(vector<float>& inputsError)
 {
-	for (int n = 0; n < numberOfNeurons; ++n)
+	for (int n = 0; n < this->neurons.size(); ++n)
 	{
 		neurons[n].backOutput(inputsError[n]);
 	}
@@ -75,5 +75,5 @@ bool AllToAll::operator==(const AllToAll& layer) const
 
 bool AllToAll::operator!=(const AllToAll& layer) const
 {
-	return this->Layer::operator!=(layer);
+	return !(*this ==layer);
 }

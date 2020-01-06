@@ -23,13 +23,6 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	protected :
-		NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
-
-		NeuralNetwork(const NeuralNetwork& neuralNetwork);
-
-		NeuralNetwork() = default;
-		~NeuralNetwork() = default;
-
 		int maxOutputIndex;
 
 		[[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
@@ -44,15 +37,15 @@ namespace snn::internal
 
 		int getLastError() const;
 
-		bool operator==(const NeuralNetwork& neuralNetwork) const;
-		bool operator!=(const NeuralNetwork& neuralNetwork) const;
-
 	public:
+		NeuralNetwork() = default; // use restricted to Boost library only
+		NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
+		NeuralNetwork(const NeuralNetwork& neuralNetwork);
+		~NeuralNetwork() = default;
 
-		// use copy constructor instead of operator=()
-		/*const*/ int numberOfLayers;
-		/*const*/ int numberOfInput;
-		/*const*/ int numberOfOutputs;
+		int getNumberOfLayers() const;
+		int getNumberOfInputs() const;
+		int getNumberOfOutputs() const;
 
 		float learningRate = 0.05f;
 		float momentum = 0.0f;
@@ -61,6 +54,9 @@ namespace snn::internal
 		int isValid() const;
 
 		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
+
+		bool operator==(const NeuralNetwork& neuralNetwork) const;
+		bool operator!=(const NeuralNetwork& neuralNetwork) const;
 	};
 
 	template <class Archive>
@@ -71,10 +67,6 @@ namespace snn::internal
 		ar & this->learningRate;
 		ar & this->momentum;
 		ar & this->maxOutputIndex;
-		ar & this->numberOfLayers;
-		ar & this->numberOfInput;
-		ar & this->numberOfOutputs;
-		ar & this->numberOfInput;
 		ar.template register_type<internal::AllToAll>();
 		ar & layers;
 	}

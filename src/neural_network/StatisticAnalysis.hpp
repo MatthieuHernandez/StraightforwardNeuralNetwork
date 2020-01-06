@@ -34,8 +34,8 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 		std::vector<binaryClassification> clusters;
-		float numberOfDataWellClassified{};
-		float numberOfDataMisclassified{};
+		float numberOfDataWellClassified;
+		float numberOfDataMisclassified;
 
 		float globalClusteringRate = 0;
 		float weightedClusteringRate = 0;
@@ -46,6 +46,10 @@ namespace snn::internal
 		float f1ScoreMax = -1.0f;
 
 	protected:
+		StatisticAnalysis() = default; // use restricted to Boost library only
+		StatisticAnalysis(int numberOfCluster);
+		StatisticAnalysis(const StatisticAnalysis&) = default;
+		virtual ~StatisticAnalysis() = default;
 
 		void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
 		                               float precision);
@@ -57,10 +61,6 @@ namespace snn::internal
 		float computeGlobalClusteringRate();
 		float computeWeightedClusteringRate();
 		float computeF1Score();
-
-		StatisticAnalysis() = default;
-		StatisticAnalysis(int numberOfCluster);
-		virtual ~StatisticAnalysis() = default;
 
 		void startTesting();
 		void stopTesting();

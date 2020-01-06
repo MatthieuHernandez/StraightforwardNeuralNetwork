@@ -10,9 +10,6 @@ namespace snn::internal
 	class Perceptron
 	{
 	private :
-
-		int numberOfInputs{};
-
 		std::vector<float> weights;
 		float bias;
 
@@ -28,25 +25,21 @@ namespace snn::internal
 		activationFunction activation;
 		ActivationFunction* outputFunction;
 
-		float randomInitializeWeight() const;
+		float randomInitializeWeight(int numberOfInputs) const;
 
 		friend class boost::serialization::access;
 		template <class Archive>
 		void serialize(Archive& ar, const unsigned int version);
 
-
 	public :
-
-		Perceptron() = default;
-		~Perceptron();
+		Perceptron() = default; // use restricted to Boost library only
 		Perceptron(int numberOfInputs, activationFunction activation, float* learningRate, float* momentum);
 		Perceptron(const Perceptron& perceptron);
+		~Perceptron();
 
 		std::vector<float>& backOutput(float error);
 		float output(const std::vector<float>& inputs);
 		void train(const std::vector<float>& inputs, float error);
-
-		void addAWeight();
 
 		int isValid() const;
 
@@ -75,7 +68,6 @@ namespace snn::internal
 		ar & this->lastInputs;
 		ar & this->errors;
 		ar & this->lastOutput;
-		ar & this->numberOfInputs;
 		ar & this->bias;
 		ar & this->activation;
 		this->outputFunction = ActivationFunction::create(activation);

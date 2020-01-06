@@ -28,7 +28,7 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(int numberOfInputs, v
 	}
 }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork)
 	: NeuralNetwork(neuralNetwork)
 {
 	if(!this->isIdle)
@@ -197,5 +197,5 @@ bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork
 
 bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const
 {
-	return !this->operator==(neuralNetwork);
+	return !(*this == neuralNetwork);
 }

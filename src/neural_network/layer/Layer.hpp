@@ -16,25 +16,25 @@ namespace snn::internal
 		void serialize(Archive& ar, unsigned version);
 
 	protected:
+	    int numberOfInputs;
 		std::vector<float> errors;
 
 	public:
+		Layer() = default; // use restricted to Boost library only
         Layer(layerType type,
               int numberOfInputs,
               int numberOfNeurons);
-
         Layer(const Layer&) = default;
-        Layer() = default;
         virtual ~Layer() = default;
 
         virtual std::unique_ptr<Layer> clone() const = 0;
 
         static const layerType type;
 
-        /*const*/ int numberOfInputs;
-        /*const*/ int numberOfNeurons;
+        int getNumberOfInputs() const;
+        int getNumberOfNeurons() const;
 
-		std::vector<Perceptron> neurons;
+        std::vector<Perceptron> neurons;
 
 		virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
 		virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;
@@ -49,7 +49,6 @@ namespace snn::internal
 	void Layer::serialize(Archive& ar, unsigned version)
 	{
 		ar & this->numberOfInputs;
-		ar & this->numberOfNeurons;
 		ar & this->errors;
 		ar & this->neurons;
 	}

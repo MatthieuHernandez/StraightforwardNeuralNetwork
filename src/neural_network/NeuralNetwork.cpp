@@ -23,41 +23,50 @@ void NeuralNetwork::initialize()
 }
 
 NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
+	:StatisticAnalysis(models.back().numberOfNeurons)
 {
 	if (isTheFirst)
 		this->initialize();
-
-	this->numberOfInput = numberOfInputs;
-	LayerFactory::build(this->layers, this->numberOfInput, models, &this->learningRate, &this->momentum);
-	this->numberOfLayers = static_cast<int>(this->layers.size());
-	this->numberOfOutputs = this->layers.back()->numberOfNeurons;
+	LayerFactory::build(this->layers, numberOfInputs, models, &this->learningRate, &this->momentum);
+	
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
-	: StatisticAnalysis(neuralNetwork.numberOfOutputs)
+	: StatisticAnalysis(neuralNetwork.getNumberOfOutputs()),
+	maxOutputIndex(neuralNetwork.maxOutputIndex),
+	learningRate(neuralNetwork.learningRate),
+	momentum(neuralNetwork.momentum)
 {
-	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
-	this->learningRate = neuralNetwork.learningRate;
-	this->momentum = neuralNetwork.momentum;
-	this->numberOfLayers = neuralNetwork.numberOfLayers;
-	this->numberOfInput = neuralNetwork.numberOfInput;
-	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
 	this->layers.reserve(neuralNetwork.layers.size());
-
 	for (const auto& layer : neuralNetwork.layers)
 		this->layers.push_back(layer->clone());
+}
+
+inline
+int NeuralNetwork::getNumberOfLayers() const
+{
+	return this->layers.size();
+}
+
+int NeuralNetwork::getNumberOfInputs() const
+{
+	return this->layers[0]->getNumberOfInputs();
+}
+
+int NeuralNetwork::getNumberOfOutputs() const
+{
+	return this->layers.back()->getNumberOfNeurons();
 }
 
 int NeuralNetwork::isValid() const
 {
 	//TODO: rework isValid
-	if (this->numberOfInput < 1 
-	|| this->numberOfInput > 2073600) // 1920 * 1080
+	if (this->getNumberOfInputs() < 1 
+	|| this->getNumberOfInputs() > 2073600) // 1920 * 1080
 		return 101;
 
-	if (this->numberOfLayers < 1 
-	|| this->numberOfLayers > 1000
-	|| this->numberOfLayers != this->layers.size())
+	if (this->getNumberOfLayers() < 1 
+	|| this->getNumberOfLayers() > 1000)
 		return 102;
 
 	if (this->learningRate <= 0.0f || this->learningRate >= 1.0f)
@@ -80,11 +89,8 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 	return this->maxOutputIndex == neuralNetwork.maxOutputIndex
 		&& this->learningRate == neuralNetwork.learningRate
 		&& this->momentum == neuralNetwork.momentum
-		&& this->numberOfLayers == neuralNetwork.numberOfLayers
-		&& this->numberOfInput == neuralNetwork.numberOfInput
-		&& this->numberOfOutputs == neuralNetwork.numberOfOutputs
 		&& [=] () {
-			for (int l = 0; l < numberOfLayers; l++)
+			for (int l = 0; l < this->layers.size(); l++)
 			{
 				if (*this->layers[l] != *neuralNetwork.layers[l])
 					return false;
@@ -95,5 +101,5 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 
 bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const
 {
-	return !this->operator==(neuralNetwork);
+	return !(*this == neuralNetwork);
 }

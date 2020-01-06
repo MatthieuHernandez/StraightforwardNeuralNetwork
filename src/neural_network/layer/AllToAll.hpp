@@ -15,17 +15,14 @@ namespace snn::internal
 		template <class Archive>
 		void serialize(Archive& ar, unsigned version);
 
-
 	public :
-		AllToAll() = default;
-		~AllToAll() = default;
-
+		AllToAll() = default;  // use restricted to Boost library only
 		AllToAll(int numberOfInputs,
                  int numberOfNeurons,
                  activationFunction activation,
                  float* learningRate,
                  float* momentum);
-
+		~AllToAll() = default;
 		AllToAll(const AllToAll&) = default;
 
 		std::unique_ptr<Layer> clone() const override;

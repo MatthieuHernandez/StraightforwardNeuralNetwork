@@ -31,6 +31,7 @@ LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activati
 
 LayerModel snn::Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, int sizeOfInputs[3], activationFunction activation)
 {
+    //TODO: Calculate the right number of neurones
     LayerModel model
     {
         convolution2D,

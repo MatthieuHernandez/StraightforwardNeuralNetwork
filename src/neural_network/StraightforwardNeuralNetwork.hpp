@@ -35,10 +35,9 @@ namespace snn
 		void serialize(Archive& ar, const unsigned int version);
 
 	public:
+		StraightforwardNeuralNetwork() = default; // use restricted to Boost library only
 		StraightforwardNeuralNetwork(int numberOfInputs, std::vector<LayerModel> models);
-		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
-
-		StraightforwardNeuralNetwork() = default;
+		StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
 		~StraightforwardNeuralNetwork() = default;
 
 		bool autoSaveWhenBetter = false;

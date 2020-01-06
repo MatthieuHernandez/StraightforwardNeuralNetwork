@@ -18,8 +18,6 @@ Perceptron::Perceptron(const int numberOfInputs,
 {
 	this->learningRate = learningRate;
 	this->momentum = momentum;
-	this->numberOfInputs = numberOfInputs;
-
 	this->previousDeltaWeights.resize(numberOfInputs, 0);
 	this->lastInputs.resize(numberOfInputs, 0);
 	this->errors.resize(numberOfInputs, 0);
@@ -31,7 +29,7 @@ Perceptron::Perceptron(const int numberOfInputs,
 	this->weights.resize(numberOfInputs);
 	for (auto& w : weights)
 	{
-		w = randomInitializeWeight();
+		w = randomInitializeWeight(numberOfInputs);
 	}
 	this->bias = 1.0f;
 }
@@ -43,15 +41,14 @@ Perceptron::Perceptron(const Perceptron& perceptron)
 	this->lastInputs = perceptron.lastInputs;
 	this->errors = perceptron.errors;
 	this->lastOutput = perceptron.lastOutput;
-	this->numberOfInputs = perceptron.numberOfInputs;
 	this->bias = perceptron.bias;
 	this->activation = perceptron.activation;
 	this->outputFunction = ActivationFunction::create(perceptron.activation);
 }
 
-float Perceptron::randomInitializeWeight() const
+float Perceptron::randomInitializeWeight(int numberOfInputs) const
 {
-	const float valueMax = 2.4f / sqrt(static_cast<float>(this->numberOfInputs));
+	const float valueMax = 2.4f / sqrt(static_cast<float>(numberOfInputs));
 	return Tools::randomBetween(-valueMax, valueMax);
 }
 
@@ -59,7 +56,7 @@ float Perceptron::output(const vector<float>& inputs)
 {
 	lastInputs = inputs;
 	float sum = 0;
-	for (int w = 0; w < numberOfInputs; ++w)
+	for (int w = 0; w < this->weights.size(); ++w)
 	{
 		sum += inputs[w] * weights[w];
 	}
@@ -75,7 +72,7 @@ std::vector<float>& Perceptron::backOutput(float error)
 
 	this->train(lastInputs, error);
 
-	for (int w = 0; w < numberOfInputs; ++w)
+	for (int w = 0; w < this->weights.size(); ++w)
 	{
 		errors[w] = error * weights[w];
 	}
@@ -84,7 +81,7 @@ std::vector<float>& Perceptron::backOutput(float error)
 
 void Perceptron::train(const std::vector<float>& inputs, const float error)
 {
-	for (int w = 0; w < numberOfInputs; ++w)
+	for (int w = 0; w < this->weights.size(); ++w)
 	{
 		auto deltaWeights = *this->learningRate * error * inputs[w];
 		deltaWeights += *this->momentum * this->previousDeltaWeights[w];
@@ -93,20 +90,13 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 	}
 }
 
-void Perceptron::addAWeight()
-{
-	numberOfInputs++;
-	weights.push_back(randomInitializeWeight());
-}
-
 int Perceptron::isValid() const
 {
 	if (this->bias != 1)
 		return 301;
 
-	if (this->numberOfInputs != weights.size()
-		|| this->numberOfInputs < 1
-		|| this->numberOfInputs > 1000000)
+	if (this->weights.size() < 1
+	 || this->weights.size() > 1000000)
 	{
 		return 302;
 	}
@@ -149,7 +139,7 @@ void Perceptron::setBias(const float bias)
 
 int Perceptron::getNumberOfInputs() const
 {
-	return numberOfInputs;
+	return this->weights.size();
 }
 
 bool Perceptron::operator==(const Perceptron& perceptron) const
@@ -159,7 +149,6 @@ bool Perceptron::operator==(const Perceptron& perceptron) const
 		&& this->lastInputs == perceptron.lastInputs
 		&& this->errors == perceptron.errors
 		&& this->lastOutput == perceptron.lastOutput
-		&& this->numberOfInputs == perceptron.numberOfInputs
 		&& this->bias == perceptron.bias
 		&& this->activation == perceptron.activation
 		&& *this->outputFunction == *perceptron.outputFunction;
@@ -167,5 +156,5 @@ bool Perceptron::operator==(const Perceptron& perceptron) const
 
 bool Perceptron::operator!=(const Perceptron& perceptron) const
 {
-	return !this->operator==(perceptron);
+	return !(*this == perceptron);
 }

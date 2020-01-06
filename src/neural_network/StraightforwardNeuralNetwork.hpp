@@ -16,6 +16,7 @@ namespace snn
 		std::thread thread;
 
 		bool wantToStopTraining = false;
+		bool isIdle = true;
 		int currentIndex = 0;
 		int numberOfIteration = 0;
 		int numberOfTrainingsBetweenTwoEvaluations = 0;
@@ -34,8 +35,7 @@ namespace snn
 		void serialize(Archive& ar, const unsigned int version);
 
 	public:
-		StraightforwardNeuralNetwork(int numberOfInputs, std::vector<internal::LayerModel> models);
-
+		StraightforwardNeuralNetwork(int numberOfInputs, std::vector<LayerModel> models);
 		StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork);
 
 		StraightforwardNeuralNetwork() = default;
@@ -68,7 +68,6 @@ namespace snn
 			this->numberOfTrainingsBetweenTwoEvaluations = value;
 		}
 
-		StraightforwardNeuralNetwork& operator=(StraightforwardNeuralNetwork& neuralNetwork);
 		bool operator==(const StraightforwardNeuralNetwork& neuralNetwork) const;
 		bool operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const;
 	};

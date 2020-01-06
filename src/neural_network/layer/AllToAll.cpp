@@ -21,6 +21,13 @@ AllToAll::AllToAll(const int numberOfInputs,
 	}
 }
 
+unique_ptr<Layer> AllToAll::clone() const
+{
+	AllToAll* ptr = new AllToAll(*this);
+	unique_ptr<Layer> uptr = make_unique<AllToAll>(*ptr);
+	return move(uptr); 
+}
+
 vector<float> AllToAll::output(const vector<float>& inputs)
 {
 	vector<float> outputs(this->numberOfNeurons);
@@ -59,11 +66,6 @@ void AllToAll::train(vector<float>& inputsError)
 int AllToAll::isValid() const
 {
 	return this->Layer::isValid();
-}
-
-Layer& AllToAll::operator=(const Layer& layer)
-{
-	return this->Layer::operator=(layer);
 }
 
 bool AllToAll::operator==(const AllToAll& layer) const

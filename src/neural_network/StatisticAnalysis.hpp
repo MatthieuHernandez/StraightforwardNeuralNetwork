@@ -76,7 +76,6 @@ namespace snn::internal
 		float getWeightedClusteringRate() const;
 		float getF1Score() const;
 
-		StatisticAnalysis& operator=(const StatisticAnalysis& sa) = default;
 		bool operator==(const StatisticAnalysis& sa) const;
 		bool operator!=(const StatisticAnalysis& sa) const;
 	};

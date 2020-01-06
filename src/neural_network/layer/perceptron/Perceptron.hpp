@@ -61,7 +61,6 @@ namespace snn::internal
 
 		int getNumberOfInputs() const;
 
-		Perceptron& operator=(const Perceptron& perceptron);
 		bool operator==(const Perceptron& perceptron) const;
 		bool operator!=(const Perceptron& perceptron) const;
 	};

@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
@@ -22,8 +23,11 @@ namespace snn::internal
               int numberOfInputs,
               int numberOfNeurons);
 
+        Layer(const Layer&) = default;
         Layer() = default;
         virtual ~Layer() = default;
+
+        virtual std::unique_ptr<Layer> clone() const = 0;
 
         static const layerType type;
 
@@ -38,7 +42,6 @@ namespace snn::internal
 
         [[nodiscard]] virtual int isValid() const;
 		virtual bool operator==(const Layer& layer) const;
-		virtual Layer& operator=(const Layer& layer) = 0;
 		virtual bool operator!=(const Layer& layer) const;
 	};
 

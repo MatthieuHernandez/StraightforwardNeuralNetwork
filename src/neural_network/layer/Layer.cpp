@@ -32,15 +32,6 @@ int Layer::isValid() const
     return 0;
 }
 
-Layer& Layer::operator=(const Layer& layer)
-{
-    this->numberOfInputs = layer.numberOfInputs;
-    this->numberOfNeurons = layer.numberOfNeurons;
-    this->errors = layer.errors;
-    this->neurons = layer.neurons;
-    return *this;
-}
-
 bool Layer::operator==(const Layer& layer) const
 {
     return this->numberOfInputs == layer.numberOfInputs

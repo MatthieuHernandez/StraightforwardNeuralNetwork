@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
@@ -25,13 +26,16 @@ namespace snn::internal
                  float* learningRate,
                  float* momentum);
 
+		AllToAll(const AllToAll&) = default;
+
+		std::unique_ptr<Layer> clone() const override;
+
 		std::vector<float> output(const std::vector<float>& inputs) override;
 		std::vector<float> backOutput(std::vector<float>& inputsError) override;
 		void train(std::vector<float>& inputsError) override;
 
 		int isValid() const override;
 
-		Layer& operator=(const Layer& layer) override;
 		bool operator==(const AllToAll& layer) const;
 		bool operator!=(const AllToAll& layer) const;
 	};

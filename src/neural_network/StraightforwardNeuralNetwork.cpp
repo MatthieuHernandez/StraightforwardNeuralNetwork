@@ -31,7 +31,13 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(int numberOfInputs, v
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
 	: NeuralNetwork(neuralNetwork)
 {
-	this->operator=(neuralNetwork);
+	if(!this->isIdle)
+		throw std::runtime_error("StraightforwardNeuralNetwork must be idle to be copy");
+	this->autoSaveFilePath = neuralNetwork.autoSaveFilePath;
+	this->autoSaveWhenBetter = neuralNetwork.autoSaveWhenBetter;
+	this->currentIndex = neuralNetwork.currentIndex;
+	this->numberOfIteration = neuralNetwork.numberOfIteration;
+	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
 vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs)
@@ -58,6 +64,7 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 void StraightforwardNeuralNetwork::trainingStart(Data& data)
 {
 	this->trainingStop();
+	this->isIdle = false;
 	this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 	this->thread.detach();
 }
@@ -155,6 +162,7 @@ void StraightforwardNeuralNetwork::trainingStop()
 		this->thread.join();
 	this->currentIndex = 0;
 	this->numberOfIteration = 0;
+	this->isIdle = true;
 }
 
 int StraightforwardNeuralNetwork::isValid() const
@@ -178,19 +186,6 @@ StraightforwardNeuralNetwork StraightforwardNeuralNetwork::loadFrom(string fileP
 	boost::archive::text_iarchive archive(ifs);
 	archive >> neuralNetwork;
 	return *neuralNetwork;
-}
-
-StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::operator=(StraightforwardNeuralNetwork& neuralNetwork)
-{
-	this->trainingStop();
-	neuralNetwork.trainingStop();
-	this->autoSaveFilePath = neuralNetwork.autoSaveFilePath;
-	this->autoSaveWhenBetter = neuralNetwork.autoSaveWhenBetter;
-	this->currentIndex = neuralNetwork.currentIndex;
-	this->numberOfIteration = neuralNetwork.numberOfIteration;
-	this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
-	this->NeuralNetwork::operator=(neuralNetwork);
-	return *this;
 }
 
 bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const

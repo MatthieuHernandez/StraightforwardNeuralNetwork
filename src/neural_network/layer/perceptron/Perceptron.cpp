@@ -38,7 +38,15 @@ Perceptron::Perceptron(const int numberOfInputs,
 
 Perceptron::Perceptron(const Perceptron& perceptron)
 {
-	this->operator=(perceptron);
+	this->weights = perceptron.weights;
+	this->previousDeltaWeights = perceptron.previousDeltaWeights;
+	this->lastInputs = perceptron.lastInputs;
+	this->errors = perceptron.errors;
+	this->lastOutput = perceptron.lastOutput;
+	this->numberOfInputs = perceptron.numberOfInputs;
+	this->bias = perceptron.bias;
+	this->activation = perceptron.activation;
+	this->outputFunction = ActivationFunction::create(perceptron.activation);
 }
 
 float Perceptron::randomInitializeWeight() const
@@ -142,20 +150,6 @@ void Perceptron::setBias(const float bias)
 int Perceptron::getNumberOfInputs() const
 {
 	return numberOfInputs;
-}
-
-Perceptron& Perceptron::operator=(const Perceptron& perceptron)
-{
-	this->weights = perceptron.weights;
-	this->previousDeltaWeights = perceptron.previousDeltaWeights;
-	this->lastInputs = perceptron.lastInputs;
-	this->errors = perceptron.errors;
-	this->lastOutput = perceptron.lastOutput;
-	this->numberOfInputs = perceptron.numberOfInputs;
-	this->bias = perceptron.bias;
-	this->activation = perceptron.activation;
-	this->outputFunction = ActivationFunction::create(perceptron.activation);
-	return *this;
 }
 
 bool Perceptron::operator==(const Perceptron& perceptron) const

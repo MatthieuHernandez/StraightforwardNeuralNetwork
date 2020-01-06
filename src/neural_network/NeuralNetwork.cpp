@@ -36,7 +36,16 @@ NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
 	: StatisticAnalysis(neuralNetwork.numberOfOutputs)
 {
-	this->operator=(neuralNetwork);
+	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
+	this->learningRate = neuralNetwork.learningRate;
+	this->momentum = neuralNetwork.momentum;
+	this->numberOfLayers = neuralNetwork.numberOfLayers;
+	this->numberOfInput = neuralNetwork.numberOfInput;
+	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
+	this->layers.reserve(neuralNetwork.layers.size());
+
+	for (const auto& layer : neuralNetwork.layers)
+		this->layers.push_back(layer->clone());
 }
 
 int NeuralNetwork::isValid() const
@@ -64,20 +73,6 @@ int NeuralNetwork::isValid() const
 			return err;
 	}
 	return 0;
-}
-
-NeuralNetwork& NeuralNetwork::operator=(const NeuralNetwork& neuralNetwork)
-{
-	this->maxOutputIndex = neuralNetwork.maxOutputIndex;
-	this->learningRate = neuralNetwork.learningRate;
-	this->momentum = neuralNetwork.momentum;
-	this->numberOfLayers = neuralNetwork.numberOfLayers;
-	this->numberOfInput = neuralNetwork.numberOfInput;
-	this->numberOfOutputs = neuralNetwork.numberOfOutputs;
-	this->layers.clear();
-	this->layers.reserve(neuralNetwork.layers.size());
-	LayerFactory::copy(this->layers, neuralNetwork.layers);
-	return *this;
 }
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const

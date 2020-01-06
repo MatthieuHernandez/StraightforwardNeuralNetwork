@@ -71,26 +71,3 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, 
         currentNumberofInputs = model.numberOfNeurons;
     }
 }
-
-inline
-unique_ptr<Layer> LayerFactory::copy(const unique_ptr<Layer>& layer)
-{
-    if (typeid(*layer) == typeid(AllToAll))
-    {
-        auto newLayer = make_unique<AllToAll>();
-        newLayer->operator=(*layer);
-        return move(newLayer);
-    }
-    else
-    {
-        throw NotImplementedException("Layer");
-    }
-}
-
-void LayerFactory::copy(vector<unique_ptr<Layer>>& copiedLayers, const vector<unique_ptr<Layer>>& layersToCopy)
-{
-    for (auto& layer : layersToCopy)
-    {
-        copiedLayers.push_back(copy(layer));
-    }
-}

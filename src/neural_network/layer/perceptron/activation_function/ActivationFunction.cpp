@@ -39,7 +39,7 @@ ActivationFunction* ActivationFunction::create(activationFunction type)
 		case gaussian:
 			return new Gaussian();
 		default:
-			throw std::runtime_error("This type of activation function doesn't exist.");
+			throw std::runtime_error("This type of activation function doesn't exist");
 	}
 }
 

@@ -44,7 +44,6 @@ namespace snn::internal
 
 		int getLastError() const;
 
-		NeuralNetwork& operator=(const NeuralNetwork& neuralNetwork);
 		bool operator==(const NeuralNetwork& neuralNetwork) const;
 		bool operator!=(const NeuralNetwork& neuralNetwork) const;
 

@@ -19,8 +19,7 @@ int regressionExample()
 	float precision = 0.1f;
 	DataForRegression data(inputData, expectedOutputs, precision);
 
-	StraightforwardOption option;
-	StraightforwardNeuralNetwork neuralNetwork({3, 5, 1}, {sigmoid, sigmoid}, option);
+	snn::StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(5), AllToAll(1)});
 
 	neuralNetwork.trainingStart(data);
 	this_thread::sleep_for(2s); // train neural network during 2 seconds on parallel thread

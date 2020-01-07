@@ -4,12 +4,12 @@
 
 namespace snn
 {
-	enum activationFunctionType
+	enum activationFunction
 	{
 		sigmoid = 0,
 		iSigmoid,
-		tanH,
-		reLU,
+		tanh,
+		ReLU,
 		gaussian
 	};
 }
@@ -30,12 +30,12 @@ namespace snn::internal
 		ActivationFunction(const ActivationFunction& activationFunction) = default;
 		virtual ~ActivationFunction() = default;
 		static void initialize();
-		static ActivationFunction* get(activationFunctionType type);
+		static ActivationFunction* create(activationFunction type);
 
 		virtual float function(const float) const = 0;
 		virtual float derivative(const float) const = 0;
 
-		virtual activationFunctionType getType() const = 0;
+		virtual activationFunction getType() const = 0;
 
 		virtual bool operator==(const ActivationFunction& activationFunction) const;
 		virtual bool operator!=(const ActivationFunction& activationFunction) const;

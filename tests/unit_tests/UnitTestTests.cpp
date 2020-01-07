@@ -1,4 +1,4 @@
-#include "GTestTools.hpp"
+#include "../ExtendedGTest.hpp"
 
 TEST(TestCaseName, Test_1) 
 {

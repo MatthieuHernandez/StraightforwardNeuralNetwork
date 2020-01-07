@@ -3,22 +3,22 @@
 
 namespace snn::internal
 {
-	class ImprovedSigmoid : public ActivationFunction
-	{
-	private :
+    class ImprovedSigmoid : public ActivationFunction
+    {
+    private :
 
-		activationFunctionType getType() const override { return iSigmoid; }
+        activationFunction getType() const override { return iSigmoid; }
 
-	public:
+    public:
 
-		float function(const float x) const override
-		{
-			return 1.0f / (1.0f + exp(-x)) + x * 0.05f;
-		}
+        float function(const float x) const override
+        {
+            return 1.0f / (1.0f + exp(-x)) + x * 0.05f;
+        }
 
-		float derivative(const float x) const override
-		{
-			return exp(x) / pow((exp(x) + 1.0f), 2);
-		}
-	};
+        float derivative(const float x) const override
+        {
+            return exp(x) / pow((exp(x) + 1.0f), 2);
+        }
+    };
 }

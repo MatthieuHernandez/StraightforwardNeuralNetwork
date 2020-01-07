@@ -11,16 +11,17 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: CMake
       run: |
-        cd ./test
-        mkdir build
         cd ./build
         cmake -G"Unix Makefiles" ./..
-    - name: make
+    - name: Make
       run: |
-        cd ./test/build
+        cd ./build
         make
-    - name: execute unit tests
-      run: ./test/build/Test.out
+    - name: Execute unit tests
+      run: |
+        cd ./build
+        ./tests/unit_tests/UnitTests.out

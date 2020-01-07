@@ -3,22 +3,22 @@
 
 namespace snn::internal
 {
-	class TanH : public ActivationFunction
-	{
-	private :
+    class Tanh : public ActivationFunction
+    {
+    private :
 
-		activationFunctionType getType() const override { return tanH; }
+        activationFunction getType() const override { return tanh; }
 
-	public:
+    public:
 
-		float function(const float x) const override
-		{
-			return tanh(x);
-		}
+        float function(const float x) const override
+        {
+            return std::tanh(x);
+        }
 
-		float derivative(const float x) const override
-		{
-			return 1 - pow(tanh(x), 2);
-		}
-	};
+        float derivative(const float x) const override
+        {
+            return 1 - pow(std::tanh(x), 2);
+        }
+    };
 }

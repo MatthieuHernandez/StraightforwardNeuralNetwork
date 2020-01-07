@@ -15,40 +15,40 @@ using namespace internal;
 
 void ActivationFunction::initialize()
 {
-	/*listOfActivationFunction.reserve(4);
+    /*listOfActivationFunction.reserve(4);
 
-	listOfActivationFunction.push_back(new Sigmoid());
-	listOfActivationFunction.push_back(new ImprovedSigmoid());
-	listOfActivationFunction.push_back(new Tanh());
-	listOfActivationFunction.push_back(new ReLU());
-	listOfActivationFunction.push_back(new Gaussian());*/
+    listOfActivationFunction.push_back(new Sigmoid());
+    listOfActivationFunction.push_back(new ImprovedSigmoid());
+    listOfActivationFunction.push_back(new Tanh());
+    listOfActivationFunction.push_back(new ReLU());
+    listOfActivationFunction.push_back(new Gaussian());*/
 }
 
 ActivationFunction* ActivationFunction::create(activationFunction type)
 {
-	switch (type)
-	{
-		case sigmoid:
-			return new Sigmoid();
-		case iSigmoid:
-			return new ImprovedSigmoid();
-		case tanh:
-			return new Tanh();
-		case ReLU:
-			return new RectifiedLinearUnit();
-		case gaussian:
-			return new Gaussian();
-		default:
-			throw std::runtime_error("This type of activation function doesn't exist");
-	}
+    switch (type)
+    {
+        case sigmoid:
+            return new Sigmoid();
+        case iSigmoid:
+            return new ImprovedSigmoid();
+        case tanh:
+            return new Tanh();
+        case ReLU:
+            return new RectifiedLinearUnit();
+        case gaussian:
+            return new Gaussian();
+        default:
+            throw std::runtime_error("This type of activation function doesn't exist");
+    }
 }
 
 bool ActivationFunction::operator==(const ActivationFunction& activationFunction) const
 {
-	return this->getType() == activationFunction.getType();
+    return this->getType() == activationFunction.getType();
 }
 
 bool ActivationFunction::operator!=(const ActivationFunction& activationFunction) const
 {
-	return !this->operator==(activationFunction);
+    return !this->operator==(activationFunction);
 }

@@ -3,22 +3,22 @@
 
 namespace snn::internal
 {
-	class Gaussian : public ActivationFunction
-	{
-	private :
+    class Gaussian : public ActivationFunction
+    {
+    private :
 
-		activationFunction getType() const override { return gaussian; }
+        activationFunction getType() const override { return gaussian; }
 
-	public :
+    public :
 
-		float function(const float x) const override
-		{
-			return exp(-pow(x, 2));
-		}
+        float function(const float x) const override
+        {
+            return exp(-pow(x, 2));
+        }
 
-		float derivative(const float x) const override
-		{
-			return -2 * x * exp(-pow(x, 2));
-		}
-	};
+        float derivative(const float x) const override
+        {
+            return -2 * x * exp(-pow(x, 2));
+        }
+    };
 }

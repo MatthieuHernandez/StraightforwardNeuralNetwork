@@ -9,65 +9,65 @@
 
 namespace snn::internal
 {
-	class NeuralNetwork : public StatisticAnalysis
-	{
-	private :
-		static bool isTheFirst;
-		static void initialize();
+    class NeuralNetwork : public StatisticAnalysis
+    {
+    private :
+        static bool isTheFirst;
+        static void initialize();
 
-		void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
-		std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
+        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
+        std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
-		friend class boost::serialization::access;
-		template <class Archive>
-		void serialize(Archive& ar, unsigned version);
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, unsigned version);
 
-	protected :
-		int maxOutputIndex;
+    protected :
+        int maxOutputIndex;
 
-		[[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
+        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
 
-		void evaluateOnceForRegression(const std::vector<float>& inputs,
-		                               const std::vector<float>& desired,
-		                               float precision);
-		void evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
-		                                           const std::vector<float>& desired,
-		                                           float separator);
-		void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
+        void evaluateOnceForRegression(const std::vector<float>& inputs,
+                                       const std::vector<float>& desired,
+                                       float precision);
+        void evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
+                                                   const std::vector<float>& desired,
+                                                   float separator);
+        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
 
-		int getLastError() const;
+        int getLastError() const;
 
-	public:
-		NeuralNetwork() = default; // use restricted to Boost library only
-		NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
-		NeuralNetwork(const NeuralNetwork& neuralNetwork);
-		~NeuralNetwork() = default;
+    public:
+        NeuralNetwork() = default; // use restricted to Boost library only
+        NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
+        NeuralNetwork(const NeuralNetwork& neuralNetwork);
+        ~NeuralNetwork() = default;
 
-		int getNumberOfLayers() const;
-		int getNumberOfInputs() const;
-		int getNumberOfOutputs() const;
+        int getNumberOfLayers() const;
+        int getNumberOfInputs() const;
+        int getNumberOfOutputs() const;
 
-		float learningRate = 0.05f;
-		float momentum = 0.0f;
+        float learningRate = 0.05f;
+        float momentum = 0.0f;
 
-		std::vector<std::unique_ptr<Layer>> layers{};
-		int isValid() const;
+        std::vector<std::unique_ptr<Layer>> layers{};
+        int isValid() const;
 
-		void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
+        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 
-		bool operator==(const NeuralNetwork& neuralNetwork) const;
-		bool operator!=(const NeuralNetwork& neuralNetwork) const;
-	};
+        bool operator==(const NeuralNetwork& neuralNetwork) const;
+        bool operator!=(const NeuralNetwork& neuralNetwork) const;
+    };
 
-	template <class Archive>
-	void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
-	{
-		boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
-		ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-		ar & this->learningRate;
-		ar & this->momentum;
-		ar & this->maxOutputIndex;
-		ar.template register_type<internal::AllToAll>();
-		ar & layers;
-	}
+    template <class Archive>
+    void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
+    {
+        boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
+        ar & boost::serialization::base_object<StatisticAnalysis>(*this);
+        ar & this->learningRate;
+        ar & this->momentum;
+        ar & this->maxOutputIndex;
+        ar.template register_type<internal::AllToAll>();
+        ar & layers;
+    }
 }

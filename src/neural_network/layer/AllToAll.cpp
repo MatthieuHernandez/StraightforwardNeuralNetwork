@@ -13,67 +13,67 @@ AllToAll::AllToAll(const int numberOfInputs,
                    activationFunction activation,
                    float* learningRate,
                    float* momentum)
-	: Layer(allToAll, numberOfInputs, numberOfNeurons)
+     : Layer(allToAll, numberOfInputs, numberOfNeurons)
 {
-	for (int n = 0; n < numberOfNeurons; ++n)
-	{
-		this->neurons.emplace_back(numberOfInputs, activation, learningRate, momentum);
-	}
+    for (int n = 0; n < numberOfNeurons; ++n)
+    {
+        this->neurons.emplace_back(numberOfInputs, activation, learningRate, momentum);
+    }
 }
 
 unique_ptr<Layer> AllToAll::clone() const
 {
-	AllToAll* ptr = new AllToAll(*this);
-	unique_ptr<Layer> uptr = make_unique<AllToAll>(*ptr);
-	return move(uptr); 
+    AllToAll* ptr = new AllToAll(*this);
+    unique_ptr<Layer> uptr = make_unique<AllToAll>(*ptr);
+    return move(uptr); 
 }
 
 vector<float> AllToAll::output(const vector<float>& inputs)
 {
-	vector<float> outputs(this->neurons.size());
-	for (int n = 0; n < this->neurons.size(); ++n)
-	{
-		outputs[n] = neurons[n].output(inputs);
-	}
-	return outputs;
+    vector<float> outputs(this->neurons.size());
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        outputs[n] = neurons[n].output(inputs);
+    }
+    return outputs;
 }
 
 vector<float> AllToAll::backOutput(vector<float>& inputsError)
 {
-	vector<float> errors(this->numberOfInputs);
-	for (int n = 0; n < numberOfInputs; ++n)
-	{
-		errors[n] = 0;
-	}
+    vector<float> errors(this->numberOfInputs);
+    for (int n = 0; n < numberOfInputs; ++n)
+    {
+        errors[n] = 0;
+    }
 
-	for (int n = 0; n < this->neurons.size(); ++n)
-	{
-		auto& result = neurons[n].backOutput(inputsError[n]);
-		for (int r = 0; r < numberOfInputs; ++r)
-			errors[r] += result[r];
-	}
-	return errors;
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto& result = neurons[n].backOutput(inputsError[n]);
+        for (int r = 0; r < numberOfInputs; ++r)
+            errors[r] += result[r];
+    }
+    return errors;
 }
 
 void AllToAll::train(vector<float>& inputsError)
 {
-	for (int n = 0; n < this->neurons.size(); ++n)
-	{
-		neurons[n].backOutput(inputsError[n]);
-	}
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        neurons[n].backOutput(inputsError[n]);
+    }
 }
 
 int AllToAll::isValid() const
 {
-	return this->Layer::isValid();
+    return this->Layer::isValid();
 }
 
 bool AllToAll::operator==(const AllToAll& layer) const
 {
-	return this->Layer::operator==(layer);
+    return this->Layer::operator==(layer);
 }
 
 bool AllToAll::operator!=(const AllToAll& layer) const
 {
-	return !(*this ==layer);
+    return !(*this ==layer);
 }

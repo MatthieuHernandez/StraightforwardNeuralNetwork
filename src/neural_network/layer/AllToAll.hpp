@@ -8,39 +8,39 @@
 
 namespace snn::internal
 {
-	class AllToAll : public Layer
-	{
-	private :
-		friend class boost::serialization::access;
-		template <class Archive>
-		void serialize(Archive& ar, unsigned version);
+    class AllToAll : public Layer
+    {
+    private :
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, unsigned version);
 
-	public :
-		AllToAll() = default;  // use restricted to Boost library only
-		AllToAll(int numberOfInputs,
+    public :
+        AllToAll() = default;  // use restricted to Boost library only
+        AllToAll(int numberOfInputs,
                  int numberOfNeurons,
                  activationFunction activation,
                  float* learningRate,
                  float* momentum);
-		~AllToAll() = default;
-		AllToAll(const AllToAll&) = default;
+        ~AllToAll() = default;
+        AllToAll(const AllToAll&) = default;
 
-		std::unique_ptr<Layer> clone() const override;
+        std::unique_ptr<Layer> clone() const override;
 
-		std::vector<float> output(const std::vector<float>& inputs) override;
-		std::vector<float> backOutput(std::vector<float>& inputsError) override;
-		void train(std::vector<float>& inputsError) override;
+        std::vector<float> output(const std::vector<float>& inputs) override;
+        std::vector<float> backOutput(std::vector<float>& inputsError) override;
+        void train(std::vector<float>& inputsError) override;
 
-		int isValid() const override;
+        int isValid() const override;
 
-		bool operator==(const AllToAll& layer) const;
-		bool operator!=(const AllToAll& layer) const;
-	};
+        bool operator==(const AllToAll& layer) const;
+        bool operator!=(const AllToAll& layer) const;
+    };
 
-	template <class Archive>
-	void AllToAll::serialize(Archive& ar, const unsigned version)
-	{
-		boost::serialization::void_cast_register<AllToAll, Layer>();
-		ar & boost::serialization::base_object<Layer>(*this);
-	}
+    template <class Archive>
+    void AllToAll::serialize(Archive& ar, const unsigned version)
+    {
+        boost::serialization::void_cast_register<AllToAll, Layer>();
+        ar & boost::serialization::base_object<Layer>(*this);
+    }
 }

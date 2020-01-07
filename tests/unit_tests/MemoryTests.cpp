@@ -1,5 +1,5 @@
 
-#include "GTestTools.hpp"
+#include "../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "data/DataForRegression.hpp"
 
@@ -13,12 +13,10 @@ TEST(Memory, passingArgByCopy)
         auto inputData = new vector<vector<float>> {{0, 0, 0}, {1, 1, 1}};
         auto expectedOutputs = new vector<vector<float>> {{0}, {1}};
         auto data = new DataForRegression(*inputData, *expectedOutputs, 0.1);
-        auto option = new StraightforwardOption();
-        StraightforwardNeuralNetwork neuralNetwork({3, 5, 1}, {sigmoid, sigmoid}, *option);
+        StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(500), AllToAll(250)});
 
         delete inputData;
         delete expectedOutputs;
-        delete option;
 
         neuralNetwork.trainingStart(*data);
         this_thread::sleep_for(1ms);
@@ -38,7 +36,7 @@ TEST(Memory, copyOperator)
         vector<vector<float>> inputData = {{0, 0, 0}, {1, 1, 1}};
         vector<vector<float>> expectedOutputs = {{0}, {1}};
         DataForRegression data(inputData, expectedOutputs, 0.1);
-        auto neuralNetwork = new StraightforwardNeuralNetwork({3, 5, 1});
+        auto neuralNetwork = new StraightforwardNeuralNetwork(3, {AllToAll(500), AllToAll(250)});
         
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;
         delete neuralNetwork;

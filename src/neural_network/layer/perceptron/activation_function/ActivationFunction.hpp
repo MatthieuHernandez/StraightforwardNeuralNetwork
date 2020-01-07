@@ -27,10 +27,9 @@ namespace snn::internal
 		static std::vector<ActivationFunction*> activationFunctions;
 
 		ActivationFunction() = default;
-		ActivationFunction(const ActivationFunction& activationFunction) = default;
 		virtual ~ActivationFunction() = default;
 		static void initialize();
-		static ActivationFunction* create(activationFunction type);
+		static ActivationFunction* get(activationFunction type);
 
 		virtual float function(const float) const = 0;
 		virtual float derivative(const float) const = 0;

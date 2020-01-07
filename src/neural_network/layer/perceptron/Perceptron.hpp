@@ -17,7 +17,7 @@ namespace snn::internal
         std::vector<float> lastInputs;
         std::vector<float> errors;
 
-        float lastOutput;
+        float lastOutput = 0;
 
         float* learningRate;
         float* momentum;
@@ -70,6 +70,6 @@ namespace snn::internal
         ar & this->lastOutput;
         ar & this->bias;
         ar & this->activation;
-        this->outputFunction = ActivationFunction::create(activation);
+        this->outputFunction = ActivationFunction::get(activation);
     }
 }

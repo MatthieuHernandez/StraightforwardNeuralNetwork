@@ -13,7 +13,8 @@ TEST(Memory, passingArgByCopy)
         auto inputData = new vector<vector<float>> {{0, 0, 0}, {1, 1, 1}};
         auto expectedOutputs = new vector<vector<float>> {{0}, {1}};
         auto data = new DataForRegression(*inputData, *expectedOutputs, 0.1);
-        StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(500), AllToAll(250)});
+        vector<LayerModel> model = {AllToAll(10), AllToAll(10)};
+        StraightforwardNeuralNetwork neuralNetwork(3, model);
 
         delete inputData;
         delete expectedOutputs;
@@ -29,7 +30,7 @@ TEST(Memory, passingArgByCopy)
     EXPECT_TRUE(true);
 }
 
-TEST(Memory, copyOperator)
+TEST(Memory, DISABLED_copyOperator)
 {
     try
     {

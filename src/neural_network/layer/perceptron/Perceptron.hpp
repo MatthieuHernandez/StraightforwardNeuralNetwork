@@ -34,8 +34,8 @@ namespace snn::internal
     public :
         Perceptron() = default; // use restricted to Boost library only
         Perceptron(int numberOfInputs, activationFunction activation, float* learningRate, float* momentum);
-        Perceptron(const Perceptron& perceptron);
-        ~Perceptron();
+        Perceptron(const Perceptron& perceptron) = default;
+        ~Perceptron() = default;
 
         std::vector<float>& backOutput(float error);
         float output(const std::vector<float>& inputs);

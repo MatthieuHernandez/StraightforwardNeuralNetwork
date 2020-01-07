@@ -16,7 +16,7 @@ bool NeuralNetwork::isTheFirst = true;
 
 void NeuralNetwork::initialize()
 {
-    srand(static_cast<int>(time(nullptr)));
+    srand(static_cast<unsigned int>(time(nullptr)));
     rand();
     ActivationFunction::initialize();
     isTheFirst = false;

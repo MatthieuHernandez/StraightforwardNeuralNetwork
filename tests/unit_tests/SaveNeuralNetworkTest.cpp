@@ -4,7 +4,7 @@
 using namespace std;
 using namespace snn;
 
-TEST(SaveNeuralNetwork, EqualTest)
+TEST(SaveNeuralNetwork, DISABLED_EqualTest)
 {
 	auto structureOfNetwork = {
 		AllToAll(20, iSigmoid),
@@ -54,7 +54,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 	EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)
+TEST(SaveNeuralNetwork, DISABLED_Save)
 {
 	StraightforwardNeuralNetwork A(5, {
 		AllToAll(20, ReLU),

@@ -6,11 +6,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-Perceptron::~Perceptron()
-{
-    delete this->outputFunction;
-}
-
 Perceptron::Perceptron(const int numberOfInputs,
                        activationFunction activation,
                        float* learningRate,
@@ -23,25 +18,12 @@ Perceptron::Perceptron(const int numberOfInputs,
     this->lastInputs.resize(numberOfInputs, 0);
     this->errors.resize(numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activation);
-
     this->weights.resize(numberOfInputs);
     for (auto& w : weights)
     {
         w = randomInitializeWeight(numberOfInputs);
     }
     this->bias = 1.0f;
-}
-
-Perceptron::Perceptron(const Perceptron& perceptron)
-{
-    this->weights = perceptron.weights;
-    this->previousDeltaWeights = perceptron.previousDeltaWeights;
-    this->lastInputs = perceptron.lastInputs;
-    this->errors = perceptron.errors;
-    this->lastOutput = perceptron.lastOutput;
-    this->bias = perceptron.bias;
-    this->activation = perceptron.activation;
-    this->outputFunction = perceptron.outputFunction;
 }
 
 float Perceptron::randomInitializeWeight(int numberOfInputs) const

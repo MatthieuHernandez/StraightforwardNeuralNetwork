@@ -23,9 +23,7 @@ AllToAll::AllToAll(const int numberOfInputs,
 
 unique_ptr<Layer> AllToAll::clone() const
 {
-    AllToAll* ptr = new AllToAll(*this);
-    unique_ptr<Layer> uptr = make_unique<AllToAll>(*ptr);
-    return move(uptr); 
+    return make_unique<AllToAll>(*this);
 }
 
 vector<float> AllToAll::output(const vector<float>& inputs)

@@ -3,17 +3,17 @@
 #include "../../examples/MultipleClassificationExemple.cpp"
 #include "../../examples/RegressionExample.cpp"
 
-TEST(exemples, DISABLED_classification)
+TEST(exemples, classification)
 {
     ASSERT_EQ(classificationExample(), EXIT_SUCCESS);
 }
 
-TEST(exemples, DISABLED_multipleClassification)
+TEST(exemples, multipleClassification)
 {
     ASSERT_EQ(multipleClassificationExample(), EXIT_SUCCESS);
 }
 
-TEST(exemples, DISABLED_regression)
+TEST(exemples, regression)
 {
     ASSERT_EQ(regressionExample(), EXIT_SUCCESS);
 }

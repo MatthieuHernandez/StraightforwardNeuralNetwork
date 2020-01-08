@@ -12,6 +12,7 @@
 #include "../data/DataForMultipleClassification.hpp"
 
 using namespace std;
+using namespace chrono;
 using namespace snn;
 using namespace internal;
 
@@ -67,6 +68,31 @@ void StraightforwardNeuralNetwork::trainingStart(Data& data)
     this->isIdle = false;
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
     this->thread.detach();
+}
+
+void StraightforwardNeuralNetwork::trainingStop()
+{
+    this->wantToStopTraining = true;
+    if (this->thread.joinable())
+        this->thread.join();
+    this->currentIndex = 0;
+    this->numberOfIteration = 0;
+    this->isIdle = true;
+}
+
+void StraightforwardNeuralNetwork::waitFor(Wait& wait)
+{
+    auto startWait = system_clock::now();
+    while(true) 
+    {
+        this_thread::sleep_for(1ms);
+        auto epochs =  this->getNumberOfIteration();
+        auto accuracy = this->getGlobalClusteringRate();
+        auto durationMs = duration_cast<std::chrono::milliseconds>(system_clock::now() - startWait).count();
+        
+        if(wait.isOver(epochs, accuracy, durationMs))
+            break;
+    }
 }
 
 void StraightforwardNeuralNetwork::train(Data& data)
@@ -152,17 +178,6 @@ void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
     this->NeuralNetwork::evaluateOnceForClassification(
                 data.getTestingData(this->currentIndex),
                 data.getTestingLabel(this->currentIndex));
-}
-
-
-void StraightforwardNeuralNetwork::trainingStop()
-{
-    this->wantToStopTraining = true;
-    if (this->thread.joinable())
-        this->thread.join();
-    this->currentIndex = 0;
-    this->numberOfIteration = 0;
-    this->isIdle = true;
 }
 
 int StraightforwardNeuralNetwork::isValid() const

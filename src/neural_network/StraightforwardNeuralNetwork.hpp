@@ -3,6 +3,7 @@
 #include <vector>
 #include <thread>
 #include "NeuralNetwork.hpp"
+#include "Wait.hpp"
 #include "../data/Data.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
@@ -47,6 +48,8 @@ namespace snn
 
         void trainingStart(Data& data);
         void trainingStop();
+
+        void waitFor(Wait& wait);
 
         void evaluate(Data& straightforwardData);
 

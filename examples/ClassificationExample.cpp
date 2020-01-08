@@ -21,7 +21,7 @@ int classificationExample()
 	StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(5), AllToAll(2)});
 
 	neuralNetwork.trainingStart(data);
-	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread
+	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
 	neuralNetwork.trainingStop();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;

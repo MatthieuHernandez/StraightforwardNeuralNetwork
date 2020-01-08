@@ -16,9 +16,10 @@ protected :
         data = move(dataset.data);
     }
 
-public :
-    shared_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
+
+unique_ptr<Data> WineTest::data = nullptr;
 
 TEST_F(WineTest, loadData)
 {
@@ -41,7 +42,7 @@ TEST_F(WineTest, trainNeuralNetwork)
             AllToAll(3)
         });
     neuralNetwork.trainingStart(*data);
-    this_thread::sleep_for(3s);
+    neuralNetwork.waitFor(1_acc || 3_s);
     neuralNetwork.trainingStop();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);

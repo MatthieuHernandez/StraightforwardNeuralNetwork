@@ -21,6 +21,7 @@ AllToAll::AllToAll(const int numberOfInputs,
     }
 }
 
+inline
 unique_ptr<Layer> AllToAll::clone() const
 {
     return make_unique<AllToAll>(*this);

@@ -16,9 +16,10 @@ protected :
         data = move(dataset.data);
     }
 
-public :
-    unique_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
+
+unique_ptr<Data> MnistTest::data = nullptr;
 
 TEST_F(MnistTest, loadData)
 {
@@ -41,12 +42,8 @@ TEST_F(MnistTest, DISABLED_trainNeuralNetwork)
             AllToAll(10)
         });
     neuralNetwork.trainingStart(*data);
-    float accuracy = 0;
-    for(int i = 0; i < 180 && accuracy < 0.91; i++)
-    {
-        accuracy = neuralNetwork.getGlobalClusteringRate();
-        this_thread::sleep_for(1s);
-    }
+    neuralNetwork.waitFor(1_ep || 30_s);
     neuralNetwork.trainingStop();
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.92);
 }

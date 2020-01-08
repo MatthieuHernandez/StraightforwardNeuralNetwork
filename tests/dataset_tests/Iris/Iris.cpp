@@ -5,6 +5,8 @@
 #include "tools/Tools.hpp"
 #include "data/DataForClassification.hpp"
 
+#include <iostream>
+
 using namespace std;
 using namespace snn;
 using namespace internal;
@@ -28,7 +30,7 @@ void Iris::loadData()
     if (!file.is_open())
         throw FileOpeningFailed();
 
-    while (getline(file, line) && line != "")
+    while (getline(file, line) && line.size() > 4)
     {
         const vector<string> temp;
         individuals.push_back(temp);
@@ -54,19 +56,19 @@ void Iris::loadData()
         for (int j = 0; j < 4; j++)
             data[i].push_back(stof(individuals[i][j]));
 
-        if (individuals[i][4] == "Iris-setosa")
+        if (individuals[i][4][8] == 'o') // Iris-setosa
         {
             labels[i][0] = 1;
             labels[i][1] = 0;
             labels[i][2] = 0;
         }
-        else if (individuals[i][4] == "Iris-versicolor")
+        else if (individuals[i][4][8] == 's') // Iris-versicolor
         {
             labels[i][0] = 0;
             labels[i][1] = 1;
             labels[i][2] = 0;
         }
-        else if (individuals[i][4] == "Iris-virginica")
+        else if (individuals[i][4][8] == 'g') // Iris-virginica
         {
             labels[i][0] = 0;
             labels[i][1] = 0;

@@ -1,4 +1,3 @@
-#include <thread>
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
 #include "../src/data/DataForMultipleClassification.hpp"
 
@@ -9,7 +8,7 @@ using namespace snn;
 /*
 This is the simplest example how to use this library
 In this neural network return 3 ouputs AND, NAND, OR logical operator of 2 inputs.
-For more explication go to wiki
+For more explanation go to wiki
 */
 int multipleClassificationExample()
 {

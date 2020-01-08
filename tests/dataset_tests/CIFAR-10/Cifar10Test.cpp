@@ -1,4 +1,3 @@
-#include <thread>
 #include "../../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "Cifar10.hpp"
@@ -16,11 +15,12 @@ protected :
         data = move(dataset.data);
     }
 
-public :
-    unique_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
 
-TEST_F(Cifar10Test, loadData)
+unique_ptr<Data> Cifar10Test::data = nullptr;
+
+TEST_F(Cifar10Test, DISABLED_loadData)
 {
     ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 3072);
@@ -41,12 +41,8 @@ TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
             AllToAll(10)
         });
     neuralNetwork.trainingStart(*data);
-    float accuracy = 0;
-    for(int i = 0; i < 300 && accuracy < 0.30; i++)
-    {
-        accuracy = neuralNetwork.getGlobalClusteringRate();
-        this_thread::sleep_for(1s);
-    }
+    neuralNetwork.waitFor(1_ep || 60_s);
     neuralNetwork.trainingStop();
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.30);
 }

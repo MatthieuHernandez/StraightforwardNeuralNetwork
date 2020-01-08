@@ -1,4 +1,3 @@
-#include <thread>
 #include "../../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "Iris.hpp"
@@ -10,15 +9,16 @@ using namespace snn;
 class IrisTest : public testing::Test
 {
 protected:
-    IrisTest()
+    static void SetUpTestSuite()
     {
         Iris dataset;
         data = move(dataset.data);
     }
 
-public:
-    shared_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
+
+unique_ptr<Data> IrisTest::data = nullptr;
 
 TEST_F(IrisTest, loadData)
 {
@@ -41,7 +41,7 @@ TEST_F(IrisTest, trainNeuralNetwork)
             AllToAll(3)
         });
     neuralNetwork.trainingStart(*data);
-    this_thread::sleep_for(2s);
+    neuralNetwork.waitFor(0.98_acc || 2_s);
     neuralNetwork.trainingStop();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98);

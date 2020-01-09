@@ -40,9 +40,9 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
             AllToAll(80),
             AllToAll(10)
         });
-    neuralNetwork.trainingStart(*data);
+    neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 300_s);
-    neuralNetwork.trainingStop();
+    neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.30);
 }

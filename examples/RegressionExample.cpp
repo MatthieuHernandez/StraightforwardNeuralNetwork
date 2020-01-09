@@ -20,9 +20,9 @@ int regressionExample()
 
 	snn::StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(5), AllToAll(1)});
 
-	neuralNetwork.trainingStart(data);
+	neuralNetwork.startTraining(data);
 	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
-	neuralNetwork.trainingStop();
+	neuralNetwork.stopTraining();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 	vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it

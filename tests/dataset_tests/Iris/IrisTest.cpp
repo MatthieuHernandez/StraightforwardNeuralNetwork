@@ -40,9 +40,9 @@ TEST_F(IrisTest, trainNeuralNetwork)
             AllToAll(5),
             AllToAll(3)
         });
-    neuralNetwork.trainingStart(*data);
+    neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(0.98_acc || 2_s);
-    neuralNetwork.trainingStop();
+    neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98);
 }

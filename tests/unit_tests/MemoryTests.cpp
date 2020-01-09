@@ -22,9 +22,9 @@ TEST(Memory, passingArgByCopy)
         delete inputData;
         delete expectedOutputs;
 
-        neuralNetwork.trainingStart(*data);
+        neuralNetwork.startTraining(*data);
         this_thread::sleep_for(1ms);
-        neuralNetwork.trainingStop();
+        neuralNetwork.stopTraining();
     }
     catch(const std::exception& e)
     {
@@ -45,9 +45,9 @@ TEST(Memory, copyOperator)
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;
         delete neuralNetwork;
 
-        neuralNetworkCopy.trainingStart(data);
+        neuralNetworkCopy.startTraining(data);
         this_thread::sleep_for(1ms);
-        neuralNetworkCopy.trainingStop();
+        neuralNetworkCopy.stopTraining();
     }
     catch(const std::exception& e)
     {

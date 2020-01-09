@@ -46,8 +46,8 @@ namespace snn
 
         int isValid() const;
 
-        void trainingStart(Data& data);
-        void trainingStop();
+        void startTraining(Data& data);
+        void stopTraining();
 
         void waitFor(Wait& wait);
 
@@ -59,7 +59,7 @@ namespace snn
         bool isTraining() const { return wantToStopTraining; }
 
         void saveAs(std::string filePath);
-        static StraightforwardNeuralNetwork loadFrom(std::string filePath);
+        static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
         int getCurrentIndex() const { return this->currentIndex; }
         int getNumberOfIteration() const { return this->numberOfIteration; }

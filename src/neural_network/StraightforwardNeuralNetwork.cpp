@@ -20,7 +20,7 @@ BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
 {
-    this->trainingStop();
+    this->stopTraining();
 };
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(int numberOfInputs, vector<LayerModel> models)
@@ -67,14 +67,14 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
     return maxOutputIndex;
 }
 
-void StraightforwardNeuralNetwork::trainingStart(Data& data)
+void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
-    this->trainingStop();
+    this->stopTraining();
     this->isIdle = false;
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 }
 
-void StraightforwardNeuralNetwork::trainingStop()
+void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
     if (this->thread.joinable())
@@ -192,13 +192,14 @@ int StraightforwardNeuralNetwork::isValid() const
 
 void StraightforwardNeuralNetwork::saveAs(string filePath)
 {
+    this->stopTraining();
     this->autoSaveFilePath = filePath;
     ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
 }
 
-StraightforwardNeuralNetwork StraightforwardNeuralNetwork::loadFrom(string filePath)
+StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(string filePath)
 {
     StraightforwardNeuralNetwork* neuralNetwork;
     ifstream ifs(filePath);

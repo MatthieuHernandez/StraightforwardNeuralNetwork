@@ -9,7 +9,7 @@ using namespace snn;
 class Cifar10Test : public testing::Test
 {
 protected :
-    Cifar10Test()
+    static void SetUpTestSuite()
     {
         Cifar10 dataset;
         data = move(dataset.data);
@@ -20,7 +20,7 @@ protected :
 
 unique_ptr<Data> Cifar10Test::data = nullptr;
 
-TEST_F(Cifar10Test, DISABLED_loadData)
+TEST_F(Cifar10Test, loadData)
 {
     ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 3072);
@@ -31,7 +31,7 @@ TEST_F(Cifar10Test, DISABLED_loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
+TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         3072,
@@ -41,7 +41,7 @@ TEST_F(Cifar10Test, DISABLED_trainNeuralNetwork)
             AllToAll(10)
         });
     neuralNetwork.trainingStart(*data);
-    neuralNetwork.waitFor(1_ep || 60_s);
+    neuralNetwork.waitFor(1_ep || 300_s);
     neuralNetwork.trainingStop();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.30);

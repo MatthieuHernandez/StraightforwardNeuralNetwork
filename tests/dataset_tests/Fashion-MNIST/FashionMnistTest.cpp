@@ -1,27 +1,26 @@
-#include <thread>
 #include "../../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
-#include "Mnist.hpp"
+#include "FashionMnist.hpp"
 
 using namespace std;
 using namespace chrono;
 using namespace snn;
 
-class MnistTest : public testing::Test
+class FashionMnistTest : public testing::Test
 {
 protected :
     static void SetUpTestSuite()
     {
-        Mnist dataset;
+        FashionMnist dataset;
         data = move(dataset.data);
     }
 
     static unique_ptr<Data> data;
 };
 
-unique_ptr<Data> MnistTest::data = nullptr;
+unique_ptr<Data> FashionMnistTest::data = nullptr;
 
-TEST_F(MnistTest, loadData)
+TEST_F(FashionMnistTest, loadData)
 {
     ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 784);
@@ -32,7 +31,7 @@ TEST_F(MnistTest, loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(MnistTest, trainNeuralNetwork)
+TEST_F(FashionMnistTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         784,
@@ -45,5 +44,5 @@ TEST_F(MnistTest, trainNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 180_s);
     neuralNetwork.trainingStop();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.92);
+    ASSERT_ACCURACY(accuracy, 0.70);
 }

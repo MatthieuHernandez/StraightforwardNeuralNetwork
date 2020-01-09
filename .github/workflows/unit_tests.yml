@@ -24,4 +24,4 @@ jobs:
     - name: Execute unit tests
       run: |
         cd ./build
-        ./tests/unit_tests/UnitTests.out
+        ./tests/unit_tests/UnitTests.out --gtest_also_run_disabled_tests

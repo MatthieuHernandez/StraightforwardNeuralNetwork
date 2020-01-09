@@ -39,7 +39,7 @@ namespace snn
         StraightforwardNeuralNetwork() = default; // use restricted to Boost library only
         StraightforwardNeuralNetwork(int numberOfInputs, std::vector<LayerModel> models);
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
-        ~StraightforwardNeuralNetwork() = default;
+        ~StraightforwardNeuralNetwork();
 
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";

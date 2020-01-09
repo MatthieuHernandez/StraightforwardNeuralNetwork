@@ -27,8 +27,8 @@ int classificationExample()
 	int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0)); // consult neural network to test it
 	int expectedClassNumber = data.getLabel(snn::testing, 0); // return position of neuron with highest output
 	if (accuracy == 100
-		&& classNumber == expectedClassNumber
-		&& neuralNetwork.isValid() == 0)
+	&& classNumber == expectedClassNumber
+	&& neuralNetwork.isValid() == 0)
 	{
 		return EXIT_SUCCESS; // the neural network has learned
 	}

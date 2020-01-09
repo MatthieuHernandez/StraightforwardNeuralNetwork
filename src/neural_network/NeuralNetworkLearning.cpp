@@ -55,7 +55,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 inline 
 vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
-    auto errors = new vector<float>(this->layers.size(), 0);
+    auto errors = new vector<float>(this->layers.back()->getNumberOfNeurons(), 0);
     for (int n = 0; n < errors->size(); ++n)
     {
         if (desired[n] != -1.0f)

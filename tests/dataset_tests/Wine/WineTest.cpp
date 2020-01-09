@@ -10,7 +10,7 @@ using namespace snn;
 class WineTest : public testing::Test
 {
 protected :
-    WineTest()
+    static void SetUpTestSuite()
     {
         Wine dataset;
         data = move(dataset.data);
@@ -42,7 +42,7 @@ TEST_F(WineTest, trainNeuralNetwork)
             AllToAll(3)
         });
     neuralNetwork.trainingStart(*data);
-    neuralNetwork.waitFor(1_acc || 3_s);
+    neuralNetwork.waitFor(1.00_acc || 3_s);
     neuralNetwork.trainingStop();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);

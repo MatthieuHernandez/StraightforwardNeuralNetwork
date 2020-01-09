@@ -18,6 +18,11 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
+StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
+{
+    this->trainingStop();
+};
+
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(int numberOfInputs, vector<LayerModel> models)
     : NeuralNetwork(numberOfInputs, models)
 {
@@ -67,7 +72,6 @@ void StraightforwardNeuralNetwork::trainingStart(Data& data)
     this->trainingStop();
     this->isIdle = false;
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
-    this->thread.detach();
 }
 
 void StraightforwardNeuralNetwork::trainingStop()

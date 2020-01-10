@@ -32,17 +32,17 @@ jobs:
     - name: Iris
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=IrisTest
+        ./tests/dataset_tests/DatasetTests.out --gtest_filter=IrisTest --gtest_also_run_disabled_tests
     - name: Wine
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=WineTest
+        ./tests/dataset_tests/DatasetTests.out --gtest_filter=WineTest --gtest_also_run_disabled_tests
     - name: MNIST
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=MnistTest
+        ./tests/dataset_tests/DatasetTests.out --gtest_filter=MnistTest --gtest_also_run_disabled_tests
     - name: CIFAR-10
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=Cifar10Test
+        ./tests/dataset_tests/DatasetTests.out --gtest_filter=Cifar10Test --gtest_also_run_disabled_tests
         

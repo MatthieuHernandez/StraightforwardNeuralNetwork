@@ -10,15 +10,16 @@ using namespace snn;
 class WineTest : public testing::Test
 {
 protected :
-    WineTest()
+    static void SetUpTestSuite()
     {
         Wine dataset;
         data = move(dataset.data);
     }
 
-public :
-    shared_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
+
+unique_ptr<Data> WineTest::data = nullptr;
 
 TEST_F(WineTest, loadData)
 {
@@ -33,10 +34,16 @@ TEST_F(WineTest, loadData)
 
 TEST_F(WineTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({13, 20, 8, 3});
-    neuralNetwork.trainingStart(*data);
-    this_thread::sleep_for(3s);
-    neuralNetwork.trainingStop();
+    StraightforwardNeuralNetwork neuralNetwork(
+        13,
+        {
+            AllToAll(20),
+            AllToAll(8),
+            AllToAll(3)
+        });
+    neuralNetwork.startTraining(*data);
+    neuralNetwork.waitFor(1.00_acc || 3_s);
+    neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }

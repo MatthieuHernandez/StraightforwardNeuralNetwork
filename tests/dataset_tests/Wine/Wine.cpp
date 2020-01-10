@@ -1,4 +1,5 @@
 #include <fstream>
+#include <string>
 #include <vector>
 #include "Wine.hpp"
 #include "data/DataForClassification.hpp"

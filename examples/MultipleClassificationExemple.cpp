@@ -1,4 +1,3 @@
-#include <thread>
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
 #include "../src/data/DataForMultipleClassification.hpp"
 
@@ -9,7 +8,7 @@ using namespace snn;
 /*
 This is the simplest example how to use this library
 In this neural network return 3 ouputs AND, NAND, OR logical operator of 2 inputs.
-For more explication go to wiki
+For more explanation go to wiki
 */
 int multipleClassificationExample()
 {
@@ -19,12 +18,11 @@ int multipleClassificationExample()
 	float separator = 0.5f;
 	DataForMultipleClassification data(inputData, expectedOutputs, separator);
 
-	StraightforwardOption option;
-	StraightforwardNeuralNetwork neuralNetwork({2, 8, 3}, {sigmoid, sigmoid}, option);
+	StraightforwardNeuralNetwork neuralNetwork(2, {AllToAll(8), AllToAll(3)});
 
-	neuralNetwork.trainingStart(data);
-	this_thread::sleep_for(1s); // train neural network during 1 seconds on parallel thread
-	neuralNetwork.trainingStop();
+	neuralNetwork.startTraining(data);
+	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
+	neuralNetwork.stopTraining();
 
 	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 	vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it

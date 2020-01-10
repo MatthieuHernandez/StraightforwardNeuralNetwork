@@ -10,15 +10,16 @@ using namespace snn;
 class MnistTest : public testing::Test
 {
 protected :
-    MnistTest()
+    static void SetUpTestSuite()
     {
         Mnist dataset;
         data = move(dataset.data);
     }
 
-public :
-    unique_ptr<Data> data;
+    static unique_ptr<Data> data;
 };
+
+unique_ptr<Data> MnistTest::data = nullptr;
 
 TEST_F(MnistTest, loadData)
 {
@@ -31,16 +32,18 @@ TEST_F(MnistTest, loadData)
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
 }
 
-TEST_F(MnistTest, DISABLED_trainNeuralNetwork)
+TEST_F(MnistTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({784, 150, 70, 10});
-    neuralNetwork.trainingStart(*data);
-    float accuracy = 0;
-    for(int i = 0; i < 180 && accuracy < 0.91; i++)
-    {
-        accuracy = neuralNetwork.getGlobalClusteringRate();
-        this_thread::sleep_for(1s);
-    }
-    neuralNetwork.trainingStop();
+    StraightforwardNeuralNetwork neuralNetwork(
+        784,
+        {
+            AllToAll(150),
+            AllToAll(70),
+            AllToAll(10)
+        });
+    neuralNetwork.startTraining(*data);
+    neuralNetwork.waitFor(1_ep || 180_s);
+    neuralNetwork.stopTraining();
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.92);
 }

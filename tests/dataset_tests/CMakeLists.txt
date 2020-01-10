@@ -3,6 +3,8 @@ file(GLOB SOURCES
     "*.cpp"
     "CIFAR-10/*.hpp"
     "CIFAR-10/*.cpp"
+    "Fashion-MNIST/*.hpp"
+    "Fashion-MNIST/*.cpp"
     "Iris/*.hpp"
     "Iris/*.cpp"
     "MNIST/*.hpp"

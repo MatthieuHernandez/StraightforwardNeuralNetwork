@@ -1,88 +1,76 @@
 #pragma once
 #include <memory>
 #include <vector>
-#pragma warning(push, 0)
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
-#pragma warning(pop)
-
-#include "NeuronOption.hpp"
+#include "../../Optimizer.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-	class Perceptron
-	{
-	private :
+    class Perceptron
+    {
+    private:
+        std::vector<float> weights;
+        float bias;
 
-		int numberOfInputs{};
+        std::vector<float> previousDeltaWeights;
+        std::vector<float> lastInputs;
+        std::vector<float> errors;
 
-		std::vector<float> weights;
-		float bias{};
+        float lastOutput = 0;
 
-		std::vector<float> previousDeltaWeights;
-		std::vector<float> lastInputs;
-		std::vector<float> errors;
+        //StochasticGradientDescent* optimizer;
 
-		float lastOutput{};
+        activationFunction activation;
+        ActivationFunction* outputFunction;
 
-		activationFunctionType aFunctionType{};
-		ActivationFunction* activationFunction = nullptr;
+        float randomInitializeWeight(int numberOfInputs) const;
 
-		float randomInitializeWeight() const;
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, const unsigned int version);
 
-		friend class boost::serialization::access;
-		template <class Archive>
-		void serialize(Archive& ar, const unsigned int version);;
+    public:
+        Perceptron() = default; // use restricted to Boost library only
+        Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
+        Perceptron(const Perceptron& perceptron) = default;
+        ~Perceptron() = default;
 
+        StochasticGradientDescent* optimizer;
 
-	public :
+        std::vector<float>& backOutput(float error);
+        float output(const std::vector<float>& inputs);
+        void train(const std::vector<float>& inputs, float error);
 
-		Perceptron() = default;
-		~Perceptron();
-		Perceptron(int numberOfInputs, activationFunctionType activationFunction, NeuronOption* option);
-		Perceptron(const Perceptron& perceptron);
+        int isValid() const;
 
-		NeuronOption* option;
+        std::vector<float> getWeights() const;
+        void setWeights(const std::vector<float>& weights);
 
-		std::vector<float>& backOutput(float error);
-		float output(const std::vector<float>& inputs);
-		void train(const std::vector<float>& inputs, float error);
+        float getWeight(int w) const;
+        void setWeight(int w, float weight);
 
-		void addAWeight();
+        float getBias() const;
+        void setBias(float bias);
 
-		int isValid() const;
+        int getNumberOfInputs() const;
 
-		ActivationFunction* getActivationFunction() const;
+        bool operator==(const Perceptron& perceptron) const;
+        bool operator!=(const Perceptron& perceptron) const;
+    };
 
-		std::vector<float> getWeights() const;
-		void setWeights(const std::vector<float>& weights);
-
-		float getWeight(int w) const;
-		void setWeight(int w, float weight);
-
-		float getBias() const;
-		void setBias(float bias);
-
-		int getNumberOfInputs() const;
-
-		Perceptron& operator=(const Perceptron& perceptron);
-		bool operator==(const Perceptron& perceptron) const;
-		bool operator!=(const Perceptron& perceptron) const;
-	};
-
-	template <class Archive>
-	void Perceptron::serialize(Archive& ar, const unsigned int version)
-	{
-		ar & this->option;
-		ar & this->weights;
-		ar & this->previousDeltaWeights;
-		ar & this->lastInputs;
-		ar & this->errors;
-		ar & this->lastOutput;
-		ar & this->numberOfInputs;
-		ar & this->bias;
-		ar & this->aFunctionType;
-		this->activationFunction = ActivationFunction::create(aFunctionType);
-	}
+    template <class Archive>
+    void Perceptron::serialize(Archive& ar, const unsigned int version)
+    {
+        ar & this->weights;
+        ar & this->bias;
+        ar & this->previousDeltaWeights;
+        ar & this->lastInputs;
+        ar & this->errors;
+        ar & this->lastOutput;
+        ar & this->activation;
+        this->outputFunction = ActivationFunction::get(activation);
+        ar & this->optimizer;
+    }
 }

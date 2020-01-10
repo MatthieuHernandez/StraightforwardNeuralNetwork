@@ -8,11 +8,9 @@ using namespace internal;
 
 Perceptron::Perceptron(const int numberOfInputs,
                        activationFunction activation,
-                       float* learningRate,
-                       float* momentum)
+                       StochasticGradientDescent* optimizer)
     : activation(activation),
-      learningRate(learningRate),
-      momentum(momentum)
+      optimizer(optimizer)
 {
     this->previousDeltaWeights.resize(numberOfInputs, 0);
     this->lastInputs.resize(numberOfInputs, 0);
@@ -63,8 +61,8 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 {
     for (int w = 0; w < this->weights.size(); ++w)
     {
-        auto deltaWeights = *this->learningRate * error * inputs[w];
-        deltaWeights += *this->momentum * this->previousDeltaWeights[w];
+        auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
+        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         weights[w] += deltaWeights;
         this->previousDeltaWeights[w] = deltaWeights;
     }
@@ -125,13 +123,14 @@ int Perceptron::getNumberOfInputs() const
 bool Perceptron::operator==(const Perceptron& perceptron) const
 {
     return this->weights == perceptron.weights
+        && this->bias == perceptron.bias
         && this->previousDeltaWeights == perceptron.previousDeltaWeights
         && this->lastInputs == perceptron.lastInputs
         && this->errors == perceptron.errors
         && this->lastOutput == perceptron.lastOutput
-        && this->bias == perceptron.bias
         && this->activation == perceptron.activation
-        && this->outputFunction == perceptron.outputFunction;
+        && this->outputFunction == perceptron.outputFunction // not really good
+        && *this->optimizer == *perceptron.optimizer;
 }
 
 bool Perceptron::operator!=(const Perceptron& perceptron) const

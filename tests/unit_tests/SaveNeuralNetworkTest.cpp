@@ -13,10 +13,10 @@ TEST(SaveNeuralNetwork, EqualTest)
     };
     StraightforwardNeuralNetwork A(5, structureOfNetwork);
     StraightforwardNeuralNetwork C(5, structureOfNetwork);
-    A.learningRate = 0.03f;
-    A.momentum = 0.78f;
-    C.learningRate = 0.03f;
-    C.momentum = 0.78f;
+    A.optimizer.learningRate = 0.03f;
+    A.optimizer.momentum = 0.78f;
+    C.optimizer.learningRate = 0.03f;
+    C.optimizer.momentum = 0.78f;
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), 0) << "A is invalid";
@@ -27,14 +27,19 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(&A != &B) << "&A != &B";
 
+    
+    EXPECT_TRUE(A.optimizer == B.optimizer) << "Value : A.optimiser == B.optimiser";
+    EXPECT_TRUE(&A.optimizer != &B.optimizer) << "Address : A.optimiser != B.optimiser";
+
     EXPECT_TRUE(*A.layers[0] == *B.layers[0]) << "Value : A.layers[0] == B.layers[0]";
     EXPECT_TRUE(A.layers[0] != B.layers[0]) << "Address : A.layers[0] != B.layers[0]";
-
-    //EXPECT_TRUE(*&A.layers[0].neurons[0] == *&B.layers[0].neurons[0]) << "Value : A.Layers[0].neurons[0] == B.Layers[0].neurons[0]";
-    //EXPECT_TRUE(&A.layers[0].neurons[0] != &B.layers[0].neurons[0]) << "Address : A.Layers[0].neurons[0] != B.Layers[0].neurons[0]";
     
-    //EXPECT_TRUE(*A.layers[0].neurons[0].getActivationFunction() == *B.layers[0].neurons[0].getActivationFunction()) << "Value : A.Layers[0].neurons[0] == B.Layers[0].neurons[0]";
-    //EXPECT_TRUE(A.layers[0].neurons[0].getActivationFunction() != B.layers[0].neurons[0].getActivationFunction()) << "Address : A.Layers[0].neurons[0] != B.Layers[0].neurons[0]";
+
+    EXPECT_TRUE(*&A.layers[0]->neurons[0] == *&B.layers[0]->neurons[0]) << "Value : A.Layers[0].neurons[0] == B.Layers[0].neurons[0]";
+    EXPECT_TRUE(&A.layers[0]->neurons[0] != &B.layers[0]->neurons[0]) << "Address : A.Layers[0].neurons[0] != B.Layers[0].neurons[0]";
+
+    EXPECT_TRUE(&A.optimizer == &*A.layers[0]->neurons[0].optimizer);
+    EXPECT_TRUE(&B.optimizer == &*B.layers[0]->neurons[0].optimizer);
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -61,12 +66,12 @@ TEST(SaveNeuralNetwork, Save)
         AllToAll(10, snn::tanh),
         AllToAll(3, sigmoid)
     });
-    A.learningRate = 0.03f;
-    A.momentum = 0.78f;
+    A.optimizer.learningRate = 0.03f;
+    A.optimizer.momentum = 0.78f;
 
     A.saveAs("./testSave.snn");
 
     StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
-
     EXPECT_TRUE(A == B);
+    EXPECT_TRUE(B.isValid() == 0);
 }

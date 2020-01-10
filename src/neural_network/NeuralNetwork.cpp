@@ -27,19 +27,18 @@ NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, numberOfInputs, models, &this->learningRate, &this->momentum);
+    LayerFactory::build(this->layers, numberOfInputs, models, &this->optimizer);
     
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork.getNumberOfOutputs()),
     maxOutputIndex(neuralNetwork.maxOutputIndex),
-    learningRate(neuralNetwork.learningRate),
-    momentum(neuralNetwork.momentum)
+    optimizer(neuralNetwork.optimizer)
 {
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
-        this->layers.push_back(layer->clone());
+        this->layers.push_back(layer->clone(&this->optimizer));
 }
 
 inline
@@ -69,10 +68,10 @@ int NeuralNetwork::isValid() const
     || this->getNumberOfLayers() > 1000)
         return 102;
 
-    if (this->learningRate <= 0.0f || this->learningRate >= 1.0f)
+    if (this->optimizer.learningRate <= 0.0f || this->optimizer.learningRate >= 1.0f)
         return 103;
 
-    if (this->momentum < 0.0f || this->momentum > 1.0f)
+    if (this->optimizer.momentum < 0.0f || this->optimizer.momentum > 1.0f)
         return 104;
 
     for (auto& layer : this->layers)
@@ -87,8 +86,8 @@ int NeuralNetwork::isValid() const
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
     return this->maxOutputIndex == neuralNetwork.maxOutputIndex
-        && this->learningRate == neuralNetwork.learningRate
-        && this->momentum == neuralNetwork.momentum
+        && this->optimizer == neuralNetwork.optimizer
+        && this->layers.size() == neuralNetwork.layers.size()
         && [=] () {
             for (int l = 0; l < this->layers.size(); l++)
             {

@@ -11,20 +11,24 @@ BOOST_CLASS_EXPORT(AllToAll)
 AllToAll::AllToAll(const int numberOfInputs,
                    const int numberOfNeurons,
                    activationFunction activation,
-                   float* learningRate,
-                   float* momentum)
+                   StochasticGradientDescent* optimizer)
      : Layer(allToAll, numberOfInputs, numberOfNeurons)
 {
     for (int n = 0; n < numberOfNeurons; ++n)
     {
-        this->neurons.emplace_back(numberOfInputs, activation, learningRate, momentum);
+        this->neurons.emplace_back(numberOfInputs, activation, optimizer);
     }
 }
 
 inline
-unique_ptr<Layer> AllToAll::clone() const
+unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
 {
-    return make_unique<AllToAll>(*this);
+    auto layer = make_unique<AllToAll>(*this);
+    for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
+    {
+        layer->neurons[n].optimizer = optimizer;
+    }
+    return layer;
 }
 
 vector<float> AllToAll::output(const vector<float>& inputs)

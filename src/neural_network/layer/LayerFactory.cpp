@@ -46,7 +46,7 @@ LayerModel snn::Convolution2D(int numberOfConvolution, int sizeOfConvolutionMatr
 }
 
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel model, int numberOfInputs, float* learningRate, float* momentum)
+unique_ptr<Layer> LayerFactory::build(LayerModel model, int numberOfInputs, StochasticGradientDescent* optimizer)
 {
     switch (model.type)
     {
@@ -54,8 +54,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel model, int numberOfInputs, floa
             return make_unique<AllToAll>(numberOfInputs,
                                         model.numberOfNeurons,
                                         model.activation,
-                                        learningRate,
-                                        momentum);
+                                        optimizer);
 
         default:
             throw NotImplementedException("Layer");
@@ -63,12 +62,12 @@ unique_ptr<Layer> LayerFactory::build(LayerModel model, int numberOfInputs, floa
 
 }
 
-void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, vector<LayerModel>& models, float* learningRate, float* momentum)
+void LayerFactory::build(vector<unique_ptr<Layer>>& layers, int numberOfInputs, vector<LayerModel>& models, StochasticGradientDescent* optimizer)
 {
     int currentNumberofInputs = numberOfInputs;
     for(auto&& model : models)
     {
-        layers.push_back(build(model, currentNumberofInputs, learningRate, momentum));
+        layers.push_back(build(model, currentNumberofInputs, optimizer));
         currentNumberofInputs = model.numberOfNeurons;
     }
 }

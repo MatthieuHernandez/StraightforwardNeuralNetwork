@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
+#include "Optimizer.hpp"
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/AllToAll.hpp"
@@ -47,8 +48,7 @@ namespace snn::internal
         int getNumberOfInputs() const;
         int getNumberOfOutputs() const;
 
-        float learningRate = 0.05f;
-        float momentum = 0.0f;
+        StochasticGradientDescent optimizer;
 
         std::vector<std::unique_ptr<Layer>> layers{};
         int isValid() const;
@@ -64,8 +64,8 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-        ar & this->learningRate;
-        ar & this->momentum;
+        ar & this->optimizer.learningRate;
+        ar & this->optimizer.momentum;
         ar & this->maxOutputIndex;
         ar.template register_type<internal::AllToAll>();
         ar & layers;

@@ -3,13 +3,14 @@
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
+#include "../../Optimizer.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
     class Perceptron
     {
-    private :
+    private:
         std::vector<float> weights;
         float bias;
 
@@ -19,8 +20,7 @@ namespace snn::internal
 
         float lastOutput = 0;
 
-        float* learningRate;
-        float* momentum;
+        //StochasticGradientDescent* optimizer;
 
         activationFunction activation;
         ActivationFunction* outputFunction;
@@ -31,11 +31,13 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
-    public :
+    public:
         Perceptron() = default; // use restricted to Boost library only
-        Perceptron(int numberOfInputs, activationFunction activation, float* learningRate, float* momentum);
+        Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
         Perceptron(const Perceptron& perceptron) = default;
         ~Perceptron() = default;
+
+        StochasticGradientDescent* optimizer;
 
         std::vector<float>& backOutput(float error);
         float output(const std::vector<float>& inputs);
@@ -61,15 +63,14 @@ namespace snn::internal
     template <class Archive>
     void Perceptron::serialize(Archive& ar, const unsigned int version)
     {
-        ar & *this->learningRate;
-        ar & *this->momentum;
         ar & this->weights;
+        ar & this->bias;
         ar & this->previousDeltaWeights;
         ar & this->lastInputs;
         ar & this->errors;
         ar & this->lastOutput;
-        ar & this->bias;
         ar & this->activation;
         this->outputFunction = ActivationFunction::get(activation);
+        ar & this->optimizer;
     }
 }

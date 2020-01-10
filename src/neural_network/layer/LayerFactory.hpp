@@ -2,6 +2,7 @@
 #include <memory>
 #include "LayerModel.hpp"
 #include "Layer.hpp"
+#include "../Optimizer.hpp"
 
 namespace snn
 {
@@ -17,9 +18,9 @@ namespace snn::internal
     class LayerFactory 
     {
     private :
-        static std::unique_ptr<Layer> build(LayerModel model, int numberOfInputs, float* learningRate, float* momentum);
+        static std::unique_ptr<Layer> build(LayerModel model, int numberOfInputs, StochasticGradientDescent* optimizer);
 
     public :
-        static void build(std::vector<std::unique_ptr<Layer>>& layers, int numberOfInputs, std::vector<LayerModel>& models, float* learningRate, float* momentum);
+        static void build(std::vector<std::unique_ptr<Layer>>& layers, int numberOfInputs, std::vector<LayerModel>& models, StochasticGradientDescent* optimizer);
     };
 }

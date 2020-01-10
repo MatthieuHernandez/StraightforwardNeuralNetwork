@@ -3,6 +3,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
+#include "../Optimizer.hpp"
 #include "LayerType.hpp"
 #include "perceptron/Perceptron.hpp"
 
@@ -27,7 +28,7 @@ namespace snn::internal
         Layer(const Layer&) = default;
         virtual ~Layer() = default;
 
-        virtual std::unique_ptr<Layer> clone() const = 0;
+        virtual std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const = 0;
 
         static const layerType type;
 

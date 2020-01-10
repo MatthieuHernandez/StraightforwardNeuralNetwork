@@ -3,6 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
+#include "../Optimizer.hpp"
 #include "perceptron/Perceptron.hpp"
 #include "perceptron/activation_function/ActivationFunction.hpp"
 
@@ -20,12 +21,11 @@ namespace snn::internal
         AllToAll(int numberOfInputs,
                  int numberOfNeurons,
                  activationFunction activation,
-                 float* learningRate,
-                 float* momentum);
+                 StochasticGradientDescent* optimizer);
         ~AllToAll() = default;
         AllToAll(const AllToAll&) = default;
 
-        std::unique_ptr<Layer> clone() const override;
+        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;

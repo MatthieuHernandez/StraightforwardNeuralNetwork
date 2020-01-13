@@ -1,4 +1,4 @@
-# execute this from build directory : cmake -G"Unix Makefiles" ./.. && make && ./tests/unit_tests/UnitTest.out
+# execute this from build directory : cmake -G"Unix Makefiles" ./.. && make && ./tests/unit_tests/UnitTests.out
 cmake_minimum_required(VERSION 3.0)
 project(StraightforwardNeuralNetwork CXX)
 set(CMAKE_CXX_STANDARD 17)

@@ -8,12 +8,17 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(MSVC)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:\"libboost_serialization-vc142-mt-x64-1_71.lib\"")
+  message("-- CMake run for msvc")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc142-mt-x64-1_71.lib /NODEFAULTLIB:libboost_serialization-vc142-mt-gd-x64-1_71.lib")
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /Zi")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /O2")
+else()
+  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif()
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 
 
 add_subdirectory(src)

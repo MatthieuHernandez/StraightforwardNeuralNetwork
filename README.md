@@ -21,6 +21,8 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 
 * To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `./tests/dataset_tests/DatasetTests.out` from `StraightforwardNeuralNetwork/build`
 
+You can also generate a Visual Studio project: `cmake -G"Visual Studio 16 2019" ./..`
+
 ## License
 
 [Apache License 2.0](LICENSE)

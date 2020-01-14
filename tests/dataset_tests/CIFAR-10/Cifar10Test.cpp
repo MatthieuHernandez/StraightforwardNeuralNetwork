@@ -15,6 +15,11 @@ protected :
         data = move(dataset.data);
     }
 
+    void SetUp() override
+    {
+        ASSERT_TRUE(data) << "Don't forget to download dataset";
+    }
+
     static unique_ptr<Data> data;
 };
 
@@ -22,7 +27,6 @@ unique_ptr<Data> Cifar10Test::data = nullptr;
 
 TEST_F(Cifar10Test, loadData)
 {
-    ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 3072);
     ASSERT_EQ(data->numberOfLabel, 10);
     ASSERT_EQ(data->sets[training].inputs.size(), 50000);

@@ -69,7 +69,7 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
-    if (this->validData(data))
+    if (!this->validData(data))
         throw runtime_error("Data has the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;

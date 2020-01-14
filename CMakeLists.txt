@@ -21,9 +21,9 @@ else()
   set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 endif()
 
-  #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-  #set(CMAKE_CXX_FLAGS_DEBUG "-g")
-  #set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-
 add_subdirectory(src)
 add_subdirectory(tests)
+
+if(MSVC)
+  set_target_properties(DatasetTests.out PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
+endif()

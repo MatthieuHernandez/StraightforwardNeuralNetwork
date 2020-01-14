@@ -42,7 +42,11 @@ TEST(Memory, copyOperator)
         vector<vector<float>> inputData = {{0, 0, 0}, {1, 1, 1}};
         vector<vector<float>> expectedOutputs = {{0}, {1}};
         DataForRegression data(inputData, expectedOutputs, 0.1);
-        auto neuralNetwork = new StraightforwardNeuralNetwork(3, {AllToAll(500), AllToAll(250)});
+        auto neuralNetwork = new StraightforwardNeuralNetwork(3, {
+                AllToAll(500),
+                AllToAll(250),
+                AllToAll(1)
+            });
         
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;
         delete neuralNetwork;

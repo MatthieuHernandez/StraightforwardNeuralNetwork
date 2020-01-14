@@ -69,6 +69,8 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
+    if (this->validData(data))
+        throw runtime_error("Data has the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
@@ -126,11 +128,7 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
     {
         if (this->wantToStopTraining)
-        {
-            this->stopTesting();
             return;
-        }
-
         std::invoke(evaluation, this, data);
     }
     this->stopTesting();
@@ -187,6 +185,14 @@ void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
 int StraightforwardNeuralNetwork::isValid() const
 {
     return this->NeuralNetwork::isValid();
+}
+
+bool StraightforwardNeuralNetwork::validData(const Data& data) const
+{
+    if(data.numberOfLabel == this->getNumberOfOutputs()
+    && data.sizeOfData == this->getNumberOfInputs())
+        return true;
+    return false;
 }
 
 

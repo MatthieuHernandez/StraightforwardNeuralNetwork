@@ -7,7 +7,6 @@
 #include "../data/Data.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
-#include "layer/perceptron/activation_function/ActivationFunction.hpp"
 
 namespace snn
 {
@@ -44,7 +43,8 @@ namespace snn
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";
 
-        int isValid() const;
+        [[nodiscard]] int isValid() const;
+        bool validData(const Data& data) const;
 
         void startTraining(Data& data);
         void stopTraining();

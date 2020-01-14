@@ -16,7 +16,9 @@ TEST(Memory, passingArgByCopy)
         vector<LayerModel> model = {
             AllToAll(4000), 
             AllToAll(4000),
-            AllToAll(4000)};
+            AllToAll(4000),
+            AllToAll(1)
+        };
         StraightforwardNeuralNetwork neuralNetwork(3, model);
 
         delete inputData;

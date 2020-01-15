@@ -49,7 +49,7 @@ namespace snn
         void startTraining(Data& data);
         void stopTraining();
 
-        void waitFor(Wait& wait);
+        void waitFor(Wait wait);
 
         void evaluate(Data& straightforwardData);
 

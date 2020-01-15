@@ -86,7 +86,7 @@ void StraightforwardNeuralNetwork::stopTraining()
     this->isIdle = true;
 }
 
-void StraightforwardNeuralNetwork::waitFor(Wait& wait)
+void StraightforwardNeuralNetwork::waitFor(Wait wait)
 {
     auto startWait = system_clock::now();
     while(true) 

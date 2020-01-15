@@ -1,4 +1,3 @@
-
 #include "../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "data/DataForRegression.hpp"
@@ -25,7 +24,7 @@ TEST(Memory, passingArgByCopy)
         delete expectedOutputs;
 
         neuralNetwork.startTraining(*data);
-        this_thread::sleep_for(1ms);
+        neuralNetwork.waitFor(1_ms);
         neuralNetwork.stopTraining();
     }
     catch(const std::exception& e)
@@ -52,7 +51,7 @@ TEST(Memory, copyOperator)
         delete neuralNetwork;
 
         neuralNetworkCopy.startTraining(data);
-        this_thread::sleep_for(1ms);
+        neuralNetworkCopy.waitFor(1_ms);
         neuralNetworkCopy.stopTraining();
     }
     catch(const std::exception& e)

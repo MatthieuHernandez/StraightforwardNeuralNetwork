@@ -7,6 +7,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
+#include "../tools/Tools.hpp"
 #include "../data/DataForClassification.hpp"
 #include "../data/DataForRegression.hpp"
 #include "../data/DataForMultipleClassification.hpp"
@@ -73,6 +74,7 @@ void StraightforwardNeuralNetwork::startTraining(Data& data)
         throw runtime_error("Data has the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
+    log<complete>("Start a new thread");
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 }
 
@@ -80,7 +82,11 @@ void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
     if (this->thread.joinable())
+    {
+        log<minimal>("Closing a thread");
         this->thread.join();
+        log<complete>("Thread closed");
+    }
     this->currentIndex = 0;
     this->numberOfIteration = 0;
     this->isIdle = true;

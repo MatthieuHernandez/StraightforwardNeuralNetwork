@@ -37,10 +37,10 @@ namespace snn::internal
 
     };
 
-    template<int T>
-    constexpr void log(const char* message)
+    template<logLevel T, typename... Targs>
+    constexpr void log(Targs&&... messages)
     {
         if constexpr (T > none && T <= verbose)
-            std::cout << message << std::endl;
+            (std::cout << ... << messages) << std::endl;
     }
 }

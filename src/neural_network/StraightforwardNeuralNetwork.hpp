@@ -12,7 +12,7 @@ namespace snn
 {
     class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
     {
-    private :
+    private:
         std::thread thread;
 
         bool wantToStopTraining = false;

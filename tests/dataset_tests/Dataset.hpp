@@ -6,10 +6,8 @@ class Dataset
 {
 public:
      std::unique_ptr<snn::Data> data;
-
-     Dataset() = default;
      ~Dataset() = default;
 
 protected:
-    virtual void loadData() = 0;
+    virtual void loadData(std::string folderPath) = 0;
 };

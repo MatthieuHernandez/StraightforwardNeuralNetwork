@@ -9,18 +9,18 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-Wine::Wine()
+Wine::Wine(string folderPath)
 {
-    this->loadData();
+    this->loadData(folderPath);
 }
 
-void Wine::loadData()
+void Wine::loadData(string folderPath)
 {
     vector2D<float> data;
     vector2D<float> labels;
 
     string line;
-    ifstream file("./datasets/Wine/wine.data", ios::in);
+    ifstream file(folderPath + "/wine.data", ios::in);
     
     if (!file.is_open())
         throw FileOpeningFailed();

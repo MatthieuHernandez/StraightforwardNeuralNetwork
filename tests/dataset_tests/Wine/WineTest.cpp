@@ -8,10 +8,10 @@ using namespace snn;
 
 class WineTest : public testing::Test
 {
-protected :
+protected:
     static void SetUpTestSuite()
     {
-        Wine dataset;
+        Wine dataset("./datasets/Wine");
         data = move(dataset.data);
     }
 

@@ -8,10 +8,10 @@ using namespace snn;
 
 class Cifar10Test : public testing::Test
 {
-protected :
+protected:
     static void SetUpTestSuite()
     {
-        Cifar10 dataset;
+        Cifar10  dataset("./datasets/CIFAR-10");
         data = move(dataset.data);
     }
 

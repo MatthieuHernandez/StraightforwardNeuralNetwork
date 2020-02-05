@@ -11,7 +11,7 @@ class IrisTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Iris dataset;
+        Iris dataset("./datasets/Iris");
         data = move(dataset.data);
     }
 

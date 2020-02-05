@@ -17,13 +17,13 @@ namespace snn::internal
 {
 	class ActivationFunction
 	{
-	private :
+	private:
 
 		friend class boost::serialization::access;
 		template <class Archive>
 		void serialize(Archive& ar, unsigned version);
 
-	public :
+	public:
 		static std::vector<ActivationFunction*> activationFunctions;
 
 		ActivationFunction() = default;

@@ -11,12 +11,12 @@ namespace snn::internal
 {
     class AllToAll : public Layer
     {
-    private :
+    private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    public :
+    public:
         AllToAll() = default;  // use restricted to Boost library only
         AllToAll(int numberOfInputs,
                  int numberOfNeurons,

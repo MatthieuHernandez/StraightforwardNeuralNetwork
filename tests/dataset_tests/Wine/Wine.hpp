@@ -3,9 +3,9 @@
 
 class Wine final : public Dataset
 {
-public :
-    Wine();
+public:
+    Wine(std::string folderPath);
 
-private :
-    void loadData() override;
+private:
+    void loadData(std::string folderPath) override;
 };

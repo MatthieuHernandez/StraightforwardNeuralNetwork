@@ -8,10 +8,10 @@ using namespace snn;
 
 class FashionMnistTest : public testing::Test
 {
-protected :
+protected:
     static void SetUpTestSuite()
     {
-        FashionMnist dataset;
+        FashionMnist dataset("./datasets/Fashion-MNIST");
         data = move(dataset.data);
     }
 

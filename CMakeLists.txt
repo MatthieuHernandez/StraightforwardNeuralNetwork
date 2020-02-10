@@ -9,7 +9,7 @@ endif()
 
 if(MSVC)
   message("-- CMake run for msvc")
-  set(CMAKE_CXX_FLAGS_RELEASE "/O2 /MT")
+  set(CMAKE_CXX_FLAGS_RELEASE "/O2 /Ot /Ob2 /Oi /MT")
   set(CMAKE_CXX_FLAGS_DEBUG "/Od /Zi /MTd")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc142-mt-x64-1_71.lib")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc142-mt-s-x64-1_71.lib")

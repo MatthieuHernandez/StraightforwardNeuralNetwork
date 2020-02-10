@@ -1,4 +1,5 @@
 #include <fstream>
+#include "tools/ExtendedExpection.hpp"
 #include "FashionMnist.hpp"
 #include "data/DataForClassification.hpp"
 

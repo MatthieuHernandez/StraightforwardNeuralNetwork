@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "ExtendedExpection.hpp"
 
 namespace snn
 {
@@ -18,7 +17,7 @@ namespace snn
         complete = 2
     };
 
-    static constexpr logLevel verbose = complete;
+    static constexpr logLevel verbose = none;
 }
 namespace snn::internal
 {

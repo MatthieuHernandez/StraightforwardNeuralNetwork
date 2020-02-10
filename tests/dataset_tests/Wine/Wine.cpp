@@ -4,6 +4,7 @@
 #include "Wine.hpp"
 #include "data/DataForClassification.hpp"
 #include "tools/Tools.hpp"
+#include "tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

@@ -4,8 +4,7 @@
 #include "Iris.hpp"
 #include "tools/Tools.hpp"
 #include "data/DataForClassification.hpp"
-
-#include <iostream>
+#include "tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

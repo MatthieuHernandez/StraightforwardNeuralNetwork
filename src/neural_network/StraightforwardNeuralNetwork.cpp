@@ -114,6 +114,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
+        log<minimal>("iteration: " + to_string(this->numberOfIteration));
         this->evaluate(data);
         data.shuffle();
 

@@ -33,6 +33,7 @@ TEST_F(Cifar10Test, loadData)
     ASSERT_EQ(data->sets[training].labels.size(), 50000);
     ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
+    ASSERT_TRUE(data->isValid());
 }
 
 TEST_F(Cifar10Test, trainNeuralNetwork)

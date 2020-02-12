@@ -1,4 +1,3 @@
-#include <thread>
 #include "../../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "Mnist.hpp"
@@ -9,11 +8,16 @@ using namespace snn;
 
 class MnistTest : public testing::Test
 {
-protected :
+protected:
     static void SetUpTestSuite()
     {
-        Mnist dataset;
+        Mnist dataset("./datasets/MNIST");;
         data = move(dataset.data);
+    }
+
+    void SetUp() override
+    {
+        ASSERT_TRUE(data) << "Don't forget to download dataset";
     }
 
     static unique_ptr<Data> data;
@@ -23,7 +27,6 @@ unique_ptr<Data> MnistTest::data = nullptr;
 
 TEST_F(MnistTest, loadData)
 {
-    ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 784);
     ASSERT_EQ(data->numberOfLabel, 10);
     ASSERT_EQ(data->sets[training].inputs.size(), 60000);

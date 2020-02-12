@@ -1,29 +1,30 @@
 #include <fstream>
 #include "Cifar10.hpp"
 #include "data/DataForClassification.hpp"
+#include "tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-Cifar10::Cifar10()
+Cifar10::Cifar10(string folderPath)
 {
-    this->loadData();
+    this->loadData(folderPath);
 }
 
-void Cifar10::loadData()
+void Cifar10::loadData(string folderPath)
 {
     string filePaths[] =
     {
-        "./datasets/CIFAR-10/data_batch_1.bin",
-        "./datasets/CIFAR-10/data_batch_2.bin",
-        "./datasets/CIFAR-10/data_batch_3.bin",
-        "./datasets/CIFAR-10/data_batch_4.bin",
-        "./datasets/CIFAR-10/data_batch_5.bin"
+        folderPath + "/data_batch_1.bin",
+        folderPath + "/data_batch_2.bin",
+        folderPath + "/data_batch_3.bin",
+        folderPath + "/data_batch_4.bin",
+        folderPath + "/data_batch_5.bin"
     };
     string testFilePaths[] =
     {
-        "./datasets/CIFAR-10/test_batch.bin"
+        folderPath + "/test_batch.bin"
     };
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;

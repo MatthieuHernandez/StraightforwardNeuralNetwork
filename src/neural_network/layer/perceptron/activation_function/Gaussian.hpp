@@ -5,12 +5,10 @@ namespace snn::internal
 {
     class Gaussian : public ActivationFunction
     {
-    private :
-
+    private:
         activationFunction getType() const override { return gaussian; }
 
-    public :
-
+    public:
         float function(const float x) const override
         {
             return exp(-pow(x, 2));

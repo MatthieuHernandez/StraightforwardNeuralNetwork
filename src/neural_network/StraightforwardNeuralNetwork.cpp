@@ -7,6 +7,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
+#include "../tools/Tools.hpp"
 #include "../data/DataForClassification.hpp"
 #include "../data/DataForRegression.hpp"
 #include "../data/DataForMultipleClassification.hpp"
@@ -69,8 +70,11 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
+    if (!this->validData(data))
+        throw runtime_error("Data has the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
+    log<complete>("Start a new thread");
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 }
 
@@ -78,13 +82,17 @@ void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
     if (this->thread.joinable())
+    {
+        log<minimal>("Closing a thread");
         this->thread.join();
+        log<complete>("Thread closed");
+    }
     this->currentIndex = 0;
     this->numberOfIteration = 0;
     this->isIdle = true;
 }
 
-void StraightforwardNeuralNetwork::waitFor(Wait& wait)
+void StraightforwardNeuralNetwork::waitFor(Wait wait)
 {
     auto startWait = system_clock::now();
     while(true) 
@@ -106,6 +114,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
+        log<minimal>("iteration: " + to_string(this->numberOfIteration));
         this->evaluate(data);
         data.shuffle();
 
@@ -126,11 +135,7 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
     {
         if (this->wantToStopTraining)
-        {
-            this->stopTesting();
             return;
-        }
-
         std::invoke(evaluation, this, data);
     }
     this->stopTesting();
@@ -187,6 +192,14 @@ void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
 int StraightforwardNeuralNetwork::isValid() const
 {
     return this->NeuralNetwork::isValid();
+}
+
+bool StraightforwardNeuralNetwork::validData(const Data& data) const
+{
+    if(data.numberOfLabel == this->getNumberOfOutputs()
+    && data.sizeOfData == this->getNumberOfInputs())
+        return true;
+    return false;
 }
 
 

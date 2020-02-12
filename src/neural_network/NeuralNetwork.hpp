@@ -12,7 +12,7 @@ namespace snn::internal
 {
     class NeuralNetwork : public StatisticAnalysis
     {
-    private :
+    private:
         static bool isTheFirst;
         static void initialize();
 
@@ -23,7 +23,7 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected :
+    protected:
         int maxOutputIndex;
 
         [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);

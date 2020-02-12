@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "DataForClassification.hpp"
+
 using namespace std;
 using namespace snn;
 

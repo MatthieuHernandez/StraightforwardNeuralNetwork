@@ -4,25 +4,24 @@
 #include "Iris.hpp"
 #include "tools/Tools.hpp"
 #include "data/DataForClassification.hpp"
-
-#include <iostream>
+#include "tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-Iris::Iris()
+Iris::Iris(string folderPath)
 {
-    this->loadData();
+    this->loadData(folderPath);
 }
 
-void Iris::loadData()
+void Iris::loadData(string folderPath)
 {
     vector2D<float> data;
     vector2D<float> labels;
 
     string line;
-    ifstream file("./datasets/Iris/bezdekIris.data");
+    ifstream file(folderPath + "/bezdekIris.data");
     int size = 0;
     vector2D<string> individuals;
     individuals.reserve(150);

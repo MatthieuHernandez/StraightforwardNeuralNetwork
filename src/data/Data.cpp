@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 #include "Data.hpp"
+#include "../tools/Tools.hpp"
 using namespace std;
 using namespace snn;
 
@@ -57,9 +58,9 @@ void Data::normalization(const float min, const float max)
 {
     try
     {
-        vector<vector<float>>* inputsTraining = &this->sets[training].inputs;
-        vector<vector<float>>* inputsTesting = &this->sets[testing].inputs;
-
+        vector2D<float>* inputsTraining = &this->sets[training].inputs;
+        vector2D<float>* inputsTesting = &this->sets[testing].inputs;
+        //TODO: if the first pixel of images is always black, normalization will be wrong if testing set is different
         for (int j = 0; j < this->sizeOfData; j++)
         {
             float minValueOfVector = (*inputsTraining)[0][j];
@@ -77,18 +78,23 @@ void Data::normalization(const float min, const float max)
                 }
             }
 
+            const float difference = maxValueOfVector - minValueOfVector;
+
             for (int i = 0; i < (*inputsTraining).size(); i++)
             {
-                (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / (maxValueOfVector -
-                    minValueOfVector
-                );
+                if(difference != 0)
+                    (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / difference;
                 (*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
+                if (isnan((*inputsTraining)[i][j]))
+                    throw exception();
             }
             for (int i = 0; i < (*inputsTesting).size(); i++)
             {
-                (*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / (maxValueOfVector -
-                    minValueOfVector);
+                if (difference != 0)
+                    (*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / difference;
                 (*inputsTesting)[i][j] = (*inputsTesting)[i][j] * (max - min) + min;
+                if (isnan((*inputsTesting)[i][j]))
+                    throw exception();
             }
         }
     }
@@ -121,18 +127,25 @@ void Data::unshuffle()
 
 bool Data::isValid()
 {
-    for (int s = testing; s <= training; s++)
+    for (auto& input : this->sets[training].inputs)
     {
-        for (auto& input : this->sets[s].inputs)
+        for (auto& value : input)
         {
-            for (auto& value : input)
+            if (value < -1
+            || value > 1
+            || isnan(value))
             {
-                if (value < -1 
-                || value > 1
-                || isnan(value))
-                {
-                    return false;
-                }
+                return false;
+            }
+        }
+    }
+    for (auto& input : this->sets[testing].inputs)
+    {
+        for (auto& value : input)
+        {
+            if (isnan(value))
+            {
+                return false;
             }
         }
     }

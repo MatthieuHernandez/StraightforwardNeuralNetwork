@@ -74,7 +74,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         for (int j = 0; !file.eof()  && j < sizeOfData; j++)
         {
             c = file.get();
-            const float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
+            const float value = static_cast<int>(c);
             images.back().push_back(value);
         }
     }

@@ -17,7 +17,7 @@ namespace snn
         complete = 2
     };
 
-    static constexpr logLevel verbose = complete;
+    static constexpr logLevel verbose = none;
 }
 namespace snn::internal
 {

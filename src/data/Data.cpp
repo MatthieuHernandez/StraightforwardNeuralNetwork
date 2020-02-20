@@ -41,6 +41,7 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
     this->sets[testing].size = static_cast<int>(testingLabels.size());
 
     this->normalization(-1, 1);
+    internal::log<minimal>("Data loaded");
 }
 
 void Data::clearData()

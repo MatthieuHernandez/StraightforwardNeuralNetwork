@@ -70,8 +70,9 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
+    log<complete>("Start training");
     if (!this->validData(data))
-        throw runtime_error("Data has the same format as the neural network");
+        throw runtime_error("Data has not the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
     log<complete>("Start a new thread");
@@ -114,7 +115,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
-        log<minimal>("iteration: " + to_string(this->numberOfIteration));
+        log<minimal>("Iteration: " + to_string(this->numberOfIteration));
         this->evaluate(data);
         data.shuffle();
 

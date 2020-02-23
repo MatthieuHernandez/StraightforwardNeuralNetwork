@@ -49,5 +49,5 @@ TEST_F(MnistTest, trainNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 180_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.92);
+    ASSERT_ACCURACY(accuracy, 0.90);
 }

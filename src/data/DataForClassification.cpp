@@ -9,38 +9,38 @@ DataForClassification::DataForClassification(std::vector<std::vector<float>> tra
                                              std::vector<std::vector<float>> testingInputs,
                                              std::vector<std::vector<float>> testingLabels,
                                              float separator)
-	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
+    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
 {
 }
 
 DataForClassification::DataForClassification(std::vector<std::vector<float>> inputs,
                                              std::vector<std::vector<float>> labels, float separator)
-	: Data(inputs, labels, separator)
+    : Data(inputs, labels, separator)
 {
 }
 
 int DataForClassification::getTrainingLabel(const int index)
 {
-	for (int i = 0; i < this->numberOfLabel; i++)
-	{
-		if (this->sets[training].labels[indexes[index]][i] == 1)
-			return i;
-	}
-	throw runtime_error("wrong label");
+    for (int i = 0; i < this->numberOfLabel; i++)
+    {
+        if (this->sets[training].labels[indexes[index]][i] == 1)
+            return i;
+    }
+    throw runtime_error("wrong label");
 }
 
 int DataForClassification::getTestingLabel(const int index)
 {
-	for (int i = 0; i < this->numberOfLabel; i++)
-	{
-		if (this->sets[testing].labels[index][i] == 1)
-			return i;
-	}
-	throw runtime_error("wrong label");
+    for (int i = 0; i < this->numberOfLabel; i++)
+    {
+        if (this->sets[testing].labels[index][i] == 1)
+            return i;
+    }
+    throw runtime_error("wrong label");
 }
 
 const vector<float>& DataForClassification::getTestingOutputs(const int index)
 {
-	// Should never be called
-	throw exception();
+    // Should never be called
+    throw exception();
 }

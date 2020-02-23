@@ -45,7 +45,7 @@ vector2D<float> Mnist::readImages(string filePath, int size)
             c = file.get();
             if (shift >= 16)
             {
-                float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
+                float value = static_cast<int>(c);
                 images.back().push_back(value);
                 j++;
             }

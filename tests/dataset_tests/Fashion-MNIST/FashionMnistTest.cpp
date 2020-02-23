@@ -33,6 +33,7 @@ TEST_F(FashionMnistTest, loadData)
     ASSERT_EQ(data->sets[training].labels.size(), 60000);
     ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
+    ASSERT_TRUE(data->isValid());
 }
 
 TEST_F(FashionMnistTest, trainNeuralNetwork)
@@ -48,5 +49,5 @@ TEST_F(FashionMnistTest, trainNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 180_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70);
+    ASSERT_ACCURACY(accuracy, 0.78);
 }

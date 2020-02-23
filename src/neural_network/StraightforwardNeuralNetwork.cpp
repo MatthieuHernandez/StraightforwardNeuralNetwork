@@ -137,18 +137,21 @@ void StraightforwardNeuralNetwork::train(TData& data)
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
 
+    this->evaluate(data);
+
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
         log<minimal>("Iteration: " + to_string(this->numberOfIteration));
-        this->evaluate(data);
+        
         data.shuffle();
 
-        for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
-             currentIndex ++)
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
+            this->currentIndex ++)
         {
-            this->trainOnce(data.getTrainingData(currentIndex),
-                            data.getTrainingOutputs(currentIndex));
+            this->trainOnce(data.getTrainingData(this->currentIndex),
+                            data.getTrainingOutputs(this->currentIndex));
         }
+        this->evaluate(data);
     }
 }
 

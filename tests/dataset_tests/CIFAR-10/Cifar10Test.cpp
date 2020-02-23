@@ -49,5 +49,5 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 300_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.30);
+    ASSERT_ACCURACY(accuracy, 0.24);
 }

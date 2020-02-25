@@ -7,6 +7,7 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
+#include "../tools/Tools.hpp"
 #include "../data/DataForClassification.hpp"
 #include "../data/DataForRegression.hpp"
 #include "../data/DataForMultipleClassification.hpp"
@@ -67,24 +68,55 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
     return maxOutputIndex;
 }
 
+bool StraightforwardNeuralNetwork::isTraining() const
+{
+    return !this->isIdle;
+}
+
+template <>
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
+    if (typeid(data) == typeid(DataForRegression))
+    {
+        this->startTraining(dynamic_cast<DataForRegression&>(data));
+    }
+    if (typeid(data) == typeid(DataForClassification))
+    {
+        this->startTraining(dynamic_cast<DataForClassification&>(data));
+    }
+    if (typeid(data) == typeid(DataForMultipleClassification))
+    {
+        this->startTraining(dynamic_cast<DataForMultipleClassification&>(data));
+    }
+}
+
+template <typename TData>
+void StraightforwardNeuralNetwork::startTraining(TData& data)
+{
+    log<complete>("Start training");
+    if (!this->validData(data))
+        throw runtime_error("Data has not the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
-    this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
+    log<complete>("Start a new thread");
+    this->thread = std::thread(&StraightforwardNeuralNetwork::train<TData>, this, std::ref(data));
 }
 
 void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
     if (this->thread.joinable())
+    {
+        log<minimal>("Closing a thread");
         this->thread.join();
+        log<complete>("Thread closed");
+    }
     this->currentIndex = 0;
     this->numberOfIteration = 0;
     this->isIdle = true;
 }
 
-void StraightforwardNeuralNetwork::waitFor(Wait& wait)
+void StraightforwardNeuralNetwork::waitFor(Wait wait) const
 {
     auto startWait = system_clock::now();
     while(true) 
@@ -99,39 +131,56 @@ void StraightforwardNeuralNetwork::waitFor(Wait& wait)
     }
 }
 
-void StraightforwardNeuralNetwork::train(Data& data)
+template <typename TData>
+void StraightforwardNeuralNetwork::train(TData& data)
 {
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
 
+    this->evaluate(data);
+
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
-        this->evaluate(data);
+        log<minimal>("Iteration: " + to_string(this->numberOfIteration));
+        
         data.shuffle();
 
-        for (currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
-             currentIndex ++)
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
+            this->currentIndex ++)
         {
-            this->trainOnce(data.getTrainingData(currentIndex),
-                            data.getTrainingOutputs(currentIndex));
+            this->trainOnce(data.getTrainingData(this->currentIndex),
+                            data.getTrainingOutputs(this->currentIndex));
         }
+        this->evaluate(data);
     }
 }
 
+template <>
 void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
-    const auto evaluation = selectEvaluationFunction(data);
+    if (typeid(data) == typeid(DataForRegression))
+    {
+        this->evaluate(dynamic_cast<DataForRegression&>(data));
+    }
+    if (typeid(data) == typeid(DataForClassification))
+    {
+        this->evaluate(dynamic_cast<DataForClassification&>(data));
+    }
+    if (typeid(data) == typeid(DataForMultipleClassification))
+    {
+        this->evaluate(dynamic_cast<DataForMultipleClassification&>(data));
+    }
+}
 
+template <typename TData>
+void StraightforwardNeuralNetwork::evaluate(TData& data)
+{
     this->startTesting();
     for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
     {
         if (this->wantToStopTraining)
-        {
-            this->stopTesting();
             return;
-        }
-
-        std::invoke(evaluation, this, data);
+        this->evaluateOnce(data);
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
@@ -141,52 +190,40 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
 }
 
 inline
-StraightforwardNeuralNetwork::evaluationFunctionPtr StraightforwardNeuralNetwork::selectEvaluationFunction(Data& data)
+void StraightforwardNeuralNetwork::evaluateOnce(DataForRegression& data)
 {
-    if(typeid(data) == typeid(DataForRegression))
-    {
-        return &StraightforwardNeuralNetwork::evaluateOnceForRegression;
-    }
-    if(typeid(data) == typeid(DataForMultipleClassification))
-    {
-        this->separator = data.getValue();
-        return &StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification;
-    }
-    if(typeid(data) == typeid(DataForClassification))
-    {
-        return &StraightforwardNeuralNetwork::evaluateOnceForClassification;
-    }
-
-    throw runtime_error("wrong Data typeid");
-}
-
-inline
-void StraightforwardNeuralNetwork::evaluateOnceForRegression(Data& data)
-{
-    this->NeuralNetwork::evaluateOnceForRegression(
+    this->evaluateOnceForRegression(
                 data.getTestingData(this->currentIndex),
                 data.getTestingOutputs(this->currentIndex), data.getValue());
 }
 
 inline
-void StraightforwardNeuralNetwork::evaluateOnceForMultipleClassification(Data& data)
+void StraightforwardNeuralNetwork::evaluateOnce(DataForClassification& data)
 {
-    this->NeuralNetwork::evaluateOnceForMultipleClassification(
-                data.getTestingData(this->currentIndex),
-                data.getTestingOutputs(this->currentIndex), data.getValue());
-}
-
-inline
-void StraightforwardNeuralNetwork::evaluateOnceForClassification(Data& data)
-{
-    this->NeuralNetwork::evaluateOnceForClassification(
+    this->evaluateOnceForClassification(
                 data.getTestingData(this->currentIndex),
                 data.getTestingLabel(this->currentIndex));
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnce(DataForMultipleClassification& data)
+{
+    this->evaluateOnceForMultipleClassification(
+        data.getTestingData(this->currentIndex),
+        data.getTestingOutputs(this->currentIndex), data.getValue());
 }
 
 int StraightforwardNeuralNetwork::isValid() const
 {
     return this->NeuralNetwork::isValid();
+}
+
+bool StraightforwardNeuralNetwork::validData(const Data& data) const
+{
+    if(data.numberOfLabel == this->getNumberOfOutputs()
+    && data.sizeOfData == this->getNumberOfInputs())
+        return true;
+    return false;
 }
 
 

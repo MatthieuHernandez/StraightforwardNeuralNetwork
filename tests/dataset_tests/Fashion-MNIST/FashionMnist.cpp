@@ -1,4 +1,5 @@
 #include <fstream>
+#include "tools/ExtendedExpection.hpp"
 #include "FashionMnist.hpp"
 #include "data/DataForClassification.hpp"
 
@@ -6,17 +7,17 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-FashionMnist::FashionMnist()
+FashionMnist::FashionMnist(string folderPath)
 {
-    this->loadData();
+    this->loadData(folderPath);
 }
 
-void FashionMnist::loadData()
+void FashionMnist::loadData(string folderPath)
 {
-    vector2D<float> trainingInputs = this->readImages("./datasets/Fashion-MNIST/train-images-idx3-ubyte", 60000);
-    vector2D<float> trainingLabels = this->readLabels("./datasets/Fashion-MNIST/train-labels-idx1-ubyte", 60000);
-    vector2D<float> testingInputs = this->readImages("./datasets/Fashion-MNIST/t10k-images-idx3-ubyte", 10000);
-    vector2D<float> testingLabels = this->readLabels("./datasets/Fashion-MNIST/t10k-labels-idx1-ubyte", 10000);
+    vector2D<float> trainingInputs = this->readImages(folderPath + "/train-images-idx3-ubyte", 60000);
+    vector2D<float> trainingLabels = this->readLabels(folderPath + "/train-labels-idx1-ubyte", 60000);
+    vector2D<float> testingInputs = this->readImages(folderPath + "/t10k-images-idx3-ubyte", 10000);
+    vector2D<float> testingLabels = this->readLabels(folderPath + "/t10k-labels-idx1-ubyte", 10000);
 
     this->data = make_unique<DataForClassification>(trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
@@ -44,7 +45,7 @@ vector2D<float> FashionMnist::readImages(string filePath, int size)
             c = file.get();
             if (shift >= 16)
             {
-                float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
+                float value = static_cast<int>(c);
                 images.back().push_back(value);
                 j++;
             }

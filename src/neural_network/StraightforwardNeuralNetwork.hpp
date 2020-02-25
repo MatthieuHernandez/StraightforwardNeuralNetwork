@@ -5,15 +5,17 @@
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
 #include "../data/Data.hpp"
+#include "../data/DataForClassification.hpp"
+#include "../data/DataForMultipleClassification.hpp"
+#include "../data/DataForRegression.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
-#include "layer/perceptron/activation_function/ActivationFunction.hpp"
 
 namespace snn
 {
     class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
     {
-    private :
+    private:
         std::thread thread;
 
         bool wantToStopTraining = false;
@@ -22,14 +24,13 @@ namespace snn
         int numberOfIteration = 0;
         int numberOfTrainingsBetweenTwoEvaluations = 0;
 
-        void train(Data& data);
+        //TODO: Use C++20 concepts to only allow class derivative from Data
+        template<class TData>
+        void train(TData& data);
 
-        typedef void (StraightforwardNeuralNetwork::* evaluationFunctionPtr)(Data& data);
-
-        evaluationFunctionPtr selectEvaluationFunction(Data& data);
-        void evaluateOnceForRegression(Data& data);
-        void evaluateOnceForMultipleClassification(Data& data);
-        void evaluateOnceForClassification(Data& data);
+        void evaluateOnce(DataForRegression& data);
+        void evaluateOnce(DataForMultipleClassification& data);
+        void evaluateOnce(DataForClassification& data);
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -44,19 +45,22 @@ namespace snn
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";
 
-        int isValid() const;
+        [[nodiscard]] int isValid() const;
+        [[nodiscard]] bool validData(const Data& data) const;
 
-        void startTraining(Data& data);
+        template<class TData>
+        void startTraining(TData& data);
         void stopTraining();
 
-        void waitFor(Wait& wait);
+        void waitFor(Wait wait) const;
 
-        void evaluate(Data& straightforwardData);
+        template <typename TData>
+        void evaluate(TData& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs);
         int computeCluster(const std::vector<float>& inputs);
 
-        bool isTraining() const { return wantToStopTraining; }
+        bool isTraining() const;
 
         void saveAs(std::string filePath);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);

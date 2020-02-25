@@ -11,8 +11,13 @@ class IrisTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Iris dataset;
+        Iris dataset("./datasets/Iris");
         data = move(dataset.data);
+    }
+
+    void SetUp() override
+    {
+        ASSERT_TRUE(data) << "Don't forget to download dataset";
     }
 
     static unique_ptr<Data> data;
@@ -22,13 +27,13 @@ unique_ptr<Data> IrisTest::data = nullptr;
 
 TEST_F(IrisTest, loadData)
 {
-    ASSERT_TRUE(data);
     ASSERT_EQ(data->sizeOfData, 4);
     ASSERT_EQ(data->numberOfLabel, 3);
     ASSERT_EQ(data->sets[training].inputs.size(), 150);
     ASSERT_EQ(data->sets[training].labels.size(), 150);
     ASSERT_EQ(data->sets[snn::testing].inputs.size(), 150);
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 150);
+    ASSERT_TRUE(data->isValid());
 }
 
 TEST_F(IrisTest, trainNeuralNetwork)

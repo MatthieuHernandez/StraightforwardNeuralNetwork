@@ -1,5 +1,6 @@
 #include "DataForMultipleClassification.hpp"
 #include "DataForRegression.hpp"
+
 using namespace std;
 using namespace snn;
 

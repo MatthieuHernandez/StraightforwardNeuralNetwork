@@ -1,29 +1,30 @@
 #include <fstream>
 #include "Cifar10.hpp"
 #include "data/DataForClassification.hpp"
+#include "tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-Cifar10::Cifar10()
+Cifar10::Cifar10(string folderPath)
 {
-    this->loadData();
+    this->loadData(folderPath);
 }
 
-void Cifar10::loadData()
+void Cifar10::loadData(string folderPath)
 {
     string filePaths[] =
     {
-        "./datasets/CIFAR-10/data_batch_1.bin",
-        "./datasets/CIFAR-10/data_batch_2.bin",
-        "./datasets/CIFAR-10/data_batch_3.bin",
-        "./datasets/CIFAR-10/data_batch_4.bin",
-        "./datasets/CIFAR-10/data_batch_5.bin"
+        folderPath + "/data_batch_1.bin",
+        folderPath + "/data_batch_2.bin",
+        folderPath + "/data_batch_3.bin",
+        folderPath + "/data_batch_4.bin",
+        folderPath + "/data_batch_5.bin"
     };
     string testFilePaths[] =
     {
-        "./datasets/CIFAR-10/test_batch.bin"
+        folderPath + "/test_batch.bin"
     };
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;
@@ -53,7 +54,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
 
     for (int i = 0; !file.eof(); i++)
     {
-        char c = file.get();
+        unsigned char c = file.get();
 
         const vector<float> labelsTemp(10, 0);
         labels.push_back(labelsTemp);
@@ -73,7 +74,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         for (int j = 0; !file.eof()  && j < sizeOfData; j++)
         {
             c = file.get();
-            const float value = static_cast<int>(c) / 255.0f * 2.0f - 1.0f;
+            const float value = static_cast<float>(static_cast<unsigned int>(c));
             images.back().push_back(value);
         }
     }

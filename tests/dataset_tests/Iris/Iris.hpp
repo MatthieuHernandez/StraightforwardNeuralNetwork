@@ -3,10 +3,10 @@
 
 class Iris final : public Dataset
 {
-public :
-    Iris();
+public:
+    Iris(std::string folderPath);
 
-private :
-    void loadData() override;
+private:
+    void loadData(std::string folderPath) override;
 };
 

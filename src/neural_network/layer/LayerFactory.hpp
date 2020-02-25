@@ -17,10 +17,10 @@ namespace snn::internal
 {
     class LayerFactory 
     {
-    private :
+    private:
         static std::unique_ptr<Layer> build(LayerModel model, int numberOfInputs, StochasticGradientDescent* optimizer);
 
-    public :
+    public:
         static void build(std::vector<std::unique_ptr<Layer>>& layers, int numberOfInputs, std::vector<LayerModel>& models, StochasticGradientDescent* optimizer);
     };
 }

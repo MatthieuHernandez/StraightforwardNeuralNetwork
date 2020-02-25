@@ -4,11 +4,11 @@
 
 class Cifar10 final : public Dataset
 {
-public :
-    Cifar10();
+public:
+    Cifar10(std::string folderPath);
 
-private :
-    void loadData() override;
+private:
+    void loadData(std::string folderPath) override;
     snn::vector2D<float> readImages(std::string filePaths[], int size, snn::vector2D<float>& labels);
     void readImages(std::string filePath, snn::vector2D<float>& images, snn::vector2D<float>& labels);
 };

@@ -1,5 +1,3 @@
-#include <cmath>
-#include <stdexcept>
 #include "ActivationFunction.hpp"
 #include "Sigmoid.hpp"
 #include "ImprovedSigmoid.hpp"

@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -16,15 +17,17 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        static int computeNumberOfInputs(int sizeOfInputs[3]); // only use in constructor
-        static int computeNumberOfNeurons(int numberOfConvolution, int sizeOfInputs[3]); // only use in constructor
-        static int computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, int sizeOfInputs[3]);
+        static int computeNumberOfInputs(std::array<int, 3> sizeOfInputs); // only use in constructor
+        static int computeNumberOfNeurons(int numberOfConvolution, std::array<int, 3> sizeOfInputs); // only use in constructor
+        static int computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, std::array<int, 3> sizeOfInputs);
+
+        static std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
         Convolution2D(int numberOfConvolution,
                       int sizeOfConvolutionMatrix,
-                      int sizeOfInputs[3],
+                      std::array<int, 3> sizeOfInputs,
                       activationFunction activation,
                       StochasticGradientDescent* optimizer);
         ~Convolution2D() = default;
@@ -34,13 +37,13 @@ namespace snn::internal
 
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
-        int sizeOfInputs[3];
+        std::array<int, 3> sizeOfInputs;
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;
         void train(std::vector<float>& inputsError) override;
 
-        int isValid() const override;
+        [[nodiscard]] int isValid() const override;
 
         bool operator==(const Convolution2D& layer) const;
         bool operator!=(const Convolution2D& layer) const;

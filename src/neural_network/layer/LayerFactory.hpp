@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 #include <memory>
 #include "LayerModel.hpp"
 #include "Layer.hpp"
@@ -6,6 +7,15 @@
 
 namespace snn
 {
+    template<typename T>
+    concept Int = requires(T a)
+    {
+        a ->std::template convertible_to<int>;
+    };
+
+    template<Int ... TInt>
+    extern LayerModel Input(Tint ... TArgs);
+
     extern LayerModel AllToAll(int numberOfNeurons, activationFunction activation = sigmoid);
 
     extern LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation = sigmoid);

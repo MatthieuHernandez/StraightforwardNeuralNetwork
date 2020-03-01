@@ -9,37 +9,37 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution2D)
 
 inline
-static int Convolution2D::computeNumberOfInputs(int sizeOfInputs[3])
+int Convolution2D::computeNumberOfInputs(std::array<int, 3> sizeOfInputs)
 {
-    return sizeOfInputs[0] * sizeOfInputs[1] * sizeOfInputs[2]
+    return sizeOfInputs[0] * sizeOfInputs[1] * sizeOfInputs[2];
 }
 
 inline
-static int Convolution2D::computeNumberOfNeurons(int numberOfConvolution, int sizeOfInputs[3])
+int Convolution2D::computeNumberOfNeurons(int numberOfConvolution, std::array<int, 3> sizeOfInputs)
 {
     return numberOfConvolution * sizeOfInputs[0] * sizeOfInputs[1];
 }
 
 inline
-static int Convolution2D::computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, int sizeOfInputs[3])
+int Convolution2D::computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, std::array<int, 3> sizeOfInputs)
 {
     return sizeOfConvolutionMatrix * sizeOfConvolutionMatrix * sizeOfInputs[2];
 }
 
 Convolution2D::Convolution2D(int numberOfConvolution,
                              int sizeOfConvolutionMatrix,
-                             int sizeOfInputs[3],
+                             std::array<int, 3> sizeOfInputs,
                              activationFunction activation,
                              StochasticGradientDescent* optimizer)
-     : Layer(Convolution2D, computeNumberOfInputs(sizeOfInputs), computeNumberOfNeurons(numberOfConvolution, sizeOfInputs[3]))
+     : Layer(convolution2D, computeNumberOfInputs(sizeOfInputs), computeNumberOfNeurons(numberOfConvolution, sizeOfInputs))
 {
     this->numberOfConvolution = numberOfConvolution;
     this->sizeOfConvolutionMatrix = sizeOfConvolutionMatrix;
     this->sizeOfInputs = sizeOfInputs;
 
-    for (int n = 0; n < computeNumberOfNeurons(numberOfConvolution, sizeOfInputs[3]); ++n)
+    for (int n = 0; n < computeNumberOfNeurons(numberOfConvolution, sizeOfInputs); ++n)
     {
-        this->neurons.emplace_back(this->numberOfInputs, this->activation, optimizer);
+        this->neurons.emplace_back(this->numberOfInputs, activation, optimizer);
     }
 }
 
@@ -59,14 +59,14 @@ vector<float> Convolution2D::output(const vector<float>& inputs)
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        auto neuronInputs = splitInputsForNeuron(n, inputs);
+        auto neuronInputs = createInputsForNeuron(n, inputs);
         outputs[n] = neurons[n].output(inputs);
     }
     return outputs;
 }
 
 inline
-static vector<float> Convolution2D::splitInputsForNeuron(int neuronNumber, const vector<float>& inputs)
+vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs)
 {
-    
+    return ;
 }

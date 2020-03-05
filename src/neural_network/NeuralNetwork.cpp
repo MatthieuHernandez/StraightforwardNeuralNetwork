@@ -22,12 +22,12 @@ void NeuralNetwork::initialize()
     isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
+NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
     :StatisticAnalysis(models.back().numberOfNeurons)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, numberOfInputs, models, &this->optimizer);
+    LayerFactory::build(this->layers, models, &this->optimizer);
     
 }
 

@@ -32,8 +32,9 @@ namespace snn::internal
 
         static const layerType type;
 
-        int getNumberOfInputs() const;
-        int getNumberOfNeurons() const;
+        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] int getNumberOfNeurons() const;
+        [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
         std::vector<Perceptron> neurons;
 

@@ -3,8 +3,9 @@ namespace snn
 {
     enum layerType
     {
-        allToAll = 0,
-        recurrent = 1,
-        convolution2D = 2
+        input = 0,
+        allToAll = 1,
+        recurrent = 2,
+        convolution = 3
     };
 }

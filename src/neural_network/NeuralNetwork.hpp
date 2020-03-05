@@ -40,18 +40,18 @@ namespace snn::internal
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
-        NeuralNetwork(int numberOfInputs, std::vector<LayerModel>& models);
+        NeuralNetwork(std::vector<LayerModel>& architecture);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         ~NeuralNetwork() = default;
 
-        int getNumberOfLayers() const;
-        int getNumberOfInputs() const;
-        int getNumberOfOutputs() const;
+        [[nodiscard]] int getNumberOfLayers() const;
+        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] int getNumberOfOutputs() const;
 
         StochasticGradientDescent optimizer;
 
         std::vector<std::unique_ptr<Layer>> layers{};
-        int isValid() const;
+        [[nodiscard]] int isValid() const;
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
 

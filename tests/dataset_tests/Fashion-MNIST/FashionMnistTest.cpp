@@ -38,13 +38,12 @@ TEST_F(FashionMnistTest, loadData)
 
 TEST_F(FashionMnistTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork(
-        784,
-        {
-            AllToAll(150),
-            AllToAll(70),
-            AllToAll(10)
-        });
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(784),
+        AllToAll(150),
+        AllToAll(70),
+        AllToAll(10)
+    });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 180_s);
     neuralNetwork.stopTraining();

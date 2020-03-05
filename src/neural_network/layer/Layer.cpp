@@ -22,6 +22,14 @@ int Layer::isValid() const
      || this->getNumberOfNeurons() > 1000000)
         return 201;
 
+    int numberOfOutput = 1;
+    auto shape = this->getShapeOfOutput();
+    for (int s : shape)
+        numberOfOutput *= s;
+
+    if(numberOfOutput != this->getNumberOfNeurons())
+        return 202;
+
     for (auto& neuron : this->neurons)
     {
         int err = neuron.isValid();

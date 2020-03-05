@@ -1,6 +1,10 @@
+#include <algorithm>
+#include <stdexcept>
 #include "Wait.hpp"
 
 using namespace snn;
+using namespace std;
+
 
 Wait& Wait::operator||(const Wait& wait)
 {

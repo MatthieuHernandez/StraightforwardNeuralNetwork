@@ -10,7 +10,7 @@
 
 namespace snn::internal
 {
-    class Convolution2D : public Layer
+    class Convolution2D final : public Layer
     {
     private :
         friend class boost::serialization::access;
@@ -18,7 +18,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
         static int computeNumberOfInputs(std::array<int, 3> sizeOfInputs); // only use in constructor
-        static int computeNumberOfNeurons(int numberOfConvolution, std::array<int, 3> sizeOfInputs); // only use in constructor
+        static int computeNumberOfNeurons(int sizeOfConvolutionMatrix, int numberOfConvolution, std::array<int, 3> sizeOfInputs); // only use in constructor
         static int computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, std::array<int, 3> sizeOfInputs);
 
         static std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
@@ -27,7 +27,7 @@ namespace snn::internal
         Convolution2D() = default;  // use restricted to Boost library only
         Convolution2D(int numberOfConvolution,
                       int sizeOfConvolutionMatrix,
-                      std::array<int, 3> sizeOfInputs,
+                      std::array<int, 3> shapeOfInput,
                       activationFunction activation,
                       StochasticGradientDescent* optimizer);
         ~Convolution2D() = default;
@@ -37,12 +37,13 @@ namespace snn::internal
 
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
-        std::array<int, 3> sizeOfInputs;
+        std::array<int, 3> shapeofInput;
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;
         void train(std::vector<float>& inputsError) override;
 
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const Convolution2D& layer) const;

@@ -18,7 +18,7 @@ int regressionExample()
 	float precision = 0.1f;
 	DataForRegression data(inputData, expectedOutputs, precision);
 
-	snn::StraightforwardNeuralNetwork neuralNetwork(3, {AllToAll(5), AllToAll(1)});
+	snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(1)});
 
 	neuralNetwork.startTraining(data);
 	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread

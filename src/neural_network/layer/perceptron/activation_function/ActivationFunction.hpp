@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include <vector>
 #include <boost/serialization/access.hpp>
 

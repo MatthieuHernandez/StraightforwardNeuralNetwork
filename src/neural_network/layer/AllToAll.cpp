@@ -43,12 +43,7 @@ vector<float> AllToAll::output(const vector<float>& inputs)
 
 vector<float> AllToAll::backOutput(vector<float>& inputsError)
 {
-    vector<float> errors(this->numberOfInputs);
-    for (int n = 0; n < numberOfInputs; ++n)
-    {
-        errors[n] = 0;
-    }
-
+    vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
         auto& result = neurons[n].backOutput(inputsError[n]);
@@ -64,6 +59,11 @@ void AllToAll::train(vector<float>& inputsError)
     {
         neurons[n].backOutput(inputsError[n]);
     }
+}
+
+std::vector<int> AllToAll::getShapeOfOutput() const
+{
+    return {this->getNumberOfNeurons()};
 }
 
 int AllToAll::isValid() const

@@ -9,7 +9,7 @@
 
 namespace snn::internal
 {
-    class AllToAll : public Layer
+    class AllToAll final : public Layer
     {
     private:
         friend class boost::serialization::access;
@@ -31,7 +31,8 @@ namespace snn::internal
         std::vector<float> backOutput(std::vector<float>& inputsError) override;
         void train(std::vector<float>& inputsError) override;
 
-        int isValid() const override;
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
+        [[nodiscard]] int isValid() const override;
 
         bool operator==(const AllToAll& layer) const;
         bool operator!=(const AllToAll& layer) const;

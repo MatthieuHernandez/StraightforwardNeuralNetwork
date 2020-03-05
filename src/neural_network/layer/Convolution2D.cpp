@@ -2,6 +2,12 @@
 #include <boost/serialization/base_object.hpp>
 #include "Convolution2D.hpp"
 
+
+#include <complex.h>
+#include <complex.h>
+
+#include "../../tools/ExtendedExpection.hpp"
+
 using namespace std;
 using namespace snn;
 using namespace internal;
@@ -15,9 +21,9 @@ int Convolution2D::computeNumberOfInputs(std::array<int, 3> sizeOfInputs)
 }
 
 inline
-int Convolution2D::computeNumberOfNeurons(int numberOfConvolution, std::array<int, 3> sizeOfInputs)
+int Convolution2D::computeNumberOfNeurons(int sizeOfConvolutionMatrix, int numberOfConvolution, std::array<int, 3> sizeOfInputs)
 {
-    return numberOfConvolution * sizeOfInputs[0] * sizeOfInputs[1];
+    return numberOfConvolution * sizeOfInputs[0] - (sizeOfConvolutionMatrix - 1) * sizeOfInputs[1] - (sizeOfConvolutionMatrix - 1);
 }
 
 inline
@@ -28,16 +34,16 @@ int Convolution2D::computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix,
 
 Convolution2D::Convolution2D(int numberOfConvolution,
                              int sizeOfConvolutionMatrix,
-                             std::array<int, 3> sizeOfInputs,
+                             std::array<int, 3> shapeOfInput,
                              activationFunction activation,
                              StochasticGradientDescent* optimizer)
-     : Layer(convolution2D, computeNumberOfInputs(sizeOfInputs), computeNumberOfNeurons(numberOfConvolution, sizeOfInputs))
+     : Layer(convolution, computeNumberOfInputs(shapeOfInput), computeNumberOfNeurons(sizeOfConvolutionMatrix, numberOfConvolution, shapeOfInput))
 {
     this->numberOfConvolution = numberOfConvolution;
     this->sizeOfConvolutionMatrix = sizeOfConvolutionMatrix;
-    this->sizeOfInputs = sizeOfInputs;
+    this->shapeofInput = shapeOfInput;
 
-    for (int n = 0; n < computeNumberOfNeurons(numberOfConvolution, sizeOfInputs); ++n)
+    for (int n = 0; n < computeNumberOfNeurons(sizeOfConvolutionMatrix, numberOfConvolution, shapeOfInput); ++n)
     {
         this->neurons.emplace_back(this->numberOfInputs, activation, optimizer);
     }
@@ -65,8 +71,55 @@ vector<float> Convolution2D::output(const vector<float>& inputs)
     return outputs;
 }
 
+std::vector<float> Convolution2D::backOutput(std::vector<float>& inputsError)
+{
+    //TODO: adapt for convolution
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto& result = neurons[n].backOutput(inputsError[n]);
+        for (int r = 0; r < numberOfInputs; ++r)
+            errors[r] += result[r];
+    }
+    return {};//errors;
+}
+
+void Convolution2D::train(std::vector<float>& inputsError)
+{
+    throw NotImplementedException();
+}
+
+std::vector<int> Convolution2D::getShapeOfOutput() const
+{
+    return {
+        shapeofInput[0] - (this->sizeOfConvolutionMatrix - 1),
+        shapeofInput[1] - (this->sizeOfConvolutionMatrix - 1),
+        this->numberOfConvolution
+    };
+}
+
+int Convolution2D::isValid() const
+{
+    return this->Layer::isValid();
+}
+
 inline
 vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs)
 {
-    return ;
+    return {};
+}
+
+inline 
+bool Convolution2D::operator==(const Convolution2D& layer) const
+{
+    return this->Layer::operator==(layer)
+    && this->numberOfConvolution == layer.numberOfConvolution
+    && this->sizeOfConvolutionMatrix == layer.sizeOfConvolutionMatrix
+    && this->shapeofInput == layer.shapeofInput;
+}
+
+inline 
+bool Convolution2D::operator!=(const Convolution2D& layer) const
+{
+    return !(*this == layer);
 }

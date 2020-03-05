@@ -8,6 +8,10 @@
 #include "perceptron/Perceptron.hpp"
 #include "perceptron/activation_function/ActivationFunction.hpp"
 
+namespace snn {
+    struct LayerModel;
+}
+
 namespace snn::internal
 {
     class Convolution2D final : public Layer
@@ -17,19 +21,11 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        static int computeNumberOfInputs(std::array<int, 3> sizeOfInputs); // only use in constructor
-        static int computeNumberOfNeurons(int sizeOfConvolutionMatrix, int numberOfConvolution, std::array<int, 3> sizeOfInputs); // only use in constructor
-        static int computeNumberOfInputsForNeurones(int sizeOfConvolutionMatrix, std::array<int, 3> sizeOfInputs);
-
         static std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
-        Convolution2D(int numberOfConvolution,
-                      int sizeOfConvolutionMatrix,
-                      std::array<int, 3> shapeOfInput,
-                      activationFunction activation,
-                      StochasticGradientDescent* optimizer);
+        Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer);
         ~Convolution2D() = default;
         Convolution2D(const Convolution2D&) = default;
 

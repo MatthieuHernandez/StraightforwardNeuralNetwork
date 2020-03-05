@@ -23,22 +23,23 @@ void NeuralNetwork::initialize()
 }
 
 NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
-    :StatisticAnalysis(models.back().numberOfNeurons)
+    : StatisticAnalysis()
 {
     if (isTheFirst)
         this->initialize();
     LayerFactory::build(this->layers, models, &this->optimizer);
-    
+    this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
-    : StatisticAnalysis(neuralNetwork.getNumberOfOutputs()),
-    maxOutputIndex(neuralNetwork.maxOutputIndex),
-    optimizer(neuralNetwork.optimizer)
+    : StatisticAnalysis(),
+      maxOutputIndex(neuralNetwork.maxOutputIndex),
+      optimizer(neuralNetwork.optimizer)
 {
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
         this->layers.push_back(layer->clone(&this->optimizer));
+    this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 inline

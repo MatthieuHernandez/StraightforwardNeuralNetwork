@@ -13,6 +13,7 @@ LayerModel snn::AllToAll(int numberOfNeurons, activationFunction activation)
     {
         allToAll,
         activation,
+        -1,
         numberOfNeurons
     };
     return model;
@@ -24,6 +25,7 @@ LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activati
     {
         recurrent,
         activation,
+        -1,
         numberOfNeurons,
         numberOfRecurrences,
     };
@@ -46,36 +48,51 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
 }
 
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
-                                      StochasticGradientDescent* optimizer)
+int computeNumberOfInputs(vector<int>& shapeOfInput)
 {
-    if (shapeOfInput.empty())
-        throw InvalidAchitectureException("Input of layer has size of 0.");
-
     int numberOfInputs = 1;
     for (auto size : shapeOfInput)
         numberOfInputs *= size;
+    return numberOfInputs;
+}
 
-    if (numberOfInputs > 1000000)
+inline
+int computeNumberOfNeuronsForConvolution2D(int sizeOfConvolutionMatrix, int numberOfConvolution, vector<int>& sizeOfInputs)
+{
+    return numberOfConvolution * (sizeOfInputs[0] - (sizeOfConvolutionMatrix - 1)) * (sizeOfInputs[1] - (sizeOfConvolutionMatrix - 1));
+}
+
+/*inline
+int computeNumberOfInputsForNeuronesForConvolution2D(int sizeOfConvolutionMatrix, vector<int>& sizeOfInputs)
+{
+    return sizeOfConvolutionMatrix * sizeOfConvolutionMatrix * sizeOfInputs[2];
+}*/
+
+inline
+unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
+                                      StochasticGradientDescent* optimizer)
+{
+    model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
+
+    if (shapeOfInput.empty())
+        throw InvalidAchitectureException("Input of layer has size of 0.");
+
+    if (model.numberOfInputs > 1000000)
         throw InvalidAchitectureException("Layer is too big.");
 
     switch (model.type)
     {
     case allToAll:
-        if (numberOfInputs <= 0)
+        if (model.numberOfInputs <= 0)
             throw InvalidAchitectureException("Input of layer has size of 0.");
 
-        return make_unique<AllToAll>(numberOfInputs,
+        return make_unique<AllToAll>(model.numberOfInputs,
                                      model.numberOfNeurons,
                                      model.activation,
                                      optimizer);
     case convolution:
-        if (shapeOfInput.size() == 1)
-            //TODO: to change as convolution1D
-            return make_unique<AllToAll>(numberOfInputs,
-                                         model.numberOfNeurons,
-                                         model.activation,
-                                         optimizer);
+        if (shapeOfInput.size() <= 2)
+            throw InvalidAchitectureException("Convolution 1D is not managed.");
         if (model.sizeOfConvolutionMatrix > shapeOfInput[0]
         || model.sizeOfConvolutionMatrix > shapeOfInput[1])
         {
@@ -83,12 +100,9 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         }
         if (shapeOfInput.size() == 3)
         {
-            std::array<int, 3> sizeOfInputsParameter = {shapeOfInput[0], shapeOfInput[1], shapeOfInput[2]};
-            return make_unique<Convolution2D>(model.numberOfConvolution,
-                                              model.sizeOfConvolutionMatrix,
-                                              sizeOfInputsParameter,
-                                              model.activation,
-                                              optimizer);
+            model.shapeOfInput = shapeOfInput;
+            model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
+            return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
             throw InvalidAchitectureException("Input with 3 dimensions or higher is not managed.");

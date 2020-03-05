@@ -11,7 +11,7 @@ TEST(Architecture, ValidArchitectures)
     vector2D<LayerModel> Architectures =
     {
         {Input(7, 8, 1), Convolution(2, 3, ReLU), AllToAll(25, sigmoid)},
-        {Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
+        //{Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
         {Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), AllToAll(30, gaussian), Convolution(2, 2), AllToAll(15)},
         {Input(4, 20, 3), AllToAll(30, iSigmoid)},
         {Input(8, 8, 8, 1), AllToAll(5)}

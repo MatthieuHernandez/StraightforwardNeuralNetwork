@@ -3,7 +3,7 @@
 using namespace snn;
 using namespace internal;
 
-StatisticAnalysis::StatisticAnalysis(int numberOfCluster)
+void StatisticAnalysis::initialize(int numberOfCluster)
 {
     clusters.resize(numberOfCluster);
     this->startTesting();

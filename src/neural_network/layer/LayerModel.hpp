@@ -9,6 +9,7 @@ namespace snn
     {
         layerType type;
         activationFunction activation;
+        int numberOfInputs;
         int numberOfNeurons;
         int numberOfRecurrences;
         int numberOfConvolution;

@@ -14,7 +14,7 @@ namespace snn {
 
 namespace snn::internal
 {
-    class Convolution2D final : public Layer
+    class Convolution1D final : public Layer
     {
     private :
         friend class boost::serialization::access;
@@ -24,16 +24,16 @@ namespace snn::internal
         static std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
 
     public :
-        Convolution2D() = default;  // use restricted to Boost library only
-        Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~Convolution2D() = default;
-        Convolution2D(const Convolution2D&) = default;
+        Convolution1D() = default;  // use restricted to Boost library only
+        Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~Convolution1D() = default;
+        Convolution1D(const Convolution1D&) = default;
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
-        std::array<int, 3> shapeofInput;
+        std::vector<int> shapeofInput;
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;
@@ -42,14 +42,14 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Convolution2D& layer) const;
-        bool operator!=(const Convolution2D& layer) const;
+        bool operator==(const Convolution1D& layer) const;
+        bool operator!=(const Convolution1D& layer) const;
     };
 
     template <class Archive>
-    void Convolution2D::serialize(Archive& ar, const unsigned version)
+    void Convolution1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Convolution2D, Convolution>();
+        boost::serialization::void_cast_register<Convolution1D, Convolution>();
         ar & boost::serialization::base_object<Convolution>(*this);
     }
 }

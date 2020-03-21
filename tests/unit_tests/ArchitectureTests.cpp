@@ -11,10 +11,10 @@ TEST(Architecture, ValidArchitectures)
     vector2D<LayerModel> Architectures =
     {
         {Input(7, 8, 1), Convolution(2, 3, ReLU), AllToAll(25, sigmoid)},
-        //{Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
+        {Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
         {Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), AllToAll(30, gaussian), Convolution(2, 2), AllToAll(15)},
         {Input(4, 20, 3), AllToAll(30, iSigmoid)},
-        {Input(8, 8, 8, 1), AllToAll(5)}
+        {Input(4, 2, 1, 2, 3), AllToAll(5)}
     };
 
     for(auto&& Architecture : Architectures)
@@ -42,15 +42,16 @@ TEST(Architecture, invalidArchitectures)
 
     vector<string> expectedErrorMessages =
     {
+        "Invalid neural network architecture: First LayerModel must be a Input type LayerModel.",
         "Invalid neural network architecture: Neural Network must have at least 1 layer.",
-        "Invalid neural network architecture: Neural Network must have at least 1 layer.",
-        "Invalid neural network architecture: First LayerModel must be a Input type LayerModel",
-        "Invalid neural network architecture: First LayerModel must be a Input type LayerModel",
+        "Invalid neural network architecture: Input of layer has size of 0.",
+        "Invalid neural network architecture: First LayerModel must be a Input type LayerModel.",
+        "Invalid neural network architecture: First LayerModel must be a Input type LayerModel.",
         "Invalid neural network architecture: Input of layer has size of 0.",
         "Invalid neural network architecture: Input of layer has size of 0.",
         "Invalid neural network architecture: Input LayerModel should be in first position.",
         "Invalid neural network architecture: Convolution matrix is too big.",
-        "Invalid neural network architecture: Layer type is not implemented.",
+        "Invalid neural network architecture: Input with 3 dimensions or higher is not managed.",
     };
 
     for(int i = 0; i < Architectures.size(); i++)

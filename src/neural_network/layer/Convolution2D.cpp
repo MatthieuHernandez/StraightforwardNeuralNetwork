@@ -1,5 +1,4 @@
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/base_object.hpp>
 #include "Convolution2D.hpp"
 #include "../../tools/ExtendedExpection.hpp"
 #include "LayerModel.hpp"
@@ -11,16 +10,8 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution2D)
 
 Convolution2D::Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer)
-     : Layer(convolution, model.numberOfInputs, model.numberOfNeurons)
+    : Convolution(model, optimizer)
 {
-    this->numberOfConvolution = model.numberOfConvolution;
-    this->sizeOfConvolutionMatrix = model.sizeOfConvolutionMatrix;
-    this->shapeofInput = {model.shapeOfInput[0], model.shapeOfInput[1], model.shapeOfInput[2]};
-
-    for (int n = 0; n < model.numberOfNeurons; ++n)
-    {
-        this->neurons.emplace_back(this->numberOfInputs, model.activation, optimizer);
-    }
 }
 
 inline
@@ -55,7 +46,7 @@ std::vector<float> Convolution2D::backOutput(std::vector<float>& inputsError)
         for (int r = 0; r < numberOfInputs; ++r)
             errors[r] += result[r];
     }
-    return {};//errors;
+    return {}; //errors;
 }
 
 void Convolution2D::train(std::vector<float>& inputsError)
@@ -66,8 +57,8 @@ void Convolution2D::train(std::vector<float>& inputsError)
 std::vector<int> Convolution2D::getShapeOfOutput() const
 {
     return {
-        this->shapeofInput[0] - (this->sizeOfConvolutionMatrix - 1),
-        this->shapeofInput[1] - (this->sizeOfConvolutionMatrix - 1),
+        this->shapeOfInput[0] - (this->sizeOfConvolutionMatrix - 1),
+        this->shapeOfInput[1] - (this->sizeOfConvolutionMatrix - 1),
         this->numberOfConvolution
     };
 }
@@ -78,21 +69,18 @@ int Convolution2D::isValid() const
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs)
+vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
     return {};
 }
 
-inline 
+inline
 bool Convolution2D::operator==(const Convolution2D& layer) const
 {
-    return this->Layer::operator==(layer)
-    && this->numberOfConvolution == layer.numberOfConvolution
-    && this->sizeOfConvolutionMatrix == layer.sizeOfConvolutionMatrix
-    && this->shapeofInput == layer.shapeofInput;
+    return this->Convolution::operator==(layer);
 }
 
-inline 
+inline
 bool Convolution2D::operator!=(const Convolution2D& layer) const
 {
     return !(*this == layer);

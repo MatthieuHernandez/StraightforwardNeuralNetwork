@@ -1,3 +1,8 @@
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/base_object.hpp>
+#include "Convolution.hpp"
+#include "../../tools/ExtendedExpection.hpp"
+#include "LayerModel.hpp"
 
 using namespace std;
 using namespace snn;
@@ -10,23 +15,12 @@ Convolution::Convolution(LayerModel& model, StochasticGradientDescent* optimizer
 {
     this->numberOfConvolution = model.numberOfConvolution;
     this->sizeOfConvolutionMatrix = model.sizeOfConvolutionMatrix;
-    this->shapeofInput = model.shapeOfInput;
+    this->shapeOfInput = model.shapeOfInput;
 
     for (int n = 0; n < model.numberOfNeurons; ++n)
     {
         this->neurons.emplace_back(this->numberOfInputs, model.activation, optimizer);
     }
-}
-
-inline
-unique_ptr<Layer> Convolution::clone(StochasticGradientDescent* optimizer) const
-{
-    auto layer = make_unique<Convolution>(*this);
-    for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
-    {
-        layer->neurons[n].optimizer = optimizer;
-    }
-    return layer;
 }
 
 vector<float> Convolution::output(const vector<float>& inputs)
@@ -58,24 +52,9 @@ void Convolution::train(std::vector<float>& inputsError)
     throw NotImplementedException();
 }
 
-std::vector<int> Convolution::getShapeOfOutput() const
-{
-    return {
-        this->shapeofInput[0] - (this->sizeOfConvolutionMatrix - 1),
-        this->shapeofInput[1] - (this->sizeOfConvolutionMatrix - 1),
-        this->numberOfConvolution
-    };
-}
-
 int Convolution::isValid() const
 {
     return this->Layer::isValid();
-}
-
-inline
-vector<float> Convolution::createInputsForNeuron(int neuronNumber, const vector<float>& inputs)
-{
-    return {};
 }
 
 inline 
@@ -84,7 +63,7 @@ bool Convolution::operator==(const Convolution& layer) const
     return this->Layer::operator==(layer)
     && this->numberOfConvolution == layer.numberOfConvolution
     && this->sizeOfConvolutionMatrix == layer.sizeOfConvolutionMatrix
-    && this->shapeofInput == layer.shapeofInput;
+    && this->shapeOfInput == layer.shapeOfInput;
 }
 
 inline 

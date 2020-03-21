@@ -3,10 +3,9 @@
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
+#include "Convolution.hpp"
 #include "../Optimizer.hpp"
 #include "perceptron/Perceptron.hpp"
-#include "perceptron/activation_function/ActivationFunction.hpp"
 
 namespace snn {
     struct LayerModel;
@@ -14,14 +13,14 @@ namespace snn {
 
 namespace snn::internal
 {
-    class Convolution2D final : public Layer
+    class Convolution2D final : public Convolution
     {
     private :
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        static std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
+        std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
@@ -30,10 +29,6 @@ namespace snn::internal
         Convolution2D(const Convolution2D&) = default;
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
-
-        int numberOfConvolution;
-        int sizeOfConvolutionMatrix;
-        std::array<int, 3> shapeofInput;
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;

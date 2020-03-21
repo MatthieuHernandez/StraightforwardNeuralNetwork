@@ -1,5 +1,4 @@
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/base_object.hpp>
 #include "Convolution1D.hpp"
 #include "../../tools/ExtendedExpection.hpp"
 #include "LayerModel.hpp"
@@ -11,16 +10,8 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution1D)
 
 Convolution1D::Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer)
-     : Layer(convolution, model.numberOfInputs, model.numberOfNeurons)
+     : Convolution(model, optimizer)
 {
-    this->numberOfConvolution = model.numberOfConvolution;
-    this->sizeOfConvolutionMatrix = model.sizeOfConvolutionMatrix;
-    this->shapeofInput = model.shapeOfInput;
-
-    for (int n = 0; n < model.numberOfNeurons; ++n)
-    {
-        this->neurons.emplace_back(this->numberOfInputs, model.activation, optimizer);
-    }
 }
 
 inline
@@ -66,8 +57,7 @@ void Convolution1D::train(std::vector<float>& inputsError)
 std::vector<int> Convolution1D::getShapeOfOutput() const
 {
     return {
-        this->shapeofInput[0] - (this->sizeOfConvolutionMatrix - 1),
-        this->shapeofInput[1] - (this->sizeOfConvolutionMatrix - 1),
+        this->shapeOfInput[0] - (this->sizeOfConvolutionMatrix - 1),
         this->numberOfConvolution
     };
 }
@@ -78,7 +68,7 @@ int Convolution1D::isValid() const
 }
 
 inline
-vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs)
+vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
     return {};
 }
@@ -86,10 +76,7 @@ vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vecto
 inline 
 bool Convolution1D::operator==(const Convolution1D& layer) const
 {
-    return this->Layer::operator==(layer)
-    && this->numberOfConvolution == layer.numberOfConvolution
-    && this->sizeOfConvolutionMatrix == layer.sizeOfConvolutionMatrix
-    && this->shapeofInput == layer.shapeofInput;
+    return this->Convolution::operator==(layer);
 }
 
 inline 

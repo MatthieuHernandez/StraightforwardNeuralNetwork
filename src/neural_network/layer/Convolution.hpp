@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -14,33 +13,34 @@ namespace snn {
 
 namespace snn::internal
 {
-    class Convolution final : public Layer
+    class Convolution : public Layer
     {
-    private :
+    private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
     protected :
-        virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs);
+        virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+        
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
-        std::vector<int> shapeofInput;
+        std::vector<int> shapeOfInput;
 
-    public :
+    public:
         Convolution() = default;  // use restricted to Boost library only
         Convolution(LayerModel& model, StochasticGradientDescent* optimizer);
         ~Convolution() = default;
         Convolution(const Convolution&) = default;
 
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        //std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
 
         std::vector<float> output(const std::vector<float>& inputs) override;
         std::vector<float> backOutput(std::vector<float>& inputsError) override;
         void train(std::vector<float>& inputsError) override;
 
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const Convolution& layer) const;

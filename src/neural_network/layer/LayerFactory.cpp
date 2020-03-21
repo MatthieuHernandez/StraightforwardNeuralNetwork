@@ -1,6 +1,7 @@
 #include "LayerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
 #include "AllToAll.hpp"
+#include "Convolution1D.hpp"
 #include "Convolution2D.hpp"
 
 using namespace std;
@@ -41,8 +42,10 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
         activation,
         -1,
         -1,
+        -1,
         numberOfConvolution,
-        sizeOfConvolutionMatrix
+        sizeOfConvolutionMatrix,
+        
     };
     return model;
 }
@@ -62,11 +65,11 @@ int computeNumberOfNeuronsForConvolution2D(int sizeOfConvolutionMatrix, int numb
     return numberOfConvolution * (sizeOfInputs[0] - (sizeOfConvolutionMatrix - 1)) * (sizeOfInputs[1] - (sizeOfConvolutionMatrix - 1));
 }
 
-/*inline
-int computeNumberOfInputsForNeuronesForConvolution2D(int sizeOfConvolutionMatrix, vector<int>& sizeOfInputs)
+inline
+int computeNumberOfNeuronsForConvolution1D(int sizeOfConvolutionMatrix, int numberOfConvolution, vector<int>& sizeOfInputs)
 {
-    return sizeOfConvolutionMatrix * sizeOfConvolutionMatrix * sizeOfInputs[2];
-}*/
+    return numberOfConvolution * (sizeOfInputs[0] - (sizeOfConvolutionMatrix - 1));
+}
 
 inline
 unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
@@ -90,22 +93,37 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
                                      model.numberOfNeurons,
                                      model.activation,
                                      optimizer);
+
     case convolution:
-        if (shapeOfInput.size() <= 2)
-            throw InvalidAchitectureException("Convolution 1D is not managed.");
-        if (model.sizeOfConvolutionMatrix > shapeOfInput[0]
-        || model.sizeOfConvolutionMatrix > shapeOfInput[1])
+
+        if (shapeOfInput.size() == 1)
         {
-            throw InvalidAchitectureException("Convolution matrix is too big.");
+            shapeOfInput.push_back(1);
+        }
+        if (shapeOfInput.size() == 2)
+        {
+            if (model.sizeOfConvolutionMatrix > shapeOfInput[0])
+            {
+                throw InvalidAchitectureException("Convolution matrix is too big.");
+            }
+            model.shapeOfInput = shapeOfInput;
+            model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
+            return make_unique<Convolution1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
         {
+            if (model.sizeOfConvolutionMatrix > shapeOfInput[0]
+                || model.sizeOfConvolutionMatrix > shapeOfInput[1])
+            {
+                throw InvalidAchitectureException("Convolution matrix is too big.");
+            }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
             return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
             throw InvalidAchitectureException("Input with 3 dimensions or higher is not managed.");
+        break;
 
     case input:
         throw InvalidAchitectureException("Input LayerModel should be in first position.");
@@ -121,11 +139,11 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& 
     if (models.size() > 1000)
         throw InvalidAchitectureException("Too much layers.");
 
+    if (models.empty() || models[0].type != input)
+        throw InvalidAchitectureException("First LayerModel must be a Input type LayerModel.");
+
     if (models.size() < 2)
         throw InvalidAchitectureException("Neural Network must have at least 1 layer.");
-
-    if (models[0].type != input)
-        throw InvalidAchitectureException("First LayerModel must be a Input type LayerModel.");
 
     int numberOfInputs = 1;
     for (auto size : models[0].shapeOfInput)

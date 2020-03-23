@@ -65,13 +65,24 @@ std::vector<int> Convolution2D::getShapeOfOutput() const
 
 int Convolution2D::isValid() const
 {
-    return this->Layer::isValid();
+    return this->Convolution::isValid();
 }
 
 inline
 vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    return {};
+    vector<float> neuronInputs{};
+
+    for(int i = 0; i < this->sizeOfConvolutionMatrix; ++i)
+    {
+        const int beginIndex = (neuronNumber * this->shapeOfInput[1]) + i * this->shapeOfInput[0];
+        const int endIndex = ((neuronNumber + this->sizeOfConvolutionMatrix) * this->shapeOfInput[1]) + i * this->shapeOfInput[0];
+        for (int j = beginIndex; j <= endIndex; ++i)
+        {
+            neuronInputs.push_back(inputs[j]);
+        }
+    }
+    return neuronInputs;
 }
 
 inline

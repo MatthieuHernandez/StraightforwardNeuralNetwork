@@ -64,13 +64,15 @@ std::vector<int> Convolution1D::getShapeOfOutput() const
 
 int Convolution1D::isValid() const
 {
-    return this->Layer::isValid();
+    return this->Convolution::isValid();
 }
 
 inline
 vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    return {};
+    const int beginIndex = neuronNumber * this->shapeOfInput[1];
+    const int endIndex = (neuronNumber + this->sizeOfConvolutionMatrix) * this->shapeOfInput[1];
+    return vector(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
 inline 

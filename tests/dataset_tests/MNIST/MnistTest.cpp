@@ -54,7 +54,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
 TEST_F(MnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(784),
+        Input(28, 28, 1),
         Convolution(1,4),
         AllToAll(70),
         AllToAll(10)

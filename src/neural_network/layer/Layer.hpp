@@ -17,6 +17,8 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
+        virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+
         int numberOfInputs;
         std::vector<float> errors;
 
@@ -38,8 +40,8 @@ namespace snn::internal
 
         std::vector<Perceptron> neurons;
 
-        virtual std::vector<float> output(const std::vector<float>& inputs) = 0;
-        virtual std::vector<float> backOutput(std::vector<float>& inputsError) = 0;
+        std::vector<float> output(const std::vector<float>& inputs);
+        std::vector<float> backOutput(std::vector<float>& inputsError);
         virtual void train(std::vector<float>& inputsError) = 0;
 
         [[nodiscard]] virtual int isValid() const;

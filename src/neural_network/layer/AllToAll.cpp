@@ -31,26 +31,10 @@ unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
     return layer;
 }
 
-vector<float> AllToAll::output(const vector<float>& inputs)
+inline
+vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        outputs[n] = neurons[n].output(inputs);
-    }
-    return outputs;
-}
-
-vector<float> AllToAll::backOutput(vector<float>& inputsError)
-{
-    vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto& result = neurons[n].backOutput(inputsError[n]);
-        for (int r = 0; r < numberOfInputs; ++r)
-            errors[r] += result[r];
-    }
-    return errors;
+    return inputs;
 }
 
 void AllToAll::train(vector<float>& inputsError)

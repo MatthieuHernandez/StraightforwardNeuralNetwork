@@ -16,6 +16,9 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
+    protected:
+        createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const;
+
     public:
         AllToAll() = default;  // use restricted to Boost library only
         AllToAll(int numberOfInputs,

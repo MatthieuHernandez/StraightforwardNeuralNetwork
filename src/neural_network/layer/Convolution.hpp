@@ -21,8 +21,6 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected :
-        virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
-        
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
         std::vector<int> shapeOfInput;

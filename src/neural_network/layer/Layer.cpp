@@ -15,6 +15,31 @@ Layer::Layer(layerType type,
     this->neurons.reserve(numberOfNeurons);
 }
 
+
+vector<float> Layer::output(const vector<float>& inputs)
+{
+    vector<float> outputs(this->neurons.size());
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto neuronInputs = this->createInputsForNeuron(n, inputs);
+        outputs[n] = neurons[n].output(neuronInputs);
+    }
+    return outputs;
+}
+
+vector<float> Layer::backOutput(vector<float>& inputsError)
+{
+    /*vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto& neuronInputs = createInputsForNeuron(n, inputsError);
+        auto& result = neurons[n].backOutput(inputsError[n]);
+        for (int r = 0; r < numberOfInputs; ++r)
+            errors[r] += result[r];
+    }
+    return errors;*/
+}
+
 int Layer::isValid() const
 {
     if (this->neurons.size() != this->getNumberOfNeurons()

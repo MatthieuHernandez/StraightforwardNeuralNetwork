@@ -37,11 +37,12 @@ vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<flo
     return inputs;
 }
 
-void AllToAll::train(vector<float>& inputsError)
+inline
+ void AllToAll::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
 {
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for(int n = 0; n < errors.size(); ++n)
     {
-        neurons[n].backOutput(inputsError[n]);
+        errors[n] += error[n];
     }
 }
 

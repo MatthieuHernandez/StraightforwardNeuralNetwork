@@ -17,7 +17,8 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const;
+        std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
+        void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
 
     public:
         AllToAll() = default;  // use restricted to Boost library only
@@ -29,10 +30,6 @@ namespace snn::internal
         AllToAll(const AllToAll&) = default;
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
-
-        std::vector<float> output(const std::vector<float>& inputs) override;
-        std::vector<float> backOutput(std::vector<float>& inputsError) override;
-        void train(std::vector<float>& inputsError) override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;

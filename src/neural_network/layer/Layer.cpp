@@ -27,17 +27,24 @@ vector<float> Layer::output(const vector<float>& inputs)
     return outputs;
 }
 
-vector<float> Layer::backOutput(vector<float>& inputsError)
+vector<float> Layer::backOutput(vector<float>& inputErrors)
 {
-    /*vector<float> errors(this->numberOfInputs, 0);
+    vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        auto& neuronInputs = createInputsForNeuron(n, inputsError);
-        auto& result = neurons[n].backOutput(inputsError[n]);
-        for (int r = 0; r < numberOfInputs; ++r)
-            errors[r] += result[r];
+        auto& error = neurons[n].backOutput(inputErrors[n]);
+         this->insertBackOutputForNeuron(n, error, errors);
     }
-    return errors;*/
+    return errors;
+}
+
+
+void Layer::train(vector<float>& inputErrors)
+{
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        neurons[n].backOutput(inputErrors[n]);
+    }
 }
 
 int Layer::isValid() const

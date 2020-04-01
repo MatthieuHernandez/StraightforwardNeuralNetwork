@@ -36,20 +36,20 @@ vector<float> Convolution1D::output(const vector<float>& inputs)
     return outputs;
 }
 
-std::vector<float> Convolution1D::backOutput(std::vector<float>& inputsError)
+std::vector<float> Convolution1D::backOutput(std::vector<float>& inputErrors)
 {
     //TODO: adapt for convolution
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        auto& result = neurons[n].backOutput(inputsError[n]);
+        auto& result = neurons[n].backOutput(inputErrors[n]);
         for (int r = 0; r < numberOfInputs; ++r)
             errors[r] += result[r];
     }
     return {};//errors;
 }
 
-void Convolution1D::train(std::vector<float>& inputsError)
+void Convolution1D::train(std::vector<float>& inputErrors)
 {
     throw NotImplementedException();
 }

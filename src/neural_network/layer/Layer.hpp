@@ -18,6 +18,7 @@ namespace snn::internal
 
     protected:
         virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
         int numberOfInputs;
         std::vector<float> errors;
@@ -41,8 +42,8 @@ namespace snn::internal
         std::vector<Perceptron> neurons;
 
         std::vector<float> output(const std::vector<float>& inputs);
-        std::vector<float> backOutput(std::vector<float>& inputsError);
-        virtual void train(std::vector<float>& inputsError) = 0;
+        std::vector<float> backOutput(std::vector<float>& inputErrors);
+        virtual void train(std::vector<float>& inputErrors);
 
         [[nodiscard]] virtual int isValid() const;
         virtual bool operator==(const Layer& layer) const;

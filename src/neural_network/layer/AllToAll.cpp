@@ -53,6 +53,11 @@ std::vector<int> AllToAll::getShapeOfOutput() const
 
 int AllToAll::isValid() const
 {
+    for (auto& neuron : neurons)
+    {
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
+            return 203;
+    }
     return this->Layer::isValid();
 }
 

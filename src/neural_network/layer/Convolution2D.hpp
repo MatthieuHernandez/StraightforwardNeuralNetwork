@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
@@ -21,6 +20,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
         std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
+        void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
@@ -30,8 +30,6 @@ namespace snn::internal
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
-        std::vector<float> output(const std::vector<float>& inputs) override;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override;
         void train(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;

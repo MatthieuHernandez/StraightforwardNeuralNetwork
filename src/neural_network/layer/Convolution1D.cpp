@@ -10,7 +10,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution1D)
 
 Convolution1D::Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer)
-     : Convolution(model, optimizer)
+    : Convolution(model, optimizer)
 {
 }
 
@@ -23,30 +23,6 @@ unique_ptr<Layer> Convolution1D::clone(StochasticGradientDescent* optimizer) con
         layer->neurons[n].optimizer = optimizer;
     }
     return layer;
-}
-
-vector<float> Convolution1D::output(const vector<float>& inputs)
-{
-    vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto neuronInputs = createInputsForNeuron(n, inputs);
-        outputs[n] = neurons[n].output(inputs);
-    }
-    return outputs;
-}
-
-std::vector<float> Convolution1D::backOutput(std::vector<float>& inputErrors)
-{
-    //TODO: adapt for convolution
-    vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto& result = neurons[n].backOutput(inputErrors[n]);
-        for (int r = 0; r < numberOfInputs; ++r)
-            errors[r] += result[r];
-    }
-    return {};//errors;
 }
 
 void Convolution1D::train(std::vector<float>& inputErrors)
@@ -64,24 +40,40 @@ std::vector<int> Convolution1D::getShapeOfOutput() const
 
 int Convolution1D::isValid() const
 {
+    for (auto& neuron : neurons)
+    {
+        if (neuron.getNumberOfInputs() != this->sizeOfConvolutionMatrix * this->shapeOfInput[1])
+            return 203;
+    }
     return this->Convolution::isValid();
 }
 
 inline
 vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    const int beginIndex = neuronNumber * this->shapeOfInput[1];
+    const int beginIndex = neuronNumber * this->shapeOfInput[0] * this->shapeOfInput[1];
     const int endIndex = (neuronNumber + this->sizeOfConvolutionMatrix) * this->shapeOfInput[1];
     return vector(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
-inline 
+inline
+void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
+                                              std::vector<float>& errors) const
+{
+    const int beginIndex = neuronNumber * this->shapeOfInput[0] * this->shapeOfInput[1];
+    for (int e = 0; e < error.size(); ++e)
+    {
+        errors[beginIndex + e] += error[e];
+    }
+}
+
+inline
 bool Convolution1D::operator==(const Convolution1D& layer) const
 {
     return this->Convolution::operator==(layer);
 }
 
-inline 
+inline
 bool Convolution1D::operator!=(const Convolution1D& layer) const
 {
     return !(*this == layer);

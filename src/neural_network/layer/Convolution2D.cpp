@@ -25,30 +25,6 @@ unique_ptr<Layer> Convolution2D::clone(StochasticGradientDescent* optimizer) con
     return layer;
 }
 
-vector<float> Convolution2D::output(const vector<float>& inputs)
-{
-    vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto neuronInputs = createInputsForNeuron(n, inputs);
-        outputs[n] = neurons[n].output(inputs);
-    }
-    return outputs;
-}
-
-std::vector<float> Convolution2D::backOutput(std::vector<float>& inputErrors)
-{
-    //TODO: adapt for convolution
-    vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto& result = neurons[n].backOutput(inputErrors[n]);
-        for (int r = 0; r < numberOfInputs; ++r)
-            errors[r] += result[r];
-    }
-    return {}; //errors;
-}
-
 void Convolution2D::train(std::vector<float>& inputErrors)
 {
     throw NotImplementedException();
@@ -65,6 +41,11 @@ std::vector<int> Convolution2D::getShapeOfOutput() const
 
 int Convolution2D::isValid() const
 {
+    for (auto& neuron : neurons)
+    {
+        if (neuron.getNumberOfInputs() != this->sizeOfConvolutionMatrix * this->sizeOfConvolutionMatrix * this->shapeOfInput[2])
+            return 203;
+    }
     return this->Convolution::isValid();
 }
 
@@ -87,6 +68,21 @@ vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vecto
         }
     }
     return neuronInputs;
+}
+
+void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
+{
+    const int neuronPositionX = neuronNumber % this->shapeOfInput[0];
+    const int neuronPositionY = neuronNumber / this->shapeOfInput[0];
+
+    for (int i = 0; i < this->sizeOfConvolutionMatrix; ++i)
+    {
+        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[2] * this->shapeOfInput[0]) + neuronPositionX * this->shapeOfInput[2];
+        for(int e = 0; e < error.size(); ++e)
+        {
+            errors[beginIndex + e] += error[e];
+        }
+    }
 }
 
 inline

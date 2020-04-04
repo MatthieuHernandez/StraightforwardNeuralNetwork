@@ -33,11 +33,6 @@ namespace snn::internal
 
         //std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
-
-        std::vector<float> output(const std::vector<float>& inputs) override;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override;
-        void train(std::vector<float>& inputErrors) override;
-
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;
 

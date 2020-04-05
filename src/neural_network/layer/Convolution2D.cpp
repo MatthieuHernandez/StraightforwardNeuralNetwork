@@ -47,14 +47,14 @@ int Convolution2D::isValid() const
 inline
 vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    vector<float> neuronInputs{};
-
+    vector<float> neuronInputs(this->neurons[neuronNumber].getNumberOfInputs());
+    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfConvolution;
     const int neuronPositionX = neuronNumber % this->shapeOfInput[0];
     const int neuronPositionY = neuronNumber / this->shapeOfInput[0];
 
     for (int i = 0; i < this->sizeOfConvolutionMatrix; ++i)
     {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[2] * this->shapeOfInput[0]) + neuronPositionX * this->shapeOfInput[2];
+        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
         const int endIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2])
         + (neuronPositionX + this->sizeOfConvolutionMatrix) * this->shapeOfInput[2];
         for (int j = beginIndex; j < endIndex; ++j)

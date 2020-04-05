@@ -7,9 +7,10 @@ using namespace snn;
 TEST(SaveNeuralNetwork, EqualTest)
 {
     auto structureOfNetwork = {
-        Input(5),
+        Input(8, 8, 3),
+        Convolution(2, 4, ReLU),
         AllToAll(20, iSigmoid),
-        AllToAll(10, snn::tanh),
+        Convolution(3, 2, snn::tanh),
         AllToAll(3, sigmoid)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
@@ -46,7 +47,12 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
-    const vector<float> inputs{1.5, 0.75, -0.25, 0, 0};
+    vector<float> inputs(8*8*3);
+    inputs[30] = 1.5;
+    inputs[60] = 0.75;
+    inputs[90] = -0.25;
+    inputs[120] = 1;
+    inputs[150] = -1.35;
     const vector<float> desired{1, 0, 0.5, 0};
 
     A.trainOnce(inputs, desired);

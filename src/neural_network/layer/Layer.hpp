@@ -7,6 +7,10 @@
 #include "LayerType.hpp"
 #include "perceptron/Perceptron.hpp"
 
+namespace snn {
+    struct LayerModel;
+}
+
 namespace snn::internal
 {
     class Layer
@@ -25,9 +29,7 @@ namespace snn::internal
 
     public:
         Layer() = default; // use restricted to Boost library only
-        Layer(layerType type,
-              int numberOfInputs,
-              int numberOfNeurons);
+        Layer(LayerModel& model, StochasticGradientDescent* optimizer);
         Layer(const Layer&) = default;
         virtual ~Layer() = default;
 
@@ -43,7 +45,7 @@ namespace snn::internal
 
         std::vector<float> output(const std::vector<float>& inputs);
         std::vector<float> backOutput(std::vector<float>& inputErrors);
-        virtual void train(std::vector<float>& inputErrors);
+        void train(std::vector<float>& inputErrors);
 
         [[nodiscard]] virtual int isValid() const;
         virtual bool operator==(const Layer& layer) const;

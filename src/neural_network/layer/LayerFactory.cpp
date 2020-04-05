@@ -28,6 +28,7 @@ LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activati
         activation,
         -1,
         numberOfNeurons,
+        -1,
         numberOfRecurrences,
     };
     return model;
@@ -40,6 +41,7 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
     {
         convolution,
         activation,
+        -1,
         -1,
         -1,
         -1,
@@ -89,10 +91,8 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         if (model.numberOfInputs <= 0)
             throw InvalidAchitectureException("Input of layer has size of 0.");
 
-        return make_unique<AllToAll>(model.numberOfInputs,
-                                     model.numberOfNeurons,
-                                     model.activation,
-                                     optimizer);
+        model.numberOfInputsByNeurons = model.numberOfInputs;
+        return make_unique<AllToAll>(model, optimizer);
 
     case convolution:
 
@@ -108,6 +108,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
+            model.numberOfInputsByNeurons = model.sizeOfConvolutionMatrix * model.shapeOfInput[1];
             return make_unique<Convolution1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
@@ -119,6 +120,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
+            model.numberOfInputsByNeurons = model.sizeOfConvolutionMatrix * model.sizeOfConvolutionMatrix * model.shapeOfInput[2];
             return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
@@ -152,7 +154,7 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& 
         throw InvalidAchitectureException("Layer is too big.");
 
     auto& currentSizeOfInputs = models[0].shapeOfInput;
-    for (auto i = 1; i < models.size(); ++i)
+    for (int i = 1; i < models.size(); ++i)
     {
         layers.push_back(build(models[i], currentSizeOfInputs, optimizer));
         currentSizeOfInputs = layers.back()->getShapeOfOutput();

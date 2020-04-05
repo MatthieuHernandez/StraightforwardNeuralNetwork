@@ -25,11 +25,6 @@ unique_ptr<Layer> Convolution1D::clone(StochasticGradientDescent* optimizer) con
     return layer;
 }
 
-void Convolution1D::train(std::vector<float>& inputErrors)
-{
-    throw NotImplementedException();
-}
-
 std::vector<int> Convolution1D::getShapeOfOutput() const
 {
     return {

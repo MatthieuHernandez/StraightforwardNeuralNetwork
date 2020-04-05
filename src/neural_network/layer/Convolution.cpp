@@ -11,16 +11,11 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution)
 
 Convolution::Convolution(LayerModel& model, StochasticGradientDescent* optimizer)
-     : Layer(convolution, model.numberOfInputs, model.numberOfNeurons)
+     : Layer(model, optimizer)
 {
     this->numberOfConvolution = model.numberOfConvolution;
     this->sizeOfConvolutionMatrix = model.sizeOfConvolutionMatrix;
     this->shapeOfInput = model.shapeOfInput;
-
-    for (int n = 0; n < model.numberOfNeurons; ++n)
-    {
-        this->neurons.emplace_back(this->numberOfInputs, model.activation, optimizer);
-    }
 }
 
 int Convolution::isValid() const

@@ -22,12 +22,9 @@ namespace snn::internal
 
     public:
         AllToAll() = default;  // use restricted to Boost library only
-        AllToAll(int numberOfInputs,
-                 int numberOfNeurons,
-                 activationFunction activation,
-                 StochasticGradientDescent* optimizer);
-        ~AllToAll() = default;
+        AllToAll(LayerModel& model, StochasticGradientDescent* optimizer);
         AllToAll(const AllToAll&) = default;
+        ~AllToAll() = default;
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 

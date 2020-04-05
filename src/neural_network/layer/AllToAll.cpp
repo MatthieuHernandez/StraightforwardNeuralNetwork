@@ -8,16 +8,9 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(AllToAll)
 
-AllToAll::AllToAll(const int numberOfInputs,
-                   const int numberOfNeurons,
-                   activationFunction activation,
-                   StochasticGradientDescent* optimizer)
-     : Layer(allToAll, numberOfInputs, numberOfNeurons)
+AllToAll::AllToAll(LayerModel& model, StochasticGradientDescent* optimizer)
+     : Layer(model, optimizer)
 {
-    for (int n = 0; n < numberOfNeurons; ++n)
-    {
-        this->neurons.emplace_back(numberOfInputs, activation, optimizer);
-    }
 }
 
 inline

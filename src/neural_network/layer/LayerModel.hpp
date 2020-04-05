@@ -11,6 +11,7 @@ namespace snn
         activationFunction activation;
         int numberOfInputs;
         int numberOfNeurons;
+        int numberOfInputsByNeurons;
         int numberOfRecurrences;
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;

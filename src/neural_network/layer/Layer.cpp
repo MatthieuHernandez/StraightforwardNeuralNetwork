@@ -1,5 +1,6 @@
 #include <boost/serialization/export.hpp>
 #include "Layer.hpp"
+#include "LayerModel.hpp"
 
 using namespace std;
 using namespace snn;
@@ -7,12 +8,14 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Layer)
 
-Layer::Layer(layerType type,
-             int numberOfInputs,
-             int numberOfNeurons)
+Layer::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
 {
-    this->numberOfInputs = numberOfInputs;
-    this->neurons.reserve(numberOfNeurons);
+    this->numberOfInputs = model.numberOfInputs;
+    this->neurons.reserve(model.numberOfNeurons);
+    for (int n = 0; n < model.numberOfNeurons; ++n)
+    {
+        this->neurons.emplace_back(model.numberOfInputsByNeurons, model.activation, optimizer);
+    }
 }
 
 

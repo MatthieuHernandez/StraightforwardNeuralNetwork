@@ -5,6 +5,8 @@
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/AllToAll.hpp"
+#include "layer/Convolution1D.hpp"
+#include "layer/Convolution2D.hpp"
 #include "StatisticAnalysis.hpp"
 
 
@@ -24,7 +26,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        int maxOutputIndex;
+        int maxOutputIndex = -1;
 
         [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
 
@@ -35,8 +37,6 @@ namespace snn::internal
                                                    const std::vector<float>& desired,
                                                    float separator);
         void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
-
-        int getLastError() const;
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
@@ -68,6 +68,8 @@ namespace snn::internal
         ar & this->optimizer.momentum;
         ar & this->maxOutputIndex;
         ar.template register_type<internal::AllToAll>();
+        ar.template register_type<internal::Convolution1D>();
+        ar.template register_type<internal::Convolution2D>();
         ar & layers;
     }
 }

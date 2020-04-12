@@ -1,9 +1,7 @@
-#include <algorithm>
 #include <ctime>
 #include <boost/serialization/export.hpp>
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
-#include "../tools/ExtendedExpection.hpp"
 #include "layer/LayerFactory.hpp"
 
 using namespace std;
@@ -16,14 +14,13 @@ bool NeuralNetwork::isTheFirst = true;
 
 void NeuralNetwork::initialize()
 {
-    srand(static_cast<unsigned int>(time(nullptr)));
+    srand(static_cast<unsigned>(time(nullptr)));
     rand();
     ActivationFunction::initialize();
     isTheFirst = false;
 }
 
 NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
-    : StatisticAnalysis()
 {
     if (isTheFirst)
         this->initialize();
@@ -90,7 +87,7 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
         && this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [=] () {
-            for (int l = 0; l < this->layers.size(); l++)
+            for (size_t l = 0; l < this->layers.size(); ++l)
             {
                 if (*this->layers[l] != *neuralNetwork.layers[l])
                     return false;

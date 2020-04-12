@@ -1,7 +1,5 @@
 #include <boost/serialization/export.hpp>
-#include <boost/serialization/base_object.hpp>
 #include "Convolution.hpp"
-#include "../../tools/ExtendedExpection.hpp"
 #include "LayerModel.hpp"
 
 using namespace std;

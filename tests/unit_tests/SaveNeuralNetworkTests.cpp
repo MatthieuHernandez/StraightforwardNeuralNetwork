@@ -72,7 +72,7 @@ TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
         Input(5),
-        AllToAll(20, ReLU),
+        Convolution(2, 2, ReLU),
         AllToAll(10, snn::tanh),
         AllToAll(3, sigmoid)
     });

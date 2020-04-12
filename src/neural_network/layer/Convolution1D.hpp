@@ -7,11 +7,6 @@
 #include "Convolution.hpp"
 #include "perceptron/Perceptron.hpp"
 
-namespace snn
-{
-    struct LayerModel;
-}
-
 namespace snn::internal
 {
     class Convolution1D final : public Convolution

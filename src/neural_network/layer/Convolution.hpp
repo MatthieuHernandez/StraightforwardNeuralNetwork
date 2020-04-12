@@ -1,15 +1,10 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
 #include "perceptron/Perceptron.hpp"
 #include "perceptron/activation_function/ActivationFunction.hpp"
-
-namespace snn {
-    struct LayerModel;
-}
 
 namespace snn::internal
 {
@@ -45,5 +40,8 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<Convolution, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
+        ar & this->numberOfConvolution;
+        ar & this->sizeOfConvolutionMatrix;
+        ar & this->shapeOfInput;
     }
 }

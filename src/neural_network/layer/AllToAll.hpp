@@ -5,7 +5,6 @@
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
 #include "perceptron/Perceptron.hpp"
-#include "perceptron/activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {

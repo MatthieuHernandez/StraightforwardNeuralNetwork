@@ -1,6 +1,5 @@
 #include <boost/serialization/export.hpp>
 #include "Convolution2D.hpp"
-#include "../../tools/ExtendedExpection.hpp"
 #include "LayerModel.hpp"
 
 using namespace std;
@@ -75,7 +74,8 @@ void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
         const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[2] * this->shapeOfInput[0]) + neuronPositionX * this->shapeOfInput[2];
         for(int e = 0; e < error.size(); ++e)
         {
-            errors[beginIndex + e] += error[e];
+            const int index = beginIndex + e;
+            errors[index] += error[e];
         }
     }
 }

@@ -60,7 +60,11 @@ TEST_F(MnistTest, convolutionNeuralNetwork)
         AllToAll(10)
         });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 60_s);
+    #ifdef DEBUG
+        neuralNetwork.waitFor(1_ep);
+    #else
+        neuralNetwork.waitFor(1_ep || 60_s);
+    #endif
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.93);

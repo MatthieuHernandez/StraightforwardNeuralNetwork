@@ -45,23 +45,23 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
         AllToAll(10)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 60_s);
+    neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.78);
+    ASSERT_ACCURACY(accuracy, 0.76);
 }
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,4),
+        Convolution(1,5),
         AllToAll(70),
         AllToAll(10)
         });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 900_s);
+    neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.83);
+    ASSERT_ACCURACY(accuracy, 0.75);
 }

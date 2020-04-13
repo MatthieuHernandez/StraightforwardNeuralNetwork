@@ -48,7 +48,7 @@ vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vecto
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfConvolution;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];
     const int endIndex = (neuronNumber + this->sizeOfConvolutionMatrix) * this->shapeOfInput[1];
-    return vector(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+    return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
 inline

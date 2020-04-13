@@ -14,7 +14,7 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 | Wine          | https://archive.ics.uci.edu/ml/datasets/wine     | 100%     | 28                 |
 | Iris          | https://archive.ics.uci.edu/ml/datasets/iris     | 100%     | 12                 |
 
-## Installation
+## Installation (with *CMake* 3.17.1)
 
 ### Linux, UNIX - GCC 9.2
 

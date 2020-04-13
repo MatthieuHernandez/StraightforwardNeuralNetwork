@@ -18,7 +18,7 @@ int multipleClassificationExample()
 	float separator = 0.5f;
 	DataForMultipleClassification data(inputData, expectedOutputs, separator);
 
-	StraightforwardNeuralNetwork neuralNetwork(2, {AllToAll(8), AllToAll(3)});
+	StraightforwardNeuralNetwork neuralNetwork({Input(2), AllToAll(8), AllToAll(3)});
 
 	neuralNetwork.startTraining(data);
 	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread

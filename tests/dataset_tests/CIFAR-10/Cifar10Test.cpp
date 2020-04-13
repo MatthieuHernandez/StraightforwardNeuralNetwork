@@ -38,13 +38,12 @@ TEST_F(Cifar10Test, loadData)
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork(
-        3072,
-        { 
-            AllToAll(200),
-            AllToAll(80),
-            AllToAll(10)
-        });
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(3072),
+        AllToAll(200),
+        AllToAll(80),
+        AllToAll(10)
+    });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 300_s);
     neuralNetwork.stopTraining();

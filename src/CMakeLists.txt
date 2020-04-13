@@ -5,6 +5,7 @@ file(GLOB SOURCES
     "data/*.cpp"
     "neural_network/*.hpp"
     "neural_network/*.cpp"
+    "neural_network/*.tpp"
     "neural_network/layer/*.hpp"
     "neural_network/layer/*.cpp"
     "neural_network/layer/perceptron/*.hpp"

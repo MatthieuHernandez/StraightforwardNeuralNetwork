@@ -10,6 +10,7 @@
 #include "../data/DataForRegression.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
+#include "../tools/Tools.hpp"
 
 namespace snn
 {
@@ -38,7 +39,7 @@ namespace snn
 
     public:
         StraightforwardNeuralNetwork() = default; // use restricted to Boost library only
-        StraightforwardNeuralNetwork(int numberOfInputs, std::vector<LayerModel> models);
+        explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture);
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
         ~StraightforwardNeuralNetwork();
 
@@ -86,4 +87,6 @@ namespace snn
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
     }
+
+    #include "StraightforwardNeuralNetwork.tpp"
 }

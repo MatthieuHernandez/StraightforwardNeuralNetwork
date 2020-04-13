@@ -38,13 +38,12 @@ TEST_F(IrisTest, loadData)
 
 TEST_F(IrisTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork(
-        4,
-        {
-            AllToAll(15),
-            AllToAll(5),
-            AllToAll(3)
-        });
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(4),
+        AllToAll(15),
+        AllToAll(5),
+        AllToAll(3)
+    });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(0.98_acc || 2_s);
     neuralNetwork.stopTraining();

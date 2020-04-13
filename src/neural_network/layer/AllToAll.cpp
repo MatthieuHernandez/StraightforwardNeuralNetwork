@@ -8,16 +8,9 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(AllToAll)
 
-AllToAll::AllToAll(const int numberOfInputs,
-                   const int numberOfNeurons,
-                   activationFunction activation,
-                   StochasticGradientDescent* optimizer)
-     : Layer(allToAll, numberOfInputs, numberOfNeurons)
+AllToAll::AllToAll(LayerModel& model, StochasticGradientDescent* optimizer)
+     : Layer(model, optimizer)
 {
-    for (int n = 0; n < numberOfNeurons; ++n)
-    {
-        this->neurons.emplace_back(numberOfInputs, activation, optimizer);
-    }
 }
 
 inline
@@ -31,43 +24,33 @@ unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
     return layer;
 }
 
-vector<float> AllToAll::output(const vector<float>& inputs)
+inline
+vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        outputs[n] = neurons[n].output(inputs);
-    }
-    return outputs;
+    return inputs;
 }
 
-vector<float> AllToAll::backOutput(vector<float>& inputsError)
+inline
+ void AllToAll::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
 {
-    vector<float> errors(this->numberOfInputs);
-    for (int n = 0; n < numberOfInputs; ++n)
+    for(int n = 0; n < errors.size(); ++n)
     {
-        errors[n] = 0;
+        errors[n] += error[n];
     }
-
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto& result = neurons[n].backOutput(inputsError[n]);
-        for (int r = 0; r < numberOfInputs; ++r)
-            errors[r] += result[r];
-    }
-    return errors;
 }
 
-void AllToAll::train(vector<float>& inputsError)
+std::vector<int> AllToAll::getShapeOfOutput() const
 {
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        neurons[n].backOutput(inputsError[n]);
-    }
+    return {this->getNumberOfNeurons()};
 }
 
 int AllToAll::isValid() const
 {
+    for (auto& neuron : neurons)
+    {
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
+            return 203;
+    }
     return this->Layer::isValid();
 }
 

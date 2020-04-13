@@ -38,7 +38,7 @@ void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, c
 
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)
 {
-    this->backpropagationAlgorithm(inputs, desired);
+    this->backpropagationAlgorithm(inputs, desired);  
 }
 
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired)

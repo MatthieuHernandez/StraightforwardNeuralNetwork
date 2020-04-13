@@ -46,10 +46,11 @@ namespace snn::internal
         float f1ScoreMax = -1.0f;
 
     protected:
-        StatisticAnalysis() = default; // use restricted to Boost library only
-        StatisticAnalysis(int numberOfCluster);
+        StatisticAnalysis() = default;
         StatisticAnalysis(const StatisticAnalysis&) = default;
         virtual ~StatisticAnalysis() = default;
+
+        void initialize(int numberOfCluster);
 
         void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
                                        float precision);

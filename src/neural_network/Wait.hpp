@@ -1,8 +1,4 @@
 #pragma once
-#include <stdexcept>
-#include <algorithm>
-
-using namespace std;
 
 namespace snn
 {

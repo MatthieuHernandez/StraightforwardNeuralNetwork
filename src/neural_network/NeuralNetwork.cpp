@@ -1,9 +1,7 @@
-#include <algorithm>
 #include <ctime>
 #include <boost/serialization/export.hpp>
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
-#include "../tools/ExtendedExpection.hpp"
 #include "layer/LayerFactory.hpp"
 
 using namespace std;
@@ -16,29 +14,29 @@ bool NeuralNetwork::isTheFirst = true;
 
 void NeuralNetwork::initialize()
 {
-    srand(static_cast<unsigned int>(time(nullptr)));
+    srand(static_cast<unsigned>(time(nullptr)));
     rand();
     ActivationFunction::initialize();
     isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(int numberOfInputs, vector<LayerModel>& models)
-    :StatisticAnalysis(models.back().numberOfNeurons)
+NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, numberOfInputs, models, &this->optimizer);
-    
+    LayerFactory::build(this->layers, models, &this->optimizer);
+    this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
-    : StatisticAnalysis(neuralNetwork.getNumberOfOutputs()),
-    maxOutputIndex(neuralNetwork.maxOutputIndex),
-    optimizer(neuralNetwork.optimizer)
+    : StatisticAnalysis(),
+      maxOutputIndex(neuralNetwork.maxOutputIndex),
+      optimizer(neuralNetwork.optimizer)
 {
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
         this->layers.push_back(layer->clone(&this->optimizer));
+    this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 inline
@@ -89,7 +87,7 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
         && this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [=] () {
-            for (int l = 0; l < this->layers.size(); l++)
+            for (size_t l = 0; l < this->layers.size(); ++l)
             {
                 if (*this->layers[l] != *neuralNetwork.layers[l])
                     return false;

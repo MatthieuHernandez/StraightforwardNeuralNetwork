@@ -4,11 +4,12 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
+#include "Convolution.hpp"
 #include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {
-    class AllToAll final : public Layer
+    class Convolution1D final : public Convolution
     {
     private:
         friend class boost::serialization::access;
@@ -20,24 +21,24 @@ namespace snn::internal
         void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
 
     public:
-        AllToAll() = default;  // use restricted to Boost library only
-        AllToAll(LayerModel& model, StochasticGradientDescent* optimizer);
-        AllToAll(const AllToAll&) = default;
-        ~AllToAll() = default;
+        Convolution1D() = default; // use restricted to Boost library only
+        Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~Convolution1D() = default;
+        Convolution1D(const Convolution1D&) = default;
 
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const AllToAll& layer) const;
-        bool operator!=(const AllToAll& layer) const;
+        bool operator==(const Convolution1D& layer) const;
+        bool operator!=(const Convolution1D& layer) const;
     };
 
     template <class Archive>
-    void AllToAll::serialize(Archive& ar, const unsigned version)
+    void Convolution1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<AllToAll, Layer>();
-        ar & boost::serialization::base_object<Layer>(*this);
+        boost::serialization::void_cast_register<Convolution1D, Convolution>();
+        ar & boost::serialization::base_object<Convolution>(*this);
     }
 }

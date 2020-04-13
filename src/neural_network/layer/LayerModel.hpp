@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "LayerType.hpp"
 #include "perceptron/activation_function/ActivationFunction.hpp"
 
@@ -8,10 +9,12 @@ namespace snn
     {
         layerType type;
         activationFunction activation;
+        int numberOfInputs;
         int numberOfNeurons;
+        int numberOfInputsByNeurons;
         int numberOfRecurrences;
         int numberOfConvolution;
         int sizeOfConvolutionMatrix;
-        int sizeOfInputs[3];
+        std::vector<int> shapeOfInput;
     };
 }

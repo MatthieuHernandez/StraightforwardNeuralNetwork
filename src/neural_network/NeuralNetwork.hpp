@@ -47,6 +47,8 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfLayers() const;
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfOutputs() const;
+        [[nodiscard]] int getNumberOfNeurons() const;
+        [[nodiscard]] int getNumberOfParameters() const;
 
         StochasticGradientDescent optimizer;
 

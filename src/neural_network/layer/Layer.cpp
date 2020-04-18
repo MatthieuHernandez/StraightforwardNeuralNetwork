@@ -1,5 +1,8 @@
 #include <boost/serialization/export.hpp>
 #include "Layer.hpp"
+
+#include <numeric>
+
 #include "LayerModel.hpp"
 
 using namespace std;
@@ -36,7 +39,7 @@ vector<float> Layer::backOutput(vector<float>& inputErrors)
     for (int n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = neurons[n].backOutput(inputErrors[n]);
-         this->insertBackOutputForNeuron(n, error, errors);
+        this->insertBackOutputForNeuron(n, error, errors);
     }
     return errors;
 }
@@ -53,8 +56,8 @@ void Layer::train(vector<float>& inputErrors)
 int Layer::isValid() const
 {
     if (this->neurons.size() != this->getNumberOfNeurons()
-     || this->getNumberOfNeurons() < 1
-     || this->getNumberOfNeurons() > 1000000)
+        || this->getNumberOfNeurons() < 1
+        || this->getNumberOfNeurons() > 1000000)
         return 201;
 
     int numberOfOutput = 1;
@@ -62,13 +65,13 @@ int Layer::isValid() const
     for (int s : shape)
         numberOfOutput *= s;
 
-    if(numberOfOutput != this->getNumberOfNeurons())
+    if (numberOfOutput != this->getNumberOfNeurons())
         return 202;
 
     for (auto& neuron : this->neurons)
     {
         int err = neuron.isValid();
-        if(err != 0)
+        if (err != 0)
             return err;
     }
     return 0;
@@ -82,6 +85,16 @@ int Layer::getNumberOfInputs() const
 int Layer::getNumberOfNeurons() const
 {
     return this->neurons.size();
+}
+
+int Layer::getNumberOfParameters() const
+{
+    int sum = 0;
+    for (auto& neuron : this->neurons)
+    {
+        sum += neuron.getNumberOfParameters();
+    }
+    return sum;
 }
 
 bool Layer::operator==(const Layer& layer) const

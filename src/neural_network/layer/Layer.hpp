@@ -39,6 +39,7 @@ namespace snn::internal
 
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfNeurons() const;
+        [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
         std::vector<Perceptron> neurons;

@@ -1,5 +1,4 @@
 #include "../ExtendedGTest.hpp"
-#include "tools/ExtendedExpection.hpp"
 #include "tools/Tools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 

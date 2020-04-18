@@ -67,3 +67,18 @@ TEST(Architecture, invalidArchitectures)
         }
     }
 }
+
+TEST(Architecture, NumberOfNeuronesAndparameters)
+{
+    StraightforwardNeuralNetwork neuralNetwork(
+        {
+        Input(12, 12, 3),
+        Convolution(3, 4),
+        AllToAll(50),
+        Convolution(1, 3),
+        AllToAll(20),
+        AllToAll(5)
+        });
+    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), 366);
+    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), 25018);
+}

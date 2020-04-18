@@ -87,7 +87,12 @@ int Perceptron::isValid() const
 
 vector<float> Perceptron::getWeights() const
 {
-    return weights;
+    return this->weights;
+}
+
+int Perceptron::getNumberOfParameters() const
+{
+    return static_cast<int>(this->weights.size());
 }
 
 void Perceptron::setWeights(const vector<float>& weights)

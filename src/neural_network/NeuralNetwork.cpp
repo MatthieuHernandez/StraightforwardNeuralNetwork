@@ -55,6 +55,26 @@ int NeuralNetwork::getNumberOfOutputs() const
     return this->layers.back()->getNumberOfNeurons();
 }
 
+int NeuralNetwork::getNumberOfNeurons() const
+{
+    int sum = 0;
+    for (auto& layer : this->layers)
+    {
+        sum += layer->getNumberOfNeurons();
+    }
+    return sum;
+}
+
+int NeuralNetwork::getNumberOfParameters() const
+{
+    int sum = 0;
+    for (auto& layer : this->layers)
+    {
+        sum += layer->getNumberOfParameters();
+    }
+    return sum;
+}
+
 int NeuralNetwork::isValid() const
 {
     //TODO: rework isValid

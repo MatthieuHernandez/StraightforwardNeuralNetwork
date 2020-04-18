@@ -43,18 +43,20 @@ namespace snn::internal
         float output(const std::vector<float>& inputs);
         void train(const std::vector<float>& inputs, float error);
 
-        int isValid() const;
+        [[nodiscard]] int isValid() const;
 
-        std::vector<float> getWeights() const;
+        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] int getNumberOfParameters() const;
+
         void setWeights(const std::vector<float>& weights);
 
-        float getWeight(int w) const;
+        [[nodiscard]] float getWeight(int w) const;
         void setWeight(int w, float weight);
 
-        float getBias() const;
+        [[nodiscard]] float getBias() const;
         void setBias(float bias);
 
-        int getNumberOfInputs() const;
+        [[nodiscard]] int getNumberOfInputs() const;
 
         bool operator==(const Perceptron& perceptron) const;
         bool operator!=(const Perceptron& perceptron) const;

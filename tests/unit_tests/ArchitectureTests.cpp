@@ -61,7 +61,7 @@ TEST(Architecture, invalidArchitectures)
             StraightforwardNeuralNetwork neuralNetwork(Architectures[i]);
             FAIL();
         }
-        catch(InvalidAchitectureException e)
+        catch(InvalidArchitectureException e)
         {
             ASSERT_EQ(e.what(), expectedErrorMessages[i]);
         }

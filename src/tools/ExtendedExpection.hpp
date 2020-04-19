@@ -18,10 +18,10 @@ namespace snn
         }
     };
 
-    class InvalidAchitectureException : public std::runtime_error
+    class InvalidArchitectureException : public std::runtime_error
     {
     public:
-        InvalidAchitectureException(std::string message) : std::runtime_error("Invalid neural network architecture: " + message)
+        InvalidArchitectureException(std::string message) : std::runtime_error("Invalid neural network architecture: " + message)
         {
         }
     };

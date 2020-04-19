@@ -80,16 +80,16 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
 
     if (shapeOfInput.empty())
-        throw InvalidAchitectureException("Input of layer has size of 0.");
+        throw InvalidArchitectureException("Input of layer has size of 0.");
 
     if (model.numberOfInputs > 1000000)
-        throw InvalidAchitectureException("Layer is too big.");
+        throw InvalidArchitectureException("Layer is too big.");
 
     switch (model.type)
     {
     case allToAll:
         if (model.numberOfInputs <= 0)
-            throw InvalidAchitectureException("Input of layer has size of 0.");
+            throw InvalidArchitectureException("Input of layer has size of 0.");
 
         model.numberOfInputsByNeurons = model.numberOfInputs;
         return make_unique<AllToAll>(model, optimizer);
@@ -104,7 +104,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         {
             if (model.sizeOfConvolutionMatrix > shapeOfInput[0])
             {
-                throw InvalidAchitectureException("Convolution matrix is too big.");
+                throw InvalidArchitectureException("Convolution matrix is too big.");
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
@@ -116,7 +116,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             if (model.sizeOfConvolutionMatrix > shapeOfInput[0]
                 || model.sizeOfConvolutionMatrix > shapeOfInput[1])
             {
-                throw InvalidAchitectureException("Convolution matrix is too big.");
+                throw InvalidArchitectureException("Convolution matrix is too big.");
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.sizeOfConvolutionMatrix, model.numberOfConvolution, model.shapeOfInput);
@@ -124,14 +124,14 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
-            throw InvalidAchitectureException("Input with 3 dimensions or higher is not managed.");
+            throw InvalidArchitectureException("Input with 3 dimensions or higher is not managed.");
         break;
 
     case input:
-        throw InvalidAchitectureException("Input LayerModel should be in first position.");
+        throw InvalidArchitectureException("Input LayerModel should be in first position.");
 
     default:
-        throw InvalidAchitectureException("Layer type is not implemented.");
+        throw InvalidArchitectureException("Layer type is not implemented.");
     }
 }
 
@@ -139,19 +139,19 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& 
                          StochasticGradientDescent* optimizer)
 {
     if (models.size() > 1000)
-        throw InvalidAchitectureException("Too much layers.");
+        throw InvalidArchitectureException("Too much layers.");
 
     if (models.empty() || models[0].type != input)
-        throw InvalidAchitectureException("First LayerModel must be a Input type LayerModel.");
+        throw InvalidArchitectureException("First LayerModel must be a Input type LayerModel.");
 
     if (models.size() < 2)
-        throw InvalidAchitectureException("Neural Network must have at least 1 layer.");
+        throw InvalidArchitectureException("Neural Network must have at least 1 layer.");
 
     int numberOfInputs = 1;
     for (auto size : models[0].shapeOfInput)
         numberOfInputs *= size;
     if (numberOfInputs > 2073600)
-        throw InvalidAchitectureException("Layer is too big.");
+        throw InvalidArchitectureException("Layer is too big.");
 
     auto& currentSizeOfInputs = models[0].shapeOfInput;
     for (int i = 1; i < models.size(); ++i)

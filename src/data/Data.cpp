@@ -3,9 +3,12 @@
 #include <random>
 #include <vector>
 #include "Data.hpp"
+
+#include "../tools/ExtendedExpection.hpp"
 #include "../tools/Tools.hpp"
 using namespace std;
 using namespace snn;
+using namespace internal;
 
 Data::Data(vector<vector<float>>& trainingInputs,
            vector<vector<float>>& trainingLabels,
@@ -24,10 +27,10 @@ Data::Data(vector<vector<float>>& inputs,
 }
 
 void Data::initialize(vector<vector<float>>& trainingInputs,
-           vector<vector<float>>& trainingLabels,
-           vector<vector<float>>& testingInputs,
-           vector<vector<float>>& testingLabels,
-           float value)
+                      vector<vector<float>>& trainingLabels,
+                      vector<vector<float>>& testingInputs,
+                      vector<vector<float>>& testingLabels,
+                      float value)
 {
     this->value = value;
     this->sets[training].inputs.resize(1);
@@ -55,7 +58,6 @@ void Data::clearData()
     this->sets[training].size = 0;
     this->sets[testing].size = 0;
 }
-
 
 void Data::normalization(const float min, const float max)
 {
@@ -85,7 +87,7 @@ void Data::normalization(const float min, const float max)
 
             for (int i = 0; i < (*inputsTraining).size(); i++)
             {
-                if(difference != 0)
+                if (difference != 0)
                     (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / difference;
                 (*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
                 if (isnan((*inputsTraining)[i][j]))
@@ -109,6 +111,23 @@ void Data::normalization(const float min, const float max)
 
 void Data::shuffle()
 {
+    switch (this->temporalType)
+    {
+    case nonTemporal:
+        this->shuffleNonTemporal();
+        break;
+    case temporal:
+        this->shuffleNonTemporal();
+        break;
+    case continuous:
+        this->shuffleContinuous();
+        break;
+    }
+}
+
+
+void Data::shuffleNonTemporal()
+{
     if (indexes.empty())
     {
         indexes.resize(sets[training].size);
@@ -119,6 +138,16 @@ void Data::shuffle()
     random_device rd;
     mt19937 g(rd());
     std::shuffle(indexes.begin(), indexes.end(), g);
+}
+
+void Data::shuffleTemporal()
+{
+    throw NotImplementedException("shuffleTemporal");
+}
+
+void Data::shuffleContinuous()
+{
+    throw NotImplementedException("shuffleContinuous");
 }
 
 void Data::unshuffle()
@@ -135,8 +164,8 @@ bool Data::isValid()
         for (auto& value : input)
         {
             if (value < -1
-            || value > 1
-            || isnan(value))
+                || value > 1
+                || isnan(value))
             {
                 return false;
             }

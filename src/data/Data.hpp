@@ -26,6 +26,12 @@ namespace snn
              std::vector<std::vector<float>>& testingLabels,
              float value);
 
+        void shuffleNonTemporal();
+        void shuffleTemporal();
+        void shuffleContinuous();
+
+        temporalType temporalType = nonTemporal;
+
     protected:
         std::vector<int> indexes;
         float value;

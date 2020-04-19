@@ -52,7 +52,8 @@ namespace snn::internal
 
         void initialize(int numberOfCluster);
 
-        void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
+        void evaluateOnceForRegression(const std::vector<float>& outputs, 
+                                       const std::vector<float>& desiredOutputs,
                                        float precision);
         void evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
                                                    const std::vector<float>& desiredOutputs,

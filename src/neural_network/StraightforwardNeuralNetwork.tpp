@@ -1,3 +1,5 @@
+#pragma once
+
 template <>
 inline void StraightforwardNeuralNetwork::startTraining(Data& data)
 {

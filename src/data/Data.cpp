@@ -30,9 +30,11 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
            float value)
 {
     this->value = value;
-    this->sets[training].inputs = trainingInputs;
+    this->sets[training].inputs.resize(1);
+    this->sets[training].inputs[0] = trainingInputs;
     this->sets[training].labels = trainingLabels;
-    this->sets[testing].inputs = testingInputs;
+    this->sets[testing].inputs.resize(1);
+    this->sets[testing].inputs[0] = testingInputs;
     this->sets[testing].labels = testingLabels;
 
     this->sizeOfData = static_cast<int>(trainingInputs.back().size());
@@ -59,8 +61,8 @@ void Data::normalization(const float min, const float max)
 {
     try
     {
-        vector2D<float>* inputsTraining = &this->sets[training].inputs;
-        vector2D<float>* inputsTesting = &this->sets[testing].inputs;
+        vector2D<float>* inputsTraining = &this->sets[training].inputs[0];
+        vector2D<float>* inputsTesting = &this->sets[testing].inputs[0];
         //TODO: if the first pixel of images is always black, normalization will be wrong if testing set is different
         for (int j = 0; j < this->sizeOfData; j++)
         {
@@ -128,7 +130,7 @@ void Data::unshuffle()
 
 bool Data::isValid()
 {
-    for (auto& input : this->sets[training].inputs)
+    for (auto& input : this->sets[training].inputs[0])
     {
         for (auto& value : input)
         {
@@ -140,7 +142,7 @@ bool Data::isValid()
             }
         }
     }
-    for (auto& input : this->sets[testing].inputs)
+    for (auto& input : this->sets[testing].inputs[0])
     {
         for (auto& value : input)
         {
@@ -155,12 +157,12 @@ bool Data::isValid()
 
 const vector<float>& Data::getTrainingData(const int index)
 {
-    return this->sets[training].inputs[indexes[index]];
+    return this->sets[training].inputs[0][indexes[index]];
 }
 
 const vector<float>& Data::getTestingData(const int index)
 {
-    return this->sets[testing].inputs[index];
+    return this->sets[testing].inputs[0][index];
 }
 
 const vector<float>& Data::getTrainingOutputs(const int index)

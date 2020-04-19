@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "../tools/Tools.hpp"
 
 namespace snn
 {
@@ -7,6 +8,13 @@ namespace snn
     {
         testing = 0,
         training = 1
+    };
+
+    enum temporalType
+    {
+        nonTemporal,
+        temporal,
+        continuous,
     };
 
     class Data
@@ -41,8 +49,8 @@ namespace snn
         {
             int index{0};
             int size{0}; // number of data inside set
-            std::vector<std::vector<float>> inputs{};
-            std::vector<std::vector<float>> labels{};
+            vector3D<float> inputs{};
+            vector2D<float> labels{};
         } sets[2];
 
         virtual ~Data() = default;

@@ -21,16 +21,17 @@ namespace snn
     {
     private:
         void initialize(std::vector<std::vector<float>>& trainingInputs,
-             std::vector<std::vector<float>>& trainingLabels,
-             std::vector<std::vector<float>>& testingInputs,
-             std::vector<std::vector<float>>& testingLabels,
-             float value);
+                        std::vector<std::vector<float>>& trainingLabels,
+                        std::vector<std::vector<float>>& testingInputs,
+                        std::vector<std::vector<float>>& testingLabels,
+                        float value,
+                        temporalType type);
 
         void shuffleNonTemporal();
         void shuffleTemporal();
         void shuffleContinuous();
 
-        temporalType temporalType = nonTemporal;
+        temporalType type;
 
     protected:
         std::vector<int> indexes;
@@ -41,11 +42,25 @@ namespace snn
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             float value);
+             float value,
+             temporalType type);
 
         Data(std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
-             float value);
+             float value,
+             temporalType type);
+
+        Data(std::vector<std::vector<std::vector<float>>>& trainingInputs,
+             std::vector<std::vector<float>>& trainingLabels,
+             std::vector<std::vector<std::vector<float>>>& testingInputs,
+             std::vector<std::vector<float>>& testingLabels,
+             float value,
+             temporalType temporalType);
+
+        Data(std::vector<std::vector<std::vector<float>>>& inputs,
+             std::vector<std::vector<float>>& labels,
+             float value,
+             temporalType temporalType);
 
     public:
         int sizeOfData; // size of one data, equal to size of neural network inputs
@@ -68,7 +83,7 @@ namespace snn
 
         [[nodiscard]] bool isValid();
 
-        [[nodiscard]] float getValue() const {return value;}
+        [[nodiscard]] float getValue() const { return value; }
 
         [[nodiscard]] virtual const std::vector<float>& getTrainingData(const int index);
         [[nodiscard]] virtual const std::vector<float>& getTestingData(const int index);

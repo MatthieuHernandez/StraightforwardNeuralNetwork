@@ -10,11 +10,13 @@ namespace snn
                           std::vector<std::vector<float>> trainingLabels,
                           std::vector<std::vector<float>> testingInputs,
                           std::vector<std::vector<float>> testingLabels,
-                          float precision = 0.1f);
+                          float precision = 0.1f,
+                          temporalType type = nonTemporal);
 
         DataForRegression(std::vector<std::vector<float>> inputs,
                           std::vector<std::vector<float>> labels,
-                          float precision);
+                          float precision = 0.1f,
+                          temporalType type = nonTemporal);
 
         [[nodiscard]] const std::vector<float>& getTestingOutputs(const int index) override;
     };

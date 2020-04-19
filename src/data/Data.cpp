@@ -14,25 +14,29 @@ Data::Data(vector<vector<float>>& trainingInputs,
            vector<vector<float>>& trainingLabels,
            vector<vector<float>>& testingInputs,
            vector<vector<float>>& testingLabels,
-           float value)
+           float value,
+           temporalType type)
 {
-    this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value);
+    this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value, type);
 }
 
 Data::Data(vector<vector<float>>& inputs,
            vector<vector<float>>& labels,
-           float value)
+           float value,
+           temporalType type)
 {
-    this->initialize(inputs, labels, inputs, labels, value);
+    this->initialize(inputs, labels, inputs, labels, value, type);
 }
 
 void Data::initialize(vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
-                      float value)
+                      float value,
+                      temporalType type)
 {
     this->value = value;
+    this->type = type;
     this->sets[training].inputs.resize(1);
     this->sets[training].inputs[0] = trainingInputs;
     this->sets[training].labels = trainingLabels;
@@ -111,13 +115,13 @@ void Data::normalization(const float min, const float max)
 
 void Data::shuffle()
 {
-    switch (this->temporalType)
+    switch (this->type)
     {
     case nonTemporal:
         this->shuffleNonTemporal();
         break;
     case temporal:
-        this->shuffleNonTemporal();
+        this->shuffleTemporal();
         break;
     case continuous:
         this->shuffleContinuous();

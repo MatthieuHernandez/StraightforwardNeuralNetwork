@@ -8,14 +8,17 @@ DataForClassification::DataForClassification(std::vector<std::vector<float>> tra
                                              std::vector<std::vector<float>> trainingLabels,
                                              std::vector<std::vector<float>> testingInputs,
                                              std::vector<std::vector<float>> testingLabels,
-                                             float separator)
-    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator)
+                                             float separator,
+                                             temporalType type)
+    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator, type)
 {
 }
 
 DataForClassification::DataForClassification(std::vector<std::vector<float>> inputs,
-                                             std::vector<std::vector<float>> labels, float separator)
-    : Data(inputs, labels, separator)
+                                             std::vector<std::vector<float>> labels,
+                                             float separator,
+                                             temporalType type)
+    : Data(inputs, labels, separator, type)
 {
 }
 

@@ -8,20 +8,22 @@ DataForRegression::DataForRegression(std::vector<std::vector<float>> trainingInp
                                      std::vector<std::vector<float>> testingInputs,
                                      std::vector<std::vector<float>> testingLabels,
                                      const float precision,
-                                     temporalType type)
-	: Data(trainingInputs, trainingLabels, testingInputs, testingLabels, precision, type)
+                                     temporalType type,
+                                     int numberOfRecurrence)
+    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, precision, type, numberOfRecurrence)
 {
 }
 
 DataForRegression::DataForRegression(std::vector<std::vector<float>> inputs,
                                      std::vector<std::vector<float>> labels,
                                      const float precision,
-                                     temporalType type)
-	: Data(inputs, labels, precision, type)
+                                     temporalType type,
+                                     int numberOfRecurrence)
+    : Data(inputs, labels, precision, type, numberOfRecurrence)
 {
 }
 
 const vector<float>& DataForRegression::getTestingOutputs(const int index)
 {
-	return this->sets[testing].labels[index];
+    return this->sets[testing].labels[index];
 }

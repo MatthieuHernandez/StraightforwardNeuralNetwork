@@ -9,16 +9,18 @@ DataForClassification::DataForClassification(std::vector<std::vector<float>> tra
                                              std::vector<std::vector<float>> testingInputs,
                                              std::vector<std::vector<float>> testingLabels,
                                              float separator,
-                                             temporalType type)
-    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator, type)
+                                             temporalType type,
+                                             int numberOfRecurrence)
+    : Data(trainingInputs, trainingLabels, testingInputs, testingLabels, separator, type, numberOfRecurrence)
 {
 }
 
 DataForClassification::DataForClassification(std::vector<std::vector<float>> inputs,
                                              std::vector<std::vector<float>> labels,
                                              float separator,
-                                             temporalType type)
-    : Data(inputs, labels, separator, type)
+                                             temporalType type,
+                                             int numberOfRecurrence)
+    : Data(inputs, labels, separator, type, numberOfRecurrence)
 {
 }
 

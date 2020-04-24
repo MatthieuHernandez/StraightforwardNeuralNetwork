@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../tools/Tools.hpp"
+#include "TemporalComposite.hpp"
 
 namespace snn
 {
@@ -17,6 +18,17 @@ namespace snn
         continuous,
     };
 
+    struct Set
+    {
+        int index{0};
+        int size{0}; // number of data inside set
+        vector2D<float> inputs{};
+        vector2D<float> labels{};
+        std::vector<int> indexesToShuffle;
+        std::vector<bool> areFirstDataOfTemporalSequence{};
+        std::vector<bool> needToLearnData{};
+    };
+
     class Data
     {
     private:
@@ -25,16 +37,14 @@ namespace snn
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
                         float value,
-                        temporalType type);
-
-        void shuffleNonTemporal();
-        void shuffleTemporal();
-        void shuffleContinuous();
+                        temporalType type,
+                        int numberOfRecurrence);
 
         temporalType type;
+        std::unique_ptr<internal::TemporalComposite> temporalComposite;
+        int numberOfRecurrence;
 
     protected:
-        std::vector<int> indexes;
         float value;
         void clearData();
 
@@ -43,12 +53,14 @@ namespace snn
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
              float value,
-             temporalType type);
+             temporalType type,
+             int numberOfRecurrence);
 
         Data(std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
              float value,
-             temporalType type);
+             temporalType type,
+             int numberOfRecurrence);
 
         Data(std::vector<std::vector<std::vector<float>>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
@@ -66,13 +78,7 @@ namespace snn
         int sizeOfData; // size of one data, equal to size of neural network inputs
         int numberOfLabel; // the number of class, equal to size of neural network outputs
 
-        struct Set
-        {
-            int index{0};
-            int size{0}; // number of data inside set
-            vector3D<float> inputs{};
-            vector2D<float> labels{};
-        } sets[2];
+        Set sets[2];
 
         virtual ~Data() = default;
 
@@ -81,12 +87,16 @@ namespace snn
         void shuffle();
         void unshuffle();
 
-        [[nodiscard]] bool isValid();
+        [[nodiscard]] int isValid();
 
         [[nodiscard]] float getValue() const { return value; }
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingData(const int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingData(const int index);
+        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index);
+        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index);
+        [[nodiscard]] bool needToLearnOnTrainingData(int index);
+
+        [[nodiscard]] virtual const std::vector<float>& getTrainingData(int index);
+        [[nodiscard]] virtual const std::vector<float>& getTestingData(int index);
 
         [[nodiscard]] virtual int getTrainingLabel(const int) { throw std::exception(); }
         [[nodiscard]] virtual int getTestingLabel(const int) { throw std::exception(); }
@@ -94,8 +104,8 @@ namespace snn
         [[nodiscard]] virtual const std::vector<float>& getTrainingOutputs(const int index);
         [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(const int) = 0;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, const int index);
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, const int index);
-        [[nodiscard]] int getLabel(set set, const int index);
+        [[nodiscard]] const std::vector<float>& getData(set set, int index);
+        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
+        [[nodiscard]] int getLabel(set set, int index);
     };
 }

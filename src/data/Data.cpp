@@ -183,19 +183,20 @@ int Data::isValid()
     return 0;
 }
 
-bool Data::isFirstTrainingDataOfTemporalSequence(const int index)
+bool Data::isFirstTrainingDataOfTemporalSequence(const int index) const
 {
-    return this->sets[training].areFirstDataOfTemporalSequence[index];
+    return this->temporalComposite->isFirstTrainingDataOfTemporalSequence(index);
 }
 
-bool Data::isFirstTestingDataOfTemporalSequence(const int index)
+bool Data::isFirstTestingDataOfTemporalSequence(const int index) const
 {
-    return this->sets[testing].areFirstDataOfTemporalSequence[index];
+    return this->temporalComposite->isFirstTestingDataOfTemporalSequence(index);
 }
 
-bool Data::needToLearnOnTrainingData(const int index)
+bool Data::needToLearnOnTrainingData(const int index) const
 {
-    return this->sets[testing].needToLearnData[index];
+    return this->temporalComposite->needToLearnOnTrainingData(index);
+}
 }
 
 const vector<float>& Data::getTrainingData(const int index)

@@ -91,9 +91,9 @@ namespace snn
 
         [[nodiscard]] float getValue() const { return value; }
 
-        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index);
-        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index);
-        [[nodiscard]] bool needToLearnOnTrainingData(int index);
+        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const;
+        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;
+        [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
 
         [[nodiscard]] virtual const std::vector<float>& getTrainingData(int index);
         [[nodiscard]] virtual const std::vector<float>& getTestingData(int index);

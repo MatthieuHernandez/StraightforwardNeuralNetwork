@@ -31,7 +31,28 @@ void CompositeForNonTemporalData::unshuffle()
         sets[training].indexesToShuffle[i] = i;
 }
 
-int CompositeForNonTemporalData::isValid() //TODO: also need learning to shuffle always true override needlearn and is first method
+bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index)
 {
+    return false;
+}
+
+bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index)
+{
+    return false;
+}
+
+bool CompositeForNonTemporalData::needToLearnOnTrainingData(int index)
+{
+    return true;
+}
+
+int CompositeForNonTemporalData::isValid()
+//TODO: also need learning to shuffle always true override needlearn and is firstJE le trouve mal method
+{
+    if (!this->sets[training].areFirstDataOfTemporalSequence.empty()
+     && !this->sets[testing].areFirstDataOfTemporalSequence.empty()
+     && !this->sets[training].needToLearnData.empty()
+     && !this->sets[testing].needToLearnData.empty())
+        return 404;
     return this->TemporalComposite::isValid();
 }

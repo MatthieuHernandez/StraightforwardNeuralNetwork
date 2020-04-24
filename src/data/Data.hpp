@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+
+#include "ProblemComposite.hpp"
 #include "../tools/Tools.hpp"
 #include "TemporalComposite.hpp"
 
@@ -9,6 +11,13 @@ namespace snn
     {
         testing = 0,
         training = 1
+    };
+
+    enum problemType
+    {
+        classification,
+        multipleClassification,
+        regression
     };
 
     enum temporalType
@@ -32,15 +41,18 @@ namespace snn
     class Data
     {
     private:
-        void initialize(std::vector<std::vector<float>>& trainingInputs,
+        void initialize(problemType problem,
+                        std::vector<std::vector<float>>& trainingInputs,
                         std::vector<std::vector<float>>& trainingLabels,
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
                         float value,
-                        temporalType type,
+                        temporalType temporel,
                         int numberOfRecurrence);
 
-        temporalType type;
+        temporalType typeOfTemporal;
+        problemType typeOfProblem;
+        std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
         int numberOfRecurrence;
 
@@ -48,31 +60,35 @@ namespace snn
         float value;
         void clearData();
 
-        Data(std::vector<std::vector<float>>& trainingInputs,
+        Data(problemType problem,
+             std::vector<std::vector<float>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
              float value,
-             temporalType type,
+             temporalType temporal,
              int numberOfRecurrence);
 
-        Data(std::vector<std::vector<float>>& inputs,
+        Data(problemType problem,
+             std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
              float value,
-             temporalType type,
+             temporalType temporal,
              int numberOfRecurrence);
 
-        Data(std::vector<std::vector<std::vector<float>>>& trainingInputs,
+        Data(problemType problem,
+             std::vector<std::vector<std::vector<float>>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<std::vector<float>>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
              float value,
              temporalType temporalType);
 
-        Data(std::vector<std::vector<std::vector<float>>>& inputs,
+        Data(problemType problem,
+             std::vector<std::vector<std::vector<float>>>& inputs,
              std::vector<std::vector<float>>& labels,
              float value,
-             temporalType temporalType);
+             temporalType temporal);
 
     public:
         int sizeOfData; // size of one data, equal to size of neural network inputs
@@ -95,17 +111,17 @@ namespace snn
         [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;
         [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingData(int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingData(int index);
+        [[nodiscard]] const std::vector<float>& getTrainingData(int index) const;
+        [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
 
-        [[nodiscard]] virtual int getTrainingLabel(const int) { throw std::exception(); }
-        [[nodiscard]] virtual int getTestingLabel(const int) { throw std::exception(); }
+        [[nodiscard]] int getTrainingLabel(int) const;
+        [[nodiscard]] int getTestingLabel(int) const;
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingOutputs(const int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(const int) = 0;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(const int index) const;
+        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, int index);
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
+        [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
+        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
         [[nodiscard]] int getLabel(set set, int index);
     };
 }

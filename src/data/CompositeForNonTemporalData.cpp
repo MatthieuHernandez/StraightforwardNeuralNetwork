@@ -31,17 +31,17 @@ void CompositeForNonTemporalData::unshuffle()
         sets[training].indexesToShuffle[i] = i;
 }
 
-bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index)
+bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index)
+bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index) const
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::needToLearnOnTrainingData(int index)
+bool CompositeForNonTemporalData::needToLearnOnTrainingData(int index) const
 {
     return true;
 }

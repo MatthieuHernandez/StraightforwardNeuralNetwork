@@ -6,43 +6,77 @@
 #include "CompositeForContinuousData.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
+#include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-Data::Data(vector<vector<float>>& trainingInputs,
+Data::Data(problemType typeOfProblem,
+           vector<vector<float>>& trainingInputs,
            vector<vector<float>>& trainingLabels,
            vector<vector<float>>& testingInputs,
            vector<vector<float>>& testingLabels,
            float value,
-           temporalType type,
+           temporalType typeOfTemporal,
            int numberOfRecurrence)
 {
-    this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels, value, type, numberOfRecurrence);
+    this->initialize(typeOfProblem,
+                     trainingInputs,
+                     trainingLabels,
+                     testingInputs,
+                     testingLabels,
+                     value,
+                     typeOfTemporal,
+                     numberOfRecurrence);
 }
 
-Data::Data(vector<vector<float>>& inputs,
+Data::Data(problemType typeOfProblem,
+           vector<vector<float>>& inputs,
            vector<vector<float>>& labels,
            float value,
-           temporalType type,
+           temporalType typeOfTemporal,
            int numberOfRecurrence)
 {
-    this->initialize(inputs, labels, inputs, labels, value, type, numberOfRecurrence);
+    this->initialize(typeOfProblem,
+                     inputs,
+                     labels,
+                     inputs,
+                     labels,
+                     value,
+                     typeOfTemporal,
+                     numberOfRecurrence);
 }
 
-void Data::initialize(vector<vector<float>>& trainingInputs,
+void Data::initialize(problemType typeOfProblem,
+                      vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
                       float value,
-                      temporalType type,
+                      temporalType typeOfTemporal,
                       int numberOfRecurrence)
 {
     this->value = value;
-    this->type = type;
+    this->typeOfProblem = typeOfProblem;
+    this->typeOfTemporal = temporal;
 
-    switch (this->type)
+    switch (this->typeOfProblem)
+    {
+    case classification:
+        this->problemComposite = make_unique<ProblemComposite>(ClassificationComposite(this->sets));
+        break;
+    case multipleClassification:
+        this->problemComposite = make_unique<ProblemComposite>(MultipleClassificationComposite(this->sets));
+        break;
+    case regression:
+        this->problemComposite = make_unique<ProblemComposite>(RegressionComposite(this->sets));
+        break;
+    default:
+        throw NotImplementedException();
+    }
+
+    switch (this->typeOfTemporal)
     {
     case nonTemporal:
         this->temporalComposite = make_unique<TemporalComposite>(CompositeForNonTemporalData(this->sets));
@@ -53,6 +87,8 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
     case continuous:
         this->temporalComposite = make_unique<TemporalComposite>(CompositeForContinuousData(this->sets));
         break;
+    default:
+        throw NotImplementedException();
     }
 
     this->numberOfRecurrence = numberOfRecurrence;
@@ -91,8 +127,8 @@ void Data::normalization(const float min, const float max)
 {
     try
     {
-        vector2D<float>* inputsTraining = &this->sets[training].inputs[0];
-        vector2D<float>* inputsTesting = &this->sets[testing].inputs[0];
+        vector2D<float>* inputsTraining = &this->sets[training].inputs;
+        vector2D<float>* inputsTesting = &this->sets[testing].inputs;
         //TODO: if the first pixel of images is always black, normalization will be wrong if testing set is different
         for (int j = 0; j < this->sizeOfData; j++)
         {
@@ -173,11 +209,11 @@ int Data::isValid()
             }
         }
     }
-    if(!this->sets[testing].indexesToShuffle.empty()
-         && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
+    if (!this->sets[testing].indexesToShuffle.empty()
+        && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
         return 403;
 
-     int err = this->temporalComposite->isValid();
+    int err = this->temporalComposite->isValid();
     if (err != 0)
         return err;
     return 0;
@@ -197,26 +233,38 @@ bool Data::needToLearnOnTrainingData(const int index) const
 {
     return this->temporalComposite->needToLearnOnTrainingData(index);
 }
-}
 
-const vector<float>& Data::getTrainingData(const int index)
+const vector<float>& Data::getTrainingData(const int index) const
 {
-    const int i = this->sets[training].indexesToShuffle[index];
-    return this->sets[training].inputs[i];
+    return this->problemComposite->getTestingData(index);
+    /*const int i = this->sets[training].indexesToShuffle[index];
+    return this->sets[training].inputs[i];*/
 }
 
-const vector<float>& Data::getTestingData(const int index)
+const vector<float>& Data::getTestingData(const int index) const
 {
-    return this->sets[testing].inputs[index];
+    return this->problemComposite->getTestingData(index);
+    /*return this->sets[testing].inputs[index];*/
 }
 
-const vector<float>& Data::getTrainingOutputs(const int index)
+int Data::getTrainingLabel(const int index) const
 {
-    const int i = this->sets[training].indexesToShuffle[index];
-    return this->sets[training].labels[i];
+    return this->problemComposite->getTrainingLabel(index);
 }
 
-const vector<float>& Data::getData(set set, const int index)
+int Data::getTestingLabel(const int index) const
+{
+    return this->problemComposite->getTestingLabel(index);
+}
+
+const vector<float>& Data::getTrainingOutputs(const int index) const
+{
+    return this->problemComposite->getTestingData(index);
+    /*const int i = this->sets[training].indexesToShuffle[index];
+    return this->sets[training].labels[i];*/
+}
+
+const vector<float>& Data::getData(set set, const int index) const
 {
     if (set == training)
         return this->getTrainingData(index);
@@ -224,7 +272,7 @@ const vector<float>& Data::getData(set set, const int index)
     return this->getTestingData(index);
 }
 
-const vector<float>& Data::getOutputs(set set, const int index)
+const vector<float>& Data::getOutputs(set set, const int index) const
 {
     if (set == training)
         return this->getTrainingOutputs(index);

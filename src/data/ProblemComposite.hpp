@@ -9,17 +9,14 @@ namespace snn::internal
         Set sets[2];
 
     public:
-        ProblemComposite(Set set[2]);
+        ProblemComposite(Set sets[2]);
 
         [[nodiscard]] virtual int isValid();
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingData(int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingData(int index);
+        [[nodiscard]] virtual int getTrainingLabel(int index) = 0;
+        [[nodiscard]] virtual int getTestingLabel(int index) = 0;
 
-        [[nodiscard]] virtual int getTrainingLabel(const int) { throw std::exception(); }
-        [[nodiscard]] virtual int getTestingLabel(const int) { throw std::exception(); }
-
-        [[nodiscard]] virtual const std::vector<float>& getTrainingOutputs(const int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(const int) = 0;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index);
+        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(int index) = 0;
     };
 }

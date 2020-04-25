@@ -3,6 +3,9 @@
 #include <vector>
 #include "Data.hpp"
 #include "../tools/Tools.hpp"
+#include "CompositeForClassification.hpp"
+#include "CompositeForMultipleClassification.hpp"
+#include "CompositeForRegression.hpp"
 #include "CompositeForContinuousData.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
@@ -20,6 +23,7 @@ Data::Data(problemType typeOfProblem,
            float value,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
+    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     this->initialize(typeOfProblem,
                      trainingInputs,
@@ -37,6 +41,7 @@ Data::Data(problemType typeOfProblem,
            float value,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
+    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     this->initialize(typeOfProblem,
                      inputs,
@@ -58,19 +63,17 @@ void Data::initialize(problemType typeOfProblem,
                       int numberOfRecurrence)
 {
     this->value = value;
-    this->typeOfProblem = typeOfProblem;
-    this->typeOfTemporal = temporal;
 
     switch (this->typeOfProblem)
     {
     case classification:
-        this->problemComposite = make_unique<ProblemComposite>(ClassificationComposite(this->sets));
+        this->problemComposite = make_unique<ProblemComposite>(CompositeForClassification(this->sets));
         break;
     case multipleClassification:
-        this->problemComposite = make_unique<ProblemComposite>(MultipleClassificationComposite(this->sets));
+        this->problemComposite = make_unique<ProblemComposite>(CompositeForMultipleClassification(this->sets));
         break;
     case regression:
-        this->problemComposite = make_unique<ProblemComposite>(RegressionComposite(this->sets));
+        this->problemComposite = make_unique<ProblemComposite>(CompositeForRegression(this->sets));
         break;
     default:
         throw NotImplementedException();
@@ -236,15 +239,13 @@ bool Data::needToLearnOnTrainingData(const int index) const
 
 const vector<float>& Data::getTrainingData(const int index) const
 {
-    return this->problemComposite->getTestingData(index);
-    /*const int i = this->sets[training].indexesToShuffle[index];
-    return this->sets[training].inputs[i];*/
+    const int i = this->sets[training].indexesToShuffle[index];
+    return this->sets[training].inputs[i];
 }
 
 const vector<float>& Data::getTestingData(const int index) const
 {
-    return this->problemComposite->getTestingData(index);
-    /*return this->sets[testing].inputs[index];*/
+    return this->sets[testing].inputs[index];
 }
 
 int Data::getTrainingLabel(const int index) const
@@ -259,9 +260,8 @@ int Data::getTestingLabel(const int index) const
 
 const vector<float>& Data::getTrainingOutputs(const int index) const
 {
-    return this->problemComposite->getTestingData(index);
-    /*const int i = this->sets[training].indexesToShuffle[index];
-    return this->sets[training].labels[i];*/
+    const int i = this->sets[training].indexesToShuffle[index];
+    return this->sets[training].labels[i];
 }
 
 const vector<float>& Data::getData(set set, const int index) const
@@ -280,7 +280,7 @@ const vector<float>& Data::getOutputs(set set, const int index) const
     return this->getTestingOutputs(index);
 }
 
-int Data::getLabel(set set, const int index)
+int Data::getLabel(set set, const int index) const
 {
     if (set == training)
         return this->getTrainingLabel(index);

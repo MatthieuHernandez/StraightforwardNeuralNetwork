@@ -27,7 +27,7 @@ void Iris::loadData(string folderPath)
     individuals.reserve(150);
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     while (getline(file, line) && line.size() > 4)
     {

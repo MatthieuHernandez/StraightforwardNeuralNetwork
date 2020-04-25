@@ -1,4 +1,5 @@
 #include "CompositeForTemporalData.hpp"
+#include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
@@ -11,10 +12,12 @@ CompositeForTemporalData::CompositeForTemporalData(Set set[2])
 
 void CompositeForTemporalData::shuffle()
 {
+    throw NotImplementedException();
 }
 
 void CompositeForTemporalData::unshuffle()
 {
+    throw NotImplementedException();
 }
 
 bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
@@ -34,7 +37,7 @@ bool CompositeForTemporalData::needToLearnOnTrainingData(int index) const
 
 int CompositeForTemporalData::isValid()
 {
-    if(!this->sets[testing].needToLearnData.empty())
+    if (!this->sets[testing].needToLearnData.empty())
         return 404;
     return this->TemporalComposite::isValid();
 }

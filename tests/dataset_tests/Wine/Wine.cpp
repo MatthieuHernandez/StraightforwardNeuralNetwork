@@ -24,7 +24,7 @@ void Wine::loadData(string folderPath)
     ifstream file(folderPath + "/wine.data", ios::in);
     
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     data.reserve(178);
     labels.reserve(178);

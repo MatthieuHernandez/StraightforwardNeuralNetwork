@@ -5,12 +5,8 @@
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
 #include "../data/Data.hpp"
-#include "../data/DataForClassification.hpp"
-#include "../data/DataForMultipleClassification.hpp"
-#include "../data/DataForRegression.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
-#include "../tools/Tools.hpp"
 
 namespace snn
 {
@@ -25,13 +21,8 @@ namespace snn
         int numberOfIteration = 0;
         int numberOfTrainingsBetweenTwoEvaluations = 0;
 
-        //TODO: Use C++20 concepts to only allow class derivative from Data
-        template<class TData>
-        void train(TData& data);
-
-        void evaluateOnce(DataForRegression& data);
-        void evaluateOnce(DataForMultipleClassification& data);
-        void evaluateOnce(DataForClassification& data);
+        void train(Data& data);
+        void evaluateOnce(Data& data);
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -49,14 +40,12 @@ namespace snn
         [[nodiscard]] int isValid() const;
         [[nodiscard]] bool validData(const Data& data) const;
 
-        template<class TData>
-        void startTraining(TData& data);
+        void startTraining(Data& data);
         void stopTraining();
 
         void waitFor(Wait wait) const;
 
-        template <typename TData>
-        void evaluate(TData& data);
+        void evaluate(Data& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs);
         int computeCluster(const std::vector<float>& inputs);
@@ -87,6 +76,4 @@ namespace snn
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
     }
-
-    #include "StraightforwardNeuralNetwork.tpp"
 }

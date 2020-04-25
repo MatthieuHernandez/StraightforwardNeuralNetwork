@@ -31,7 +31,7 @@ vector2D<float> Mnist::readImages(string filePath, int size)
     constexpr int sizeOfData = 28 * 28;
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;
@@ -67,7 +67,7 @@ vector2D<float> Mnist::readLabels(string filePath, int size)
     labels.reserve(size);
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;

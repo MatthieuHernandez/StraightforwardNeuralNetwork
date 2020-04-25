@@ -1,4 +1,5 @@
 #include "CompositeForContinuousData.hpp"
+#include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
@@ -11,10 +12,12 @@ CompositeForContinuousData::CompositeForContinuousData(Set set[2])
 
 void CompositeForContinuousData::shuffle()
 {
+    throw NotImplementedException();
 }
 
 void CompositeForContinuousData::unshuffle()
 {
+    throw NotImplementedException();
 }
 
 bool CompositeForContinuousData::isFirstTrainingDataOfTemporalSequence(int index) const

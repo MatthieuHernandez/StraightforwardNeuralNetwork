@@ -47,11 +47,9 @@ namespace snn
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
                         float value,
-                        temporalType temporel,
+                        temporalType temporal,
                         int numberOfRecurrence);
 
-        temporalType typeOfTemporal;
-        problemType typeOfProblem;
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
         int numberOfRecurrence;
@@ -91,6 +89,10 @@ namespace snn
              temporalType temporal);
 
     public:
+
+        const problemType typeOfProblem;
+        const temporalType typeOfTemporal;
+
         int sizeOfData; // size of one data, equal to size of neural network inputs
         int numberOfLabel; // the number of class, equal to size of neural network outputs
 
@@ -122,6 +124,6 @@ namespace snn
 
         [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
         [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
-        [[nodiscard]] int getLabel(set set, int index);
+        [[nodiscard]] int getLabel(set set, int index) const;
     };
 }

@@ -50,7 +50,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
     file.open(filePath, ios::in | ios::binary);
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     for (int i = 0; !file.eof(); i++)
     {

@@ -6,7 +6,7 @@ namespace snn::internal
     class CompositeForContinuousData : TemporalComposite
     {
     public:
-        CompositeForContinuousData(Set set[2]);
+        CompositeForContinuousData(snn::Set sets[2]);
 
         void shuffle() override;
         void unshuffle() override;
@@ -16,6 +16,5 @@ namespace snn::internal
         [[nodiscard]] bool needToLearnOnTrainingData(int index) const override;
 
         [[nodiscard]] int isValid() override;
-
     };
 }

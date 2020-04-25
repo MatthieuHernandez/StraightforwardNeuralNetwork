@@ -5,8 +5,8 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-CompositeForTemporalData::CompositeForTemporalData(Set set[2])
-    : TemporalComposite(set)
+CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
+    : TemporalComposite(sets)
 {
 }
 

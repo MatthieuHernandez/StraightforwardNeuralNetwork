@@ -6,7 +6,7 @@ namespace snn::internal
     class CompositeForTemporalData : TemporalComposite
     {
     public:
-        CompositeForTemporalData(Set set[2]);
+        CompositeForTemporalData(snn::Set sets[2]);
 
         void shuffle() override;
         void unshuffle() override;

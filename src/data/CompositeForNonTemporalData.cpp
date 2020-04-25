@@ -26,9 +26,9 @@ void CompositeForNonTemporalData::shuffle() //TODO: also need learning to shuffl
 
 void CompositeForNonTemporalData::unshuffle()
 {
-    sets[training].indexesToShuffle.resize(sets[training].size);
-    for (int i = 0; i < static_cast<int>(sets[training].indexesToShuffle.size()); ++i)
-        sets[training].indexesToShuffle[i] = i;
+    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
+    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); ++i)
+        this->sets[training].indexesToShuffle[i] = i;
 }
 
 bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const

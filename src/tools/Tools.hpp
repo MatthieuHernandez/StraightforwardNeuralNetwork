@@ -19,6 +19,7 @@ namespace snn
 
     static constexpr logLevel verbose = none;
 }
+
 namespace snn::internal
 {
     class Tools

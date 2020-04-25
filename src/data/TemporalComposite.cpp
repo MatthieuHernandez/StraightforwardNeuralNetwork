@@ -4,9 +4,9 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-TemporalComposite::TemporalComposite(Set set[2])
+TemporalComposite::TemporalComposite(Set sets[2])
 {
-    *this->sets = *set;
+    *this->sets = *sets;
 }
 
 int TemporalComposite::isValid()

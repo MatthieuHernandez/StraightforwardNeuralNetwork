@@ -114,7 +114,19 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     {
         if (this->wantToStopTraining)
             return;
-        switch (data.typeOfProblem)
+        this->evaluateOnce(data);
+    }
+    this->stopTesting();
+    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
+    {
+        this->saveAs(autoSaveFilePath);
+    }
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
+{
+    switch (data.typeOfProblem)
         {
         case classification:
             this->evaluateOnceForClassification(
@@ -133,13 +145,8 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
         default:
             throw NotImplementedException();
         }
-    }
-    this->stopTesting();
-    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
-    {
-        this->saveAs(autoSaveFilePath);
-    }
 }
+
 
 void StraightforwardNeuralNetwork::stopTraining()
 {

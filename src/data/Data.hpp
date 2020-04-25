@@ -1,9 +1,8 @@
 #pragma once
 #include <vector>
-
 #include "ProblemComposite.hpp"
-#include "../tools/Tools.hpp"
 #include "TemporalComposite.hpp"
+#include "../tools/Tools.hpp"
 
 namespace snn
 {

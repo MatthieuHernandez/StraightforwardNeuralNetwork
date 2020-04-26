@@ -21,7 +21,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs, bool temporalReset) const = 0;
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
         int numberOfInputs;
@@ -44,7 +44,7 @@ namespace snn::internal
 
         std::vector<Perceptron> neurons;
 
-        std::vector<float> output(const std::vector<float>& inputs);
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
         std::vector<float> backOutput(std::vector<float>& inputErrors);
         void train(std::vector<float>& inputErrors);
 

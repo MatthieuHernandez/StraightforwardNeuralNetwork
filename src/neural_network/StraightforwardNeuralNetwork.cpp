@@ -44,14 +44,14 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const Straightforward
     this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs)
+vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset)
 {
-    return this->output(inputs);
+    return this->output(inputs, temporalReset);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
+int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
     for (int i = 0; i < outputs.size(); i++)
@@ -97,8 +97,9 @@ void StraightforwardNeuralNetwork::train(Data& data)
         for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
             this->currentIndex ++)
         {
-            this->trainOnce(data.getTrainingData(this->currentIndex),
-                            data.getTrainingOutputs(this->currentIndex));
+            if(data.needToLearnOnTrainingData(this->currentIndex))
+                this->trainOnce(data.getTrainingData(this->currentIndex),
+                                data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(true));
         }
         this->evaluate(data);
     }
@@ -107,11 +108,12 @@ void StraightforwardNeuralNetwork::train(Data& data)
 void StraightforwardNeuralNetwork::evaluate(Data& data)
 {
     this->startTesting();
-    for (currentIndex = 0; currentIndex < data.sets[testing].size; currentIndex++)
+    for (this->currentIndex = 0; this->currentIndex < data.sets[testing].size; this->currentIndex++)
     {
         if (this->wantToStopTraining)
             return;
-        this->evaluateOnce(data);
+        if(data.needToEvaluateOnTestingData(this->currentIndex))
+            this->evaluateOnce(data);
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
@@ -124,24 +126,26 @@ inline
 void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
 {
     switch (data.typeOfProblem)
-        {
-        case classification:
-            this->evaluateOnceForClassification(
-                data.getTestingData(this->currentIndex),
-                data.getTestingLabel(this->currentIndex));
-            break;
-        case multipleClassification:
-            this->evaluateOnceForMultipleClassification(
-                data.getTestingData(this->currentIndex),
-                data.getTestingOutputs(this->currentIndex), data.getValue());
-            break;
-        case regression:
-            this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
-                                            data.getTestingOutputs(this->currentIndex), data.getValue());
-            break;
-        default:
-            throw NotImplementedException();
-        }
+    {
+    case classification:
+        this->evaluateOnceForClassification(data.getTestingData(this->currentIndex),
+                                            data.getTestingLabel(this->currentIndex),
+                                            data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    case multipleClassification:
+        this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
+                                                    data.getTestingOutputs(this->currentIndex), data.getValue(),
+                                                    data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    case regression:
+        this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
+                                        data.getTestingOutputs(this->currentIndex),
+                                        data.getValue(),
+                                        data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    default:
+        throw NotImplementedException();
+    }
 }
 
 
@@ -167,7 +171,7 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
         this_thread::sleep_for(1ms);
         auto epochs =  this->getNumberOfIteration();
         auto accuracy = this->getGlobalClusteringRate();
-        auto durationMs = duration_cast<std::chrono::milliseconds>(system_clock::now() - startWait).count();
+        auto durationMs = duration_cast<milliseconds>(system_clock::now() - startWait).count();
         
         if(wait.isOver(epochs, accuracy, durationMs))
             break;

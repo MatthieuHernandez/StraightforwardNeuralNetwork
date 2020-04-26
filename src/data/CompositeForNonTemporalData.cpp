@@ -46,6 +46,11 @@ bool CompositeForNonTemporalData::needToLearnOnTrainingData(int index) const
     return true;
 }
 
+bool CompositeForNonTemporalData::needToEvaluateOnTestingData(int index) const
+{
+    return true;
+}
+
 int CompositeForNonTemporalData::isValid()
 //TODO: also need learning to shuffle always true override needlearn and is firstJE le trouve mal method
 {

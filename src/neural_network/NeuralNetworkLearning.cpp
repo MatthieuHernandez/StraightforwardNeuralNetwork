@@ -5,45 +5,45 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-vector<float> NeuralNetwork::output(const vector<float>& inputs)
+vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
 {
-    auto outputs = layers[0]->output(inputs);
+    auto outputs = layers[0]->output(inputs, temporalReset);
 
     for (int l = 1; l < this->layers.size(); ++l)
     {
-        outputs = layers[l]->output(outputs);
+        outputs = layers[l]->output(outputs, temporalReset);
     }
     return outputs;
 }
 
 void NeuralNetwork::evaluateOnceForRegression(
-    const vector<float>& inputs, const vector<float>& desired, const float precision)
+    const vector<float>& inputs, const vector<float>& desired, const float precision, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForRegression(outputs, desired, precision);
 }
 
 void NeuralNetwork::evaluateOnceForMultipleClassification(
-    const vector<float>& inputs, const vector<float>& desired, const float separator)
+    const vector<float>& inputs, const vector<float>& desired, const float separator, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
 }
 
-void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber)
+void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber);
 }
 
-void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired)
+void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
 {
-    this->backpropagationAlgorithm(inputs, desired);  
+    this->backpropagationAlgorithm(inputs, desired, temporalReset);
 }
 
-void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired)
+void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     auto errors = calculateError(outputs, desired);
 
     for (int l = this->layers.size() - 1; l > 0; --l)

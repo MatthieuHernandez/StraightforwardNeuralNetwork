@@ -5,7 +5,7 @@
 using namespace std;
 using namespace snn;
 
-DataForClassification createData();
+Data createData();
 
 TEST(Convolution, SimpleConvolution2D)
 {
@@ -25,7 +25,7 @@ TEST(Convolution, SimpleConvolution2D)
 
 }
 
-DataForClassification createData()
+Data createData()
 {
     vector<vector<float>> inputData = {
         {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 
@@ -42,6 +42,6 @@ DataForClassification createData()
     };
 	vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-	DataForClassification data(inputData, expectedOutputs);
+	Data data(classification, inputData, expectedOutputs);
     return data;
 }

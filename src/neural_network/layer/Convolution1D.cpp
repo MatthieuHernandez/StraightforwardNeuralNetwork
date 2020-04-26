@@ -43,7 +43,7 @@ int Convolution1D::isValid() const
 }
 
 inline
-vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs, bool temporalReset) const
 {
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfConvolution;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];

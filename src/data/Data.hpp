@@ -29,7 +29,6 @@ namespace snn
                         std::vector<std::vector<float>>& trainingLabels,
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
-                        float value,
                         temporalType temporal,
                         int numberOfRecurrence);
 
@@ -38,40 +37,36 @@ namespace snn
         int numberOfRecurrence;
 
     protected:
-        float value;
+        float precision{};
+        float separator{};
         void clearData();
 
+    public:
         Data(problemType problem,
              std::vector<std::vector<float>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             float value,
              temporalType temporal,
              int numberOfRecurrence);
 
         Data(problemType problem,
              std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
-             float value,
              temporalType temporal,
              int numberOfRecurrence);
 
-        Data(problemType problem,
+        /*Data(problemType problem,
              std::vector<std::vector<std::vector<float>>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<std::vector<float>>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             float value,
              temporalType temporalType);
 
         Data(problemType problem,
              std::vector<std::vector<std::vector<float>>>& inputs,
              std::vector<std::vector<float>>& labels,
-             float value,
-             temporalType temporal);
-
-    public:
+             temporalType temporal);*/
 
         const problemType typeOfProblem;
         const temporalType typeOfTemporal;
@@ -90,11 +85,10 @@ namespace snn
 
         [[nodiscard]] int isValid();
 
-        [[nodiscard]] float getValue() const { return value; }
-
         [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const;
         [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;
         [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
+        [[nodiscard]] bool needToEvaluateOnTestingData(int index) const;
 
         [[nodiscard]] const std::vector<float>& getTrainingData(int index) const;
         [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
@@ -108,5 +102,13 @@ namespace snn
         [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
         [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
         [[nodiscard]] int getLabel(set set, int index) const;
+
+        
+        [[nodiscard]] float getSeparator() const;
+        [[nodiscard]] void setSeparator(float value);
+        [[nodiscard]] float getPrecision() const;
+        [[nodiscard]] void setPrecision(float value);
+
+
     };
 }

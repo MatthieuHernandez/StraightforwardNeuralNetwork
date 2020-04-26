@@ -35,6 +35,11 @@ bool CompositeForContinuousData::needToLearnOnTrainingData(int index) const
     return this->sets[training].needToLearnData[index];
 }
 
+bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
+{
+    return this->sets[testing].needToLearnData[index];
+}
+
 int CompositeForContinuousData::isValid()
 {
     if (!this->sets[testing].areFirstDataOfTemporalSequence.empty()

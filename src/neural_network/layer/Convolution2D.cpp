@@ -44,7 +44,7 @@ int Convolution2D::isValid() const
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs, bool temporalReset) const
 {
     vector<float> neuronInputs;
     neuronInputs.reserve(this->neurons[neuronNumber].getNumberOfInputs());

@@ -47,8 +47,8 @@ namespace snn
 
         void evaluate(Data& data);
 
-        std::vector<float> computeOutput(const std::vector<float>& inputs);
-        int computeCluster(const std::vector<float>& inputs);
+        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
+        int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);
 
         bool isTraining() const;
 

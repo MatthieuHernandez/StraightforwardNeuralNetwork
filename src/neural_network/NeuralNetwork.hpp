@@ -18,7 +18,8 @@ namespace snn::internal
         static bool isTheFirst;
         static void initialize();
 
-        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired);
+        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
+                                      bool temporalReset);
         std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
         friend class boost::serialization::access;
@@ -28,15 +29,17 @@ namespace snn::internal
     protected:
         int maxOutputIndex = -1;
 
-        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs);
+        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
 
         void evaluateOnceForRegression(const std::vector<float>& inputs,
                                        const std::vector<float>& desired,
-                                       float precision);
+                                       float precision,
+                                       bool temporalReset);
         void evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
                                                    const std::vector<float>& desired,
-                                                   float separator);
-        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber);
+                                                   float separator,
+                                                   bool temporalReset);
+        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, bool temporalReset);
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
@@ -55,7 +58,7 @@ namespace snn::internal
         std::vector<std::unique_ptr<Layer>> layers{};
         [[nodiscard]] int isValid() const;
 
-        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired);
+        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = false);
 
         bool operator==(const NeuralNetwork& neuralNetwork) const;
         bool operator!=(const NeuralNetwork& neuralNetwork) const;

@@ -25,7 +25,7 @@ unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
 }
 
 inline
-vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<float>& inputs, bool temporalReset) const
 {
     return inputs;
 }

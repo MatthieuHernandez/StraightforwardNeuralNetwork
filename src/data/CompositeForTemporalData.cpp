@@ -35,6 +35,11 @@ bool CompositeForTemporalData::needToLearnOnTrainingData(int index) const
     return this->sets[training].needToLearnData[index];
 }
 
+bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
+{
+      return this->sets[testing].needToLearnData[index];
+}
+
 int CompositeForTemporalData::isValid()
 {
     if (!this->sets[testing].needToLearnData.empty())

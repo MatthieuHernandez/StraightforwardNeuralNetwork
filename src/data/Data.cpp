@@ -20,7 +20,6 @@ Data::Data(problemType typeOfProblem,
            vector<vector<float>>& trainingLabels,
            vector<vector<float>>& testingInputs,
            vector<vector<float>>& testingLabels,
-           float value,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
@@ -30,7 +29,6 @@ Data::Data(problemType typeOfProblem,
                      trainingLabels,
                      testingInputs,
                      testingLabels,
-                     value,
                      typeOfTemporal,
                      numberOfRecurrence);
 }
@@ -38,7 +36,6 @@ Data::Data(problemType typeOfProblem,
 Data::Data(problemType typeOfProblem,
            vector<vector<float>>& inputs,
            vector<vector<float>>& labels,
-           float value,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
@@ -48,7 +45,6 @@ Data::Data(problemType typeOfProblem,
                      labels,
                      inputs,
                      labels,
-                     value,
                      typeOfTemporal,
                      numberOfRecurrence);
 }
@@ -58,11 +54,11 @@ void Data::initialize(problemType typeOfProblem,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
-                      float value,
                       temporalType typeOfTemporal,
                       int numberOfRecurrence)
 {
-    this->value = value;
+    this->precision = 0.1f;
+    this->separator = 0.5f;
 
     switch (this->typeOfProblem)
     {
@@ -237,6 +233,11 @@ bool Data::needToLearnOnTrainingData(const int index) const
     return this->temporalComposite->needToLearnOnTrainingData(index);
 }
 
+bool Data::needToEvaluateOnTestingData(int index) const
+{
+    return this->temporalComposite->needToEvaluateOnTestingData(index);
+}
+
 const vector<float>& Data::getTrainingData(const int index) const
 {
     const int i = this->sets[training].indexesToShuffle[index];
@@ -286,4 +287,42 @@ int Data::getLabel(set set, const int index) const
         return this->getTrainingLabel(index);
 
     return this->getTestingLabel(index);
+}
+
+inline
+void Data::setPrecision(float value)
+{
+    if (this->typeOfProblem == regression)
+        this->precision = value;
+    else
+        throw std::runtime_error("Precision is only for regression problems.");
+}
+
+inline
+float Data::getPrecision() const
+{
+    if (this->typeOfProblem == regression)
+        return this->precision;
+    else
+        throw std::runtime_error("Precision is only for regression problems.");
+}
+
+inline
+void Data::setSeparator(float value)
+{
+    if (this->typeOfProblem == classification
+        || this->typeOfProblem == multipleClassification)
+        this->separator = value;
+    else
+        throw std::runtime_error("Separator is only for classification and multiple classification problems.");
+}
+
+inline
+float Data::getSeparator() const
+{
+    if (this->typeOfProblem == classification
+        || this->typeOfProblem == multipleClassification)
+        return this->separator;
+    else
+        throw std::runtime_error("Separator is only for classification and multiple classification problems.");
 }

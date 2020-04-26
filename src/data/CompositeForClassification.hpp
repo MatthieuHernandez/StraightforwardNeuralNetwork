@@ -3,7 +3,7 @@
 
 namespace snn::internal
 {
-    class CompositeForClassification : ProblemComposite
+    class CompositeForClassification : public ProblemComposite
     {
     public:
         CompositeForClassification(Set sets[2]);

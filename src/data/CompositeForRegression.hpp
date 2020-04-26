@@ -3,7 +3,7 @@
 
 namespace snn::internal
 {
-    class CompositeForRegression : ProblemComposite
+    class CompositeForRegression : public ProblemComposite
     {
     public:
         CompositeForRegression(Set sets[2]);

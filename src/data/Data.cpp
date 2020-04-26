@@ -67,13 +67,13 @@ void Data::initialize(problemType typeOfProblem,
     switch (this->typeOfProblem)
     {
     case classification:
-        this->problemComposite = make_unique<ProblemComposite>(CompositeForClassification(this->sets));
+        this->problemComposite = make_unique<CompositeForClassification>(this->sets);
         break;
     case multipleClassification:
-        this->problemComposite = make_unique<ProblemComposite>(CompositeForMultipleClassification(this->sets));
+        this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets);
         break;
     case regression:
-        this->problemComposite = make_unique<ProblemComposite>(CompositeForRegression(this->sets));
+        this->problemComposite = make_unique<CompositeForRegression>(this->sets);
         break;
     default:
         throw NotImplementedException();
@@ -82,13 +82,13 @@ void Data::initialize(problemType typeOfProblem,
     switch (this->typeOfTemporal)
     {
     case nonTemporal:
-        this->temporalComposite = make_unique<TemporalComposite>(CompositeForNonTemporalData(this->sets));
+        this->temporalComposite = make_unique<CompositeForNonTemporalData>(this->sets);
         break;
     case temporal:
-        this->temporalComposite = make_unique<TemporalComposite>(CompositeForTemporalData(this->sets));
+        this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
         break;
     case continuous:
-        this->temporalComposite = make_unique<TemporalComposite>(CompositeForContinuousData(this->sets));
+        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets);
         break;
     default:
         throw NotImplementedException();

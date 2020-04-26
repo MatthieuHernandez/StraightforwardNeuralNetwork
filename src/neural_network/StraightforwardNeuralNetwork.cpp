@@ -6,11 +6,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
-
 #include "../tools/ExtendedExpection.hpp"
-//#include "../data/DataForClassification.hpp"
-//#include "../data/DataForRegression.hpp"
-//#include "../data/DataForMultipleClassification.hpp"
+
 
 using namespace std;
 using namespace chrono;

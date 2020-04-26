@@ -1,17 +1,12 @@
 #pragma once
 #include <vector>
 #include "ProblemComposite.hpp"
+#include "Set.hpp"
 #include "TemporalComposite.hpp"
 #include "../tools/Tools.hpp"
 
 namespace snn
 {
-    enum set
-    {
-        testing = 0,
-        training = 1
-    };
-
     enum problemType
     {
         classification,
@@ -24,17 +19,6 @@ namespace snn
         nonTemporal,
         temporal,
         continuous,
-    };
-
-    struct Set
-    {
-        int index{0};
-        int size{0}; // number of data inside set
-        vector2D<float> inputs{};
-        vector2D<float> labels{};
-        std::vector<int> indexesToShuffle;
-        std::vector<bool> areFirstDataOfTemporalSequence{};
-        std::vector<bool> needToLearnData{};
     };
 
     class Data

@@ -3,7 +3,7 @@
 
 namespace snn::internal
 {
-    class CompositeForTemporalData : TemporalComposite
+    class CompositeForTemporalData : public TemporalComposite
     {
     public:
         CompositeForTemporalData(snn::Set sets[2]);

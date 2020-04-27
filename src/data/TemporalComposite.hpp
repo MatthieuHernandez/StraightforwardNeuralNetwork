@@ -6,7 +6,7 @@ namespace snn::internal
     class TemporalComposite
     {
     protected:
-        snn::Set sets[2];
+        Set* sets;
 
     public:
         TemporalComposite(snn::Set sets[2]);

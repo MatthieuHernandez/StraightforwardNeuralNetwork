@@ -1,5 +1,5 @@
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
-#include "data/DataForRegression.hpp"
+#include "data/Data.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -16,7 +16,8 @@ int regressionExample()
 	vector<vector<float>> expectedOutputs = {{0.333}, {0.666}, {0.666}, {0.666}, {0}, {1}};
 
 	float precision = 0.1f;
-	DataForRegression data(inputData, expectedOutputs, precision);
+	Data data(regression, inputData, expectedOutputs);
+	data.setPrecision(precision);
 
 	snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(1)});
 

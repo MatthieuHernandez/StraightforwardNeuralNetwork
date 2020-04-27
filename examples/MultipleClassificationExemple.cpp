@@ -1,5 +1,5 @@
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
-#include "../src/data/DataForMultipleClassification.hpp"
+#include "../src/data/Data.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -15,8 +15,9 @@ int multipleClassificationExample()
 	vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 	vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
-	float separator = 0.5f;
-	DataForMultipleClassification data(inputData, expectedOutputs, separator);
+	const float separator = 0.5f;
+	Data data(multipleClassification, inputData, expectedOutputs);
+	data.setSeparator(separator);
 
 	StraightforwardNeuralNetwork neuralNetwork({Input(2), AllToAll(8), AllToAll(3)});
 

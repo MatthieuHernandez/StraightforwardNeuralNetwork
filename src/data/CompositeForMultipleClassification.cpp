@@ -10,6 +10,11 @@ CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[
 {
 }
 
+int CompositeForMultipleClassification::isValid()
+{
+    return this->ProblemComposite::isValid();
+}
+
 const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index)
 {
     return this->sets[testing].labels[index];

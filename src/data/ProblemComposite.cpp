@@ -6,7 +6,7 @@ using namespace internal;
 
 ProblemComposite::ProblemComposite(Set sets[2])
 {
-    *this->sets = *sets;
+    this->sets = sets;
 }
 
 int ProblemComposite::isValid()

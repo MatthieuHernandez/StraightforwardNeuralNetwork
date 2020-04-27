@@ -47,14 +47,14 @@ namespace snn
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             temporalType temporal,
-             int numberOfRecurrence);
+             temporalType temporal = nonTemporal,
+             int numberOfRecurrence = 0);
 
         Data(problemType problem,
              std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
-             temporalType temporal,
-             int numberOfRecurrence);
+             temporalType temporal = nonTemporal,
+             int numberOfRecurrence = 0);
 
         /*Data(problemType problem,
              std::vector<std::vector<std::vector<float>>>& trainingInputs,
@@ -105,9 +105,9 @@ namespace snn
 
         
         [[nodiscard]] float getSeparator() const;
-        [[nodiscard]] void setSeparator(float value);
+        void setSeparator(float value);
         [[nodiscard]] float getPrecision() const;
-        [[nodiscard]] void setPrecision(float value);
+        void setPrecision(float value);
 
 
     };

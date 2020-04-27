@@ -1,5 +1,5 @@
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
-#include "../src/data/DataForClassification.hpp"
+#include "../src/data/Data.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -15,7 +15,7 @@ int classificationExample()
 	vector<vector<float>> inputData = {{-0.1, 0.4, -0.6}, {0.5, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {-0.9, -0.5, 1.7}, {0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
 	vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
-	DataForClassification data(inputData, expectedOutputs);
+	Data data(classification, inputData, expectedOutputs);
 
 	StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(2)});
 

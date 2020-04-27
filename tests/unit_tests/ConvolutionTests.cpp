@@ -40,8 +40,7 @@ Data createData()
          0.41, 0.42, 0.51, 0.52, 0.61, 0.62,
          0.71, 0.72, 0.81, 0.82, 0.91, 0.92}
     };
-	vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
+    vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-	Data data(classification, inputData, expectedOutputs);
-    return data;
+    return Data(classification, inputData, expectedOutputs);
 }

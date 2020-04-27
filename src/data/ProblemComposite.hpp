@@ -6,7 +6,7 @@ namespace snn::internal
     class ProblemComposite
     {
     protected:
-        Set sets[2];
+        Set* sets;
 
     public:
         ProblemComposite(Set sets[2]);

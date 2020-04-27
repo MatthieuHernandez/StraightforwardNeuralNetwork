@@ -10,6 +10,11 @@ CompositeForRegression::CompositeForRegression(Set sets[2])
 {
 }
 
+int CompositeForRegression::isValid()
+{
+    return this->ProblemComposite::isValid();
+}
+
 const std::vector<float>& CompositeForRegression::getTestingOutputs(const int index)
 {
     return this->sets[testing].labels[index];

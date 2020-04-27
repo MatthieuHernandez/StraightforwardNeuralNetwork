@@ -212,10 +212,13 @@ int Data::isValid()
         && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
         return 403;
 
-    int err = this->temporalComposite->isValid();
+    int err = this->problemComposite->isValid();
     if (err != 0)
         return err;
-    return 0;
+    err = this->temporalComposite->isValid();
+    if (err != 0)
+        return err;
+    return 0;;
 }
 
 bool Data::isFirstTrainingDataOfTemporalSequence(const int index) const
@@ -261,8 +264,12 @@ int Data::getTestingLabel(const int index) const
 
 const vector<float>& Data::getTrainingOutputs(const int index) const
 {
-    const int i = this->sets[training].indexesToShuffle[index];
-    return this->sets[training].labels[i];
+    return this->problemComposite->getTrainingOutputs(index);
+}
+
+const std::vector<float>& Data::getTestingOutputs(const int index) const
+{
+    return this->problemComposite->getTestingOutputs(index);
 }
 
 const vector<float>& Data::getData(set set, const int index) const
@@ -289,8 +296,7 @@ int Data::getLabel(set set, const int index) const
     return this->getTestingLabel(index);
 }
 
-inline
-void Data::setPrecision(float value)
+void Data::setPrecision(const float value)
 {
     if (this->typeOfProblem == regression)
         this->precision = value;
@@ -298,7 +304,6 @@ void Data::setPrecision(float value)
         throw std::runtime_error("Precision is only for regression problems.");
 }
 
-inline
 float Data::getPrecision() const
 {
     if (this->typeOfProblem == regression)
@@ -307,8 +312,7 @@ float Data::getPrecision() const
         throw std::runtime_error("Precision is only for regression problems.");
 }
 
-inline
-void Data::setSeparator(float value)
+void Data::setSeparator(const float value)
 {
     if (this->typeOfProblem == classification
         || this->typeOfProblem == multipleClassification)
@@ -317,7 +321,6 @@ void Data::setSeparator(float value)
         throw std::runtime_error("Separator is only for classification and multiple classification problems.");
 }
 
-inline
 float Data::getSeparator() const
 {
     if (this->typeOfProblem == classification

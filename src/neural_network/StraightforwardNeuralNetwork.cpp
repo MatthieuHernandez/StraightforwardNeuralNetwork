@@ -134,13 +134,13 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
         break;
     case multipleClassification:
         this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
-                                                    data.getTestingOutputs(this->currentIndex), data.getValue(),
+                                                    data.getTestingOutputs(this->currentIndex), data.getSeparator(),
                                                     data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
     case regression:
         this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
                                         data.getTestingOutputs(this->currentIndex),
-                                        data.getValue(),
+                                        data.getPrecision(),
                                         data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
     default:

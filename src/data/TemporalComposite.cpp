@@ -6,7 +6,7 @@ using namespace internal;
 
 TemporalComposite::TemporalComposite(Set sets[2])
 {
-    *this->sets = *sets;
+    this->sets = sets;
 }
 
 int TemporalComposite::isValid()

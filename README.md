@@ -1,4 +1,6 @@
-# StraightforwardNeuralNetwork
+# StraightforwardNeuralNetwork 
+![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Linux/Windows/badge.svg?barnch=master) ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests%20Linux/badge.svg?barnch=master)
+
 **Straightforward Neural Network** is an open source software simple neural network library in C++
 
 ## Documentation

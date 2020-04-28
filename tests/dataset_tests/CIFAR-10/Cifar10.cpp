@@ -1,6 +1,6 @@
 #include <fstream>
 #include "Cifar10.hpp"
-#include "data/DataForClassification.hpp"
+#include "data/Data.hpp"
 #include "tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -28,10 +28,10 @@ void Cifar10::loadData(string folderPath)
     };
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;
-    vector2D<float> trainingInputs = this->readImages(filePaths, 5, trainingLabels);
-    vector2D<float> testingInputs = this->readImages(testFilePaths, 1, testingLabels);
+    vector2D<float> trainingInputs = readImages(filePaths, 5, trainingLabels);
+    vector2D<float> testingInputs = readImages(testFilePaths, 1, testingLabels);
 
-    this->data = make_unique<DataForClassification>(trainingInputs, trainingLabels, testingInputs, testingLabels);
+    this->data = make_unique<Data>(classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
 vector2D<float> Cifar10::readImages(string filePaths[], int size, vector2D<float>& labels)

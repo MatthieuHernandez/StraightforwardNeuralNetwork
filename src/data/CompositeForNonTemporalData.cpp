@@ -1,5 +1,6 @@
-#include "CompositeForNonTemporalData.hpp"
+#include <algorithm>
 #include <random>
+#include "CompositeForNonTemporalData.hpp"
 
 using namespace std;
 using namespace snn;

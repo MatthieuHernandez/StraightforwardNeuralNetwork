@@ -3,7 +3,7 @@
 #include <fstream>
 #include "Iris.hpp"
 #include "tools/Tools.hpp"
-#include "data/DataForClassification.hpp"
+#include "data/Data.hpp"
 #include "tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -76,5 +76,5 @@ void Iris::loadData(string folderPath)
         else
             throw runtime_error("Cannot load iris dataset");
     }
-    this->data = make_unique<DataForClassification>(data, labels);
+    this->data = make_unique<Data>(classification, data, labels);
 }

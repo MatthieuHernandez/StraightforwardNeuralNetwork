@@ -48,7 +48,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.90);
+    ASSERT_ACCURACY(accuracy, 0.90f);
 }
 
 TEST_F(MnistTest, convolutionalNeuralNetwork)
@@ -63,7 +63,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.93);
+    ASSERT_ACCURACY(accuracy, 0.93f);
 }
 
 TEST_F(MnistTest, multipleConvolutionalNeuralNetwork)
@@ -84,5 +84,5 @@ TEST_F(MnistTest, multipleConvolutionalNeuralNetwork)
     #endif
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.80);
+    ASSERT_ACCURACY(accuracy, 0.80f);
 }

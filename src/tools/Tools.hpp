@@ -34,13 +34,25 @@ namespace snn::internal
 
         template <typename T>
         static T getMaxValue(std::vector<T> vector);
-
     };
 
-    template<logLevel T, typename... Targs>
+    template <logLevel T, typename... Targs>
     constexpr void log(Targs&&... messages)
     {
         if constexpr (T > none && T <= verbose)
             (std::cout << ... << messages) << std::endl;
+    }
+
+    template <typename T>
+    std::vector<T> flatten(const std::vector<std::vector<T>>& vector2D)
+    {
+        std::vector<T> vector1D;
+        size_t size = 0;
+        for (const auto& v : vector2D)
+            size += vector2D.size();
+        vector1D.reserve(size);
+        for (const auto& v : vector2D)
+            vector1D.insert(vector1D.end(), v.begin(), v.end());
+        return vector1D;
     }
 }

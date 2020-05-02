@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <random>
 #include "CompositeForTemporalData.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
@@ -8,16 +10,31 @@ using namespace internal;
 CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
     : TemporalComposite(sets)
 {
+    for (int i = 0; i > this->sets[training].size; ++i)
+    {
+        if (this->sets[training].areFirstDataOfTemporalSequence[i])
+        {
+            this->indexesForShuffles.push_back(i);
+        }
+    }
 }
 
 void CompositeForTemporalData::shuffle()
 {
-    throw NotImplementedException();
-}
+    std::random_device rd;
+    mt19937 g(rd());
+    std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
 
-void CompositeForTemporalData::unshuffle()
-{
-    throw NotImplementedException();
+    for (int i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
+    {
+        this->sets[training].indexesToShuffle[j++] = this->indexesForShuffles[i];
+
+        int index = this->indexesForShuffles[i] + 1;
+        while (!this->sets[training].areFirstDataOfTemporalSequence[index])
+        {
+            this->sets[training].indexesToShuffle[j++] = index++;
+        }
+    }
 }
 
 bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
@@ -37,7 +54,7 @@ bool CompositeForTemporalData::needToLearnOnTrainingData(int index) const
 
 bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 {
-      return this->sets[testing].needToLearnData[index];
+    return this->sets[testing].needToLearnData[index];
 }
 
 int CompositeForTemporalData::isValid()

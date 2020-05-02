@@ -50,6 +50,51 @@ Data::Data(problemType typeOfProblem,
                      numberOfRecurrence);
 }
 
+Data::Data(problemType typeOfProblem,
+           std::vector<std::vector<std::vector<float>>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels,
+           std::vector<std::vector<std::vector<float>>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels,
+           temporalType typeOfTemporal,
+           int numberOfRecurrence)
+    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+{
+    if (this->typeOfProblem != temporal)
+        throw runtime_error("Vector 3D type inputs are only for temporal data.");
+
+    this->flatten(training, trainingInputs);
+    this->flatten(testing, testingInputs);
+
+    this->initialize(typeOfProblem,
+                     this->sets[training].inputs,
+                     trainingLabels,
+                     this->sets[testing].inputs,
+                     testingLabels,
+                     typeOfTemporal,
+                     numberOfRecurrence);
+}
+
+Data::Data(problemType typeOfProblem,
+           std::vector<std::vector<std::vector<float>>>& inputs,
+           std::vector<std::vector<float>>& labels,
+           temporalType typeOfTemporal,
+           int numberOfRecurrence)
+    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+{
+    if (this->typeOfProblem != temporal)
+        throw runtime_error("Vector 3D type inputs are only for temporal data.");
+
+    this->flatten(training, inputs);
+
+    this->initialize(typeOfProblem,
+                     this->sets[training].inputs,
+                     labels,
+                     this->sets[testing].inputs,
+                     labels,
+                     typeOfTemporal,
+                     numberOfRecurrence);
+}
+
 void Data::initialize(problemType typeOfProblem,
                       vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
@@ -85,7 +130,7 @@ void Data::initialize(problemType typeOfProblem,
         this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
         break;
     case continuous:
-        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets);
+        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets, this->numberOfRecurrence);
         break;
     default:
         throw NotImplementedException();
@@ -102,6 +147,10 @@ void Data::initialize(problemType typeOfProblem,
     this->sets[training].size = static_cast<int>(trainingLabels.size());
     this->sets[testing].size = static_cast<int>(testingLabels.size());
 
+    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
+    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
+        this->sets[training].indexesToShuffle[i] = i;
+    
     this->normalization(-1, 1);
     internal::log<minimal>("Data loaded");
 
@@ -113,14 +162,23 @@ void Data::initialize(problemType typeOfProblem,
     }
 }
 
-void Data::clearData()
+void Data::flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D)
 {
-    this->sets[training].labels.clear();
-    this->sets[training].inputs.clear();
-    this->sets[testing].labels.clear();
-    this->sets[testing].inputs.clear();
-    this->sets[training].size = 0;
-    this->sets[testing].size = 0;
+    this->sets[set].inputs = vector2D<float>(std::accumulate(input3D.begin(), input3D.end(), 0,
+                                                             [](float sum = 0, const std::vector<float>& v)
+                                                             {
+                                                                 return sum + v.size();
+                                                             }));
+    this->sets[set].size = this->sets[set].inputs.size();
+    this->sets[set].areFirstDataOfTemporalSequence.resize(this->sets[set].size, false);
+    int i = 0;
+    for (auto&& v : input3D)
+    {
+        std::move(this->sets[set].inputs.end(), v.begin(), v.end());
+
+        this->sets[set].areFirstDataOfTemporalSequence[i] = true;
+        i += v.size();
+    }
 }
 
 void Data::normalization(const float min, const float max)

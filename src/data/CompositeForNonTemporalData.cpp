@@ -13,23 +13,9 @@ CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
 
 void CompositeForNonTemporalData::shuffle() //TODO: also need learning to shuffle
 {
-    if (this->sets[training].indexesToShuffle.empty())
-    {
-        this->sets[training].indexesToShuffle.resize(this->sets[training].size);
-        for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
-            this->sets[training].indexesToShuffle[i] = i;
-    }
-
     std::random_device rd;
     mt19937 g(rd());
     std::shuffle(this->sets[training].indexesToShuffle.begin(), this->sets[training].indexesToShuffle.end(), g);
-}
-
-void CompositeForNonTemporalData::unshuffle()
-{
-    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
-    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); ++i)
-        this->sets[training].indexesToShuffle[i] = i;
 }
 
 bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const

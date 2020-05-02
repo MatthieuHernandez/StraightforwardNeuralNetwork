@@ -9,7 +9,6 @@ namespace snn::internal
         CompositeForNonTemporalData(snn::Set sets[2]);
 
         void shuffle() override;
-        void unshuffle() override;
 
         [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const override;
         [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const override;

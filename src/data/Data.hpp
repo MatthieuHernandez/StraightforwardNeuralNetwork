@@ -24,55 +24,56 @@ namespace snn
     class Data
     {
     private:
-        void initialize(problemType problem,
+        void initialize(problemType typeOfProblem,
                         std::vector<std::vector<float>>& trainingInputs,
                         std::vector<std::vector<float>>& trainingLabels,
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
-                        temporalType temporal,
+                        temporalType typeOfTemporal,
                         int numberOfRecurrence);
+
+        void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
-        int numberOfRecurrence;
-
-    protected:
+        int numberOfRecurrence{};
         float precision{};
         float separator{};
-        void clearData();
 
     public:
-        Data(problemType problem,
+        Data(problemType typeOfProblem,
              std::vector<std::vector<float>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             temporalType temporal = nonTemporal,
+             temporalType typeOfTemporal = nonTemporal,
              int numberOfRecurrence = 0);
 
-        Data(problemType problem,
+        Data(problemType typeOfProblem,
              std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
              temporalType temporal = nonTemporal,
              int numberOfRecurrence = 0);
 
-        /*Data(problemType problem,
+        Data(problemType typeOfProblem,
              std::vector<std::vector<std::vector<float>>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<std::vector<float>>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
-             temporalType temporalType);
+             temporalType typeOfTemporal,
+             int numberOfRecurrence = 0);
 
-        Data(problemType problem,
+        Data(problemType typeOfProblem,
              std::vector<std::vector<std::vector<float>>>& inputs,
              std::vector<std::vector<float>>& labels,
-             temporalType temporal);*/
+             temporalType typeOfTemporal,
+             int numberOfRecurrence = 0);
 
         const problemType typeOfProblem;
         const temporalType typeOfTemporal;
 
-        int sizeOfData; // size of one data, equal to size of neural network inputs
-        int numberOfLabel; // the number of class, equal to size of neural network outputs
+        int sizeOfData{}; // size of one data, equal to size of neural network inputs
+        int numberOfLabel{}; // the number of class, equal to size of neural network outputs
 
         Set sets[2];
 

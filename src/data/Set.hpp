@@ -16,7 +16,7 @@ namespace snn
         int size{0}; // number of data inside set
         vector2D<float> inputs{};
         vector2D<float> labels{};
-        std::vector<int> indexesToShuffle;
+        std::vector<int> indexesToShuffle{};
         std::vector<bool> areFirstDataOfTemporalSequence{};
         std::vector<bool> needToLearnData{};
     };

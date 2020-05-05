@@ -17,6 +17,7 @@ void StatisticAnalysis::startTesting()
         c.trueNegative = 0;
         c.falsePositive = 0;
         c.falseNegative = 0;
+        c.totalError = 0;
     }
     numberOfDataWellClassified = 0;
     numberOfDataMisclassified = 0;
@@ -27,6 +28,8 @@ void StatisticAnalysis::stopTesting()
     float newGlobalClusteringRate = this->computeGlobalClusteringRate();
     float newWeightedClusteringRate = this->computeWeightedClusteringRate();
     float newF1Score = this->computeF1Score();
+    float newMeanAbsoluteError = this->computeMeanAbsoluteError();
+    float newRootMeanSquaredError = this->computeRootMeanSquaredError();
 
     this->globalClusteringRateIsBetterThanPreviously = newGlobalClusteringRate > this->globalClusteringRate;
     if (this->globalClusteringRateIsBetterThanPreviously)
@@ -40,9 +43,19 @@ void StatisticAnalysis::stopTesting()
     if (this->f1ScoreIsBetterThanPreviously)
         this->f1Score = newF1Score;
 
+    this->meanAbsoluteErrorIsBetterThanPreviously = newMeanAbsoluteError > this->meanAbsoluteError;
+    if(this->meanAbsoluteErrorIsBetterThanPreviously)
+        this->meanAbsoluteErrorMax = newMeanAbsoluteError;
+
+    this->rootMeanSquaredErrorIsBetterThanPreviously = newRootMeanSquaredError > this->rootMeanSquaredError;
+    if(this->rootMeanSquaredErrorIsBetterThanPreviously)
+        this->rootMeanSquaredErrorMax = newMeanAbsoluteError;
+
     this->globalClusteringRate = newGlobalClusteringRate;
     this->weightedClusteringRate = newWeightedClusteringRate;
     this->f1Score = newF1Score;
+    this->meanAbsoluteError = newMeanAbsoluteError;
+    this->rootMeanSquaredError = newRootMeanSquaredError;
 }
 
 void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outputs,
@@ -70,6 +83,8 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
         {
             clusters[i].trueNegative ++;
         }
+
+        clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
         numberOfDataWellClassified++;
@@ -102,6 +117,8 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
             clusters[i].falseNegative ++;
             classifiedWell = false;
         }
+
+        clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
         numberOfDataWellClassified++;
@@ -113,6 +130,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
 {
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
+
     for (int i = 0; i < clusters.size(); i++)
     {
         if (maxOutputValue < outputs[i])
@@ -120,21 +138,31 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
             maxOutputValue = outputs[i];
             maxOutputIndex = i;
         }
-        if (i == classNumber && outputs[i] > this->separator)
+        if (i == classNumber)
         {
-            clusters[i].truePositive ++;
+            clusters[i].totalError += abs(1 - outputs[i]);
+
+            if (outputs[i] > this->separator)
+            {
+                clusters[i].truePositive ++;
+            }
+            else
+            {
+                clusters[i].falseNegative ++;
+            }
         }
-        else if (i == classNumber && outputs[i] <= this->separator)
+        else
         {
-            clusters[i].falseNegative ++;
-        }
-        else if (outputs[i] > this->separator)
-        {
-            clusters[i].falsePositive ++;
-        }
-        else if (outputs[i] <= this->separator)
-        {
-            clusters[i].trueNegative ++;
+            clusters[i].totalError += abs(0 - outputs[i]);
+
+            if (outputs[i] > this->separator)
+            {
+                clusters[i].falsePositive ++;
+            }
+            else
+            {
+                clusters[i].trueNegative ++;
+            }
         }
     }
     if (maxOutputIndex == classNumber)
@@ -177,6 +205,27 @@ float StatisticAnalysis::computeF1Score()
     return 2.0f * f1Score / clusters.size();
 }
 
+float StatisticAnalysis::computeMeanAbsoluteError()
+{
+    float totalError = 0;
+    for (const auto& c : clusters)
+    {
+        totalError += c.totalError;
+    }
+    return totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
+}
+
+float StatisticAnalysis::computeRootMeanSquaredError()
+{
+    float totalError = 0;
+    for (const auto& c : clusters)
+    {
+        totalError += c.totalError * c.totalError;
+    }
+    const float meanSquaredError = totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
+    return sqrtf(meanSquaredError);
+}
+
 float StatisticAnalysis::getGlobalClusteringRate() const
 {
     return this->globalClusteringRate;
@@ -189,7 +238,17 @@ float StatisticAnalysis::getWeightedClusteringRate() const
 
 float StatisticAnalysis::getF1Score() const
 {
-    return f1Score;
+    return this->f1Score;
+}
+
+float StatisticAnalysis::getMeanAbsoluteError() const
+{
+    return this->meanAbsoluteError;
+}
+
+float StatisticAnalysis::getRootMeanSquaredError() const
+{
+    return this->rootMeanSquaredError;
 }
 
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const

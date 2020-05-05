@@ -1,8 +1,12 @@
 file(GLOB SOURCES
     "*.hpp"
     "*.cpp"
+    "audio-cats-and-dogs/*.hpp"
+    "audio-cats-and-dogs/*.cpp"
     "CIFAR-10/*.hpp"
     "CIFAR-10/*.cpp"
+    "daily-min-temperatures/*.hpp"
+    "daily-min-temperatures/*.cpp"
     "Fashion-MNIST/*.hpp"
     "Fashion-MNIST/*.cpp"
     "Iris/*.hpp"

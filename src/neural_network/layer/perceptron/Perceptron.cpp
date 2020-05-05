@@ -26,7 +26,7 @@ Perceptron::Perceptron(const int numberOfInputs,
 
 float Perceptron::randomInitializeWeight(int numberOfInputs) const
 {
-    const float valueMax = 2.4f / sqrt(static_cast<float>(numberOfInputs));
+    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfInputs));
     return Tools::randomBetween(-valueMax, valueMax);
 }
 

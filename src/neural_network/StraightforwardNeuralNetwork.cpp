@@ -166,14 +166,16 @@ void StraightforwardNeuralNetwork::stopTraining()
 void StraightforwardNeuralNetwork::waitFor(Wait wait) const
 {
     auto startWait = system_clock::now();
-    while(true) 
+    while (true)
     {
         this_thread::sleep_for(1ms);
-        auto epochs =  this->getNumberOfIteration();
-        auto accuracy = this->getGlobalClusteringRate();
-        auto durationMs = duration_cast<milliseconds>(system_clock::now() - startWait).count();
-        
-        if(wait.isOver(epochs, accuracy, durationMs))
+
+        const auto epochs = this->getNumberOfIteration();
+        const auto accuracy = this->getGlobalClusteringRate();
+        const auto mae = this->getMeanAbsoluteError();
+        const auto durationMs = duration_cast<milliseconds>(system_clock::now() - startWait).count();
+
+        if (wait.isOver(epochs, accuracy, mae, durationMs))
             break;
     }
 }

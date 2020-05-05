@@ -35,7 +35,7 @@ void Wine::loadData(string folderPath)
         vector<float> values;
 
         float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
-        
+
         label.resize(3, 0);
         label[static_cast<int>(value-1.0)] = 1;
         labels.push_back(label);

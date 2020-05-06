@@ -17,8 +17,10 @@ file(GLOB SOURCES
     "Wine/*.cpp"
 )
 
+include_directories(../AudioFile AudioFile)
+
 add_executable(DatasetTests.out ${SOURCES})
 
-target_link_libraries(DatasetTests.out GTestExtended StraightforwardNeuralNetwork)
+target_link_libraries(DatasetTests.out GTestExtended AudioFile StraightforwardNeuralNetwork)
 
 install(TARGETS DatasetTests.out DESTINATION bin)

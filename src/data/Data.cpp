@@ -1,4 +1,5 @@
 #include <cmath>
+#include <numeric>
 #include <string>
 #include <stdexcept>
 #include <vector>
@@ -10,6 +11,7 @@
 #include "CompositeForContinuousData.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
+#include "../tools/Tools.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -150,7 +152,7 @@ void Data::initialize(problemType typeOfProblem,
     this->sets[training].indexesToShuffle.resize(this->sets[training].size);
     for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
         this->sets[training].indexesToShuffle[i] = i;
-    
+
     this->normalization(-1, 1);
     internal::log<minimal>("Data loaded");
 
@@ -164,13 +166,15 @@ void Data::initialize(problemType typeOfProblem,
 
 void Data::flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D)
 {
-    this->sets[set].inputs = vector2D<float>(std::accumulate(input3D.begin(), input3D.end(), 0,
-                                                             [](float sum = 0, const std::vector<float>& v)
-                                                             {
-                                                                 return sum + v.size();
-                                                             }));
+    this->sets[set].inputs = vector2D<float>(accumulate(input3D.begin(), input3D.end(), 0,
+                                                        [](float sum, vector2D<float>& v)
+                                                        {
+                                                            return sum + v.size();
+                                                        }));
+
     this->sets[set].size = this->sets[set].inputs.size();
     this->sets[set].areFirstDataOfTemporalSequence.resize(this->sets[set].size, false);
+
     int i = 0;
     for (auto&& v : input3D)
     {

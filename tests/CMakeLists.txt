@@ -4,6 +4,7 @@ file(GLOB SOURCES
 )
 
 add_subdirectory(googletest-release-1.10.0)
+add_subdirectory(AudioFile)
 
 include_directories(../src src)
 include_directories(../src/external_library/boost_1_71_0_minimal)

@@ -40,9 +40,8 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        AllToAll(10),
-        AllToAll(10),
-        AllToAll(1)
+        Recurrent(10, 5),
+        AllToAll(1) // Adjusted Sigmoid or Linear function
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(0.8_mae || 3_s);

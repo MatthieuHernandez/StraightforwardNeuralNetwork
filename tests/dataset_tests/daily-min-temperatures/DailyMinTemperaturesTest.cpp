@@ -11,7 +11,7 @@ class DailyMinTemperaturesTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        DailyMinTemperature dataset("./datasets/DailyMinTemperature");
+        DailyMinTemperatures dataset("./datasets/DailyMinTemperature");
         data = move(dataset.data);
     }
     
@@ -41,11 +41,11 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrent(10, 5),
-        AllToAll(1) // Adjusted Sigmoid or Linear function
+        AllToAll(1)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(0.8_mae || 3_s);
     neuralNetwork.stopTraining();
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 1.0);
+    auto mae = neuralNetwork.getMeanAbsoluteError();
+    ASSERT_ACCURACY(mae, 1.0);
 }

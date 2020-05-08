@@ -53,10 +53,10 @@ Data::Data(problemType typeOfProblem,
 }
 
 Data::Data(problemType typeOfProblem,
-           std::vector<std::vector<std::vector<float>>>& trainingInputs,
-           std::vector<std::vector<float>>& trainingLabels,
-           std::vector<std::vector<std::vector<float>>>& testingInputs,
-           std::vector<std::vector<float>>& testingLabels,
+           vector<vector<vector<float>>>& trainingInputs,
+           vector<vector<float>>& trainingLabels,
+           vector<vector<vector<float>>>& testingInputs,
+           vector<vector<float>>& testingLabels,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
@@ -77,8 +77,8 @@ Data::Data(problemType typeOfProblem,
 }
 
 Data::Data(problemType typeOfProblem,
-           std::vector<std::vector<std::vector<float>>>& inputs,
-           std::vector<std::vector<float>>& labels,
+           vector<vector<vector<float>>>& inputs,
+           vector<vector<float>>& labels,
            temporalType typeOfTemporal,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
@@ -164,7 +164,7 @@ void Data::initialize(problemType typeOfProblem,
     }
 }
 
-void Data::flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D)
+void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
     this->sets[set].inputs = vector2D<float>(accumulate(input3D.begin(), input3D.end(), 0,
                                                         [](float sum, vector2D<float>& v)
@@ -330,7 +330,7 @@ const vector<float>& Data::getTrainingOutputs(const int index) const
     return this->problemComposite->getTrainingOutputs(index);
 }
 
-const std::vector<float>& Data::getTestingOutputs(const int index) const
+const vector<float>& Data::getTestingOutputs(const int index) const
 {
     return this->problemComposite->getTestingOutputs(index);
 }

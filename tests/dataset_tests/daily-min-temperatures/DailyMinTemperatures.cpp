@@ -11,12 +11,12 @@ using namespace snn;
 using namespace internal;
 
 
-void DailyMinTemperature::loadData(string folderPath)
+DailyMinTemperatures::DailyMinTemperatures(string folderPath)
 {
     this->loadData(folderPath);
 }
 
-inline DailyMinTemperature::DailyMinTemperature(string folderPath)
+void DailyMinTemperatures::loadData(string folderPath)
 {
     vector2D<float> data;
     vector2D<float> labels;

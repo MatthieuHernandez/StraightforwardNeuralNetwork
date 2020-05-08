@@ -27,7 +27,25 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 * To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `./tests/dataset_tests/DatasetTests.out` from `StraightforwardNeuralNetwork/build`
 ### Windows - MSVC++ 14.2
  * You can generate a Visual Studio project: `cmake -G"Visual Studio 16 2019" ./..`
+ 
+ ## Use
+Create, train and use a neural network in few lines of code.
+```cpp
+Data data(classification, inputData, expectedOutputs);
+StraightforwardNeuralNetwork neuralNetwork({
+    Input(28, 28, 1), 
+    Convolution(1, 3, ReLU),
+    AllToAll(70, tanh),
+    AllToAll(10, sigmoid)
+});
 
+neuralNetwork.startTraining(data);
+neuralNetwork.waitFor(20_s);
+neuralNetwork.stopTraining();
+
+float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+```
+[see more details](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki/)
 ## License
 
 [Apache License 2.0](LICENSE)

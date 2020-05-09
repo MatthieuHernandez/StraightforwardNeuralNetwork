@@ -18,13 +18,16 @@ namespace snn::internal
         int sizeOfConvolutionMatrix;
         std::vector<int> shapeOfInput;
 
+        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
+
     public:
         Convolution() = default;  // use restricted to Boost library only
         Convolution(LayerModel& model, StochasticGradientDescent* optimizer);
         ~Convolution() = default;
         Convolution(const Convolution&) = default;
 
-        //std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;

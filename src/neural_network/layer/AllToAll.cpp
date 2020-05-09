@@ -24,19 +24,26 @@ unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
     return layer;
 }
 
-inline
-vector<float> AllToAll::createInputsForNeuron(int neuronNumber, const vector<float>& inputs, bool temporalReset) const
+vector<float> AllToAll::output(const vector<float>& inputs, bool temporalReset)
 {
-    return inputs;
+    vector<float> outputs(this->neurons.size());
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        outputs[n] = neurons[n].output(inputs);
+    }
+    return outputs;
 }
 
-inline
- void AllToAll::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
+vector<float> AllToAll::backOutput(vector<float>& inputErrors)
 {
-    for(int n = 0; n < errors.size(); ++n)
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->neurons.size(); ++n)
     {
-        errors[n] += error[n];
+        auto& error = neurons[n].backOutput(inputErrors[n]);
+        for(int n = 0; n < errors.size(); ++n)
+            errors[n] += error[n];
     }
+    return errors;
 }
 
 std::vector<int> AllToAll::getShapeOfOutput() const

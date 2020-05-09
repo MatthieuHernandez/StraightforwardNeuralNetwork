@@ -77,8 +77,9 @@ TEST(Architecture, NumberOfNeuronesAndparameters)
         AllToAll(50),
         Convolution(1, 3),
         AllToAll(20),
+        Recurrent(10, 4),
         AllToAll(5)
         });
-    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), 366);
-    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), 25018);
+    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), 466);
+    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), 25118);
 }

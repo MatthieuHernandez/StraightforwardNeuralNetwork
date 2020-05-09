@@ -10,7 +10,8 @@ namespace snn
         iSigmoid,
         tanh,
         ReLU,
-        gaussian
+        gaussian,
+        identity
     };
 }
 namespace snn::internal

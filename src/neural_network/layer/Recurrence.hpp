@@ -8,18 +8,25 @@
 
 namespace snn::internal
 {
-    class AllToAll final : public Layer
+    class Recurrence final : public Layer
     {
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
+        std::vector<float> allInputs;
+        const int numberOfRecurrences;
+        const size_t sizeToCopy;
+
+    protected:
+        void addNewInputs(std::vector<float> inputs, bool temporalReset);
+
     public:
-        AllToAll() = default;  // use restricted to Boost library only
-        AllToAll(LayerModel& model, StochasticGradientDescent* optimizer);
-        AllToAll(const AllToAll&) = default;
-        ~AllToAll() = default;
+        Recurrence() = default;  // use restricted to Boost library only
+        Recurrence(LayerModel& model, StochasticGradientDescent* optimizer);
+        Recurrence(const Recurrence&) = default;
+        ~Recurrence() = default;
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
@@ -28,14 +35,14 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const AllToAll& layer) const;
-        bool operator!=(const AllToAll& layer) const;
+        bool operator==(const Recurrence& layer) const;
+        bool operator!=(const Recurrence& layer) const;
     };
 
     template <class Archive>
-    void AllToAll::serialize(Archive& ar, const unsigned version)
+    void Recurrence::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<AllToAll, Layer>();
+        boost::serialization::void_cast_register<Recurrence, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
     }
 }

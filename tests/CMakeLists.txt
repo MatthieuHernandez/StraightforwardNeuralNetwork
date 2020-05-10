@@ -12,5 +12,6 @@ add_library(GTestExtended ${SOURCES})
 
 target_link_libraries(GTestExtended gtest)
 
+add_subdirectory(audiofile)
 add_subdirectory(unit_tests)
 add_subdirectory(dataset_tests)

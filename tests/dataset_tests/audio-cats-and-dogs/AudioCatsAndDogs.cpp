@@ -1,7 +1,7 @@
 #include <string>
 #include "AudioCatsAndDogs.hpp"
 #include "tools/Tools.hpp"
-#include "AudioFile.h"
+#include "AudioFile.hpp"
 
 using namespace std;
 using namespace snn;

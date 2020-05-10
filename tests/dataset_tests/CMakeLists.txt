@@ -17,7 +17,7 @@ file(GLOB SOURCES
     "Wine/*.cpp"
 )
 
-include_directories(../AudioFile AudioFile)
+include_directories(../audiofile audiofile)
 include_directories(.. tests)
 
 add_executable(DatasetTests.out ${SOURCES})

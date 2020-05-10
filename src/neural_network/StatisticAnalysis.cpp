@@ -1,3 +1,4 @@
+#include <cmath>
 #include "StatisticAnalysis.hpp"
 
 using namespace snn;
@@ -223,7 +224,7 @@ float StatisticAnalysis::computeRootMeanSquaredError()
         totalError += c.totalError * c.totalError;
     }
     const float meanSquaredError = totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
-    return sqrtf(meanSquaredError);
+    return sqrt(meanSquaredError);
 }
 
 float StatisticAnalysis::getGlobalClusteringRate() const

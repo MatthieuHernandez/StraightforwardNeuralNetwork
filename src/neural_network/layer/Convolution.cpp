@@ -27,6 +27,17 @@ vector<float> Convolution::output(const vector<float>& inputs, bool temporalRese
     return outputs;
 }
 
+vector<float> Convolution::backOutput(vector<float>& inputErrors)
+{
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto& error = neurons[n].backOutput(inputErrors[n]);
+        this->insertBackOutputForNeuron(n, error, errors);
+    }
+    return errors;
+}
+
 int Convolution::isValid() const
 {
     return this->Layer::isValid();

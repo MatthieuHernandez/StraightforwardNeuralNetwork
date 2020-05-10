@@ -28,6 +28,7 @@ namespace snn::internal
         Convolution(const Convolution&) = default;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
+        std::vector<float> backOutput(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;

@@ -18,6 +18,7 @@ file(GLOB SOURCES
 )
 
 include_directories(../AudioFile AudioFile)
+include_directories(.. tests)
 
 add_executable(DatasetTests.out ${SOURCES})
 

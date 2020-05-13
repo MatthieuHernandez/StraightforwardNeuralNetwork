@@ -40,7 +40,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(16),
-        Recurrent(30, 100),
+        Recurrence(30, 100),
         AllToAll(2)
     });
     neuralNetwork.startTraining(*data);

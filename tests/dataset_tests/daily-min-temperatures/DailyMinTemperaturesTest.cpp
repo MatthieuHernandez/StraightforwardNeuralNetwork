@@ -40,7 +40,7 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrent(10, 5),
+        Recurrence(10, 5),
         AllToAll(1)
     });
     neuralNetwork.startTraining(*data);

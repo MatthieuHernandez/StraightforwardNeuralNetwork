@@ -20,11 +20,11 @@ LayerModel snn::AllToAll(int numberOfNeurons, activationFunction activation)
     return model;
 }
 
-LayerModel snn::Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
+LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
 {
     LayerModel model
     {
-        recurrent,
+        recurrence,
         activation,
         -1,
         numberOfNeurons,
@@ -94,8 +94,14 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         model.numberOfInputsByNeurons = model.numberOfInputs;
         return make_unique<AllToAll>(model, optimizer);
 
-    case convolution:
+    case recurrence:
+        if (model.numberOfRecurrences < 0)
+            throw InvalidArchitectureException("Input of layer has size of 0.");
 
+        model.numberOfInputsByNeurons = model.numberOfInputs;
+        return make_unique<AllToAll>(model, optimizer);
+
+    case convolution:
         if (shapeOfInput.size() == 1)
         {
             shapeOfInput.push_back(1);

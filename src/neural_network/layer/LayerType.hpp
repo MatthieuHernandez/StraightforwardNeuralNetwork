@@ -5,7 +5,7 @@ namespace snn
     {
         input = 0,
         allToAll = 1,
-        recurrent = 2,
+        recurrence = 2,
         convolution = 3
     };
 }

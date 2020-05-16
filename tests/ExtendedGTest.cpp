@@ -32,7 +32,7 @@ void ASSERT_ACCURACY(float actual, float expected)
 void ASSERT_MAE(float actual, float expected)
 {
     stringstream message;
-    message << "Mean Absolute Error = " << std::fixed << std::setprecision(2) << actual * 100.0f << "%";
+    message << "Mean Absolute Error = " << std::fixed << std::setprecision(2) << actual;
     PRINT_RESULT(message.str());
-    ASSERT_GE(actual, expected);
+    ASSERT_LE(actual, expected);
 }

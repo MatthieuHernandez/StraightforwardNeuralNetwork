@@ -281,7 +281,7 @@ int Data::isValid()
     err = this->temporalComposite->isValid();
     if (err != 0)
         return err;
-    return 0;;
+    return 0;
 }
 
 bool Data::isFirstTrainingDataOfTemporalSequence(const int index) const

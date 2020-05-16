@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include "ActivationFunction.hpp"
 
 namespace snn::internal

@@ -4,6 +4,7 @@
 #include "Tanh.hpp"
 #include "ReLU.hpp"
 #include "Gaussian.hpp"
+#include "Identity.hpp"
 
 using namespace std;
 using namespace snn;
@@ -19,6 +20,7 @@ void ActivationFunction::initialize()
     activationFunctions.push_back(new Tanh());
     activationFunctions.push_back(new RectifiedLinearUnit());
     activationFunctions.push_back(new Gaussian());
+    activationFunctions.push_back(new Identity());
 }
 
 ActivationFunction* ActivationFunction::get(activationFunction type)

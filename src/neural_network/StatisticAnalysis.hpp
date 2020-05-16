@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include <vector>
 #include <boost/serialization/access.hpp>
 
@@ -38,11 +39,11 @@ namespace snn::internal
         float numberOfDataWellClassified;
         float numberOfDataMisclassified;
 
-        float globalClusteringRate = 0;
-        float weightedClusteringRate = 0;
-        float f1Score = 0;
-        float meanAbsoluteError = 0;
-        float rootMeanSquaredError = 0;
+        float globalClusteringRate = -1.0f;
+        float weightedClusteringRate = -1.0f;
+        float f1Score = -1.0f;
+        float meanAbsoluteError = -1.0f;
+        float rootMeanSquaredError = -1.0f;
 
         float globalClusteringRateMax = -1.0f;
         float weightedClusteringRateMax = -1.0f;

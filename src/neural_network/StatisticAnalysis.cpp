@@ -44,11 +44,11 @@ void StatisticAnalysis::stopTesting()
     if (this->f1ScoreIsBetterThanPreviously)
         this->f1Score = newF1Score;
 
-    this->meanAbsoluteErrorIsBetterThanPreviously = newMeanAbsoluteError > this->meanAbsoluteError;
+    this->meanAbsoluteErrorIsBetterThanPreviously = newMeanAbsoluteError < this->meanAbsoluteError || this->meanAbsoluteError < 0;
     if(this->meanAbsoluteErrorIsBetterThanPreviously)
         this->meanAbsoluteErrorMax = newMeanAbsoluteError;
 
-    this->rootMeanSquaredErrorIsBetterThanPreviously = newRootMeanSquaredError > this->rootMeanSquaredError;
+    this->rootMeanSquaredErrorIsBetterThanPreviously = newRootMeanSquaredError < this->rootMeanSquaredError || this->meanAbsoluteError < 0;
     if(this->rootMeanSquaredErrorIsBetterThanPreviously)
         this->rootMeanSquaredErrorMax = newMeanAbsoluteError;
 

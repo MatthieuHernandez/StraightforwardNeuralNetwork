@@ -33,6 +33,7 @@ void DailyMinTemperatures::loadData(string folderPath)
     while (getline(file, line))
     {
         string date = line.substr(0, line.find(','));
+        line = line.substr(line.find(',') + 1);
         float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
         if (previousValue != -273.15f)
@@ -43,5 +44,5 @@ void DailyMinTemperatures::loadData(string folderPath)
         previousValue = value;
     }
     file.close();
-    this->data = make_unique<Data>(classification, data, labels);
+    this->data = make_unique<Data>(regression, data, labels);
 }

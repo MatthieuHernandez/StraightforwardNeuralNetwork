@@ -1,5 +1,8 @@
-# StraightforwardNeuralNetwork 
-![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Linux/Windows/badge.svg?barnch=master) ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests%20Linux/badge.svg?barnch=master)
+#  <img src="https://github.com/MatthieuHernandez/NeuralNetworkTest/blob/master/CPU_MLP.png" width="64"> StraightforwardNeuralNetwork
+
+
+![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Linux/Windows/badge.svg?barnch=master)
+![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests%20Linux/badge.svg?barnch=master)
 
 **Straightforward Neural Network** is an open source software simple neural network library in C++
 
@@ -8,13 +11,15 @@
 You can see documentation on [Wiki](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki).
 
 ## Classification datasets results
-| Dataset Name  | Link                                             | Accuracy | Number of Neurones |
-|---------------|--------------------------------------------------|----------|--------------------|
-| CIFAR-10      | https://www.cs.toronto.edu/~kriz/cifar.html      | 36.8%    | 230                |
-| Fashion-MNIST | https://github.com/zalandoresearch/fashion-mnist | 88.13%   | 230                |
-| MNIST         | http://yann.lecun.com/exdb/mnist/                | 98.32%   | 230                |
-| Wine          | https://archive.ics.uci.edu/ml/datasets/wine     | 100%     | 28                 |
-| Iris          | https://archive.ics.uci.edu/ml/datasets/iris     | 100%     | 12                 |
+| Dataset Name | Data type | Problem type | Accuracy | Number of Neurones |                   
+|--------------|-----------|--------------|----------|--------------------|                  
+| [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | --     | --   |
+| [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | --     |  --  |
+| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 36.8%  | 230  |
+| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.13% | 230  |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.32% | 230  |
+| [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100%   | 28   |
+| [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100%   | 12   |
 
 ## Installation (with *CMake* 3.17.1)
 

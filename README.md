@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://github.com/MatthieuHernandez/NeuralNetworkTest/blob/master/CPU_MLP.png" width="128" style="text-align:center">
     <br/>
-    <h1> StraightforwardNeuralNetwork </h1>
+    <h1 align="center"> StraightforwardNeuralNetwork </h1>
 </p>
 
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Linux/Windows/badge.svg?barnch=master)

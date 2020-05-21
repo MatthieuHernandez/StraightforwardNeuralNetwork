@@ -8,7 +8,8 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath)
+AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
+    : sizeOfOneData(sizeOfOneData)
 {
     this->loadData(folderPath);
 }
@@ -307,42 +308,54 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
     {
         for (auto fileName : fileNames[i])
         {
+            bool isCat;
+            if (fileName.find("cat") == std::string::npos)
+            {
+                isCat = true;
+            }
+            else if (fileName.find("dog") == std::string::npos)
+            {
+                isCat = false;
+            }
+            else
+            {
+                throw runtime_error("Wrong file name: " + fileName);
+            }
+
             AudioFile<float> audioFile;
             audioFile.load(folderPath + fileName);
 
-            if(audioFile.getNumSamplesPerChannel() == 0)
+            if (audioFile.getNumSamplesPerChannel() == 0)
                 throw FileOpeningFailedException();
 
             const int channel = 0; // only one
             const int numberOfSamples = audioFile.getNumSamplesPerChannel();
 
             vector2D<float> dataSound;
-            dataSound.reserve(numberOfSamples / 16);
+            const int numberOfData = numberOfSamples / this->sizeOfOneData;
+            dataSound.reserve(numberOfData);
+            labels->reserve(numberOfData);
 
-            for (int i = 0; i < numberOfSamples; i++) // Sample Rate 16000
+            for (int j = 0; j < numberOfSamples; j++) // Sample Rate 16000
             {
-                if (i % 16 == 0)
+                if (j % this->sizeOfOneData == 0)
                 {
                     dataSound.push_back({});
-                    dataSound.back().reserve(16);
+                    dataSound.back().reserve(this->sizeOfOneData);
                 }
-                const float sample = audioFile.samples[channel][i];
+                const float sample = audioFile.samples[channel][j];
                 dataSound.back().push_back(sample);
+
+                if(isCat)
+                    labels[i].push_back({1, 0});
+                else
+                    labels[i].push_back({0, 1});
+            }
+            while(dataSound.back().size() < this->sizeOfOneData)
+            {
+                dataSound.back().push_back(0);
             }
             inputs[i].push_back(dataSound);
-
-            if (fileName.find("cat") == std::string::npos)
-            {
-                labels[i].push_back({1, 0});
-            }
-            else if (fileName.find("dog") == std::string::npos)
-            {
-                labels[i].push_back({0, 1});
-            }
-            else
-            {
-                throw runtime_error("Wrong file name: " + fileName);
-            }
         }
     }
     this->data = make_unique<Data>(classification,

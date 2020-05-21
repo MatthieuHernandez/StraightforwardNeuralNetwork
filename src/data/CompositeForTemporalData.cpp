@@ -59,7 +59,11 @@ bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 
 int CompositeForTemporalData::isValid()
 {
-    if (!this->sets[testing].needToLearnData.empty())
+    if (!this->sets[testing].needToLearnData.empty()
+        || this->sets[training].needToLearnData.size() != this->sets[training].size
+        || this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[training].size
+        || this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size)
         return 404;
+
     return this->TemporalComposite::isValid();
 }

@@ -7,5 +7,6 @@ private:
     void loadData(std::string folderPath) override;
 
 public:
-    AudioCatsAndDogs(std::string folderPath);
+    const int sizeOfOneData;
+    AudioCatsAndDogs(std::string folderPath, int sizeOfOneData);
 };

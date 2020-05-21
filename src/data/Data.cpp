@@ -173,6 +173,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
                                                         });
     this->sets[set].inputs.reserve(size);
     this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
+    this->sets[set].needToLearnData.resize(size, false);
 
     int i = 0;
     for (vector2D<float>& v : input3D)
@@ -181,6 +182,8 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
+        if(set == testing)
+            this->sets[testing].needToLearnData[i]= true;
     }
     this->sets[set].size = this->sets[set].inputs.size();
 }
@@ -263,8 +266,8 @@ int Data::isValid()
     {
         for (auto& value : input)
         {
-            if (value < -1
-                || value > 1
+            if (value < -10
+                || value > 10
                 || isnan(value))
             {
                 return 401;
@@ -275,10 +278,10 @@ int Data::isValid()
       && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
         return 403;
 
-    if(this->sets[training].size == this->sets[training].inputs.size()
-    && this->sets[training].size == this->sets[training].labels.size()
-    && this->sets[testing].size == this->sets[training].inputs.size()
-    && this->sets[testing].size == this->sets[training].labels.size())
+    if(this->sets[training].size != this->sets[training].inputs.size()
+    && this->sets[training].size != this->sets[training].labels.size()
+    && this->sets[testing].size != this->sets[training].inputs.size()
+    && this->sets[testing].size != this->sets[training].labels.size())
         return 405;
 
     int err = this->problemComposite->isValid();

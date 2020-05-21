@@ -99,7 +99,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
         {
             if(data.needToLearnOnTrainingData(this->currentIndex))
                 this->trainOnce(data.getTrainingData(this->currentIndex),
-                                data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(true));
+                                data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
         }
         this->evaluate(data);
     }
@@ -114,6 +114,8 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
             return;
         if(data.needToEvaluateOnTestingData(this->currentIndex))
             this->evaluateOnce(data);
+        else
+            this->output(data.getTestingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)

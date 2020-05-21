@@ -61,7 +61,7 @@ Data::Data(problemType typeOfProblem,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
-    if (this->typeOfProblem != temporal)
+    if (this->typeOfTemporal != temporal)
         throw runtime_error("Vector 3D type inputs are only for temporal data.");
 
     this->flatten(training, trainingInputs);
@@ -83,7 +83,7 @@ Data::Data(problemType typeOfProblem,
            int numberOfRecurrence)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
-    if (this->typeOfProblem != temporal)
+    if (this->typeOfTemporal != temporal)
         throw runtime_error("Vector 3D type inputs are only for temporal data.");
 
     this->flatten(training, inputs);
@@ -166,23 +166,23 @@ void Data::initialize(problemType typeOfProblem,
 
 void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
-    this->sets[set].inputs = vector2D<float>(accumulate(input3D.begin(), input3D.end(), 0,
+    auto size = accumulate(input3D.begin(), input3D.end(), 0,
                                                         [](float sum, vector2D<float>& v)
                                                         {
                                                             return sum + v.size();
-                                                        }));
-
-    this->sets[set].size = this->sets[set].inputs.size();
-    this->sets[set].areFirstDataOfTemporalSequence.resize(this->sets[set].size, false);
+                                                        });
+    this->sets[set].inputs.reserve(size);
+    this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
 
     int i = 0;
-    for (auto&& v : input3D)
+    for (vector2D<float>& v : input3D)
     {
-        std::move(this->sets[set].inputs.end(), v.begin(), v.end());
+        std::move(v.begin(), v.end(), std::back_inserter(this->sets[set].inputs));
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
     }
+    this->sets[set].size = this->sets[set].inputs.size();
 }
 
 void Data::normalization(const float min, const float max)
@@ -272,8 +272,14 @@ int Data::isValid()
         }
     }
     if (!this->sets[testing].indexesToShuffle.empty()
-        && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
+      && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
         return 403;
+
+    if(this->sets[training].size == this->sets[training].inputs.size()
+    && this->sets[training].size == this->sets[training].labels.size()
+    && this->sets[testing].size == this->sets[training].inputs.size()
+    && this->sets[testing].size == this->sets[training].labels.size())
+        return 405;
 
     int err = this->problemComposite->isValid();
     if (err != 0)

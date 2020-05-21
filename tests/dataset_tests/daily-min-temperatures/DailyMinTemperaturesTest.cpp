@@ -40,13 +40,12 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(10, 5),
+        Recurrence(5, 5),
         AllToAll(1, snn::identity)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(3_s || 0.8_mae);
+    neuralNetwork.waitFor(/*3_s ||*/ 1.2_mae);
     neuralNetwork.stopTraining();
-    neuralNetwork.startTraining(*data);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     ASSERT_MAE(mae, 0.8);
 }

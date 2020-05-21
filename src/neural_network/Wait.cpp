@@ -47,9 +47,9 @@ Wait& Wait::operator&&(const Wait& wait)
 
 bool Wait::isOver(int epochs, float accuracy, float mae, int duration)
 {
-    const bool isValidEpochs = epochs >= this->epochs;
-    const bool isValidAccuracy = accuracy >= this->accuracy;
-    const bool isValidMae = mae <= this->mae;
+    const bool isValidEpochs = epochs >= this->epochs && epochs > 0;
+    const bool isValidAccuracy = accuracy >= this->accuracy && accuracy > 0;
+    const bool isValidMae = mae <= this->mae && mae > 0;
     const bool isValidDuration = duration >= this->duration;
 
     if (this->op == andOp)

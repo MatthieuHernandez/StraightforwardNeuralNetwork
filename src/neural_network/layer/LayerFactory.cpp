@@ -1,6 +1,7 @@
 #include "LayerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
 #include "AllToAll.hpp"
+#include "Recurrence.hpp"
 #include "Convolution1D.hpp"
 #include "Convolution2D.hpp"
 
@@ -98,8 +99,8 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         if (model.numberOfRecurrences < 0)
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
-        model.numberOfInputsByNeurons = model.numberOfInputs;
-        return make_unique<AllToAll>(model, optimizer);
+        model.numberOfInputsByNeurons = model.numberOfInputs * (model.numberOfRecurrences + 1);
+        return make_unique<Recurrence>(model, optimizer);
 
     case convolution:
         if (shapeOfInput.size() == 1)

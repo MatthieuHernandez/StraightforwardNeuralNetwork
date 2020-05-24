@@ -33,7 +33,7 @@ vector<float> Recurrence::output(const vector<float>& inputs, bool temporalReset
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        outputs[n] = neurons[n].output(inputs);
+        outputs[n] = neurons[n].output(this->allInputs);
     }
     return outputs;
 }
@@ -46,10 +46,10 @@ void Recurrence::addNewInputs(std::vector<float> inputs, bool temporalReset)
     }
     else
     {
-        for(int i = this->numberOfRecurrences-1; i < 0; --i)
+        for(int i = this->numberOfRecurrences; i > 0; --i)
         {
             const int index = i * this->numberOfInputs;
-            std::memcpy(&inputs[index], &inputs[index-this->numberOfInputs], this->sizeToCopy);
+            std::memcpy(&this->allInputs[index], &this->allInputs[index-this->numberOfInputs], this->sizeToCopy);
         }
     }
     copy(inputs.begin(), inputs.end(), this->allInputs.begin());
@@ -77,7 +77,7 @@ int Recurrence::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->getNumberOfInputs() * (numberOfRecurrences+1))
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs() * (numberOfRecurrences + 1))
             return 203;
     }
     return this->Layer::isValid();

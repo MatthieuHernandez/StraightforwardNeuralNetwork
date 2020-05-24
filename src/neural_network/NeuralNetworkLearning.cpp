@@ -62,10 +62,11 @@ vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const
         if (desired[n] != -1.0f)
         {
             float e = desired[n] - outputs[n];
-            if(e < 100)
+
+            if(abs(e) < 1)
                 (*errors)[n] = e * abs(e);
             else
-                (*errors)[n] = 100;
+                (*errors)[n] = e;
         }
         else
             (*errors)[n] = 0;

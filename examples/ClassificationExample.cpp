@@ -1,3 +1,4 @@
+#include "Examples.hpp"
 #include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
 #include "../src/data/Data.hpp"
 
@@ -12,25 +13,25 @@ For more explanation go to wiki.
 */
 int classificationExample()
 {
-	vector<vector<float>> inputData = {{-0.1, 0.4, -0.6}, {0.5, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {-0.9, -0.5, 1.7}, {0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
-	vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
+    vector<vector<float>> inputData = {{-0.1, 0.4, -0.6}, {0.5, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {-0.9, -0.5, 1.7}, {0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
+    vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
-	Data data(classification, inputData, expectedOutputs);
+    Data data(classification, inputData, expectedOutputs);
 
-	StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(2)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(2)});
 
-	neuralNetwork.startTraining(data);
-	neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
-	neuralNetwork.stopTraining();
+    neuralNetwork.startTraining(data);
+    neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
+    neuralNetwork.stopTraining();
 
-	float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
-	int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0)); // consult neural network to test it
-	int expectedClassNumber = data.getLabel(snn::testing, 0); // return position of neuron with highest output
-	if (accuracy == 100
-	&& classNumber == expectedClassNumber
-	&& neuralNetwork.isValid() == 0)
-	{
-		return EXIT_SUCCESS; // the neural network has learned
-	}
-	return EXIT_FAILURE;
+    float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+    int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0)); // consult neural network to test it
+    int expectedClassNumber = data.getLabel(snn::testing, 0); // return position of neuron with highest output
+    if (accuracy == 100
+    && classNumber == expectedClassNumber
+    && neuralNetwork.isValid() == 0)
+    {
+        return EXIT_SUCCESS; // the neural network has learned
+    }
+    return EXIT_FAILURE;
 }

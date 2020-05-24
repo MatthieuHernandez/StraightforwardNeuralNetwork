@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <random>
 #include "CompositeForTemporalData.hpp"
-#include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
@@ -37,6 +36,11 @@ void CompositeForTemporalData::shuffle()
     }
 }
 
+void CompositeForTemporalData::unshuffle()
+{
+    this->TemporalComposite::unshuffle();
+}
+
 bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
 {
     return this->sets[training].areFirstDataOfTemporalSequence[index];
@@ -47,22 +51,24 @@ bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) c
     return this->sets[testing].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToLearnOnTrainingData(int index) const
+bool CompositeForTemporalData::needToTrainOnTrainingData(int index) const
 {
-    return this->sets[training].needToLearnData[index];
+    return true;
 }
 
 bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 {
-    return this->sets[testing].needToLearnData[index];
+    return this->sets[testing].needToEvaluateOnData[index];
 }
 
 int CompositeForTemporalData::isValid()
 {
-    if (!this->sets[testing].needToLearnData.empty()
-        || this->sets[training].needToLearnData.size() != this->sets[training].size
-        || this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[training].size
-        || this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size)
+    if (!this->sets[training].areFirstDataOfTemporalSequence.size() == this->sets[training].size
+     || !this->sets[testing].areFirstDataOfTemporalSequence.size() == this->sets[testing].size
+     || !this->sets[training].needToTrainOnData.empty()
+     || !this->sets[testing].needToTrainOnData.empty()
+     || !this->sets[training].needToEvaluateOnData.empty()
+     || !this->sets[testing].needToEvaluateOnData.size() == this->sets[training].size)
         return 404;
 
     return this->TemporalComposite::isValid();

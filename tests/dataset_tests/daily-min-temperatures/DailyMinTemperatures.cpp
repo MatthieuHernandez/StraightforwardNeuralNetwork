@@ -11,7 +11,8 @@ using namespace snn;
 using namespace internal;
 
 
-DailyMinTemperatures::DailyMinTemperatures(string folderPath)
+DailyMinTemperatures::DailyMinTemperatures(string folderPath, int numberOfRecurrences)
+    : numberOfRecurrences(numberOfRecurrences)
 {
     this->loadData(folderPath);
 }
@@ -44,5 +45,5 @@ void DailyMinTemperatures::loadData(string folderPath)
         previousValue = value;
     }
     file.close();
-    this->data = make_unique<Data>(regression, data, labels);
+    this->data = make_unique<Data>(regression, data, labels, continuous, this->numberOfRecurrences);
 }

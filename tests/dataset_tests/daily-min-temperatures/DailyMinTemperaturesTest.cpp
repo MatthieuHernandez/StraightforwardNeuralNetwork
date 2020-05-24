@@ -11,7 +11,7 @@ class DailyMinTemperaturesTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        DailyMinTemperatures dataset("./datasets/daily-min-temperatures");
+        DailyMinTemperatures dataset("./datasets/daily-min-temperatures", 5);
         data = move(dataset.data);
     }
     
@@ -33,6 +33,9 @@ TEST_F(DailyMinTemperaturesTest, loadData)
     ASSERT_EQ(data->sets[training].labels.size(), 3649);
     ASSERT_EQ(data->sets[snn::testing].inputs.size(), 3649);
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 3649);
+    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 1);
+    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 1);
+    ASSERT_EQ(data->numberOfLabel, 1);
     ASSERT_EQ(data->isValid(), 0);
 }
 
@@ -44,8 +47,8 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
         AllToAll(1, snn::identity)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(/*3_s ||*/ 1.2_mae);
+    neuralNetwork.waitFor(7_s || 1.2_mae);
     neuralNetwork.stopTraining();
     auto mae = neuralNetwork.getMeanAbsoluteError();
-    ASSERT_MAE(mae, 0.8);
+    ASSERT_MAE(mae, 1.2);
 }

@@ -30,13 +30,13 @@ namespace snn
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
                         temporalType typeOfTemporal,
-                        int numberOfRecurrence);
+                        int numberOfRecurrences);
 
         void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
-        int numberOfRecurrence{};
+        int numberOfRecurrences{};
         float precision{};
         float separator{};
 
@@ -47,13 +47,13 @@ namespace snn
              std::vector<std::vector<float>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
              temporalType typeOfTemporal = nonTemporal,
-             int numberOfRecurrence = 0);
+             int numberOfRecurrences = 0);
 
         Data(problemType typeOfProblem,
              std::vector<std::vector<float>>& inputs,
              std::vector<std::vector<float>>& labels,
              temporalType temporal = nonTemporal,
-             int numberOfRecurrence = 0);
+             int numberOfRecurrences = 0);
 
         Data(problemType typeOfProblem,
              std::vector<std::vector<std::vector<float>>>& trainingInputs,
@@ -61,13 +61,13 @@ namespace snn
              std::vector<std::vector<std::vector<float>>>& testingInputs,
              std::vector<std::vector<float>>& testingLabels,
              temporalType typeOfTemporal,
-             int numberOfRecurrence = 0);
+             int numberOfRecurrences = 0);
 
         Data(problemType typeOfProblem,
              std::vector<std::vector<std::vector<float>>>& inputs,
              std::vector<std::vector<float>>& labels,
              temporalType typeOfTemporal,
-             int numberOfRecurrence = 0);
+             int numberOfRecurrences = 0);
 
         const problemType typeOfProblem;
         const temporalType typeOfTemporal;

@@ -12,11 +12,11 @@ namespace snn::internal
         TemporalComposite(snn::Set sets[2]);
 
         virtual void shuffle() = 0;
-        void unshuffle();
+        virtual void unshuffle();
 
         [[nodiscard]] virtual bool isFirstTrainingDataOfTemporalSequence(int index) const = 0;
         [[nodiscard]] virtual bool isFirstTestingDataOfTemporalSequence(int index) const = 0;
-        [[nodiscard]] virtual bool needToLearnOnTrainingData(int index) const = 0;
+        [[nodiscard]] virtual bool needToTrainOnTrainingData(int index) const = 0;
         [[nodiscard]] virtual bool needToEvaluateOnTestingData(int index) const = 0;
 
         [[nodiscard]] virtual int isValid();

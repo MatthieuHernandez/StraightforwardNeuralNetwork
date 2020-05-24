@@ -14,10 +14,12 @@ namespace snn
     {
         int index{0};
         int size{0}; // number of data inside set
+        int numberOfTemporalSequence{};
         vector2D<float> inputs{};
         vector2D<float> labels{};
         std::vector<int> indexesToShuffle{};
         std::vector<bool> areFirstDataOfTemporalSequence{};
-        std::vector<bool> needToLearnData{};
+        std::vector<bool> needToTrainOnData{};
+        std::vector<bool> needToEvaluateOnData{};
     };
 }

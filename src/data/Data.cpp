@@ -11,7 +11,6 @@
 #include "CompositeForContinuousData.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
-#include "../tools/Tools.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -24,7 +23,7 @@ Data::Data(problemType typeOfProblem,
            vector<vector<float>>& testingInputs,
            vector<vector<float>>& testingLabels,
            temporalType typeOfTemporal,
-           int numberOfRecurrence)
+           int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     this->initialize(typeOfProblem,
@@ -33,14 +32,14 @@ Data::Data(problemType typeOfProblem,
                      testingInputs,
                      testingLabels,
                      typeOfTemporal,
-                     numberOfRecurrence);
+                     numberOfRecurrences);
 }
 
 Data::Data(problemType typeOfProblem,
            vector<vector<float>>& inputs,
            vector<vector<float>>& labels,
            temporalType typeOfTemporal,
-           int numberOfRecurrence)
+           int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     this->initialize(typeOfProblem,
@@ -49,7 +48,7 @@ Data::Data(problemType typeOfProblem,
                      inputs,
                      labels,
                      typeOfTemporal,
-                     numberOfRecurrence);
+                     numberOfRecurrences);
 }
 
 Data::Data(problemType typeOfProblem,
@@ -58,7 +57,7 @@ Data::Data(problemType typeOfProblem,
            vector<vector<vector<float>>>& testingInputs,
            vector<vector<float>>& testingLabels,
            temporalType typeOfTemporal,
-           int numberOfRecurrence)
+           int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != temporal)
@@ -73,14 +72,14 @@ Data::Data(problemType typeOfProblem,
                      this->sets[testing].inputs,
                      testingLabels,
                      typeOfTemporal,
-                     numberOfRecurrence);
+                     numberOfRecurrences);
 }
 
 Data::Data(problemType typeOfProblem,
            vector<vector<vector<float>>>& inputs,
            vector<vector<float>>& labels,
            temporalType typeOfTemporal,
-           int numberOfRecurrence)
+           int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != temporal)
@@ -94,7 +93,7 @@ Data::Data(problemType typeOfProblem,
                      this->sets[testing].inputs,
                      labels,
                      typeOfTemporal,
-                     numberOfRecurrence);
+                     numberOfRecurrences);
 }
 
 void Data::initialize(problemType typeOfProblem,
@@ -103,10 +102,24 @@ void Data::initialize(problemType typeOfProblem,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
                       temporalType typeOfTemporal,
-                      int numberOfRecurrence)
+                      int numberOfRecurrences)
 {
     this->precision = 0.1f;
-    this->separator = 0.5f;
+    this->separator = 0.5f;  
+    this->numberOfRecurrences = numberOfRecurrences;
+    this->sets[training].inputs = trainingInputs;
+    this->sets[training].labels = trainingLabels;
+    this->sets[testing].inputs = testingInputs;
+    this->sets[testing].labels = testingLabels;
+
+    this->sizeOfData = static_cast<int>(trainingInputs.back().size());
+    this->numberOfLabel = static_cast<int>(trainingLabels.back().size());;
+    this->sets[training].size = static_cast<int>(trainingLabels.size());
+    this->sets[testing].size = static_cast<int>(testingLabels.size());
+
+    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
+    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
+        this->sets[training].indexesToShuffle[i] = i;
 
     switch (this->typeOfProblem)
     {
@@ -132,26 +145,11 @@ void Data::initialize(problemType typeOfProblem,
         this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
         break;
     case continuous:
-        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets, this->numberOfRecurrence);
+        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets, this->numberOfRecurrences);
         break;
     default:
         throw NotImplementedException();
     }
-
-    this->numberOfRecurrence = numberOfRecurrence;
-    this->sets[training].inputs = trainingInputs;
-    this->sets[training].labels = trainingLabels;
-    this->sets[testing].inputs = testingInputs;
-    this->sets[testing].labels = testingLabels;
-
-    this->sizeOfData = static_cast<int>(trainingInputs.back().size());
-    this->numberOfLabel = static_cast<int>(trainingLabels.back().size());;
-    this->sets[training].size = static_cast<int>(trainingLabels.size());
-    this->sets[testing].size = static_cast<int>(testingLabels.size());
-
-    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
-    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
-        this->sets[training].indexesToShuffle[i] = i;
 
     this->normalization(-1, 1);
     internal::log<minimal>("Data loaded");
@@ -166,6 +164,7 @@ void Data::initialize(problemType typeOfProblem,
 
 void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
+    this->sets[set].numberOfTemporalSequence = input3D.size();
     auto size = accumulate(input3D.begin(), input3D.end(), 0,
                                                         [](float sum, vector2D<float>& v)
                                                         {
@@ -173,7 +172,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
                                                         });
     this->sets[set].inputs.reserve(size);
     this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
-    this->sets[set].needToLearnData.resize(size, false);
+    this->sets[set].needToEvaluateOnData.resize(size, false);
 
     int i = 0;
     for (vector2D<float>& v : input3D)
@@ -183,7 +182,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
         if(set == testing)
-            this->sets[testing].needToLearnData[i]= true;
+            this->sets[testing].needToEvaluateOnData[i-1] = true;
     }
     this->sets[set].size = this->sets[set].inputs.size();
 }
@@ -305,7 +304,7 @@ bool Data::isFirstTestingDataOfTemporalSequence(const int index) const
 
 bool Data::needToLearnOnTrainingData(const int index) const
 {
-    return this->temporalComposite->needToLearnOnTrainingData(index);
+    return this->temporalComposite->needToTrainOnTrainingData(index);
 }
 
 bool Data::needToEvaluateOnTestingData(int index) const

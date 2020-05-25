@@ -20,7 +20,7 @@ int recurrenceExample()
     Data data(regression, inputData, expectedOutputs, continuous, 1);
     data.setPrecision(precision);
 
-    snn::StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(3, 2), AllToAll(1, snn::identity)});
+    snn::StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(4, 1), AllToAll(1, snn::identity)});
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 10_s ); // train neural network until 100% accurary or 3s on a parallel thread

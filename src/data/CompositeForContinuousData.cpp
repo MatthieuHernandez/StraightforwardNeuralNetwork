@@ -39,19 +39,25 @@ void CompositeForContinuousData::shuffle()
     const int offset = Tools::randomBetween(0, this->numberOfRecurrences + 1);
     const int lastRecurrence = offset > this->rest ? 1 : 0;
 
+    for(int i = 0; i < this->sets[training].size; ++i)
+    {
+        this->sets[training].needToTrainOnData[i] = false;
+        this->sets[training].areFirstDataOfTemporalSequence[i] = true;
+    }
+
     for (int i = 0; i < this->indexesForShuffles.size() - lastRecurrence; ++i)
     {
         for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
         {
+
             const int index = i * (this->numberOfRecurrences + 1) + j + offset;
             this->sets[training].indexesToShuffle[index] = this->indexesForShuffles[i] + j;
 
-            if (j == 0)
-                this->sets[training].areFirstDataOfTemporalSequence[index] = true;
-            if (j == this->numberOfRecurrences)
+            if (j != 0)
+                this->sets[training].areFirstDataOfTemporalSequence[index] = false;
+
+            if (j == this->numberOfRecurrences && index >= offset)
                 this->sets[training].needToTrainOnData[index] = true;
-            else
-                this->sets[training].needToTrainOnData[index] = false;
         }
     }
 }

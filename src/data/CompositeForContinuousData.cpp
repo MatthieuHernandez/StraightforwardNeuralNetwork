@@ -17,15 +17,15 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
     this->sets[training].numberOfTemporalSequence = 1;
     this->sets[testing].numberOfTemporalSequence = 1;
 
-    this->divide = this->sets[training].size / this->numberOfRecurrences;
-    this->rest = this->sets[training].size / this->numberOfRecurrences;
+    this->divide = this->sets[training].size / (this->numberOfRecurrences + 1);
+    this->rest = this->sets[training].size % (this->numberOfRecurrences + 1);
 
     this->indexesForShuffles.resize(this->divide);
-    for(int i = 0; i < this->divide; ++i)
+    for (int i = 0; i < this->divide; ++i)
     {
         this->indexesForShuffles[i] = i;
     }
-    this->sets[training].needToTrainOnData  = vector(this->sets[training].size, true);
+    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
     this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 }
@@ -36,22 +36,22 @@ void CompositeForContinuousData::shuffle()
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
 
-    const int offset = Tools::randomBetween(0, this->numberOfRecurrences);
+    const int offset = Tools::randomBetween(0, this->numberOfRecurrences + 1);
     const int lastRecurrence = offset > this->rest ? 1 : 0;
 
-    for(int i = 0; i < this->indexesForShuffles.size() - lastRecurrence; ++i)
+    for (int i = 0; i < this->indexesForShuffles.size() - lastRecurrence; ++i)
     {
-        for(int j = 0; j < this->numberOfRecurrences; ++j)
+        for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
         {
-            const int index = i * this->numberOfRecurrences + j + offset;
+            const int index = i * (this->numberOfRecurrences + 1) + j + offset;
             this->sets[training].indexesToShuffle[index] = this->indexesForShuffles[i] + j;
 
-            if(j == 0)
-                this->sets[training].areFirstDataOfTemporalSequence[j] = true;
-            if(j == this->numberOfRecurrences-1)
-                this->sets[training].needToTrainOnData[i] = true;
+            if (j == 0)
+                this->sets[training].areFirstDataOfTemporalSequence[index] = true;
+            if (j == this->numberOfRecurrences)
+                this->sets[training].needToTrainOnData[index] = true;
             else
-                this->sets[training].needToTrainOnData[i] = false;
+                this->sets[training].needToTrainOnData[index] = false;
         }
     }
 }
@@ -59,7 +59,7 @@ void CompositeForContinuousData::shuffle()
 void CompositeForContinuousData::unshuffle()
 {
     this->TemporalComposite::unshuffle();
-    this->sets[training].needToTrainOnData  = vector(this->sets[training].size, true);
+    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
     this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 }
@@ -87,11 +87,11 @@ bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
 int CompositeForContinuousData::isValid()
 {
     if (!this->sets[training].areFirstDataOfTemporalSequence.size() == this->sets[training].size
-     || !this->sets[testing].areFirstDataOfTemporalSequence.empty()
-     || !this->sets[training].needToTrainOnData.size() == this->sets[training].size
-     || !this->sets[testing].needToTrainOnData.empty()
-     || !this->sets[training].needToEvaluateOnData.empty()
-     || !this->sets[testing].needToEvaluateOnData.empty())
+        || !this->sets[testing].areFirstDataOfTemporalSequence.empty()
+        || !this->sets[training].needToTrainOnData.size() == this->sets[training].size
+        || !this->sets[testing].needToTrainOnData.empty()
+        || !this->sets[training].needToEvaluateOnData.empty()
+        || !this->sets[testing].needToEvaluateOnData.empty())
         return 404;
 
     return this->TemporalComposite::isValid();

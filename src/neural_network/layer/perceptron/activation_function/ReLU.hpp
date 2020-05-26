@@ -4,7 +4,7 @@
 
 namespace snn::internal
 {
-    class RectifiedLinearUnit : public ActivationFunction // WARNING : bad function, if sum < 0 at start, neuron will never learn
+    class RectifiedLinearUnit final : public ActivationFunction // WARNING : bad function, if sum < 0 at start, neuron will never learn
     {
     private:
         activationFunction getType() const override { return ReLU; }

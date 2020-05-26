@@ -3,7 +3,7 @@
 
 namespace snn::internal
 {
-    class Identity : public ActivationFunction
+    class Identity final : public ActivationFunction
     {
     private:
         activationFunction getType() const override { return identity; }

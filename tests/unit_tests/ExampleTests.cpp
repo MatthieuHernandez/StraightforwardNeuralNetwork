@@ -15,7 +15,18 @@ TEST(exemples, regression)
 {
     ASSERT_EQ(regressionExample(), EXIT_SUCCESS);
 }
-TEST(exemples, recurrence)
+
+TEST(exemples, simpleRecurrence)
 {
-    ASSERT_EQ(recurrenceExample(), EXIT_SUCCESS);
+    ASSERT_EQ(simpleRecurrenceExample(), EXIT_SUCCESS);
+}
+
+TEST(exemples, mediumRecurrence)
+{
+    ASSERT_EQ(mediumRecurrenceExample(), EXIT_SUCCESS);
+}
+
+TEST(exemples, complexRecurrence)
+{
+    ASSERT_EQ(complexRecurrenceExample(), EXIT_SUCCESS);
 }

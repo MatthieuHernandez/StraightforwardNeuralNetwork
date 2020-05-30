@@ -115,7 +115,7 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
         if(data.needToEvaluateOnTestingData(this->currentIndex))
             this->evaluateOnce(data);
         else
-            this->output(data.getTestingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
+            this->output(data.getTestingData(this->currentIndex), data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)

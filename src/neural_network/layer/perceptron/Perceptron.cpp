@@ -70,11 +70,11 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 
 int Perceptron::isValid() const
 {
-    if (this->bias != 1)
+    if (this->bias != 1.0f)
         return 301;
 
-    if (this->weights.size() < 1
-     || this->weights.size() > 1000000)
+    if (this->weights.empty()
+        || this->weights.size() > 1000000)
     {
         return 302;
     }

@@ -13,6 +13,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
     {
         outputs = layers[l]->output(outputs, temporalReset);
     }
+
     return outputs;
 }
 
@@ -61,12 +62,16 @@ vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const
     {
         if (desired[n] != -1.0f)
         {
-            float e = desired[n] - outputs[n];
+            const float err = desired[n] - outputs[n];
 
-            if(abs(e) < 1)
-                (*errors)[n] = e * abs(e);
+            if(abs(err) < 1)
+                (*errors)[n] = err * abs(err);
             else
-                (*errors)[n] = e;
+                //(*errors)[n] = err;
+                if(err > 0)
+                    (*errors)[n] = log2(abs(err)+1);
+                else
+                    (*errors)[n] = -log2(abs(err)+1);
         }
         else
             (*errors)[n] = 0;

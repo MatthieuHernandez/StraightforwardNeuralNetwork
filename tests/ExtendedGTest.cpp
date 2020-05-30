@@ -11,6 +11,16 @@ void ASSERT_BETWEEN(T min, T value, T max, string valueName)
     ASSERT_LE(value, max);
 }
 
+void ASSERT_SUCCESS()
+{
+    ASSERT_TRUE(true);
+}
+
+void ASSERT_FAIL(string message)
+{
+    ASSERT_TRUE(false) << message;
+}
+
 void PRINT_LOG(string message)
 {
     cout << "\033[0;32m" << "[          ] " << "\033[0;0m" << message << endl;

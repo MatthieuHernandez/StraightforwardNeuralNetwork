@@ -20,10 +20,10 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
     this->divide = this->sets[training].size / (this->numberOfRecurrences + 1);
     this->rest = this->sets[training].size % (this->numberOfRecurrences + 1);
 
-    this->indexesForShuffles.resize(this->divide);
+    this->indexesForShuffling.resize(this->divide);
     for (int i = 0; i < this->divide; ++i)
     {
-        this->indexesForShuffles[i] = i;
+        this->indexesForShuffling[i] = i;
     }
     this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
     this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
@@ -34,7 +34,7 @@ void CompositeForContinuousData::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
+    std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
 
     const int offset = Tools::randomBetween(0, this->numberOfRecurrences + 1);
     const int lastRecurrence = offset > this->rest ? 1 : 0;
@@ -45,19 +45,27 @@ void CompositeForContinuousData::shuffle()
         this->sets[training].areFirstDataOfTemporalSequence[i] = true;
     }
 
-    for (int i = 0; i < this->indexesForShuffles.size() - lastRecurrence; ++i)
+    for (int i = 0; i < this->indexesForShuffling.size() - lastRecurrence; ++i)
     {
-        for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
+        const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
+        if(maxIndex < this->sets[training].shuffledIndexes.size())
         {
+            for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
+            {
 
-            const int index = i * (this->numberOfRecurrences + 1) + j + offset;
-            this->sets[training].indexesToShuffle[index] = this->indexesForShuffles[i] + j;
+                const int index = i * (this->numberOfRecurrences + 1) + j + offset;
+                this->sets[training].shuffledIndexes[index] = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 
-            if (j != 0)
-                this->sets[training].areFirstDataOfTemporalSequence[index] = false;
+                if (j != 0)
+                    this->sets[training].areFirstDataOfTemporalSequence[index] = false;
+                else
+                    this->sets[training].areFirstDataOfTemporalSequence[index] = true;
 
-            if (j == this->numberOfRecurrences && index >= offset)
-                this->sets[training].needToTrainOnData[index] = true;
+                if (j == this->numberOfRecurrences && index >= offset)
+                    this->sets[training].needToTrainOnData[index] = true;
+                else
+                    this->sets[training].needToTrainOnData[index] = false;
+            }
         }
     }
 }

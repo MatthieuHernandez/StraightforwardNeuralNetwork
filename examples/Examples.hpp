@@ -6,7 +6,4 @@ extern int multipleClassificationExample();
 
 extern int regressionExample();
 
-extern int simpleRecurrenceExample();
-extern int mediumRecurrenceExample();
-extern int complexRecurrenceExample();
-
+extern int recurrenceExample();

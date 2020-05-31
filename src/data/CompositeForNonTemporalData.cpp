@@ -17,7 +17,7 @@ void CompositeForNonTemporalData::shuffle() //TODO: also need learning to shuffl
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->sets[training].indexesToShuffle.begin(), this->sets[training].indexesToShuffle.end(), g);
+    std::shuffle(this->sets[training].shuffledIndexes.begin(), this->sets[training].shuffledIndexes.end(), g);
 }
 
 void CompositeForNonTemporalData::unshuffle()

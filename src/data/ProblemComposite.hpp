@@ -16,7 +16,7 @@ namespace snn::internal
         [[nodiscard]] virtual int getTrainingLabel(int index) = 0;
         [[nodiscard]] virtual int getTestingLabel(int index) = 0;
 
-        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(int index) = 0;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index) const;
+        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(int index) const = 0;
     };
 }

@@ -17,7 +17,7 @@ namespace snn
         int numberOfTemporalSequence{};
         vector2D<float> inputs{};
         vector2D<float> labels{};
-        std::vector<int> indexesToShuffle{};
+        std::vector<int> shuffledIndexes{};
         std::vector<bool> areFirstDataOfTemporalSequence{};
         std::vector<bool> needToTrainOnData{};
         std::vector<bool> needToEvaluateOnData{};

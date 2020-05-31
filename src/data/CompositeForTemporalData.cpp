@@ -26,12 +26,12 @@ void CompositeForTemporalData::shuffle()
 
     for (int i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
-        this->sets[training].indexesToShuffle[j++] = this->indexesForShuffles[i];
+        this->sets[training].shuffledIndexes[j++] = this->indexesForShuffles[i];
 
         int index = this->indexesForShuffles[i] + 1;
         while (!this->sets[training].areFirstDataOfTemporalSequence[index])
         {
-            this->sets[training].indexesToShuffle[j++] = index++;
+            this->sets[training].shuffledIndexes[j++] = index++;
         }
     }
 }

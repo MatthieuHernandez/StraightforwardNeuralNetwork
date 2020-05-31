@@ -100,6 +100,8 @@ void StraightforwardNeuralNetwork::train(Data& data)
             if(data.needToLearnOnTrainingData(this->currentIndex))
                 this->trainOnce(data.getTrainingData(this->currentIndex),
                                 data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
+            else
+                this->output(data.getTrainingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
         }
         this->evaluate(data);
     }

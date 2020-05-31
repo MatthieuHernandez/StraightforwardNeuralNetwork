@@ -21,7 +21,7 @@ Perceptron::Perceptron(const int numberOfInputs,
     {
         w = randomInitializeWeight(numberOfInputs);
     }
-    this->bias = 1.0f;
+    this->bias = 0.0f;
 }
 
 float Perceptron::randomInitializeWeight(int numberOfInputs) const
@@ -70,7 +70,7 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 
 int Perceptron::isValid() const
 {
-    if (this->bias != 1.0f)
+    if (this->bias != 0.0f)
         return 301;
 
     if (this->weights.empty()

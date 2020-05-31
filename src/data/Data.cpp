@@ -117,9 +117,9 @@ void Data::initialize(problemType typeOfProblem,
     this->sets[training].size = static_cast<int>(trainingLabels.size());
     this->sets[testing].size = static_cast<int>(testingLabels.size());
 
-    this->sets[training].indexesToShuffle.resize(this->sets[training].size);
-    for (int i = 0; i < static_cast<int>(this->sets[training].indexesToShuffle.size()); i++)
-        this->sets[training].indexesToShuffle[i] = i;
+    this->sets[training].shuffledIndexes.resize(this->sets[training].size);
+    for (int i = 0; i < static_cast<int>(this->sets[training].shuffledIndexes.size()); i++)
+        this->sets[training].shuffledIndexes[i] = i;
 
     switch (this->typeOfProblem)
     {
@@ -273,8 +273,8 @@ int Data::isValid()
             }
         }
     }
-    if (!this->sets[testing].indexesToShuffle.empty()
-      && this->sets[training].indexesToShuffle.size() != this->sets[training].size)
+    if (!this->sets[testing].shuffledIndexes.empty()
+      && this->sets[training].shuffledIndexes.size() != this->sets[training].size)
         return 403;
 
     if(this->sets[training].size != this->sets[training].inputs.size()
@@ -314,7 +314,7 @@ bool Data::needToEvaluateOnTestingData(int index) const
 
 const vector<float>& Data::getTrainingData(const int index) const
 {
-    const int i = this->sets[training].indexesToShuffle[index];
+    const int i = this->sets[training].shuffledIndexes[index];
     return this->sets[training].inputs[i];
 }
 

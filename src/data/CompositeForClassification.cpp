@@ -36,7 +36,7 @@ int CompositeForClassification::getTestingLabel(const int index)
 }
 
 
-const std::vector<float>& CompositeForClassification::getTestingOutputs(const int)
+const std::vector<float>& CompositeForClassification::getTestingOutputs(const int) const
 {
     throw ShouldNeverBeCalledException("getTestingOutputs");
 }

@@ -10,7 +10,7 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() override;
 
-        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) override;
+        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const override;
         [[nodiscard]] int getTrainingLabel(const int) override;
         [[nodiscard]] int getTestingLabel(const int) override;
     };

@@ -17,8 +17,8 @@ int ProblemComposite::isValid()
     return 0;
 }
 
-const std::vector<float>& ProblemComposite::getTrainingOutputs(int index)
+const std::vector<float>& ProblemComposite::getTrainingOutputs(int index) const
 {
-    const int i = this->sets[training].indexesToShuffle[index];
+    const int i = this->sets[training].shuffledIndexes[index];
     return this->sets[training].labels[i];
 }

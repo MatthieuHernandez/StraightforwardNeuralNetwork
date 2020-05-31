@@ -15,7 +15,7 @@ int CompositeForMultipleClassification::isValid()
     return this->ProblemComposite::isValid();
 }
 
-const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index)
+const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index) const
 {
     return this->sets[testing].labels[index];
 }

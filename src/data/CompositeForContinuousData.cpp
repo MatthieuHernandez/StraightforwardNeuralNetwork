@@ -28,6 +28,7 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
     this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
     this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
+    this->offset = 0;
 }
 
 void CompositeForContinuousData::shuffle()
@@ -36,7 +37,6 @@ void CompositeForContinuousData::shuffle()
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
 
-    const int offset = Tools::randomBetween(0, this->numberOfRecurrences + 1);
     const int lastRecurrence = offset > this->rest ? 1 : 0;
 
     for(int i = 0; i < this->sets[training].size; ++i)
@@ -45,7 +45,7 @@ void CompositeForContinuousData::shuffle()
         this->sets[training].areFirstDataOfTemporalSequence[i] = true;
     }
 
-    for (int i = 0; i < this->indexesForShuffling.size() - lastRecurrence; ++i)
+    for (int i = 0; i < this->indexesForShuffling.size(); ++i)
     {
         const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
         if(maxIndex < this->sets[training].shuffledIndexes.size())
@@ -67,7 +67,18 @@ void CompositeForContinuousData::shuffle()
                     this->sets[training].needToTrainOnData[index] = false;
             }
         }
+        else
+        {
+            for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
+            {
+                const int index = i * (this->numberOfRecurrences + 1) + j + offset;
+                if (j == 0)
+                    this->sets[training].areFirstDataOfTemporalSequence[index] = true;
+                this->sets[training].needToTrainOnData[index] = false;
+            }
+        }
     }
+    this->offset = (this->offset+1) % (this->numberOfRecurrences+1);
 }
 
 void CompositeForContinuousData::unshuffle()

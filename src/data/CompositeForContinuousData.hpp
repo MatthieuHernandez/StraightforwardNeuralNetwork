@@ -9,6 +9,7 @@ namespace snn::internal
     private:
         int numberOfRecurrences;
         std::vector<int> indexesForShuffling;
+        int offset;
         int divide;
         int rest;
     public:

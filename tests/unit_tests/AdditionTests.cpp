@@ -15,12 +15,9 @@ TEST(Addition, WithMPL)
     auto data = createData();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        AllToAll(16, sigmoid),
-        AllToAll(4, sigmoid),
+        AllToAll(6, sigmoid),
         AllToAll(1, snn::identity)
     });
-    neuralNetwork.optimizer.momentum = 0.98;
-    neuralNetwork.optimizer.learningRate = 0.001;
     testNeuralNetwork(neuralNetwork, *data);
    
 }
@@ -51,11 +48,11 @@ inline
 void testNeuralNetwork(StraightforwardNeuralNetwork &nn, Data &d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 10_s);
+    nn.waitFor(1.0_acc || 3_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 100);
+    ASSERT_ACCURACY(acc, 1.0);
     ASSERT_MAE(mae, 0.5);
 }
 
@@ -65,7 +62,7 @@ unique_ptr<Data> createData()
     vector<vector<float>> inputData = {
         {3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2},
         {2, 4}, {4, 1}, {1, 4}, {4, 3}, {3, 0},
-        {0, 0}, {0, 0}, {4, 3}, {3, 2}, {2, 1},
+        {0, 0}, {0, 4}, {4, 3}, {3, 2}, {2, 1},
         {1, 2}, {2, 0}, {0, 1}, {1, 2}, {5, 5},
         {5, 3}, {1, 1}, {4, 4}, {3, 3}, {2, 2}
     };
@@ -73,7 +70,7 @@ unique_ptr<Data> createData()
         {8}, {9}, {6}, {2}, {2},
         {6}, {5}, {5}, {7}, {3},
         {0}, {4}, {7}, {5}, {3},
-        {3}, {2}, {1}, {6}, {10},
+        {3}, {2}, {1}, {3}, {10},
         {8}, {2}, {8}, {6}, {4}
     };
 
@@ -87,10 +84,10 @@ inline
 unique_ptr<Data> createRecurrentData()
 {
     vector<vector<float>> inputData = {
-        {3}, {5}, {4}, {2}, {0}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}
+        {3}, {5}, {4}, {2}, {0}, {2}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}, {3}
     };
     vector<vector<float>> expectedOutputs = {
-        {3}, {8}, {9}, {6}, {2}, {2}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}
+        {3}, {8}, {9}, {6}, {2}, {2}, {4}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}, {6}
     };
 
     const float precision = 0.05f;

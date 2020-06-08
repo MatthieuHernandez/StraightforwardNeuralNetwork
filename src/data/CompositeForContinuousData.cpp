@@ -33,6 +33,7 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
 
 void CompositeForContinuousData::shuffle()
 {
+    return;
     std::random_device rd;
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
@@ -47,8 +48,10 @@ void CompositeForContinuousData::shuffle()
 
     for (int i = 0; i < this->indexesForShuffling.size(); ++i)
     {
-        const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
-        if(maxIndex < this->sets[training].shuffledIndexes.size())
+        const int maxIndex1 = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
+        const int maxIndex2 =                            i * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
+        if (maxIndex1 < this->sets[training].size
+            && maxIndex2 < this->sets[training].size)
         {
             for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
             {
@@ -69,7 +72,7 @@ void CompositeForContinuousData::shuffle()
         }
         else
         {
-            for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
+            for (int j = 0; j < this->numberOfRecurrences + 1 - offset; ++j)
             {
                 const int index = i * (this->numberOfRecurrences + 1) + j + offset;
                 if (j == 0)
@@ -106,6 +109,8 @@ bool CompositeForContinuousData::needToTrainOnTrainingData(int index) const
 
 bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
 {
+    if(index < this->numberOfRecurrences)
+        return false;
     return true;
 }
 

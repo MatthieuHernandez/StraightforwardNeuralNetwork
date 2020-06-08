@@ -20,20 +20,20 @@ int recurrenceExample()
         {0.3}, {0.8}, {0.9}, {0.6}, {0.2}, {0.2}, {0.6}, {0.5}, {0.5}, {0.7}, {0.3}, {0.0}, {0.4}, {0.7}, {0.5}, {0.3}, {0.3}, {0.2}, {0.1}, {0.6}, {1.0}, {0.8}
     };
 
-    float precision = 0.09f;
+    const float precision = 0.05f;
     Data data(regression, inputData, expectedOutputs, continuous, 1);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(4, 1),
-        AllToAll(1, snn::sigmoid)
+        Recurrence(6, 1),
+        AllToAll(1, snn::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.002f;
-    neuralNetwork.optimizer.momentum = 0.99f;
+    neuralNetwork.optimizer.learningRate = 0.0003f;
+    //neuralNetwork.optimizer.momentum = 0.98f;
 
     neuralNetwork.startTraining(data);
-    neuralNetwork.waitFor(1.00_acc || 5_s); // train neural network until 100% accurary or 3s on a parallel thread
+    neuralNetwork.waitFor(1.00_acc /*|| 8_s*/); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
     float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;

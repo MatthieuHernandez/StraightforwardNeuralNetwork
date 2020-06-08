@@ -67,7 +67,6 @@ vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const
             if(abs(err) < 1)
                 (*errors)[n] = err * abs(err);
             else
-                //(*errors)[n] = err;
                 if(err > 0)
                     (*errors)[n] = log2(abs(err)+1);
                 else

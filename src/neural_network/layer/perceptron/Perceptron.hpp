@@ -26,6 +26,7 @@ namespace snn::internal
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;
+        void updateWeights(const std::vector<float>& inputs, float error);
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -39,9 +40,9 @@ namespace snn::internal
 
         StochasticGradientDescent* optimizer;
 
-        std::vector<float>& backOutput(float error);
-        float output(const std::vector<float>& inputs);
-        void train(const std::vector<float>& inputs, float error);
+        [[nodiscard]] float output(const std::vector<float>& inputs);
+        [[nodiscard]] std::vector<float>& backOutput(float error);
+        void train(float error);
 
         [[nodiscard]] int isValid() const;
 

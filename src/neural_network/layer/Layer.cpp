@@ -22,7 +22,7 @@ void Layer::train(vector<float>& inputErrors)
 {
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        neurons[n].backOutput(inputErrors[n]);
+        neurons[n].train(inputErrors[n]);
     }
 }
 

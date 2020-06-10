@@ -48,7 +48,7 @@ std::vector<float>& Perceptron::backOutput(float error)
 {
     error = error * outputFunction->derivative(lastOutput);
 
-    this->train(lastInputs, error);
+    this->updateWeights(lastInputs, error);
 
     for (int w = 0; w < this->weights.size(); ++w)
     {
@@ -57,7 +57,14 @@ std::vector<float>& Perceptron::backOutput(float error)
     return errors;
 }
 
-void Perceptron::train(const std::vector<float>& inputs, const float error)
+void Perceptron::train(float error)
+{
+    error = error * outputFunction->derivative(lastOutput);
+
+    this->updateWeights(lastInputs, error);
+}
+
+void Perceptron::updateWeights(const std::vector<float>& inputs, const float error)
 {
     for (int w = 0; w < this->weights.size(); ++w)
     {

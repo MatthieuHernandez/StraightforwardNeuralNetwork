@@ -160,10 +160,10 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& 
     if (numberOfInputs > 2073600)
         throw InvalidArchitectureException("Layer is too big.");
 
-    auto& currentSizeOfInputs = models[0].shapeOfInput;
+    auto& currentShapeOfInputs = models[0].shapeOfInput;
     for (int i = 1; i < models.size(); ++i)
     {
-        layers.push_back(build(models[i], currentSizeOfInputs, optimizer));
-        currentSizeOfInputs = layers.back()->getShapeOfOutput();
+        layers.push_back(build(models[i], currentShapeOfInputs, optimizer));
+        currentShapeOfInputs = layers.back()->getShapeOfOutput();
     }
 }

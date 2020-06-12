@@ -49,7 +49,7 @@ void Recurrence::addNewInputs(std::vector<float> inputs, bool temporalReset)
         for(int i = this->numberOfRecurrences; i > 0; --i)
         {
             const int index = i * this->numberOfInputs;
-            std::memcpy(&this->allInputs[index], &this->allInputs[index-this->numberOfInputs], this->sizeToCopy);
+            memcpy(&this->allInputs[index], &this->allInputs[index - this->numberOfInputs], this->sizeToCopy);
         }
     }
     copy(inputs.begin(), inputs.end(), this->allInputs.begin());

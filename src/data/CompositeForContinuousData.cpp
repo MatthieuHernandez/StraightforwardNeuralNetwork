@@ -33,7 +33,6 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
 
 void CompositeForContinuousData::shuffle()
 {
-    return;
     std::random_device rd;
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);

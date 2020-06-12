@@ -8,7 +8,7 @@ using namespace snn;
 
 unique_ptr<Data> createData();
 unique_ptr<Data> createRecurrentData();
-void testNeuralNetwork(StraightforwardNeuralNetwork& nn, Data& d);
+void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Addition, WithMPL)
 {
@@ -18,7 +18,7 @@ TEST(Addition, WithMPL)
         AllToAll(6, sigmoid),
         AllToAll(1, snn::identity)
     });
-    testNeuralNetwork(neuralNetwork, *data);
+    testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 TEST(Addition, WithCNN)
@@ -29,7 +29,7 @@ TEST(Addition, WithCNN)
         Convolution(6, 1, sigmoid),
         AllToAll(1, snn::identity)
     });
-    testNeuralNetwork(neuralNetwork, *data);
+    testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 TEST(Addition, WithRNN)
@@ -40,14 +40,14 @@ TEST(Addition, WithRNN)
         Recurrence(6, 1, sigmoid),
         AllToAll(1, snn::identity)
     });
-    testNeuralNetwork(neuralNetwork, *data);
+    testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 inline
-void testNeuralNetwork(StraightforwardNeuralNetwork& nn, Data& d)
+void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc /*|| 3_s*/);
+    nn.waitFor(1.0_acc || 5_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
@@ -58,14 +58,14 @@ void testNeuralNetwork(StraightforwardNeuralNetwork& nn, Data& d)
 inline
 unique_ptr<Data> createData()
 {
-    vector<vector<float>> inputData = {
+    vector2D<float> inputData = {
         {3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2},
         {2, 4}, {4, 1}, {1, 4}, {4, 3}, {3, 0},
         {0, 0}, {0, 4}, {4, 3}, {3, 2}, {2, 1},
         {1, 2}, {2, 0}, {0, 1}, {1, 2}, {5, 5},
         {5, 3}, {1, 1}, {4, 4}, {3, 3}, {2, 2}
     };
-    vector<vector<float>> expectedOutputs = {
+    vector2D<float> expectedOutputs = {
         {8}, {9}, {6}, {2}, {2},
         {6}, {5}, {5}, {7}, {3},
         {0}, {4}, {7}, {5}, {3},
@@ -82,10 +82,10 @@ unique_ptr<Data> createData()
 inline
 unique_ptr<Data> createRecurrentData()
 {
-    vector<vector<float>> inputData = {
+    vector2D<float> inputData = {
         {3}, {5}, {4}, {2}, {0}, {2}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}, {3}
     };
-    vector<vector<float>> expectedOutputs = {
+    vector2D<float> expectedOutputs = {
         {3}, {8}, {9}, {6}, {2}, {2}, {4}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {8}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}, {6}
     };
 

@@ -29,7 +29,7 @@ namespace snn::internal
     protected:
         int maxOutputIndex = -1;
 
-        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
 
         void evaluateOnceForRegression(const std::vector<float>& inputs,
                                        const std::vector<float>& desired,

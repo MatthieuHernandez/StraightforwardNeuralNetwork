@@ -108,8 +108,9 @@ bool CompositeForContinuousData::needToTrainOnTrainingData(int index) const
 
 bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
 {
-    if(index < this->numberOfRecurrences)
-        return false;
+    // Skip firsts testing data can be distort the accuracy
+    /*if(index < this->numberOfRecurrences)
+        return false;*/
     return true;
 }
 

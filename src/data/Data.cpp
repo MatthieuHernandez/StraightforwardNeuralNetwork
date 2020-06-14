@@ -265,9 +265,7 @@ int Data::isValid()
     {
         for (auto& value : input)
         {
-            if (value < -10
-                || value > 10
-                || isnan(value))
+            if (isnan(value))
             {
                 return 401;
             }

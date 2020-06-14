@@ -42,7 +42,7 @@ void Recurrence::addNewInputs(std::vector<float> inputs, bool temporalReset)
 {
     if(temporalReset)
     {
-        fill(this->allInputs.begin()+inputs.size(), this->allInputs.end(), 0);
+        fill(this->allInputs.begin()+inputs.size(), this->allInputs.end(), -1);
     }
     else
     {

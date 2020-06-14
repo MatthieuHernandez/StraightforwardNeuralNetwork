@@ -39,23 +39,29 @@ void CompositeForContinuousData::shuffle()
 
     const int lastRecurrence = offset > this->rest ? 1 : 0;
 
-    for(int i = 0; i < this->sets[training].size; ++i)
+
+    for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
     {
         this->sets[training].needToTrainOnData[i] = false;
-        this->sets[training].areFirstDataOfTemporalSequence[i] = true;
     }
 
-    for (int i = 0; i < this->indexesForShuffling.size(); ++i)
+    for (int i = 0; i < offset; ++i)
     {
-        const int maxIndex1 = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
-        const int maxIndex2 =                            i * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
-        if (maxIndex1 < this->sets[training].size
-            && maxIndex2 < this->sets[training].size)
+        this->sets[training].shuffledIndexes[i] = i;
+        this->sets[training].needToTrainOnData[i] = true;
+        this->sets[training].areFirstDataOfTemporalSequence[i] = false;
+    }
+    this->sets[training].areFirstDataOfTemporalSequence[0] = true;
+
+    for (int i = 0, iForIndex = 0; i < this->indexesForShuffling.size(); ++i)
+    {
+        const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
+        if (maxIndex < this->sets[training].size)
         {
             for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
             {
 
-                const int index = i * (this->numberOfRecurrences + 1) + j + offset;
+                const int index = iForIndex * (this->numberOfRecurrences + 1) + j + offset;
                 this->sets[training].shuffledIndexes[index] = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 
                 if (j != 0)
@@ -68,16 +74,7 @@ void CompositeForContinuousData::shuffle()
                 else
                     this->sets[training].needToTrainOnData[index] = false;
             }
-        }
-        else
-        {
-            for (int j = 0; j < this->numberOfRecurrences + 1 - offset; ++j)
-            {
-                const int index = i * (this->numberOfRecurrences + 1) + j + offset;
-                if (j == 0)
-                    this->sets[training].areFirstDataOfTemporalSequence[index] = true;
-                this->sets[training].needToTrainOnData[index] = false;
-            }
+            iForIndex ++;
         }
     }
     this->offset = (this->offset+1) % (this->numberOfRecurrences+1);

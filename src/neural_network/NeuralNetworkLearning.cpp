@@ -31,7 +31,8 @@ void NeuralNetwork::evaluateOnceForMultipleClassification(
     this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
 }
 
-void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber, bool temporalReset)
+void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber,
+                                                  bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber);
@@ -42,7 +43,8 @@ void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& 
     this->backpropagationAlgorithm(inputs, desired, temporalReset);
 }
 
-void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
+void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired,
+                                             bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
     auto errors = calculateError(outputs, desired);
@@ -54,26 +56,25 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
     layers[0]->train(errors);
 }
 
-inline 
+inline
 vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
     auto errors = new vector<float>(this->layers.back()->getNumberOfNeurons(), 0);
     for (int n = 0; n < errors->size(); ++n)
     {
-        if (desired[n] != -1.0f)
+        if (isnan(desired[n]))
+            (*errors)[n] = 0;
+        else
         {
             const float err = desired[n] - outputs[n];
 
-            if(abs(err) < 1)
+            if (abs(err) < 1)
                 (*errors)[n] = err * abs(err);
+            else if (err > 0)
+                (*errors)[n] = log2(abs(err) + 1);
             else
-                if(err > 0)
-                    (*errors)[n] = log2(abs(err)+1);
-                else
-                    (*errors)[n] = -log2(abs(err)+1);
+                (*errors)[n] = -log2(abs(err) + 1);
         }
-        else
-            (*errors)[n] = 0;
     }
     return *errors;
 }

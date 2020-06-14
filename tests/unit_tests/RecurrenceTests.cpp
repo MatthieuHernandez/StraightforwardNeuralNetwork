@@ -8,19 +8,39 @@ using namespace snn;
 
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d);
 
-TEST(Recurence, SimplestTest)
+TEST(Recurence, RepeatInput)
 {
-    vector<vector<float>> inputData = {{-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
-    vector<vector<float>> expectedOutputs = {{-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
+    vector<vector<float>> inputData = {{0.0}, {-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
+    vector<vector<float>> expectedOutputs = {{0.0}, {-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
     auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
     data->setPrecision(0.1);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
+        Recurrence(8, 1),
         AllToAll(4),
-        AllToAll(1)
+        AllToAll(1, snn::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.005f;
+    neuralNetwork.optimizer.learningRate = 0.006f;
+    neuralNetwork.optimizer.momentum = 0.99f;
+    testNeuralNetworkForRecurrence(neuralNetwork, *data);
+}
+
+TEST(Recurence, RepeatLastInput)
+{
+    vector<vector<float>> inputData       = {{-1.0}, {-1.0}, {-1.0}, {-0.5}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {0.0}};
+    vector<vector<float>> expectedOutputs = {{-1.0}, {-1.0}, {-1.0}, {-1.0}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {1.0}};
+    auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
+    data->setPrecision(0.1);
+
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(1),
+        Recurrence(8, 1),
+        AllToAll(4),
+        AllToAll(1, snn::tanh)
+    });
+    neuralNetwork.optimizer.learningRate = 0.006f;
+    neuralNetwork.optimizer.momentum = 0.99f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 

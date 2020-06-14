@@ -47,7 +47,7 @@ inline
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 5_s);
+    nn.waitFor(1.0_acc || 3_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
@@ -89,7 +89,7 @@ unique_ptr<Data> createRecurrentData()
         {3}, {8}, {9}, {6}, {2}, {2}, {4}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {8}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}, {6}
     };
 
-    const float precision = 0.05f;
+    const float precision = 0.5f;
     auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
     data->setPrecision(precision);
     return data;

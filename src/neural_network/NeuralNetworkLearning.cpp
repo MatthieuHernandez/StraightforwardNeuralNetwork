@@ -1,4 +1,5 @@
-﻿#include "NeuralNetwork.hpp"
+﻿#include <cmath>
+#include "NeuralNetwork.hpp"
 #include "../tools/Tools.hpp"
 
 using namespace std;

@@ -14,26 +14,24 @@ For more explanation go to wiki.
 int recurrenceExample()
 {
     vector<vector<float>> inputData = {
-        {3}, {5}, {4}, {2}, {0}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}
+        {3}, {5}, {4}, {2}, {0}, {2}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}, {3}
     };
     vector<vector<float>> expectedOutputs = {
-        {0.3}, {0.8}, {0.9}, {0.6}, {0.2}, {0.2}, {0.6}, {0.5}, {0.5}, {0.7}, {0.3}, {0.0}, {0.4}, {0.7}, {0.5}, {0.3}, {0.3}, {0.2}, {0.1}, {0.6}, {1.0}, {0.8}
+        {3}, {8}, {9}, {6}, {2}, {2}, {4}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {8}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}, {6}
     };
 
-    const float precision = 0.05f;
+    const float precision = 0.5f;
     Data data(regression, inputData, expectedOutputs, continuous, 1);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(6, 1),
-        AllToAll(1, snn::tanh)
+        AllToAll(1, snn::identity)
     });
-    neuralNetwork.optimizer.learningRate = 0.0003f;
-    //neuralNetwork.optimizer.momentum = 0.98f;
 
     neuralNetwork.startTraining(data);
-    neuralNetwork.waitFor(1.00_acc /*|| 8_s*/); // train neural network until 100% accurary or 3s on a parallel thread
+    neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
     float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;

@@ -342,16 +342,16 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
                 {
                     dataSound.push_back({});
                     dataSound.back().reserve(this->sizeOfOneData);
+
+                    if (isCat)
+                        labels[i].push_back({1, 0});
+                    else
+                        labels[i].push_back({0, 1});
                 }
                 const float sample = audioFile.samples[channel][j];
                 dataSound.back().push_back(sample);
-
-                if(isCat)
-                    labels[i].push_back({1, 0});
-                else
-                    labels[i].push_back({0, 1});
             }
-            while(dataSound.back().size() < this->sizeOfOneData)
+            while (dataSound.back().size() < this->sizeOfOneData)
             {
                 dataSound.back().push_back(0);
             }

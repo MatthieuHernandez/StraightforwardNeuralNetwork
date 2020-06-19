@@ -105,7 +105,7 @@ void Data::initialize(problemType typeOfProblem,
                       int numberOfRecurrences)
 {
     this->precision = 0.1f;
-    this->separator = 0.5f;  
+    this->separator = 0.5f;
     this->numberOfRecurrences = numberOfRecurrences;
     this->sets[training].inputs = trainingInputs;
     this->sets[training].labels = trainingLabels;
@@ -166,13 +166,14 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
     this->sets[set].numberOfTemporalSequence = input3D.size();
     auto size = accumulate(input3D.begin(), input3D.end(), 0,
-                                                        [](float sum, vector2D<float>& v)
-                                                        {
-                                                            return sum + v.size();
-                                                        });
+                           [](float sum, vector2D<float>& v)
+                           {
+                               return sum + v.size();
+                           });
     this->sets[set].inputs.reserve(size);
     this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
-    this->sets[set].needToEvaluateOnData.resize(size, false);
+    if (set == testing)
+        this->sets[set].needToEvaluateOnData.resize(size, false);
 
     int i = 0;
     for (vector2D<float>& v : input3D)
@@ -181,8 +182,8 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
-        if(set == testing)
-            this->sets[testing].needToEvaluateOnData[i-1] = true;
+        if (set == testing)
+            this->sets[testing].needToEvaluateOnData[i - 1] = true;
     }
     this->sets[set].size = this->sets[set].inputs.size();
 }
@@ -272,13 +273,13 @@ int Data::isValid()
         }
     }
     if (!this->sets[testing].shuffledIndexes.empty()
-      && this->sets[training].shuffledIndexes.size() != this->sets[training].size)
+        && this->sets[training].shuffledIndexes.size() != this->sets[training].size)
         return 403;
 
-    if(this->sets[training].size != this->sets[training].inputs.size()
-    && this->sets[training].size != this->sets[training].labels.size()
-    && this->sets[testing].size != this->sets[training].inputs.size()
-    && this->sets[testing].size != this->sets[training].labels.size())
+    if (this->sets[training].size != this->sets[training].inputs.size()
+        && this->sets[training].size != this->sets[training].labels.size()
+        && this->sets[testing].size != this->sets[training].inputs.size()
+        && this->sets[testing].size != this->sets[training].labels.size())
         return 405;
 
     int err = this->problemComposite->isValid();

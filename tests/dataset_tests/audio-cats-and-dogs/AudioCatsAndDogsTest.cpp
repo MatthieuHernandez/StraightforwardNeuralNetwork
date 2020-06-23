@@ -6,12 +6,14 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
+const static unsigned int sizeOfOneData = 256;
+
 class AudioCatsAndDogsTest : public testing::Test
 {
 protected:
     static void SetUpTestSuite()
     {
-        AudioCatsAndDogs dataset("./datasets/audio-cats-and-dogs", 16);
+        AudioCatsAndDogs dataset("./datasets/audio-cats-and-dogs", sizeOfOneData);
         data = move(dataset.data);
     }
     
@@ -27,7 +29,7 @@ unique_ptr<Data> AudioCatsAndDogsTest::data = nullptr;
 
 TEST_F(AudioCatsAndDogsTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 16);
+    ASSERT_EQ(data->sizeOfData, sizeOfOneData);
     ASSERT_EQ(data->numberOfLabel, 2);
     ASSERT_EQ(data->sets[training].numberOfTemporalSequence, 210);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 67);
@@ -36,14 +38,23 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 
 TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 {
+    // Need to implement MaxPooling layer to help learning
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(16),
-        Recurrence(30, 100),
-        AllToAll(2)
+        Input(sizeOfOneData),
+        //Convolution(1, 256, sigmoid),
+        Recurrence(100, 10, snn::tanh),
+        Recurrence(30, 5),
+        Recurrence(2, 100)
     });
+    //auto numberOfparameters = neuralNetwork.getNumberOfParameters();
+    //PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");
+    neuralNetwork.optimizer.learningRate = 0.001f;
+    neuralNetwork.optimizer.momentum = 0.6f;
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep);
+    neuralNetwork.waitFor(10_ep);
     neuralNetwork.stopTraining();
+    auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.5);
+    ASSERT_RECALL(recall, 0.55);
+    ASSERT_ACCURACY(accuracy, 0.6);
 }

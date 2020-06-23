@@ -39,6 +39,14 @@ void ASSERT_ACCURACY(float actual, float expected)
     ASSERT_GE(actual, expected);
 }
 
+void ASSERT_RECALL(float actual, float expected)
+{
+    stringstream message;
+    message << "Recall = " << std::fixed << std::setprecision(2) << actual * 100.0f << "%";
+    PRINT_RESULT(message.str());
+    ASSERT_GE(actual, expected);
+}
+
 void ASSERT_MAE(float actual, float expected)
 {
     stringstream message;

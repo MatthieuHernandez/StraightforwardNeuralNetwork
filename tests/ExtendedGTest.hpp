@@ -14,4 +14,6 @@ extern void PRINT_RESULT(std::string message);
 
 extern void ASSERT_ACCURACY(float actual, float expected);
 
+extern void ASSERT_RECALL(float actual, float expected);
+
 extern void ASSERT_MAE(float actual, float expected);

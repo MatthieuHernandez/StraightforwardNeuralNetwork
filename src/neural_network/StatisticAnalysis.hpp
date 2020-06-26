@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include <vector>
 #include <boost/serialization/access.hpp>
 
@@ -10,6 +11,7 @@ namespace snn::internal
         float trueNegative{};
         float falsePositive{};
         float falseNegative{};
+        float totalError{};
 
         bool operator==(const binaryClassification&) const
         {
@@ -37,13 +39,17 @@ namespace snn::internal
         float numberOfDataWellClassified;
         float numberOfDataMisclassified;
 
-        float globalClusteringRate = 0;
-        float weightedClusteringRate = 0;
-        float f1Score = 0;
+        float globalClusteringRate = -1.0f;
+        float weightedClusteringRate = -1.0f;
+        float f1Score = -1.0f;
+        float meanAbsoluteError = -1.0f;
+        float rootMeanSquaredError = -1.0f;
 
         float globalClusteringRateMax = -1.0f;
         float weightedClusteringRateMax = -1.0f;
         float f1ScoreMax = -1.0f;
+        float meanAbsoluteErrorMax = -1.0f;
+        float rootMeanSquaredErrorMax = -1.0f;
 
     protected:
         StatisticAnalysis() = default;
@@ -52,7 +58,8 @@ namespace snn::internal
 
         void initialize(int numberOfCluster);
 
-        void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
+        void evaluateOnceForRegression(const std::vector<float>& outputs, 
+                                       const std::vector<float>& desiredOutputs,
                                        float precision);
         void evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
                                                    const std::vector<float>& desiredOutputs,
@@ -62,6 +69,8 @@ namespace snn::internal
         float computeGlobalClusteringRate();
         float computeWeightedClusteringRate();
         float computeF1Score();
+        float computeMeanAbsoluteError();
+        float computeRootMeanSquaredError();
 
         void startTesting();
         void stopTesting();
@@ -69,6 +78,8 @@ namespace snn::internal
         bool globalClusteringRateIsBetterThanPreviously = false;
         bool weightedClusteringRateIsBetterThanPreviously = false;
         bool f1ScoreIsBetterThanPreviously = false;
+        bool meanAbsoluteErrorIsBetterThanPreviously = false;
+        bool rootMeanSquaredErrorIsBetterThanPreviously = false;
 
         float separator = 0.5f;
 
@@ -76,6 +87,8 @@ namespace snn::internal
         float getGlobalClusteringRate() const;
         float getWeightedClusteringRate() const;
         float getF1Score() const;
+        float getMeanAbsoluteError() const;
+        float getRootMeanSquaredError() const;
 
         bool operator==(const StatisticAnalysis& sa) const;
         bool operator!=(const StatisticAnalysis& sa) const;

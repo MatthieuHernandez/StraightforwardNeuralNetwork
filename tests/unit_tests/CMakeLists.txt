@@ -1,6 +1,8 @@
 file(GLOB SOURCES
     "*.hpp"
     "*.cpp"
+    "../../examples/*.hpp"
+    "../../examples/*.cpp"
 )
 
 add_executable(UnitTests.out ${SOURCES})

@@ -1,7 +1,5 @@
 #include "../ExtendedGTest.hpp"
-#include "../../examples/ClassificationExample.cpp"
-#include "../../examples/MultipleClassificationExemple.cpp"
-#include "../../examples/RegressionExample.cpp"
+#include "../../examples/Examples.hpp"
 
 TEST(exemples, classification)
 {
@@ -16,4 +14,9 @@ TEST(exemples, multipleClassification)
 TEST(exemples, regression)
 {
     ASSERT_EQ(regressionExample(), EXIT_SUCCESS);
+}
+
+TEST(exemples, recurrenceExample)
+{
+    ASSERT_EQ(recurrenceExample(), EXIT_SUCCESS);
 }

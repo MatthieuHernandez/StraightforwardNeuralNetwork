@@ -26,7 +26,7 @@ Perceptron::Perceptron(const int numberOfInputs,
 
 float Perceptron::randomInitializeWeight(int numberOfInputs) const
 {
-    const float valueMax = 2.4f / sqrt(static_cast<float>(numberOfInputs));
+    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfInputs));
     return Tools::randomBetween(-valueMax, valueMax);
 }
 
@@ -48,7 +48,7 @@ std::vector<float>& Perceptron::backOutput(float error)
 {
     error = error * outputFunction->derivative(lastOutput);
 
-    this->train(lastInputs, error);
+    this->updateWeights(lastInputs, error);
 
     for (int w = 0; w < this->weights.size(); ++w)
     {
@@ -57,7 +57,14 @@ std::vector<float>& Perceptron::backOutput(float error)
     return errors;
 }
 
-void Perceptron::train(const std::vector<float>& inputs, const float error)
+void Perceptron::train(float error)
+{
+    error = error * outputFunction->derivative(lastOutput);
+
+    this->updateWeights(lastInputs, error);
+}
+
+void Perceptron::updateWeights(const std::vector<float>& inputs, const float error)
 {
     for (int w = 0; w < this->weights.size(); ++w)
     {
@@ -70,11 +77,11 @@ void Perceptron::train(const std::vector<float>& inputs, const float error)
 
 int Perceptron::isValid() const
 {
-    if (this->bias != 1)
+    if (this->bias != 1.0f)
         return 301;
 
-    if (this->weights.size() < 1
-     || this->weights.size() > 1000000)
+    if (this->weights.empty()
+        || this->weights.size() > 1000000)
     {
         return 302;
     }

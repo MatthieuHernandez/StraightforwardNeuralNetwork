@@ -1,8 +1,5 @@
 #include <boost/serialization/export.hpp>
 #include "Layer.hpp"
-
-#include <numeric>
-
 #include "LayerModel.hpp"
 
 using namespace std;
@@ -21,35 +18,11 @@ Layer::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     }
 }
 
-
-vector<float> Layer::output(const vector<float>& inputs)
-{
-    vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto neuronInputs = this->createInputsForNeuron(n, inputs);
-        outputs[n] = neurons[n].output(neuronInputs);
-    }
-    return outputs;
-}
-
-vector<float> Layer::backOutput(vector<float>& inputErrors)
-{
-    vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
-    {
-        auto& error = neurons[n].backOutput(inputErrors[n]);
-        this->insertBackOutputForNeuron(n, error, errors);
-    }
-    return errors;
-}
-
-
 void Layer::train(vector<float>& inputErrors)
 {
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        neurons[n].backOutput(inputErrors[n]);
+        neurons[n].train(inputErrors[n]);
     }
 }
 

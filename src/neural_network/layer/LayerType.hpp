@@ -4,8 +4,8 @@ namespace snn
     enum layerType
     {
         input = 0,
-        allToAll = 1,
-        recurrent = 2,
+        fullyConnected = 1,
+        recurrence = 2,
         convolution = 3
     };
 }

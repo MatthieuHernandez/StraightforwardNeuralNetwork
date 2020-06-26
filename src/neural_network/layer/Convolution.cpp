@@ -16,6 +16,28 @@ Convolution::Convolution(LayerModel& model, StochasticGradientDescent* optimizer
     this->shapeOfInput = model.shapeOfInput;
 }
 
+vector<float> Convolution::output(const vector<float>& inputs, bool temporalReset)
+{
+    vector<float> outputs(this->neurons.size());
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto neuronInputs = this->createInputsForNeuron(n, inputs);
+        outputs[n] = neurons[n].output(neuronInputs);
+    }
+    return outputs;
+}
+
+vector<float> Convolution::backOutput(vector<float>& inputErrors)
+{
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->neurons.size(); ++n)
+    {
+        auto& error = neurons[n].backOutput(inputErrors[n]);
+        this->insertBackOutputForNeuron(n, error, errors);
+    }
+    return errors;
+}
+
 int Convolution::isValid() const
 {
     return this->Layer::isValid();

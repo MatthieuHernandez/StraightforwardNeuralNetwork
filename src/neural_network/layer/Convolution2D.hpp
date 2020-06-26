@@ -27,7 +27,6 @@ namespace snn::internal
         Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer);
         ~Convolution2D() = default;
         Convolution2D(const Convolution2D&) = default;
-
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;

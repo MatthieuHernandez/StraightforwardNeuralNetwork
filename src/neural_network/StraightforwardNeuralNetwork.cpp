@@ -6,9 +6,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
-//#include "../data/DataForClassification.hpp"
-//#include "../data/DataForRegression.hpp"
-//#include "../data/DataForMultipleClassification.hpp"
+#include "../tools/ExtendedExpection.hpp"
+
 
 using namespace std;
 using namespace chrono;
@@ -45,14 +44,14 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const Straightforward
     this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs)
+vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset)
 {
-    return this->output(inputs);
+    return this->output(inputs, temporalReset);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs)
+int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset)
 {
-    const auto outputs = this->output(inputs);
+    const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
     for (int i = 0; i < outputs.size(); i++)
@@ -71,6 +70,89 @@ bool StraightforwardNeuralNetwork::isTraining() const
     return !this->isIdle;
 }
 
+void StraightforwardNeuralNetwork::startTraining(Data& data)
+{
+    internal::log<complete>("Start training");
+    if (!this->validData(data))
+        throw std::runtime_error("Data has not the same format as the neural network");
+    this->stopTraining();
+    this->isIdle = false;
+    internal::log<complete>("Start a new thread");
+    this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
+}
+
+void StraightforwardNeuralNetwork::train(Data& data)
+{
+    this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
+    this->wantToStopTraining = false;
+
+    this->evaluate(data);
+
+    for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
+    {
+        internal::log<minimal>("Iteration: " + std::to_string(this->numberOfIteration));
+        
+        data.shuffle();
+
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
+            this->currentIndex ++)
+        {
+            if(data.needToLearnOnTrainingData(this->currentIndex))
+                this->trainOnce(data.getTrainingData(this->currentIndex),
+                                data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
+            else
+                this->output(data.getTrainingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
+        }
+        this->evaluate(data);
+    }
+}
+
+void StraightforwardNeuralNetwork::evaluate(Data& data)
+{
+    this->startTesting();
+    for (this->currentIndex = 0; this->currentIndex < data.sets[testing].size; this->currentIndex++)
+    {
+        if (this->wantToStopTraining)
+            return;
+        if(data.needToEvaluateOnTestingData(this->currentIndex))
+            this->evaluateOnce(data);
+        else
+            this->output(data.getTestingData(this->currentIndex), data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+    }
+    this->stopTesting();
+    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
+    {
+        this->saveAs(autoSaveFilePath);
+    }
+}
+
+inline
+void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
+{
+    switch (data.typeOfProblem)
+    {
+    case classification:
+        this->evaluateOnceForClassification(data.getTestingData(this->currentIndex),
+                                            data.getTestingLabel(this->currentIndex),
+                                            data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    case multipleClassification:
+        this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
+                                                    data.getTestingOutputs(this->currentIndex), data.getSeparator(),
+                                                    data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    case regression:
+        this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
+                                        data.getTestingOutputs(this->currentIndex),
+                                        data.getPrecision(),
+                                        data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
+        break;
+    default:
+        throw NotImplementedException();
+    }
+}
+
+
 void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
@@ -88,14 +170,16 @@ void StraightforwardNeuralNetwork::stopTraining()
 void StraightforwardNeuralNetwork::waitFor(Wait wait) const
 {
     auto startWait = system_clock::now();
-    while(true) 
+    while (true)
     {
         this_thread::sleep_for(1ms);
-        auto epochs =  this->getNumberOfIteration();
-        auto accuracy = this->getGlobalClusteringRate();
-        auto durationMs = duration_cast<std::chrono::milliseconds>(system_clock::now() - startWait).count();
-        
-        if(wait.isOver(epochs, accuracy, durationMs))
+
+        const auto epochs = this->getNumberOfIteration();
+        const auto accuracy = this->getGlobalClusteringRate();
+        const auto mae = this->getMeanAbsoluteError();
+        const auto durationMs = duration_cast<milliseconds>(system_clock::now() - startWait).count();
+
+        if (wait.isOver(epochs, accuracy, mae, durationMs))
             break;
     }
 }
@@ -125,7 +209,7 @@ void StraightforwardNeuralNetwork::saveAs(string filePath)
 
 StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(string filePath)
 {
-    StraightforwardNeuralNetwork* neuralNetwork;
+    StraightforwardNeuralNetwork* neuralNetwork = nullptr;
     ifstream ifs(filePath);
     boost::archive::text_iarchive archive(ifs);
     archive >> neuralNetwork;

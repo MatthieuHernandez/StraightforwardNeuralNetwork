@@ -31,9 +31,9 @@ namespace snn
         return model;
     };
 
-    extern LayerModel AllToAll(int numberOfNeurons, activationFunction activation = sigmoid);
+    extern LayerModel FullyConnected(int numberOfNeurons, activationFunction activation = sigmoid);
 
-    extern LayerModel Recurrent(int numberOfNeurons, int numberOfRecurrences, activationFunction activation = sigmoid);
+    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation = sigmoid);
 
     extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation = ReLU);
 }

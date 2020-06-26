@@ -5,15 +5,15 @@
 using namespace std;
 using namespace snn;
 
-DataForClassification createData();
+Data createDataForConvolutionTests();
 
 TEST(Convolution, SimpleConvolution2D)
 {
-    auto data = createData();
+    auto data = createDataForConvolutionTests();
     vector<LayerModel> architectures =
     {
         Input(3, 3, 2), Convolution(2, 2, sigmoid),
-        AllToAll(2)
+        FullyConnected(2)
     };
     StraightforwardNeuralNetwork neuralNetwork(architectures);
     neuralNetwork.startTraining(data);
@@ -25,7 +25,7 @@ TEST(Convolution, SimpleConvolution2D)
 
 }
 
-DataForClassification createData()
+Data createDataForConvolutionTests()
 {
     vector<vector<float>> inputData = {
         {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 
@@ -40,8 +40,7 @@ DataForClassification createData()
          0.41, 0.42, 0.51, 0.52, 0.61, 0.62,
          0.71, 0.72, 0.81, 0.82, 0.91, 0.92}
     };
-	vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
+    vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-	DataForClassification data(inputData, expectedOutputs);
-    return data;
+    return Data(classification, inputData, expectedOutputs);
 }

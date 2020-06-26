@@ -9,6 +9,6 @@ public:
 
 private:
     void loadData(std::string folderPath) override;
-    snn::vector2D<float> readImages(std::string filePath, int size);
-    snn::vector2D<float> readLabels(std::string filePath, int size);
+    static snn::vector2D<float> readImages(std::string filePath, int size);
+    static snn::vector2D<float> readLabels(std::string filePath, int size);
 };

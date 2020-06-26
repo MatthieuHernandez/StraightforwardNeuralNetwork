@@ -37,6 +37,10 @@ jobs:
       run: |
         cd ./build
         ./tests/dataset_tests/DatasetTests.out --gtest_filter=WineTest* --gtest_also_run_disabled_tests
+    - name: DailyMinTemperatures
+      run: |
+        cd ./build
+        ./tests/dataset_tests/DatasetTests.out --gtest_filter=DailyMinTemperaturesTest* --gtest_also_run_disabled_tests
     - name: MNIST
       run: |
         cd ./build

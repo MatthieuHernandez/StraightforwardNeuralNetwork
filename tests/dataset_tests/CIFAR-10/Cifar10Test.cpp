@@ -1,4 +1,4 @@
-#include "../../ExtendedGTest.hpp"
+#include "ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "Cifar10.hpp"
 
@@ -33,16 +33,18 @@ TEST_F(Cifar10Test, loadData)
     ASSERT_EQ(data->sets[training].labels.size(), 50000);
     ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
-    ASSERT_TRUE(data->isValid());
+    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
+    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
+    ASSERT_EQ(data->isValid(), 0);
 }
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3072),
-        AllToAll(200),
-        AllToAll(80),
-        AllToAll(10)
+        FullyConnected(200),
+        FullyConnected(80),
+        FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 300_s);

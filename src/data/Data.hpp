@@ -1,49 +1,81 @@
 #pragma once
+#include <memory>
 #include <vector>
+#include "Set.hpp"
+#include "ProblemComposite.hpp"
+#include "TemporalComposite.hpp"
 
 namespace snn
 {
-    enum set
+    enum problemType
     {
-        testing = 0,
-        training = 1
+        classification,
+        multipleClassification,
+        regression
+    };
+
+    enum temporalType
+    {
+        nonTemporal,
+        temporal,
+        timeSeries,
     };
 
     class Data
     {
     private:
-        void initialize(std::vector<std::vector<float>>& trainingInputs,
-             std::vector<std::vector<float>>& trainingLabels,
-             std::vector<std::vector<float>>& testingInputs,
-             std::vector<std::vector<float>>& testingLabels,
-             float value);
+        void initialize(problemType typeOfProblem,
+                        std::vector<std::vector<float>>& trainingInputs,
+                        std::vector<std::vector<float>>& trainingLabels,
+                        std::vector<std::vector<float>>& testingInputs,
+                        std::vector<std::vector<float>>& testingLabels,
+                        temporalType typeOfTemporal,
+                        int numberOfRecurrences);
 
-    protected:
-        std::vector<int> indexes;
-        float value;
-        void clearData();
+        void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
 
-        Data(std::vector<std::vector<float>>& trainingInputs,
-             std::vector<std::vector<float>>& trainingLabels,
-             std::vector<std::vector<float>>& testingInputs,
-             std::vector<std::vector<float>>& testingLabels,
-             float value);
-
-        Data(std::vector<std::vector<float>>& inputs,
-             std::vector<std::vector<float>>& labels,
-             float value);
+        std::unique_ptr<internal::ProblemComposite> problemComposite;
+        std::unique_ptr<internal::TemporalComposite> temporalComposite;
+        int numberOfRecurrences{};
+        float precision{};
+        float separator{};
 
     public:
-        int sizeOfData; // size of one data, equal to size of neural network inputs
-        int numberOfLabel; // the number of class, equal to size of neural network outputs
+        Data(problemType typeOfProblem,
+             std::vector<std::vector<float>>& trainingInputs,
+             std::vector<std::vector<float>>& trainingLabels,
+             std::vector<std::vector<float>>& testingInputs,
+             std::vector<std::vector<float>>& testingLabels,
+             temporalType typeOfTemporal = nonTemporal,
+             int numberOfRecurrences = 0);
 
-        struct Set
-        {
-            int index{0};
-            int size{0}; // number of data inside set
-            std::vector<std::vector<float>> inputs{};
-            std::vector<std::vector<float>> labels{};
-        } sets[2];
+        Data(problemType typeOfProblem,
+             std::vector<std::vector<float>>& inputs,
+             std::vector<std::vector<float>>& labels,
+             temporalType temporal = nonTemporal,
+             int numberOfRecurrences = 0);
+
+        Data(problemType typeOfProblem,
+             std::vector<std::vector<std::vector<float>>>& trainingInputs,
+             std::vector<std::vector<float>>& trainingLabels,
+             std::vector<std::vector<std::vector<float>>>& testingInputs,
+             std::vector<std::vector<float>>& testingLabels,
+             temporalType typeOfTemporal,
+             int numberOfRecurrences = 0);
+
+        Data(problemType typeOfProblem,
+             std::vector<std::vector<std::vector<float>>>& inputs,
+             std::vector<std::vector<float>>& labels,
+             temporalType typeOfTemporal,
+             int numberOfRecurrences = 0);
+
+        const problemType typeOfProblem;
+        const temporalType typeOfTemporal;
+
+        int sizeOfData{}; // size of one data, equal to size of neural network inputs
+        int numberOfLabel{}; // the number of class, equal to size of neural network outputs
+
+        Set sets[2];
 
         virtual ~Data() = default;
 
@@ -52,21 +84,32 @@ namespace snn
         void shuffle();
         void unshuffle();
 
-        [[nodiscard]] bool isValid();
+        [[nodiscard]] int isValid();
 
-        [[nodiscard]] float getValue() const {return value;}
+        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const;
+        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;
+        [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
+        [[nodiscard]] bool needToEvaluateOnTestingData(int index) const;
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingData(const int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingData(const int index);
+        [[nodiscard]] const std::vector<float>& getTrainingData(int index) const;
+        [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
 
-        [[nodiscard]] virtual int getTrainingLabel(const int) { throw std::exception(); }
-        [[nodiscard]] virtual int getTestingLabel(const int) { throw std::exception(); }
+        [[nodiscard]] int getTrainingLabel(int) const;
+        [[nodiscard]] int getTestingLabel(int) const;
 
-        [[nodiscard]] virtual const std::vector<float>& getTrainingOutputs(const int index);
-        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(const int) = 0;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(const int index) const;
+        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, const int index);
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, const int index);
-        [[nodiscard]] int getLabel(set set, const int index);
+        [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
+        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
+        [[nodiscard]] int getLabel(set set, int index) const;
+
+        
+        [[nodiscard]] float getSeparator() const;
+        void setSeparator(float value);
+        [[nodiscard]] float getPrecision() const;
+        void setPrecision(float value);
+
+
     };
 }

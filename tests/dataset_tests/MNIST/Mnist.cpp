@@ -1,6 +1,6 @@
 #include <fstream>
 #include "Mnist.hpp"
-#include "data/DataForClassification.hpp"
+#include "data/Data.hpp"
 #include "tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -14,12 +14,12 @@ Mnist::Mnist(string folderPath)
 
 void Mnist::loadData(string folderPath)
 {
-    vector2D<float> trainingInputs = this->readImages(folderPath + "/train-images.idx3-ubyte", 60000);
-    vector2D<float> trainingLabels = this->readLabels(folderPath + "/train-labels.idx1-ubyte", 60000);
-    vector2D<float> testingInputs = this->readImages(folderPath + "/t10k-images.idx3-ubyte", 10000);
-    vector2D<float> testingLabels = this->readLabels(folderPath + "/t10k-labels.idx1-ubyte", 10000);
+    vector2D<float> trainingInputs = readImages(folderPath + "/train-images.idx3-ubyte", 60000);
+    vector2D<float> trainingLabels = readLabels(folderPath + "/train-labels.idx1-ubyte", 60000);
+    vector2D<float> testingInputs = readImages(folderPath + "/t10k-images.idx3-ubyte", 10000);
+    vector2D<float> testingLabels = readLabels(folderPath + "/t10k-labels.idx1-ubyte", 10000);
 
-    this->data = make_unique<DataForClassification>(trainingInputs, trainingLabels, testingInputs, testingLabels);
+    this->data = make_unique<Data>(classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
 vector2D<float> Mnist::readImages(string filePath, int size)
@@ -31,7 +31,7 @@ vector2D<float> Mnist::readImages(string filePath, int size)
     constexpr int sizeOfData = 28 * 28;
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;
@@ -67,7 +67,7 @@ vector2D<float> Mnist::readLabels(string filePath, int size)
     labels.reserve(size);
 
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;

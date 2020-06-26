@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include "Wine.hpp"
-#include "data/DataForClassification.hpp"
+#include "data/Data.hpp"
 #include "tools/Tools.hpp"
 #include "tools/ExtendedExpection.hpp"
 
@@ -24,7 +24,7 @@ void Wine::loadData(string folderPath)
     ifstream file(folderPath + "/wine.data", ios::in);
     
     if (!file.is_open())
-        throw FileOpeningFailed();
+        throw FileOpeningFailedException();
 
     data.reserve(178);
     labels.reserve(178);
@@ -34,22 +34,22 @@ void Wine::loadData(string folderPath)
         vector<float> label;
         vector<float> values;
 
-        float value = atof(line.substr(0, line.find(',')).c_str());
-        
+        float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
+
         label.resize(3, 0);
-        label[value-1] = 1;
+        label[static_cast<int>(value-1.0)] = 1;
         labels.push_back(label);
         line = line.substr(line.find(',') + 1);
         while (line != line.substr(line.find(',') + 1))
         {
-            value = atof(line.substr(0, line.find(',')).c_str());
+            value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
             values.push_back(value);
             line = line.substr(line.find(',') + 1);
         }
-        value = atof(line.substr(0, line.find(',')).c_str());
+        value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
         values.push_back(value);
         data.push_back(values);
     }
     file.close();
-    this->data = make_unique<DataForClassification>(data, labels);
+    this->data = make_unique<Data>(classification, data, labels);
 }

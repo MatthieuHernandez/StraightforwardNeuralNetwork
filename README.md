@@ -43,8 +43,8 @@ Data data(classification, inputData, expectedOutputs);
 StraightforwardNeuralNetwork neuralNetwork({
     Input(28, 28, 1), 
     Convolution(1, 3, ReLU),
-    AllToAll(70, tanh),
-    AllToAll(10, sigmoid)
+    FullyConnected(70, tanh),
+    FullyConnected(10, sigmoid)
 });
 
 neuralNetwork.startTraining(data);

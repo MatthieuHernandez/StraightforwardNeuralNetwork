@@ -42,9 +42,9 @@ TEST_F(WineTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(13),
-        AllToAll(20),
-        AllToAll(8),
-        AllToAll(3)
+        FullyConnected(20),
+        FullyConnected(8),
+        FullyConnected(3)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1.00_acc || 3_s);

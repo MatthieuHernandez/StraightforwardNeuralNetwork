@@ -4,7 +4,7 @@
 #include "Optimizer.hpp"
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
-#include "layer/AllToAll.hpp"
+#include "layer/FullyConnected.hpp"
 #include "layer/Convolution1D.hpp"
 #include "layer/Convolution2D.hpp"
 #include "StatisticAnalysis.hpp"
@@ -72,9 +72,9 @@ namespace snn::internal
         ar & this->optimizer.learningRate;
         ar & this->optimizer.momentum;
         ar & this->maxOutputIndex;
-        ar.template register_type<internal::AllToAll>();
-        ar.template register_type<internal::Convolution1D>();
-        ar.template register_type<internal::Convolution2D>();
+        ar.template register_type<FullyConnected>();
+        ar.template register_type<Convolution1D>();
+        ar.template register_type<Convolution2D>();
         ar & layers;
     }
 }

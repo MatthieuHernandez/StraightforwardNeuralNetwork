@@ -42,9 +42,9 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        AllToAll(150),
-        AllToAll(70),
-        AllToAll(10)
+        FullyConnected(150),
+        FullyConnected(70),
+        FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 45_s);
@@ -58,8 +58,8 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
         Convolution(1,5),
-        AllToAll(70),
-        AllToAll(10)
+        FullyConnected(70),
+        FullyConnected(10)
         });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 45_s);
@@ -74,9 +74,9 @@ TEST_F(MnistTest, multipleConvolutionalNeuralNetwork)
         Input(28, 28, 1),
         Convolution(1,4),
         Convolution(1,4),
-        AllToAll(70),
+        FullyConnected(70),
         Convolution(1, 4, sigmoid),
-        AllToAll(10)
+        FullyConnected(10)
         });
     neuralNetwork.startTraining(*data);
     #ifdef DEBUG

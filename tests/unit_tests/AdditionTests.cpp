@@ -14,8 +14,8 @@ TEST(Addition, WithMPL)
     unique_ptr<Data> data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        AllToAll(6, sigmoid),
-        AllToAll(1, snn::identity)
+        FullyConnected(6, sigmoid),
+        FullyConnected(1, snn::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -26,7 +26,7 @@ TEST(Addition, WithCNN)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
         Convolution(6, 1, sigmoid),
-        AllToAll(1, snn::identity)
+        FullyConnected(1, snn::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -37,7 +37,7 @@ TEST(Addition, WithRNN)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(6, 1, sigmoid),
-        AllToAll(1, snn::identity)
+        FullyConnected(1, snn::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }

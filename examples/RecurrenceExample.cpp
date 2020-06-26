@@ -27,7 +27,7 @@ int recurrenceExample()
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(6, 1),
-        AllToAll(1, snn::identity)
+        FullyConnected(1, snn::identity)
     });
 
     neuralNetwork.startTraining(data);

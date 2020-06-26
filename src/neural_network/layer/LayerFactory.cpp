@@ -1,6 +1,6 @@
 #include "LayerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
-#include "AllToAll.hpp"
+#include "FullyConnected.hpp"
 #include "Recurrence.hpp"
 #include "Convolution1D.hpp"
 #include "Convolution2D.hpp"
@@ -9,11 +9,11 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerModel snn::AllToAll(int numberOfNeurons, activationFunction activation)
+LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activation)
 {
     LayerModel model
     {
-        allToAll,
+        fullyConnected,
         activation,
         -1,
         numberOfNeurons
@@ -88,12 +88,12 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
 
     switch (model.type)
     {
-    case allToAll:
+    case fullyConnected:
         if (model.numberOfInputs <= 0)
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
         model.numberOfInputsByNeurons = model.numberOfInputs;
-        return make_unique<AllToAll>(model, optimizer);
+        return make_unique<FullyConnected>(model, optimizer);
 
     case recurrence:
         if (model.numberOfRecurrences < 0)

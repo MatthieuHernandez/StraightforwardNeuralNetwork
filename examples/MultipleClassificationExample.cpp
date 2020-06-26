@@ -20,7 +20,7 @@ int multipleClassificationExample()
     Data data(multipleClassification, inputData, expectedOutputs);
     data.setSeparator(separator);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(2), AllToAll(8), AllToAll(3)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread

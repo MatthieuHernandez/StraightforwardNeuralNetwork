@@ -13,7 +13,7 @@ TEST(Identity, WorksWithSmallNumbers)
 
     Data data(regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), AllToAll(4), AllToAll(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::identity)});
     neuralNetwork.optimizer.learningRate = 0.02;
     neuralNetwork.optimizer.momentum = 0.99;
 
@@ -36,7 +36,7 @@ TEST(Identity, WorksWithBigNumbers)
 
     Data data(regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), AllToAll(4), AllToAll(4), AllToAll(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(4), FullyConnected(1, snn::identity)});
     neuralNetwork.optimizer.learningRate = 0.0001;
     neuralNetwork.optimizer.momentum = 0.99;
 
@@ -61,7 +61,7 @@ TEST(Identity, WorksWithLotsOfNumbers)
     Data data(regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), AllToAll(8), AllToAll(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::identity)});
     neuralNetwork.optimizer.learningRate = 0.0002;
     neuralNetwork.optimizer.momentum = 0.99;
 

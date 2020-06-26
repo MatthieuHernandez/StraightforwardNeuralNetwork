@@ -10,14 +10,14 @@ TEST(Architecture, ValidArchitectures)
 {
     vector2D<LayerModel> Architectures =
     {
-        {Input(7, 8, 1), Convolution(2, 3, ReLU), AllToAll(25, sigmoid)},
+        {Input(7, 8, 1), Convolution(2, 3, ReLU), FullyConnected(25, sigmoid)},
         {Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
         {
-            Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), AllToAll(30, gaussian), Convolution(2, 2),
-            AllToAll(15)
+            Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), FullyConnected(30, gaussian), Convolution(2, 2),
+            FullyConnected(15)
         },
-        {Input(4, 20, 3), AllToAll(30, iSigmoid)},
-        {Input(4, 2, 1, 2, 3), AllToAll(5)}
+        {Input(4, 20, 3), FullyConnected(30, iSigmoid)},
+        {Input(4, 2, 1, 2, 3), FullyConnected(5)}
     };
 
     for (auto&& Architecture : Architectures)
@@ -33,14 +33,14 @@ TEST(Architecture, invalidArchitectures)
     {
         {},
         {Input(7, 7, 1)},
-        {Input(), AllToAll(10)},
-        {AllToAll(3, sigmoid)},
+        {Input(), FullyConnected(10)},
+        {FullyConnected(3, sigmoid)},
         {Convolution(3, sigmoid)},
-        {Input(), AllToAll(3, sigmoid)},
-        {Input(1, 0), AllToAll(3, sigmoid)},
-        {Input(1, 1), AllToAll(10), Input(6, 1)},
-        {Input(10, 4, 1), Convolution(1, 7), AllToAll(1)},
-        {Input(8, 8, 8, 1), Convolution(1, 3), AllToAll(2)}
+        {Input(), FullyConnected(3, sigmoid)},
+        {Input(1, 0), FullyConnected(3, sigmoid)},
+        {Input(1, 1), FullyConnected(10), Input(6, 1)},
+        {Input(10, 4, 1), Convolution(1, 7), FullyConnected(1)},
+        {Input(8, 8, 8, 1), Convolution(1, 3), FullyConnected(2)}
     };
 
     vector<string> expectedErrorMessages =
@@ -77,11 +77,11 @@ TEST(Architecture, NumberOfNeuronesAndParameters)
         {
             Input(12, 12, 3),
             Convolution(3, 4),
-            AllToAll(50),
+            FullyConnected(50),
             Convolution(1, 3),
-            AllToAll(20),
+            FullyConnected(20),
             Recurrence(10, 4),
-            AllToAll(5)
+            FullyConnected(5)
         });
     const int numberOfNeurons = 9 * 9 * 3 + 50 + 48 + 20 + 10 + 5; // = 376
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);

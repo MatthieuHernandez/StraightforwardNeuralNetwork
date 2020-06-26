@@ -42,9 +42,9 @@ TEST_F(IrisTest, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(4),
-        AllToAll(15),
-        AllToAll(5),
-        AllToAll(3)
+        FullyConnected(15),
+        FullyConnected(5),
+        FullyConnected(3)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(0.98_acc || 2_s);

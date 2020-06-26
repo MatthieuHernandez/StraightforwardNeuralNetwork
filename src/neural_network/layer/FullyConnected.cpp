@@ -1,22 +1,22 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "AllToAll.hpp"
+#include "FullyConnected.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(AllToAll)
+BOOST_CLASS_EXPORT(FullyConnected)
 
-AllToAll::AllToAll(LayerModel& model, StochasticGradientDescent* optimizer)
+FullyConnected::FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer)
      : Layer(model, optimizer)
 {
 }
 
 inline
-unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<Layer> FullyConnected::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<AllToAll>(*this);
+    auto layer = make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;
@@ -24,7 +24,7 @@ unique_ptr<Layer> AllToAll::clone(StochasticGradientDescent* optimizer) const
     return layer;
 }
 
-vector<float> AllToAll::output(const vector<float>& inputs, bool temporalReset)
+vector<float> FullyConnected::output(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -34,7 +34,7 @@ vector<float> AllToAll::output(const vector<float>& inputs, bool temporalReset)
     return outputs;
 }
 
-vector<float> AllToAll::backOutput(vector<float>& inputErrors)
+vector<float> FullyConnected::backOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -46,12 +46,12 @@ vector<float> AllToAll::backOutput(vector<float>& inputErrors)
     return errors;
 }
 
-std::vector<int> AllToAll::getShapeOfOutput() const
+std::vector<int> FullyConnected::getShapeOfOutput() const
 {
     return {this->getNumberOfNeurons()};
 }
 
-int AllToAll::isValid() const
+int FullyConnected::isValid() const
 {
     for (auto& neuron : neurons)
     {
@@ -61,12 +61,12 @@ int AllToAll::isValid() const
     return this->Layer::isValid();
 }
 
-bool AllToAll::operator==(const AllToAll& layer) const
+bool FullyConnected::operator==(const FullyConnected& layer) const
 {
     return this->Layer::operator==(layer);
 }
 
-bool AllToAll::operator!=(const AllToAll& layer) const
+bool FullyConnected::operator!=(const FullyConnected& layer) const
 {
     return !(*this ==layer);
 }

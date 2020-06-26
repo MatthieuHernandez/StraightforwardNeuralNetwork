@@ -13,7 +13,7 @@ TEST(Convolution, SimpleConvolution2D)
     vector<LayerModel> architectures =
     {
         Input(3, 3, 2), Convolution(2, 2, sigmoid),
-        AllToAll(2)
+        FullyConnected(2)
     };
     StraightforwardNeuralNetwork neuralNetwork(architectures);
     neuralNetwork.startTraining(data);

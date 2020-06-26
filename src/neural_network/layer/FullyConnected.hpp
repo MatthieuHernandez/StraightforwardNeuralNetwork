@@ -8,7 +8,7 @@
 
 namespace snn::internal
 {
-    class AllToAll final : public Layer
+    class FullyConnected final : public Layer
     {
     private:
         friend class boost::serialization::access;
@@ -16,10 +16,10 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        AllToAll() = default;  // use restricted to Boost library only
-        AllToAll(LayerModel& model, StochasticGradientDescent* optimizer);
-        AllToAll(const AllToAll&) = default;
-        ~AllToAll() = default;
+        FullyConnected() = default;  // use restricted to Boost library only
+        FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer);
+        FullyConnected(const FullyConnected&) = default;
+        ~FullyConnected() = default;
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
@@ -28,14 +28,14 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const AllToAll& layer) const;
-        bool operator!=(const AllToAll& layer) const;
+        bool operator==(const FullyConnected& layer) const;
+        bool operator!=(const FullyConnected& layer) const;
     };
 
     template <class Archive>
-    void AllToAll::serialize(Archive& ar, const unsigned version)
+    void FullyConnected::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<AllToAll, Layer>();
+        boost::serialization::void_cast_register<FullyConnected, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
     }
 }

@@ -18,8 +18,8 @@ TEST(Recurence, RepeatInput)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(8, 1),
-        AllToAll(4),
-        AllToAll(1, snn::tanh)
+        FullyConnected(4),
+        FullyConnected(1, snn::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.006f;
     neuralNetwork.optimizer.momentum = 0.99f;
@@ -36,8 +36,8 @@ TEST(Recurence, RepeatLastInput)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(8, 1),
-        AllToAll(4),
-        AllToAll(1, snn::tanh)
+        FullyConnected(4),
+        FullyConnected(1, snn::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.006f;
     neuralNetwork.optimizer.momentum = 0.99f;

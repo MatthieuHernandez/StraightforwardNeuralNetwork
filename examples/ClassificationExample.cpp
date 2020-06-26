@@ -18,7 +18,7 @@ int classificationExample()
 
     Data data(classification, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(2)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(2)});
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread

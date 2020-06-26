@@ -20,7 +20,7 @@ int regressionExample()
     Data data(regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), AllToAll(5), AllToAll(1)});
+    snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(1)});
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread

@@ -15,10 +15,10 @@ TEST(Memory, passingArgByCopy)
         vector<LayerModel> achitecture = {
             Input(3, 1),
             Convolution(500, 1),
-            AllToAll(3000),
-            AllToAll(3000),
+            FullyConnected(3000),
+            FullyConnected(3000),
             Convolution(1, 4),
-            AllToAll(1)
+            FullyConnected(1)
         };
         StraightforwardNeuralNetwork neuralNetwork(achitecture);
 
@@ -46,8 +46,8 @@ TEST(Memory, copyOperator)
         auto neuralNetwork = new StraightforwardNeuralNetwork({
                 Input(3, 1),
                 Convolution(500, 1),
-                AllToAll(250),
-                AllToAll(1)
+                FullyConnected(250),
+                FullyConnected(1)
             });
         
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;

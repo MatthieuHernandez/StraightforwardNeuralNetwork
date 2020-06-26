@@ -86,7 +86,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests()
     };
 
     const float precision = 0.5f;
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
+    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
     data->setPrecision(precision);
     return data;
 }

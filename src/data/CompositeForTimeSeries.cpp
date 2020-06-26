@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <random>
-#include "CompositeForContinuousData.hpp"
+#include "CompositeForTimeSeries.hpp"
 #include "../tools/ExtendedExpection.hpp"
 #include "../tools/Tools.hpp"
 
@@ -8,11 +8,11 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOfRecurrences)
+CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurrences)
     : TemporalComposite(sets), numberOfRecurrences(numberOfRecurrences)
 {
     if (this->numberOfRecurrences < 1)
-        throw runtime_error("The number of recurrence must be > 1 for continuous data");
+        throw runtime_error("The number of recurrence must be > 1 for time series.");
 
     this->sets[training].numberOfTemporalSequence = 1;
     this->sets[testing].numberOfTemporalSequence = 1;
@@ -31,7 +31,7 @@ CompositeForContinuousData::CompositeForContinuousData(Set sets[2], int numberOf
     this->offset = 0;
 }
 
-void CompositeForContinuousData::shuffle()
+void CompositeForTimeSeries::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
@@ -80,7 +80,7 @@ void CompositeForContinuousData::shuffle()
     this->offset = (this->offset+1) % (this->numberOfRecurrences+1);
 }
 
-void CompositeForContinuousData::unshuffle()
+void CompositeForTimeSeries::unshuffle()
 {
     this->TemporalComposite::unshuffle();
     this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
@@ -88,22 +88,22 @@ void CompositeForContinuousData::unshuffle()
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 }
 
-bool CompositeForContinuousData::isFirstTrainingDataOfTemporalSequence(int index) const
+bool CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) const
 {
     return this->sets[training].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForContinuousData::isFirstTestingDataOfTemporalSequence(int index) const
+bool CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const
 {
     return index == 0 ? true : false;
 }
 
-bool CompositeForContinuousData::needToTrainOnTrainingData(int index) const
+bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
 {
     return this->sets[training].needToTrainOnData[index];
 }
 
-bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
+bool CompositeForTimeSeries::needToEvaluateOnTestingData(int index) const
 {
     // Skip firsts testing data can be distort the accuracy
     /*if(index < this->numberOfRecurrences)
@@ -111,7 +111,7 @@ bool CompositeForContinuousData::needToEvaluateOnTestingData(int index) const
     return true;
 }
 
-int CompositeForContinuousData::isValid()
+int CompositeForTimeSeries::isValid()
 {
     if (!this->sets[training].areFirstDataOfTemporalSequence.size() == this->sets[training].size
         || !this->sets[testing].areFirstDataOfTemporalSequence.empty()

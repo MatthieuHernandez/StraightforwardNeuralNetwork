@@ -4,7 +4,7 @@
 
 namespace snn::internal
 {
-    class CompositeForContinuousData : public TemporalComposite
+    class CompositeForTimeSeries : public TemporalComposite
     {
     private:
         int numberOfRecurrences;
@@ -13,7 +13,7 @@ namespace snn::internal
         int divide;
         int rest;
     public:
-        CompositeForContinuousData(snn::Set sets[2], int numberOfRecurrences);
+        CompositeForTimeSeries(snn::Set sets[2], int numberOfRecurrences);
 
         void shuffle() override;
         void unshuffle() override;

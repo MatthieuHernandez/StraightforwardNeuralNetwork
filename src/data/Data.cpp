@@ -8,7 +8,7 @@
 #include "CompositeForClassification.hpp"
 #include "CompositeForMultipleClassification.hpp"
 #include "CompositeForRegression.hpp"
-#include "CompositeForContinuousData.hpp"
+#include "CompositeForTimeSeries.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
 #include "../tools/ExtendedExpection.hpp"
@@ -144,8 +144,8 @@ void Data::initialize(problemType typeOfProblem,
     case temporal:
         this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
         break;
-    case continuous:
-        this->temporalComposite = make_unique<CompositeForContinuousData>(this->sets, this->numberOfRecurrences);
+    case timeSeries:
+        this->temporalComposite = make_unique<CompositeForTimeSeries>(this->sets, this->numberOfRecurrences);
         break;
     default:
         throw NotImplementedException();

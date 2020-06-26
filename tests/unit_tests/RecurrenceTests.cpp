@@ -12,7 +12,7 @@ TEST(Recurence, RepeatInput)
 {
     vector<vector<float>> inputData = {{0.0}, {-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
     vector<vector<float>> expectedOutputs = {{0.0}, {-1.0}, {-0.5}, {0.0}, {0.5}, {1.0}};
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
+    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
     data->setPrecision(0.1);
 
     StraightforwardNeuralNetwork neuralNetwork({
@@ -30,7 +30,7 @@ TEST(Recurence, RepeatLastInput)
 {
     vector<vector<float>> inputData       = {{-1.0}, {-1.0}, {-1.0}, {-0.5}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {0.0}};
     vector<vector<float>> expectedOutputs = {{-1.0}, {-1.0}, {-1.0}, {-1.0}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {1.0}};
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, continuous, 1);
+    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
     data->setPrecision(0.1);
 
     StraightforwardNeuralNetwork neuralNetwork({

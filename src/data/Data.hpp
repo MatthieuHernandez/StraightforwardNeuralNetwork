@@ -18,7 +18,7 @@ namespace snn
     {
         nonTemporal,
         temporal,
-        continuous,
+        timeSeries,
     };
 
     class Data

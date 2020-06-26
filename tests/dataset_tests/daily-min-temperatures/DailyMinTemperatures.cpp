@@ -45,5 +45,5 @@ void DailyMinTemperatures::loadData(string folderPath)
         previousValue = value;
     }
     file.close();
-    this->data = make_unique<Data>(regression, data, labels, continuous, this->numberOfRecurrences);
+    this->data = make_unique<Data>(regression, data, labels, timeSeries, this->numberOfRecurrences);
 }

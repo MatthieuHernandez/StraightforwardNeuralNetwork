@@ -21,7 +21,7 @@ int recurrenceExample()
     };
 
     const float precision = 0.5f;
-    Data data(regression, inputData, expectedOutputs, continuous, 1);
+    Data data(regression, inputData, expectedOutputs, timeSeries, 1);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({

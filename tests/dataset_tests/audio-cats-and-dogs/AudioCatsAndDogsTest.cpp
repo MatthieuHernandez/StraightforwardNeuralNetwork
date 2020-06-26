@@ -38,13 +38,12 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 
 TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 {
-    // Need to implement MaxPooling layer to help learning
+     // Need to implement MaxPooling layer to help learning
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        //Convolution(1, 256, sigmoid),
-        Recurrence(100, 10, snn::tanh),
-        Recurrence(30, 5),
-        Recurrence(2, 100)
+        Recurrence(20, 10, snn::tanh),
+        Recurrence(6, 5),
+        Recurrence(2, 2)
     });
     //auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     //PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");

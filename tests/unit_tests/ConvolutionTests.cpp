@@ -5,11 +5,11 @@
 using namespace std;
 using namespace snn;
 
-Data createData();
+Data createDataForConvolutionTests();
 
 TEST(Convolution, SimpleConvolution2D)
 {
-    auto data = createData();
+    auto data = createDataForConvolutionTests();
     vector<LayerModel> architectures =
     {
         Input(3, 3, 2), Convolution(2, 2, sigmoid),
@@ -25,7 +25,7 @@ TEST(Convolution, SimpleConvolution2D)
 
 }
 
-Data createData()
+Data createDataForConvolutionTests()
 {
     vector<vector<float>> inputData = {
         {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 

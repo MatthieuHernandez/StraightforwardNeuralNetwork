@@ -21,7 +21,7 @@ if(MSVC)
 else()
   #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
   set(CMAKE_CXX_FLAGS_DEBUG "-g")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+  set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
 endif()
 
 add_subdirectory(src)

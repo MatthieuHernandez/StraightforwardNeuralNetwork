@@ -1,18 +1,17 @@
 #include "../ExtendedGTest.hpp"
-#include "tools/ExtendedExpection.hpp"
 #include "tools/Tools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 
 using namespace std;
 using namespace snn;
 
-unique_ptr<Data> createData();
-unique_ptr<Data> createRecurrentData();
+unique_ptr<Data> createDataForAdditionTests();
+unique_ptr<Data> createRecurrentDataForAdditionTests();
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Addition, WithMPL)
 {
-    auto data = createData();
+    unique_ptr<Data> data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
         AllToAll(6, sigmoid),
@@ -23,7 +22,7 @@ TEST(Addition, WithMPL)
 
 TEST(Addition, WithCNN)
 {
-    auto data = createData();
+    auto data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
         Convolution(6, 1, sigmoid),
@@ -34,7 +33,7 @@ TEST(Addition, WithCNN)
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentData();
+    auto data = createRecurrentDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(6, 1, sigmoid),
@@ -43,7 +42,6 @@ TEST(Addition, WithRNN)
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
-inline
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
@@ -55,8 +53,7 @@ void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
     ASSERT_MAE(mae, 0.5);
 }
 
-inline
-unique_ptr<Data> createData()
+unique_ptr<Data> createDataForAdditionTests()
 {
     vector2D<float> inputData = {
         {3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2},
@@ -74,13 +71,12 @@ unique_ptr<Data> createData()
     };
 
     const float precision = 0.5f;
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs);
+    unique_ptr<Data> data = make_unique<Data>(regression, inputData, expectedOutputs);
     data->setPrecision(precision);
     return data;
 }
 
-inline
-unique_ptr<Data> createRecurrentData()
+unique_ptr<Data> createRecurrentDataForAdditionTests()
 {
     vector2D<float> inputData = {
         {3}, {5}, {4}, {2}, {0}, {2}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}, {3}

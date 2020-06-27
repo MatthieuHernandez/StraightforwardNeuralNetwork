@@ -1,22 +1,22 @@
 #include <boost/serialization/export.hpp>
-#include "Convolution1D.hpp"
+#include "LocallyConnected1D.hpp"
 #include "LayerModel.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Convolution1D)
+BOOST_CLASS_EXPORT(LocallyConnected1D)
 
-Convolution1D::Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer)
+LocallyConnected1D::LocallyConnected1D(LayerModel& model, StochasticGradientDescent* optimizer)
     : Filter(model, optimizer)
 {
 }
 
 inline
-unique_ptr<Layer> Convolution1D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<Layer> LocallyConnected1D::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<Convolution1D>(*this);
+    auto layer = make_unique<LocallyConnected1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;
@@ -24,7 +24,7 @@ unique_ptr<Layer> Convolution1D::clone(StochasticGradientDescent* optimizer) con
     return layer;
 }
 
-std::vector<int> Convolution1D::getShapeOfOutput() const
+std::vector<int> LocallyConnected1D::getShapeOfOutput() const
 {
     return {
         this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
@@ -32,7 +32,7 @@ std::vector<int> Convolution1D::getShapeOfOutput() const
     };
 }
 
-int Convolution1D::isValid() const
+int LocallyConnected1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
@@ -43,20 +43,20 @@ int Convolution1D::isValid() const
 }
 
 inline
-vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> LocallyConnected1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int beginIndex = neuronNumber * this->shapeOfInput[1];
-    const int endIndex = (neuronNumber + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
+    const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
+    const int endIndex = beginIndex + this->sizeOfFilterMatrix * this->shapeOfInput[1];
     return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
 inline
-void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
+void LocallyConnected1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
                                               std::vector<float>& errors) const
 {
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int beginIndex = neuronNumber * this->shapeOfInput[1];
+    const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
     for (int e = 0; e < error.size(); ++e)
     {
         const int i = beginIndex + e;
@@ -65,13 +65,13 @@ void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
 }
 
 inline
-bool Convolution1D::operator==(const Convolution1D& layer) const
+bool LocallyConnected1D::operator==(const LocallyConnected1D& layer) const
 {
     return this->Filter::operator==(layer);
 }
 
 inline
-bool Convolution1D::operator!=(const Convolution1D& layer) const
+bool LocallyConnected1D::operator!=(const LocallyConnected1D& layer) const
 {
     return !(*this == layer);
 }

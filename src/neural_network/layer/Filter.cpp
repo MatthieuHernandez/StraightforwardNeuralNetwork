@@ -6,7 +6,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Convolution)
+BOOST_CLASS_EXPORT(Filter)
 
 Filter::Filter(LayerModel& model, StochasticGradientDescent* optimizer)
      : Layer(model, optimizer)

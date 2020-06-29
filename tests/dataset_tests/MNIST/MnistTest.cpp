@@ -68,11 +68,11 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.93f);
 }
 
-TEST_F(MnistTest, multipleConvolutionalNeuralNetwork)
+TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,4),
+        LocallyConnected(1,2),
         Convolution(1,4),
         FullyConnected(70),
         Convolution(1, 4, sigmoid),

@@ -99,9 +99,9 @@ TEST(Architecture, NumberOfNeuronesAndParameters2)
             LocallyConnected(1, 7),
             FullyConnected(2)
         });
-    const int numberOfNeurons = 3 * 4 * 3 + 200 + 29 + 20 + 10 + 2; // = 297
+    const int numberOfNeurons = 36 + 200 + 29 + 2; // = 297
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 3 * 4 * 3 * 4 + 200 * 144 + 29 * 7 + 203 * 2; // = 29553
+    const int numberOfParameters = 36 * 16 * 3 + 36 * 200 + 29 * 7 + 29 * 2; //  = 9189
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 

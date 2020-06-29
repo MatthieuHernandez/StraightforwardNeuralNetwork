@@ -104,7 +104,7 @@ int computeNumberOfNeuronsForConvolution2D(int numberOfConvolution, int sizeOfCo
 }
 
 inline
-int computeNumberOfNeuronsForConvolution1D(int sizeOfConvolutionMatrix, int numberOfConvolution, vector<int>& shapeOfInput)
+int computeNumberOfNeuronsForConvolution1D(int numberOfConvolution, int sizeOfConvolutionMatrix, vector<int>& shapeOfInput)
 {
     return numberOfConvolution * (shapeOfInput[0] - (sizeOfConvolutionMatrix - 1));
 }

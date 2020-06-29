@@ -26,9 +26,12 @@ unique_ptr<Layer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer
 
 std::vector<int> LocallyConnected2D::getShapeOfOutput() const
 {
+    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+
     return {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
-        this->shapeOfInput[1] - (this->sizeOfFilterMatrix - 1),
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
+        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
         this->numberOfFilters
     };
 }
@@ -59,7 +62,10 @@ vector<float> LocallyConnected2D::createInputsForNeuron(int neuronNumber, const 
         + (neuronPositionX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
         for (int j = beginIndex; j < endIndex; ++j)
         {
-            neuronInputs.push_back(inputs[j]);
+            if(j < inputs.size())
+                neuronInputs.push_back(inputs[j]);
+            else
+                neuronInputs.push_back(inputs[0]);
         }
     }
     return neuronInputs;

@@ -26,8 +26,10 @@ unique_ptr<Layer> LocallyConnected1D::clone(StochasticGradientDescent* optimizer
 
 std::vector<int> LocallyConnected1D::getShapeOfOutput() const
 {
+    const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+
     return {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
         this->numberOfFilters
     };
 }
@@ -45,17 +47,25 @@ int LocallyConnected1D::isValid() const
 inline
 vector<float> LocallyConnected1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
     const int endIndex = beginIndex + this->sizeOfFilterMatrix * this->shapeOfInput[1];
-    return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+
+    if(endIndex <= this->shapeOfInput[1])
+        return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+    else
+    {
+        auto v = vector<float>(inputs.begin() + beginIndex, inputs.begin() + this->shapeOfInput[1]);
+        v.resize(this->sizeOfFilterMatrix, 0);
+        return v;
+    }
 }
 
 inline
 void LocallyConnected1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
-                                              std::vector<float>& errors) const
+                                                   std::vector<float>& errors) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
     for (int e = 0; e < error.size(); ++e)
     {

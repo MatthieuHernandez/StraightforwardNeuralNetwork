@@ -26,7 +26,7 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 
 ## Installation (with *CMake* 3.17.1)
 
-### Linux, UNIX - GCC 9.2
+### Linux, UNIX - GCC 10.1
 
 * To compile the library run `cmake -G"Unix Makefiles" ./..  && make` from `StraightforwardNeuralNetwork/build`
 

@@ -5,7 +5,6 @@
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
 #include "Filter.hpp"
-#include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {

@@ -51,7 +51,7 @@ vector<float> LocallyConnected1D::createInputsForNeuron(int neuronNumber, const 
     const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
     const int endIndex = beginIndex + this->sizeOfFilterMatrix * this->shapeOfInput[1];
 
-    if(endIndex <= this->shapeOfInput[1])
+    if(endIndex <= this->shapeOfInput[0])
         return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
     else
     {

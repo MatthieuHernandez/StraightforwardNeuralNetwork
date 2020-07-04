@@ -52,8 +52,8 @@ vector<float> LocallyConnected2D::createInputsForNeuron(int neuronNumber, const 
     vector<float> neuronInputs;
     neuronInputs.reserve(this->neurons[neuronNumber].getNumberOfInputs());
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int neuronPositionX = neuronNumber % (this->shapeOfInput[0] * this->sizeOfFilterMatrix);
-    const int neuronPositionY = neuronNumber / (this->shapeOfInput[0] * this->sizeOfFilterMatrix);
+    const int neuronPositionX = neuronNumber  * this->sizeOfFilterMatrix % this->shapeOfInput[0];
+    const int neuronPositionY = neuronNumber  * this->sizeOfFilterMatrix / this->shapeOfInput[0];
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {

@@ -22,6 +22,6 @@ include_directories(.. tests)
 
 add_executable(DatasetTests.out ${SOURCES})
 
-target_link_libraries(DatasetTests.out GTestExtended AudioFile StraightforwardNeuralNetwork)
+target_link_libraries(DatasetTests.out ExtendedGTest AudioFile StraightforwardNeuralNetwork)
 
 install(TARGETS DatasetTests.out DESTINATION bin)

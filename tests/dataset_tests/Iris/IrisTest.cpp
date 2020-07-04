@@ -40,6 +40,7 @@ TEST_F(IrisTest, loadData)
 
 TEST_F(IrisTest, trainNeuralNetwork)
 {
+    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(4),
         FullyConnected(15),

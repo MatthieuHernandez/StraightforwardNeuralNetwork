@@ -38,6 +38,7 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 
 TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 {
+    START_TIMER();
      // Need to implement MaxPooling layer to help learning
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),

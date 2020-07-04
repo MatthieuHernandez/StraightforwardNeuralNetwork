@@ -40,6 +40,7 @@ TEST_F(Cifar10Test, loadData)
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
+    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3072),
         FullyConnected(200),

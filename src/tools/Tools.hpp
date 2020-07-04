@@ -1,5 +1,7 @@
 #pragma once
+#include <chrono>
 #include <iostream>
+#include <string>
 #include <vector>
 
 namespace snn
@@ -34,6 +36,9 @@ namespace snn::internal
 
         template <typename T>
         static T getMaxValue(std::vector<T> vector);
+
+        static std::string toString(std::chrono::milliseconds duration);
+
     };
 
     template <logLevel T, typename... Targs>

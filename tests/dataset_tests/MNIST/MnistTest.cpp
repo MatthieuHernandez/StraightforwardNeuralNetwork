@@ -54,8 +54,9 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.90f);
 }
 
-TEST_F(MnistTest, feedforwardNeuralNetwork2)
+TEST_F(MnistTest, LocallyConnected1D)
 {
+    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         LocallyConnected(1, 7),
@@ -72,6 +73,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork2)
 
 TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
+    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
         Convolution(1,5),
@@ -87,6 +89,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 
 TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
+    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
         LocallyConnected(1,4),

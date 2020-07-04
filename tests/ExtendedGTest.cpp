@@ -10,12 +10,13 @@ using namespace chrono;
 
 namespace snn::internal::extendedGTest
 {
-     time_point<system_clock> start;
+     time_point<system_clock> start = time_point<system_clock>::max();
 
     string TIMER()
     {
         const auto end = system_clock::now();
         const auto duration = duration_cast<milliseconds>(end - start);
+        start = time_point<system_clock>::max();
         if(duration.count() <= 0)
             return "";
         return " in " + Tools::toString(duration);

@@ -67,16 +67,18 @@ vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vecto
 
 void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
 {
-    const int neuronPositionX = neuronNumber % this->shapeOfInput[0];
-    const int neuronPositionY = neuronNumber / this->shapeOfInput[0];
+    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
+    const int neuronPositionX = neuronNumber % (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
+    const int neuronPositionY = neuronNumber / (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[2] * this->shapeOfInput[0]) + neuronPositionX * this->shapeOfInput[2];
-        for(int e = 0; e < error.size(); ++e)
+        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
+        for(int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int index = beginIndex + e;
-            errors[index] += error[e];
+            const int indexErrors = beginIndex + j;
+            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
+            errors[indexErrors] += error[indexMatrix];
         }
     }
 }

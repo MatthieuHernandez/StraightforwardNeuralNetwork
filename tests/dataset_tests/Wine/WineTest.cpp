@@ -40,7 +40,6 @@ TEST_F(WineTest, loadData)
 
 TEST_F(WineTest, trainNeuralNetwork)
 {
-    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(13),
         FullyConnected(20),

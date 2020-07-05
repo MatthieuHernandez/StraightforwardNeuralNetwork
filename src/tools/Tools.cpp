@@ -66,7 +66,7 @@ std::string Tools::toString(std::chrono::milliseconds duration)
             "min";
 
     if (duration.count() > 60000)
-        return std::to_string(duration.count() / 60000) + "min" + std::to_string(duration.count() / 1000) + "s";
+        return std::to_string(duration.count() / 60000) + "min " + std::to_string(duration.count() / 1000) + "s";
 
     if (duration.count() > 1000)
         return std::to_string(duration.count() / 1000) + "s";

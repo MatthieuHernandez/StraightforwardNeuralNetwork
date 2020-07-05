@@ -40,7 +40,6 @@ TEST_F(FashionMnistTest, loadData)
 
 TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 {
-    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         FullyConnected(150),
@@ -56,7 +55,6 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
-    START_TIMER();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
         Convolution(1,5),

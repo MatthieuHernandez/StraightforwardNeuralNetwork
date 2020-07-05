@@ -1,8 +1,6 @@
 #pragma once
 #include <gtest/gtest.h>
 
-void START_TIMER();
-
 template<typename T>
 void ASSERT_BETWEEN(T min, T value, T max, std::string valueName = "value");
 

@@ -45,7 +45,7 @@ int Convolution1D::isValid() const
 inline
 vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];
     const int endIndex = (neuronNumber + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
     return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
@@ -55,7 +55,7 @@ inline
 void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
                                               std::vector<float>& errors) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];
     for (int e = 0; e < error.size(); ++e)
     {

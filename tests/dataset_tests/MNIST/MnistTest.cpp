@@ -63,7 +63,7 @@ TEST_F(MnistTest, LocallyConnected1D)
         FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep /*|| 45_s*/);
+    neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70f);
@@ -79,7 +79,7 @@ TEST_F(MnistTest, LocallyConnected2D)
         FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(4_ep /*|| 45_s*/);
+    neuralNetwork.waitFor(4_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70f);
@@ -104,14 +104,14 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        LocallyConnected(1,4),
-        Convolution(1,4),
+        LocallyConnected(1, 4, sigmoid),
+        Convolution(1, 4, sigmoid),
         FullyConnected(70),
         Convolution(1, 4, sigmoid),
         FullyConnected(10)
-        });
+    });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(5_ep /*|| 60_s*/);
+    neuralNetwork.waitFor(5_ep || 60_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.80f);
@@ -121,25 +121,25 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filer({
         Input(28, 28, 1),
-        Convolution(1,14),
+        Convolution(1,26, sigmoid),
         FullyConnected(10)
         });
     nn1Filer.startTraining(*data);
-    nn1Filer.waitFor(1_ep);
+    nn1Filer.waitFor(1_ep );
     nn1Filer.stopTraining();
     auto accuracy1Filter = nn1Filer.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy1Filter, 0.5f);
+    ASSERT_ACCURACY(accuracy1Filter, 0.7f);
 
     StraightforwardNeuralNetwork nn10Filers({
         Input(28, 28, 1),
-        Convolution(10,14),
+        Convolution(8,26, sigmoid),
         FullyConnected(10)
         });
     nn10Filers.startTraining(*data);
     nn10Filers.waitFor(1_ep);
     nn10Filers.stopTraining();
     auto accuracy10Filers = nn10Filers.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy10Filers, 0.5f);
+    ASSERT_ACCURACY(accuracy10Filers, 0.8f);
 
     EXPECT_GT(accuracy10Filers, accuracy1Filter);
 }

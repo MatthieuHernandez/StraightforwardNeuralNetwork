@@ -37,7 +37,7 @@ namespace snn
 
     extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activationFunction activation = sigmoid);
 
-    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation = ReLU);
+    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation = sigmoid);
 }
 
 namespace snn::internal

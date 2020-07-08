@@ -32,7 +32,7 @@ namespace snn::internal
         virtual std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const = 0;
 
         static const layerType type;
-        std::vector<Perceptron> neurons;
+        std::vector<Neuron> neurons;
 
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfNeurons() const;

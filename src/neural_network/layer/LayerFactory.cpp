@@ -134,7 +134,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         if (model.numberOfRecurrences < 0)
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
-        model.numberOfInputsByNeurons = model.numberOfInputs * (model.numberOfRecurrences + 1);
+        model.numberOfInputsByNeurons = model.numberOfInputs + model.numberOfRecurrences;
         return make_unique<Recurrence>(model, optimizer);
 
     case locallyConnected:
@@ -158,7 +158,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             if (model.sizeOfFilerMatrix > shapeOfInput[0]
                 || model.sizeOfFilerMatrix > shapeOfInput[1])
             {
-                throw InvalidArchitectureException("Filter matrix of convolutionnal layer is too big.");
+                throw InvalidArchitectureException("Filter matrix of convolutional layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);

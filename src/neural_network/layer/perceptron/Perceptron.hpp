@@ -1,14 +1,13 @@
 #pragma once
-#include <memory>
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
-#include "../../Optimizer.hpp"
+#include "Neuron.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-    class Perceptron
+    class Perceptron : public Neuron
     {
     private:
         std::vector<float> weights;
@@ -20,13 +19,8 @@ namespace snn::internal
 
         float lastOutput = 0;
 
-        //StochasticGradientDescent* optimizer;
-
         activationFunction activation;
         ActivationFunction* outputFunction;
-
-        float randomInitializeWeight(int numberOfInputs) const;
-        void updateWeights(const std::vector<float>& inputs, float error);
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -38,26 +32,7 @@ namespace snn::internal
         Perceptron(const Perceptron& perceptron) = default;
         ~Perceptron() = default;
 
-        StochasticGradientDescent* optimizer;
-
-        [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
-        void train(float error);
-
         [[nodiscard]] int isValid() const;
-
-        [[nodiscard]] std::vector<float> getWeights() const;
-        [[nodiscard]] int getNumberOfParameters() const;
-
-        void setWeights(const std::vector<float>& weights);
-
-        [[nodiscard]] float getWeight(int w) const;
-        void setWeight(int w, float weight);
-
-        [[nodiscard]] float getBias() const;
-        void setBias(float bias);
-
-        [[nodiscard]] int getNumberOfInputs() const;
 
         bool operator==(const Perceptron& perceptron) const;
         bool operator!=(const Perceptron& perceptron) const;

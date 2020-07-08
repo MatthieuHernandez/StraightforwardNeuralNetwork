@@ -9,7 +9,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution1D)
 
 Convolution1D::Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Convolution(model, optimizer)
+    : Filter(model, optimizer)
 {
 }
 
@@ -27,8 +27,8 @@ unique_ptr<Layer> Convolution1D::clone(StochasticGradientDescent* optimizer) con
 std::vector<int> Convolution1D::getShapeOfOutput() const
 {
     return {
-        this->shapeOfInput[0] - (this->sizeOfConvolutionMatrix - 1),
-        this->numberOfConvolution
+        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
+        this->numberOfFilters
     };
 }
 
@@ -36,18 +36,18 @@ int Convolution1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfConvolutionMatrix * this->shapeOfInput[1])
+        if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->shapeOfInput[1])
             return 203;
     }
-    return this->Convolution::isValid();
+    return this->Filter::isValid();
 }
 
 inline
 vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfConvolution;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];
-    const int endIndex = (neuronNumber + this->sizeOfConvolutionMatrix) * this->shapeOfInput[1];
+    const int endIndex = (neuronNumber + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
     return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
@@ -55,7 +55,7 @@ inline
 void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
                                               std::vector<float>& errors) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfConvolution;
+    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1];
     for (int e = 0; e < error.size(); ++e)
     {
@@ -67,7 +67,7 @@ void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
 inline
 bool Convolution1D::operator==(const Convolution1D& layer) const
 {
-    return this->Convolution::operator==(layer);
+    return this->Filter::operator==(layer);
 }
 
 inline

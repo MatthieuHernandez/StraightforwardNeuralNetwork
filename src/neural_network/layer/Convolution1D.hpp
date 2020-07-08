@@ -4,12 +4,12 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
-#include "Convolution.hpp"
+#include "Filter.hpp"
 #include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {
-    class Convolution1D final : public Convolution
+    class Convolution1D final : public Filter
     {
     private:
         friend class boost::serialization::access;
@@ -38,7 +38,7 @@ namespace snn::internal
     template <class Archive>
     void Convolution1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Convolution1D, Convolution>();
-        ar & boost::serialization::base_object<Convolution>(*this);
+        boost::serialization::void_cast_register<Convolution1D, Filter>();
+        ar & boost::serialization::base_object<Filter>(*this);
     }
 }

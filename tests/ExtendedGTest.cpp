@@ -1,10 +1,14 @@
+#include <chrono>
 #include <iostream>
 #include <sstream>
 #include "ExtendedGTest.hpp"
 
-using namespace std;
+#include "tools/Tools.hpp"
 
-template<typename T>
+using namespace std;
+using namespace chrono;
+
+template <typename T>
 void ASSERT_BETWEEN(T min, T value, T max, string valueName)
 {
     ASSERT_GE(value, min);

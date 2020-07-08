@@ -12,7 +12,7 @@ namespace snn {
 
 namespace snn::internal
 {
-    class Convolution2D final : public Filter
+    class LocallyConnected2D final : public Filter
     {
     private :
         friend class boost::serialization::access;
@@ -23,23 +23,23 @@ namespace snn::internal
         void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
 
     public :
-        Convolution2D() = default;  // use restricted to Boost library only
-        Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~Convolution2D() = default;
-        Convolution2D(const Convolution2D&) = default;
+        LocallyConnected2D() = default;  // use restricted to Boost library only
+        LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~LocallyConnected2D() = default;
+        LocallyConnected2D(const LocallyConnected2D&) = default;
         std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Convolution2D& layer) const;
-        bool operator!=(const Convolution2D& layer) const;
+        bool operator==(const LocallyConnected2D& layer) const;
+        bool operator!=(const LocallyConnected2D& layer) const;
     };
 
     template <class Archive>
-    void Convolution2D::serialize(Archive& ar, const unsigned version)
+    void LocallyConnected2D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Convolution2D, Filter>();
+        boost::serialization::void_cast_register<LocallyConnected2D, Filter>();
         ar & boost::serialization::base_object<Filter>(*this);
     }
 }

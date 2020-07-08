@@ -1,22 +1,22 @@
 #include <boost/serialization/export.hpp>
-#include "Convolution2D.hpp"
+#include "LocallyConnected2D.hpp"
 #include "LayerModel.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Convolution2D)
+BOOST_CLASS_EXPORT(LocallyConnected2D)
 
-Convolution2D::Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer)
+LocallyConnected2D::LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer)
     : Filter(model, optimizer)
 {
 }
 
 inline
-unique_ptr<Layer> Convolution2D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<Layer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<Convolution2D>(*this);
+    auto layer = make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;
@@ -24,16 +24,19 @@ unique_ptr<Layer> Convolution2D::clone(StochasticGradientDescent* optimizer) con
     return layer;
 }
 
-std::vector<int> Convolution2D::getShapeOfOutput() const
+std::vector<int> LocallyConnected2D::getShapeOfOutput() const
 {
+    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+
     return {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
-        this->shapeOfInput[1] - (this->sizeOfFilterMatrix - 1),
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
+        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
         this->numberOfFilters
     };
 }
 
-int Convolution2D::isValid() const
+int LocallyConnected2D::isValid() const
 {
     for (auto& neuron : neurons)
     {
@@ -44,13 +47,13 @@ int Convolution2D::isValid() const
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> LocallyConnected2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
 {
     vector<float> neuronInputs;
     neuronInputs.reserve(this->neurons[neuronNumber].getNumberOfInputs());
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int neuronPositionX = neuronNumber % this->shapeOfInput[0];
-    const int neuronPositionY = neuronNumber / this->shapeOfInput[0];
+    const int neuronPositionX = neuronNumber * this->sizeOfFilterMatrix % this->shapeOfInput[0];
+    const int neuronPositionY = neuronNumber * this->sizeOfFilterMatrix / this->shapeOfInput[0];
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
@@ -59,17 +62,20 @@ vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vecto
         + (neuronPositionX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
         for (int j = beginIndex; j < endIndex; ++j)
         {
-            neuronInputs.push_back(inputs[j]);
+            if(j < inputs.size())
+                neuronInputs.push_back(inputs[j]);
+            else
+                neuronInputs.push_back(inputs[0]);
         }
     }
     return neuronInputs;
 }
 
-void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
+void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
 {
     neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int neuronPositionX = neuronNumber % (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
-    const int neuronPositionY = neuronNumber / (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
+    const int neuronPositionX = neuronNumber * this->sizeOfFilterMatrix % this->shapeOfInput[0] % this->numberOfFilters;
+    const int neuronPositionY = neuronNumber * this->sizeOfFilterMatrix / this->shapeOfInput[0] % this->numberOfFilters;
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
@@ -84,13 +90,13 @@ void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
 }
 
 inline
-bool Convolution2D::operator==(const Convolution2D& layer) const
+bool LocallyConnected2D::operator==(const LocallyConnected2D& layer) const
 {
     return this->Filter::operator==(layer);
 }
 
 inline
-bool Convolution2D::operator!=(const Convolution2D& layer) const
+bool LocallyConnected2D::operator!=(const LocallyConnected2D& layer) const
 {
     return !(*this == layer);
 }

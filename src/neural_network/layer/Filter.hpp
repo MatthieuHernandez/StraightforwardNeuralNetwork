@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class Convolution : public Layer
+    class Filter : public Layer
     {
     private:
         friend class boost::serialization::access;
@@ -14,18 +14,18 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected :
-        int numberOfConvolution;
-        int sizeOfConvolutionMatrix;
+        int numberOfFilters;
+        int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
 
         [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
     public:
-        Convolution() = default;  // use restricted to Boost library only
-        Convolution(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~Convolution() = default;
-        Convolution(const Convolution&) = default;
+        Filter() = default;  // use restricted to Boost library only
+        Filter(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~Filter() = default;
+        Filter(const Filter&) = default;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override;
@@ -33,17 +33,17 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Convolution& layer) const;
-        bool operator!=(const Convolution& layer) const;
+        bool operator==(const Filter& layer) const;
+        bool operator!=(const Filter& layer) const;
     };
 
     template <class Archive>
-    void Convolution::serialize(Archive& ar, const unsigned version)
+    void Filter::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Convolution, Layer>();
+        boost::serialization::void_cast_register<Filter, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
-        ar & this->numberOfConvolution;
-        ar & this->sizeOfConvolutionMatrix;
+        ar & this->numberOfFilters;
+        ar & this->sizeOfFilterMatrix;
         ar & this->shapeOfInput;
     }
 }

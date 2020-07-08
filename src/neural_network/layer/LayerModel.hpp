@@ -13,8 +13,8 @@ namespace snn
         int numberOfNeurons;
         int numberOfInputsByNeurons;
         int numberOfRecurrences;
-        int numberOfConvolution;
-        int sizeOfConvolutionMatrix;
+        int numberOfFilters;
+        int sizeOfFilerMatrix;
         std::vector<int> shapeOfInput;
     };
 }

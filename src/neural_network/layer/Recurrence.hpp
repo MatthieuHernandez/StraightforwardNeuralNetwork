@@ -8,7 +8,7 @@
 
 namespace snn::internal
 {
-    class Recurrence final : public Layer
+    class Recurrence final : public Layer<Perceptron>
     {
     private:
         friend class boost::serialization::access;

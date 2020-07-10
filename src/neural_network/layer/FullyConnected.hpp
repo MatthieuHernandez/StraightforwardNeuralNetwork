@@ -8,7 +8,7 @@
 
 namespace snn::internal
 {
-    class FullyConnected final : public Layer
+    class FullyConnected final : public Layer<Perceptron>
     {
     private:
         friend class boost::serialization::access;
@@ -20,7 +20,7 @@ namespace snn::internal
         FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer);
         FullyConnected(const FullyConnected&) = default;
         ~FullyConnected() = default;
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<Layer<Perceptron>> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override;

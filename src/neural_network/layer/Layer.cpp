@@ -6,9 +6,10 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Layer)
+BOOST_CLASS_EXPORT(Layer<Perceptron>)
 
-Layer::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
+template <class N>
+Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
 {
     this->numberOfInputs = model.numberOfInputs;
     this->neurons.reserve(model.numberOfNeurons);
@@ -18,7 +19,8 @@ Layer::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     }
 }
 
-void Layer::train(vector<float>& inputErrors)
+template <class N>
+void Layer<N>::train(vector<float>& inputErrors)
 {
     for (int n = 0; n < this->neurons.size(); ++n)
     {
@@ -26,7 +28,8 @@ void Layer::train(vector<float>& inputErrors)
     }
 }
 
-int Layer::isValid() const
+template <class N>
+int Layer<N>::isValid() const
 {
     if (this->neurons.size() != this->getNumberOfNeurons()
         || this->getNumberOfNeurons() < 1
@@ -50,17 +53,20 @@ int Layer::isValid() const
     return 0;
 }
 
-int Layer::getNumberOfInputs() const
+template <class N>
+int Layer<N>::getNumberOfInputs() const
 {
     return this->numberOfInputs;
 }
 
-int Layer::getNumberOfNeurons() const
+template <class N>
+int Layer<N>::getNumberOfNeurons() const
 {
     return this->neurons.size();
 }
 
-int Layer::getNumberOfParameters() const
+template <class N>
+int Layer<N>::getNumberOfParameters() const
 {
     int sum = 0;
     for (auto& neuron : this->neurons)
@@ -70,14 +76,16 @@ int Layer::getNumberOfParameters() const
     return sum;
 }
 
-bool Layer::operator==(const Layer& layer) const
+template <class N>
+bool Layer<N>::operator==(const Layer& layer) const
 {
     return this->numberOfInputs == layer.numberOfInputs
         && this->errors == layer.errors
         && this->neurons == layer.neurons;
 }
 
-bool Layer::operator!=(const Layer& layer) const
+template <class T>
+bool Layer<T>::operator!=(const Layer& layer) const
 {
     return !(*this == layer);
 }

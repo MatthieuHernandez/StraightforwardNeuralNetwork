@@ -1,27 +1,14 @@
 #pragma once
-#include <vector>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/base_object.hpp>
 #include "Neuron.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-    class Perceptron : public Neuron
+    class Perceptron final : public Neuron
     {
     private:
-        std::vector<float> weights;
-        float bias;
-
-        std::vector<float> previousDeltaWeights;
-        std::vector<float> lastInputs;
-        std::vector<float> errors;
-
-        float lastOutput = 0;
-
-        activationFunction activation;
-        ActivationFunction* outputFunction;
-
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
@@ -34,21 +21,14 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const;
 
-        bool operator==(const Perceptron& perceptron) const;
-        bool operator!=(const Perceptron& perceptron) const;
+        bool operator==(const Neuron& neuron) const override;
+        bool operator!=(const Neuron& neuron) const override;
     };
 
     template <class Archive>
     void Perceptron::serialize(Archive& ar, const unsigned int version)
     {
-        ar & this->weights;
-        ar & this->bias;
-        ar & this->previousDeltaWeights;
-        ar & this->lastInputs;
-        ar & this->errors;
-        ar & this->lastOutput;
-        ar & this->activation;
-        this->outputFunction = ActivationFunction::get(activation);
-        ar & this->optimizer;
+        boost::serialization::void_cast_register<Perceptron, Neuron>();
+        ar & boost::serialization::base_object<Neuron>(*this);
     }
 }

@@ -10,6 +10,11 @@ namespace snn::internal
     class Neuron
     {
     private:
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, const unsigned int version);
+
+    protected:
         std::vector<float> weights;
         float bias;
 
@@ -25,14 +30,11 @@ namespace snn::internal
         float randomInitializeWeight(int numberOfInputs) const;
         void updateWeights(const std::vector<float>& inputs, float error);
 
-        friend class boost::serialization::access;
-        template <class Archive>
-        void serialize(Archive& ar, const unsigned int version);
 
     public:
         Neuron() = default; // use restricted to Boost library only
         Neuron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
-        Neuron(const Neuron& perceptron) = default;
+        Neuron(const Neuron& neuron) = default;
         virtual ~Neuron() = default;
 
         StochasticGradientDescent* optimizer;
@@ -41,7 +43,7 @@ namespace snn::internal
         [[nodiscard]] std::vector<float>& backOutput(float error);
         void train(float error);
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] virtual int isValid() const;
 
         [[nodiscard]] std::vector<float> getWeights() const;
         [[nodiscard]] int getNumberOfParameters() const;
@@ -56,8 +58,8 @@ namespace snn::internal
 
         [[nodiscard]] int getNumberOfInputs() const;
 
-        virtual bool operator==(const Neuron& perceptron) const;
-        virtual bool operator!=(const Neuron& perceptron) const;
+        virtual bool operator==(const Neuron& neuron) const;
+        virtual bool operator!=(const Neuron& neuron) const;
     };
 
     template <class Archive>

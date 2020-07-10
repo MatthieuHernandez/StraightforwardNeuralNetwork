@@ -55,7 +55,8 @@ namespace snn::internal
 
         StochasticGradientDescent optimizer;
 
-        std::vector<std::unique_ptr<Layer>> layers{};
+        std::vector<std::unique_ptr<Layer<Neuron>>> layers{};
+
         [[nodiscard]] int isValid() const;
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = false);

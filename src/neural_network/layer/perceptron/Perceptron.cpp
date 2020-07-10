@@ -1,23 +1,27 @@
-#include <cmath>
+#include <boost/serialization/export.hpp>
 #include "Perceptron.hpp"
-#include "../../../tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
 
+Perceptron::Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer)
+    : Neuron(numberOfInputs, activation, optimizer)
+{
+}
+
 int Perceptron::isValid() const
 {
     return this->Neuron::isValid();
 }
 
-bool Perceptron::operator==(const Perceptron& perceptron) const
+bool Perceptron::operator==(const Neuron& neuron) const
 {
-    return this->Neuron::operator==(perceptron);
+    return this->Neuron::operator==(neuron);
 }
 
-bool Perceptron::operator!=(const Perceptron& perceptron) const
+bool Perceptron::operator!=(const Neuron& neuron) const
 {
-    return !(*this == perceptron);
+    return !(*this == neuron);
 }

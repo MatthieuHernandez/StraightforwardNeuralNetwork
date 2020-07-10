@@ -131,17 +131,18 @@ int Neuron::getNumberOfInputs() const
     return this->weights.size();
 }
 
-bool Neuron::operator==(const Neuron& Neuron) const
+bool Neuron::operator==(const Neuron& neuron) const
 {
-    return this->weights == Neuron.weights
-        && this->bias == Neuron.bias
-        && this->previousDeltaWeights == Neuron.previousDeltaWeights
-        && this->lastInputs == Neuron.lastInputs
-        && this->errors == Neuron.errors
-        && this->lastOutput == Neuron.lastOutput
-        && this->activation == Neuron.activation
-        && this->outputFunction == Neuron.outputFunction // not really good
-        && *this->optimizer == *Neuron.optimizer;
+    return typeid(this) == typeid(neuron)
+        && this->weights == neuron.weights
+        && this->bias == neuron.bias
+        && this->previousDeltaWeights == neuron.previousDeltaWeights
+        && this->lastInputs == neuron.lastInputs
+        && this->errors == neuron.errors
+        && this->lastOutput == neuron.lastOutput
+        && this->activation == neuron.activation
+        && this->outputFunction == neuron.outputFunction // not really good
+        && *this->optimizer == *neuron.optimizer;
 }
 
 bool Neuron::operator!=(const Neuron& Neuron) const

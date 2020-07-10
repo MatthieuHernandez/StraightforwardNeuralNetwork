@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class Filter : public Layer
+    class Filter : public Layer<Perceptron>
     {
     private:
         friend class boost::serialization::access;

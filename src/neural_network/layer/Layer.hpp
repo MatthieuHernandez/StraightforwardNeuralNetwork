@@ -7,12 +7,15 @@
 #include "LayerType.hpp"
 #include "perceptron/Perceptron.hpp"
 
-namespace snn {
+namespace snn
+{
     struct LayerModel;
 }
 
 namespace snn::internal
 {
+    // TODO: use external template to list all layer<N>
+    template <class N>
     class Layer
     {
     private:
@@ -32,7 +35,7 @@ namespace snn::internal
         virtual std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const = 0;
 
         static const layerType type;
-        std::vector<Neuron> neurons;
+        std::vector<N> neurons;
 
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfNeurons() const;
@@ -48,8 +51,9 @@ namespace snn::internal
         virtual bool operator!=(const Layer& layer) const;
     };
 
+    template <class N>
     template <class Archive>
-    void Layer::serialize(Archive& ar, unsigned version)
+    void Layer<N>::serialize(Archive& ar, unsigned version)
     {
         ar & this->numberOfInputs;
         ar & this->errors;

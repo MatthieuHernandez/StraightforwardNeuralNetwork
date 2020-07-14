@@ -6,7 +6,7 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     this->neurons.reserve(model.numberOfNeurons);
     for (int n = 0; n < model.numberOfNeurons; ++n)
     {
-        this->neurons.emplace_back(model.numberOfInputsByNeurons, model.activation, optimizer);
+        this->neurons.emplace_back(model.neuron, optimizer);
     }
 }
 

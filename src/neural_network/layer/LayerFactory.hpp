@@ -16,9 +16,10 @@ namespace snn
             input,
             sigmoid,
             0,
-            0,
-            0,
-            0,
+            {
+                0,
+                0
+            },
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},

@@ -4,8 +4,7 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
-#include "Filter.hpp"
-#include "perceptron/Perceptron.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {

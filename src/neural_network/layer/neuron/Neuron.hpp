@@ -2,6 +2,7 @@
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
+#include "NeuronModel.hpp"
 #include "../../Optimizer.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
@@ -33,7 +34,7 @@ namespace snn::internal
 
     public:
         Neuron() = default; // use restricted to Boost library only
-        Neuron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
+        Neuron(NeuronModel model, StochasticGradientDescent* optimizer);
         Neuron(const Neuron& neuron) = default;
         virtual ~Neuron() = default;
 

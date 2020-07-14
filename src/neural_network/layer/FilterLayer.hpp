@@ -6,9 +6,7 @@
 
 namespace snn::internal
 {
-    //extern template class Layer<Perceptron>;
-
-    class FilterLayer : public Layer<Perceptron>
+    class FilterLayer : public Layer<Neuron>
     {
     private:
         friend class boost::serialization::access;

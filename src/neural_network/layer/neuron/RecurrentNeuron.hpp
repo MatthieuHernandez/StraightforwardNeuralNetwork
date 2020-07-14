@@ -13,9 +13,11 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
+        std::vector<float> previousOutputs;
+
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only
-        RecurrentNeuron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
+        RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer);
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 

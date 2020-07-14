@@ -5,20 +5,19 @@ using namespace std;
 using namespace snn;
 using namespace snn::internal;
 
-Neuron::Neuron(const int numberOfInputs,
-                       activationFunction activation,
+Neuron::Neuron(NeuronModel model,
                        StochasticGradientDescent* optimizer)
-    : activation(activation),
+    : activation(model.activation),
       optimizer(optimizer)
 {
-    this->previousDeltaWeights.resize(numberOfInputs, 0);
-    this->lastInputs.resize(numberOfInputs, 0);
-    this->errors.resize(numberOfInputs, 0);
+    this->previousDeltaWeights.resize(model.numberOfInputs, 0);
+    this->lastInputs.resize(model.numberOfInputs, 0);
+    this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activation);
-    this->weights.resize(numberOfInputs);
+    this->weights.resize(model.numberOfInputs);
     for (auto& w : weights)
     {
-        w = randomInitializeWeight(numberOfInputs);
+        w = randomInitializeWeight(model.numberOfInputs);
     }
     this->bias = 1.0f;
 }

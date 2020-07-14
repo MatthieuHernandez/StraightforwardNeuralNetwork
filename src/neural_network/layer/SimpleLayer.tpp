@@ -1,12 +1,12 @@
 
 template <class N>
 SimpleLayer<N>::SimpleLayer(LayerModel& model, StochasticGradientDescent* optimizer)
-     : Layer(model, optimizer)
+    : Layer(model, optimizer)
 {
 }
 
 template <class N>
-unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* optimizer) const
+std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<SimpleLayer<N>>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -17,7 +17,7 @@ unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* optimizer
 }
 
 template <class N>
-vector<float> SimpleLayer<N>::output(const vector<float>& inputs, bool temporalReset)
+std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -28,7 +28,7 @@ vector<float> SimpleLayer<N>::output(const vector<float>& inputs, bool temporalR
 }
 
 template <class N>
-vector<float> SimpleLayer<N>::backOutput(vector<float>& inputErrors)
+std::vector<float> SimpleLayer<N>::backOutput(std::vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)

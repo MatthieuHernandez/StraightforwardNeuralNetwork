@@ -2,7 +2,7 @@
 #include <memory>
 #include <boost/serialization/vector.hpp>
 #include "../Optimizer.hpp"
-#include "perceptron/Perceptron.hpp"
+#include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {

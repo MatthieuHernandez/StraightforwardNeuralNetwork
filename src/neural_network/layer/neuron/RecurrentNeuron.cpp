@@ -7,9 +7,10 @@ using namespace snn::internal;
 
 BOOST_CLASS_EXPORT(Neuron)
 
-RecurrentNeuron::RecurrentNeuron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer)
-    : Neuron(numberOfInputs, activation, optimizer)
+RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
+    : Neuron(model, optimizer)
 {
+    previousOutputs.resize(model.numberOfRecurrences);
 }
 
 int RecurrentNeuron::isValid() const

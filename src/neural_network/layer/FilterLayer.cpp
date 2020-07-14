@@ -1,5 +1,5 @@
 #include <boost/serialization/export.hpp>
-#include "Filter.hpp"
+#include "FilterLayer.hpp"
 #include "LayerModel.hpp"
 
 using namespace std;
@@ -22,7 +22,7 @@ vector<float> FilterLayer::output(const vector<float>& inputs, bool temporalRese
     for (int n = 0; n < this->neurons.size(); ++n)
     {
         auto neuronInputs = this->createInputsForNeuron(n, inputs);
-        outputs[n] = neurons[n].output(neuronInputs);
+        outputs[n] = this->neurons[n].output(neuronInputs);
     }
     return outputs;
 }
@@ -32,7 +32,7 @@ vector<float> FilterLayer::backOutput(vector<float>& inputErrors)
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        auto& error = neurons[n].backOutput(inputErrors[n]);
+        auto& error = this->neurons[n].backOutput(inputErrors[n]);
         this->insertBackOutputForNeuron(n, error, errors);
     }
     return errors;

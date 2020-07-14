@@ -2,11 +2,10 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Neuron.hpp"
-#include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-    class Perceptron final : public Neuron
+    class SimpleNeuron final : public Neuron
     {
     private:
         friend class boost::serialization::access;
@@ -14,10 +13,10 @@ namespace snn::internal
         void serialize(Archive& ar, const unsigned int version);
 
     public:
-        Perceptron() = default; // use restricted to Boost library only
-        Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
-        Perceptron(const Perceptron& perceptron) = default;
-        ~Perceptron() = default;
+        SimpleNeuron() = default; // use restricted to Boost library only
+        SimpleNeuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        SimpleNeuron(const SimpleNeuron& neuron) = default;
+        ~SimpleNeuron() = default;
 
         [[nodiscard]] int isValid() const override;
 
@@ -26,9 +25,9 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Perceptron::serialize(Archive& ar, const unsigned int version)
+    void SimpleNeuron::serialize(Archive& ar, const unsigned int version)
     {
-        boost::serialization::void_cast_register<Perceptron, Neuron>();
+        boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);
     }
 }

@@ -2,9 +2,8 @@
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Filter.hpp"
+#include "FilterLayer.hpp"
 #include "../Optimizer.hpp"
-#include "perceptron/Perceptron.hpp"
 
 namespace snn {
     struct LayerModel;

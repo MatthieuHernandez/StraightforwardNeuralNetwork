@@ -8,7 +8,7 @@ namespace snn::internal
 {
     //extern template class Layer<Perceptron>;
 
-    class Filter : public Layer<Perceptron>
+    class FilterLayer : public Layer<Perceptron>
     {
     private:
         friend class boost::serialization::access;
@@ -24,10 +24,10 @@ namespace snn::internal
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
     public:
-        Filter() = default;  // use restricted to Boost library only
-        Filter(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~Filter() = default;
-        Filter(const Filter&) = default;
+        FilterLayer() = default;  // use restricted to Boost library only
+        FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~FilterLayer() = default;
+        FilterLayer(const FilterLayer&) = default;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
@@ -40,9 +40,9 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Filter::serialize(Archive& ar, const unsigned version)
+    void FilterLayer::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Filter, Layer>();
+        boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
         ar & this->numberOfFilters;
         ar & this->sizeOfFilterMatrix;

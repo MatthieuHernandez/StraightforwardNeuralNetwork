@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 
 Perceptron::Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer)

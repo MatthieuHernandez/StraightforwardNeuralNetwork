@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurrences)
     : TemporalComposite(sets), numberOfRecurrences(numberOfRecurrences)

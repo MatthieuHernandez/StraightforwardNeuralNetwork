@@ -4,12 +4,12 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 BOOST_CLASS_EXPORT(LocallyConnected1D)
 
 LocallyConnected1D::LocallyConnected1D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Filter(model, optimizer)
+    : FilterLayer(model, optimizer)
 {
 }
 
@@ -41,7 +41,7 @@ int LocallyConnected1D::isValid() const
         if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->shapeOfInput[1])
             return 203;
     }
-    return this->Filter::isValid();
+    return this->FilterLayer::isValid();
 }
 
 inline
@@ -77,7 +77,7 @@ void LocallyConnected1D::insertBackOutputForNeuron(int neuronNumber, const std::
 inline
 bool LocallyConnected1D::operator==(const BaseLayer& layer) const
 {
-    return this->Filter::operator==(layer);
+    return this->FilterLayer::operator==(layer);
 }
 
 inline

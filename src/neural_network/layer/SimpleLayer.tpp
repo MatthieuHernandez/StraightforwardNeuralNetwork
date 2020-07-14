@@ -1,22 +1,14 @@
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/base_object.hpp>
-#include "FullyConnected.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace snn::internal;
-
-BOOST_CLASS_EXPORT(FullyConnected)
-
-FullyConnected::FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer)
+template <class N>
+SimpleLayer<N>::SimpleLayer(LayerModel& model, StochasticGradientDescent* optimizer)
      : Layer(model, optimizer)
 {
 }
 
-inline
-unique_ptr<BaseLayer> FullyConnected::clone(StochasticGradientDescent* optimizer) const
+template <class N>
+unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<FullyConnected>(*this);
+    auto layer = make_unique<SimpleLayer<N>>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;
@@ -24,7 +16,8 @@ unique_ptr<BaseLayer> FullyConnected::clone(StochasticGradientDescent* optimizer
     return layer;
 }
 
-vector<float> FullyConnected::output(const vector<float>& inputs, bool temporalReset)
+template <class N>
+vector<float> SimpleLayer<N>::output(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -34,7 +27,8 @@ vector<float> FullyConnected::output(const vector<float>& inputs, bool temporalR
     return outputs;
 }
 
-vector<float> FullyConnected::backOutput(vector<float>& inputErrors)
+template <class N>
+vector<float> SimpleLayer<N>::backOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -46,12 +40,14 @@ vector<float> FullyConnected::backOutput(vector<float>& inputErrors)
     return errors;
 }
 
-std::vector<int> FullyConnected::getShapeOfOutput() const
+template <class N>
+std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 {
     return {this->getNumberOfNeurons()};
 }
 
-int FullyConnected::isValid() const
+template <class N>
+int SimpleLayer<N>::isValid() const
 {
     for (auto& neuron : neurons)
     {
@@ -61,12 +57,14 @@ int FullyConnected::isValid() const
     return this->Layer::isValid();
 }
 
-bool FullyConnected::operator==(const BaseLayer& layer) const
+template <class N>
+bool SimpleLayer<N>::operator==(const BaseLayer& layer) const
 {
     return this->Layer::operator==(layer);
 }
 
-bool FullyConnected::operator!=(const BaseLayer& layer) const
+template <class N>
+bool SimpleLayer<N>::operator!=(const BaseLayer& layer) const
 {
     return !(*this ==layer);
 }

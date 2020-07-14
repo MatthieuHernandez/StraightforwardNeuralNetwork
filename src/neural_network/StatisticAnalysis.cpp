@@ -2,7 +2,7 @@
 #include "StatisticAnalysis.hpp"
 
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 void StatisticAnalysis::initialize(int numberOfCluster)
 {

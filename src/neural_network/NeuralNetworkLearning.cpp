@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
 {

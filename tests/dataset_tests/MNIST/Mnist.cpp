@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 Mnist::Mnist(string folderPath)
 {

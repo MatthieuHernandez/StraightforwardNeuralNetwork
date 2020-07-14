@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 Neuron::Neuron(const int numberOfInputs,
                        activationFunction activation,

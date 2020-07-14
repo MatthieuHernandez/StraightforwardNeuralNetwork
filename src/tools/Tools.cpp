@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 
 int Tools::randomBetween(const int min, const int max) // [min; max[

@@ -4,11 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
-#include "perceptron/Perceptron.hpp"
 
 namespace snn::internal
 {
-    class FullyConnected final : public Layer<Perceptron>
+    template <class N>
+    class SimpleLayer final : public Layer<N>
     {
     private:
         friend class boost::serialization::access;
@@ -16,10 +16,10 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        FullyConnected() = default;  // use restricted to Boost library only
-        FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer);
-        FullyConnected(const FullyConnected&) = default;
-        ~FullyConnected() = default;
+        SimpleLayer() = default;  // use restricted to Boost library only
+        SimpleLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        SimpleLayer(const SimpleLayer&) = default;
+        ~SimpleLayer() = default;
         std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
@@ -32,10 +32,13 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override;
     };
 
+    template <class N>
     template <class Archive>
-    void FullyConnected::serialize(Archive& ar, const unsigned version)
+    void SimpleLayer<N>::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<FullyConnected, Layer>();
+        boost::serialization::void_cast_register<SimpleLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
     }
+
+    #include "SimpleLayer.tpp"
 }

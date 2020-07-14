@@ -12,7 +12,7 @@ namespace snn {
 
 namespace snn::internal
 {
-    class LocallyConnected2D final : public Filter
+    class LocallyConnected2D final : public FilterLayer
     {
     private :
         friend class boost::serialization::access;
@@ -39,7 +39,7 @@ namespace snn::internal
     template <class Archive>
     void LocallyConnected2D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<LocallyConnected2D, Filter>();
-        ar & boost::serialization::base_object<Filter>(*this);
+        boost::serialization::void_cast_register<LocallyConnected2D, FilterLayer>();
+        ar & boost::serialization::base_object<FilterLayer>(*this);
     }
 }

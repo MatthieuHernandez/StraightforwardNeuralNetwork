@@ -4,12 +4,12 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 BOOST_CLASS_EXPORT(LocallyConnected2D)
 
 LocallyConnected2D::LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Filter(model, optimizer)
+    : FilterLayer(model, optimizer)
 {
 }
 
@@ -43,7 +43,7 @@ int LocallyConnected2D::isValid() const
         if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
             return 203;
     }
-    return this->Filter::isValid();
+    return this->FilterLayer::isValid();
 }
 
 inline
@@ -92,7 +92,7 @@ void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::
 inline
 bool LocallyConnected2D::operator==(const BaseLayer& layer) const
 {
-    return this->Filter::operator==(layer);
+    return this->FilterLayer::operator==(layer);
 }
 
 inline

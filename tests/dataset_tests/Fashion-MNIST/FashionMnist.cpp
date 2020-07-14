@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 FashionMnist::FashionMnist(string folderPath)
 {

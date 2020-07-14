@@ -6,7 +6,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
     : sizeOfOneData(sizeOfOneData)

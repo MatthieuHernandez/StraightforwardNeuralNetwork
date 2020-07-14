@@ -9,9 +9,9 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
-extern template class Layer<snn::internal::Perceptron>;
+//extern template class Layer<Perceptron>;
 
 LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activation)
 {

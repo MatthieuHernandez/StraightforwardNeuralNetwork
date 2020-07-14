@@ -8,7 +8,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 Wine::Wine(string folderPath)
 {

@@ -15,7 +15,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 Data::Data(problemType typeOfProblem,
            vector<vector<float>>& trainingInputs,

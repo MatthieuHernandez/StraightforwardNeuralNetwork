@@ -2,7 +2,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 ProblemComposite::ProblemComposite(Set sets[2])
 {

@@ -4,12 +4,12 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 BOOST_CLASS_EXPORT(Convolution2D)
 
 Convolution2D::Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Filter(model, optimizer)
+    : FilterLayer(model, optimizer)
 {
 }
 
@@ -40,7 +40,7 @@ int Convolution2D::isValid() const
         if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
             return 203;
     }
-    return this->Filter::isValid();
+    return this->FilterLayer::isValid();
 }
 
 inline
@@ -86,7 +86,7 @@ void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
 inline
 bool Convolution2D::operator==(const BaseLayer& layer) const
 {
-    return this->Filter::operator==(layer);
+    return this->FilterLayer::operator==(layer);
 }
 
 inline

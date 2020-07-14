@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 BOOST_CLASS_EXPORT(Neuron)
 

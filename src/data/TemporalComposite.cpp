@@ -2,7 +2,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
 TemporalComposite::TemporalComposite(Set sets[2])
 {

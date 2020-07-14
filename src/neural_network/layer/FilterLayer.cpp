@@ -4,11 +4,11 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
+using namespace snn::internal;
 
-BOOST_CLASS_EXPORT(Filter)
+BOOST_CLASS_EXPORT(FilterLayer)
 
-Filter::Filter(LayerModel& model, StochasticGradientDescent* optimizer)
+FilterLayer::FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer)
      : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
@@ -16,7 +16,7 @@ Filter::Filter(LayerModel& model, StochasticGradientDescent* optimizer)
     this->shapeOfInput = model.shapeOfInput;
 }
 
-vector<float> Filter::output(const vector<float>& inputs, bool temporalReset)
+vector<float> FilterLayer::output(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -27,7 +27,7 @@ vector<float> Filter::output(const vector<float>& inputs, bool temporalReset)
     return outputs;
 }
 
-vector<float> Filter::backOutput(vector<float>& inputErrors)
+vector<float> FilterLayer::backOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
@@ -38,16 +38,16 @@ vector<float> Filter::backOutput(vector<float>& inputErrors)
     return errors;
 }
 
-int Filter::isValid() const
+int FilterLayer::isValid() const
 {
     return this->Layer::isValid();
 }
 
-bool Filter::operator==(const BaseLayer& layer) const
+bool FilterLayer::operator==(const BaseLayer& layer) const
 {
    try
     {
-        const auto& f = dynamic_cast<const Filter&>(layer);
+        const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
             && this->numberOfInputs == f.numberOfInputs
             && this->errors == f.errors
@@ -59,7 +59,7 @@ bool Filter::operator==(const BaseLayer& layer) const
     }
 }
 
-bool Filter::operator!=(const BaseLayer& layer) const
+bool FilterLayer::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);
 }

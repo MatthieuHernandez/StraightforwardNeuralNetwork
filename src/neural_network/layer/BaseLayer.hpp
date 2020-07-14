@@ -4,11 +4,6 @@
 #include "../Optimizer.hpp"
 #include "perceptron/Perceptron.hpp"
 
-namespace snn
-{
-    struct LayerModel;
-}
-
 namespace snn::internal
 {
     class BaseLayer

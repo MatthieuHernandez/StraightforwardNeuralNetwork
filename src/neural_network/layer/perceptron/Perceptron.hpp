@@ -19,7 +19,7 @@ namespace snn::internal
         Perceptron(const Perceptron& perceptron) = default;
         ~Perceptron() = default;
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] int isValid() const override;
 
         bool operator==(const Neuron& neuron) const override;
         bool operator!=(const Neuron& neuron) const override;

@@ -14,7 +14,7 @@ FullyConnected::FullyConnected(LayerModel& model, StochasticGradientDescent* opt
 }
 
 inline
-unique_ptr<Layer> FullyConnected::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> FullyConnected::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -61,12 +61,12 @@ int FullyConnected::isValid() const
     return this->Layer::isValid();
 }
 
-bool FullyConnected::operator==(const FullyConnected& layer) const
+bool FullyConnected::operator==(const BaseLayer& layer) const
 {
     return this->Layer::operator==(layer);
 }
 
-bool FullyConnected::operator!=(const FullyConnected& layer) const
+bool FullyConnected::operator!=(const BaseLayer& layer) const
 {
     return !(*this ==layer);
 }

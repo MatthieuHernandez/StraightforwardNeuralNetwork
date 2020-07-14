@@ -27,13 +27,13 @@ namespace snn::internal
         LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer);
         ~LocallyConnected2D() = default;
         LocallyConnected2D(const LocallyConnected2D&) = default;
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const LocallyConnected2D& layer) const;
-        bool operator!=(const LocallyConnected2D& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>

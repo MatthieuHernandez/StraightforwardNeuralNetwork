@@ -43,17 +43,23 @@ int Filter::isValid() const
     return this->Layer::isValid();
 }
 
-inline 
-bool Filter::operator==(const Filter& layer) const
+bool Filter::operator==(const BaseLayer& layer) const
 {
-    return this->Layer::operator==(layer)
-    && this->numberOfFilters == layer.numberOfFilters
-    && this->sizeOfFilterMatrix == layer.sizeOfFilterMatrix
-    && this->shapeOfInput == layer.shapeOfInput;
+   try
+    {
+        const auto& f = dynamic_cast<const Filter&>(layer);
+        return this->Layer::operator==(layer)
+            && this->numberOfInputs == f.numberOfInputs
+            && this->errors == f.errors
+            && this->neurons == f.neurons;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
-inline 
-bool Filter::operator!=(const Filter& layer) const
+bool Filter::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);
 }

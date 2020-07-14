@@ -8,6 +8,7 @@ file(GLOB SOURCES
     "neural_network/*.tpp"
     "neural_network/layer/*.hpp"
     "neural_network/layer/*.cpp"
+	"neural_network/layer/*.tpp"
     "neural_network/layer/perceptron/*.hpp"
     "neural_network/layer/perceptron/*.cpp"
     "neural_network/layer/perceptron/activation_function/*.hpp"

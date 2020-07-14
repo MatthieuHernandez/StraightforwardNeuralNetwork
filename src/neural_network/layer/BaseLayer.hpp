@@ -1,10 +1,7 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include <boost/serialization/unique_ptr.hpp>
-#include <boost/serialization/access.hpp>
 #include "../Optimizer.hpp"
-#include "LayerType.hpp"
 #include "perceptron/Perceptron.hpp"
 
 namespace snn
@@ -19,6 +16,7 @@ namespace snn::internal
     public:
         virtual std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const = 0;
 
+        [[nodiscard]] virtual Neuron* getNeuron(int index) = 0;
         [[nodiscard]] virtual int getNumberOfInputs() const = 0;
         [[nodiscard]] virtual int getNumberOfNeurons() const = 0;
         [[nodiscard]] virtual int getNumberOfParameters() const = 0;
@@ -28,7 +26,8 @@ namespace snn::internal
         virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 
-        [[nodiscard]] virtual int isValid() const;
+        [[nodiscard]] virtual int isValid() const = 0;
+
         virtual bool operator==(const BaseLayer& layer) const = 0;
         virtual bool operator!=(const BaseLayer& layer) const = 0;
     };

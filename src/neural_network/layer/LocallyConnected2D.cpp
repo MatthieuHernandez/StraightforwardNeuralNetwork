@@ -14,7 +14,7 @@ LocallyConnected2D::LocallyConnected2D(LayerModel& model, StochasticGradientDesc
 }
 
 inline
-unique_ptr<Layer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -90,13 +90,13 @@ void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::
 }
 
 inline
-bool LocallyConnected2D::operator==(const LocallyConnected2D& layer) const
+bool LocallyConnected2D::operator==(const BaseLayer& layer) const
 {
     return this->Filter::operator==(layer);
 }
 
 inline
-bool LocallyConnected2D::operator!=(const LocallyConnected2D& layer) const
+bool LocallyConnected2D::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);
 }

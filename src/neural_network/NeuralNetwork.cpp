@@ -29,7 +29,7 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
-    : StatisticAnalysis(),
+    : StatisticAnalysis(neuralNetwork),
       maxOutputIndex(neuralNetwork.maxOutputIndex),
       optimizer(neuralNetwork.optimizer)
 {
@@ -68,7 +68,7 @@ int NeuralNetwork::getNumberOfNeurons() const
 int NeuralNetwork::getNumberOfParameters() const
 {
     int sum = 0;
-    for (auto& layer : this->layers)
+    for (const auto& layer : this->layers)
     {
         sum += layer->getNumberOfParameters();
     }
@@ -92,7 +92,7 @@ int NeuralNetwork::isValid() const
     if (this->optimizer.momentum < 0.0f || this->optimizer.momentum > 1.0f)
         return 104;
 
-    for (auto& layer : this->layers)
+    for (const auto& layer : this->layers)
     {
         int err = layer->isValid();
         if(err != 0)

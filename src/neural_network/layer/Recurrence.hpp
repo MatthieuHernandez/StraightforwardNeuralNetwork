@@ -8,6 +8,8 @@
 
 namespace snn::internal
 {
+    //extern template class Layer<Perceptron>;
+
     class Recurrence final : public Layer<Perceptron>
     {
     private:
@@ -27,7 +29,7 @@ namespace snn::internal
         Recurrence(LayerModel& model, StochasticGradientDescent* optimizer);
         Recurrence(const Recurrence&) = default;
         ~Recurrence() = default;
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override;
@@ -35,8 +37,8 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Recurrence& layer) const;
-        bool operator!=(const Recurrence& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>

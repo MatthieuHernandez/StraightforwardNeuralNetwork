@@ -16,7 +16,7 @@ Recurrence::Recurrence(LayerModel& model, StochasticGradientDescent* optimizer)
 }
 
 inline
-unique_ptr<Layer> Recurrence::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> Recurrence::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<Recurrence>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -77,18 +77,18 @@ int Recurrence::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->getNumberOfInputs() * (numberOfRecurrences + 1))
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs() + numberOfRecurrences )
             return 203;
     }
     return this->Layer::isValid();
 }
 
-bool Recurrence::operator==(const Recurrence& layer) const
+bool Recurrence::operator==(const BaseLayer& layer) const
 {
     return this->Layer::operator==(layer);
 }
 
-bool Recurrence::operator!=(const Recurrence& layer) const
+bool Recurrence::operator!=(const BaseLayer& layer) const
 {
     return !(*this ==layer);
 }

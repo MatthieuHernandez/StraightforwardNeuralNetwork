@@ -6,6 +6,8 @@
 
 namespace snn::internal
 {
+    //extern template class Layer<Perceptron>;
+
     class Filter : public Layer<Perceptron>
     {
     private:
@@ -27,14 +29,14 @@ namespace snn::internal
         ~Filter() = default;
         Filter(const Filter&) = default;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override;
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Filter& layer) const;
-        bool operator!=(const Filter& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>

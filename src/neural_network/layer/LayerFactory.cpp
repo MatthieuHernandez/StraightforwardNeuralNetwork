@@ -11,6 +11,8 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
+extern template class Layer<snn::internal::Perceptron>;
+
 LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activation)
 {
     LayerModel model
@@ -110,7 +112,7 @@ int computeNumberOfNeuronsForConvolution1D(int numberOfConvolution, int sizeOfCo
 }
 
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
+unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                                       StochasticGradientDescent* optimizer)
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
@@ -209,7 +211,7 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
     }
 }
 
-void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& models,
+void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerModel>& models,
                          StochasticGradientDescent* optimizer)
 {
     if (models.size() > 1000)

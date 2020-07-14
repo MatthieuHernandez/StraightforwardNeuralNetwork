@@ -8,6 +8,8 @@
 
 namespace snn::internal
 {
+    //extern template class Layer<Perceptron>;
+
     class FullyConnected final : public Layer<Perceptron>
     {
     private:
@@ -20,7 +22,7 @@ namespace snn::internal
         FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer);
         FullyConnected(const FullyConnected&) = default;
         ~FullyConnected() = default;
-        std::unique_ptr<Layer<Perceptron>> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override;
@@ -28,8 +30,8 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const FullyConnected& layer) const;
-        bool operator!=(const FullyConnected& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>

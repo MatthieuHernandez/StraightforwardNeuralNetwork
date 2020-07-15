@@ -13,7 +13,15 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
-        std::vector<float> previousOutputs;
+         void addNewInputs(float output);
+         void reset();
+
+        const int numberOfRecurrences;
+        const int numberOfInputs;
+        const size_t sizeOfInputs;
+        const size_t sizeToCopy;
+        const int indexEnd;
+        std::vector<float> recurrences;
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only
@@ -21,7 +29,11 @@ namespace snn::internal
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
+
         [[nodiscard]] int isValid() const override;
+
+        [[nodiscard]] int getNumberOfInputs() const override;
 
         bool operator==(const Neuron& neuron) const override;
         bool operator!=(const Neuron& neuron) const override;

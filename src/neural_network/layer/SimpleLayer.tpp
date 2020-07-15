@@ -19,7 +19,7 @@ std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* opti
 template <class N>
 std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
-    vector<float> outputs(this->neurons.size());
+    std::vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = neurons[n].output(inputs);
@@ -30,7 +30,7 @@ std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool
 template <class N>
 std::vector<float> SimpleLayer<N>::backOutput(std::vector<float>& inputErrors)
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = neurons[n].backOutput(inputErrors[n]);

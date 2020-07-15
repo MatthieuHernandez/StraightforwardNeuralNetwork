@@ -57,7 +57,7 @@ namespace snn::internal
         [[nodiscard]] float getBias() const;
         void setBias(float bias);
 
-        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] virtual int getNumberOfInputs() const;
 
         virtual bool operator==(const Neuron& neuron) const;
         virtual bool operator!=(const Neuron& neuron) const;

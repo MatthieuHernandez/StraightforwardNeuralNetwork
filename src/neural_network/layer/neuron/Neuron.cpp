@@ -127,7 +127,7 @@ void Neuron::setBias(const float bias)
 
 int Neuron::getNumberOfInputs() const
 {
-    return this->weights.size();
+    return static_cast<int>(this->weights.size());
 }
 
 bool Neuron::operator==(const Neuron& neuron) const

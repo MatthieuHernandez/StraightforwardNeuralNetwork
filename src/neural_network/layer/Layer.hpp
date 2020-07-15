@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <typeinfo>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
@@ -56,6 +57,8 @@ namespace snn::internal
     template <class Archive>
     void Layer<N>::serialize(Archive& ar, unsigned version)
     {
+        boost::serialization::void_cast_register<Layer, BaseLayer>();
+        ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->errors;
         ar & this->neurons;

@@ -1,3 +1,4 @@
+#include <typeinfo>
 #include "Neuron.hpp"
 #include "../../../tools/Tools.hpp"
 
@@ -132,7 +133,7 @@ int Neuron::getNumberOfInputs() const
 
 bool Neuron::operator==(const Neuron& neuron) const
 {
-    return typeid(this) == typeid(neuron)
+    return typeid(*this).hash_code() == typeid(neuron).hash_code()
         && this->weights == neuron.weights
         && this->bias == neuron.bias
         && this->previousDeltaWeights == neuron.previousDeltaWeights

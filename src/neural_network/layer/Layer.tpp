@@ -79,7 +79,7 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
     try
     {
         const Layer& l = dynamic_cast<const Layer&>(layer);
-        return typeid(this) == typeid(layer)
+        return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs
             && this->errors == l.errors
             && this->neurons == l.neurons;

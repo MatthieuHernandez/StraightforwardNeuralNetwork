@@ -20,8 +20,9 @@ namespace snn::internal
         const int numberOfInputs;
         const size_t sizeOfInputs;
         const size_t sizeToCopy;
-        const int indexEnd;
         std::vector<float> recurrences;
+
+       void updateWeights(const std::vector<float>& inputs, float error) override;
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only

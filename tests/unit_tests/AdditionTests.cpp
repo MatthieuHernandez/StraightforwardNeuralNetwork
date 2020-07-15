@@ -45,7 +45,7 @@ TEST(Addition, WithRNN)
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 3_s);
+    nn.waitFor(1.0_acc || 15_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

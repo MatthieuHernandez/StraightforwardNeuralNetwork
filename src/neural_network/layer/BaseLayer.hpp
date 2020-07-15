@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/access.hpp>
 #include "../Optimizer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
@@ -8,6 +9,11 @@ namespace snn::internal
 {
     class BaseLayer
     {
+    private:
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, unsigned version);
+
     public:
         virtual std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const = 0;
 
@@ -26,4 +32,9 @@ namespace snn::internal
         virtual bool operator==(const BaseLayer& layer) const = 0;
         virtual bool operator!=(const BaseLayer& layer) const = 0;
     };
+
+    template <class Archive>
+    void BaseLayer::serialize(Archive& ar, unsigned version)
+    {
+    }
 }

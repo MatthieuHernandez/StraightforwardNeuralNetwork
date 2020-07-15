@@ -12,8 +12,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* o
       numberOfRecurrences(model.numberOfRecurrences),
       numberOfInputs(model.numberOfInputs - this->numberOfRecurrences),
       sizeOfInputs(sizeof(float) * model.numberOfInputs - this->numberOfRecurrences),
-      sizeToCopy(sizeof(float) * model.numberOfRecurrences - 1),
-      indexEnd(model.numberOfRecurrences - 2)
+      sizeToCopy(sizeof(float) * (model.numberOfRecurrences-1))
 {
     this->recurrences.resize(model.numberOfRecurrences, -1);
 }
@@ -29,9 +28,9 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     {
         sum += inputs[w] * weights[w];
     }
-    for (; w < this->weights.size(); ++w)
+    for (int r = 0; r < this->recurrences.size(); ++r, ++w)
     {
-        sum += this->recurrences[w] * weights[w];
+        sum += this->recurrences[r] * weights[w];
     }
     sum += bias;
     lastOutput = sum;
@@ -39,6 +38,27 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->addNewInputs(sum);
     return sum;
 }
+
+inline
+void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float error)
+{
+    int w;
+    for (w = 0; w < inputs.size(); ++w)
+    {
+        auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
+        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
+        weights[w] += deltaWeights;
+        this->previousDeltaWeights[w] = deltaWeights;
+    }
+    for (int r = 0; r < this->recurrences.size(); ++r, ++w)
+    {
+        auto deltaWeights = this->optimizer->learningRate * error * recurrences[r];
+        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
+        weights[w] += deltaWeights;
+        this->previousDeltaWeights[w] = deltaWeights;
+    }
+}
+
 
 inline
 void RecurrentNeuron::reset()
@@ -49,14 +69,15 @@ void RecurrentNeuron::reset()
 inline
 void RecurrentNeuron::addNewInputs(float output)
 {
-    memcpy(&this->recurrences[0], &this->recurrences[indexEnd], this->sizeToCopy);
+    if(this->numberOfRecurrences > 1)
+        memcpy(&this->recurrences[1], &this->recurrences[0], this->sizeToCopy);
     this->recurrences[0] = output;
 }
 
 int RecurrentNeuron::isValid() const
 {
     if (this->numberOfInputs != static_cast<int>(this->weights.size()) - this->numberOfRecurrences
-        || this->recurrences.size() == this->numberOfRecurrences)
+        || this->recurrences.size() != this->numberOfRecurrences)
         return 304;
     return this->Neuron::isValid();
 }

@@ -6,8 +6,7 @@ using namespace std;
 using namespace snn;
 using namespace snn::internal;
 
-Neuron::Neuron(NeuronModel model,
-                       StochasticGradientDescent* optimizer)
+Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
     : activation(model.activation),
       optimizer(optimizer)
 {
@@ -45,6 +44,8 @@ float Neuron::output(const vector<float>& inputs)
 
 std::vector<float>& Neuron::backOutput(float error)
 {
+    if (isnan(error))
+            throw exception();
     error = error * outputFunction->derivative(lastOutput);
 
     this->updateWeights(lastInputs, error);
@@ -70,6 +71,8 @@ void Neuron::updateWeights(const std::vector<float>& inputs, const float error)
         auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         weights[w] += deltaWeights;
+        if (isnan(weights[w]))
+            throw exception();
         this->previousDeltaWeights[w] = deltaWeights;
     }
 }

@@ -21,15 +21,15 @@ TEST(Recurence, RepeatInput)
         FullyConnected(4),
         FullyConnected(1, snn::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.006f;
-    neuralNetwork.optimizer.momentum = 0.99f;
+    neuralNetwork.optimizer.learningRate = 0.01f;
+    neuralNetwork.optimizer.momentum = 0.98f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
 TEST(Recurence, RepeatLastInput)
 {
-    vector<vector<float>> inputData       = {{-1.0}, {-1.0}, {-1.0}, {-0.5}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {0.0}};
-    vector<vector<float>> expectedOutputs = {{-1.0}, {-1.0}, {-1.0}, {-1.0}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {1.0}};
+    vector<vector<float>> inputData       = {{-1.0}, {-1.0}, {-1.0}, {-0.5}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {0.0}, {1.0}};
+    vector<vector<float>> expectedOutputs = {{-1.0}, {-1.0}, {-1.0}, {-1.0}, {-0.5}, {-0.5}, {0.0}, {0.0}, {0.5}, {0.5}, {1.0}, {0.0}};
     auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
     data->setPrecision(0.1);
 
@@ -39,8 +39,8 @@ TEST(Recurence, RepeatLastInput)
         FullyConnected(4),
         FullyConnected(1, snn::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.006f;
-    neuralNetwork.optimizer.momentum = 0.99f;
+    neuralNetwork.optimizer.learningRate = 0.05f;
+    neuralNetwork.optimizer.momentum = 0.98f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -48,7 +48,7 @@ inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 5_s);
+    nn.waitFor(1.0_acc || 8_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

@@ -12,7 +12,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* o
       numberOfRecurrences(model.numberOfRecurrences),
       numberOfInputs(model.numberOfInputs - this->numberOfRecurrences),
       sizeOfInputs(sizeof(float) * model.numberOfInputs - this->numberOfRecurrences),
-      sizeToCopy(sizeof(float) * (model.numberOfRecurrences-1))
+      sizeToCopy(sizeof(float) * (model.numberOfRecurrences - 1))
 {
     this->recurrences.resize(model.numberOfRecurrences, -1);
 }
@@ -48,6 +48,8 @@ void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float erro
         auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         weights[w] += deltaWeights;
+        if (isnan(weights[w]))
+            throw exception();
         this->previousDeltaWeights[w] = deltaWeights;
     }
     for (int r = 0; r < this->recurrences.size(); ++r, ++w)
@@ -55,6 +57,8 @@ void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float erro
         auto deltaWeights = this->optimizer->learningRate * error * recurrences[r];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         weights[w] += deltaWeights;
+        if (isnan(weights[w]))
+            throw exception();
         this->previousDeltaWeights[w] = deltaWeights;
     }
 }
@@ -63,13 +67,13 @@ void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float erro
 inline
 void RecurrentNeuron::reset()
 {
-    fill(this->recurrences.begin(), this->recurrences.end(), -1);
+    fill(this->recurrences.begin(), this->recurrences.end(), 0); // TODO: AC min
 }
 
 inline
 void RecurrentNeuron::addNewInputs(float output)
 {
-    if(this->numberOfRecurrences > 1)
+    if (this->numberOfRecurrences > 1)
         memcpy(&this->recurrences[1], &this->recurrences[0], this->sizeToCopy);
     this->recurrences[0] = output;
 }

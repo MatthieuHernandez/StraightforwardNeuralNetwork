@@ -31,6 +31,17 @@ TEST(Addition, WithCNN)
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
+TEST(Addition, WithLCNN)
+{
+    auto data = createDataForAdditionTests();
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(2),
+        LocallyConnected(6, 1, sigmoid),
+        FullyConnected(1, snn::identity)
+    });
+    testNeuralNetworkForAddition(neuralNetwork, *data);
+}
+
 TEST(Addition, WithRNN)
 {
     auto data = createRecurrentDataForAdditionTests();
@@ -45,7 +56,7 @@ TEST(Addition, WithRNN)
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 15_s);
+    nn.waitFor(0.7_acc || 4_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

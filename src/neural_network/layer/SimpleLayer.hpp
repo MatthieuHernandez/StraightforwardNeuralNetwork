@@ -4,6 +4,7 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
+#include "neuron/RecurrentNeuron.hpp"
 
 namespace snn::internal
 {
@@ -36,9 +37,12 @@ namespace snn::internal
     template <class Archive>
     void SimpleLayer<N>::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<SimpleLayer, Layer>();
-        ar & boost::serialization::base_object<Layer>(*this);
+        boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
+        ar & boost::serialization::base_object<Layer<N>>(*this);
     }
 
+    template<>
+    std::vector<float> SimpleLayer<RecurrentNeuron>::output(const std::vector<float>& inputs, bool temporalReset);
+    
     #include "SimpleLayer.tpp"
 }

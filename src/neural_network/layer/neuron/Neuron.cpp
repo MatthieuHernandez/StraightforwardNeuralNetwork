@@ -1,3 +1,4 @@
+#include <cmath>
 #include <typeinfo>
 #include "Neuron.hpp"
 #include "../../../tools/Tools.hpp"

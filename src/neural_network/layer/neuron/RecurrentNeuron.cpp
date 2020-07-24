@@ -1,3 +1,4 @@
+#include <cmath>
 #include <boost/serialization/export.hpp>
 #include "RecurrentNeuron.hpp"
 

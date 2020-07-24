@@ -29,15 +29,4 @@ namespace snn::internal
         boost::serialization::void_cast_register<Recurrence, SimpleLayer>();
         ar & boost::serialization::base_object<SimpleLayer>(*this);
     }
-
-    inline
-    std::vector<float> SimpleLayer<RecurrentNeuron>::output(const std::vector<float>& inputs, bool temporalReset)
-    {
-        std::vector<float> outputs(this->neurons.size());
-        for (int n = 0; n < this->neurons.size(); ++n)
-        {
-            outputs[n] = neurons[n].output(inputs, temporalReset);
-        }
-        return outputs;
-    }
 }

@@ -106,7 +106,7 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
     return this->maxOutputIndex == neuralNetwork.maxOutputIndex
         && this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
-        && [=] () {
+        && [this, neuralNetwork] () {
             for (size_t l = 0; l < this->layers.size(); ++l)
             {
                 if (*this->layers[l] != *neuralNetwork.layers[l])

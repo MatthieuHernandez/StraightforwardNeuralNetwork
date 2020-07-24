@@ -1,7 +1,7 @@
 
 template <class N>
 SimpleLayer<N>::SimpleLayer(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Layer(model, optimizer)
+    : Layer<N>(model, optimizer)
 {
 }
 
@@ -22,7 +22,7 @@ std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool
     std::vector<float> outputs(this->neurons.size());
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        outputs[n] = neurons[n].output(inputs);
+        outputs[n] = this->neurons[n].output(inputs);
     }
     return outputs;
 }
@@ -33,7 +33,7 @@ std::vector<float> SimpleLayer<N>::backOutput(std::vector<float>& inputErrors)
     std::vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < this->neurons.size(); ++n)
     {
-        auto& error = neurons[n].backOutput(inputErrors[n]);
+        auto& error = this->neurons[n].backOutput(inputErrors[n]);
         for(int n = 0; n < errors.size(); ++n)
             errors[n] += error[n];
     }
@@ -49,22 +49,22 @@ std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 template <class N>
 int SimpleLayer<N>::isValid() const
 {
-    for (auto& neuron : neurons)
+    for (auto& neuron : this->neurons)
     {
         if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
             return 203;
     }
-    return this->Layer::isValid();
+    return this->Layer<N>::isValid();
 }
 
 template <class N>
 bool SimpleLayer<N>::operator==(const BaseLayer& layer) const
 {
-    return this->Layer::operator==(layer);
+    return this->Layer<N>::operator==(layer);
 }
 
 template <class N>
 bool SimpleLayer<N>::operator!=(const BaseLayer& layer) const
 {
-    return !(*this ==layer);
+    return !(*this == layer);
 }

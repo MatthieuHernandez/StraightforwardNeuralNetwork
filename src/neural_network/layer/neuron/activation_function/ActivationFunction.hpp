@@ -27,7 +27,10 @@ namespace snn::internal
     public:
         static std::vector<ActivationFunction*> activationFunctions;
 
-        ActivationFunction() = default;
+        const float min;
+        const float max;
+
+        ActivationFunction(float min, float max);
         virtual ~ActivationFunction() = default;
         static void initialize();
         static ActivationFunction* get(activationFunction type);

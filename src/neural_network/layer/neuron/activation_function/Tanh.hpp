@@ -10,6 +10,11 @@ namespace snn::internal
         activationFunction getType() const override { return tanh; }
 
     public:
+        Tanh()
+            : ActivationFunction(-1, 1)
+        {
+        }
+
         float function(const float x) const override
         {
             return std::tanh(x);

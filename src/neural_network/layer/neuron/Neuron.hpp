@@ -41,8 +41,8 @@ namespace snn::internal
         StochasticGradientDescent* optimizer;
 
         [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
-        void train(float error);
+        [[nodiscard]] virtual std::vector<float>& backOutput(float error);
+        virtual void train(float error);
 
         [[nodiscard]] virtual int isValid() const;
 

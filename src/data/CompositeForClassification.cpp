@@ -10,8 +10,11 @@ CompositeForClassification::CompositeForClassification(Set sets[2])
 {
 }
 
+
 int CompositeForClassification::isValid()
 {
+    if(this->sets[training].labels[0].size() < 2)
+        return 406;
     return this->ProblemComposite::isValid();
 }
 

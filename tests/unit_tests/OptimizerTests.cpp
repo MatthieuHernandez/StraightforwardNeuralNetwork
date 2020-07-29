@@ -12,12 +12,13 @@ TEST(Optimizer, FindRightValueIn20)
     unique_ptr<Data> data = createDataForOptimisezTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(20),
+        FullyConnected(4, snn::tanh),
         FullyConnected(1, sigmoid)
     });
-    neuralNetwork.optimizer.momentum = 0.7f;
+    neuralNetwork.optimizer.momentum = 0.6f;
 
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1.0_acc || 10_s);
+    neuralNetwork.waitFor(1.0_acc || 5_s);
     neuralNetwork.stopTraining();
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
@@ -46,9 +47,7 @@ unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
         else
             expectedOutputs.push_back({0.0f});
     }
-
-    const float precision = 0.5f;
     unique_ptr<Data> data = make_unique<Data>(regression, inputData, expectedOutputs);
-    data->setPrecision(precision);
+    data->setPrecision(0.5);
     return data;
 }

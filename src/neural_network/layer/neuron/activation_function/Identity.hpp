@@ -9,6 +9,11 @@ namespace snn::internal
         activationFunction getType() const override { return identity; }
 
     public:
+         Identity()
+            : ActivationFunction(-INFINITY, +INFINITY)
+        {
+        }
+
         float function(const float x) const override
         {
             return x;

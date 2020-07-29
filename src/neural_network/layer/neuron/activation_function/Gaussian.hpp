@@ -10,6 +10,11 @@ namespace snn::internal
         activationFunction getType() const override { return gaussian; }
 
     public:
+        Gaussian()
+            : ActivationFunction(0, 1)
+        {
+        }
+
         float function(const float x) const override
         {
             return std::exp(-std::pow(x, 2));

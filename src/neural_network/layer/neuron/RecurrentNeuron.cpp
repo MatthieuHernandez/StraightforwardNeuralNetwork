@@ -15,7 +15,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* o
       sizeOfInputs(sizeof(float) * model.numberOfInputs - this->numberOfRecurrences),
       sizeToCopy(sizeof(float) * (model.numberOfRecurrences - 1))
 {
-    this->recurrences.resize(model.numberOfRecurrences, -1);
+    this->previousOutputs.resize(model.numberOfRecurrences, 0);
 }
 
 float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
@@ -27,18 +27,40 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     int w;
     for (w = 0; w < inputs.size(); ++w)
     {
-        sum += inputs[w] * weights[w];
+        sum += inputs[w] * this->weights[w];
     }
-    for (int r = 0; r < this->recurrences.size(); ++r, ++w)
+    for (int r = 0; r < this->previousOutputs.size(); ++r, ++w)
     {
-        sum += this->recurrences[r] * weights[w];
+        sum += this->previousOutputs[r] * this->weights[w];
     }
     sum += bias;
     lastOutput = sum;
     sum = outputFunction->function(sum);
-    this->addNewInputs(sum);
+    this->addPreviousOutput(sum);
     return sum;
 }
+
+std::vector<float>& RecurrentNeuron::backOutput(float error)
+{
+    error = error * outputFunction->derivative(lastOutput);
+
+    this->updateWeights(lastInputs, error);
+    this->addPreviousError(error);
+
+    for (int w = 0; w < this->weights.size(); ++w)
+    {
+        errors[w] = error * this->weights[w];
+    }
+    return errors;
+}
+
+void RecurrentNeuron::train(float error)
+{
+    error = error * outputFunction->derivative(lastOutput);
+    this->updateWeights(lastInputs, error);
+    //this->addPreviousError(error);
+}
+
 
 inline
 void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float error)
@@ -48,41 +70,47 @@ void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float erro
     {
         auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        weights[w] += deltaWeights;
-        if (isnan(weights[w]))
-            throw exception();
+        this->weights[w] += deltaWeights;
         this->previousDeltaWeights[w] = deltaWeights;
     }
-    for (int r = 0; r < this->recurrences.size(); ++r, ++w)
+    for (int r = 0; r < this->previousOutputs.size(); ++r, ++w)
     {
-        auto deltaWeights = this->optimizer->learningRate * error * recurrences[r];
+        this->recurrentError += error;
+        auto deltaWeights = this->optimizer->learningRate * this->recurrentError * this->previousOutputs[r];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        weights[w] += deltaWeights;
-        if (isnan(weights[w]))
-            throw exception();
+        this->weights[w] += deltaWeights;
         this->previousDeltaWeights[w] = deltaWeights;
     }
 }
-
 
 inline
 void RecurrentNeuron::reset()
 {
-    fill(this->recurrences.begin(), this->recurrences.end(), 0); // TODO: AC min
+    fill(this->previousOutputs.begin(), this->previousOutputs.end(), 0);
+    this->recurrentError = 0;
 }
 
 inline
-void RecurrentNeuron::addNewInputs(float output)
+void RecurrentNeuron::addPreviousOutput(float output)
 {
     if (this->numberOfRecurrences > 1)
-        memcpy(&this->recurrences[1], &this->recurrences[0], this->sizeToCopy);
-    this->recurrences[0] = output;
+        memcpy(&this->previousOutputs[1], &this->previousOutputs[0], this->sizeToCopy);
+    this->previousOutputs[0] = output;
 }
+
+inline
+void RecurrentNeuron::addPreviousError(float error)
+{
+    /*if (this->numberOfRecurrences > 1)
+        memcpy(&this->previousErrors[1], &this->previousErrors[0], this->sizeToCopy);
+    this->previousErrors[0] = error;*/
+}
+
 
 int RecurrentNeuron::isValid() const
 {
     if (this->numberOfInputs != static_cast<int>(this->weights.size()) - this->numberOfRecurrences
-        || this->recurrences.size() != this->numberOfRecurrences)
+        || this->previousOutputs.size() != this->numberOfRecurrences)
         return 304;
     return this->Neuron::isValid();
 }

@@ -13,14 +13,16 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
-         void addNewInputs(float output);
+         void addPreviousOutput(float output);
+         void addPreviousError(float output);
          void reset();
 
         const int numberOfRecurrences;
         const int numberOfInputs;
         const size_t sizeOfInputs;
         const size_t sizeToCopy;
-        std::vector<float> recurrences;
+        std::vector<float> previousOutputs;
+        float recurrentError = 0;
 
        void updateWeights(const std::vector<float>& inputs, float error) override;
 
@@ -38,6 +40,8 @@ namespace snn::internal
 
         bool operator==(const Neuron& neuron) const override;
         bool operator!=(const Neuron& neuron) const override;
+        [[nodiscard]] std::vector<float>& backOutput(float error) override;
+        void train(float error) override;
     };
 
     template <class Archive>

@@ -219,16 +219,12 @@ void Data::normalization(const float min, const float max)
                 if (difference != 0)
                     (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / difference;
                 (*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
-                if (isnan((*inputsTraining)[i][j]))
-                    throw exception();
             }
             for (int i = 0; i < (*inputsTesting).size(); i++)
             {
                 if (difference != 0)
                     (*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / difference;
                 (*inputsTesting)[i][j] = (*inputsTesting)[i][j] * (max - min) + min;
-                if (isnan((*inputsTesting)[i][j]))
-                    throw exception();
             }
         }
     }

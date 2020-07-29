@@ -10,6 +10,11 @@ namespace snn::internal
         activationFunction getType() const override { return ReLU; }
 
     public:
+        RectifiedLinearUnit()
+            : ActivationFunction(0, +INFINITY)
+        {
+        }
+
         float function(const float x) const override
         {
             return (x > 0.0f) ? 0.0f : x;

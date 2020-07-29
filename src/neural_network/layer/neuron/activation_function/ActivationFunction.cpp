@@ -12,6 +12,11 @@ using namespace snn::internal;
 
 vector<ActivationFunction*> ActivationFunction::activationFunctions;
 
+ActivationFunction::ActivationFunction(float min, float max)
+    : min(min), max(max)
+{
+}
+
 void ActivationFunction::initialize()
 {
     activationFunctions.reserve(4);

@@ -8,17 +8,18 @@ using namespace snn;
 using namespace snn::internal;
 
 Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
-    : activation(model.activation),
+    : numberOfInputs(model.numberOfInputs),
+      activation(model.activation),
       optimizer(optimizer)
 {
-    this->previousDeltaWeights.resize(model.numberOfInputs, 0);
+    this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->lastInputs.resize(model.numberOfInputs, 0);
-    this->errors.resize(model.numberOfInputs, 0);
+    this->errors.resize(model.numberOfWeights, 0);
     this->outputFunction = ActivationFunction::get(this->activation);
-    this->weights.resize(model.numberOfInputs);
+    this->weights.resize(model.numberOfWeights);
     for (auto& w : weights)
     {
-        w = randomInitializeWeight(model.numberOfInputs);
+        w = randomInitializeWeight(model.numberOfWeights);
     }
     this->bias = 1.0f;
 }
@@ -31,21 +32,21 @@ float Neuron::randomInitializeWeight(int numberOfInputs) const
 
 float Neuron::output(const vector<float>& inputs)
 {
-    lastInputs = inputs;
+    this->lastInputs = inputs;
     float sum = 0;
     for (int w = 0; w < this->weights.size(); ++w)
     {
         sum += inputs[w] * weights[w];
     }
     sum += bias;
-    lastOutput = sum;
+    this->sum = sum;
     sum = outputFunction->function(sum);
     return sum;
 }
 
 std::vector<float>& Neuron::backOutput(float error)
 {
-    error = error * outputFunction->derivative(lastOutput);
+    error = error * outputFunction->derivative(this->sum);
 
     this->updateWeights(lastInputs, error);
 
@@ -58,7 +59,7 @@ std::vector<float>& Neuron::backOutput(float error)
 
 void Neuron::train(float error)
 {
-    error = error * outputFunction->derivative(lastOutput);
+    error = error * outputFunction->derivative(this->sum);
 
     this->updateWeights(lastInputs, error);
 }
@@ -128,18 +129,19 @@ void Neuron::setBias(const float bias)
 
 int Neuron::getNumberOfInputs() const
 {
-    return static_cast<int>(this->weights.size());
+    return this->numberOfInputs;
 }
 
 bool Neuron::operator==(const Neuron& neuron) const
 {
     return typeid(*this).hash_code() == typeid(neuron).hash_code()
+        && this->numberOfInputs == neuron.numberOfInputs
         && this->weights == neuron.weights
         && this->bias == neuron.bias
         && this->previousDeltaWeights == neuron.previousDeltaWeights
         && this->lastInputs == neuron.lastInputs
         && this->errors == neuron.errors
-        && this->lastOutput == neuron.lastOutput
+        && this->sum == neuron.sum
         && this->activation == neuron.activation
         && this->outputFunction == neuron.outputFunction // not really good
         && *this->optimizer == *neuron.optimizer;

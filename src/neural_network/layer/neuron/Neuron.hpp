@@ -16,6 +16,8 @@ namespace snn::internal
         void serialize(Archive& ar, const unsigned int version);
 
     protected:
+
+        int numberOfInputs;
         std::vector<float> weights;
         float bias;
 
@@ -23,7 +25,7 @@ namespace snn::internal
         std::vector<float> lastInputs;
         std::vector<float> errors;
 
-        float lastOutput = 0;
+        float sum = 0;
 
         activationFunction activation;
         ActivationFunction* outputFunction;
@@ -57,7 +59,7 @@ namespace snn::internal
         [[nodiscard]] float getBias() const;
         void setBias(float bias);
 
-        [[nodiscard]] virtual int getNumberOfInputs() const;
+        [[nodiscard]] int getNumberOfInputs() const;
 
         virtual bool operator==(const Neuron& neuron) const;
         virtual bool operator!=(const Neuron& neuron) const;
@@ -66,12 +68,13 @@ namespace snn::internal
     template <class Archive>
     void Neuron::serialize(Archive& ar, const unsigned int version)
     {
+        ar & this->numberOfInputs;
         ar & this->weights;
         ar & this->bias;
         ar & this->previousDeltaWeights;
         ar & this->lastInputs;
         ar & this->errors;
-        ar & this->lastOutput;
+        ar & this->sum;
         ar & this->activation;
         this->outputFunction = ActivationFunction::get(activation);
         ar & this->optimizer;

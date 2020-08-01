@@ -6,6 +6,7 @@
      struct NeuronModel
      {
          int numberOfInputs;
+         int numberOfWeights;
          int numberOfRecurrences;
          activationFunction activation;
      };

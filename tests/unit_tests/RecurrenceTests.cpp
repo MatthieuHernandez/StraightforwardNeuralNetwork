@@ -16,7 +16,7 @@ TEST(Recurence, RepeatInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12,  1,sigmoid),
+        FullyConnected(12,  sigmoid),
         FullyConnected(6),
         FullyConnected(1, snn::tanh)
     });
@@ -39,8 +39,27 @@ TEST(Recurence, RepeatLastInput)
         FullyConnected(6),
         FullyConnected(1, snn::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.01f;
-    neuralNetwork.optimizer.momentum = 0.4f;
+    neuralNetwork.optimizer.learningRate = 0.05f;
+    //neuralNetwork.optimizer.momentum = 0.4f;
+    testNeuralNetworkForRecurrence(neuralNetwork, *data);
+}
+
+TEST(Recurence, RepeatLastLastInput)
+{
+    vector2D<float> inputData =       {{0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}, {0}, {0}};
+    vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
+
+    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
+    data->setPrecision(0.3);
+
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(1),
+        Recurrence(12, 2,snn::tanh),
+        FullyConnected(6),
+        FullyConnected(1, snn::tanh)
+    });
+    neuralNetwork.optimizer.learningRate = 0.05f;
+    //neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -48,7 +67,7 @@ inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 5_s);
+    nn.waitFor(1.0_acc || 4_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

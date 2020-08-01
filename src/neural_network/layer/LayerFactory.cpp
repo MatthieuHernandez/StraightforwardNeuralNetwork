@@ -149,13 +149,15 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
         model.neuron.numberOfInputs = model.numberOfInputs;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs;
         return make_unique<FullyConnected>(model, optimizer);
 
     case recurrence:
         if (model.neuron.numberOfRecurrences < 0)
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
-        model.neuron.numberOfInputs = model.numberOfInputs + model.neuron.numberOfRecurrences;
+        model.neuron.numberOfInputs = model.numberOfInputs;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
         return make_unique<Recurrence>(model, optimizer);
 
     case locallyConnected:
@@ -173,6 +175,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected1D(
                 model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
             model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<LocallyConnected1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
@@ -186,6 +189,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(
                 model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
             model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<LocallyConnected2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
@@ -207,6 +211,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(
                 model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
             model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<Convolution1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
@@ -220,6 +225,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(
                 model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
             model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)

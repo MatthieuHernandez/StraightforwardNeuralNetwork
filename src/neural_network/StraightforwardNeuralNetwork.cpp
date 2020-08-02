@@ -12,7 +12,7 @@
 using namespace std;
 using namespace chrono;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 

@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
     : numberOfInputs(model.numberOfInputs),

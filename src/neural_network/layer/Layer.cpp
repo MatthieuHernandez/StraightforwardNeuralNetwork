@@ -2,7 +2,7 @@
 #include "neuron/RecurrentNeuron.hpp"
 
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 extern template class Layer<Neuron>;
 extern template class Layer<RecurrentNeuron>;

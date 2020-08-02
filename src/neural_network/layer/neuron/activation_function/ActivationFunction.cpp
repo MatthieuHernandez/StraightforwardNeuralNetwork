@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 vector<ActivationFunction*> ActivationFunction::activationFunctions;
 

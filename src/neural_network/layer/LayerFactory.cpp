@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
 {

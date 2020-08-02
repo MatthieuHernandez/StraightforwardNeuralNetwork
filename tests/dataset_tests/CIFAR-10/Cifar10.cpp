@@ -5,7 +5,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 Cifar10::Cifar10(string folderPath)
 {

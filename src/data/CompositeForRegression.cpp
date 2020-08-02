@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 CompositeForRegression::CompositeForRegression(Set sets[2])
     : ProblemComposite(sets)

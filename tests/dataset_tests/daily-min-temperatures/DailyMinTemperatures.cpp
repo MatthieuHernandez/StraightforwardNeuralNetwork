@@ -8,7 +8,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 
 DailyMinTemperatures::DailyMinTemperatures(string folderPath, int numberOfRecurrences)

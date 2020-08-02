@@ -2,11 +2,11 @@
 
 namespace snn
 {
-    enum waitOperator
+    enum class waitOperator
     {
-        noneOp = 0,
-        andOp = 1,
-        orOp = 2
+        none = 0,
+        and = 1,
+        or = 2
     };
 
     struct Wait

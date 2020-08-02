@@ -8,10 +8,10 @@ using namespace std;
 
 Wait& Wait::operator||(const Wait& wait)
 {
-    if (op == andOp)
+    if (op == waitOperator::and)
         throw runtime_error("Cannot mix || and && operator for waitFor.");
 
-    this->op = orOp;
+    this->op = waitOperator::or;
 
     if (this->epochs > 0 && wait.epochs > 0)
         this->epochs = min(this->epochs, wait.epochs);
@@ -33,10 +33,10 @@ Wait& Wait::operator||(const Wait& wait)
 
 Wait& Wait::operator&&(const Wait& wait)
 {
-    if (op == orOp)
-        throw runtime_error("");
+    if (op == waitOperator::or)
+        throw runtime_error("Cannot mix || and && operator for waitFor.");
 
-    this->op = andOp;
+    this->op = waitOperator::and;
 
     this->epochs = max(this->epochs, wait.epochs);
     this->accuracy = max(this->accuracy, wait.accuracy);
@@ -52,7 +52,7 @@ bool Wait::isOver(int epochs, float accuracy, float mae, int duration)
     const bool isValidMae = mae <= this->mae && mae > 0;
     const bool isValidDuration = duration >= this->duration;
 
-    if (this->op == andOp)
+    if (this->op == waitOperator::and)
     {
         if ((isValidEpochs || this->epochs < 0)
             && (isValidAccuracy || this->accuracy < 0)

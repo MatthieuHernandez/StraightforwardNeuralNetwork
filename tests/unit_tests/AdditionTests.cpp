@@ -48,7 +48,7 @@ TEST(Addition, WithRNN)
     auto data = createRecurrentDataForAdditionTests(500, 1);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(10, 1),
+        Recurrence(10),
         FullyConnected(4),
         FullyConnected(1)
     });

@@ -16,7 +16,7 @@ TEST(Recurence, RepeatInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1),
+        Recurrence(12),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
     });
@@ -35,7 +35,7 @@ TEST(Recurence, RepeatLastInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1),
+        Recurrence(12),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
     });

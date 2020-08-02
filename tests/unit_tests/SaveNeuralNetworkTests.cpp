@@ -12,7 +12,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         FullyConnected(20, activation::iSigmoid),
         LocallyConnected(3, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid),
-        Recurrence(3, 2)
+        Recurrence(3)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork C(structureOfNetwork);

@@ -27,7 +27,7 @@ int recurrenceExample()
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(10, 1),
+        Recurrence(10),
         FullyConnected(1, activation::sigmoid)
     });
 

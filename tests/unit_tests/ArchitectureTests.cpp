@@ -80,7 +80,7 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
             FullyConnected(50),
             Convolution(1, 3),
             FullyConnected(20),
-            Recurrence(10, 4),
+            Recurrence(10),
             FullyConnected(5)
         });
     const int numberOfNeurons = 9 * 9 * 3 + 50 + 48 + 20 + 10 + 5; // = 376
@@ -110,7 +110,7 @@ TEST(Architecture, InputWithSizeOf1)
     StraightforwardNeuralNetwork neuralNetworkFC({Input(5), FullyConnected(3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkLC({Input(5), LocallyConnected(2, 3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkC({Input(5), Convolution(2, 3), FullyConnected(1)});
-    StraightforwardNeuralNetwork neuralNetworkR({Input(5), Recurrence(3, 1), FullyConnected(1)});
+    StraightforwardNeuralNetwork neuralNetworkR({Input(5), Recurrence(3), FullyConnected(1)});
 
     ASSERT_EQ(neuralNetworkFC.isValid(), 0) << "FullyConnected neural network is invalid.";
     ASSERT_EQ(neuralNetworkLC.isValid(), 0) << "LocallyConnected neural network is invalid.";
@@ -123,7 +123,7 @@ TEST(Architecture, InputWithSizeOf2)
     StraightforwardNeuralNetwork neuralNetworkFC({Input(5, 2), FullyConnected(3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkLC({Input(5, 2), LocallyConnected(2, 3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkC({Input(5, 2), Convolution(2,3), FullyConnected(1)});
-    StraightforwardNeuralNetwork neuralNetworkR({Input(5, 2), Recurrence(3, 1), FullyConnected(1)});
+    StraightforwardNeuralNetwork neuralNetworkR({Input(5, 2), Recurrence(3), FullyConnected(1)});
 
     ASSERT_EQ(neuralNetworkFC.isValid(), 0) << "FullyConnected neural network is invalid.";
     ASSERT_EQ(neuralNetworkLC.isValid(), 0) << "LocallyConnected neural network is invalid.";

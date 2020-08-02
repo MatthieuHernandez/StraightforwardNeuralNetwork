@@ -4,9 +4,9 @@ namespace snn
 {
     enum class waitOperator
     {
-        none = 0,
-        and = 1,
-        or = 2
+        noneOp = 0,
+        andOp,
+        orOp
     };
 
     struct Wait
@@ -18,7 +18,7 @@ namespace snn
         waitOperator op;
         Wait& operator||(const Wait& wait);
         Wait& operator&&(const Wait& wait);
-        bool isOver(int epochs, float accuracy, float mae, int duration);
+        bool isOver(int epochs, float accuracy, float mae, int duration) const;
     };
 
     extern Wait operator""_ep(unsigned long long value);

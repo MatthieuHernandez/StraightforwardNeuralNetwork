@@ -33,15 +33,13 @@ float Neuron::randomInitializeWeight(int numberOfInputs) const
 float Neuron::output(const vector<float>& inputs)
 {
     this->lastInputs = inputs;
-    float sum = 0;
+    this->sum = 0;
     for (int w = 0; w < this->weights.size(); ++w)
     {
-        sum += inputs[w] * weights[w];
+        this->sum += inputs[w] * weights[w];
     }
-    sum += bias;
-    this->sum = sum;
-    sum = outputFunction->function(sum);
-    return sum;
+    this->sum += bias; 
+    return outputFunction->function(this->sum);
 }
 
 std::vector<float>& Neuron::backOutput(float error)

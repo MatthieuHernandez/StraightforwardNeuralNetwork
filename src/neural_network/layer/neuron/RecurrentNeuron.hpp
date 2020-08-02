@@ -13,6 +13,7 @@ namespace snn::internal
         void serialize(Archive& ar, const unsigned int version);
 
         int numberOfRecurrences;
+        float lastOutput = 0;
         float previousOutput = 0;
         float recurrentError = 0;
         float previousSum = 0;

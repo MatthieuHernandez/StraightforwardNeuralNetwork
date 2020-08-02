@@ -16,7 +16,7 @@ TEST(Recurence, RepeatInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        FullyConnected(12, activation::sigmoid),
+        Recurrence(12, 1, activation::sigmoid),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
     });
@@ -31,7 +31,7 @@ TEST(Recurence, RepeatLastInput)
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {1}, {1}, {0},  {-1}, {-1}, {0}, {1},  {-1}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data->setPrecision(0.3);
+    data->setPrecision(0.4);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),

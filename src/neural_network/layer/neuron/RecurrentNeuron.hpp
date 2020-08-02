@@ -12,7 +12,6 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
-        int numberOfRecurrences;
         float lastOutput = 0;
         float previousOutput = 0;
         float recurrentError = 0;
@@ -42,6 +41,7 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);
+        ar & this->lastOutput;
         ar & this->previousOutput;
         ar & this->recurrentError;
         ar & this->previousSum;

@@ -21,7 +21,6 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
         {
             -1,
             -1,
-            -1,
             activation
         },
         -1,
@@ -30,7 +29,7 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
     return model;
 }
 
-LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activation activation)
+LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
 {
     LayerModel model
     {
@@ -40,7 +39,6 @@ LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activat
         {
             -1,
             -1,
-            numberOfRecurrences,
             activation
         },
         -1,
@@ -60,7 +58,7 @@ LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMa
         {
             -1,
             -1,
-            -1,
+   
             activation
         },
         numberOfLocallyConnected,
@@ -78,7 +76,6 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
         -1,
         -1,
         {
-            -1,
             -1,
             -1,
             activation,
@@ -157,9 +154,6 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
         return make_unique<FullyConnected>(model, optimizer);
 
     case recurrence:
-        if (model.neuron.numberOfRecurrences < 0)
-            throw InvalidArchitectureException("Input of layer has size of 0.");
-
         model.neuron.numberOfInputs = model.numberOfInputs;
         model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
         return make_unique<Recurrence>(model, optimizer);
@@ -263,10 +257,10 @@ void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerMode
     if (numberOfInputs > 2073600)
         throw InvalidArchitectureException("Layer is too big.");
 
-    auto& currentshapeOfInput = models[0].shapeOfInput;
+    auto& currentShapeOfInput = models[0].shapeOfInput;
     for (int i = 1; i < models.size(); ++i)
     {
-        layers.push_back(build(models[i], currentshapeOfInput, optimizer));
-        currentshapeOfInput = layers.back()->getShapeOfOutput();
+        layers.push_back(build(models[i], currentShapeOfInput, optimizer));
+        currentShapeOfInput = layers.back()->getShapeOfOutput();
     }
 }

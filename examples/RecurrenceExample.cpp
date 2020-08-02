@@ -38,8 +38,6 @@ int recurrenceExample()
     float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteError();
 
-    PRINT_LOG("The accuracy is " + to_string(accuracy) + ".");
-
     if (accuracy == 100
         && mae < precision
         && neuralNetwork.isValid() == 0)

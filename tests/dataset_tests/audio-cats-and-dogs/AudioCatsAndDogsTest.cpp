@@ -41,20 +41,19 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        LocallyConnected(1, 16),
-        Recurrence(300, 100),
-        FullyConnected(30),
-        Recurrence(2, 2)
+        LocallyConnected(2, 32),
+        Recurrence(100),
+        Recurrence(30),
+        FullyConnected(2)
     });
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.optimizer.learningRate = 0.05f;
-    neuralNetwork.optimizer.momentum = 0.0f;
+    neuralNetwork.optimizer.learningRate = 0.1f;
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(5_ep);
     neuralNetwork.stopTraining();
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_RECALL(recall, 0.55);
-    ASSERT_ACCURACY(accuracy, 0.60);
+    ASSERT_RECALL(recall, 0.50);
+    ASSERT_ACCURACY(accuracy, 0.55);
 }

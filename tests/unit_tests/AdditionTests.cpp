@@ -45,22 +45,22 @@ TEST(Addition, WithLCNN)
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentDataForAdditionTests(1000, 1);
+    auto data = createRecurrentDataForAdditionTests(500, 1);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(6, 1),
-        FullyConnected(2),
+        Recurrence(10, 1),
+        FullyConnected(4),
         FullyConnected(1)
     });
     neuralNetwork.optimizer.learningRate = 0.01f;
-    neuralNetwork.optimizer.momentum = 0.5f;
+    //neuralNetwork.optimizer.momentum = 0.5f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 4_s);
+    nn.waitFor(1.0_acc || 7_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
@@ -110,7 +110,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numbe
         }
     }
 
-    const float precision = 0.1f;
+    const float precision = 0.2f;
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, numberOfRecurrences);
     data->setPrecision(precision);
     return data;

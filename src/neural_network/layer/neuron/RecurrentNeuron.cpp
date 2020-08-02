@@ -9,8 +9,7 @@ using namespace snn::internal;
 BOOST_CLASS_EXPORT(Neuron)
 
 RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
-    : Neuron(model, optimizer),
-      numberOfRecurrences(model.numberOfRecurrences)
+    : Neuron(model, optimizer)
 {
 }
 
@@ -27,8 +26,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     {
         this->sum += inputs[w] * this->weights[w];
     }
-    this->sum += this->previousOutput * this->weights[w];
-    this->sum += this->bias;
+    this->sum += this->previousOutput * this->weights[w] + this->bias;
     float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
@@ -92,7 +90,7 @@ bool RecurrentNeuron::operator==(const Neuron& neuron) const
     {
         const auto& n = dynamic_cast<const RecurrentNeuron&>(neuron);
         return this->Neuron::operator==(neuron)
-            && numberOfRecurrences == n.numberOfRecurrences
+            && this->lastOutput == n.lastOutput
             && this->previousOutput == n.previousOutput
             && this->recurrentError == n.recurrentError
             && this->previousSum == n.previousSum;

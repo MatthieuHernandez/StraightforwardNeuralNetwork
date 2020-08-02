@@ -7,7 +7,6 @@
      {
          int numberOfInputs;
          int numberOfWeights;
-         int numberOfRecurrences;
          activation activationFunction;
      };
  }

@@ -8,10 +8,10 @@ using namespace std;
 
 Wait& Wait::operator||(const Wait& wait)
 {
-    if (op == andOp)
+    if (op == waitOperator::andOp)
         throw runtime_error("Cannot mix || and && operator for waitFor.");
 
-    this->op = orOp;
+    this->op = waitOperator::orOp;
 
     if (this->epochs > 0 && wait.epochs > 0)
         this->epochs = min(this->epochs, wait.epochs);
@@ -33,10 +33,10 @@ Wait& Wait::operator||(const Wait& wait)
 
 Wait& Wait::operator&&(const Wait& wait)
 {
-    if (op == orOp)
-        throw runtime_error("");
+    if (op == waitOperator::orOp)
+        throw runtime_error("Cannot mix || and && operator for waitFor.");
 
-    this->op = andOp;
+    this->op = waitOperator::andOp;
 
     this->epochs = max(this->epochs, wait.epochs);
     this->accuracy = max(this->accuracy, wait.accuracy);
@@ -45,14 +45,14 @@ Wait& Wait::operator&&(const Wait& wait)
     return *this;
 }
 
-bool Wait::isOver(int epochs, float accuracy, float mae, int duration)
+bool Wait::isOver(int epochs, float accuracy, float mae, int duration) const
 {
     const bool isValidEpochs = epochs >= this->epochs && epochs > 0;
     const bool isValidAccuracy = accuracy >= this->accuracy && accuracy > 0;
     const bool isValidMae = mae <= this->mae && mae > 0;
     const bool isValidDuration = duration >= this->duration;
 
-    if (this->op == andOp)
+    if (this->op == waitOperator::andOp)
     {
         if ((isValidEpochs || this->epochs < 0)
             && (isValidAccuracy || this->accuracy < 0)

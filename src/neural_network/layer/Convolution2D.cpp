@@ -9,12 +9,12 @@ using namespace internal;
 BOOST_CLASS_EXPORT(Convolution2D)
 
 Convolution2D::Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Filter(model, optimizer)
+    : FilterLayer(model, optimizer)
 {
 }
 
 inline
-unique_ptr<Layer> Convolution2D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> Convolution2D::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<Convolution2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -40,7 +40,7 @@ int Convolution2D::isValid() const
         if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
             return 203;
     }
-    return this->Filter::isValid();
+    return this->FilterLayer::isValid();
 }
 
 inline
@@ -84,13 +84,13 @@ void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vecto
 }
 
 inline
-bool Convolution2D::operator==(const Convolution2D& layer) const
+bool Convolution2D::operator==(const BaseLayer& layer) const
 {
-    return this->Filter::operator==(layer);
+    return this->FilterLayer::operator==(layer);
 }
 
 inline
-bool Convolution2D::operator!=(const Convolution2D& layer) const
+bool Convolution2D::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);
 }

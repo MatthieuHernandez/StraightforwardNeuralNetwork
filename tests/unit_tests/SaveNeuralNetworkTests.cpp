@@ -8,10 +8,11 @@ TEST(SaveNeuralNetwork, EqualTest)
 {
     auto structureOfNetwork = {
         Input(8, 8, 3),
-        Convolution(2, 4, ReLU),
-        FullyConnected(20, iSigmoid),
-        Convolution(3, 2, snn::tanh),
-        FullyConnected(3, sigmoid)
+        Convolution(2, 4, activation::ReLU),
+        FullyConnected(20, activation::iSigmoid),
+        LocallyConnected(3, 2, activation::tanh),
+        FullyConnected(3, activation::sigmoid),
+        Recurrence(3)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork C(structureOfNetwork);
@@ -36,14 +37,11 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(*A.layers[0] == *B.layers[0]) << "Value : A.layers[0] == B.layers[0]";
     EXPECT_TRUE(A.layers[0] != B.layers[0]) << "Address : A.layers[0] != B.layers[0]";
 
+    EXPECT_TRUE(*A.layers[0]->getNeuron(0) == *B.layers[0]->getNeuron(0)) << "Value : A.Layers[0].getNeuron(0) == B.Layers[0].getNeuron(0)";
+    EXPECT_TRUE(A.layers[0]->getNeuron(0) != B.layers[0]->getNeuron(0)) << "Address : A.Layers[0].getNeuron(0) != B.Layers[0].getNeuron(0)";
 
-    EXPECT_TRUE(*&A.layers[0]->neurons[0] == *&B.layers[0]->neurons[0]) <<
- "Value : A.Layers[0].neurons[0] == B.Layers[0].neurons[0]";
-    EXPECT_TRUE(&A.layers[0]->neurons[0] != &B.layers[0]->neurons[0]) <<
- "Address : A.Layers[0].neurons[0] != B.Layers[0].neurons[0]";
-
-    EXPECT_TRUE(&A.optimizer == &*A.layers[0]->neurons[0].optimizer);
-    EXPECT_TRUE(&B.optimizer == &*B.layers[0]->neurons[0].optimizer);
+    EXPECT_TRUE(&A.optimizer == &*A.layers[0]->getNeuron(0)->optimizer);
+    EXPECT_TRUE(&B.optimizer == &*B.layers[0]->getNeuron(0)->optimizer);
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -72,9 +70,9 @@ TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
         Input(5),
-        Convolution(2, 2, ReLU),
-        FullyConnected(10, snn::tanh),
-        FullyConnected(3, sigmoid)
+        Convolution(2, 2, activation::ReLU),
+        FullyConnected(10, activation::tanh),
+        FullyConnected(3, activation::sigmoid)
     });
     A.optimizer.learningRate = 0.03f;
     A.optimizer.momentum = 0.78f;

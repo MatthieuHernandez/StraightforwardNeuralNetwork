@@ -1,29 +1,25 @@
 #pragma once
 #include <memory>
+
+#include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
 
 namespace snn
 {
-    // Waiting C++20 compatibility
-    /*template<typename T>
-    concept Int = requires(T a)
-    {
-        a ->std::template convertible_to<int>;
-    };*/
-
     template <typename ... TInt>
     extern LayerModel Input(TInt ... sizeOfInput)
     {
         LayerModel model
         {
             input,
-            sigmoid,
+            static_cast<int>(activation::sigmoid),
             0,
-            0,
-            0,
-            0,
+            {
+                0,
+                0
+            },
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},
@@ -31,13 +27,13 @@ namespace snn
         return model;
     };
 
-    extern LayerModel FullyConnected(int numberOfNeurons, activationFunction activation = sigmoid);
+    extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 
-    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation = sigmoid);
+    extern LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh);
 
-    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activationFunction activation = sigmoid);
+    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 
-    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation = ReLU);
+    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
 }
 
 namespace snn::internal
@@ -45,9 +41,9 @@ namespace snn::internal
     class LayerFactory 
     {
     private:
-        static std::unique_ptr<Layer> build(LayerModel& model, std::vector<int>& shapeOfInput, StochasticGradientDescent* optimizer);
+        static std::unique_ptr<BaseLayer> build(LayerModel& model, std::vector<int>& shapeOfInput, StochasticGradientDescent* optimizer);
 
     public:
-        static void build(std::vector<std::unique_ptr<Layer>>& layers, std::vector<LayerModel>& models, StochasticGradientDescent* optimizer);
+        static void build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::vector<LayerModel>& models, StochasticGradientDescent* optimizer);
     };
 }

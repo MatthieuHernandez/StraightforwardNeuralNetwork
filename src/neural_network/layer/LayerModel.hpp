@@ -1,18 +1,15 @@
 #pragma once
-#include <vector>
 #include "LayerType.hpp"
-#include "perceptron/activation_function/ActivationFunction.hpp"
+#include "neuron/NeuronModel.hpp"
 
 namespace snn
 {
     struct LayerModel
     {
-        layerType type;
-        activationFunction activation;
+        layerType type; 
         int numberOfInputs;
         int numberOfNeurons;
-        int numberOfInputsByNeurons;
-        int numberOfRecurrences;
+        NeuronModel neuron;
         int numberOfFilters;
         int sizeOfFilerMatrix;
         std::vector<int> shapeOfInput;

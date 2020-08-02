@@ -17,7 +17,7 @@ int regressionExample()
     vector<vector<float>> expectedOutputs = {{0.333}, {0.666}, {0.666}, {0.666}, {0}, {1}};
 
     float precision = 0.1f;
-    Data data(regression, inputData, expectedOutputs);
+    Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
     snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(1)});

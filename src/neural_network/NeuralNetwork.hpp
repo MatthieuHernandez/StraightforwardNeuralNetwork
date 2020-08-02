@@ -8,6 +8,7 @@
 #include "layer/Convolution1D.hpp"
 #include "layer/Convolution2D.hpp"
 #include "StatisticAnalysis.hpp"
+#include "layer/BaseLayer.hpp"
 
 
 namespace snn::internal
@@ -55,7 +56,8 @@ namespace snn::internal
 
         StochasticGradientDescent optimizer;
 
-        std::vector<std::unique_ptr<Layer>> layers{};
+        std::vector<std::unique_ptr<BaseLayer>> layers{};
+
         [[nodiscard]] int isValid() const;
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = false);

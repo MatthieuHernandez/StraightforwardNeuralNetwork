@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class Filter : public Layer
+    class FilterLayer : public Layer<Neuron>
     {
     private:
         friend class boost::serialization::access;
@@ -22,25 +22,25 @@ namespace snn::internal
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
     public:
-        Filter() = default;  // use restricted to Boost library only
-        Filter(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~Filter() = default;
-        Filter(const Filter&) = default;
+        FilterLayer() = default;  // use restricted to Boost library only
+        FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        ~FilterLayer() = default;
+        FilterLayer(const FilterLayer&) = default;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override;
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Filter& layer) const;
-        bool operator!=(const Filter& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>
-    void Filter::serialize(Archive& ar, const unsigned version)
+    void FilterLayer::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Filter, Layer>();
+        boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
         ar & this->numberOfFilters;
         ar & this->sizeOfFilterMatrix;

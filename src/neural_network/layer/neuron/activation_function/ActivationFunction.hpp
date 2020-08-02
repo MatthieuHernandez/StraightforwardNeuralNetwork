@@ -4,7 +4,7 @@
 
 namespace snn
 {
-    enum activationFunction
+    enum class activation
     {
         sigmoid = 0,
         iSigmoid,
@@ -27,15 +27,18 @@ namespace snn::internal
     public:
         static std::vector<ActivationFunction*> activationFunctions;
 
-        ActivationFunction() = default;
+        const float min;
+        const float max;
+
+        ActivationFunction(float min, float max);
         virtual ~ActivationFunction() = default;
         static void initialize();
-        static ActivationFunction* get(activationFunction type);
+        static ActivationFunction* get(activation type);
 
         virtual float function(const float) const = 0;
         virtual float derivative(const float) const = 0;
 
-        virtual activationFunction getType() const = 0;
+        virtual activation getType() const = 0;
 
         virtual bool operator==(const ActivationFunction& activationFunction) const;
         virtual bool operator!=(const ActivationFunction& activationFunction) const;

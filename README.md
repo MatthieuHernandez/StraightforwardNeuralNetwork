@@ -39,12 +39,15 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
  ## Use
 Create, train and use a neural network in few lines of code.
 ```cpp
-Data data(classification, inputData, expectedOutputs);
+using namespace snn;
+
+Data data(problem::classification, inputData, expectedOutputs);
+
 StraightforwardNeuralNetwork neuralNetwork({
     Input(28, 28, 1), 
-    Convolution(1, 3, ReLU),
-    FullyConnected(70, tanh),
-    FullyConnected(10, sigmoid)
+    Convolution(1, 3, activation::ReLU),
+    FullyConnected(70, activation::tanh),
+    FullyConnected(10, activation::sigmoid)
 });
 
 neuralNetwork.startTraining(data);

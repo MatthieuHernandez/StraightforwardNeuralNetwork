@@ -1,16 +1,23 @@
 #pragma once
-#include <memory>
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
+#include "NeuronModel.hpp"
 #include "../../Optimizer.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-    class Perceptron
+    class Neuron
     {
     private:
+        friend class boost::serialization::access;
+        template <class Archive>
+        void serialize(Archive& ar, const unsigned int version);
+
+    protected:
+
+        int numberOfInputs;
         std::vector<float> weights;
         float bias;
 
@@ -18,33 +25,28 @@ namespace snn::internal
         std::vector<float> lastInputs;
         std::vector<float> errors;
 
-        float lastOutput = 0;
+        float sum = 0;
 
-        //StochasticGradientDescent* optimizer;
-
-        activationFunction activation;
+        activation activationFunction;
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;
-        void updateWeights(const std::vector<float>& inputs, float error);
+        virtual void updateWeights(const std::vector<float>& inputs, float error);
 
-        friend class boost::serialization::access;
-        template <class Archive>
-        void serialize(Archive& ar, const unsigned int version);
 
     public:
-        Perceptron() = default; // use restricted to Boost library only
-        Perceptron(int numberOfInputs, activationFunction activation, StochasticGradientDescent* optimizer);
-        Perceptron(const Perceptron& perceptron) = default;
-        ~Perceptron() = default;
+        Neuron() = default; // use restricted to Boost library only
+        Neuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        Neuron(const Neuron& neuron) = default;
+        virtual ~Neuron() = default;
 
         StochasticGradientDescent* optimizer;
 
         [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
-        void train(float error);
+        [[nodiscard]] virtual std::vector<float>& backOutput(float error);
+        virtual void train(float error);
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] virtual int isValid() const;
 
         [[nodiscard]] std::vector<float> getWeights() const;
         [[nodiscard]] int getNumberOfParameters() const;
@@ -59,21 +61,22 @@ namespace snn::internal
 
         [[nodiscard]] int getNumberOfInputs() const;
 
-        bool operator==(const Perceptron& perceptron) const;
-        bool operator!=(const Perceptron& perceptron) const;
+        virtual bool operator==(const Neuron& neuron) const;
+        virtual bool operator!=(const Neuron& neuron) const;
     };
 
     template <class Archive>
-    void Perceptron::serialize(Archive& ar, const unsigned int version)
+    void Neuron::serialize(Archive& ar, const unsigned int version)
     {
+        ar & this->numberOfInputs;
         ar & this->weights;
         ar & this->bias;
         ar & this->previousDeltaWeights;
         ar & this->lastInputs;
         ar & this->errors;
-        ar & this->lastOutput;
-        ar & this->activation;
-        this->outputFunction = ActivationFunction::get(activation);
+        ar & this->sum;
+        ar & this->activationFunction;
+        this->outputFunction = ActivationFunction::get(activationFunction);
         ar & this->optimizer;
     }
 }

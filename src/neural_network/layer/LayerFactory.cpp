@@ -11,62 +11,78 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activation)
+LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
 {
     LayerModel model
     {
         fullyConnected,
-        activation,
         -1,
-        numberOfNeurons
+        numberOfNeurons,
+        {
+            -1,
+            -1,
+            activation
+        },
+        -1,
+        -1
     };
     return model;
 }
 
-LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
+LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
 {
     LayerModel model
     {
         recurrence,
-        activation,
         -1,
         numberOfNeurons,
+        {
+            -1,
+            -1,
+            activation
+        },
         -1,
-        numberOfRecurrences,
+        -1
     };
     return model;
 }
 
-LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activationFunction activation)
+LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation)
 {
     LayerModel model
     {
         locallyConnected,
-        activation,
+
         -1,
         -1,
-        -1,
-        -1,
+        {
+            -1,
+            -1,
+   
+            activation
+        },
         numberOfLocallyConnected,
         sizeOfLocalMatrix,
-        
+
     };
     return model;
 }
 
-LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation)
+LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation)
 {
     LayerModel model
     {
         convolution,
-        activation,
         -1,
         -1,
-        -1,
-        -1,
+        {
+            -1,
+            -1,
+            activation,
+        },
         numberOfConvolution,
         sizeOfConvolutionMatrix,
-        
+
     };
     return model;
 }
@@ -81,16 +97,19 @@ int computeNumberOfInputs(vector<int>& shapeOfInput)
 }
 
 inline
-int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int sizeOfLocalMatrix, vector<int>& shapeOfInput)
+int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int sizeOfLocalMatrix,
+                                                vector<int>& shapeOfInput)
 {
     const int restX = shapeOfInput[0] % sizeOfLocalMatrix == 0 ? 0 : 1;
     const int restY = shapeOfInput[1] % sizeOfLocalMatrix == 0 ? 0 : 1;
 
-    return numberOfLocallyConnected * ((shapeOfInput[0] / sizeOfLocalMatrix) + restX) * ((shapeOfInput[1] / sizeOfLocalMatrix) + restY);
+    return numberOfLocallyConnected * ((shapeOfInput[0] / sizeOfLocalMatrix) + restX) * ((shapeOfInput[1] /
+        sizeOfLocalMatrix) + restY);
 }
 
 inline
-int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int sizeOfLocalMatrix, vector<int>& shapeOfInput)
+int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int sizeOfLocalMatrix,
+                                                vector<int>& shapeOfInput)
 {
     const int rest = shapeOfInput[0] % sizeOfLocalMatrix == 0 ? 0 : 1;
 
@@ -98,20 +117,23 @@ int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, in
 }
 
 inline
-int computeNumberOfNeuronsForConvolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix, vector<int>& shapeOfInput)
+int computeNumberOfNeuronsForConvolution2D(int numberOfConvolution, int sizeOfConvolutionMatrix,
+                                           vector<int>& shapeOfInput)
 {
-    return numberOfConvolution * (shapeOfInput[0] - (sizeOfConvolutionMatrix - 1)) * (shapeOfInput[1] - (sizeOfConvolutionMatrix - 1));
+    return numberOfConvolution * (shapeOfInput[0] - (sizeOfConvolutionMatrix - 1)) * (shapeOfInput[1] - (
+        sizeOfConvolutionMatrix - 1));
 }
 
 inline
-int computeNumberOfNeuronsForConvolution1D(int numberOfConvolution, int sizeOfConvolutionMatrix, vector<int>& shapeOfInput)
+int computeNumberOfNeuronsForConvolution1D(int numberOfConvolution, int sizeOfConvolutionMatrix,
+                                           vector<int>& shapeOfInput)
 {
     return numberOfConvolution * (shapeOfInput[0] - (sizeOfConvolutionMatrix - 1));
 }
 
 inline
-unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
-                                      StochasticGradientDescent* optimizer)
+unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
+                                          StochasticGradientDescent* optimizer)
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
 
@@ -127,14 +149,13 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
         if (model.numberOfInputs <= 0)
             throw InvalidArchitectureException("Input of layer has size of 0.");
 
-        model.numberOfInputsByNeurons = model.numberOfInputs;
+        model.neuron.numberOfInputs = model.numberOfInputs;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs;
         return make_unique<FullyConnected>(model, optimizer);
 
     case recurrence:
-        if (model.numberOfRecurrences < 0)
-            throw InvalidArchitectureException("Input of layer has size of 0.");
-
-        model.numberOfInputsByNeurons = model.numberOfInputs * (model.numberOfRecurrences + 1);
+        model.neuron.numberOfInputs = model.numberOfInputs;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
         return make_unique<Recurrence>(model, optimizer);
 
     case locallyConnected:
@@ -149,8 +170,10 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
                 throw InvalidArchitectureException("Filter matrix of locally connected layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected1D(model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
-            model.numberOfInputsByNeurons = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected1D(
+                model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
+            model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<LocallyConnected1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
@@ -158,11 +181,13 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
             if (model.sizeOfFilerMatrix > shapeOfInput[0]
                 || model.sizeOfFilerMatrix > shapeOfInput[1])
             {
-                throw InvalidArchitectureException("Filter matrix of convolutionnal layer is too big.");
+                throw InvalidArchitectureException("Filter matrix of convolutional layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
-            model.numberOfInputsByNeurons = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(
+                model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
+            model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<LocallyConnected2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
@@ -181,8 +206,10 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
                 throw InvalidArchitectureException("Convolution matrix is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
-            model.numberOfInputsByNeurons = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(
+                model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
+            model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.shapeOfInput[1];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<Convolution1D>(model, optimizer);
         }
         if (shapeOfInput.size() == 3)
@@ -193,8 +220,10 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
                 throw InvalidArchitectureException("Convolution matrix is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
-            model.numberOfInputsByNeurons = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(
+                model.numberOfFilters, model.sizeOfFilerMatrix, model.shapeOfInput);
+            model.neuron.numberOfInputs = model.sizeOfFilerMatrix * model.sizeOfFilerMatrix * model.shapeOfInput[2];
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             return make_unique<Convolution2D>(model, optimizer);
         }
         if (shapeOfInput.size() > 3)
@@ -207,9 +236,10 @@ unique_ptr<Layer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInp
     default:
         throw InvalidArchitectureException("Layer type is not implemented.");
     }
+    throw InvalidArchitectureException("The layer factory fail to build layer.");
 }
 
-void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& models,
+void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerModel>& models,
                          StochasticGradientDescent* optimizer)
 {
     if (models.size() > 1000)
@@ -227,10 +257,10 @@ void LayerFactory::build(vector<unique_ptr<Layer>>& layers, vector<LayerModel>& 
     if (numberOfInputs > 2073600)
         throw InvalidArchitectureException("Layer is too big.");
 
-    auto& currentshapeOfInput = models[0].shapeOfInput;
+    auto& currentShapeOfInput = models[0].shapeOfInput;
     for (int i = 1; i < models.size(); ++i)
     {
-        layers.push_back(build(models[i], currentshapeOfInput, optimizer));
-        currentshapeOfInput = layers.back()->getShapeOfOutput();
+        layers.push_back(build(models[i], currentShapeOfInput, optimizer));
+        currentShapeOfInput = layers.back()->getShapeOfOutput();
     }
 }

@@ -4,11 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
-#include "Filter.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {
-    class LocallyConnected1D final : public Filter
+    class LocallyConnected1D final : public FilterLayer
     {
     private:
         friend class boost::serialization::access;
@@ -25,19 +25,19 @@ namespace snn::internal
         ~LocallyConnected1D() = default;
         LocallyConnected1D(const LocallyConnected1D&) = default;
 
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const LocallyConnected1D& layer) const;
-        bool operator!=(const LocallyConnected1D& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>
     void LocallyConnected1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<LocallyConnected1D, Filter>();
-        ar & boost::serialization::base_object<Filter>(*this);
+        boost::serialization::void_cast_register<LocallyConnected1D, FilterLayer>();
+        ar & boost::serialization::base_object<FilterLayer>(*this);
     }
 }

@@ -4,12 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
-#include "Filter.hpp"
-#include "perceptron/Perceptron.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {
-    class Convolution1D final : public Filter
+    class Convolution1D final : public FilterLayer
     {
     private:
         friend class boost::serialization::access;
@@ -26,19 +25,19 @@ namespace snn::internal
         ~Convolution1D() = default;
         Convolution1D(const Convolution1D&) = default;
 
-        std::unique_ptr<Layer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Convolution1D& layer) const;
-        bool operator!=(const Convolution1D& layer) const;
+        bool operator==(const BaseLayer& layer) const override;
+        bool operator!=(const BaseLayer& layer) const override;
     };
 
     template <class Archive>
     void Convolution1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<Convolution1D, Filter>();
-        ar & boost::serialization::base_object<Filter>(*this);
+        boost::serialization::void_cast_register<Convolution1D, FilterLayer>();
+        ar & boost::serialization::base_object<FilterLayer>(*this);
     }
 }

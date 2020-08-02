@@ -6,9 +6,14 @@ namespace snn::internal
     class Identity final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return identity; }
+        activation getType() const override { return activation::identity; }
 
     public:
+         Identity()
+            : ActivationFunction(-INFINITY, +INFINITY)
+        {
+        }
+
         float function(const float x) const override
         {
             return x;

@@ -72,12 +72,12 @@ bool StraightforwardNeuralNetwork::isTraining() const
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
-    internal::log<complete>("Start training");
+    log<complete>("Start training");
     if (!this->validData(data))
         throw std::runtime_error("Data has not the same format as the neural network");
     this->stopTraining();
     this->isIdle = false;
-    internal::log<complete>("Start a new thread");
+    log<complete>("Start a new thread");
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 }
 
@@ -90,7 +90,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
-        internal::log<minimal>("Iteration: " + std::to_string(this->numberOfIteration));
+        log<minimal>("Iteration: " + std::to_string(this->numberOfIteration));
         
         data.shuffle();
 
@@ -131,17 +131,17 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
 {
     switch (data.typeOfProblem)
     {
-    case classification:
+    case problem::classification:
         this->evaluateOnceForClassification(data.getTestingData(this->currentIndex),
                                             data.getTestingLabel(this->currentIndex),
                                             data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
-    case multipleClassification:
+    case problem::multipleClassification:
         this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
                                                     data.getTestingOutputs(this->currentIndex), data.getSeparator(),
                                                     data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
-    case regression:
+    case problem::regression:
         this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
                                         data.getTestingOutputs(this->currentIndex),
                                         data.getPrecision(),

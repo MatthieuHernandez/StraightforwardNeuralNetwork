@@ -7,9 +7,14 @@ namespace snn::internal
     class Gaussian final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return gaussian; }
+        activation getType() const override { return activation::gaussian; }
 
     public:
+        Gaussian()
+            : ActivationFunction(0, 1)
+        {
+        }
+
         float function(const float x) const override
         {
             return std::exp(-std::pow(x, 2));

@@ -51,5 +51,5 @@ void Wine::loadData(string folderPath)
         data.push_back(values);
     }
     file.close();
-    this->data = make_unique<Data>(classification, data, labels);
+    this->data = make_unique<Data>(problem::classification, data, labels);
 }

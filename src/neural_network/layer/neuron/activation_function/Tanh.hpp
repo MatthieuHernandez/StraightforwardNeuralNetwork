@@ -7,9 +7,14 @@ namespace snn::internal
     class Tanh final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return tanh; }
+        activation getType() const override { return activation::tanh; }
 
     public:
+        Tanh()
+            : ActivationFunction(-1, 1)
+        {
+        }
+
         float function(const float x) const override
         {
             return std::tanh(x);

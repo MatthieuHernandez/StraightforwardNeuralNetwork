@@ -6,7 +6,7 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
-const static unsigned int sizeOfOneData = 256;
+const static unsigned int sizeOfOneData = 1024;
 
 class AudioCatsAndDogsTest : public testing::Test
 {
@@ -38,22 +38,22 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 
 TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 {
-     // Need to implement MaxPooling layer to help learning
+
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        Recurrence(20, 10, snn::tanh),
-        Recurrence(6, 5),
-        Recurrence(2, 2)
+        LocallyConnected(2, 32),
+        Recurrence(100),
+        Recurrence(30),
+        FullyConnected(2)
     });
-    //auto numberOfparameters = neuralNetwork.getNumberOfParameters();
-    //PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");
-    neuralNetwork.optimizer.learningRate = 0.001f;
-    neuralNetwork.optimizer.momentum = 0.6f;
+    /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
+    PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
+    neuralNetwork.optimizer.learningRate = 0.1f;
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(10_ep);
+    neuralNetwork.waitFor(5_ep);
     neuralNetwork.stopTraining();
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_RECALL(recall, 0.55);
-    ASSERT_ACCURACY(accuracy, 0.6);
+    ASSERT_RECALL(recall, 0.50);
+    ASSERT_ACCURACY(accuracy, 0.55);
 }

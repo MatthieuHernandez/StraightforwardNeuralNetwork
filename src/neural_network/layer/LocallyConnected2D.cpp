@@ -9,12 +9,12 @@ using namespace internal;
 BOOST_CLASS_EXPORT(LocallyConnected2D)
 
 LocallyConnected2D::LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer)
-    : Filter(model, optimizer)
+    : FilterLayer(model, optimizer)
 {
 }
 
 inline
-unique_ptr<Layer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> LocallyConnected2D::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -43,7 +43,7 @@ int LocallyConnected2D::isValid() const
         if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
             return 203;
     }
-    return this->Filter::isValid();
+    return this->FilterLayer::isValid();
 }
 
 inline
@@ -90,13 +90,13 @@ void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::
 }
 
 inline
-bool LocallyConnected2D::operator==(const LocallyConnected2D& layer) const
+bool LocallyConnected2D::operator==(const BaseLayer& layer) const
 {
-    return this->Filter::operator==(layer);
+    return this->FilterLayer::operator==(layer);
 }
 
 inline
-bool LocallyConnected2D::operator!=(const LocallyConnected2D& layer) const
+bool LocallyConnected2D::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);
 }

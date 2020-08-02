@@ -7,9 +7,14 @@ namespace snn::internal
     class Sigmoid final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return sigmoid; }
+        activation getType() const override { return activation::sigmoid; }
 
     public:
+        Sigmoid()
+            : ActivationFunction(0, 1)
+        {
+        }
+
         float function(const float x) const override
         {
             return 1.0f / (1.0f + std::exp(-x));

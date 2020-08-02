@@ -11,7 +11,7 @@ TEST(Memory, passingArgByCopy)
     {
         auto inputData = new vector<vector<float>> {{0, 0, 0}, {1, 1, 1}};
         auto expectedOutputs = new vector<vector<float>> {{0}, {1}};
-        auto data = new Data(regression, *inputData, *expectedOutputs);
+        auto data = new Data(problem::regression, *inputData, *expectedOutputs);
         vector<LayerModel> achitecture = {
             Input(3, 1),
             Convolution(500, 1),
@@ -42,7 +42,7 @@ TEST(Memory, copyOperator)
     {
         vector<vector<float>> inputData = {{0, 0, 0}, {1, 1, 1}};
         vector<vector<float>> expectedOutputs = {{0}, {1}};
-        Data data(regression, inputData, expectedOutputs);
+        Data data(problem::regression, inputData, expectedOutputs);
         auto neuralNetwork = new StraightforwardNeuralNetwork({
                 Input(3, 1),
                 Convolution(500, 1),

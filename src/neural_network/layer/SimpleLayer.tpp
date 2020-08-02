@@ -8,7 +8,7 @@ SimpleLayer<N>::SimpleLayer(LayerModel& model, StochasticGradientDescent* optimi
 template <class N>
 std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<SimpleLayer<N>>(*this);
+    auto layer = std::make_unique<SimpleLayer<N>>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;

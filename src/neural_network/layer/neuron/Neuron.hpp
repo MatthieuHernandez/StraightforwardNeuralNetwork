@@ -27,7 +27,7 @@ namespace snn::internal
 
         float sum = 0;
 
-        activation activation;
+        activation activationFunction;
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;
@@ -75,8 +75,8 @@ namespace snn::internal
         ar & this->lastInputs;
         ar & this->errors;
         ar & this->sum;
-        ar & this->activation;
-        this->outputFunction = ActivationFunction::get(activation);
+        ar & this->activationFunction;
+        this->outputFunction = ActivationFunction::get(activationFunction);
         ar & this->optimizer;
     }
 }

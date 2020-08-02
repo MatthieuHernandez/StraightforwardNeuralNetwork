@@ -9,13 +9,13 @@ using namespace snn::internal;
 
 Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
     : numberOfInputs(model.numberOfInputs),
-      activation(model.activation),
+      activationFunction(model.activationFunction),
       optimizer(optimizer)
 {
     this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->lastInputs.resize(model.numberOfInputs, 0);
     this->errors.resize(model.numberOfWeights, 0);
-    this->outputFunction = ActivationFunction::get(this->activation);
+    this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
     for (auto& w : weights)
     {
@@ -140,7 +140,7 @@ bool Neuron::operator==(const Neuron& neuron) const
         && this->lastInputs == neuron.lastInputs
         && this->errors == neuron.errors
         && this->sum == neuron.sum
-        && this->activation == neuron.activation
+        && this->activationFunction == neuron.activationFunction
         && this->outputFunction == neuron.outputFunction // not really good
         && *this->optimizer == *neuron.optimizer;
 }

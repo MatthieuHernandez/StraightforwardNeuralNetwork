@@ -42,9 +42,8 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
         LocallyConnected(1, 16),
-        FullyConnected(300),
+        Recurrence(300, 100),
         FullyConnected(30),
-        Recurrence(10, 1),
         Recurrence(2, 2)
     });
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();

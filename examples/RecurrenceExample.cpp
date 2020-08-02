@@ -1,4 +1,5 @@
 #include "Examples.hpp"
+#include "../tests/ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
 #include "data/Data.hpp"
 
@@ -14,10 +15,10 @@ For more explanation go to wiki.
 int recurrenceExample()
 {
     vector<vector<float>> inputData = {
-        {3}, {5}, {4}, {2}, {0}, {2}, {2}, {4}, {1}, {4}, {3}, {0}, {0}, {4}, {4}, {3}, {2}, {1}, {2}, {0}, {1}, {5}, {5}, {3}, {3}
+        {0.3}, {0.5}, {0.4}, {0.2}, {0.0}, {0.2}, {0.2}, {0.4}, {0.1}, {0.3}, {0.4}, {0.0}, {0.0}, {0.4}, {0.4}, {0.3}, {0.2}, {0.1}, {0.2}, {0.0}, {0.1}, {0.5}, {0.5}, {0.3}, {0.3}
     };
     vector<vector<float>> expectedOutputs = {
-        {3}, {8}, {9}, {6}, {2}, {2}, {4}, {6}, {5}, {5}, {7}, {3}, {0}, {4}, {8}, {7}, {5}, {3}, {3}, {2}, {1}, {6}, {10}, {8}, {6}
+        {0.3}, {0.8}, {0.9}, {0.6}, {0.2}, {0.2}, {0.4}, {0.6}, {0.5}, {0.4}, {0.7}, {0.4}, {0.0}, {0.4}, {0.8}, {0.7}, {0.5}, {0.3}, {0.3}, {0.2}, {0.1}, {0.6}, {0.10}, {0.8}, {0.6}
     };
 
     const float precision = 0.5f;
@@ -26,8 +27,8 @@ int recurrenceExample()
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(6, 1),
-        FullyConnected(1, snn::activation::identity)
+        Recurrence(10, 1),
+        FullyConnected(1, activation::sigmoid)
     });
 
     neuralNetwork.startTraining(data);
@@ -36,6 +37,8 @@ int recurrenceExample()
 
     float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteError();
+
+    PRINT_LOG("The accuracy is " + to_string(accuracy) + ".");
 
     if (accuracy == 100
         && mae < precision

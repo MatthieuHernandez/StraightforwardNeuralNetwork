@@ -10,9 +10,9 @@ TEST(Identity, WorksWithSmallNumbers)
     vector<vector<float>> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}};
     vector<vector<float>> expectedOutputs = {{0}, {0.25}, {0.50}, {0.75}, {1.00}, {1.25}};
 
-    Data data(regression, inputData, expectedOutputs);
+    Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)});
     neuralNetwork.optimizer.learningRate = 0.02;
     neuralNetwork.optimizer.momentum = 0.99;
 
@@ -33,9 +33,9 @@ TEST(Identity, WorksWithBigNumbers)
     vector<vector<float>> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}, {6}};
     vector<vector<float>> expectedOutputs = {{0}, {25}, {50}, {75}, {100}, {125}, {150}};
 
-    Data data(regression, inputData, expectedOutputs);
+    Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(4), FullyConnected(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(4), FullyConnected(1, snn::activation::identity)});
     neuralNetwork.optimizer.learningRate = 0.0001;
     neuralNetwork.optimizer.momentum = 0.99;
 
@@ -57,10 +57,10 @@ TEST(Identity, WorksWithLotsOfNumbers)
     vector<vector<float>> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0}, {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
 
     float precision = 0.4f;
-    Data data(regression, inputData, expectedOutputs);
+    Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::identity)});
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)});
     neuralNetwork.optimizer.learningRate = 0.0002;
     neuralNetwork.optimizer.momentum = 0.99;
 

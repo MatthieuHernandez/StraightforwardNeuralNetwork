@@ -104,10 +104,10 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        LocallyConnected(1, 2, sigmoid),
-        Convolution(1, 2, sigmoid),
+        LocallyConnected(1, 2, activation::sigmoid),
+        Convolution(1, 2, activation::sigmoid),
         FullyConnected(70),
-        Convolution(1, 4, sigmoid),
+        Convolution(1, 4, activation::sigmoid),
         FullyConnected(10)
     });
     neuralNetwork.optimizer.learningRate = 0.06;
@@ -123,7 +123,7 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filer({
         Input(28, 28, 1),
-        Convolution(1,26, sigmoid),
+        Convolution(1,26, activation::sigmoid),
         FullyConnected(10)
         });
     nn1Filer.startTraining(*data);
@@ -134,7 +134,7 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 
     StraightforwardNeuralNetwork nn10Filers({
         Input(28, 28, 1),
-        Convolution(8,26, sigmoid),
+        Convolution(8,26, activation::sigmoid),
         FullyConnected(10)
         });
     nn10Filers.startTraining(*data);

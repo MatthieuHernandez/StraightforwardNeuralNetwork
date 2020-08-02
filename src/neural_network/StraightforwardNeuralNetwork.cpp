@@ -131,17 +131,17 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
 {
     switch (data.typeOfProblem)
     {
-    case classification:
+    case problem::classification:
         this->evaluateOnceForClassification(data.getTestingData(this->currentIndex),
                                             data.getTestingLabel(this->currentIndex),
                                             data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
-    case multipleClassification:
+    case problem::multipleClassification:
         this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
                                                     data.getTestingOutputs(this->currentIndex), data.getSeparator(),
                                                     data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
-    case regression:
+    case problem::regression:
         this->evaluateOnceForRegression(data.getTestingData(this->currentIndex),
                                         data.getTestingOutputs(this->currentIndex),
                                         data.getPrecision(),

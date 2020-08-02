@@ -358,10 +358,10 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             inputs[i].push_back(dataSound);
         }
     }
-    this->data = make_unique<Data>(classification,
+    this->data = make_unique<Data>(problem::classification,
                                    inputs[0],
                                    labels[0],
                                    inputs[1],
                                    labels[1],
-                                   temporal);
+                                   nature::sequential);
 }

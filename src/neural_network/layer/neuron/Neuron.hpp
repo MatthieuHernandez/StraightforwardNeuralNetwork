@@ -27,7 +27,7 @@ namespace snn::internal
 
         float sum = 0;
 
-        activationFunction activation;
+        activation activation;
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;

@@ -10,13 +10,13 @@ TEST(Architecture, ValidArchitectures)
 {
     vector2D<LayerModel> Architectures =
     {
-        {Input(7, 8, 1), Convolution(2, 3, ReLU), FullyConnected(25, sigmoid)},
+        {Input(7, 8, 1), Convolution(2, 3, activation::ReLU), FullyConnected(25, activation::sigmoid)},
         {Input(10, 1), Convolution(1, 1), Convolution(2, 3)},
         {
-            Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), FullyConnected(30, gaussian), Convolution(2, 2),
+            Input(10, 5, 3), Convolution(2, 2), Convolution(2, 2), FullyConnected(30, activation::gaussian), Convolution(2, 2),
             FullyConnected(15)
         },
-        {Input(4, 20, 3), FullyConnected(30, iSigmoid)},
+        {Input(4, 20, 3), FullyConnected(30, activation::iSigmoid)},
         {Input(4, 2, 1, 2, 3), FullyConnected(5)}
     };
 
@@ -34,10 +34,10 @@ TEST(Architecture, invalidArchitectures)
         {},
         {Input(7, 7, 1)},
         {Input(), FullyConnected(10)},
-        {FullyConnected(3, sigmoid)},
-        {Convolution(3, sigmoid)},
-        {Input(), FullyConnected(3, sigmoid)},
-        {Input(1, 0), FullyConnected(3, sigmoid)},
+        {FullyConnected(3, activation::sigmoid)},
+        {Convolution(3, static_cast<int>(activation::sigmoid))},
+        {Input(), FullyConnected(3, activation::sigmoid)},
+        {Input(1, 0), FullyConnected(3, activation::sigmoid)},
         {Input(1, 1), FullyConnected(10), Input(6, 1)},
         {Input(10, 4, 1), Convolution(1, 7), FullyConnected(1)},
         {Input(8, 8, 8, 1), Convolution(1, 3), FullyConnected(2)}

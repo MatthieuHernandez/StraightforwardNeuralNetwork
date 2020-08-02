@@ -17,7 +17,7 @@ int multipleClassificationExample()
     vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
     const float separator = 0.5f;
-    Data data(multipleClassification, inputData, expectedOutputs);
+    Data data(problem::multipleClassification, inputData, expectedOutputs);
     data.setSeparator(separator);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});

@@ -7,7 +7,7 @@ namespace snn::internal
     class Gaussian final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return gaussian; }
+        activation getType() const override { return activation::gaussian; }
 
     public:
         Gaussian()

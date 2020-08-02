@@ -76,5 +76,5 @@ void Iris::loadData(string folderPath)
         else
             throw runtime_error("Cannot load iris dataset");
     }
-    this->data = make_unique<Data>(classification, data, labels);
+    this->data = make_unique<Data>(problem::classification, data, labels);
 }

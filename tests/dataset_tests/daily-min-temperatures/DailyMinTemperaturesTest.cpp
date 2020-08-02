@@ -45,7 +45,7 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
         Input(1),
         Recurrence(8,2),
         Recurrence(8,1),
-        FullyConnected(1, snn::identity)
+        FullyConnected(1, snn::activation::identity)
     });
     neuralNetwork.optimizer.learningRate = 0.004f;
     neuralNetwork.optimizer.momentum = 0.2f;

@@ -11,14 +11,14 @@ TEST(Recurence, RepeatInput)
 {
     vector2D<float> inputData =       {{0.0}, {-1.0}, {-0.8}, {-0.5}, {-0.2}, {0.0}, {0.3}, {0.5}, {0.7}, {1.0}};
     vector2D<float> expectedOutputs = {{0.0}, {-1.0}, {-0.8}, {-0.5}, {-0.2}, {0.0}, {0.3}, {0.5}, {0.7}, {1.0}};
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data->setPrecision(0.15);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        FullyConnected(12,  sigmoid),
+        FullyConnected(12, activation::sigmoid),
         FullyConnected(6),
-        FullyConnected(1, snn::tanh)
+        FullyConnected(1, activation::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.03f;
     neuralNetwork.optimizer.momentum = 0.98f;
@@ -30,14 +30,14 @@ TEST(Recurence, RepeatLastInput)
     vector2D<float> inputData =       {{0}, {0}, {1}, {1}, {0}, {-1}, {-1}, {0},  {1}, {-1}, {1},  {0}};
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {1}, {1}, {0},  {-1}, {-1}, {0}, {1},  {-1}, {1}};
 
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data->setPrecision(0.3);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1,snn::tanh),
+        Recurrence(12, 1, activation::tanh),
         FullyConnected(6),
-        FullyConnected(1, snn::tanh)
+        FullyConnected(1, activation::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.05f;
     //neuralNetwork.optimizer.momentum = 0.4f;
@@ -49,14 +49,14 @@ TEST(Recurence, RepeatLastLastInput)
     vector2D<float> inputData =       {{0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}, {0}, {0}};
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
 
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data->setPrecision(0.3);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 2,snn::tanh),
+        Recurrence(12, 2, activation::tanh),
         FullyConnected(6),
-        FullyConnected(1, snn::tanh)
+        FullyConnected(1, activation::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.05f;
     //neuralNetwork.optimizer.momentum = 0.4f;

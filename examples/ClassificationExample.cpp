@@ -16,7 +16,7 @@ int classificationExample()
     vector<vector<float>> inputData = {{-0.1, 0.4, -0.6}, {0.5, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {-0.9, -0.5, 1.7}, {0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
     vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
-    Data data(classification, inputData, expectedOutputs);
+    Data data(problem::classification, inputData, expectedOutputs);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(2)});
 

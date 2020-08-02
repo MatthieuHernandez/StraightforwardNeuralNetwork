@@ -31,7 +31,7 @@ void Cifar10::loadData(string folderPath)
     vector2D<float> trainingInputs = readImages(filePaths, 5, trainingLabels);
     vector2D<float> testingInputs = readImages(testFilePaths, 1, testingLabels);
 
-    this->data = make_unique<Data>(classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
+    this->data = make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
 vector2D<float> Cifar10::readImages(string filePaths[], int size, vector2D<float>& labels)

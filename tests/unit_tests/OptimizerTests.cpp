@@ -12,8 +12,8 @@ TEST(Optimizer, FindRightValueIn20)
     unique_ptr<Data> data = createDataForOptimisezTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(20),
-        FullyConnected(4, snn::tanh),
-        FullyConnected(1, sigmoid)
+        FullyConnected(4, activation::tanh),
+        FullyConnected(1, activation::sigmoid)
     });
     neuralNetwork.optimizer.momentum = 0.6f;
 
@@ -47,7 +47,7 @@ unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
         else
             expectedOutputs.push_back({0.0f});
     }
-    unique_ptr<Data> data = make_unique<Data>(regression, inputData, expectedOutputs);
+    unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(0.5);
     return data;
 }

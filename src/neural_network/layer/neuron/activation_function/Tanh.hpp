@@ -7,7 +7,7 @@ namespace snn::internal
     class Tanh final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return tanh; }
+        activation getType() const override { return activation::tanh; }
 
     public:
         Tanh()

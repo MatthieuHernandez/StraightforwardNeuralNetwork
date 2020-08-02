@@ -21,13 +21,13 @@ int recurrenceExample()
     };
 
     const float precision = 0.5f;
-    Data data(regression, inputData, expectedOutputs, timeSeries, 1);
+    Data data(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(6, 1),
-        FullyConnected(1, snn::identity)
+        FullyConnected(1, snn::activation::identity)
     });
 
     neuralNetwork.startTraining(data);

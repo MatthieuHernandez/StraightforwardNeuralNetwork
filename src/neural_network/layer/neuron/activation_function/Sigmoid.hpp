@@ -7,7 +7,7 @@ namespace snn::internal
     class Sigmoid final : public ActivationFunction
     {
     private:
-        activationFunction getType() const override { return sigmoid; }
+        activation getType() const override { return activation::sigmoid; }
 
     public:
         Sigmoid()

@@ -17,12 +17,12 @@ using namespace std;
 using namespace snn;
 using namespace snn::internal;
 
-Data::Data(problemType typeOfProblem,
+Data::Data(problem typeOfProblem,
            vector<vector<float>>& trainingInputs,
            vector<vector<float>>& trainingLabels,
            vector<vector<float>>& testingInputs,
            vector<vector<float>>& testingLabels,
-           temporalType typeOfTemporal,
+           nature typeOfTemporal,
            int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
@@ -35,10 +35,10 @@ Data::Data(problemType typeOfProblem,
                      numberOfRecurrences);
 }
 
-Data::Data(problemType typeOfProblem,
+Data::Data(problem typeOfProblem,
            vector<vector<float>>& inputs,
            vector<vector<float>>& labels,
-           temporalType typeOfTemporal,
+           nature typeOfTemporal,
            int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
@@ -51,16 +51,16 @@ Data::Data(problemType typeOfProblem,
                      numberOfRecurrences);
 }
 
-Data::Data(problemType typeOfProblem,
+Data::Data(problem typeOfProblem,
            vector<vector<vector<float>>>& trainingInputs,
            vector<vector<float>>& trainingLabels,
            vector<vector<vector<float>>>& testingInputs,
            vector<vector<float>>& testingLabels,
-           temporalType typeOfTemporal,
+           nature typeOfTemporal,
            int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
-    if (this->typeOfTemporal != temporal)
+    if (this->typeOfTemporal != nature::sequential)
         throw runtime_error("Vector 3D type inputs are only for temporal data.");
 
     this->flatten(training, trainingInputs);
@@ -75,14 +75,14 @@ Data::Data(problemType typeOfProblem,
                      numberOfRecurrences);
 }
 
-Data::Data(problemType typeOfProblem,
+Data::Data(problem typeOfProblem,
            vector<vector<vector<float>>>& inputs,
            vector<vector<float>>& labels,
-           temporalType typeOfTemporal,
+           nature typeOfTemporal,
            int numberOfRecurrences)
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
-    if (this->typeOfTemporal != temporal)
+    if (this->typeOfTemporal != nature::sequential)
         throw runtime_error("Vector 3D type inputs are only for temporal data.");
 
     this->flatten(training, inputs);
@@ -96,12 +96,12 @@ Data::Data(problemType typeOfProblem,
                      numberOfRecurrences);
 }
 
-void Data::initialize(problemType typeOfProblem,
+void Data::initialize(problem typeOfProblem,
                       vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
-                      temporalType typeOfTemporal,
+                      nature typeOfTemporal,
                       int numberOfRecurrences)
 {
     this->precision = 0.1f;
@@ -123,13 +123,13 @@ void Data::initialize(problemType typeOfProblem,
 
     switch (this->typeOfProblem)
     {
-    case classification:
+    case problem::classification:
         this->problemComposite = make_unique<CompositeForClassification>(this->sets);
         break;
-    case multipleClassification:
+    case problem::multipleClassification:
         this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets);
         break;
-    case regression:
+    case problem::regression:
         this->problemComposite = make_unique<CompositeForRegression>(this->sets);
         break;
     default:
@@ -138,13 +138,13 @@ void Data::initialize(problemType typeOfProblem,
 
     switch (this->typeOfTemporal)
     {
-    case nonTemporal:
+    case nature::nonTemporal:
         this->temporalComposite = make_unique<CompositeForNonTemporalData>(this->sets);
         break;
-    case temporal:
+    case nature::sequential:
         this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
         break;
-    case timeSeries:
+    case nature::timeSeries:
         this->temporalComposite = make_unique<CompositeForTimeSeries>(this->sets, this->numberOfRecurrences);
         break;
     default:
@@ -364,7 +364,7 @@ int Data::getLabel(set set, const int index) const
 
 void Data::setPrecision(const float value)
 {
-    if (this->typeOfProblem == regression)
+    if (this->typeOfProblem == problem::regression)
         this->precision = value;
     else
         throw std::runtime_error("Precision is only for regression problems.");
@@ -372,7 +372,7 @@ void Data::setPrecision(const float value)
 
 float Data::getPrecision() const
 {
-    if (this->typeOfProblem == regression)
+    if (this->typeOfProblem == problem::regression)
         return this->precision;
     else
         throw std::runtime_error("Precision is only for regression problems.");
@@ -380,8 +380,8 @@ float Data::getPrecision() const
 
 void Data::setSeparator(const float value)
 {
-    if (this->typeOfProblem == classification
-        || this->typeOfProblem == multipleClassification)
+    if (this->typeOfProblem == problem::classification
+        || this->typeOfProblem == problem::multipleClassification)
         this->separator = value;
     else
         throw std::runtime_error("Separator is only for classification and multiple classification problems.");
@@ -389,8 +389,8 @@ void Data::setSeparator(const float value)
 
 float Data::getSeparator() const
 {
-    if (this->typeOfProblem == classification
-        || this->typeOfProblem == multipleClassification)
+    if (this->typeOfProblem == problem::classification
+        || this->typeOfProblem == problem::multipleClassification)
         return this->separator;
     else
         throw std::runtime_error("Separator is only for classification and multiple classification problems.");

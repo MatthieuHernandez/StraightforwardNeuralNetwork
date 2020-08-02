@@ -11,7 +11,7 @@ using namespace std;
 using namespace snn;
 using namespace snn::internal;
 
-LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activation)
+LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
 {
     LayerModel model
     {
@@ -19,6 +19,7 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activatio
         -1,
         numberOfNeurons,
         {
+            -1,
             -1,
             -1,
             activation
@@ -29,7 +30,7 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activationFunction activatio
     return model;
 }
 
-LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation)
+LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activation activation)
 {
     LayerModel model
     {
@@ -37,6 +38,7 @@ LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activat
         -1,
         numberOfNeurons,
         {
+            -1,
             -1,
             numberOfRecurrences,
             activation
@@ -47,7 +49,7 @@ LayerModel snn::Recurrence(int numberOfNeurons, int numberOfRecurrences, activat
     return model;
 }
 
-LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activationFunction activation)
+LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation)
 {
     LayerModel model
     {
@@ -56,6 +58,7 @@ LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMa
         -1,
         -1,
         {
+            -1,
             -1,
             -1,
             activation
@@ -67,7 +70,7 @@ LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMa
     return model;
 }
 
-LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation)
+LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation)
 {
     LayerModel model
     {
@@ -75,6 +78,7 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
         -1,
         -1,
         {
+            -1,
             -1,
             -1,
             activation,

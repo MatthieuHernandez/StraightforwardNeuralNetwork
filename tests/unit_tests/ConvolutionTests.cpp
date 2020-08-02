@@ -12,7 +12,7 @@ TEST(Convolution, SimpleConvolution2D)
     auto data = createDataForConvolutionTests();
     vector<LayerModel> architectures =
     {
-        Input(3, 3, 2), Convolution(2, 2, sigmoid),
+        Input(3, 3, 2), Convolution(2, 2, activation::sigmoid),
         FullyConnected(2)
     };
     StraightforwardNeuralNetwork neuralNetwork(architectures);
@@ -42,5 +42,5 @@ Data createDataForConvolutionTests()
     };
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-    return Data(classification, inputData, expectedOutputs);
+    return Data(problem::classification, inputData, expectedOutputs);
 }

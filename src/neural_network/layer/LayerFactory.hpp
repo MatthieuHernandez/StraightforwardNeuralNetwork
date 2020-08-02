@@ -14,7 +14,7 @@ namespace snn
         LayerModel model
         {
             input,
-            sigmoid,
+            static_cast<int>(activation::sigmoid),
             0,
             {
                 0,
@@ -27,13 +27,13 @@ namespace snn
         return model;
     };
 
-    extern LayerModel FullyConnected(int numberOfNeurons, activationFunction activation = sigmoid);
+    extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 
-    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activationFunction activation = sigmoid);
+    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activation activation = activation::sigmoid);
 
-    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activationFunction activation = sigmoid);
+    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 
-    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activationFunction activation = ReLU);
+    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
 }
 
 namespace snn::internal

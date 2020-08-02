@@ -15,8 +15,8 @@ TEST(Addition, WithMPL)
     unique_ptr<Data> data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        FullyConnected(6, sigmoid),
-        FullyConnected(1, snn::identity)
+        FullyConnected(6, activation::sigmoid),
+        FullyConnected(1, activation::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -26,8 +26,8 @@ TEST(Addition, WithCNN)
     auto data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        Convolution(6, 1, sigmoid),
-        FullyConnected(1, snn::identity)
+        Convolution(6, 1, activation::sigmoid),
+        FullyConnected(1, activation::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -37,8 +37,8 @@ TEST(Addition, WithLCNN)
     auto data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        LocallyConnected(6, 1, sigmoid),
-        FullyConnected(1, snn::identity)
+        LocallyConnected(6, 1, activation::sigmoid),
+        FullyConnected(1, activation::identity)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -48,9 +48,9 @@ TEST(Addition, WithRNN)
     auto data = createRecurrentDataForAdditionTests(400);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1, sigmoid),
-        FullyConnected(6, sigmoid),
-        FullyConnected(1, sigmoid)
+        Recurrence(12, 1, activation::sigmoid),
+        FullyConnected(6, activation::sigmoid),
+        FullyConnected(1, activation::sigmoid)
     });
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -84,7 +84,7 @@ unique_ptr<Data> createDataForAdditionTests()
     };
 
     const float precision = 0.5f;
-    unique_ptr<Data> data = make_unique<Data>(regression, inputData, expectedOutputs);
+    unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(precision);
     return data;
 }
@@ -109,7 +109,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData)
     }
 
     const float precision = 0.05f;
-    auto data = make_unique<Data>(regression, inputData, expectedOutputs, timeSeries, 1);
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data->setPrecision(precision);
     return data;
 }

@@ -3,7 +3,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[2])
     : ProblemComposite(sets)

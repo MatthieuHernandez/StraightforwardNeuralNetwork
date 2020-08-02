@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace snn;
-using namespace snn::internal;
+using namespace internal;
 
 CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
     : TemporalComposite(sets)

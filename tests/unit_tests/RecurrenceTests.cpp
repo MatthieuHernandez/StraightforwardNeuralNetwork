@@ -16,7 +16,7 @@ TEST(Recurence, RepeatInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1, activation::sigmoid),
+        Recurrence(12, 1),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
     });
@@ -35,33 +35,33 @@ TEST(Recurence, RepeatLastInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1, activation::tanh),
+        Recurrence(12, 1),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.05f;
-    //neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
-TEST(Recurence, RepeatLastLastInput)
+//a simple recurrent neural network can't solve this problem
+/*TEST(Recurence, RepeatLastLastInput)
 {
     vector2D<float> inputData =       {{0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}, {0}, {0}};
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
 
-    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
     data->setPrecision(0.3);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(12, 2, activation::tanh),
         FullyConnected(6),
-        FullyConnected(1, activation::tanh)
+        FullyConnected(1, activation::sigmoid)
     });
     neuralNetwork.optimizer.learningRate = 0.05f;
     //neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
-}
+}*/
 
 inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)

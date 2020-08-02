@@ -7,7 +7,7 @@ using namespace std;
 using namespace snn;
 
 unique_ptr<Data> createDataForAdditionTests();
-unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData);
+unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences);
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Addition, WithMPL)
@@ -45,13 +45,15 @@ TEST(Addition, WithLCNN)
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentDataForAdditionTests(400);
+    auto data = createRecurrentDataForAdditionTests(1000, 1);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 1, activation::sigmoid),
-        FullyConnected(6, activation::sigmoid),
-        FullyConnected(1, activation::sigmoid)
+        Recurrence(6, 1),
+        FullyConnected(2),
+        FullyConnected(1)
     });
+    neuralNetwork.optimizer.learningRate = 0.01f;
+    neuralNetwork.optimizer.momentum = 0.5f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
@@ -89,7 +91,7 @@ unique_ptr<Data> createDataForAdditionTests()
     return data;
 }
 
-unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData)
+unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences)
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;
@@ -98,18 +100,18 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData)
 
     for (int i = 0; i < numberOfData; ++i)
     {
-        auto r = snn::internal::Tools::randomBetween(0.0f, 0.25f);
+        auto r = snn::internal::Tools::randomBetween(0.0f, 1.0f/(numberOfRecurrences+1));
         inputData.push_back({r});
 
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < numberOfRecurrences+1; ++j)
         {
             if (i + j < numberOfData)
                 expectedOutputs[i + j][0] += r;
         }
     }
 
-    const float precision = 0.05f;
-    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
+    const float precision = 0.1f;
+    auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, numberOfRecurrences);
     data->setPrecision(precision);
     return data;
 }

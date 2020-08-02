@@ -29,7 +29,7 @@ namespace snn
 
     extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 
-    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activation activation = activation::sigmoid);
+    extern LayerModel Recurrence(int numberOfNeurons, int numberOfRecurrences, activation activation = activation::tanh);
 
     extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 

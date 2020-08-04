@@ -1,20 +1,20 @@
 #include <boost/serialization/export.hpp>
-#include "Recurrence.hpp"
+#include "GruLayer.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Recurrence)
+BOOST_CLASS_EXPORT(GruLayer)
 
-Recurrence::Recurrence(LayerModel& model, StochasticGradientDescent* optimizer)
+GruLayer::GruLayer(LayerModel& model, StochasticGradientDescent* optimizer)
      : SimpleLayer(model, optimizer)
 {
 }
 
-unique_ptr<BaseLayer> Recurrence::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> GruLayer::clone(StochasticGradientDescent* optimizer) const
 {
-    auto layer = make_unique<Recurrence>(*this);
+    auto layer = make_unique<GruLayer>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].optimizer = optimizer;

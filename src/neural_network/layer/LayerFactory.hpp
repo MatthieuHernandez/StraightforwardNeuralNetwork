@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "Layer.hpp"
@@ -30,6 +29,8 @@ namespace snn
     extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 
     extern LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh);
+
+    extern LayerModel GruLayer(int numberOfNeurons);
 
     extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 

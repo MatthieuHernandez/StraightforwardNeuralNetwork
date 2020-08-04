@@ -2,6 +2,7 @@
 #include "../../tools/ExtendedExpection.hpp"
 #include "FullyConnected.hpp"
 #include "Recurrence.hpp"
+#include "GruLayer.hpp"
 #include "Convolution1D.hpp"
 #include "Convolution2D.hpp"
 #include "LocallyConnected1D.hpp"
@@ -40,6 +41,24 @@ LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
             -1,
             -1,
             activation
+        },
+        -1,
+        -1
+    };
+    return model;
+}
+
+LayerModel snn::GruLayer(int numberOfNeurons)
+{
+    LayerModel model
+    {
+        recurrence,
+        -1,
+        numberOfNeurons,
+        {
+            -1,
+            -1,
+            activation::tanh,
         },
         -1,
         -1
@@ -157,6 +176,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
         model.neuron.numberOfInputs = model.numberOfInputs;
         model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
         return make_unique<Recurrence>(model, optimizer);
+
+    case gruLayer:
+        model.neuron.numberOfInputs = model.numberOfInputs;
+        model.neuron.numberOfWeights = (model.neuron.numberOfInputs+1)*3;
+        return make_unique<GruLayer>(model, optimizer);
 
     case locallyConnected:
         if (shapeOfInput.size() == 1)

@@ -26,7 +26,8 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     {
         this->sum += inputs[w] * this->weights[w];
     }
-    this->sum += this->previousOutput * this->weights[w] + this->bias;
+    this->sum += this->previousOutput * this->weights[w];
+    this->sum += this->bias;
     float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
@@ -35,28 +36,28 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 std::vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(this->lastInputs, error);
 
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];
     }
+    this->updateWeights(error);
     return this->errors;
 }
 
 void RecurrentNeuron::train(float error)
 {
     error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(this->lastInputs, error);
+    this->updateWeights(error);
 }
 
 inline
-void RecurrentNeuron::updateWeights(const std::vector<float>& inputs, float error)
+void RecurrentNeuron::updateWeights(const float error)
 {
     int w;
-    for (w = 0; w < inputs.size(); ++w)
+    for (w = 0; w < this->lastInputs.size(); ++w)
     {
-        auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
+        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         this->weights[w] += deltaWeights;
         this->previousDeltaWeights[w] = deltaWeights;

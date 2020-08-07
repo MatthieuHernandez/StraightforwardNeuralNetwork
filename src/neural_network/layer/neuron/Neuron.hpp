@@ -31,7 +31,7 @@ namespace snn::internal
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;
-        virtual void updateWeights(const std::vector<float>& inputs, float error);
+        virtual void updateWeights(const float error);
 
 
     public:

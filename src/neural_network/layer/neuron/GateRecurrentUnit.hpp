@@ -17,14 +17,25 @@ namespace snn::internal
         float recurrentError = 0;
         float previousSum = 0;
 
+        int resetGateBegin;
+        int resetGateEnd;
+        int updateGateBegin;
+        int updateGateEnd;
+
+        ActivationFunction* sigmoid;
+
         void reset();
-        void updateWeights(const std::vector<float>& inputs, float error) override;
+        void updateWeights(const float error) override;
 
-        void forgetGateOutput(const std::vector<float>& inputs);
-        void updateGateOutput(const std::vector<float>& inputs);
+        float resetGateOutput(const std::vector<float>& inputs);
+        float updateGateOutput(const std::vector<float>& inputs);
 
-        std::vector<float>& forgetGateBackOutput(const std::vector<float>& inputs);
-        std::vector<float>& updateGateBackOutput(const std::vector<float>& inputs);
+        std::vector<float>& resetGateBackOutput(float error);
+        std::vector<float>& updateGateBackOutput(float error);
+
+        void updateResetGateWeights(const float error);
+        void updateUpdateGateWeights(const float error);
+
 
     public:
         GateRecurrentUnit() = default; // use restricted to Boost library only

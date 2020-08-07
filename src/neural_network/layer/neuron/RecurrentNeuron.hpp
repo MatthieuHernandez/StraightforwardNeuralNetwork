@@ -18,7 +18,7 @@ namespace snn::internal
         float previousSum = 0;
 
         void reset();
-        void updateWeights(const std::vector<float>& inputs, float error) override;
+        void updateWeights(const float error) override;
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only

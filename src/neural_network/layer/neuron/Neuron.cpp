@@ -38,7 +38,7 @@ float Neuron::output(const vector<float>& inputs)
     {
         this->sum += inputs[w] * weights[w];
     }
-    this->sum += bias; 
+    this->sum += bias;
     return outputFunction->function(this->sum);
 }
 
@@ -46,12 +46,11 @@ std::vector<float>& Neuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 
-    this->updateWeights(lastInputs, error);
-
     for (int w = 0; w < this->weights.size(); ++w)
     {
         errors[w] = error * weights[w];
     }
+    this->updateWeights(error);
     return errors;
 }
 
@@ -59,14 +58,14 @@ void Neuron::train(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 
-    this->updateWeights(lastInputs, error);
+    this->updateWeights(error);
 }
 
-void Neuron::updateWeights(const std::vector<float>& inputs, const float error)
+void Neuron::updateWeights(const float error)
 {
     for (int w = 0; w < this->weights.size(); ++w)
     {
-        auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
+        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
         deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
         weights[w] += deltaWeights;
         this->previousDeltaWeights[w] = deltaWeights;

@@ -21,3 +21,4 @@ MakeFile
 # Ignore copy of datasets.
 build/datasets/
 docs/.*
+docs/_site/

@@ -9,148 +9,83 @@ using namespace internal;
 BOOST_CLASS_EXPORT(GateRecurrentUnit)
 
 GateRecurrentUnit::GateRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
-    : Neuron(model, optimizer)
+    : numberOfInputs(model.numberOfInputs),
+      resetGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
+      updateGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
+      outputGate({model.numberOfInputs, model.numberOfWeights, activation::tanh}, optimizer)
 {
-    this->sigmoid = ActivationFunction::get(activation::sigmoid);
-
-    this->resetGateBegin = (this->numberOfInputs + 1) * 1;
-    this->resetGateEnd = this->resetGateBegin + this->numberOfInputs;
-    this->updateGateBegin = (this->numberOfInputs + 1) * 2;
-    this->updateGateEnd = this->updateGateBegin + this->numberOfInputs;
+    this->optimizer = optimizer;
 }
 
 float GateRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
 {
-    float resetGate = this->resetGateOutput(inputs);
-    float updateGate = this->updateGateOutput(inputs);
+    if (temporalReset)
+        this->reset();
+    float resetGateOutput = this->resetGate.output(inputs, temporalReset);
+    this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
+    this->outputGate.lastOutput *= resetGateOutput;
+    this->outputGateOutput = this->outputGate.output(inputs, temporalReset);
 
-    this->sum = 0;
-    int w;
-    for (w = 0; w < inputs.size(); ++w)
-    {
-        this->sum += inputs[w] * this->weights[w];
-    }
-    this->sum += this->previousOutput * resetGate * this->weights[w];
-    this->sum += this->bias;
-    float output = outputFunction->function(sum);
-    output *= updateGate;
-    output += this->previousOutput * (1 - updateGate);
+    float output = (1 - this->updateGateOutput) * this->previousOutput + this->updateGateOutput * outputGateOutput;
+
+    this->resetGate.lastOutput = output;
+    this->updateGate.lastOutput = output;
+    this->outputGate.lastOutput = output;
+
     return output;
 }
 
 std::vector<float>& GateRecurrentUnit::backOutput(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(this->lastInputs, error);
+    float d3 = error;
+    float d8 = d3 * this->updateGateOutput;
+    float d5 = d3 * this->recurrentError;
+    float d7 = d3 * this->outputGateOutput;
+    float d9 = d7 + d8;
 
-    for (int w = 0; w < this->numberOfInputs; ++w)
-    {
-        this->errors[w] = error * this->weights[w];
-    }
-    return this->errors;
+
+    auto e1 = this->outputGate.backOutput(d8);
+    auto e2 = this->updateGate.backOutput(d9);
+    float d13 = e1.back();
+    float d16 = d13 * this->previousOutput;
+    auto e3 = this->resetGate.backOutput(d16);
+
+    std::transform(e1.begin(), e1.end(), e2.begin(), e1.begin(), std::plus());
+    std::transform(e1.begin(), e1.end(), e3.begin(), e1.begin(), std::plus());
+    return e1;
 }
 
 void GateRecurrentUnit::train(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(this->lastInputs, error);
-    throw exception();
+    float outputGateError = 0;
+    float updateGateError = 0;
+    float resetGateError = 0;
 }
 
-inline
-float GateRecurrentUnit::resetGateOutput(const std::vector<float>& inputs)
+vector<float> GateRecurrentUnit::getWeights() const
 {
-    float resetGateSum = 0;
-    int w;
-    for (w = this->resetGateBegin; w < this->resetGateEnd; ++w)
-    {
-        resetGateSum += inputs[w] * this->weights[w];
-    }
-    resetGateSum += this->previousOutput * this->weights[w];
-    resetGateSum += this->bias;
-    return this->sigmoid->function(resetGateSum);
+    vector<float> allWeights;
+    allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
+    allWeights.insert(allWeights.end(), this->updateGate.weights.begin(), this->updateGate.weights.end());
+    allWeights.insert(allWeights.end(), this->outputGate.weights.begin(), this->outputGate.weights.end());
+    return allWeights;
 }
 
-inline
-float GateRecurrentUnit::updateGateOutput(const std::vector<float>& inputs)
+int GateRecurrentUnit::getNumberOfParameters() const
 {
-    float updateGateSum = 0;
-    int w;
-    for (w = this->updateGateBegin; w < this->updateGateEnd; ++w)
-    {
-        updateGateSum += inputs[w] * this->weights[w];
-    }
-    updateGateSum += this->previousOutput * this->weights[w];
-    updateGateSum += this->bias;
-    return this->sigmoid->function(updateGateSum);
+    return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() + this
+                                                                                                ->outputGate.
+                                                                                                getNumberOfParameters();
 }
 
-inline
-void GateRecurrentUnit::updateResetGateWeights(const float error)
+int GateRecurrentUnit::getNumberOfInputs() const
 {
-    int w;
-    for (w = this->resetGateBegin; w < this->resetGateEnd; ++w)
-    {
-        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        this->weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
-    }
-    this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-
-    auto deltaWeights = this->optimizer->learningRate * this->recurrentError * this->previousOutput;
-    deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-    this->weights[w] += deltaWeights;
-    this->previousDeltaWeights[w] = deltaWeights;
+    return this->numberOfInputs;
 }
 
-inline
-void GateRecurrentUnit::updateUpdateGateWeights(const float error)
-{
-    int w;
-    for (w = this->updateGateBegin; w < this->updateGateEnd; ++w)
-    {
-        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        this->weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
-    }
-    this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-
-    auto deltaWeights = this->optimizer->learningRate * this->recurrentError * this->previousOutput;
-    deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-    this->weights[w] += deltaWeights;
-    this->previousDeltaWeights[w] = deltaWeights;
-}
 
 inline
-std::vector<float>& GateRecurrentUnit::updateGateBackOutput(float error)
-{
-     error = error * outputFunction->derivative(this->sum);
-
-    for (int w = 0; w < this->numberOfInputs; ++w)
-    {
-        this->errors[w] = error * this->weights[w];
-    }
-    this->updateWeights(error);
-    return this->errors;
-}
-
-inline
-std::vector<float>& GateRecurrentUnit::resetGateBackOutput(float error)
-{
-    error = error * outputFunction->derivative(this->sum);
-
-    for (int w = 0; w < this->numberOfInputs; ++w)
-    {
-        this->errors[w] = error * this->weights[w];
-    }
-    this->updateWeights(error);
-    return this->errors;
-}
-
-inline
-void GateRecurrentUnit::updateWeights(const std::vector<float>& inputs, float error)
+void GateRecurrentUnit::updateWeights(float error)
 {
     throw exception();
 }
@@ -160,26 +95,37 @@ void GateRecurrentUnit::reset()
 {
     this->previousOutput = 0;
     this->recurrentError = 0;
-    this->previousSum = 0;
+    this->updateGateOutput = 0;
 }
 
 int GateRecurrentUnit::isValid() const
 {
-    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 1)
-        return 304;
-    return this->Neuron::isValid();
+    auto err = resetGate.isValid();
+    if (err != 0)
+        return err;
+    err = updateGate.isValid();
+    if (err != 0)
+        return err;
+    err = outputGate.isValid();
+    if (err != 0)
+        return err;
+    return 0;
 }
 
-bool GateRecurrentUnit::operator==(const Neuron& neuron) const
+bool GateRecurrentUnit::operator==(const BaseNeuron& neuron) const
 {
     try
     {
         const auto& n = dynamic_cast<const GateRecurrentUnit&>(neuron);
-        return this->Neuron::operator==(neuron)
-            && this->lastOutput == n.lastOutput
+        return this->BaseNeuron::operator==(neuron)
+            && this->numberOfInputs == n.numberOfInputs
             && this->previousOutput == n.previousOutput
             && this->recurrentError == n.recurrentError
-            && this->previousSum == n.previousSum;
+            && this->updateGateOutput == n.updateGateOutput
+            && this->outputGateOutput == n.outputGateOutput
+            && this->resetGate.RecurrentNeuron::operator==(n.resetGate)
+            && this->updateGate.RecurrentNeuron::operator==(n.updateGate)
+            && this->outputGate.RecurrentNeuron::operator==(n.outputGate);
     }
     catch (bad_cast&)
     {
@@ -187,7 +133,7 @@ bool GateRecurrentUnit::operator==(const Neuron& neuron) const
     }
 }
 
-bool GateRecurrentUnit::operator!=(const Neuron& neuron) const
+bool GateRecurrentUnit::operator!=(const BaseNeuron& neuron) const
 {
     return !(*this == neuron);
 }

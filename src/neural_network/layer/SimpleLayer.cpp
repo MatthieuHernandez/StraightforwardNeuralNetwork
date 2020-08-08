@@ -5,7 +5,7 @@
 using namespace snn;
 using namespace internal;
 
-extern template class SimpleLayer<Neuron>;
+extern template class SimpleLayer<SimpleNeuron>;
 extern template class SimpleLayer<RecurrentNeuron>;
 extern template class SimpleLayer<GateRecurrentUnit>;
 

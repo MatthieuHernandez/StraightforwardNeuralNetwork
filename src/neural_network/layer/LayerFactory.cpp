@@ -179,7 +179,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
 
     case gruLayer:
         model.neuron.numberOfInputs = model.numberOfInputs;
-        model.neuron.numberOfWeights = (model.neuron.numberOfInputs+1)*3;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
         return make_unique<GruLayer>(model, optimizer);
 
     case locallyConnected:

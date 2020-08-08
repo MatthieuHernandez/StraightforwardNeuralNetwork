@@ -6,7 +6,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Neuron)
+BOOST_CLASS_EXPORT(RecurrentNeuron)
 
 RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
     : Neuron(model, optimizer)
@@ -85,7 +85,7 @@ int RecurrentNeuron::isValid() const
     return this->Neuron::isValid();
 }
 
-bool RecurrentNeuron::operator==(const Neuron& neuron) const
+bool RecurrentNeuron::operator==(const BaseNeuron& neuron) const
 {
     try
     {
@@ -102,7 +102,7 @@ bool RecurrentNeuron::operator==(const Neuron& neuron) const
     }
 }
 
-bool RecurrentNeuron::operator!=(const Neuron& neuron) const
+bool RecurrentNeuron::operator!=(const BaseNeuron& neuron) const
 {
     return !(*this == neuron);
 }

@@ -32,8 +32,6 @@ namespace snn::internal
         ActivationFunction* outputFunction;
 
         float randomInitializeWeight(int numberOfInputs) const;
-        virtual void updateWeights(const float error) override = 0;
-
 
     public:
         Neuron() = default; // use restricted to Boost library only
@@ -42,9 +40,6 @@ namespace snn::internal
         virtual ~Neuron() = default;
 
         StochasticGradientDescent* optimizer;
-
-        [[nodiscard]] std::vector<float>& backOutput(float error) override = 0;
-        void train(float error) override = 0;
 
         [[nodiscard]] int isValid() const override;
 

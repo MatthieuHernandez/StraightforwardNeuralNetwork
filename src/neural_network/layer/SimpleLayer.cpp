@@ -10,7 +10,7 @@ extern template class SimpleLayer<SimpleNeuron>;
 extern template class SimpleLayer<RecurrentNeuron>;
 extern template class SimpleLayer<GateRecurrentUnit>;
 
-BOOST_CLASS_EXPORT(SimpleLayer<Neuron>)
+BOOST_CLASS_EXPORT(SimpleLayer<SimpleNeuron>)
 BOOST_CLASS_EXPORT(SimpleLayer<RecurrentNeuron>)
 BOOST_CLASS_EXPORT(SimpleLayer<GateRecurrentUnit>)
 

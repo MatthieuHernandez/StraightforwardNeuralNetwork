@@ -1,5 +1,6 @@
 ﻿#include "../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
+#include "neural_network/layer/neuron/Neuron.hpp"
 
 using namespace std;
 using namespace snn;
@@ -40,8 +41,9 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(*A.layers[0]->getNeuron(0) == *B.layers[0]->getNeuron(0)) << "Value : A.Layers[0].getNeuron(0) == B.Layers[0].getNeuron(0)";
     EXPECT_TRUE(A.layers[0]->getNeuron(0) != B.layers[0]->getNeuron(0)) << "Address : A.Layers[0].getNeuron(0) != B.Layers[0].getNeuron(0)";
 
-    EXPECT_TRUE(&A.optimizer == &*A.layers[0]->getNeuron(0)->optimizer);
-    EXPECT_TRUE(&B.optimizer == &*B.layers[0]->getNeuron(0)->optimizer);
+    //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
+    EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);
+    EXPECT_TRUE(&B.optimizer == &*static_cast<internal::SimpleNeuron*>(B.layers[0]->getNeuron(0))->optimizer);
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 

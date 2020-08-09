@@ -4,11 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
 #include "../Optimizer.hpp"
-#include "neuron/Neuron.hpp"
+#include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {
-    class FullyConnected final : public SimpleLayer<Neuron>
+    class FullyConnected final : public SimpleLayer<SimpleNeuron>
     {
     private:
         friend class boost::serialization::access;

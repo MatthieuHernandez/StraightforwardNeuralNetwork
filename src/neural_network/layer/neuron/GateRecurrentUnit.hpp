@@ -1,41 +1,33 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Neuron.hpp"
+#include "BaseNeuron.hpp"
+#include "RecurrentNeuron.hpp"
 
 namespace snn::internal
 {
-    class GateRecurrentUnit final : public Neuron
+    class GateRecurrentUnit final : public BaseNeuron
     {
-            private:
+    private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
 
-        float lastOutput = 0;
+       friend class RecurrentNeuron;
+
+        int numberOfInputs;
+
         float previousOutput = 0;
         float recurrentError = 0;
-        float previousSum = 0;
+        float updateGateOutput = 0;
+        float outputGateOutput = 0;
 
-        int resetGateBegin;
-        int resetGateEnd;
-        int updateGateBegin;
-        int updateGateEnd;
-
-        ActivationFunction* sigmoid;
+        RecurrentNeuron resetGate;
+        RecurrentNeuron updateGate;
+        RecurrentNeuron outputGate;
 
         void reset();
         void updateWeights(const float error) override;
-
-        float resetGateOutput(const std::vector<float>& inputs);
-        float updateGateOutput(const std::vector<float>& inputs);
-
-        std::vector<float>& resetGateBackOutput(float error);
-        std::vector<float>& updateGateBackOutput(float error);
-
-        void updateResetGateWeights(const float error);
-        void updateUpdateGateWeights(const float error);
-
 
     public:
         GateRecurrentUnit() = default; // use restricted to Boost library only
@@ -43,20 +35,34 @@ namespace snn::internal
         GateRecurrentUnit(const GateRecurrentUnit& recurrentNeuron) = default;
         ~GateRecurrentUnit() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
+        StochasticGradientDescent* optimizer;
+
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) override;
+        [[nodiscard]] std::vector<float>& backOutput(float error) override;
+        void train(float error) override;
+
+        [[nodiscard]] std::vector<float> getWeights() const override;
+        [[nodiscard]] int getNumberOfParameters() const override;
+        [[nodiscard]] int getNumberOfInputs() const override;
 
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Neuron& neuron) const override;
-        bool operator!=(const Neuron& neuron) const override;
-        [[nodiscard]] std::vector<float>& backOutput(float error) override;
-        void train(float error) override;
+        bool operator==(const BaseNeuron& neuron) const override;
+        bool operator!=(const BaseNeuron& neuron) const override;
     };
 
     template <class Archive>
     void GateRecurrentUnit::serialize(Archive& ar, const unsigned int version)
     {
-        boost::serialization::void_cast_register<GateRecurrentUnit, Neuron>();
-        ar & boost::serialization::base_object<Neuron>(*this);
+        boost::serialization::void_cast_register<GateRecurrentUnit, BaseNeuron>();
+        ar & boost::serialization::base_object<BaseNeuron>(*this);
+        ar & this->numberOfInputs;
+        ar & this->previousOutput;
+        ar & this->recurrentError;
+        ar & this->updateGateOutput;
+        ar & this->outputGateOutput;
+        ar & this->resetGate;
+        ar & this->updateGate;
+        ar & this->outputGate;
     }
 }

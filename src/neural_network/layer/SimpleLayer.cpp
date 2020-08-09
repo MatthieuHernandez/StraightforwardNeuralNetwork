@@ -1,4 +1,5 @@
 #include "SimpleLayer.hpp"
+#include "neuron/SimpleNeuron.hpp"
 #include "neuron/RecurrentNeuron.hpp"
 #include "neuron/GateRecurrentUnit.hpp"
 

@@ -53,6 +53,21 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.90f);
 }
 
+TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(784),
+        GruLayer(150),
+        GruLayer(70),
+        GruLayer(10)
+    });
+    neuralNetwork.startTraining(*data);
+    neuralNetwork.waitFor(1_ep || 45_s);
+    neuralNetwork.stopTraining();
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.90f);
+}
+
 TEST_F(MnistTest, LocallyConnected1D)
 {
     StraightforwardNeuralNetwork neuralNetwork({

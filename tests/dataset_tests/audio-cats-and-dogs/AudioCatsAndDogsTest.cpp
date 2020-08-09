@@ -43,7 +43,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
         Input(sizeOfOneData),
         LocallyConnected(2, 32),
         Recurrence(100),
-        Recurrence(30),
+        GruLayer(30),
         FullyConnected(2)
     });
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();

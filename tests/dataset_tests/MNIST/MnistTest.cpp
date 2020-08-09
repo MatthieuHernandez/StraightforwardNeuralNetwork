@@ -57,9 +57,9 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        GruLayer(150),
-        GruLayer(70),
-        GruLayer(10)
+        FullyConnected(100),
+        GruLayer(10),
+        FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1_ep || 45_s);

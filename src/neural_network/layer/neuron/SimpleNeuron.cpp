@@ -30,10 +30,10 @@ std::vector<float>& SimpleNeuron::backOutput(float error)
 
     for (int w = 0; w < this->weights.size(); ++w)
     {
-        errors[w] = error * weights[w];
+        this->errors[w] = error * weights[w];
     }
     this->updateWeights(error);
-    return errors;
+    return this->errors;
 }
 
 void SimpleNeuron::train(float error)

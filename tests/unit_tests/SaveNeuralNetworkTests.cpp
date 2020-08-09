@@ -13,6 +13,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         FullyConnected(20, activation::iSigmoid),
         LocallyConnected(3, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid),
+        GruLayer(3),
         Recurrence(3)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
@@ -71,10 +72,11 @@ TEST(SaveNeuralNetwork, EqualTest)
 TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
-        Input(5),
+        Input(15),
         Convolution(2, 2, activation::ReLU),
-        FullyConnected(10, activation::tanh),
-        FullyConnected(3, activation::sigmoid)
+        LocallyConnected(2, 2, activation::tanh),
+        FullyConnected(3, activation::sigmoid),
+        GruLayer(2)
     });
     A.optimizer.learningRate = 0.03f;
     A.optimizer.momentum = 0.78f;

@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
 #include <typeinfo>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "BaseLayer.hpp"

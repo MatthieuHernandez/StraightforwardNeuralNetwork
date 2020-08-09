@@ -52,7 +52,7 @@ LayerModel snn::GruLayer(int numberOfNeurons)
 {
     LayerModel model
     {
-        recurrence,
+        gruLayer,
         -1,
         numberOfNeurons,
         {

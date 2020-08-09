@@ -44,15 +44,15 @@ std::vector<float>& GateRecurrentUnit::backOutput(float error)
     float d9 = d7 + d8;
 
 
-    auto e1 = this->outputGate.backOutput(d8);
+    this->errors = this->outputGate.backOutput(d8);
     auto e2 = this->updateGate.backOutput(d9);
-    float d13 = e1.back();
+    float d13 = this->errors.back();
     float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
-    std::transform(e1.begin(), e1.end(), e2.begin(), e1.begin(), std::plus<float>());
-    std::transform(e1.begin(), e1.end(), e3.begin(), e1.begin(), std::plus<float>());
-    return e1;
+    std::transform(this->errors .begin(), this->errors .end(), e2.begin(), this->errors .begin(), std::plus<float>());
+    std::transform(this->errors .begin(), this->errors .end(), e3.begin(), this->errors .begin(), std::plus<float>());
+    return this->errors;
 }
 
 void GateRecurrentUnit::train(float error)

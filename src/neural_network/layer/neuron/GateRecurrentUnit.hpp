@@ -15,7 +15,9 @@ namespace snn::internal
 
        friend class RecurrentNeuron;
 
-        int numberOfInputs;
+        std::vector<float> errors;
+
+        int numberOfInputs{};
 
         float previousOutput = 0;
         float recurrentError = 0;
@@ -35,7 +37,7 @@ namespace snn::internal
         GateRecurrentUnit(const GateRecurrentUnit& recurrentNeuron) = default;
         ~GateRecurrentUnit() = default;
 
-        StochasticGradientDescent* optimizer;
+        StochasticGradientDescent* optimizer{};
 
         [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) override;
         [[nodiscard]] std::vector<float>& backOutput(float error) override;

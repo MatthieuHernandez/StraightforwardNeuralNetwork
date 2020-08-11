@@ -49,11 +49,11 @@ TEST(Addition, WithRNN)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(12),
-        FullyConnected(5),
+        Recurrence(5),
         FullyConnected(1)
     });
     neuralNetwork.optimizer.learningRate = 0.01f;
-    //neuralNetwork.optimizer.momentum = 0.5f;
+    neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
@@ -63,17 +63,18 @@ TEST(Addition, WithGRU)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         GruLayer(15),
+         GruLayer(5),
         FullyConnected(1)
     });
     neuralNetwork.optimizer.learningRate = 0.01f;
-    //neuralNetwork.optimizer.momentum = 0.5f;
+    neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 7_s);
+    nn.waitFor(1.0_acc || 8_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

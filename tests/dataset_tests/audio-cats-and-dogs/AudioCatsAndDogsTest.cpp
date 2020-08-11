@@ -48,7 +48,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     });
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.optimizer.learningRate = 0.01f;
+    neuralNetwork.optimizer.learningRate = 0.0001f;
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(10_ep);
     neuralNetwork.stopTraining();

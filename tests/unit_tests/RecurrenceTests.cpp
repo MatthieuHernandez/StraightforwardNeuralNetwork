@@ -44,7 +44,7 @@ TEST(Recurence, RepeatLastInput)
 }
 
 //a simple recurrent neural network can't solve this problem
-/*TEST(Recurence, RepeatLastLastInput)
+TEST(Recurence, RepeatLastLastInput)
 {
     vector2D<float> inputData =       {{0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}, {0}, {0}};
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
@@ -54,14 +54,14 @@ TEST(Recurence, RepeatLastInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12, 2, activation::tanh),
-        FullyConnected(6),
-        FullyConnected(1, activation::sigmoid)
+        GruLayer(15),
+        GruLayer(5),
+        FullyConnected(1)
     });
     neuralNetwork.optimizer.learningRate = 0.05f;
     //neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
-}*/
+}
 
 inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)

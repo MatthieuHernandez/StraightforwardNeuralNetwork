@@ -54,7 +54,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[90] = -0.25;
     inputs[120] = 1;
     inputs[150] = -1.35;
-    const vector<float> desired{1, 0, 0.5, 0};
+    const vector<float> desired{1, 0, 0.5, 0.07};
 
     A.trainOnce(inputs, desired);
 

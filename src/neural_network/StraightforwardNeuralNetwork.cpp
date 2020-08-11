@@ -8,7 +8,6 @@
 #include "StraightforwardNeuralNetwork.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
-
 using namespace std;
 using namespace chrono;
 using namespace snn;

@@ -51,7 +51,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     neuralNetwork.optimizer.learningRate = 0.002f;
     neuralNetwork.optimizer.momentum = 0.2f;
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(100_ep || 0.6_acc || 1_min);
+    neuralNetwork.waitFor(100_ep || 0.6_acc || 30_s);
     neuralNetwork.stopTraining();
     neuralNetwork.saveAs("ACaD.snn");
     auto recall = neuralNetwork.getWeightedClusteringRate();

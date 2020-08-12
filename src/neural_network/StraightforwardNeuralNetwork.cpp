@@ -104,6 +104,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
         }
         this->evaluate(data);
         log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
+        log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
     }
 }
 

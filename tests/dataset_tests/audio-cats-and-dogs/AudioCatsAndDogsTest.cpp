@@ -6,7 +6,7 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
-const static unsigned int sizeOfOneData = 128;
+const static unsigned int sizeOfOneData = 16000;
 
 class AudioCatsAndDogsTest : public testing::Test
 {
@@ -41,20 +41,21 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        Convolution(1, 16),
+        LocallyConnected(1, 1000, activation::tanh),
         GruLayer(20),
-        GruLayer(20),
+        GruLayer(5),
         FullyConnected(2)
     });
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.optimizer.learningRate = 0.0001f;
+    neuralNetwork.optimizer.learningRate = 0.002f;
+    neuralNetwork.optimizer.momentum = 0.2f;
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(10_ep);
+    neuralNetwork.waitFor(100_ep || 0.6_acc || 1_min);
     neuralNetwork.stopTraining();
     neuralNetwork.saveAs("ACaD.snn");
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_RECALL(recall, 0.50);
-    ASSERT_ACCURACY(accuracy, 0.55);
+    ASSERT_ACCURACY(accuracy, 0.6);
 }

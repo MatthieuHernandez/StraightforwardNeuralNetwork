@@ -310,17 +310,11 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
         {
             bool isCat;
             if (fileName.find("cat") == std::string::npos)
-            {
                 isCat = true;
-            }
             else if (fileName.find("dog") == std::string::npos)
-            {
                 isCat = false;
-            }
             else
-            {
                 throw runtime_error("Wrong file name: " + fileName);
-            }
 
             AudioFile<float> audioFile;
             audioFile.load(folderPath + fileName);

@@ -1,14 +1,14 @@
 #include <cmath>
 #include <boost/serialization/export.hpp>
-#include "GateRecurrentUnit.hpp"
+#include "GatedRecurrentUnit.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(GateRecurrentUnit)
+BOOST_CLASS_EXPORT(GatedRecurrentUnit)
 
-GateRecurrentUnit::GateRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
+GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
     : numberOfInputs(model.numberOfInputs),
       resetGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
       updateGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
@@ -17,7 +17,7 @@ GateRecurrentUnit::GateRecurrentUnit(NeuronModel model, StochasticGradientDescen
     this->optimizer = optimizer;
 }
 
-float GateRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
+float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
@@ -35,7 +35,7 @@ float GateRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
     return output;
 }
 
-std::vector<float>& GateRecurrentUnit::backOutput(float error)
+std::vector<float>& GatedRecurrentUnit::backOutput(float error)
 {
     float d3 = error;
     float d8 = d3 * this->updateGateOutput;
@@ -55,14 +55,14 @@ std::vector<float>& GateRecurrentUnit::backOutput(float error)
     return this->errors;
 }
 
-void GateRecurrentUnit::train(float error)
+void GatedRecurrentUnit::train(float error)
 {
     float outputGateError = 0;
     float updateGateError = 0;
     float resetGateError = 0;
 }
 
-vector<float> GateRecurrentUnit::getWeights() const
+vector<float> GatedRecurrentUnit::getWeights() const
 {
     vector<float> allWeights;
     allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
@@ -71,34 +71,34 @@ vector<float> GateRecurrentUnit::getWeights() const
     return allWeights;
 }
 
-int GateRecurrentUnit::getNumberOfParameters() const
+int GatedRecurrentUnit::getNumberOfParameters() const
 {
     return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() + this
                                                                                                 ->outputGate.
                                                                                                 getNumberOfParameters();
 }
 
-int GateRecurrentUnit::getNumberOfInputs() const
+int GatedRecurrentUnit::getNumberOfInputs() const
 {
     return this->numberOfInputs;
 }
 
 
 inline
-void GateRecurrentUnit::updateWeights(float error)
+void GatedRecurrentUnit::updateWeights(float error)
 {
     throw exception();
 }
 
 inline
-void GateRecurrentUnit::reset()
+void GatedRecurrentUnit::reset()
 {
     this->previousOutput = 0;
     this->recurrentError = 0;
     this->updateGateOutput = 0;
 }
 
-int GateRecurrentUnit::isValid() const
+int GatedRecurrentUnit::isValid() const
 {
     auto err = resetGate.isValid();
     if (err != 0)
@@ -112,11 +112,11 @@ int GateRecurrentUnit::isValid() const
     return 0;
 }
 
-bool GateRecurrentUnit::operator==(const BaseNeuron& neuron) const
+bool GatedRecurrentUnit::operator==(const BaseNeuron& neuron) const
 {
     try
     {
-        const auto& n = dynamic_cast<const GateRecurrentUnit&>(neuron);
+        const auto& n = dynamic_cast<const GatedRecurrentUnit&>(neuron);
         return this->BaseNeuron::operator==(neuron)
             && this->numberOfInputs == n.numberOfInputs
             && this->previousOutput == n.previousOutput
@@ -133,7 +133,7 @@ bool GateRecurrentUnit::operator==(const BaseNeuron& neuron) const
     }
 }
 
-bool GateRecurrentUnit::operator!=(const BaseNeuron& neuron) const
+bool GatedRecurrentUnit::operator!=(const BaseNeuron& neuron) const
 {
     return !(*this == neuron);
 }

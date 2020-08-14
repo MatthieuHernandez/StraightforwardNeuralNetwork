@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class GateRecurrentUnit final : public BaseNeuron
+    class GatedRecurrentUnit final : public BaseNeuron
     {
     private:
         friend class boost::serialization::access;
@@ -32,10 +32,10 @@ namespace snn::internal
         void updateWeights(const float error) override;
 
     public:
-        GateRecurrentUnit() = default; // use restricted to Boost library only
-        GateRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer);
-        GateRecurrentUnit(const GateRecurrentUnit& recurrentNeuron) = default;
-        ~GateRecurrentUnit() = default;
+        GatedRecurrentUnit() = default; // use restricted to Boost library only
+        GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer);
+        GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
+        ~GatedRecurrentUnit() = default;
 
         StochasticGradientDescent* optimizer{};
 
@@ -54,9 +54,9 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void GateRecurrentUnit::serialize(Archive& ar, const unsigned int version)
+    void GatedRecurrentUnit::serialize(Archive& ar, const unsigned int version)
     {
-        boost::serialization::void_cast_register<GateRecurrentUnit, BaseNeuron>();
+        boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron>();
         ar & boost::serialization::base_object<BaseNeuron>(*this);
         ar & this->numberOfInputs;
         ar & this->previousOutput;

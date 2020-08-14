@@ -8,7 +8,7 @@ namespace snn::internal
     class RecurrentNeuron final : public Neuron
     {
     private:    
-        friend class GateRecurrentUnit;
+        friend class GatedRecurrentUnit;
 
         friend class boost::serialization::access;
         template <class Archive>

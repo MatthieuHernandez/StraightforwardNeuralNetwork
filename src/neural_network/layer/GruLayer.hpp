@@ -4,11 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
 #include "../Optimizer.hpp"
-#include "neuron/GateRecurrentUnit.hpp"
+#include "neuron/GatedRecurrentUnit.hpp"
 
 namespace snn::internal
 {
-    class GruLayer final : public SimpleLayer<GateRecurrentUnit>
+    class GruLayer final : public SimpleLayer<GatedRecurrentUnit>
     {
     private:
         friend class boost::serialization::access;

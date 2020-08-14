@@ -8,7 +8,6 @@
 #include "StraightforwardNeuralNetwork.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
-
 using namespace std;
 using namespace chrono;
 using namespace snn;
@@ -72,7 +71,7 @@ bool StraightforwardNeuralNetwork::isTraining() const
 
 void StraightforwardNeuralNetwork::startTraining(Data& data)
 {
-    log<complete>("Start training");
+    log<minimal>("Start training");
     if (!this->validData(data))
         throw std::runtime_error("Data has not the same format as the neural network");
     this->stopTraining();
@@ -104,6 +103,8 @@ void StraightforwardNeuralNetwork::train(Data& data)
                 this->output(data.getTrainingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
         }
         this->evaluate(data);
+        log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
+        log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
     }
 }
 
@@ -158,7 +159,7 @@ void StraightforwardNeuralNetwork::stopTraining()
     this->wantToStopTraining = true;
     if (this->thread.joinable())
     {
-        log<minimal>("Closing a thread");
+        log<minimal>("Stop training");
         this->thread.join();
         log<complete>("Thread closed");
     }

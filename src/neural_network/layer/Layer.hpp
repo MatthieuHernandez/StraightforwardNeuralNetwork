@@ -1,8 +1,6 @@
 #pragma once
 #include <memory>
 #include <typeinfo>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "BaseLayer.hpp"
@@ -39,7 +37,7 @@ namespace snn::internal
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override = 0;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
-        [[nodiscard]] Neuron* getNeuron(int index) override final;
+        [[nodiscard]] BaseNeuron* getNeuron(int index) override final;
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;

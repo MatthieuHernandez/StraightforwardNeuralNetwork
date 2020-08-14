@@ -5,6 +5,7 @@
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
 #include "neuron/RecurrentNeuron.hpp"
+#include "neuron/GateRecurrentUnit.hpp"
 
 namespace snn::internal
 {
@@ -43,6 +44,9 @@ namespace snn::internal
 
     template<>
     std::vector<float> SimpleLayer<RecurrentNeuron>::output(const std::vector<float>& inputs, bool temporalReset);
+
+    template<>
+    std::vector<float> SimpleLayer<GateRecurrentUnit>::output(const std::vector<float>& inputs, bool temporalReset);
     
     #include "SimpleLayer.tpp"
 }

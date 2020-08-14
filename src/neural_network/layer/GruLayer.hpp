@@ -4,11 +4,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
 #include "../Optimizer.hpp"
-#include "neuron/SimpleNeuron.hpp"
+#include "neuron/GateRecurrentUnit.hpp"
 
 namespace snn::internal
 {
-    class FullyConnected final : public SimpleLayer<SimpleNeuron>
+    class GruLayer final : public SimpleLayer<GateRecurrentUnit>
     {
     private:
         friend class boost::serialization::access;
@@ -16,17 +16,17 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        FullyConnected() = default;  // use restricted to Boost library only
-        FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer);
-        FullyConnected(const FullyConnected&) = default;
-        ~FullyConnected() = default;
+        GruLayer() = default;  // use restricted to Boost library only
+        GruLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        GruLayer(const GruLayer&) = default;
+        ~GruLayer() = default;
         std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
     };
 
     template <class Archive>
-    void FullyConnected::serialize(Archive& ar, const unsigned version)
+    void GruLayer::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<FullyConnected, SimpleLayer>();
+        boost::serialization::void_cast_register<GruLayer, SimpleLayer>();
         ar & boost::serialization::base_object<SimpleLayer>(*this);
     }
 }

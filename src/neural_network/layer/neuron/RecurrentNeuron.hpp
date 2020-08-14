@@ -7,7 +7,9 @@ namespace snn::internal
 {
     class RecurrentNeuron final : public Neuron
     {
-    private:
+    private:    
+        friend class GateRecurrentUnit;
+
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, const unsigned int version);
@@ -18,7 +20,7 @@ namespace snn::internal
         float previousSum = 0;
 
         void reset();
-        void updateWeights(const std::vector<float>& inputs, float error) override;
+        void updateWeights(const float error) override;
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only
@@ -26,14 +28,14 @@ namespace snn::internal
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
+        [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset) override;
+        [[nodiscard]] std::vector<float>& backOutput(float error) override;
+        void train(float error) override;
 
         [[nodiscard]] int isValid() const override;
 
-        bool operator==(const Neuron& neuron) const override;
-        bool operator!=(const Neuron& neuron) const override;
-        [[nodiscard]] std::vector<float>& backOutput(float error) override;
-        void train(float error) override;
+        bool operator==(const BaseNeuron& neuron) const override;
+        bool operator!=(const BaseNeuron& neuron) const override;
     };
 
     template <class Archive>

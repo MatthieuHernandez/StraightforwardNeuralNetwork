@@ -1,5 +1,6 @@
 ﻿#include "../ExtendedGTest.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
+#include "neural_network/layer/neuron/Neuron.hpp"
 
 using namespace std;
 using namespace snn;
@@ -12,6 +13,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         FullyConnected(20, activation::iSigmoid),
         LocallyConnected(3, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid),
+        GruLayer(3),
         Recurrence(3)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
@@ -40,8 +42,9 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(*A.layers[0]->getNeuron(0) == *B.layers[0]->getNeuron(0)) << "Value : A.Layers[0].getNeuron(0) == B.Layers[0].getNeuron(0)";
     EXPECT_TRUE(A.layers[0]->getNeuron(0) != B.layers[0]->getNeuron(0)) << "Address : A.Layers[0].getNeuron(0) != B.Layers[0].getNeuron(0)";
 
-    EXPECT_TRUE(&A.optimizer == &*A.layers[0]->getNeuron(0)->optimizer);
-    EXPECT_TRUE(&B.optimizer == &*B.layers[0]->getNeuron(0)->optimizer);
+    //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
+    EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);
+    EXPECT_TRUE(&B.optimizer == &*static_cast<internal::SimpleNeuron*>(B.layers[0]->getNeuron(0))->optimizer);
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -51,7 +54,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[90] = -0.25;
     inputs[120] = 1;
     inputs[150] = -1.35;
-    const vector<float> desired{1, 0, 0.5, 0};
+    const vector<float> desired{1, 0, 0.5, 0.07};
 
     A.trainOnce(inputs, desired);
 
@@ -69,10 +72,11 @@ TEST(SaveNeuralNetwork, EqualTest)
 TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
-        Input(5),
+        Input(15),
         Convolution(2, 2, activation::ReLU),
-        FullyConnected(10, activation::tanh),
-        FullyConnected(3, activation::sigmoid)
+        LocallyConnected(2, 2, activation::tanh),
+        FullyConnected(3, activation::sigmoid),
+        GruLayer(2)
     });
     A.optimizer.learningRate = 0.03f;
     A.optimizer.momentum = 0.78f;

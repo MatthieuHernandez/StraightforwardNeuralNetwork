@@ -3,10 +3,11 @@
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
 #include "../Optimizer.hpp"
+#include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {
-    class FilterLayer : public Layer<Neuron>
+    class FilterLayer : public Layer<SimpleNeuron>
     {
     private:
         friend class boost::serialization::access;

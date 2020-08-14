@@ -14,7 +14,7 @@ Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
 {
     this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->lastInputs.resize(model.numberOfInputs, 0);
-    this->errors.resize(model.numberOfWeights, 0);
+    this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
     for (auto& w : weights)
@@ -28,49 +28,6 @@ float Neuron::randomInitializeWeight(int numberOfInputs) const
 {
     const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfInputs));
     return Tools::randomBetween(-valueMax, valueMax);
-}
-
-float Neuron::output(const vector<float>& inputs)
-{
-    this->lastInputs = inputs;
-    this->sum = 0;
-    for (int w = 0; w < this->weights.size(); ++w)
-    {
-        this->sum += inputs[w] * weights[w];
-    }
-    this->sum += bias; 
-    return outputFunction->function(this->sum);
-}
-
-std::vector<float>& Neuron::backOutput(float error)
-{
-    error = error * outputFunction->derivative(this->sum);
-
-    this->updateWeights(lastInputs, error);
-
-    for (int w = 0; w < this->weights.size(); ++w)
-    {
-        errors[w] = error * weights[w];
-    }
-    return errors;
-}
-
-void Neuron::train(float error)
-{
-    error = error * outputFunction->derivative(this->sum);
-
-    this->updateWeights(lastInputs, error);
-}
-
-void Neuron::updateWeights(const std::vector<float>& inputs, const float error)
-{
-    for (int w = 0; w < this->weights.size(); ++w)
-    {
-        auto deltaWeights = this->optimizer->learningRate * error * inputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
-    }
 }
 
 int Neuron::isValid() const
@@ -100,52 +57,35 @@ int Neuron::getNumberOfParameters() const
     return static_cast<int>(this->weights.size());
 }
 
-void Neuron::setWeights(const vector<float>& weights)
-{
-    this->weights = weights;
-}
-
-float Neuron::getWeight(const int w) const
-{
-    return weights[w];
-}
-
-void Neuron::setWeight(const int w, const float weight)
-{
-    this->weights[w] = weight;
-}
-
-float Neuron::getBias() const
-{
-    return bias;
-}
-
-void Neuron::setBias(const float bias)
-{
-    this->bias = bias;
-}
-
 int Neuron::getNumberOfInputs() const
 {
     return this->numberOfInputs;
 }
 
-bool Neuron::operator==(const Neuron& neuron) const
+bool Neuron::operator==(const BaseNeuron& neuron) const
 {
-    return typeid(*this).hash_code() == typeid(neuron).hash_code()
-        && this->numberOfInputs == neuron.numberOfInputs
-        && this->weights == neuron.weights
-        && this->bias == neuron.bias
-        && this->previousDeltaWeights == neuron.previousDeltaWeights
-        && this->lastInputs == neuron.lastInputs
-        && this->errors == neuron.errors
-        && this->sum == neuron.sum
-        && this->activationFunction == neuron.activationFunction
-        && this->outputFunction == neuron.outputFunction // not really good
-        && *this->optimizer == *neuron.optimizer;
+    try
+    {
+        const auto& n = dynamic_cast<const Neuron&>(neuron);
+        return this->BaseNeuron::operator==(neuron)
+            && this->numberOfInputs == n.numberOfInputs
+            && this->weights == n.weights
+            && this->bias == n.bias
+            && this->previousDeltaWeights == n.previousDeltaWeights
+            && this->lastInputs == n.lastInputs
+            && this->errors == n.errors
+            && this->sum == n.sum
+            && this->activationFunction == n.activationFunction
+            && this->outputFunction == n.outputFunction // not really good
+            && *this->optimizer == *n.optimizer;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
-bool Neuron::operator!=(const Neuron& Neuron) const
+bool Neuron::operator!=(const BaseNeuron& Neuron) const
 {
     return !(*this == Neuron);
 }

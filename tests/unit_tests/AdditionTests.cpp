@@ -7,7 +7,7 @@ using namespace std;
 using namespace snn;
 
 unique_ptr<Data> createDataForAdditionTests();
-unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences);
+unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision);
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Addition, WithMPL)
@@ -45,22 +45,36 @@ TEST(Addition, WithLCNN)
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentDataForAdditionTests(100, 1);
+    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(12),
-        FullyConnected(5),
+        Recurrence(5),
         FullyConnected(1)
     });
     neuralNetwork.optimizer.learningRate = 0.01f;
-    //neuralNetwork.optimizer.momentum = 0.5f;
+    neuralNetwork.optimizer.momentum = 0.4f;
+    testNeuralNetworkForAddition(neuralNetwork, *data);
+}
+
+TEST(Addition, WithGRU)
+{
+    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3);
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(1),
+        GruLayer(15),
+         GruLayer(5),
+        FullyConnected(1)
+    });
+    neuralNetwork.optimizer.learningRate = 0.01f;
+    neuralNetwork.optimizer.momentum = 0.4f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 7_s);
+    nn.waitFor(1.0_acc || 8_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
@@ -91,7 +105,7 @@ unique_ptr<Data> createDataForAdditionTests()
     return data;
 }
 
-unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences)
+unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;
@@ -100,7 +114,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numbe
 
     for (int i = 0; i < numberOfData; ++i)
     {
-        auto r = snn::internal::Tools::randomBetween(0.0f, 1.0f/(numberOfRecurrences+1));
+        auto r = internal::Tools::randomBetween(0.0f, 1.0f/(numberOfRecurrences+1));
         inputData.push_back({r});
 
         for (int j = 0; j < numberOfRecurrences+1; ++j)
@@ -110,7 +124,6 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numbe
         }
     }
 
-    const float precision = 0.25f;
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, numberOfRecurrences);
     data->setPrecision(precision);
     return data;

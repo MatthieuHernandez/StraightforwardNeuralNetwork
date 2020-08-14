@@ -39,7 +39,7 @@ unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
         inputData.back().reserve(sizeOfData);
         for(int j = 0; j < sizeOfData; ++j)
         {
-            const auto rand = snn::internal::Tools::randomBetween(-1, 1);
+            const auto rand = internal::Tools::randomBetween(-1, 1);
             inputData.back().push_back(rand);
         }
         if(inputData[i][0] > 0)

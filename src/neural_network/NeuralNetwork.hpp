@@ -9,6 +9,10 @@
 #include "layer/Convolution2D.hpp"
 #include "StatisticAnalysis.hpp"
 #include "layer/BaseLayer.hpp"
+#include "layer/Recurrence.hpp"
+#include "layer/GruLayer.hpp"
+#include "layer/LocallyConnected1D.hpp"
+#include "layer/LocallyConnected2D.hpp"
 
 
 namespace snn::internal
@@ -75,8 +79,12 @@ namespace snn::internal
         ar & this->optimizer.momentum;
         ar & this->maxOutputIndex;
         ar.template register_type<FullyConnected>();
+        ar.template register_type<Recurrence>();
+        ar.template register_type<GruLayer>();
         ar.template register_type<Convolution1D>();
         ar.template register_type<Convolution2D>();
+        ar.template register_type<LocallyConnected1D>();
+        ar.template register_type<LocallyConnected2D>();
         ar & layers;
     }
 }

@@ -15,7 +15,7 @@ namespace snn
         float accuracy = -1;
         float mae = -1;
         int duration = -1;
-        waitOperator op;
+        waitOperator op = waitOperator::noneOp;
         Wait& operator||(const Wait& wait);
         Wait& operator&&(const Wait& wait);
         bool isOver(int epochs, float accuracy, float mae, int duration) const;

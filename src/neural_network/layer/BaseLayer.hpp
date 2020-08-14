@@ -3,7 +3,7 @@
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
 #include "../Optimizer.hpp"
-#include "neuron/SimpleNeuron.hpp"
+#include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
 {
@@ -17,7 +17,7 @@ namespace snn::internal
     public:
         virtual std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const = 0;
 
-        [[nodiscard]] virtual Neuron* getNeuron(int index) = 0;
+        [[nodiscard]] virtual BaseNeuron* getNeuron(int index) = 0;
         [[nodiscard]] virtual int getNumberOfInputs() const = 0;
         [[nodiscard]] virtual int getNumberOfNeurons() const = 0;
         [[nodiscard]] virtual int getNumberOfParameters() const = 0;

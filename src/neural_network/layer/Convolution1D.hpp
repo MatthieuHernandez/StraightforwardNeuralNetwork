@@ -2,9 +2,8 @@
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
-#include "../Optimizer.hpp"
 #include "FilterLayer.hpp"
+#include "../Optimizer.hpp"
 
 namespace snn::internal
 {

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Examples on datasets
-nav_order: 4
+nav_order: 6
 permalink: /examples
 has_children: true
 ---

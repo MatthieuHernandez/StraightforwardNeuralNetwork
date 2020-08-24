@@ -21,7 +21,7 @@ TEST(Recurrence, RepeatInput)
         FullyConnected(1, activation::tanh)
     });
     neuralNetwork.optimizer.learningRate = 0.03f;
-    neuralNetwork.optimizer.momentum = 0.98f;
+    neuralNetwork.optimizer.momentum = 0.97f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -35,11 +35,11 @@ TEST(Recurrence, RepeatLastInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        Recurrence(12),
-        FullyConnected(6),
+        Recurrence(20),
+        FullyConnected(8),
         FullyConnected(1, activation::tanh)
     });
-    neuralNetwork.optimizer.learningRate = 0.05f;
+    neuralNetwork.optimizer.learningRate = 0.02f;
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -67,7 +67,7 @@ inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
 {
     nn.startTraining(d);
-    nn.waitFor(1.0_acc || 4_s);
+    nn.waitFor(1.0_acc || 7_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();

@@ -29,6 +29,7 @@ TEST(Addition, WithCNN)
         Convolution(6, 1, activation::sigmoid),
         FullyConnected(1, activation::identity)
     });
+    neuralNetwork.optimizer.learningRate = 0.01f;
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 

@@ -102,17 +102,24 @@ TEST_F(MnistTest, LocallyConnected2D)
 
 TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(1,5),
-        FullyConnected(70),
-        FullyConnected(10)
-        });
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
-    neuralNetwork.stopTraining();
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.93f);
+    vector<float> learningRates = {0.05, 0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1, 0.1, 0.1, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01};
+    vector<Wait> iterations = {1_ep, 2_ep, 3_ep, 5_ep, 10_ep, 1_ep, 2_ep, 3_ep, 5_ep, 10_ep, 1_ep, 2_ep, 3_ep, 5_ep, 10_ep, 1_ep, 2_ep, 3_ep, 5_ep, 10_ep};
+    for(int i = 0; i < 20; ++i)
+    {
+        StraightforwardNeuralNetwork neuralNetwork({
+            Input(28, 28, 1),
+            Convolution(1, 5),
+            FullyConnected(70),
+            FullyConnected(10)
+            });
+        neuralNetwork.optimizer.learningRate = learningRates[i];
+        neuralNetwork.optimizer.momentum = 0.1;
+        neuralNetwork.startTraining(*data);
+        neuralNetwork.waitFor(iterations[i]);
+        neuralNetwork.stopTraining();
+        auto accuracy = neuralNetwork.getGlobalClusteringRate();
+        ASSERT_ACCURACY(accuracy, -1.0f);
+    }
 }
 
 TEST_F(MnistTest, multipleLayersNeuralNetwork)

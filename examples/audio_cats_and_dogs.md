@@ -44,6 +44,6 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.6);
 }
 ```
-:warning: _This dataset is not executed during the iteration tests because no stable architecture enough accurate was found.__
-
 [See the code](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/blob/master/tests/dataset_tests/audio-cats-and-dogs/AudioCatsAndDogsTest.cpp)
+<br>
+_This dataset is not executed during the iteration tests because no stable architecture enough accurate was found._

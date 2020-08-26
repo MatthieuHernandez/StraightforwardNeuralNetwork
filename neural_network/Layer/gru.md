@@ -7,13 +7,13 @@ nav_order: 4
 ---
 
 # Gated Recurrent Units layer
-
 <p>
     <img src="{{site.baseurl}}/assets/images/neural_network/gru1.png" att="GRU neuron" width="320px" class="center"/>
 </p>
 
 ## Presentation
-This layer si a simple fully connected layer with Gated recurrent units instead of simple neurons. Gated recurrent units (GRUs) are improved version of standard recurrent neural network. The GRU is like a long short-term memory (LSTM) but with fewer parameters. This is really useful when predicting time series or classifying sequential data.
+This layer is a simple fully connected layer with Gated recurrent units instead of simple neurons. Gated recurrent units (GRUs) are improved version of standard recurrent neural network. The GRU is like a long short-term memory (LSTM) but with fewer parameters. This is really useful when predicting time series or classifying sequential data.
+
 ## Declaration
 This is the function used to declare a GRU layer.
 ```cpp
@@ -28,9 +28,8 @@ StraightforwardNeuralNetwork neuralNetwork({
     });
 ```
 [See an example of GRU layer on dataset]({{site.baseurl}}/examples/audio_cats_and_dogs.html)
+
 ## Algorithms and References
-
-
 <p>
     <img src="{{site.baseurl}}/assets/images/neural_network/gru2.png" att="GRU neuron" width="320px" class="left"/>
 </p>

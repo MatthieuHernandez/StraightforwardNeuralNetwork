@@ -125,8 +125,8 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
         Convolution(1, 4, activation::sigmoid),
         FullyConnected(10)
     });
-    neuralNetwork.optimizer.learningRate = 0.06;
-    neuralNetwork.optimizer.momentum = 0.9;
+    neuralNetwork.optimizer.learningRate = 0.03;
+    neuralNetwork.optimizer.momentum = 0.90;
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(2_ep || 60_s);
     neuralNetwork.stopTraining();

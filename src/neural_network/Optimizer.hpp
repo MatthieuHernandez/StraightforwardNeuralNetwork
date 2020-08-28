@@ -16,7 +16,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        float learningRate = 0.05f;
+        float learningRate = 0.03f;
         float momentum = 0.0f;
 
         StochasticGradientDescent() = default;

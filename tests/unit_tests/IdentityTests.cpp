@@ -30,25 +30,28 @@ TEST(Identity, WorksWithSmallNumbers)
 
 TEST(Identity, WorksWithBigNumbers)
 {
-    vector<vector<float>> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}, {6}};
-    vector<vector<float>> expectedOutputs = {{0}, {25}, {50}, {75}, {100}, {125}, {150}};
+    vector<vector<float>> inputData = {{-3}, {-2}, {-1}, {0}, {1}, {2}, {3}, {4}};
+    vector<vector<float>> expectedOutputs = {{-75}, {-50}, {-25}, {0}, {25}, {50}, {75}, {100}};
 
     Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(4), FullyConnected(1, snn::activation::identity)});
-    neuralNetwork.optimizer.learningRate = 0.0001;
-    neuralNetwork.optimizer.momentum = 0.99;
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(1),
+        FullyConnected(20),
+        FullyConnected(8),
+        FullyConnected(4, activation::tanh),
+        FullyConnected(1, activation::identity)
+    });
+    neuralNetwork.optimizer.learningRate = 0.00001f;
+    neuralNetwork.optimizer.momentum = 0.95f;
 
     neuralNetwork.startTraining(data);
-    neuralNetwork.waitFor(1.0_mae || 3_s);
+    neuralNetwork.waitFor(1.0_mae || 5_s);
     neuralNetwork.stopTraining();
 
     float mae = neuralNetwork.getMeanAbsoluteError();
 
-    if (mae <= 1)
-        ASSERT_SUCCESS();
-    else
-        ASSERT_FAIL("MAE > 1: " + to_string(mae));
+    ASSERT_MAE(mae, 2);
 }
 
 TEST(Identity, WorksWithLotsOfNumbers)

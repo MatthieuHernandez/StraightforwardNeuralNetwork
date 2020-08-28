@@ -24,7 +24,7 @@ float SimpleNeuron::output(const vector<float>& inputs)
     return outputFunction->function(this->sum);
 }
 
-std::vector<float>& SimpleNeuron::backOutput(float error)
+vector<float>& SimpleNeuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 

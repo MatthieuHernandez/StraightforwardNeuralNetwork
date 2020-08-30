@@ -8,7 +8,7 @@ nav_order: 3
 
 # Recurrent layer
 <p>
-    <img src="{{site.baseurl}}/assets/images/neural_network/gru1.png" att="GRU neuron" width="320px" class="center"/>
+    <img src="{{site.baseurl}}/assets/images/neural_network/recurrence.png" att="GRU neuron" width="500px" class="center"/>
 </p>
 
 ## Presentation

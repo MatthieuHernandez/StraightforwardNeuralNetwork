@@ -8,7 +8,7 @@ nav_order: 5
 
 # Locally Connected layer
 <p>
-    <img src="{{site.baseurl}}/assets/images/neural_network/localluyconnected.gif" att="Convolutionnal layer" width="320px" class="center"/>
+    <img src="{{site.baseurl}}/assets/images/neural_network/locally_connected.gif" att="Convolutionnal layer" width="320px" class="center"/>
 </p>
 
 ## Presentation

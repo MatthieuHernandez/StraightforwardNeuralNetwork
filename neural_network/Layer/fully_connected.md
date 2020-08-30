@@ -8,7 +8,7 @@ nav_order: 2
 
 # Fully Connected layer
 <p>
-    <img src="{{site.baseurl}}/assets/images/neural_network/fully_connected_layer.png" att="Fully Connected layer" width="320px" class="center"/>
+    <img src="{{site.baseurl}}/assets/images/neural_network/fully_connected_layer.png" att="Fully Connected layer" width="200px" class="center"/>
 </p>
 
 ## Presentation

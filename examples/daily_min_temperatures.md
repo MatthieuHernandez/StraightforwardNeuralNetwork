@@ -5,7 +5,7 @@ parent: Examples on datasets
 nav_order: 2
 ---
 
-<p >
+<p>
     <img src="{{site.baseurl}}/assets/images/examples/temperatures.jpg" att="temperatures" width="270px" class="center"/>
 </p>
 
@@ -21,7 +21,7 @@ The Daily min temperatures dataset describes the minimum daily temperatures over
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **1.42** mean absolute error on this dataset.
-:warning: _To reach this accuracy you may need more tetative and more learning time.__
+_To reach this accuracy you may need more tetative and more learning time._
 
 
 ```cpp

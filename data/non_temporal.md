@@ -1,19 +1,14 @@
 ---
 layout: default
-title: Multiple classification
+title: Non temporal 
 parent: Data
-nav_order: 2
+nav_order: 4
 ---
 
-# Multiple classification
+# Non temporal data
 
 ## Presentation
-Multiple classification is very similar to the simple classification. The only difference is that an sigle data can have sereval classes. For example if you have 5 classes and the input corresponds to class  1 and 3 the expected ouput vector must be:
-```cpp
-vector<float> expectedOutput = {1, 0, 1, 0, 0};
-```
- Unlike simple classification when calculating accuracy of a neural network all classes must be correct for the item to be considered well classified.
-
+Non temporal data is set by default, do not take care of the 2 last parameters of constructor.
 
 ## Declaration
 ```cpp
@@ -21,9 +16,7 @@ Data(problem:classification,
      std::vector<std::vector<float>>& trainingInputs,
      std::vector<std::vector<float>>& trainingLabels,
      std::vector<std::vector<float>>& testingInputs,
-     std::vector<std::vector<float>>& testingLabels,
-     nature typeOfTemporal = nature::nonTemporal,
-     int numberOfRecurrences = 0);
+     std::vector<std::vector<float>>& testingLabels);
 ```
 **Arguments**
  * **trainingInputs**: 2D vector of all the data inputs use to train the neural network. Each `vector<float>` represents an input for the neural network. 
@@ -32,3 +25,4 @@ Data(problem:classification,
  * **testingLabels**: 2D vector of all the expected ouputs use to evaluate the neural network. Each `vector<float>` represents the expected ouput by the neural network for the corresponding input.
  * **typeOfTemporal**: An `enum` corresponding to the temporal nature of problem associated with the data. There are 3 types of temporal nature [nonTemporal]({{site.baseurl}}/data/non_temporal.html), [sequential]({{site.baseurl}}/data/sequential.html) and [timeSeries]({{site.baseurl}}/data/time_series.html).
  * **numberOfRecurrences**: Size of sequence used for train neural network. Only used for [timeSeries]({{site.baseurl}}/data/time_series.html) otherwise leave the value at 0.
+

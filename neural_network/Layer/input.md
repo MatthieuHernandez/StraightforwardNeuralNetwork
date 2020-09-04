@@ -2,7 +2,7 @@
 layout: default
 title: Input
 parent: Layers
-grand_parent: Neural network
+grand_parent: Neural Network
 nav_order: 1
 ---
 

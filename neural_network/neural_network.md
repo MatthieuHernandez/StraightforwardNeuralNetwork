@@ -20,7 +20,7 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> mo
 ```
 **Arguments**
  * **models**: The vector of all layer of function of neurons. 
- [See list of all available layer types.]({{site.baseurl}}/layer/layer.html)
+ [See list of all available layer types.]({{site.baseurl}}/neural_network/Layer/layer.html)
 
  Here is an example of neural networks.
 ```cpp

@@ -16,4 +16,8 @@ nav_order: 2
 ### Windows - MSVC++ 14.2
  * You can generate a Visual Studio project with CMake by running the following command from the `build` folder:
  `cmake -G"Visual Studio 16 2019" ./..`
+
+<br>
+
+ [After installation]({{site.baseurl}}/quick_start.html){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
  

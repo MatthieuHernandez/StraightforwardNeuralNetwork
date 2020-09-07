@@ -1,10 +1,11 @@
 ---
 layout: default
-title: Quickstart
+title: Quick start
 nav_order: 3
 ---
 
-## Quickstart
+# Quick start
+{: .no_toc }
 
 First, don't forget `include` and `namespace`
 
@@ -16,15 +17,16 @@ using namespace snn;
 
 After, you just need to follow this 5 basic steps.
 
-### 1) Prepare you data
+1. TOC
+{:toc}
 
+### Prepare you data
 Create a `Data` object, choose your problem type [classification]({{site.baseurl}}/data/classification.html), [multipleClassification]({{site.baseurl}}/data/multiple_classification.html) or [regression]({{site.baseurl}}/data/regression.html).
 ```cpp
 Data data(problem::classification, inputData, expectedOutputs);
 ```
 
-### 2) Design the neural network
-
+### Design the neural network
 Create a `StraightforwardNeuralNetwork` object, choose the architecture using the [layers]({{site.baseurl}}/neural_network/Layer/layer.html).
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({
@@ -35,8 +37,7 @@ StraightforwardNeuralNetwork neuralNetwork({
 });
 ```
 
-### 4) Train the neural network
-
+### Train the neural network
 Train the neural network and wait until the neural network has learned.
 ```cpp
 neuralNetwork.startTraining(data);
@@ -44,8 +45,7 @@ neuralNetwork.waitFor(20_s || 0.9_acc);
 neuralNetwork.stopTraining();
 ```
 
-### 5) Use it
-
+### Use it
 ```cpp
 vector<float> output = neuralNetwork.computeOutput(input); // for regression and multiple classification
 ```
@@ -54,7 +54,7 @@ or
 int classNumber = neuralNetwork.computeCluster(input); // for classification
 ```
 
-### 6) Save and load (Optional)
+### Save and load (Optional)
 ```cpp
 neuralNetwork.SaveAs(".\MyFirstNeuralNetwork.snn");
 neuralNetwork.LoadFrom(".\MyFirstNeuralNetwork.snn");

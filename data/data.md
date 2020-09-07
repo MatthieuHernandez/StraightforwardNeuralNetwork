@@ -4,6 +4,7 @@ title: Data
 nav_order: 4
 permalink: /data
 has_children: true
+has_toc: false
 ---
 # Data
 **Data** is one of most important class of the library, this class store the data using by the neural network.

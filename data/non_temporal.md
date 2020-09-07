@@ -12,7 +12,7 @@ Non temporal data is set by default, do not take care of the 2 last parameters o
 
 ## Declaration
 ```cpp
-Data(problem:classification,
+Data(problem typeOfProblem,
      std::vector<std::vector<float>>& trainingInputs,
      std::vector<std::vector<float>>& trainingLabels,
      std::vector<std::vector<float>>& testingInputs,

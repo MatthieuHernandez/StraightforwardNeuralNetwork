@@ -8,24 +8,23 @@ nav_order: 5
 # Sequential data
 
 ## Presentation
-Time series is used for continuous data. They are often used for the prediction of continuous temporal data such as daily temperature, the price of an product, the evolution of a population, etc. over time.
+Sequencial data is mostly used for classification of dataset composed of sevral examples of different durations. For example chess games, different sounds,videos, etc.
 
 ## Declaration
 ```cpp
-Data(problem:classification,
-     std::vector<std::vector<float>>& trainingInputs,
+Data(problem typeOfProblem,
+     std::vector<std::vector<std::vector<float>>>& trainingInputs,
      std::vector<std::vector<float>>& trainingLabels,
-     std::vector<std::vector<float>>& testingInputs,
+     std::vector<std::vector<std::vector<float>>>& testingInputs,
      std::vector<std::vector<float>>& testingLabels,
-     nature::timeSeries,
-     int numberOfRecurrences = 0);
+     nature::timeSeries);
 ```
 **Arguments**
- * **trainingInputs**: 2D vector of all the data inputs use to train the neural network. Each `vector<float>` represents an input for the neural network. 
+ * **trainingInputs**: 3D vector of all the data inputs use to train the neural network. Each `vector<float>` represents an input for the neural network for one example at one moment.
  * **trainingLabels**: 2D vector of all the expected ouputs use to train the neural network. Each `vector<float>` represents the expected ouput by the neural network for the corresponding input.
- * **testingInputs**: 2D vector of all the data inputs use to evaluate the neural network. Each `vector<float>` represents an input for the neural network.
+ * **testingInputs**: 3D vector of all the data inputs use to evaluate the neural network. Each `vector<float>` represents an input for the neural networkfor one example at one moment.
  * **testingLabels**: 2D vector of all the expected ouputs use to evaluate the neural network. Each `vector<float>` represents the expected ouput by the neural network for the corresponding input.
  * **typeOfTemporal**: An `enum` corresponding to the temporal nature of problem associated with the data. There are 3 types of temporal nature [nonTemporal]({{site.baseurl}}/data/non_temporal.html), [sequential]({{site.baseurl}}/data/sequential.html) and [timeSeries]({{site.baseurl}}/data/time_series.html).
  * **numberOfRecurrences**: Size of sequence used for train neural network. Only used for [timeSeries]({{site.baseurl}}/data/time_series.html) otherwise leave the value at 0.
  
- Here the number of recurrences is very import because it determines the amount of data to be used by the neural network to predict during the learning phase. If the value is too low the neuron networks will not have enough information to learn and if the value is too high it will unnecessarily lengthen the learning time.
+The labels is a 2D vector and inputs is a 3D vector because each example is represented by a 2D vector of each vector of input at each time.

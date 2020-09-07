@@ -28,6 +28,8 @@ Data(problem typeOfProblem,
  * **typeOfTemporal**: An `enum` corresponding to the temporal nature of problem associated with the data. There are 3 types of temporal nature [nonTemporal]({{site.baseurl}}/data/non_temporal.html), [sequential]({{site.baseurl}}/data/sequential.html) and [timeSeries]({{site.baseurl}}/data/time_series.html).
  * **numberOfRecurrences**: Size of sequence used for train neural network. Only used for [timeSeries]({{site.baseurl}}/data/time_series.html) otherwise leave the value at 0.
 
+**Each example of a  dataset must always be an 1D vector** (except for [sequential data]({{site.baseurl}}/data/sequential.html)). For example to use [CIFAR-10 dataset]({{site.baseurl}}/examples/CIFAR-10.html) each image must be convect as 1D vector. It's the neural network [Input layer] which permet to define the shape of image, here `Input(32, 32,3)`.
+
 **Data** has a 2nd constructors if the data for training and testing are the same.
 ```cpp
 Data(problem typeOfProblem,
@@ -43,7 +45,7 @@ vector<vector<float>> inputs;
 vector<vector<float>> label;
 Data data(problem::classification, inputData, expectedOutputs, nature::nonTemporal);
 ```
- 
+
 The **Data** allows neuron networks to solve 3 types of problem:
 ```cpp
 enum class problem

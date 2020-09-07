@@ -12,7 +12,7 @@ Time series is used for continuous data. They are often used for the prediction 
 
 ## Declaration
 ```cpp
-Data(problem:classification,
+Data(problem typeOfProblem,
      std::vector<std::vector<float>>& trainingInputs,
      std::vector<std::vector<float>>& trainingLabels,
      std::vector<std::vector<float>>& testingInputs,

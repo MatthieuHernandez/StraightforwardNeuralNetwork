@@ -10,7 +10,6 @@ nav_order: 3
 ## Presentation
 **Data** can be use to regression. Regression is used when you want specific output values. The outputs can have any values but it is better to normalize the output to 0 and 1 and use a [sigmoid]({{site.baseurl}}/neural_network/Layer/activation_functions.html) as the output enable function. (Or a [tanh]({{site.baseurl}}/neural_network/Layer/activation_functions.html) for values between -1 and 1)
 
-
 ## Declaration
 ```cpp
 Data(problem:regression,

@@ -19,6 +19,9 @@ This is the function used to declare a GRU layer.
 ```cpp
 LayerModel GruLayer(int numberOfNeurons);
 ```
+**Arguments**
+ * **numberOfNeurons**: The number of neurons in the layer.
+
 Here is an example of neural networks using a GRU layer.
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({

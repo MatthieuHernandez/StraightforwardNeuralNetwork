@@ -19,6 +19,10 @@ This is the function used to declare a Recurrent layer.
 ```cpp
 LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh);
 ```
+**Arguments**
+ * **numberOfNeurons**: The number of neurons in the layer.
+* **activation**: The activation function of the neurons of the layer. It is recommended to use the tanh activation function.
+
 Here is an example of neural networks using a GRU layer.
 ```cpp
  StraightforwardNeuralNetwork neuralNetwork({

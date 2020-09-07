@@ -13,17 +13,24 @@ nav_order: 5
 
 ## Presentation
 This layer is mainly used for reduce the size of input, the Locally Connected layer makes it easier to extract markers from the images. 
+
 ## Declaration 
-This is the function used to declare the size input of neural network.
+This is the function used to declare a local connected layer.
 ```cpp
-LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
+LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 ```
-Here is an example of neural networks with 2D input.
+**Arguments**
+ * **numberOfLocallyConnected**: The number of output filters. Multiply the number of neurons.
+ * **sizeOfLocalMatrix**: The size of the matrix. For a 2D convolution the matrice is a square of length `sizeOfLocalMatrix`.
+ * **activation**: The activation function of the neurons of the layer. [See list of activation function]({{site.baseurl}}/layer/activation_functions.html)
+
+ Here is an example of neural networks with 2D input. The Locally Connected layer receives a shape of 28 x 28 x 1 input and outputs a size of 7 x 7 x 2 output.
 ```cpp
-StraightforwardNeuralNetwork neuralNetwork({
+ StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        FullyConnected(150, activatation::ReLu),
-        FullyConnected(70, activatation::tanh),
+        LocallyConnected(2, 4),
+        FullyConnected(150),
+        FullyConnected(70),
         FullyConnected(10)
     });
 ```

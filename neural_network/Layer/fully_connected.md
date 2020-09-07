@@ -18,6 +18,10 @@ This is the function used to declare a fully connected layer.
 ```cpp
 LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 ```
+**Arguments**
+ * **numberOfNeurons**: The number of neurons in the layer.
+ * **activation**: The activation function of the neurons of the layer. [See list of activation function]({{site.baseurl}}/layer/activation_functions.html)
+
 Here is an example of neural networks with 3 fully connected layer.
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({
@@ -27,4 +31,5 @@ StraightforwardNeuralNetwork neuralNetwork({
         FullyConnected(10)
     });
 ```
+
 [See an example of GRU layer on dataset]({{site.baseurl}}/examples/Wine.html)

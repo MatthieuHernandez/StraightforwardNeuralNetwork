@@ -14,14 +14,14 @@ nav_order: 6
 ## Presentation
 This layer is mainly used for image processing, this makes it easier to extract markers from the images. The Convolutionnal layer can be 1D ou 2D depending on the previous layer.
 ## Declaration 
-This is the function used to declare the size input of neural network.
+This is the function used to declare a convolutionnal layer.
 ```cpp
 LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
 ```
 **Arguments**
- * **numberOfConvolution**: the number of output filters in the convolution. [See list of activation function]
-
- * **activation**: Activation function of neurons. [See list of activation function]({{site.baseurl}}/layer/activation_functions.html)
+ * **numberOfConvolution**: The number of output filters in the convolution. Multiply the number of neurons.
+ * **sizeOfConvolutionMatrix**: The size of the convolution matrix. For a 2D convolution the matrice is a square of length `sizeOfConvolutionMatrix`.
+ * **activation**: The activation function of the neurons of the layer. [See list of activation function]({{site.baseurl}}/layer/activation_functions.html)
 
 Here is an example of neural networks with 2D input.
 ```cpp

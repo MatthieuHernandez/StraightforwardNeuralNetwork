@@ -19,3 +19,10 @@ This is basicly how train a neural network. The `startTraining` method recieve a
 The `WaitFor` method can use one or several conditions with the operator `&&` or `||` are used. Don't mix the both operator.
 
 List of all conditions of the `WaitFor` method:
+
+* **_ep**: The number of epochs before the learning stops. A epoch is one learn about the whole dataset.
+* **_acc**: The minimum accuracy (between 0 and 1) to reach before the learning stops. The accuracy is equal to classification rate for classification dataset.
+* **_mae**: The maximum MAE (mean absolute error) to reach before the learning stops. The ME is equal to classification rate for classification dataset.
+* **_ms**: The minimum time before the learning stops in milliseconds.
+* **_s**: The minimum time before the learning stops in seconds.
+* **_min**: The minimum time before the learning stops in minutes.

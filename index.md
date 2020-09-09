@@ -20,7 +20,7 @@ last_modified_date: 2020-07-24T17:54:08+0000
 
 ---
 
-# open source neural network library
+# A open source neural network library
 
 **Straightforward Neural Network** is an open source simple neural network library in C++17 optimized for CPU.
 

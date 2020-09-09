@@ -45,5 +45,5 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 }
 ```
 [See the code](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/blob/master/tests/dataset_tests/audio-cats-and-dogs/AudioCatsAndDogsTest.cpp)
-<br>
+<br/>
 _This dataset is not executed during the iteration tests because no stable architecture enough accurate was found._

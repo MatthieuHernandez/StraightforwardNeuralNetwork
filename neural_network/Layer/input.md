@@ -27,5 +27,5 @@ StraightforwardNeuralNetwork neuralNetwork({
     });
 ```
 [See an example of GRU layer on dataset]({{site.baseurl}}/examples/MNIST.html)
-<br>
+<br/>
 _3D inputs or more are not supported._

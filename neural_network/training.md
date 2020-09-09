@@ -10,7 +10,6 @@ nav_order: 4
 ## Declaration 
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({Input(4), FullyConnected(20), FullyConnected(3)});
-
 neuralNetwork.startTraining(data);
 neuralNetwork.waitFor(20_s || 0.9_acc);
 neuralNetwork.stopTraining();

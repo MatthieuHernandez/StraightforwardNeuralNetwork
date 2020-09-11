@@ -36,5 +36,5 @@ StraightforwardNeuralNetwork neuralNetwork({
 <p>
     <img src="{{site.baseurl}}/assets/images/neural_network/gru2.png" att="GRU neuron" width="320px" class="left"/>
 </p>
-GRU implementation is based on **Fully Gated Unit** schema on [Gated recurrent unit Wikipadia page](https://en.wikipedia.org/wiki/Gated_recurrent_unit).
+GRU implementation is based on **Fully Gated Unit** schema on [Gated recurrent unit Wikipedia page](https://en.wikipedia.org/wiki/Gated_recurrent_unit).
 Also used [Back propagation through time](https://cran.r-project.org/web/packages/rnn/vignettes/GRU_units.html).

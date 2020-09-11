@@ -21,7 +21,7 @@ The Daily min temperatures dataset describes the minimum daily temperatures over
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **1.42** mean absolute error on this dataset.
-_To reach this accuracy you may need more tetative and more learning time._
+_To reach this accuracy you may need more attempts and more learning time._
 
 
 ```cpp

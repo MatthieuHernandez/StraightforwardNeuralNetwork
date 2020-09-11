@@ -8,7 +8,7 @@ nav_order: 5
 
 # Locally Connected layer
 <p>
-    <img src="{{site.baseurl}}/assets/images/neural_network/locally_connected.gif" att="Convolutionnal layer" width="320px" class="center"/>
+    <img src="{{site.baseurl}}/assets/images/neural_network/locally_connected.gif" att="locally connected layer" width="320px" class="center"/>
 </p>
 
 ## Presentation
@@ -21,7 +21,7 @@ LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation
 ```
 **Arguments**
  * **numberOfLocallyConnected**: The number of output filters. Multiply the number of neurons.
- * **sizeOfLocalMatrix**: The size of the matrix. For a 2D convolution the matrice is a square of length `sizeOfLocalMatrix`.
+ * **sizeOfLocalMatrix**: The size of the matrix. For a 2D convolution the matrix is a square of length `sizeOfLocalMatrix`.
  * **activation**: The activation function of the neurons of the layer. [See list of activation function]({{site.baseurl}}/layer/activation_functions.html)
 
  Here is an example of neural networks with 2D input. The Locally Connected layer receives a shape of 28 x 28 x 1 input and outputs a size of 7 x 7 x 2 output.

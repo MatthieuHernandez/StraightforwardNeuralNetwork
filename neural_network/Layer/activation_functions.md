@@ -3,7 +3,7 @@ layout: default
 title: List of activation functions
 parent: Layers
 grand_parent: Neural network
-nav_order: 6
+nav_order: 7
 ---
 
 # List of activation functions

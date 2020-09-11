@@ -26,8 +26,8 @@ Here is an example of neural networks with 3 fully connected layer.
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        FullyConnected(150, activatation::ReLu),
-        FullyConnected(70, activatation::tanh),
+        FullyConnected(150, activation::ReLu),
+        FullyConnected(70, activation::tanh),
         FullyConnected(10)
     });
 ```

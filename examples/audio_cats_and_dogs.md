@@ -20,7 +20,7 @@ The Audio Cats and Dogs dataset contains 277 barking and meowing audio files fro
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **--%** accuracy on this dataset.
-:warning: _To reach this accuracy you may need more tetative and more learning time.__
+:warning: _To reach this accuracy you may need more attempts and more learning time._
 
 
 ```cpp

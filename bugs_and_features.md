@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Bugs and features
-nav_order: 6
+nav_order: 7
 ---
 
 ## Report a bug &#128030;

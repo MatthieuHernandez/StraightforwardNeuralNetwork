@@ -21,7 +21,7 @@ The data set consists of 50 samples from each of three species of Iris (Iris set
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **100%** accuracy on this dataset.
-_To reach this accuracy you may need more tetative and more learning time._
+_To reach this accuracy you may need more attempts and more learning time._
 
 
 ```cpp

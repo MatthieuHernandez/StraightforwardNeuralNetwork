@@ -20,11 +20,11 @@ Fashion-MNIST is a dataset of Zalando's article images—consisting of a trainin
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **88.13%** accuracy on this dataset.
-_To reach this accuracy you may need more tetative and more learning time._
+_To reach this accuracy you may need more attempts and more learning time._
 
 
 ```cpp
-TEST_F(FashionMnistTest, convolutionNeuralNetwork)
+TEST_F(FashionMnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),

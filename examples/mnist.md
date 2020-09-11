@@ -20,7 +20,7 @@ The MNIST database of handwritten digits, available from this page, has a traini
 ## Neural network 
 
 This is the test with the neural network architecture used to obtain up to **98.32%** accuracy on this dataset.
-_To reach this accuracy you may need more tetative and more learning time._
+_To reach this accuracy you may need more attempts and more learning time._
 
 
 ```cpp

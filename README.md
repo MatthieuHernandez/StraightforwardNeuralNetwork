@@ -7,11 +7,10 @@
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Linux/Windows/badge.svg?barnch=master)
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests%20Linux/badge.svg?barnch=master)
 
-**Straightforward Neural Network** is an open source software simple neural network library in C++ optimized for CPU.
+**Straightforward Neural Network** is an open source neural network library in C++17 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
 
 ## Documentation
-
-You can see documentation on [Wiki](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki).
+ See the full documentation [here](https://matthieuhernandez.github.io/StraightforwardNeuralNetwork/).
 
 ## Classification datasets results
 | Dataset Name | Data type | Problem type | Score | Number of Neurones |
@@ -27,15 +26,19 @@ You can see documentation on [Wiki](https://github.com/MatthieuHernandez/Straigh
 ## Installation (with *CMake* 3.17.1)
 
 ### Linux, UNIX - GCC 10.1
+* To compile open a command prompt and run `cmake -G"Unix Makefiles" ./..  && make` from the `build` folder.
 
-* To compile the library run `cmake -G"Unix Makefiles" ./..  && make` from `StraightforwardNeuralNetwork/build`
+* To run the unit tests execute `./tests/unit_tests/UnitTests.out` from `build` folder.
 
-* To run unit tests exectute `./tests/unit_tests/UnitTests.out` from `StraightforwardNeuralNetwork/build`
+* To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests.out` from `build` folder.
 
-* To run dataset tests run `./ImportDatasets.sh` from `StraightforwardNeuralNetwork\tests\dataset_tests` and exectute `./tests/dataset_tests/DatasetTests.out` from `StraightforwardNeuralNetwork/build`
 ### Windows - MSVC++ 14.2
- * You can generate a Visual Studio project: `cmake -G"Visual Studio 16 2019" ./..`
- 
+* You can generate a Visual Studio project by running `cmake -G"Visual Studio 16 2019" ./..` from `build` folder.
+
+* To run the unit tests open `./tests/unit_tests/UnitTests.out.vcxproj` in Visual Studio.
+
+* To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and open `./tests/dataset_tests/DatasetTests.out.vcxproj` in Visual Studio.
+
  ## Use
 Create, train and use a neural network in few lines of code.
 ```cpp

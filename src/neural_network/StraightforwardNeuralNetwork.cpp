@@ -89,7 +89,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
-        log<minimal>("Iteration: " + std::to_string(this->numberOfIteration));
+        log<minimal>("Epoch: " + std::to_string(this->numberOfIteration));
         
         data.shuffle();
 

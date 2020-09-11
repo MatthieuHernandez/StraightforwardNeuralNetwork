@@ -182,11 +182,8 @@ float StatisticAnalysis::computeWeightedClusteringRate()
     float weightedClusteringRate = 0;
     for (const auto& c : clusters)
     {
-        const float numerator = c.truePositive;
-        const float denominator = c.truePositive + c.falsePositive;
-
-        if (numerator > 0)
-            weightedClusteringRate += numerator / denominator;
+        if (c.truePositive > 0)
+            weightedClusteringRate += c.truePositive / (c.truePositive + c.falseNegative);
     }
     return weightedClusteringRate / clusters.size();
 }

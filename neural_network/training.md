@@ -5,9 +5,10 @@ parent: Neural network
 nav_order: 4
 ---
 
-# Training
+# Training &#127947;
+This part is about how traing a `StraightforwardNeuralNetwork`.
 
-## Declaration 
+## Example 
 ```cpp
 StraightforwardNeuralNetwork neuralNetwork({Input(4), FullyConnected(20), FullyConnected(3)});
 neuralNetwork.startTraining(data);
@@ -25,3 +26,6 @@ List of all conditions of the `WaitFor` method:
 * **_ms**: The minimum time before the learning stops in milliseconds.
 * **_s**: The minimum time before the learning stops in seconds.
 * **_min**: The minimum time before the learning stops in minutes.
+
+### Tip
+You can set the `verbose` enum to `minimal` for display the accuracy and the epoch number during training.

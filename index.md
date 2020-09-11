@@ -20,14 +20,14 @@ last_modified_date: 2020-07-24T17:54:08+0000
 
 ---
 
-# A open source neural network library
+# An open source library
 
-**Straightforward Neural Network** is an open source simple neural network library in C++17 optimized for CPU.
+**Straightforward Neural Network** is an open source simple neural network library in C++17 optimized for CPU. The goal of this GitHub project is to make the use of neural networks as easy as possible.
 
 
-## Features
+## Available features
 
 You can simply implement the main types of neural networks in few lines of codes:
  * DFF (Deep Feed Forward) [See an example]({{site.baseurl}}/examples/wine.html)
- * CNN (Convoliutional Neural Network) [See an example]({{site.baseurl}}/examples/cifar_10.html)
+ * CNN (Convolutional Neural Network) [See an example]({{site.baseurl}}/examples/cifar_10.html)
  * RNN (Recurrent Neural Network) [See an example]({{site.baseurl}}/examples/audio_cats_and_dogs.html)

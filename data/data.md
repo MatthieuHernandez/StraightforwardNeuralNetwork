@@ -6,7 +6,7 @@ permalink: /data
 has_children: true
 has_toc: false
 ---
-# Data
+# Data &#128200;
 **Data** is one of most important class of the library, this class store the data using by the neural network.
 
 ## Declaration
@@ -67,7 +67,3 @@ Data can process data of many natures:
     };
 ```
 There are 3 types of problems and 3 types of temporality.
-
-
-{:toc}
-

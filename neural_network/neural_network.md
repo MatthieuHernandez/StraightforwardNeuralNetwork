@@ -4,11 +4,12 @@ title: Neural network
 nav_order: 5
 permalink: /neural_network
 has_children: true
+has_toc: false
 ---
 
 # Neural network
 <p>
-    <img src="{{site.baseurl}}/assets/images/neural_network/neural_network.png" att="Neural network" height="300px" class="center"/>
+    <img src="{{site.baseurl}}/assets/images/neural_network/neural_network.png" att="Neural network" width="300px" class="center"/>
 </p>
 
 ## Presentation

@@ -4,7 +4,7 @@ title: Quick start
 nav_order: 3
 ---
 
-# Quick start
+# Quick start &#128640;
 {: .no_toc }
 
 First, don't forget `include` and `namespace`
@@ -46,6 +46,7 @@ neuralNetwork.stopTraining();
 ```
 
 ### Use it
+Use the neural networks to predict or calculate the class of new data.
 ```cpp
 vector<float> output = neuralNetwork.computeOutput(input); // for regression and multiple classification
 ```

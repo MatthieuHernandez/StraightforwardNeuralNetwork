@@ -4,8 +4,8 @@ title: Bugs and features
 nav_order: 6
 ---
 
-## Report a bug
+## Report a bug &#128030;
+If you see any bug in the code please open a [issue](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/issues/new?assignees=MatthieuHernandez&labels=bug&template=bug_report.md) on [GitHub](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork).
 
-If you see any bug in the code please open a [issue](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/issues/new?assignees=MatthieuHernandez&labels=bug&template=bug_report.md) on GitHub.
-
-If you want a new feature please open a [issue](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/issues/new?assignees=MatthieuHernandez&labels=enhancement&template=feature_request.md) on GitHub.
+## Report a feature &#128161;
+If you have any idea to improve library or you want a new feature please open a [issue](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/issues/new?assignees=MatthieuHernandez&labels=enhancement&template=feature_request.md) on [GitHub](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork).

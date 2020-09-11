@@ -5,7 +5,7 @@ parent: Neural network
 nav_order: 4
 ---
 
-# Evaluation
+# Evaluation &#127919;
 {: .no_toc }
 
 This is the list of metrics used by `StraighforwardNeuralNetwork` to evaluate the neural network from `Data`.

@@ -8,7 +8,7 @@ file(GLOB SOURCES
     "neural_network/*.tpp"
     "neural_network/layer/*.hpp"
     "neural_network/layer/*.cpp"
-	"neural_network/layer/*.tpp"
+    "neural_network/layer/*.tpp"
     "neural_network/layer/neuron/*.hpp"
     "neural_network/layer/neuron/*.cpp"
     "neural_network/layer/neuron/activation_function/*.hpp"

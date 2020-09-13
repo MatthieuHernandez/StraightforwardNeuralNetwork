@@ -50,7 +50,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
     const auto outputs = this->output(inputs, temporalReset);
     auto errors = calculateError(outputs, desired);
 
-    for (int l = this->layers.size() - 1; l > 0; --l)
+    for (size_t l = this->layers.size() - 1; l > 0; --l)
     {
         errors = layers[l]->backOutput(errors);
     }

@@ -71,7 +71,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
+    void NeuralNetwork::serialize(Archive& ar, const unsigned int)
     {
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);

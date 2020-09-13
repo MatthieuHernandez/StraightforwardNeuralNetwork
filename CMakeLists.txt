@@ -28,7 +28,7 @@ add_subdirectory(tests)
 
 if(MSVC)
   set_target_properties(DatasetTests.out PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
-  target_compile_options(StraightforwardNeuralNetwork BEFORE PUBLIC /Wall /WX)
+  target_compile_options(StraightforwardNeuralNetwork BEFORE PUBLIC /W4 /WX)
 else()
   target_compile_options(StraightforwardNeuralNetwork BEFORE PUBLIC -Wall -Wextra -pedantic -Werror)
 endif()

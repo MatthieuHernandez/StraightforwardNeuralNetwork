@@ -175,7 +175,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
     if (set == testing)
         this->sets[set].needToEvaluateOnData.resize(size, false);
 
-    int i = 0;
+    size_t i = 0;
     for (vector2D<float>& v : input3D)
     {
         std::move(v.begin(), v.end(), std::back_inserter(this->sets[set].inputs));

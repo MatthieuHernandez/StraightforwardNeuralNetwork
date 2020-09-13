@@ -31,7 +31,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void SimpleNeuron::serialize(Archive& ar, const unsigned int version)
+    void SimpleNeuron::serialize(Archive& ar, const unsigned int)
     {
         boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);

@@ -34,7 +34,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void BaseLayer::serialize(Archive& ar, unsigned version)
+    void BaseLayer::serialize(Archive& ar, unsigned)
     {
     }
 }

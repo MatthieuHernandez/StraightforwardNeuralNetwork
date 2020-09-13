@@ -59,7 +59,7 @@ int Layer<N>::getNumberOfInputs() const
 template <class N>
 int Layer<N>::getNumberOfNeurons() const
 {
-    return this->neurons.size();
+    return (int)this->neurons.size();
 }
 
 template <class N>

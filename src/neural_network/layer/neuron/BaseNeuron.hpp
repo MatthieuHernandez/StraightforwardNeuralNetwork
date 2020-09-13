@@ -17,9 +17,9 @@ namespace snn::internal
         virtual void updateWeights(const float error) = 0;
 
     public:
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs) { throw NotImplementedException(); }
+        [[nodiscard]] virtual float output(const std::vector<float>&) { throw NotImplementedException(); }
 
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset) { throw NotImplementedException(); }
+        [[nodiscard]] virtual float output(const std::vector<float>&, bool) { throw NotImplementedException(); }
 
         [[nodiscard]] virtual std::vector<float>& backOutput(float error) = 0;
         virtual void train(float error) = 0;
@@ -42,7 +42,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void BaseNeuron::serialize(Archive& ar, unsigned version)
+    void BaseNeuron::serialize(Archive& ar, unsigned)
     {
     }
 }

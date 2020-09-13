@@ -25,22 +25,22 @@ void CompositeForNonTemporalData::unshuffle()
     this->TemporalComposite::unshuffle();
 }
 
-bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
+bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int) const
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index) const
+bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int) const
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::needToTrainOnTrainingData(int index) const
+bool CompositeForNonTemporalData::needToTrainOnTrainingData(int) const
 {
     return true;
 }
 
-bool CompositeForNonTemporalData::needToEvaluateOnTestingData(int index) const
+bool CompositeForNonTemporalData::needToEvaluateOnTestingData(int) const
 {
     return true;
 }

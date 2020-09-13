@@ -3,7 +3,8 @@
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "Layer.hpp"
-#include "../Optimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/OptimizerModel.hpp"
 
 namespace snn
 {
@@ -36,6 +37,8 @@ namespace snn
     extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
 
     extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
+
+    extern OptimizerModel Dropout(float value);
 
     namespace internal
     {

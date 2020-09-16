@@ -18,7 +18,7 @@ BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
 {
     this->stopTraining();
-};
+}
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> models)
     : NeuralNetwork(models)
@@ -53,7 +53,7 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bo
     const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
-    for (int i = 0; i < outputs.size(); i++)
+    for (int i = 0; i < (int)outputs.size(); i++)
     {
         if (maxOutputValue < outputs[i])
         {

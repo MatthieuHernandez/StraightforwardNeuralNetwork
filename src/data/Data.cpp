@@ -200,7 +200,7 @@ void Data::normalization(const float min, const float max)
             float minValueOfVector = (*inputsTraining)[0][j];
             float maxValueOfVector = (*inputsTraining)[0][j];
 
-            for (int i = 1; i < (*inputsTraining).size(); i++)
+            for (size_t i = 1; i < (*inputsTraining).size(); i++)
             {
                 if ((*inputsTraining)[i][j] < minValueOfVector)
                 {
@@ -214,13 +214,13 @@ void Data::normalization(const float min, const float max)
 
             const float difference = maxValueOfVector - minValueOfVector;
 
-            for (int i = 0; i < (*inputsTraining).size(); i++)
+            for (size_t i = 0; i < (*inputsTraining).size(); i++)
             {
                 if (difference != 0)
                     (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / difference;
                 (*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
             }
-            for (int i = 0; i < (*inputsTesting).size(); i++)
+            for (size_t i = 0; i < (*inputsTesting).size(); i++)
             {
                 if (difference != 0)
                     (*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / difference;
@@ -228,7 +228,7 @@ void Data::normalization(const float min, const float max)
             }
         }
     }
-    catch (exception e)
+    catch (exception&)
     {
         throw runtime_error("Normalization of input data failed");
     }
@@ -269,13 +269,13 @@ int Data::isValid()
         }
     }
     if (!this->sets[testing].shuffledIndexes.empty()
-        && this->sets[training].shuffledIndexes.size() != this->sets[training].size)
+        && this->sets[training].size != (int)this->sets[training].shuffledIndexes.size())
         return 403;
 
-    if (this->sets[training].size != this->sets[training].inputs.size()
-        && this->sets[training].size != this->sets[training].labels.size()
-        && this->sets[testing].size != this->sets[training].inputs.size()
-        && this->sets[testing].size != this->sets[training].labels.size())
+    if (this->sets[training].size != (int)this->sets[training].inputs.size()
+        && this->sets[training].size != (int)this->sets[training].labels.size()
+        && this->sets[testing].size != (int)this->sets[training].inputs.size()
+        && this->sets[testing].size != (int)this->sets[training].labels.size())
         return 405;
 
     int err = this->problemComposite->isValid();

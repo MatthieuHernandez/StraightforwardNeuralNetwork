@@ -13,7 +13,7 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
 template <class N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         neurons[n].train(inputErrors[n]);
     }
@@ -22,7 +22,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
 template <class N>
 int Layer<N>::isValid() const
 {
-    if (this->neurons.size() != this->getNumberOfNeurons()
+    if (this->getNumberOfNeurons() != (int)this->neurons.size()
         || this->getNumberOfNeurons() < 1
         || this->getNumberOfNeurons() > 1000000)
         return 201;

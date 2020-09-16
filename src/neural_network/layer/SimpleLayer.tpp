@@ -20,7 +20,7 @@ template <class N>
 std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs);
     }
@@ -31,10 +31,10 @@ template <class N>
 std::vector<float> SimpleLayer<N>::backOutput(std::vector<float>& inputErrors)
 {
     std::vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        for(int e = 0; e < errors.size(); ++e)
+        for(size_t e = 0; e < errors.size(); ++e)
             errors[e] += error[e];
     }
     return errors;

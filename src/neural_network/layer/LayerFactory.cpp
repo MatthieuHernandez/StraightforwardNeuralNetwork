@@ -25,7 +25,8 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
             activation
         },
         -1,
-        -1
+        -1,
+        vector<int>()
     };
     return model;
 }
@@ -43,7 +44,8 @@ LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
             activation
         },
         -1,
-        -1
+        -1,
+        vector<int>()
     };
     return model;
 }
@@ -61,7 +63,8 @@ LayerModel snn::GruLayer(int numberOfNeurons)
             activation::tanh,
         },
         -1,
-        -1
+        -1,
+        vector<int>()
     };
     return model;
 }
@@ -82,6 +85,7 @@ LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMa
         },
         numberOfLocallyConnected,
         sizeOfLocalMatrix,
+        vector<int>()
 
     };
     return model;
@@ -101,7 +105,7 @@ LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix
         },
         numberOfConvolution,
         sizeOfConvolutionMatrix,
-
+        vector<int>()
     };
     return model;
 }
@@ -282,7 +286,7 @@ void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerMode
         throw InvalidArchitectureException("Layer is too big.");
 
     auto& currentShapeOfInput = models[0].shapeOfInput;
-    for (int i = 1; i < models.size(); ++i)
+    for (size_t i = 1; i < models.size(); ++i)
     {
         layers.push_back(build(models[i], currentShapeOfInput, optimizer));
         currentShapeOfInput = layers.back()->getShapeOfOutput();

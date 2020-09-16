@@ -17,14 +17,15 @@ namespace snn
             0,
             {
                 0,
-                0
+                0,
+                activation::identity
             },
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},
         };
         return model;
-    };
+    }
 
     extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
 

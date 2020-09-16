@@ -24,7 +24,7 @@ void CompositeForTemporalData::shuffle()
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
 
-    for (int i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
+    for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
         this->sets[training].shuffledIndexes[j++] = this->indexesForShuffles[i];
 
@@ -63,12 +63,12 @@ bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 
 int CompositeForTemporalData::isValid()
 {
-    if (!this->sets[training].areFirstDataOfTemporalSequence.size() == this->sets[training].size
-     || !this->sets[testing].areFirstDataOfTemporalSequence.size() == this->sets[testing].size
+    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size
+     || (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size
      || !this->sets[training].needToTrainOnData.empty()
      || !this->sets[testing].needToTrainOnData.empty()
      || !this->sets[training].needToEvaluateOnData.empty()
-     || !this->sets[testing].needToEvaluateOnData.size() == this->sets[training].size)
+     || (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[training].size)
         return 404;
 
     return this->TemporalComposite::isValid();

@@ -29,7 +29,7 @@ TEST(Memory, passingArgByCopy)
         neuralNetwork.waitFor(3_ms);
         neuralNetwork.stopTraining();
     }
-    catch(const std::exception& e)
+    catch(exception& e)
     {
         EXPECT_TRUE(false) << e.what();
     }
@@ -57,7 +57,7 @@ TEST(Memory, copyOperator)
         neuralNetworkCopy.waitFor(3_ms);
         neuralNetworkCopy.stopTraining();
     }
-    catch(const std::exception& e)
+    catch(exception& e)
     {
         EXPECT_TRUE(false) << e.what();
     }

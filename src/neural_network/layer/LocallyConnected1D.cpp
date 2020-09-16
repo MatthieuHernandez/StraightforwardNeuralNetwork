@@ -67,7 +67,7 @@ void LocallyConnected1D::insertBackOutputForNeuron(int neuronNumber, const std::
 {
     neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
     const int beginIndex = neuronNumber * this->shapeOfInput[1] * this->sizeOfFilterMatrix;
-    for (int e = 0; e < error.size(); ++e)
+    for (int e = 0; e < (int)error.size(); ++e)
     {
         const int i = beginIndex + e;
         errors[i] += error[e];

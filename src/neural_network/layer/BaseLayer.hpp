@@ -15,6 +15,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
+        virtual ~BaseLayer() = default;
         virtual std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const = 0;
 
         [[nodiscard]] virtual BaseNeuron* getNeuron(int index) = 0;

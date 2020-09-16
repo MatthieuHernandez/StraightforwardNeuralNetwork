@@ -17,8 +17,9 @@ namespace snn::internal
         virtual void updateWeights(const float error) = 0;
 
     public:
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs) { throw NotImplementedException(); }
+        virtual ~BaseNeuron() = default;
 
+        [[nodiscard]] virtual float output(const std::vector<float>& inputs) { throw NotImplementedException(); }
         [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset) { throw NotImplementedException(); }
 
         [[nodiscard]] virtual std::vector<float>& backOutput(float error) = 0;

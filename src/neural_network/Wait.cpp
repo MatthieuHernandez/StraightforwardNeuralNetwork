@@ -106,6 +106,6 @@ Wait snn::operator""_s(unsigned long long value)
 Wait snn::operator""_min(unsigned long long value)
 {
     Wait res;
-    res.accuracy = (int)value * 1000 * 60;
+    res.duration = (int)value * 1000 * 60;
     return res;
 }

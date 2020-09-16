@@ -30,7 +30,6 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
-      maxOutputIndex(neuralNetwork.maxOutputIndex),
       optimizer(neuralNetwork.optimizer)
 {
     this->layers.reserve(neuralNetwork.layers.size());
@@ -42,7 +41,7 @@ NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
 inline
 int NeuralNetwork::getNumberOfLayers() const
 {
-    return this->layers.size();
+    return (int)this->layers.size();
 }
 
 int NeuralNetwork::getNumberOfInputs() const
@@ -103,8 +102,7 @@ int NeuralNetwork::isValid() const
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-    return this->maxOutputIndex == neuralNetwork.maxOutputIndex
-        && this->optimizer == neuralNetwork.optimizer
+    return this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [this, neuralNetwork] () {
             for (size_t l = 0; l < this->layers.size(); ++l)

@@ -32,11 +32,11 @@ void NeuralNetwork::evaluateOnceForMultipleClassification(
     this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
 }
 
-void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber,
+void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber, const float separator,
                                                   bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
-    this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber);
+    this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber, separator);
 }
 
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)

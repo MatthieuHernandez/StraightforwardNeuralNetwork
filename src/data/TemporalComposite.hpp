@@ -10,6 +10,7 @@ namespace snn::internal
 
     public:
         TemporalComposite(snn::Set sets[2]);
+        virtual ~TemporalComposite() = default;
 
         virtual void shuffle() = 0;
         virtual void unshuffle();

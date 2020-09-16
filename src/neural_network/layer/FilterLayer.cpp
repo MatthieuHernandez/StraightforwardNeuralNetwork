@@ -50,7 +50,6 @@ bool FilterLayer::operator==(const BaseLayer& layer) const
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
             && this->numberOfInputs == f.numberOfInputs
-            && this->errors == f.errors
             && this->neurons == f.neurons;
     }
     catch (bad_cast&)

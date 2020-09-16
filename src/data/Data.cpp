@@ -164,11 +164,11 @@ void Data::initialize(problem problem,
 
 void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
-    this->sets[set].numberOfTemporalSequence = input3D.size();
+    this->sets[set].numberOfTemporalSequence = (int)input3D.size();
     auto size = accumulate(input3D.begin(), input3D.end(), 0,
-                           [](float sum, vector2D<float>& v)
+                           [](int sum, vector2D<float>& v)
                            {
-                               return sum + v.size();
+                               return sum + (int)v.size();
                            });
     this->sets[set].inputs.reserve(size);
     this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
@@ -185,7 +185,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
         if (set == testing)
             this->sets[testing].needToEvaluateOnData[i - 1] = true;
     }
-    this->sets[set].size = this->sets[set].inputs.size();
+    this->sets[set].size = (int)this->sets[set].inputs.size();
 }
 
 void Data::normalization(const float min, const float max)

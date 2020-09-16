@@ -28,7 +28,7 @@ add_subdirectory(tests)
 
 if(MSVC)
   set_target_properties(DatasetTests.out PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
-  target_compile_options(StraightforwardNeuralNetwork PUBLIC /W4 /WX)
+  target_compile_options(StraightforwardNeuralNetwork PUBLIC /W4 /WX /wd4100)
   target_compile_options(Boost PRIVATE /W0)
   target_compile_options(AudioFile PRIVATE /W0)
 else()

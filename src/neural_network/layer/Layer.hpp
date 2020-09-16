@@ -20,7 +20,6 @@ namespace snn::internal
 
     protected:
         int numberOfInputs;
-        std::vector<float> errors;
 
     public:
         Layer() = default; // use restricted to Boost library only

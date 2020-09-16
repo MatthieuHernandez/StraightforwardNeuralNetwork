@@ -24,7 +24,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void GruLayer::serialize(Archive& ar, const unsigned int)
+    void GruLayer::serialize(Archive& ar, const unsigned version)
     {
         boost::serialization::void_cast_register<GruLayer, SimpleLayer>();
         ar & boost::serialization::base_object<SimpleLayer>(*this);

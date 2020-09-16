@@ -127,7 +127,7 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
         numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber)
+void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber, float separator)
 {
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
@@ -143,7 +143,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         {
             clusters[i].totalError += abs(1 - outputs[i]);
 
-            if (outputs[i] > this->separator)
+            if (outputs[i] > separator)
             {
                 clusters[i].truePositive ++;
             }
@@ -156,7 +156,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         {
             clusters[i].totalError += abs(0 - outputs[i]);
 
-            if (outputs[i] > this->separator)
+            if (outputs[i] > separator)
             {
                 clusters[i].falsePositive ++;
             }
@@ -179,28 +179,28 @@ float StatisticAnalysis::computeGlobalClusteringRate()
 
 float StatisticAnalysis::computeWeightedClusteringRate()
 {
-    float weightedClusteringRate = 0;
+    float result = 0;
     for (const auto& c : clusters)
     {
         if (c.truePositive > 0)
-            weightedClusteringRate += c.truePositive / (c.truePositive + c.falseNegative);
+            result += c.truePositive / (c.truePositive + c.falseNegative);
     }
-    return weightedClusteringRate / clusters.size();
+    return result / clusters.size();
 }
 
 float StatisticAnalysis::computeF1Score()
 {
-    float f1Score = 0;
+    float result = 0;
     for (const auto& c : clusters)
     {
         if (c.truePositive > 0)
         {
             const float precision = c.truePositive / (c.truePositive + c.falsePositive);
             const float recall = c.truePositive / (c.truePositive + c.falseNegative);
-            f1Score += (precision * recall) / (precision + recall);
+            result += (precision * recall) / (precision + recall);
         }
     }
-    return 2.0f * f1Score / clusters.size();
+    return 2.0f * result / clusters.size();
 }
 
 float StatisticAnalysis::computeMeanAbsoluteError()

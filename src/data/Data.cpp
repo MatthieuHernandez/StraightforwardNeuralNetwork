@@ -96,17 +96,17 @@ Data::Data(problem typeOfProblem,
                      numberOfRecurrences);
 }
 
-void Data::initialize(problem typeOfProblem,
+void Data::initialize(problem problem,
                       vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
                       vector<vector<float>>& testingLabels,
-                      nature typeOfTemporal,
-                      int numberOfRecurrences)
+                      nature nature,
+                      int recurrences)
 {
     this->precision = 0.1f;
     this->separator = 0.5f;
-    this->numberOfRecurrences = numberOfRecurrences;
+    this->numberOfRecurrences = recurrences;
     this->sets[training].inputs = trainingInputs;
     this->sets[training].labels = trainingLabels;
     this->sets[testing].inputs = testingInputs;

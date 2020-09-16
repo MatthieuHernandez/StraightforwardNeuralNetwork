@@ -69,7 +69,7 @@ namespace snn
     };
 
     template <class Archive>
-    void StraightforwardNeuralNetwork::serialize(Archive& ar, const unsigned int)
+    void StraightforwardNeuralNetwork::serialize(Archive& ar, const unsigned version)
     {
         boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
         ar & boost::serialization::base_object<NeuralNetwork>(*this);

@@ -24,9 +24,9 @@ Neuron::Neuron(NeuronModel model, StochasticGradientDescent* optimizer)
     this->bias = 1.0f;
 }
 
-float Neuron::randomInitializeWeight(int numberOfInputs) const
+float Neuron::randomInitializeWeight(int numberOfWeights) const
 {
-    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfInputs));
+    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfWeights));
     return Tools::randomBetween(-valueMax, valueMax);
 }
 

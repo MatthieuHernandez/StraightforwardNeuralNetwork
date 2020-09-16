@@ -50,6 +50,12 @@ namespace snn::internal
         float f1ScoreMax = -1.0f;
         float meanAbsoluteErrorMax = -1.0f;
         float rootMeanSquaredErrorMax = -1.0f;
+        
+        float computeGlobalClusteringRate();
+        float computeWeightedClusteringRate();
+        float computeF1Score();
+        float computeMeanAbsoluteError();
+        float computeRootMeanSquaredError();
 
     protected:
         StatisticAnalysis() = default;
@@ -64,13 +70,9 @@ namespace snn::internal
         void evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
                                                    const std::vector<float>& desiredOutputs,
                                                    float separator);
-        void evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber);
-
-        float computeGlobalClusteringRate();
-        float computeWeightedClusteringRate();
-        float computeF1Score();
-        float computeMeanAbsoluteError();
-        float computeRootMeanSquaredError();
+        void evaluateOnceForClassification(const std::vector<float>& outputs,
+                                           int classNumber,
+                                           float separator);
 
         void startTesting();
         void stopTesting();
@@ -80,8 +82,6 @@ namespace snn::internal
         bool f1ScoreIsBetterThanPreviously = false;
         bool meanAbsoluteErrorIsBetterThanPreviously = false;
         bool rootMeanSquaredErrorIsBetterThanPreviously = false;
-
-        float separator = 0.5f;
 
     public:
         float getGlobalClusteringRate() const;

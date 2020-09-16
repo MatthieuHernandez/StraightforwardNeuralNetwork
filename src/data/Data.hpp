@@ -24,13 +24,13 @@ namespace snn
     class Data
     {
     private:
-        void initialize(problem typeOfProblem,
+        void initialize(problem problem,
                         std::vector<std::vector<float>>& trainingInputs,
                         std::vector<std::vector<float>>& trainingLabels,
                         std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels,
-                        nature typeOfTemporal,
-                        int numberOfRecurrences);
+                        nature nature,
+                        int recurrences);
 
         void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
 

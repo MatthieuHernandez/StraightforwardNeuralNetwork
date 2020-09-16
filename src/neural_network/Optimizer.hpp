@@ -35,7 +35,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void StochasticGradientDescent::serialize(Archive& ar, const unsigned int)
+    void StochasticGradientDescent::serialize(Archive& ar, const unsigned int version)
     {
         ar & this->learningRate;
         ar & this->momentum;

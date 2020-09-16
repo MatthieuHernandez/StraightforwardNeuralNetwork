@@ -54,7 +54,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void GatedRecurrentUnit::serialize(Archive& ar, const unsigned int)
+    void GatedRecurrentUnit::serialize(Archive& ar, const unsigned int version)
     {
         boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron>();
         ar & boost::serialization::base_object<BaseNeuron>(*this);

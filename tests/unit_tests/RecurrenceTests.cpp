@@ -9,10 +9,10 @@ void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Recurrence, RepeatInput)
 {
-    vector2D<float> inputData =       {{0.0}, {-1.0}, {-0.8}, {-0.5}, {-0.2}, {0.0}, {0.3}, {0.5}, {0.7}, {1.0}};
-    vector2D<float> expectedOutputs = {{0.0}, {-1.0}, {-0.8}, {-0.5}, {-0.2}, {0.0}, {0.3}, {0.5}, {0.7}, {1.0}};
+    vector2D<float> inputData =       {{0.0f}, {-1.0f}, {-0.8f}, {-0.5f}, {-0.2f}, {0.0f}, {0.3f}, {0.5f}, {0.7f}, {1.0f}};
+    vector2D<float> expectedOutputs = {{0.0f}, {-1.0f}, {-0.8f}, {-0.5f}, {-0.2f}, {0.0f}, {0.3f}, {0.5f}, {0.7f}, {1.0f}};
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data->setPrecision(0.15);
+    data->setPrecision(0.15f);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
@@ -31,7 +31,7 @@ TEST(Recurrence, RepeatLastInput)
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {1}, {1}, {0},  {-1}, {-1}, {0}, {1},  {-1}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data->setPrecision(0.4);
+    data->setPrecision(0.4f);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
@@ -50,7 +50,7 @@ TEST(Recurrence, RepeatLastLastInput)
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
-    data->setPrecision(0.3);
+    data->setPrecision(0.3f);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),

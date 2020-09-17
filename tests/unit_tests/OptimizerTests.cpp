@@ -22,8 +22,8 @@ TEST(Optimizer, FindRightValueIn20)
     neuralNetwork.stopTraining();
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 1.0);
-    ASSERT_MAE(mae, 0.6);
+    ASSERT_ACCURACY(acc, 1.0f);
+    ASSERT_MAE(mae, 0.6f);
 }
 
 unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
@@ -39,7 +39,7 @@ unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
         inputData.back().reserve(sizeOfData);
         for(int j = 0; j < sizeOfData; ++j)
         {
-            const auto rand = internal::Tools::randomBetween(-1, 1);
+            const float rand = internal::Tools::randomBetween(-1.0f, 1.0f);
             inputData.back().push_back(rand);
         }
         if(inputData[i][0] > 0)

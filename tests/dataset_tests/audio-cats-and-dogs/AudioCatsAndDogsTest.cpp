@@ -6,7 +6,7 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
-const static unsigned int sizeOfOneData = 16000;
+const static int sizeOfOneData = 16000;
 
 class AudioCatsAndDogsTest : public testing::Test
 {
@@ -56,6 +56,6 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     neuralNetwork.saveAs("ACaD.snn");
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_RECALL(recall, 0.50);
-    ASSERT_ACCURACY(accuracy, 0.6);
+    ASSERT_RECALL(recall, 0.50f);
+    ASSERT_ACCURACY(accuracy, 0.6f);
 }

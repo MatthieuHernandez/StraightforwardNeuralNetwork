@@ -13,7 +13,7 @@ For more explanation go to wiki.
 */
 int classificationExample()
 {
-    vector<vector<float>> inputData = {{-0.1, 0.4, -0.6}, {0.5, -0.4, -0.8}, {-0.7, 0.9, -0.7}, {-0.9, -0.5, 1.7}, {0.5, -0.5, 0.9}, {0.3, 0.6, 0.8}};
+    vector<vector<float>> inputData = {{-0.1f, 0.4f, -0.6f}, {0.5f, -0.4f, -0.8f}, {-0.7f, 0.9f, -0.7f}, {-0.9f, -0.5f, 1.7f}, {0.5f, -0.5f, 0.9f}, {0.3f, 0.6f, 0.8f}};
     vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
     Data data(problem::classification, inputData, expectedOutputs);

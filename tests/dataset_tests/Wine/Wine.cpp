@@ -17,7 +17,7 @@ Wine::Wine(string folderPath)
 
 void Wine::loadData(string folderPath)
 {
-    vector2D<float> data;
+    vector2D<float> inputs;
     vector2D<float> labels;
 
     string line;
@@ -26,7 +26,7 @@ void Wine::loadData(string folderPath)
     if (!file.is_open())
         throw FileOpeningFailedException();
 
-    data.reserve(178);
+    inputs.reserve(178);
     labels.reserve(178);
 
     while (getline(file, line))
@@ -48,8 +48,8 @@ void Wine::loadData(string folderPath)
         }
         value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
         values.push_back(value);
-        data.push_back(values);
+        inputs.push_back(values);
     }
     file.close();
-    this->data = make_unique<Data>(problem::classification, data, labels);
+    this->data = make_unique<Data>(problem::classification, inputs, labels);
 }

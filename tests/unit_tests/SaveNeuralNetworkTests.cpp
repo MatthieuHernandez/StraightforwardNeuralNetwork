@@ -49,12 +49,12 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
     vector<float> inputs(8*8*3);
-    inputs[30] = 1.5;
-    inputs[60] = 0.75;
-    inputs[90] = -0.25;
-    inputs[120] = 1;
-    inputs[150] = -1.35;
-    const vector<float> desired{1, 0, 0.5, 0.07};
+    inputs[30] = 1.5f;
+    inputs[60] = 0.75f;
+    inputs[90] = -0.25f;
+    inputs[120] = 1.0f;
+    inputs[150] = -1.35f;
+    const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
     A.trainOnce(inputs, desired);
 

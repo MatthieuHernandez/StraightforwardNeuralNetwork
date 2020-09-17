@@ -29,10 +29,10 @@ TEST_F(WineTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 13);
     ASSERT_EQ(data->numberOfLabel, 3);
-    ASSERT_EQ(data->sets[training].inputs.size(), 178);
-    ASSERT_EQ(data->sets[training].labels.size(), 178);
-    ASSERT_EQ(data->sets[snn::testing].inputs.size(), 178);
-    ASSERT_EQ(data->sets[snn::testing].labels.size(), 178);
+    ASSERT_EQ((int)data->sets[training].inputs.size(), 178);
+    ASSERT_EQ((int)data->sets[training].labels.size(), 178);
+    ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 178);
+    ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 178);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->isValid(), 0);

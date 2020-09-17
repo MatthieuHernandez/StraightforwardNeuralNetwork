@@ -17,7 +17,7 @@ Iris::Iris(string folderPath)
 
 void Iris::loadData(string folderPath)
 {
-    vector2D<float> data;
+    vector2D<float> inputs;
     vector2D<float> labels;
 
     string line;
@@ -42,18 +42,18 @@ void Iris::loadData(string folderPath)
         size++;
     }
     file.close();
-    data.resize(size);
+    inputs.resize(size);
     labels.resize(size);
     for (int i = 0; i < size; i++)
     {
-        data[i].reserve(4);
+        inputs[i].reserve(4);
         labels[i].resize(3);
     }
 
     for (int i = 0; i < size; i++)
     {
         for (int j = 0; j < 4; j++)
-            data[i].push_back(stof(individuals[i][j]));
+            inputs[i].push_back(stof(individuals[i][j]));
 
         if (individuals[i][4][8] == 'o') // Iris-setosa
         {
@@ -76,5 +76,5 @@ void Iris::loadData(string folderPath)
         else
             throw runtime_error("Cannot load iris dataset");
     }
-    this->data = make_unique<Data>(problem::classification, data, labels);
+    this->data = make_unique<Data>(problem::classification, inputs, labels);
 }

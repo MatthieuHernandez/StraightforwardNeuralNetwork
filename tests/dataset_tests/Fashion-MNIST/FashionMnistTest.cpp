@@ -29,10 +29,10 @@ TEST_F(FashionMnistTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 784);
     ASSERT_EQ(data->numberOfLabel, 10);
-    ASSERT_EQ(data->sets[training].inputs.size(), 60000);
-    ASSERT_EQ(data->sets[training].labels.size(), 60000);
-    ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
-    ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
+    ASSERT_EQ((int)data->sets[training].inputs.size(), 60000);
+    ASSERT_EQ((int)data->sets[training].labels.size(), 60000);
+    ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
+    ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->isValid(), 0);
@@ -50,7 +50,7 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 45_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.76);
+    ASSERT_ACCURACY(accuracy, 0.76f);
 }
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)

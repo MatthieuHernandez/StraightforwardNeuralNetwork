@@ -13,8 +13,8 @@ TEST(Identity, WorksWithSmallNumbers)
     Data data(problem::regression, inputData, expectedOutputs);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)});
-    neuralNetwork.optimizer.learningRate = 0.02;
-    neuralNetwork.optimizer.momentum = 0.99;
+    neuralNetwork.optimizer.learningRate = 0.02f;
+    neuralNetwork.optimizer.momentum = 0.99f;
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(0.01_mae || 3_s);
@@ -64,8 +64,8 @@ TEST(Identity, WorksWithLotsOfNumbers)
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)});
-    neuralNetwork.optimizer.learningRate = 0.0002;
-    neuralNetwork.optimizer.momentum = 0.99;
+    neuralNetwork.optimizer.learningRate = 0.0002f;
+    neuralNetwork.optimizer.momentum = 0.99f;
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread

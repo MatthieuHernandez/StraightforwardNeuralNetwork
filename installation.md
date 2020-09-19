@@ -13,10 +13,10 @@ nav_order: 2
 * To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests.out` from `build` folder.
 
 ## Windows - MSVC++ 14.2
- * You can generate a Visual Studio project by running `cmake -G"Visual Studio 16 2019" ./..` from `build` folder.
+* You can generate a Visual Studio project by running `cmake -G"Visual Studio 16 2019" ./..` from `build` folder.
 
- * To run the unit tests open `./tests/unit_tests/UnitTests.out.vcxproj` in Visual Studio.
- 
+* To run the unit tests open `./tests/unit_tests/UnitTests.out.vcxproj` in Visual Studio.
+
 * To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and open `./tests/dataset_tests/DatasetTests.out.vcxproj` in Visual Studio.
  
 <br/>

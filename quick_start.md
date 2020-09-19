@@ -11,7 +11,7 @@ First, don't forget `include` and `namespace`
 
 ```cpp
 #include "StraightforwardNeuralNetwork/src/neural_network/StraightforwardNeuralNetwork.hpp"
-#include "StraightforwardNeuralNetwork/src/data/Data.hpp.hpp"
+#include "StraightforwardNeuralNetwork/src/data/Data.hpp"
 using namespace snn;
 ```
 

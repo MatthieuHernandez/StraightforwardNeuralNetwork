@@ -1,4 +1,4 @@
-name: Dataset tests Linux
+name: Dataset tests
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-tests:
-    name: Build and run unit tests
+    name: Build and run
     runs-on: ubuntu-latest
 
     steps:

@@ -1,17 +1,14 @@
-name: Unit tests Linux/Windows
+name: Unit tests Linux
 
 on: [push]
 
 jobs:
   unit-tests:
-    name: Build and run unit tests
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
+    name: Build and run
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
+    - name: Checkout the project
       uses: actions/checkout@v2
     - name: CMake
       run: |

@@ -46,7 +46,7 @@ TEST(Addition, WithLCNN)
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3);
+    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3f);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         Recurrence(12),
@@ -60,7 +60,7 @@ TEST(Addition, WithRNN)
 
 TEST(Addition, WithGRU)
 {
-    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3);
+    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3f);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
         GruLayer(15),
@@ -121,7 +121,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numbe
         for (int j = 0; j < numberOfRecurrences+1; ++j)
         {
             if (i + j < numberOfData)
-                expectedOutputs[i + j][0] += r;
+                expectedOutputs[(int)(i + j)][0] += r;
         }
     }
 

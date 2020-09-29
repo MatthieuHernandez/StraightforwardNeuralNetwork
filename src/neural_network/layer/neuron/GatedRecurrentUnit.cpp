@@ -39,10 +39,8 @@ std::vector<float>& GatedRecurrentUnit::backOutput(float error)
 {
     float d3 = error;
     float d8 = d3 * this->updateGateOutput;
-    float d5 = d3 * this->recurrentError;
     float d7 = d3 * this->outputGateOutput;
     float d9 = d7 + d8;
-
 
     this->errors = this->outputGate.backOutput(d8);
     auto e2 = this->updateGate.backOutput(d9);
@@ -57,9 +55,16 @@ std::vector<float>& GatedRecurrentUnit::backOutput(float error)
 
 void GatedRecurrentUnit::train(float error)
 {
-    float outputGateError = 0;
-    float updateGateError = 0;
-    float resetGateError = 0;
+    float d3 = error;
+    float d8 = d3 * this->updateGateOutput;
+    float d7 = d3 * this->outputGateOutput;
+    float d9 = d7 + d8;
+
+    this->errors = this->outputGate.backOutput(d8);
+    auto e2 = this->updateGate.backOutput(d9);
+    float d13 = this->errors.back();
+    float d16 = d13 * this->previousOutput;
+    auto e3 = this->resetGate.backOutput(d16);
 }
 
 vector<float> GatedRecurrentUnit::getWeights() const

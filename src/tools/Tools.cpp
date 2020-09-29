@@ -26,7 +26,7 @@ T Tools::getMinValue(vector<T> vector)
     {
         T minValue = vector[0];
 
-        for (int i = 1; i < vector.size(); i++)
+        for (size_t i = 1; i < vector.size(); i++)
         {
             if (vector[i] < minValue)
             {
@@ -45,7 +45,7 @@ T Tools::getMaxValue(vector<T> vector)
     {
         T maxValue = vector[0];
 
-        for (int i = 1; i < vector.size(); i++)
+        for (size_t i = 1; i < vector.size(); i++)
         {
             if (vector[i] > maxValue)
             {

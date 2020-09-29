@@ -6,9 +6,9 @@
 using namespace snn;
 using namespace internal;
 
-extern template class SimpleLayer<SimpleNeuron>;
-extern template class SimpleLayer<RecurrentNeuron>;
-extern template class SimpleLayer<GatedRecurrentUnit>;
+extern template class internal::SimpleLayer<SimpleNeuron>;
+extern template class internal::SimpleLayer<RecurrentNeuron>;
+extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 
 BOOST_CLASS_EXPORT(SimpleLayer<SimpleNeuron>)
 BOOST_CLASS_EXPORT(SimpleLayer<RecurrentNeuron>)
@@ -18,7 +18,7 @@ template <>
 std::vector<float> SimpleLayer<RecurrentNeuron>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs, temporalReset);
     }
@@ -29,7 +29,7 @@ template <>
 std::vector<float> SimpleLayer<GatedRecurrentUnit>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs, temporalReset);
     }

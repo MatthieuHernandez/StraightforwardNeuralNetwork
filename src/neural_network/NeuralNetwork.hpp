@@ -32,8 +32,6 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        int maxOutputIndex = -1;
-
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
 
         void evaluateOnceForRegression(const std::vector<float>& inputs,
@@ -44,7 +42,10 @@ namespace snn::internal
                                                    const std::vector<float>& desired,
                                                    float separator,
                                                    bool temporalReset);
-        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, bool temporalReset);
+        void evaluateOnceForClassification(const std::vector<float>& inputs,
+                                           int classNumber,
+                                           const float separator,
+                                           bool temporalReset);
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
@@ -71,13 +72,12 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void NeuralNetwork::serialize(Archive& ar, const unsigned int version)
+    void NeuralNetwork::serialize(Archive& ar, unsigned version)
     {
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
         ar & this->optimizer.learningRate;
         ar & this->optimizer.momentum;
-        ar & this->maxOutputIndex;
         ar.template register_type<FullyConnected>();
         ar.template register_type<Recurrence>();
         ar.template register_type<GruLayer>();

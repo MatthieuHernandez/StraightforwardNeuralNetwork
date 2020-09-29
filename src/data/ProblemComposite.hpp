@@ -10,6 +10,7 @@ namespace snn::internal
 
     public:
         ProblemComposite(Set sets[2]);
+        virtual ~ProblemComposite() = default;
 
         [[nodiscard]] virtual int isValid();
 

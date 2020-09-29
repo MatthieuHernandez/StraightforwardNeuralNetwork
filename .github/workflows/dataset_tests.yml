@@ -1,4 +1,4 @@
-name: Dataset tests Linux
+name: Dataset tests
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   unit-tests:
-    name: Build and run unit tests
+    name: Build and run
     runs-on: ubuntu-latest
 
     steps:
@@ -32,25 +32,25 @@ jobs:
     - name: Iris
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=IrisTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=IrisTest* --gtest_also_run_disabled_tests
     - name: Wine
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=WineTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=WineTest* --gtest_also_run_disabled_tests
     - name: DailyMinTemperatures
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=DailyMinTemperaturesTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=DailyMinTemperaturesTest* --gtest_also_run_disabled_tests
     - name: MNIST
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=MnistTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=MnistTest* --gtest_also_run_disabled_tests
     - name: Fashion MNIST
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=FashionMnistTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest* --gtest_also_run_disabled_tests
     - name: CIFAR-10
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests.out --gtest_filter=Cifar10Test* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test* --gtest_also_run_disabled_tests
         

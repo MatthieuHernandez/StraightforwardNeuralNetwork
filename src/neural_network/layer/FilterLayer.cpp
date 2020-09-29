@@ -19,7 +19,7 @@ FilterLayer::FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer
 vector<float> FilterLayer::output(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
         auto neuronInputs = this->createInputsForNeuron(n, inputs);
         outputs[n] = this->neurons[n].output(neuronInputs);
@@ -30,7 +30,7 @@ vector<float> FilterLayer::output(const vector<float>& inputs, bool temporalRese
 vector<float> FilterLayer::backOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
         this->insertBackOutputForNeuron(n, error, errors);
@@ -50,7 +50,6 @@ bool FilterLayer::operator==(const BaseLayer& layer) const
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
             && this->numberOfInputs == f.numberOfInputs
-            && this->errors == f.errors
             && this->neurons == f.neurons;
     }
     catch (bad_cast&)

@@ -20,7 +20,6 @@ namespace snn::internal
 
     protected:
         int numberOfInputs;
-        std::vector<float> errors;
 
     public:
         Layer() = default; // use restricted to Boost library only
@@ -58,7 +57,6 @@ namespace snn::internal
         boost::serialization::void_cast_register<Layer, BaseLayer>();
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
-        ar & this->errors;
         ar & this->neurons;
     }
 

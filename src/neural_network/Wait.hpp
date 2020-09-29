@@ -18,7 +18,7 @@ namespace snn
         waitOperator op = waitOperator::noneOp;
         Wait& operator||(const Wait& wait);
         Wait& operator&&(const Wait& wait);
-        bool isOver(int epochs, float accuracy, float mae, int duration) const;
+        bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae, int currentDuration) const;
     };
 
     extern Wait operator""_ep(unsigned long long value);

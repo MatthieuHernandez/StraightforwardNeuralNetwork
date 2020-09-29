@@ -20,7 +20,7 @@ int CompositeForClassification::isValid()
 
 int CompositeForClassification::getTrainingLabel(const int index)
 {
-    for (int i = 0; i < this->sets[training].labels[index].size(); i++)
+    for (int i = 0; i < (int)this->sets[training].labels[index].size(); i++)
     {
         if (this->sets[training].labels[index][i] == 1)
             return i;
@@ -30,7 +30,7 @@ int CompositeForClassification::getTrainingLabel(const int index)
 
 int CompositeForClassification::getTestingLabel(const int index)
 {
-    for (int i = 0; i < this->sets[testing].labels[index].size(); i++)
+    for (int i = 0; i < (int)this->sets[testing].labels[index].size(); i++)
     {
         if (this->sets[testing].labels[index][i] == 1)
             return i;

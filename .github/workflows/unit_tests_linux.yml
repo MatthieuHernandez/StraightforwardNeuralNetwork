@@ -1,0 +1,24 @@
+name: Unit tests Linux
+
+on: [push]
+
+jobs:
+  unit-tests:
+    name: Build and run
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v2
+    - name: CMake
+      run: |
+        cd ./build
+        CC=gcc-9 CXX=/usr/bin/g++-9 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+    - name: Make
+      run: |
+        cd ./build
+        make
+    - name: Execute unit tests
+      run: |
+        cd ./build
+        ./tests/unit_tests/UnitTests --gtest_also_run_disabled_tests

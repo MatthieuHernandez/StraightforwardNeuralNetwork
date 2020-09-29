@@ -11,7 +11,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, const unsigned int version);
+        void serialize(Archive& ar, unsigned version);
 
        friend class RecurrentNeuron;
 
@@ -54,7 +54,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void GatedRecurrentUnit::serialize(Archive& ar, const unsigned int version)
+    void GatedRecurrentUnit::serialize(Archive& ar, unsigned version)
     {
         boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron>();
         ar & boost::serialization::base_object<BaseNeuron>(*this);

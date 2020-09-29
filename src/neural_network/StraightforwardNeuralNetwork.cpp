@@ -18,7 +18,7 @@ BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
 {
     this->stopTraining();
-};
+}
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> models)
     : NeuralNetwork(models)
@@ -53,7 +53,7 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bo
     const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
-    for (int i = 0; i < outputs.size(); i++)
+    for (int i = 0; i < (int)outputs.size(); i++)
     {
         if (maxOutputValue < outputs[i])
         {
@@ -135,11 +135,13 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
     case problem::classification:
         this->evaluateOnceForClassification(data.getTestingData(this->currentIndex),
                                             data.getTestingLabel(this->currentIndex),
+                                            data.getSeparator(),
                                             data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
     case problem::multipleClassification:
         this->evaluateOnceForMultipleClassification(data.getTestingData(this->currentIndex),
-                                                    data.getTestingOutputs(this->currentIndex), data.getSeparator(),
+                                                    data.getTestingOutputs(this->currentIndex),
+                                                    data.getSeparator(),
                                                     data.isFirstTestingDataOfTemporalSequence(this->currentIndex));
         break;
     case problem::regression:
@@ -178,7 +180,7 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
         const auto epochs = this->getNumberOfIteration();
         const auto accuracy = this->getGlobalClusteringRate();
         const auto mae = this->getMeanAbsoluteError();
-        const auto durationMs = duration_cast<milliseconds>(system_clock::now() - startWait).count();
+        const auto durationMs = (int)duration_cast<milliseconds>(system_clock::now() - startWait).count();
 
         if (wait.isOver(epochs, accuracy, mae, durationMs))
             break;

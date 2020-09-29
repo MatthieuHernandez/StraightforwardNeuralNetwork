@@ -57,14 +57,14 @@ TEST(Architecture, invalidArchitectures)
         "Invalid neural network architecture: Input with 3 dimensions or higher is not managed.",
     };
 
-    for (int i = 0; i < Architectures.size(); i++)
+    for (size_t i = 0; i < Architectures.size(); i++)
     {
         try
         {
             StraightforwardNeuralNetwork neuralNetwork(Architectures[i]);
             FAIL();
         }
-        catch (InvalidArchitectureException e)
+        catch (InvalidArchitectureException& e)
         {
             ASSERT_EQ(e.what(), expectedErrorMessages[i]);
         }

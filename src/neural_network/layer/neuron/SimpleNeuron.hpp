@@ -10,7 +10,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, const unsigned int version);
+        void serialize(Archive& ar, unsigned version);
 
         void updateWeights(const float error) override;
 
@@ -31,7 +31,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void SimpleNeuron::serialize(Archive& ar, const unsigned int version)
+    void SimpleNeuron::serialize(Archive& ar, unsigned version)
     {
         boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);

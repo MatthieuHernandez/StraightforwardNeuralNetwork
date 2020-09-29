@@ -1,0 +1,26 @@
+name: Unit tests Windows
+
+on: [push]
+
+jobs:
+  unit-tests:
+    name: Build and run
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v2
+    - name: Checkout msvc-dev-cmd
+      uses: ilammy/msvc-dev-cmd@v1.3.0
+    - name: CMake
+      run: |
+        cd ./build
+        cmake -G"NMake Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+    - name: Make
+      run: |
+        cd ./build
+        nmake
+    - name: Execute unit tests
+      run: |
+        cd ./build
+        ./tests/unit_tests/UnitTests --gtest_also_run_disabled_tests

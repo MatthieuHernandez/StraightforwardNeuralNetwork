@@ -19,7 +19,7 @@ DailyMinTemperatures::DailyMinTemperatures(string folderPath, int numberOfRecurr
 
 void DailyMinTemperatures::loadData(string folderPath)
 {
-    vector2D<float> data;
+    vector2D<float> inputs;
     vector2D<float> labels;
     string line;
     ifstream file(folderPath + "/daily-min-temperatures.csv", ios::in);
@@ -27,7 +27,7 @@ void DailyMinTemperatures::loadData(string folderPath)
     if (!file.is_open())
         throw FileOpeningFailedException();
 
-    data.reserve(3650);
+    inputs.reserve(3650);
 
     getline(file, line); // ignore headers
     float previousValue = -273.15f;
@@ -39,11 +39,11 @@ void DailyMinTemperatures::loadData(string folderPath)
 
         if (previousValue != -273.15f)
         {
-            data.push_back({previousValue});
+            inputs.push_back({previousValue});
             labels.push_back({value});
         }
         previousValue = value;
     }
     file.close();
-    this->data = make_unique<Data>(problem::regression, data, labels, nature::timeSeries, this->numberOfRecurrences);
+    this->data = make_unique<Data>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
 }

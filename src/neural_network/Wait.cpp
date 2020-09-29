@@ -45,12 +45,12 @@ Wait& Wait::operator&&(const Wait& wait)
     return *this;
 }
 
-bool Wait::isOver(int epochs, float accuracy, float mae, int duration) const
+bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae, int currentDuration) const
 {
-    const bool isValidEpochs = epochs >= this->epochs && epochs > 0;
-    const bool isValidAccuracy = accuracy >= this->accuracy && accuracy > 0;
-    const bool isValidMae = mae <= this->mae && mae > 0;
-    const bool isValidDuration = duration >= this->duration;
+    const bool isValidEpochs = currentEpochs >= this->epochs && currentEpochs > 0;
+    const bool isValidAccuracy = CurrentAccuracy >= this->accuracy && CurrentAccuracy > 0;
+    const bool isValidMae = currentMae <= this->mae && currentMae > 0;
+    const bool isValidDuration = currentDuration >= this->duration;
 
     if (this->op == waitOperator::andOp)
     {
@@ -71,41 +71,41 @@ bool Wait::isOver(int epochs, float accuracy, float mae, int duration) const
 Wait snn::operator""_ep(unsigned long long value)
 {
     Wait res;
-    res.epochs = value;
+    res.epochs = (int)value;
     return res;
 }
 
 Wait snn::operator""_acc(long double value)
 {
     Wait res;
-    res.accuracy = value;
+    res.accuracy = (float)value;
     return res;
 }
 
 Wait snn::operator""_mae(long double value)
 {
     Wait res;
-    res.mae = value;
+    res.mae = (float)value;
     return res;
 }
 
 Wait snn::operator""_ms(unsigned long long value)
 {
     Wait res;
-    res.duration = value;
+    res.duration = (int)value;
     return res;
 }
 
 Wait snn::operator""_s(unsigned long long value)
 {
     Wait res;
-    res.duration = value * 1000;
+    res.duration = (int)value * 1000;
     return res;
 }
 
 Wait snn::operator""_min(unsigned long long value)
 {
     Wait res;
-    res.accuracy = value * 1000 * 60;
+    res.duration = (int)value * 1000 * 60;
     return res;
 }

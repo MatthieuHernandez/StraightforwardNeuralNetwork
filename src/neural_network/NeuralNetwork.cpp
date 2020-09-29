@@ -1,3 +1,4 @@
+#include <cmath>
 #include <ctime>
 #include <boost/serialization/export.hpp>
 #include "NeuralNetwork.hpp"
@@ -30,7 +31,6 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
-      maxOutputIndex(neuralNetwork.maxOutputIndex),
       optimizer(neuralNetwork.optimizer)
 {
     this->layers.reserve(neuralNetwork.layers.size());
@@ -39,10 +39,77 @@ NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
+
+void NeuralNetwork::evaluateOnceForRegression(
+    const vector<float>& inputs, const vector<float>& desired, const float precision, bool temporalReset)
+{
+    const auto outputs = this->output(inputs, temporalReset);
+    this->StatisticAnalysis::evaluateOnceForRegression(outputs, desired, precision);
+}
+
+void NeuralNetwork::evaluateOnceForMultipleClassification(
+    const vector<float>& inputs, const vector<float>& desired, const float separator, bool temporalReset)
+{
+    const auto outputs = this->output(inputs, temporalReset);
+    this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
+}
+
+void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber, const float separator,
+                                                  bool temporalReset)
+{
+    const auto outputs = this->output(inputs, temporalReset);
+    this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber, separator);
+}
+
+void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
+{
+    this->backpropagationAlgorithm(inputs, desired, temporalReset);
+}
+
+vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
+{
+    auto outputs = layers[0]->output(inputs, temporalReset);
+
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->output(outputs, temporalReset);
+    }
+
+    return outputs;
+}
+
+void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired,
+                                             bool temporalReset)
+{
+    const auto outputs = this->output(inputs, temporalReset);
+    auto errors = calculateError(outputs, desired);
+
+    for (size_t l = this->layers.size() - 1; l > 0; --l)
+    {
+        errors = layers[l]->backOutput(errors);
+    }
+    layers[0]->train(errors);
+}
+
 inline
+vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+{
+    auto errors = new vector<float>(this->layers.back()->getNumberOfNeurons(), 0);
+    for (size_t n = 0; n < errors->size(); ++n)
+    {
+        if (isnan(desired[n]))
+            (*errors)[n] = 0;
+        else
+        {
+            (*errors)[n] = 2 * (desired[n] - outputs[n]);
+        }
+    }
+    return *errors;
+}
+
 int NeuralNetwork::getNumberOfLayers() const
 {
-    return this->layers.size();
+    return (int)this->layers.size();
 }
 
 int NeuralNetwork::getNumberOfInputs() const
@@ -103,8 +170,7 @@ int NeuralNetwork::isValid() const
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-    return this->maxOutputIndex == neuralNetwork.maxOutputIndex
-        && this->optimizer == neuralNetwork.optimizer
+    return this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [this, neuralNetwork] () {
             for (size_t l = 0; l < this->layers.size(); ++l)

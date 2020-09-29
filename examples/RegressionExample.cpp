@@ -14,7 +14,7 @@ For more explanation go to wiki.
 int regressionExample()
 {
     vector<vector<float>> inputData = {{0, 1, 0}, {0, 1, 1},{1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
-    vector<vector<float>> expectedOutputs = {{0.333}, {0.666}, {0.666}, {0.666}, {0}, {1}};
+    vector<vector<float>> expectedOutputs = {{0.333f}, {0.666f}, {0.666f}, {0.666f}, {0.0f}, {1.0f}};
 
     float precision = 0.1f;
     Data data(problem::regression, inputData, expectedOutputs);

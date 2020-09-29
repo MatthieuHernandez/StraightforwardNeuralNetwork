@@ -13,7 +13,7 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
 template <class N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         neurons[n].train(inputErrors[n]);
     }
@@ -22,7 +22,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
 template <class N>
 int Layer<N>::isValid() const
 {
-    if (this->neurons.size() != this->getNumberOfNeurons()
+    if (this->getNumberOfNeurons() != (int)this->neurons.size()
         || this->getNumberOfNeurons() < 1
         || this->getNumberOfNeurons() > 1000000)
         return 201;
@@ -59,7 +59,7 @@ int Layer<N>::getNumberOfInputs() const
 template <class N>
 int Layer<N>::getNumberOfNeurons() const
 {
-    return this->neurons.size();
+    return (int)this->neurons.size();
 }
 
 template <class N>
@@ -81,7 +81,6 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
         const Layer& l = dynamic_cast<const Layer&>(layer);
         return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs
-            && this->errors == l.errors
             && this->neurons == l.neurons;
     }
     catch (std::bad_cast&)

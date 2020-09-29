@@ -37,9 +37,6 @@ void CompositeForTimeSeries::shuffle()
     mt19937 g(rd());
     std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
 
-    const int lastRecurrence = offset > this->rest ? 1 : 0;
-
-
     for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
     {
         this->sets[training].needToTrainOnData[i] = false;
@@ -53,7 +50,8 @@ void CompositeForTimeSeries::shuffle()
     }
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 
-    for (int i = 0, iForIndex = 0; i < this->indexesForShuffling.size(); ++i)
+    int iForIndex = 0;
+    for (size_t i = 0; i < this->indexesForShuffling.size(); ++i)
     {
         const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
         if (maxIndex < this->sets[training].size)
@@ -113,9 +111,9 @@ bool CompositeForTimeSeries::needToEvaluateOnTestingData(int index) const
 
 int CompositeForTimeSeries::isValid()
 {
-    if (!this->sets[training].areFirstDataOfTemporalSequence.size() == this->sets[training].size
+    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size
         || !this->sets[testing].areFirstDataOfTemporalSequence.empty()
-        || !this->sets[training].needToTrainOnData.size() == this->sets[training].size
+        || (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size
         || !this->sets[testing].needToTrainOnData.empty()
         || !this->sets[training].needToEvaluateOnData.empty()
         || !this->sets[testing].needToEvaluateOnData.empty())

@@ -62,7 +62,7 @@ vector<float> LocallyConnected2D::createInputsForNeuron(int neuronNumber, const 
         + (neuronPositionX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
         for (int j = beginIndex; j < endIndex; ++j)
         {
-            if(j < inputs.size())
+            if(j < (int)inputs.size())
                 neuronInputs.push_back(inputs[j]);
             else
                 neuronInputs.push_back(inputs[0]);

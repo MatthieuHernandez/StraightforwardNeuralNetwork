@@ -29,10 +29,10 @@ TEST_F(Cifar10Test, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 3072);
     ASSERT_EQ(data->numberOfLabel, 10);
-    ASSERT_EQ(data->sets[training].inputs.size(), 50000);
-    ASSERT_EQ(data->sets[training].labels.size(), 50000);
-    ASSERT_EQ(data->sets[snn::testing].inputs.size(), 10000);
-    ASSERT_EQ(data->sets[snn::testing].labels.size(), 10000);
+    ASSERT_EQ((int)data->sets[training].inputs.size(), 50000);
+    ASSERT_EQ((int)data->sets[training].labels.size(), 50000);
+    ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
+    ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->isValid(), 0);
@@ -50,5 +50,5 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     neuralNetwork.waitFor(1_ep || 300_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.24);
+    ASSERT_ACCURACY(accuracy, 0.24f);
 }

@@ -19,7 +19,7 @@ jobs:
     - name: Make
       run: |
         cd ./build
-        nmake
+        nmake BUILD=Release
     - name: Execute unit tests
       run: |
         cd ./build

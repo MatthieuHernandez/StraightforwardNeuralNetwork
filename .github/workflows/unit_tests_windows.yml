@@ -15,11 +15,11 @@ jobs:
     - name: CMake
       run: |
         cd ./build
-        cmake -G"NMake Makefiles" ./..
+        cmake -G"NMake Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: Make
       run: |
         cd ./build
-        nmake BUILD=Release
+        nmake
     - name: Execute unit tests
       run: |
         cd ./build

@@ -5,8 +5,8 @@ file(GLOB SOURCES
     "../../examples/*.cpp"
 )
 
-add_executable(UnitTests.out ${SOURCES})
+add_executable(UnitTests ${SOURCES})
 
-target_link_libraries(UnitTests.out ExtendedGTest StraightforwardNeuralNetwork)
+target_link_libraries(UnitTests ExtendedGTest StraightforwardNeuralNetwork)
 
-install(TARGETS UnitTests.out DESTINATION bin)
+install(TARGETS UnitTests DESTINATION bin)

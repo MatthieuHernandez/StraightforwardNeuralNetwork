@@ -20,8 +20,8 @@ file(GLOB SOURCES
 include_directories(../audiofile audiofile)
 include_directories(.. tests)
 
-add_executable(DatasetTests.out ${SOURCES})
+add_executable(DatasetTests ${SOURCES})
 
-target_link_libraries(DatasetTests.out ExtendedGTest AudioFile StraightforwardNeuralNetwork)
+target_link_libraries(DatasetTests ExtendedGTest AudioFile StraightforwardNeuralNetwork)
 
-install(TARGETS DatasetTests.out DESTINATION bin)
+install(TARGETS DatasetTests DESTINATION bin)

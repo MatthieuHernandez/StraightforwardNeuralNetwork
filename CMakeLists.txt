@@ -1,16 +1,28 @@
-# execute this from build directory : cmake -G"Unix Makefiles" ./.. && make && ./tests/unit_tests/UnitTests.out
+# execute this from build directory : cmake -G"Unix Makefiles" ./.. && make && ./tests/unit_tests/UnitTests
 cmake_minimum_required(VERSION 3.0)
 project(StraightforwardNeuralNetwork CXX)
 set(CMAKE_CXX_STANDARD 20)
+
+macro(remove_target_compile_options _target _flag)
+    get_target_property(_target_cxx_flags ${_target} COMPILE_OPTIONS)
+    if(_target_cxx_flags)
+        list(REMOVE_ITEM _target_cxx_flags ${_flag})
+        set_target_properties(${_target} PROPERTIES COMPILE_OPTIONS "${_target_cxx_flags}")
+    endif()
+endmacro()
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
+message("Compile in ${CMAKE_BUILD_TYPE} mode")
+
 if(MSVC)
   message("-- CMake run for msvc")
   string(REPLACE "/Ob2" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
+  string(REPLACE "/MD" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /D \"NDEBUG\" /O2 /Ot /Ob3 /Oi /Oy /GR /GT /GL /GS- /MT /fp:fast")
+  string(REPLACE "/MDd" "" CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Od /sdl /GR /GS /Zi /MTd")
   set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "${CMAKE_STATIC_LINKER_FLAGS_RELEASE} /LTCG")
 
@@ -27,9 +39,13 @@ add_subdirectory(src)
 add_subdirectory(tests)
 
 if(MSVC)
-  set_target_properties(DatasetTests.out PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
+  set_target_properties(DatasetTests PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
   target_compile_options(StraightforwardNeuralNetwork PUBLIC /W4 /WX /wd4100)
   target_compile_options(Boost PRIVATE /W0)
+  remove_target_compile_options(Boost /W3)
+  remove_target_compile_options(StraightforwardNeuralNetwork /W3)
+  remove_target_compile_options(UnitTests /W3)
+  remove_target_compile_options(DatasetTests /W3)
 else()
   target_compile_options(StraightforwardNeuralNetwork PUBLIC -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
   target_compile_options(Boost PRIVATE -w)

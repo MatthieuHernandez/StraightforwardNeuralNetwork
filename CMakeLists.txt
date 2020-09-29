@@ -3,6 +3,19 @@ cmake_minimum_required(VERSION 3.0)
 project(StraightforwardNeuralNetwork CXX)
 set(CMAKE_CXX_STANDARD 20)
 
+# Applies CMAKE_CXX_FLAGS to all targets in the current CMake directory.
+# Pre: apply_global_cxx_flags_to_all_targets() must be invoked.
+macro(apply_global_cxx_flags_to_all_targets)
+    separate_arguments(_global_cxx_flags_list UNIX_COMMAND ${CMAKE_CXX_FLAGS})
+    get_property(_targets DIRECTORY PROPERTY BUILDSYSTEM_TARGETS)
+    foreach(_target ${_targets})
+        target_compile_options(${_target} PUBLIC ${_global_cxx_flags_list})
+    endforeach()
+    unset(CMAKE_CXX_FLAGS)
+    set(_flag_sync_required TRUE)
+endmacro()
+
+# Removes the specified compile flag from the specified target.
 macro(remove_target_compile_options _target _flag)
     get_target_property(_target_cxx_flags ${_target} COMPILE_OPTIONS)
     if(_target_cxx_flags)
@@ -15,7 +28,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
 
-message("Compile in ${CMAKE_BUILD_TYPE} mode")
+message("-- Compile in ${CMAKE_BUILD_TYPE} mode")
 
 if(MSVC)
   message("-- CMake run for msvc")
@@ -38,14 +51,16 @@ endif()
 add_subdirectory(src)
 add_subdirectory(tests)
 
+apply_global_cxx_flags_to_all_targets()
+
 if(MSVC)
   set_target_properties(DatasetTests PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
   target_compile_options(StraightforwardNeuralNetwork PUBLIC /W4 /WX /wd4100)
   target_compile_options(Boost PRIVATE /W0)
   remove_target_compile_options(Boost /W3)
-  remove_target_compile_options(StraightforwardNeuralNetwork /W3)
-  remove_target_compile_options(UnitTests /W3)
-  remove_target_compile_options(DatasetTests /W3)
+  remove_target_compile_options(StraightforwardNeuralNetwork "/W3")
+  remove_target_compile_options(UnitTests "/W3")
+  remove_target_compile_options(DatasetTests "/W3")
 else()
   target_compile_options(StraightforwardNeuralNetwork PUBLIC -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
   target_compile_options(Boost PRIVATE -w)

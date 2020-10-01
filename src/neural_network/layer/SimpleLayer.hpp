@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
-#include "../Optimizer.hpp"
+#include "../optimizer/Optimizer.hpp"
 #include "neuron/RecurrentNeuron.hpp"
 #include "neuron/GatedRecurrentUnit.hpp"
 

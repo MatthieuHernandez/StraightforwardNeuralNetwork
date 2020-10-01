@@ -28,17 +28,15 @@ namespace snn
         return model;
     }
 
-    extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
+    extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, OptimizerModel ...);
 
-    extern LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh);
+    extern LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh, OptimizerModel ...);
 
-    extern LayerModel GruLayer(int numberOfNeurons);
+    extern LayerModel GruLayer(int numberOfNeurons, OptimizerModel ...);
 
-    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
+    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, OptimizerModel ...);
 
-    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
-
-    extern OptimizerModel Dropout(float value);
+    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU, OptimizerModel ...);
 
     namespace internal
     {

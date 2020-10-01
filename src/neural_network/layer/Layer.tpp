@@ -8,6 +8,7 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
+    LayerOptimizerFactory::Build(this->optimizers, model.optimizers, model);
 }
 
 template <class N>

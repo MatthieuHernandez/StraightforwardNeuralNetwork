@@ -5,10 +5,6 @@
 #include "FilterLayer.hpp"
 #include "../Optimizer.hpp"
 
-namespace snn {
-    struct LayerModel;
-}
-
 namespace snn::internal
 {
     class Convolution2D final : public FilterLayer

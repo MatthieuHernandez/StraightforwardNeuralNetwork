@@ -12,7 +12,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
+LayerModel snn::FullyConnected(int numberOfNeurons, activation activation, OptimizerModel ...)
 {
     LayerModel model
     {
@@ -31,7 +31,7 @@ LayerModel snn::FullyConnected(int numberOfNeurons, activation activation)
     return model;
 }
 
-LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
+LayerModel snn::Recurrence(int numberOfNeurons, activation activation, OptimizerModel ...)
 {
     LayerModel model
     {
@@ -50,7 +50,7 @@ LayerModel snn::Recurrence(int numberOfNeurons, activation activation)
     return model;
 }
 
-LayerModel snn::GruLayer(int numberOfNeurons)
+LayerModel snn::GruLayer(int numberOfNeurons, OptimizerModel ...)
 {
     LayerModel model
     {
@@ -69,7 +69,7 @@ LayerModel snn::GruLayer(int numberOfNeurons)
     return model;
 }
 
-LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation)
+LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation, OptimizerModel ...)
 {
     LayerModel model
     {
@@ -91,7 +91,7 @@ LayerModel snn::LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMa
     return model;
 }
 
-LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation)
+LayerModel snn::Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation, OptimizerModel ...)
 {
     LayerModel model
     {

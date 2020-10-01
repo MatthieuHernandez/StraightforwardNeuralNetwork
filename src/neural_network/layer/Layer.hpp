@@ -4,9 +4,10 @@
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "BaseLayer.hpp"
-#include "../Optimizer.hpp"
 #include "LayerType.hpp"
 #include "LayerModel.hpp"
+#include "../optimizer/LayerOptimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
 {
@@ -32,6 +33,7 @@ namespace snn::internal
 
         static const layerType type;
         std::vector<N> neurons;
+        std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override = 0;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;

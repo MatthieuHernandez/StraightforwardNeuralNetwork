@@ -6,10 +6,4 @@ namespace snn::internal
     {
 
     };
-
-    class LayerOptimizer : public Optimizer
-    {
-
-    };
-
 }

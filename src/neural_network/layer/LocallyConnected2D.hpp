@@ -6,10 +6,6 @@
 #include "../Optimizer.hpp"
 #include "neuron/Neuron.hpp"
 
-namespace snn {
-    struct LayerModel;
-}
-
 namespace snn::internal
 {
     class LocallyConnected2D final : public FilterLayer

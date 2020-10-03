@@ -28,7 +28,7 @@ namespace snn::internal
         ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;

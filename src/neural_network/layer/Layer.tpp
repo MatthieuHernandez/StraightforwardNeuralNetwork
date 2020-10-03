@@ -12,6 +12,17 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
 }
 
 template <class N>
+std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
+{
+    auto output = this->output(inputs, temporalReset)
+    for(auto& optimizer : this->optimizers)
+    {
+        optimizer->apply(output);
+    }
+    return output;
+}
+
+template <class N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
     for (size_t n = 0; n < this->neurons.size(); ++n)

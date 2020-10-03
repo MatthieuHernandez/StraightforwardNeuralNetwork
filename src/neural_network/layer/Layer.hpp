@@ -22,6 +22,8 @@ namespace snn::internal
     protected:
         int numberOfInputs;
 
+        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override = 0;
+
     public:
         Layer() = default; // use restricted to Boost library only
         Layer(LayerModel& model, StochasticGradientDescent* optimizer);
@@ -35,7 +37,7 @@ namespace snn::internal
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override = 0;
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
         [[nodiscard]] BaseNeuron* getNeuron(int index) override final;

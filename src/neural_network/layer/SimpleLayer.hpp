@@ -24,7 +24,7 @@ namespace snn::internal
         ~SimpleLayer() = default;
         std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
@@ -43,10 +43,10 @@ namespace snn::internal
     }
 
     template<>
-    std::vector<float> SimpleLayer<RecurrentNeuron>::output(const std::vector<float>& inputs, bool temporalReset);
+    std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
 
     template<>
-    std::vector<float> SimpleLayer<GatedRecurrentUnit>::output(const std::vector<float>& inputs, bool temporalReset);
+    std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
     
     #include "SimpleLayer.tpp"
 }

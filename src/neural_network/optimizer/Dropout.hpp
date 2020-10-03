@@ -1,21 +1,27 @@
+#include <vector>
 #include <boost/serialization/access.hpp>
-#include "Optimizer.hpp"
+#include "LayerOptimizer.hpp"
 
 namespace snn::internal
 {
-    class Dropout : public Optimizer
+    class Dropout final : public LayerOptimizer
     {
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    public:
-        float value = 0.1f;
+        float reverseValue;
 
-        Dropout(float value) : value(value) {}
+    public:
+        const float value = 0.1f;
+
+        Dropout(float value);
         Dropout(const Dropout& sgd) = default;
         ~Dropout() = default;
+
+        void apply(std::vector<float>& output) override;
+        void applyForBackpropagation(std::vector<float>& output) override;
 
         bool operator==(const Dropout& d) const 
         {
@@ -26,6 +32,10 @@ namespace snn::internal
             return !(*this == d); 
         }
     };
+
+    inline void Dropout::apply()
+    {
+    }
 
     template <class Archive>
     void Dropout::serialize(Archive& ar, const unsigned int version)

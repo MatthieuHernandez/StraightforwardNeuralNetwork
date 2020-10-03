@@ -78,6 +78,19 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
     return outputs;
 }
 
+std::vector<float> snn::internal::NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+{
+    auto outputs = layers[0]->outputForBackpropagation(inputs, temporalReset);
+
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->outputForBackpropagation(outputs, temporalReset);
+    }
+
+    return outputs;
+}
+
+
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired,
                                              bool temporalReset)
 {

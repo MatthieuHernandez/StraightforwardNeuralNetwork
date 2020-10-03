@@ -1,6 +1,8 @@
 #include "LayerOptimizerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
+#include "Dropout.hpp";
 
+using namespace std;
 using namespace snn;
 using namespace internal;
 
@@ -9,7 +11,7 @@ std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(OptimizerModel& mod
     switch (model.type)
     {
     case dropout:
-
+        return make_unique<Dropout>(model.value);
     default:
         throw InvalidArchitectureException("Optimizer type is not implemented.");
     }

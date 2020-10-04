@@ -8,17 +8,28 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
-    LayerOptimizerFactory::Build(this->optimizers, model.optimizers, model);
+    //LayerOptimizerFactory::build(this->optimizers, model);
 }
 
 template <class N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
-    auto output = this->output(inputs, temporalReset)
-    for(auto& optimizer : this->optimizers)
+    auto output = this->computeOutput(inputs, temporalReset);
+    /*for(auto& optimizer : this->optimizers)
     {
         optimizer->apply(output);
-    }
+    }*/
+    return output;
+}
+
+template <class N>
+std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
+{
+    auto output = this->computeOutput(inputs, temporalReset);
+    /*for(auto& optimizer : this->optimizers)
+    {
+        optimizer->applyForBackpropagation(output);
+    }*/
     return output;
 }
 

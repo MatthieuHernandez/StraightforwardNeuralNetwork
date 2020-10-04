@@ -24,19 +24,122 @@ namespace snn
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},
+            std::vector<OptimizerModel>()
         };
         return model;
     }
 
-    extern LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, OptimizerModel ...);
+    template <class ... TOptimizer>
+    LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid,
+                              TOptimizer ... optimizers)
+    {
+        LayerModel model
+        {
+            fullyConnected,
+            -1,
+            numberOfNeurons,
+            {
+                -1,
+                -1,
+                activation
+            },
+            -1,
+            -1,
+            std::vector<int>(),
+            {static_cast<int>(optimizers) ...}
+        };
+        return model;
+    }
 
-    extern LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh, OptimizerModel ...);
+    template <class ... TOptimizer>
+    LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh, TOptimizer ... optimizers)
+    {
+        LayerModel model
+        {
+            recurrence,
+            -1,
+            numberOfNeurons,
+            {
+                -1,
+                -1,
+                activation
+            },
+            -1,
+            -1,
+            std::vector<int>(),
+            {static_cast<int>(optimizers) ...}
+        };
+        return model;
+    }
 
-    extern LayerModel GruLayer(int numberOfNeurons, OptimizerModel ...);
+    template <class ... TOptimizer>
+    LayerModel GruLayer(int numberOfNeurons, TOptimizer ... optimizers)
+    {
+        LayerModel model
+        {
+            gruLayer,
+            -1,
+            numberOfNeurons,
+            {
+                -1,
+                -1,
+                activation::tanh,
+            },
+            -1,
+            -1,
+            std::vector<int>(),
+            {static_cast<int>(optimizers) ...}
+        };
+        return model;
+    }
 
-    extern LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, OptimizerModel ...);
+    template <class ... TOptimizer>
+    LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix,
+                                activation activation = activation::sigmoid, TOptimizer ... optimizers)
+    {
+        LayerModel model
+        {
+            locallyConnected,
 
-    extern LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU, OptimizerModel ...);
+            -1,
+            -1,
+            {
+                -1,
+                -1,
+
+                activation
+            },
+            numberOfLocallyConnected,
+            sizeOfLocalMatrix,
+            std::vector<int>(),
+            {static_cast<int>(optimizers) ...}
+
+        };
+        return model;
+    }
+
+    template <class ... TOptimizer>
+    LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix,
+                           activation activation = activation::ReLU, TOptimizer ... optimizers)
+    {
+        LayerModel model
+        {
+            convolution,
+            -1,
+            -1,
+            {
+                -1,
+                -1,
+                activation,
+            },
+            numberOfConvolution,
+            sizeOfConvolutionMatrix,
+            std::vector<int>(),
+            {static_cast<int>(optimizers) ...}
+        };
+        return model;
+    }
+
 
     namespace internal
     {

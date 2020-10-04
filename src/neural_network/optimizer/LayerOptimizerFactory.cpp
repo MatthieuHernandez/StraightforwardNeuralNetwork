@@ -6,7 +6,17 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(OptimizerModel& model, LayerModel& layerModel)
+
+OptimizerModel snn::Dropout(float value)
+{
+    OptimizerModel model
+    {
+    };
+    return model;
+}
+
+
+std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(OptimizerModel& model)
 {
     switch (model.type)
     {
@@ -17,11 +27,10 @@ std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(OptimizerModel& mod
     }
 }
 
-void LayerOptimizerFactory::build(std::vector<std::unique_ptr<LayerOptimizer>>& optimizers,
-                                        std::vector<OptimizerModel>& models, LayerModel& model)
+void LayerOptimizerFactory::build(vector<unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model)
 {
-    for (int o = 0; o < model.optimizers.size(); ++o)
+    for (auto& optimizer : model.optimizers)
     {
-        optimizers.push_back(build(model.optimizers[o], model));
+        optimizers.push_back(build(optimizer));
     }
 }

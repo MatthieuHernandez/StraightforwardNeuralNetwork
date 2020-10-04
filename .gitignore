@@ -10,6 +10,9 @@ boost_1_71_0/
 *.out
 *.snn
 
+DatasetTests
+UnitTests
+
 # Ignore cmake generated directories and files.
 generated/
 CMakeFiles/

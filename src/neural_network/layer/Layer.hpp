@@ -7,6 +7,7 @@
 #include "LayerType.hpp"
 #include "LayerModel.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
+#include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
@@ -35,9 +36,10 @@ namespace snn::internal
 
         static const layerType type;
         std::vector<N> neurons;
-        std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
+        std::vector<std::unique_ptr<int>> toto;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
         [[nodiscard]] BaseNeuron* getNeuron(int index) override final;
@@ -62,7 +64,7 @@ namespace snn::internal
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->neurons;
-        ar & this->optimizers;
+        //ar & this->optimizers;
     }
 
     #include "Layer.tpp"

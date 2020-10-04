@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
-#include "../Optimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
 #include "neuron/RecurrentNeuron.hpp"
 
 namespace snn::internal

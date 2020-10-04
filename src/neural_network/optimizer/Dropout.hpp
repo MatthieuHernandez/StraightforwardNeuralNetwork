@@ -23,23 +23,15 @@ namespace snn::internal
         void apply(std::vector<float>& output) override;
         void applyForBackpropagation(std::vector<float>& output) override;
 
-        bool operator==(const Dropout& d) const 
-        {
-            return this->value == d.value;
-        }
-        bool operator!=(const Dropout& d) const 
-        { 
-            return !(*this == d); 
-        }
-    };
+        bool operator==(const Dropout& d) const;
 
-    inline void Dropout::apply()
-    {
-    }
+        bool operator!=(const Dropout& d) const;
+    };
 
     template <class Archive>
     void Dropout::serialize(Archive& ar, const unsigned int version)
     {
         ar & this->value;
+        ar & this->reverseValue;
     }
 }

@@ -1,6 +1,6 @@
 #include "LayerOptimizerFactory.hpp"
 #include "../../tools/ExtendedExpection.hpp"
-#include "Dropout.hpp";
+#include "Dropout.hpp"
 
 using namespace std;
 using namespace snn;

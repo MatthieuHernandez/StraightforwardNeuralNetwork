@@ -1,3 +1,4 @@
+#pragma once
 #include <boost/serialization/access.hpp>
 #include "Optimizer.hpp"
 

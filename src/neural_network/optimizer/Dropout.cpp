@@ -25,3 +25,14 @@ void Dropout::applyForBackpropagation(std::vector<float>& output)
             o = 0.0f;
     }
 }
+
+bool Dropout::operator==(const Dropout& d) const
+{
+    return this->value == d.value
+        && this->reverseValue == d.reverseValue;
+}
+
+bool Dropout::operator!=(const Dropout& d) const
+{
+    return !(*this == d);
+}

@@ -62,6 +62,7 @@ namespace snn::internal
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->neurons;
+        ar & this->optimizers;
     }
 
     #include "Layer.tpp"

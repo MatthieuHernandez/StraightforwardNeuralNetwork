@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include "Optimizer.hpp"
+#include "optimizer/StochasticGradientDescent.hpp"
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/FullyConnected.hpp"

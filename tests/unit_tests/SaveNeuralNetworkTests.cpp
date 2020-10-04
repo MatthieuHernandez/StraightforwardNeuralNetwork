@@ -12,7 +12,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         Convolution(2, 4, activation::ReLU),
         FullyConnected(20, activation::iSigmoid),
         LocallyConnected(3, 2, activation::tanh),
-        FullyConnected(3, activation::sigmoid),
+        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
         GruLayer(3),
         Recurrence(3)
     };
@@ -75,7 +75,7 @@ TEST(SaveNeuralNetwork, Save)
         Input(15),
         Convolution(2, 2, activation::ReLU),
         LocallyConnected(2, 2, activation::tanh),
-        FullyConnected(3, activation::sigmoid),
+        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
         GruLayer(2)
     });
     A.optimizer.learningRate = 0.03f;

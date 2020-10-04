@@ -4,7 +4,6 @@
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "BaseLayer.hpp"
-#include "LayerType.hpp"
 #include "LayerModel.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
 #include "../optimizer/LayerOptimizerFactory.hpp"
@@ -28,15 +27,14 @@ namespace snn::internal
     public:
         Layer() = default; // use restricted to Boost library only
         Layer(LayerModel& model, StochasticGradientDescent* optimizer);
-        Layer(const Layer&) = default;
+        Layer(const Layer& layer);
         virtual ~Layer() = default;
 
         // TODO : Can this line be removed ?
         std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override = 0;
 
-        static const layerType type;
         std::vector<N> neurons;
-        std::vector<std::unique_ptr<int>> toto;
+        std::vector<std::unique_ptr<LayerOptimizer>> optimizers{};
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
@@ -64,7 +62,7 @@ namespace snn::internal
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->neurons;
-        //ar & this->optimizers;
+        ar & this->optimizers;
     }
 
     #include "Layer.tpp"

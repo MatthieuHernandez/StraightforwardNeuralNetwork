@@ -17,10 +17,8 @@ inline
 unique_ptr<BaseLayer> Convolution2D::clone(StochasticGradientDescent* optimizer) const
 {
     auto layer = make_unique<Convolution2D>(*this);
-    for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
-    {
-        layer->neurons[n].optimizer = optimizer;
-    }
+    for (auto& neuron : layer->neurons)
+        neuron.optimizer = optimizer;
     return layer;
 }
 

@@ -46,7 +46,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<int>(optimizers) ...}
+            {static_cast<OptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -67,7 +67,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<int>(optimizers) ...}
+            {static_cast<OptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -88,7 +88,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<int>(optimizers) ...}
+            {static_cast<OptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -112,7 +112,7 @@ namespace snn
             numberOfLocallyConnected,
             sizeOfLocalMatrix,
             std::vector<int>(),
-            {static_cast<int>(optimizers) ...}
+            {static_cast<OptimizerModel>(optimizers) ...}
 
         };
         return model;
@@ -135,7 +135,7 @@ namespace snn
             numberOfConvolution,
             sizeOfConvolutionMatrix,
             std::vector<int>(),
-            {static_cast<int>(optimizers) ...}
+            {static_cast<OptimizerModel>(optimizers) ...}
         };
         return model;
     }

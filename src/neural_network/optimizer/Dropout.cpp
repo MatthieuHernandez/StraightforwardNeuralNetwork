@@ -7,14 +7,15 @@ using namespace snn;
 using namespace internal;
 
 Dropout::Dropout(const float value)
-    : value(value)
+    : LayerOptimizer(), value(value)
 {
     reverseValue = 1.0f / (1.0f - this->value);
 }
 
 void Dropout::apply(std::vector<float>& output)
 {
-    transform(output.begin(), output.end(), output.begin(), std::bind(std::multiplies<float>(), std::placeholders::_1, 3));
+    transform(output.begin(), output.end(), output.begin(),
+              std::bind(std::multiplies<float>(), std::placeholders::_1, 3));
 }
 
 void Dropout::applyForBackpropagation(std::vector<float>& output)
@@ -26,13 +27,22 @@ void Dropout::applyForBackpropagation(std::vector<float>& output)
     }
 }
 
-bool Dropout::operator==(const Dropout& d) const
+bool Dropout::operator==(const Optimizer& optimizer) const
 {
-    return this->value == d.value
-        && this->reverseValue == d.reverseValue;
+    try
+    {
+        const auto& o = dynamic_cast<const Dropout&>(optimizer);
+        return this->LayerOptimizer::operator==(optimizer)
+            && this->value == o.value
+            && this->reverseValue == o.reverseValue;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
-bool Dropout::operator!=(const Dropout& d) const
+bool Dropout::operator!=(const Optimizer& optimizer) const
 {
-    return !(*this == d);
+    return !(*this == optimizer);
 }

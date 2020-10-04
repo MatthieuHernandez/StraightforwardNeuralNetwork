@@ -17,20 +17,21 @@ namespace snn::internal
         const float value = 0.1f;
 
         Dropout(float value);
-        Dropout(const Dropout& sgd) = default;
+        Dropout(const Dropout& dropout) = default;
         ~Dropout() = default;
 
         void apply(std::vector<float>& output) override;
         void applyForBackpropagation(std::vector<float>& output) override;
 
-        bool operator==(const Dropout& d) const;
-
-        bool operator!=(const Dropout& d) const;
+        bool operator==(const Optimizer& optimizer) const override;
+        bool operator!=(const Optimizer& optimizer) const override;
     };
 
     template <class Archive>
     void Dropout::serialize(Archive& ar, const unsigned int version)
     {
+        boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
+        ar & boost::serialization::base_object<LayerOptimizer>(*this);
         ar & this->value;
         ar & this->reverseValue;
     }

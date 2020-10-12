@@ -9,8 +9,10 @@ using namespace internal;
 
 OptimizerModel snn::Dropout(float value)
 {
-    OptimizerModel model
+    const OptimizerModel model
     {
+      dropout,
+      value
     };
     return model;
 }

@@ -30,11 +30,10 @@ namespace snn::internal
         Layer(const Layer& layer);
         virtual ~Layer() = default;
 
-        // TODO : Can this line be removed ?
         std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override = 0;
 
         std::vector<N> neurons;
-        std::vector<std::unique_ptr<LayerOptimizer>> optimizers{};
+        //std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
@@ -62,7 +61,7 @@ namespace snn::internal
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->neurons;
-        ar & this->optimizers;
+        //ar & this->optimizers;
     }
 
     #include "Layer.tpp"

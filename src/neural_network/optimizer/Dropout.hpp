@@ -11,14 +11,16 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        float reverseValue;
+        float reverseValue{};
 
     public:
         const float value = 0.1f;
-
+        Dropout() = default;  // use restricted to Boost library only
         Dropout(float value);
         Dropout(const Dropout& dropout) = default;
         ~Dropout() = default;
+
+        std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const override;
 
         void apply(std::vector<float>& output) override;
         void applyForBackpropagation(std::vector<float>& output) override;

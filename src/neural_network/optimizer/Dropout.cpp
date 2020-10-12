@@ -9,13 +9,18 @@ using namespace internal;
 Dropout::Dropout(const float value)
     : LayerOptimizer(), value(value)
 {
-    reverseValue = 1.0f / (1.0f - this->value);
+    this->reverseValue = 1.0f / (1.0f - this->value);
+}
+
+std::unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
+{
+    return make_unique<Dropout>(*this);
 }
 
 void Dropout::apply(std::vector<float>& output)
 {
     transform(output.begin(), output.end(), output.begin(),
-              std::bind(std::multiplies<float>(), std::placeholders::_1, 3));
+              std::bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
 }
 
 void Dropout::applyForBackpropagation(std::vector<float>& output)

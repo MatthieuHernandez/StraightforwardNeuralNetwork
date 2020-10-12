@@ -9,29 +9,28 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
-    LayerOptimizerFactory::build(this->optimizers, model);
+    //LayerOptimizerFactory::build(this->optimizers, model);
 }
 
 template<class N>
 Layer<N>::Layer(const Layer& layer)
 {
-        this->numberOfInputs = layer.numberOfInputs;
-        this->neurons = layer.neurons;
+    this->numberOfInputs = layer.numberOfInputs;
+    this->neurons = layer.neurons;
 
-        this->optimizers.reserve(layer.optimizers.size());
-        for(auto& optimizer : layer.optimizers)
-            this->optimizers.push_back(std::make_unique<LayerOptimizer>(*optimizer));
-
+    /*this->optimizers.reserve(layer.optimizers.size());
+    for(auto& optimizer : layer.optimizers)
+        this->optimizers.emplace_back(optimizer->clone(optimizer.get()));*/
 }
 
 template <class N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for(auto& optimizer : this->optimizers)
+    /*for(auto& optimizer : this->optimizers)
     {
         optimizer->apply(output);
-    }
+    }*/
     return output;
 }
 
@@ -39,10 +38,10 @@ template <class N>
 std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for(auto& optimizer : this->optimizers)
+    /*for(auto& optimizer : this->optimizers)
     {
         optimizer->applyForBackpropagation(output);
-    }
+    }*/
     return output;
 }
 
@@ -118,7 +117,7 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
         return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs
             && this->neurons == l.neurons
-            && this->optimizers == l.optimizers;
+            /*&& this->optimizers == l.optimizers*/;
     }
     catch (std::bad_cast&)
     {

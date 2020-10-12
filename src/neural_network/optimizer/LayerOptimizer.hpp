@@ -18,8 +18,10 @@ namespace snn::internal
         LayerOptimizer(const LayerOptimizer& layer) = default;
         virtual ~LayerOptimizer() = default;
 
-        virtual void apply(std::vector<float>& output) { throw std::exception(); }
-        virtual void applyForBackpropagation(std::vector<float>& output) { throw std::exception(); }
+        virtual std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const = 0;
+
+        virtual void apply(std::vector<float>& output) = 0;
+        virtual void applyForBackpropagation(std::vector<float>& output) = 0;
 
         bool operator==(const Optimizer& optimizer) const override
         {

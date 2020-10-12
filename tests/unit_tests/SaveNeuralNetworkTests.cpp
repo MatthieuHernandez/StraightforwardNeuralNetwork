@@ -12,7 +12,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         Convolution(2, 4, activation::ReLU),
         FullyConnected(20, activation::iSigmoid),
         LocallyConnected(3, 2, activation::tanh),
-        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
+        FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
         GruLayer(3),
         Recurrence(3)
     };
@@ -44,7 +44,6 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
     EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);
-    EXPECT_TRUE(&B.optimizer == &*static_cast<internal::SimpleNeuron*>(B.layers[0]->getNeuron(0))->optimizer);
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -56,17 +55,19 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -1.35f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
-    A.trainOnce(inputs, desired);
+    for(int i = 0; i < 10; ++i)
+        A.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A != B) << "A != B";
 
-    B.trainOnce(inputs, desired);
+    for(int i = 0; i < 10; ++i)
+        B.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A == B) << "A == B";
 
-    A.trainOnce(inputs, desired);
-
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
+    EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";
+    EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
 TEST(SaveNeuralNetwork, Save)

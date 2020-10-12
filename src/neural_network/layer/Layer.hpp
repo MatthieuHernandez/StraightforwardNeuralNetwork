@@ -8,6 +8,7 @@
 #include "../optimizer/LayerOptimizer.hpp"
 #include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/Dropout.hpp"
 
 namespace snn::internal
 {
@@ -61,6 +62,7 @@ namespace snn::internal
         ar & boost::serialization::base_object<BaseLayer>(*this);
         ar & this->numberOfInputs;
         ar & this->neurons;
+        ar.template register_type<Dropout>();
         ar & this->optimizers;
     }
 

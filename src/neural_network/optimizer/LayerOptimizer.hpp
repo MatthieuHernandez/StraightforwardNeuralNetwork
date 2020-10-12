@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <boost/serialization/unique_ptr.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
 #include "Optimizer.hpp"
 
@@ -23,15 +23,8 @@ namespace snn::internal
         virtual void apply(std::vector<float>& output) = 0;
         virtual void applyForBackpropagation(std::vector<float>& output) = 0;
 
-        bool operator==(const Optimizer& optimizer) const override
-        {
-            return this->Optimizer::operator==(optimizer);
-        }
-
-        bool operator!=(const Optimizer& optimizer) const override
-        {
-            return this->Optimizer::operator!=(optimizer);
-        }
+        bool operator==(const Optimizer& optimizer) const override;
+        bool operator!=(const Optimizer& optimizer) const override;
     };
 
     template <class Archive>

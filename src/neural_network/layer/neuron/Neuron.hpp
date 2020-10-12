@@ -47,8 +47,8 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfParameters() const override;
         [[nodiscard]] int getNumberOfInputs() const override;
 
-        virtual bool operator==(const BaseNeuron& neuron) const override;
-        virtual bool operator!=(const BaseNeuron& neuron) const override;
+        bool operator==(const BaseNeuron& neuron) const override;
+        bool operator!=(const BaseNeuron& neuron) const override;
     };
 
     template <class Archive>

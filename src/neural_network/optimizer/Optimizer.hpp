@@ -1,4 +1,5 @@
 #pragma once
+#include <boost/serialization/access.hpp>
 
 namespace snn::internal
 {
@@ -12,15 +13,9 @@ namespace snn::internal
     public:
         virtual ~Optimizer() = default;
 
-        virtual bool operator==(const Optimizer& optimizer) const
-        {
-            return typeid(*this).hash_code() == typeid(optimizer).hash_code();
-        }
+        virtual bool operator==(const Optimizer& optimizer) const;
 
-        virtual bool operator!=(const Optimizer& optimizer) const
-        {
-            return !(*this == optimizer);
-        }
+        virtual bool operator!=(const Optimizer& optimizer) const;
     };
 
     template <class Archive>

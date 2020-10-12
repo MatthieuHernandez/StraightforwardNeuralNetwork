@@ -1,4 +1,7 @@
+#pragma once
 #include <vector>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "LayerOptimizer.hpp"
 
@@ -11,10 +14,10 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        float reverseValue{};
+        float value = 0.1f;
+        float reverseValue;
 
     public:
-        const float value = 0.1f;
         Dropout() = default;  // use restricted to Boost library only
         Dropout(float value);
         Dropout(const Dropout& dropout) = default;
@@ -30,7 +33,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Dropout::serialize(Archive& ar, const unsigned int version)
+    void Dropout::serialize(Archive& ar, unsigned version)
     {
         boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);

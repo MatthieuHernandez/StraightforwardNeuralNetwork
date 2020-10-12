@@ -1,10 +1,13 @@
-#include "Dropout.hpp"
 #include <algorithm>
 #include <functional>
+#include <boost/serialization/export.hpp>
+#include "Dropout.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(Dropout)
 
 Dropout::Dropout(const float value)
     : LayerOptimizer(), value(value)

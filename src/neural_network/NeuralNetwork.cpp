@@ -78,7 +78,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
     return outputs;
 }
 
-std::vector<float> snn::internal::NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> snn::internal::NeuralNetwork::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
 {
     auto outputs = layers[0]->outputForBackpropagation(inputs, temporalReset);
 
@@ -94,7 +94,7 @@ std::vector<float> snn::internal::NeuralNetwork::outputForTraining(const std::ve
 void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired,
                                              bool temporalReset)
 {
-    const auto outputs = this->output(inputs, temporalReset);
+    const auto outputs = this->outputForBackpropagation(inputs, temporalReset);
     auto errors = calculateError(outputs, desired);
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
@@ -185,7 +185,8 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
     return this->optimizer == neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
-        && [this, neuralNetwork] () {
+        && [this, &neuralNetwork]()
+        {
             for (size_t l = 0; l < this->layers.size(); ++l)
             {
                 if (*this->layers[l] != *neuralNetwork.layers[l])

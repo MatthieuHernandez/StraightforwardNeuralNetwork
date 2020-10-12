@@ -114,10 +114,19 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
     try
     {
         const Layer& l = dynamic_cast<const Layer&>(layer);
+
         return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs
             && this->neurons == l.neurons
-            && this->optimizers == l.optimizers;
+            && [this, &l]()
+            {
+                for (size_t o = 0; o < this->optimizers.size(); ++o)
+                {
+                    if (*this->optimizers[o] != *l.optimizers[o])
+                        return false;
+                }
+                return true;
+            }();
     }
     catch (std::bad_cast&)
     {

@@ -37,7 +37,7 @@ namespace snn::internal
     template <class Archive>
     void LayerOptimizer::serialize(Archive& ar, unsigned version)
     {
-        //boost::serialization::void_cast_register<LayerOptimizer, Optimizer>();
-        //ar & boost::serialization::base_object<Optimizer>(*this);
+        boost::serialization::void_cast_register<LayerOptimizer, Optimizer>();
+        ar & boost::serialization::base_object<Optimizer>(*this);
     }
 }

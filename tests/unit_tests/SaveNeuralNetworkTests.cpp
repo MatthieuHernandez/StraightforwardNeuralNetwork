@@ -58,12 +58,12 @@ TEST(SaveNeuralNetwork, EqualTest)
     for(int i = 0; i < 10; ++i)
         A.trainOnce(inputs, desired);
 
-    EXPECT_TRUE(A != B) << "A != B";
+    EXPECT_TRUE(A != B);
 
     for(int i = 0; i < 10; ++i)
         B.trainOnce(inputs, desired);
 
-    EXPECT_TRUE(A == B) << "A == B";
+    EXPECT_TRUE(A == B);
 
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
     EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";
@@ -88,12 +88,12 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     inputs[9] = -1.35f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
-    EXPECT_TRUE(A != B) << "A = B";
+    EXPECT_TRUE(A == B);
 
     A.trainOnce(inputs, desired);
     B.trainOnce(inputs, desired);
 
-    EXPECT_TRUE(A != B) << "A != B";
+    EXPECT_TRUE(A != B);
 
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
     EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";

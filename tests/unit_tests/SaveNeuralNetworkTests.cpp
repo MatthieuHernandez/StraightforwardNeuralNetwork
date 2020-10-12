@@ -14,7 +14,7 @@ TEST(SaveNeuralNetwork, EqualTest)
         LocallyConnected(3, 2, activation::tanh),
         FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
         GruLayer(3),
-        Recurrence(3)
+        Recurrence(4)
     };
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork C(structureOfNetwork);
@@ -70,6 +70,36 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
+TEST(SaveNeuralNetwork, EqualTestWithDropout)
+{
+    auto structureOfNetwork = {
+        Input(10),
+        FullyConnected(200, activation::sigmoid, Dropout(0.4f)),
+        FullyConnected(4)
+    };
+    StraightforwardNeuralNetwork A(structureOfNetwork);
+    StraightforwardNeuralNetwork B = A;
+
+    vector<float> inputs(10);
+    inputs[1] = 1.5f;
+    inputs[4] = 0.75f;
+    inputs[5] = -0.25f;
+    inputs[7] = 1.0f;
+    inputs[9] = -1.35f;
+    const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
+
+    EXPECT_TRUE(A != B) << "A = B";
+
+    A.trainOnce(inputs, desired);
+    B.trainOnce(inputs, desired);
+
+    EXPECT_TRUE(A != B) << "A != B";
+
+    EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
+    EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";
+    EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
+}
+
 TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
@@ -86,5 +116,5 @@ TEST(SaveNeuralNetwork, Save)
 
     StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
     EXPECT_TRUE(A == B);
-    EXPECT_TRUE(B.isValid() == 0);
+    ASSERT_EQ(B.isValid(), 0);
 }

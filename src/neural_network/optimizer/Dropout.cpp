@@ -12,7 +12,7 @@ BOOST_CLASS_EXPORT(Dropout)
 Dropout::Dropout(const float value)
     : LayerOptimizer(), value(value)
 {
-    this->reverseValue = 1.0f / (1.0f - this->value);
+    this->reverseValue = 1.0f - this->value;
 }
 
 std::unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
@@ -20,15 +20,15 @@ std::unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
     return make_unique<Dropout>(*this);
 }
 
-void Dropout::apply(std::vector<float>& output)
+void Dropout::applyBefore(std::vector<float>& inputs)
 {
-    transform(output.begin(), output.end(), output.begin(),
+    transform(inputs.begin(), inputs.end(), inputs.begin(),
               std::bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
 }
 
-void Dropout::applyForBackpropagation(std::vector<float>& output)
+void Dropout::applyAfterForBackpropagation(std::vector<float>& outputs)
 {
-    for (auto& o : output)
+    for (auto& o : outputs)
     {
         if (rand() / static_cast<float>(RAND_MAX) < value)
             o = 0.0f;

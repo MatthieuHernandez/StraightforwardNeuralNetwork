@@ -14,7 +14,7 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        float value = 0.1f;
+        float value;
         float reverseValue;
 
     public:
@@ -25,8 +25,8 @@ namespace snn::internal
 
         std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const override;
 
-        void apply(std::vector<float>& output) override;
-        void applyForBackpropagation(std::vector<float>& output) override;
+        void applyBefore(std::vector<float>& inputs) override;
+        void applyAfterForBackpropagation(std::vector<float>& outputs) override;
 
         bool operator==(const Optimizer& optimizer) const override;
         bool operator!=(const Optimizer& optimizer) const override;

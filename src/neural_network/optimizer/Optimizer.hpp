@@ -14,7 +14,6 @@ namespace snn::internal
         virtual ~Optimizer() = default;
 
         virtual bool operator==(const Optimizer& optimizer) const;
-
         virtual bool operator!=(const Optimizer& optimizer) const;
     };
 

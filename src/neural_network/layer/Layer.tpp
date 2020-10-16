@@ -26,12 +26,19 @@ Layer<N>::Layer(const Layer& layer)
 template <class N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
-    auto output = this->computeOutput(inputs, temporalReset);
-    for(auto& optimizer : this->optimizers)
+    if(this->optimizers.size() > 0)
     {
-        optimizer->apply(output);
+        auto copyOfInputs = std::vector(inputs);
+        for (auto& optimizer : this->optimizers)
+            optimizer->applyBefore(copyOfInputs);
+        auto output = this->computeOutput(copyOfInputs, temporalReset);
+        return output;
     }
-    return output;
+    else
+    {
+        auto output = this->computeOutput(inputs, temporalReset);
+        return output;
+    }
 }
 
 template <class N>
@@ -39,9 +46,7 @@ std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& 
 {
     auto output = this->computeOutput(inputs, temporalReset);
     for(auto& optimizer : this->optimizers)
-    {
-        optimizer->applyForBackpropagation(output);
-    }
+        optimizer->applyAfterForBackpropagation(output);
     return output;
 }
 

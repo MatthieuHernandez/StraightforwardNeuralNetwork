@@ -40,17 +40,21 @@ TEST_F(MnistTest, loadData)
 
 TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(784),
-        FullyConnected(150),
-        FullyConnected(70),
-        FullyConnected(10)
-    });
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
-    neuralNetwork.stopTraining();
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.90f);
+    for(int i = 0; i < 5; ++i)
+    {
+        StraightforwardNeuralNetwork neuralNetwork({
+            Input(784),
+            FullyConnected(150, activation::sigmoid, Dropout(0.2f)),
+            FullyConnected(70, activation::sigmoid, Dropout(0.5f)),
+            FullyConnected(10)
+        });
+        neuralNetwork.startTraining(*data);
+        neuralNetwork.waitFor(1_ep || 35_s);
+        neuralNetwork.stopTraining();
+        std::cout << "Accuracy: " << neuralNetwork.getGlobalClusteringRate() << std::endl;
+        //auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    }
+    //ASSERT_ACCURACY(accuracy, 0.90f);
 }
 
 TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)

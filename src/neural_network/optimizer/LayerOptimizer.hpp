@@ -20,8 +20,8 @@ namespace snn::internal
 
         virtual std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const = 0;
 
-        virtual void apply(std::vector<float>& output) = 0;
-        virtual void applyForBackpropagation(std::vector<float>& output) = 0;
+        virtual void applyBefore(std::vector<float>& inputs) = 0;
+        virtual void applyAfterForBackpropagation(std::vector<float>& outputs) = 0;
 
         bool operator==(const Optimizer& optimizer) const override;
         bool operator!=(const Optimizer& optimizer) const override;

@@ -59,12 +59,12 @@ int SimpleNeuron::isValid() const
     return this->Neuron::isValid();
 }
 
-bool SimpleNeuron::operator==(const BaseNeuron& neuron) const
+bool SimpleNeuron::operator==(const SimpleNeuron& neuron) const
 {
     return this->Neuron::operator==(neuron);
 }
 
-bool SimpleNeuron::operator!=(const BaseNeuron& neuron) const
+bool SimpleNeuron::operator!=(const SimpleNeuron& neuron) const
 {
     return !(*this == neuron);
 }

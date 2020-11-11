@@ -85,24 +85,16 @@ int RecurrentNeuron::isValid() const
     return this->Neuron::isValid();
 }
 
-bool RecurrentNeuron::operator==(const BaseNeuron& neuron) const
+bool RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const
 {
-    try
-    {
-        const auto& n = dynamic_cast<const RecurrentNeuron&>(neuron);
         return this->Neuron::operator==(neuron)
-            && this->lastOutput == n.lastOutput
-            && this->previousOutput == n.previousOutput
-            && this->recurrentError == n.recurrentError
-            && this->previousSum == n.previousSum;
-    }
-    catch (bad_cast&)
-    {
-        return false;
-    }
+            && this->lastOutput == neuron.lastOutput
+            && this->previousOutput == neuron.previousOutput
+            && this->recurrentError == neuron.recurrentError
+            && this->previousSum == neuron.previousSum;
 }
 
-bool RecurrentNeuron::operator!=(const BaseNeuron& neuron) const
+bool RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const
 {
     return !(*this == neuron);
 }

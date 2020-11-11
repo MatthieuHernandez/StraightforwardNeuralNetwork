@@ -6,7 +6,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(GatedRecurrentUnit)
+//BOOST_CLASS_EXPORT(GatedRecurrentUnit)
 
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
     : numberOfInputs(model.numberOfInputs),
@@ -48,8 +48,8 @@ std::vector<float>& GatedRecurrentUnit::backOutput(float error)
     float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
-    std::transform(this->errors .begin(), this->errors .end(), e2.begin(), this->errors .begin(), std::plus<float>());
-    std::transform(this->errors .begin(), this->errors .end(), e3.begin(), this->errors .begin(), std::plus<float>());
+    std::transform(this->errors.begin(), this->errors.end(), e2.begin(), this->errors.begin(), std::plus<float>());
+    std::transform(this->errors.begin(), this->errors.end(), e3.begin(), this->errors.begin(), std::plus<float>());
     return this->errors;
 }
 
@@ -78,21 +78,14 @@ vector<float> GatedRecurrentUnit::getWeights() const
 
 int GatedRecurrentUnit::getNumberOfParameters() const
 {
-    return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() + this
-                                                                                                ->outputGate.
-                                                                                                getNumberOfParameters();
+    return this->resetGate.getNumberOfParameters()
+        + this->updateGate.getNumberOfParameters()
+        + this->outputGate.getNumberOfParameters();
 }
 
 int GatedRecurrentUnit::getNumberOfInputs() const
 {
     return this->numberOfInputs;
-}
-
-
-inline
-void GatedRecurrentUnit::updateWeights(float error)
-{
-    throw exception();
 }
 
 inline
@@ -117,28 +110,19 @@ int GatedRecurrentUnit::isValid() const
     return 0;
 }
 
-bool GatedRecurrentUnit::operator==(const BaseNeuron& neuron) const
+bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
 {
-    try
-    {
-        const auto& n = dynamic_cast<const GatedRecurrentUnit&>(neuron);
-        return this->BaseNeuron::operator==(neuron)
-            && this->numberOfInputs == n.numberOfInputs
-            && this->previousOutput == n.previousOutput
-            && this->recurrentError == n.recurrentError
-            && this->updateGateOutput == n.updateGateOutput
-            && this->outputGateOutput == n.outputGateOutput
-            && this->resetGate.RecurrentNeuron::operator==(n.resetGate)
-            && this->updateGate.RecurrentNeuron::operator==(n.updateGate)
-            && this->outputGate.RecurrentNeuron::operator==(n.outputGate);
-    }
-    catch (bad_cast&)
-    {
-        return false;
-    }
+    return this->numberOfInputs == neuron .numberOfInputs
+        && this->previousOutput == neuron.previousOutput
+        && this->recurrentError == neuron.recurrentError
+        && this->updateGateOutput == neuron.updateGateOutput
+        && this->outputGateOutput == neuron.outputGateOutput
+        && this->resetGate == neuron.resetGate
+        && this->updateGate == neuron.updateGate
+        && this->outputGate == neuron.outputGate;
 }
 
-bool GatedRecurrentUnit::operator!=(const BaseNeuron& neuron) const
+bool GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const
 {
     return !(*this == neuron);
 }

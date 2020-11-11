@@ -6,14 +6,14 @@
 
 namespace snn::internal
 {
-    class GatedRecurrentUnit final : public BaseNeuron
+    class GatedRecurrentUnit final : public BaseNeuron<GatedRecurrentUnit>
     {
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-       friend class RecurrentNeuron;
+        friend class RecurrentNeuron;
 
         std::vector<float> errors;
 
@@ -29,7 +29,6 @@ namespace snn::internal
         RecurrentNeuron outputGate;
 
         void reset();
-        void updateWeights(const float error) override;
 
     public:
         GatedRecurrentUnit() = default; // use restricted to Boost library only
@@ -39,25 +38,25 @@ namespace snn::internal
 
         StochasticGradientDescent* optimizer{};
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) override;
-        [[nodiscard]] std::vector<float>& backOutput(float error) override;
-        void train(float error) override;
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
+        [[nodiscard]] std::vector<float>& backOutput(float error);
+        void train(float error);
 
-        [[nodiscard]] std::vector<float> getWeights() const override;
-        [[nodiscard]] int getNumberOfParameters() const override;
-        [[nodiscard]] int getNumberOfInputs() const override;
+        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] int getNumberOfParameters() const;
+        [[nodiscard]] int getNumberOfInputs() const;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] int isValid() const;
 
-        bool operator==(const BaseNeuron& neuron) const override;
-        bool operator!=(const BaseNeuron& neuron) const override;
+        bool operator==(const GatedRecurrentUnit& neuron) const;
+        bool operator!=(const GatedRecurrentUnit& neuron) const;
     };
 
     template <class Archive>
     void GatedRecurrentUnit::serialize(Archive& ar, unsigned version)
     {
-        boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron>();
-        ar & boost::serialization::base_object<BaseNeuron>(*this);
+        boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron<GatedRecurrentUnit>>();
+        ar & boost::serialization::base_object<BaseNeuron<GatedRecurrentUnit>>(*this);
         ar & this->numberOfInputs;
         ar & this->previousOutput;
         ar & this->recurrentError;

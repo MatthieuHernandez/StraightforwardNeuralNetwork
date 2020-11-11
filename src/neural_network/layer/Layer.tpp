@@ -45,9 +45,9 @@ int Layer<N>::isValid() const
 }
 
 template <class N>
-BaseNeuron* Layer<N>::getNeuron(int index)
+void* Layer<N>::getNeuron(int index)
 {
-    return static_cast<BaseNeuron*>(&this->neurons[index]);
+    return static_cast<void*>(&this->neurons[index]);
 }
 
 template <class N>

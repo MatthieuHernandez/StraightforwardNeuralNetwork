@@ -36,7 +36,7 @@ namespace snn::internal
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override = 0;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
-        [[nodiscard]] BaseNeuron* getNeuron(int index) override final;
+        [[nodiscard]] void* getNeuron(int index) override final;
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;

@@ -24,23 +24,25 @@ TEST(SaveNeuralNetwork, EqualTest)
     C.optimizer.momentum = 0.78f;
     StraightforwardNeuralNetwork B = A;
 
-    ASSERT_EQ(A.isValid(), 0) << "A is invalid";
-    ASSERT_EQ(B.isValid(), 0) << "B is invalid";
+    ASSERT_EQ(A.isValid(), 0);
+    ASSERT_EQ(B.isValid(), 0);
 
     EXPECT_TRUE(A == B);
     EXPECT_TRUE(&A != &B);
 
-    EXPECT_TRUE(&A != &B) << "&A != &B";
+    EXPECT_TRUE(&A != &B);
 
 
-    EXPECT_TRUE(A.optimizer == B.optimizer) << "Value : A.optimiser == B.optimiser";
-    EXPECT_TRUE(&A.optimizer != &B.optimizer) << "Address : A.optimiser != B.optimiser";
+    EXPECT_TRUE(A.optimizer == B.optimizer);
+    EXPECT_TRUE(&A.optimizer != &B.optimizer);
 
-    EXPECT_TRUE(*A.layers[0] == *B.layers[0]) << "Value : A.layers[0] == B.layers[0]";
-    EXPECT_TRUE(A.layers[0] != B.layers[0]) << "Address : A.layers[0] != B.layers[0]";
+    EXPECT_TRUE(*A.layers[0] == *B.layers[0]);
+    EXPECT_TRUE(A.layers[0] != B.layers[0]);
 
-    EXPECT_TRUE(*A.layers[0]->getNeuron(0) == *B.layers[0]->getNeuron(0)) << "Value : A.Layers[0].getNeuron(0) == B.Layers[0].getNeuron(0)";
-    EXPECT_TRUE(A.layers[0]->getNeuron(0) != B.layers[0]->getNeuron(0)) << "Address : A.Layers[0].getNeuron(0) != B.Layers[0].getNeuron(0)";
+    auto* neuronA = static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0));
+    auto* neuronB = static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0));
+    EXPECT_TRUE(*neuronA == *neuronB);
+    EXPECT_TRUE(neuronA != neuronB);
 
     //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
     EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);

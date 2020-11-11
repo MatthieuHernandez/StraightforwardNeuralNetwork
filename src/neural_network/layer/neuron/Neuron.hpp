@@ -94,7 +94,7 @@ namespace snn::internal
     template <class Derived>
     float Neuron<Derived>::randomInitializeWeight(int numberOfWeights)
     {
-        const float valueMax = 2.4f / std::sqrtf(static_cast<float>(numberOfWeights));
+        const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfWeights));
         return Tools::randomBetween(-valueMax, valueMax);
     }
 

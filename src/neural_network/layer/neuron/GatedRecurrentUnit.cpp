@@ -1,4 +1,3 @@
-#include <cmath>
 #include <boost/serialization/export.hpp>
 #include "GatedRecurrentUnit.hpp"
 
@@ -6,7 +5,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-//BOOST_CLASS_EXPORT(GatedRecurrentUnit)
+BOOST_CLASS_EXPORT(GatedRecurrentUnit)
 
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
     : numberOfInputs(model.numberOfInputs),

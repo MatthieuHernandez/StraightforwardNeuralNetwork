@@ -40,7 +40,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A.layers[0] != B.layers[0]);
 
     auto* neuronA = static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0));
-    auto* neuronB = static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0));
+    auto* neuronB = static_cast<internal::SimpleNeuron*>(B.layers[0]->getNeuron(0));
     EXPECT_TRUE(*neuronA == *neuronB);
     EXPECT_TRUE(neuronA != neuronB);
 

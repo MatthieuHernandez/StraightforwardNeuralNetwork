@@ -25,7 +25,7 @@ namespace snn::internal
     public:
         FilterLayer() = default;  // use restricted to Boost library only
         FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~FilterLayer() = default;
+        virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;

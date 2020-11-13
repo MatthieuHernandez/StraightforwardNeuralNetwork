@@ -32,7 +32,7 @@ namespace snn::internal
         float sum = 0;
 
         activation activationFunction;
-        ActivationFunction* outputFunction;
+        std::shared_ptr<ActivationFunction> outputFunction;
 
         static float randomInitializeWeight(int numberOfInputs);
 

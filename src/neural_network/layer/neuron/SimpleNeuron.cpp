@@ -21,12 +21,12 @@ float SimpleNeuron::output(const vector<float>& inputs)
         this->sum += inputs[w] * weights[w];
     }
     this->sum += bias;
-    return outputFunction->function(this->sum);
+    return this->outputFunction->function(this->sum);
 }
 
 vector<float>& SimpleNeuron::backOutput(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
+    error = error * this->outputFunction->derivative(this->sum);
 
     for (size_t w = 0; w < this->weights.size(); ++w)
     {
@@ -45,12 +45,16 @@ void SimpleNeuron::train(float error)
 
 void SimpleNeuron::updateWeights(const float error)
 {
+     const auto learningRate = this->optimizer->learningRate; 
+     const auto momentum = this->optimizer->momentum;
+
     for (size_t w = 0; w < this->weights.size(); ++w)
     {
-        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
+        auto &previousDeltaWeight = this->previousDeltaWeights[w];
+        auto deltaWeights = learningRate * error * this->lastInputs[w];
+        deltaWeights += momentum * previousDeltaWeight;
         weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
+        previousDeltaWeight = deltaWeights;
     }
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <boost/serialization/access.hpp>
 
@@ -25,7 +26,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        static std::vector<ActivationFunction*> activationFunctions;
+        static std::vector<std::shared_ptr<ActivationFunction>> activationFunctions;
 
         const float min;
         const float max;
@@ -33,12 +34,12 @@ namespace snn::internal
         ActivationFunction(float min, float max);
         virtual ~ActivationFunction() = default;
         static void initialize();
-        static ActivationFunction* get(activation type);
+        static std::shared_ptr<ActivationFunction> get(activation type);
 
-        virtual float function(const float) const = 0;
-        virtual float derivative(const float) const = 0;
+        [[nodiscard]] virtual float function(const float) const = 0;
+        [[nodiscard]] virtual float derivative(const float) const = 0;
 
-        virtual activation getType() const = 0;
+        [[nodiscard]] virtual activation getType() const = 0;
 
         virtual bool operator==(const ActivationFunction& activationFunction) const;
         virtual bool operator!=(const ActivationFunction& activationFunction) const;

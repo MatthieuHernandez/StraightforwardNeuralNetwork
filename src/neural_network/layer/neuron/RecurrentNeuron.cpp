@@ -54,20 +54,25 @@ void RecurrentNeuron::train(float error)
 inline
 void RecurrentNeuron::updateWeights(const float error)
 {
-    int w;
-    for (w = 0; w < (int)this->lastInputs.size(); ++w)
+     const auto learningRate = this->optimizer->learningRate; 
+     const auto momentum = this->optimizer->momentum;
+
+    size_t w;
+    for (w = 0; w < this->lastInputs.size(); ++w)
     {
-        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
+        auto &previousDeltaWeight = this->previousDeltaWeights[w];
+        auto deltaWeights = learningRate * error * this->lastInputs[w];
+        deltaWeights += momentum * previousDeltaWeight;
         this->weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
+        previousDeltaWeight = deltaWeights;
     }
     this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
 
-    auto deltaWeights = this->optimizer->learningRate * this->recurrentError * this->previousOutput;
-    deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
+    auto &previousDeltaWeight = this->previousDeltaWeights[w];
+    auto deltaWeights = learningRate * this->recurrentError * this->previousOutput;
+    deltaWeights += momentum * previousDeltaWeight;
     this->weights[w] += deltaWeights;
-    this->previousDeltaWeights[w] = deltaWeights;
+    previousDeltaWeight = deltaWeights;
 }
 
 inline

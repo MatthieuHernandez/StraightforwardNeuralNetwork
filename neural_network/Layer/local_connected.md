@@ -17,7 +17,8 @@ This layer is mainly used for reduce the size of input, the Locally Connected la
 ## Declaration 
 This is the function used to declare a local connected layer.
 ```cpp
-LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid);
+template <class ... TOptimizer>
+LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, TOptimizer ... optimizers);
 ```
 **Arguments**
  * **numberOfLocallyConnected**: The number of output filters. Multiply the number of neurons.

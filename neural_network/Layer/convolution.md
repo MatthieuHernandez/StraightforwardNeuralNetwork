@@ -16,7 +16,8 @@ This layer is mainly used for image processing, this makes it easier to extract 
 ## Declaration 
 This is the function used to declare a convolutional layer.
 ```cpp
-LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU);
+ template <class ... TOptimizer>
+LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU, TOptimizer ... optimizers);
 ```
 **Arguments**
  * **numberOfConvolution**: The number of output filters in the convolution. Multiply the number of neurons.

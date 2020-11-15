@@ -17,7 +17,8 @@ This layer is a simple fully connected layer with recurrence, where each neuron 
 ## Declaration
 This is the function used to declare a Recurrent layer.
 ```cpp
-LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh);
+template <class ... TOptimizer>
+LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh, TOptimizer ... optimizers);
 ```
 **Arguments**
  * **numberOfNeurons**: The number of neurons in the layer.

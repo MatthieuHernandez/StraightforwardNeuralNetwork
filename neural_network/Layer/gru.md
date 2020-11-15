@@ -17,7 +17,8 @@ This layer is a simple fully connected layer with Gated recurrent units instead 
 ## Declaration
 This is the function used to declare a GRU layer.
 ```cpp
-LayerModel GruLayer(int numberOfNeurons);
+ template <class ... TOptimizer>
+LayerModel GruLayer(int numberOfNeurons, TOptimizer ... optimizers);
 ```
 **Arguments**
  * **numberOfNeurons**: The number of neurons in the layer.

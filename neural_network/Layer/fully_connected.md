@@ -16,7 +16,8 @@ This layer is the most common and simple layer, almost all neural network have o
 ## Declaration 
 This is the function used to declare a fully connected layer.
 ```cpp
-LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid);
+template <class ... TOptimizer>
+LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, TOptimizer ... optimizers);
 ```
 **Arguments**
  * **numberOfNeurons**: The number of neurons in the layer.

@@ -11,7 +11,7 @@ class MnistTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Mnist dataset("./datasets/MNIST");;
+        Mnist dataset("./datasets/MNIST");
         data = move(dataset.data);
     }
 
@@ -73,7 +73,7 @@ TEST_F(MnistTest, LocallyConnected1D)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         LocallyConnected(1, 7),
-        FullyConnected(150),
+        FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(70),
         FullyConnected(10)
     });

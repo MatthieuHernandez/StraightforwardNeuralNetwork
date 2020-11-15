@@ -16,7 +16,7 @@ FilterLayer::FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer
     this->shapeOfInput = model.shapeOfInput;
 }
 
-vector<float> FilterLayer::output(const vector<float>& inputs, bool temporalReset)
+vector<float> FilterLayer::computeOutput(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
     for (int n = 0; n < (int)this->neurons.size(); ++n)

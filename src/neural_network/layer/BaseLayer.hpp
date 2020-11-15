@@ -2,7 +2,7 @@
 #include <memory>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
-#include "../Optimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
 #include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
@@ -13,6 +13,9 @@ namespace snn::internal
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
+
+    protected:
+        virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
 
     public:
         virtual ~BaseLayer() = default;
@@ -25,6 +28,7 @@ namespace snn::internal
         [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
         virtual std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) = 0;
+        virtual std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) = 0;
         virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 

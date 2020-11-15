@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include "Optimizer.hpp"
+#include "optimizer/StochasticGradientDescent.hpp"
 #include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/FullyConnected.hpp"
@@ -33,6 +33,7 @@ namespace snn::internal
 
     protected:
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
+        std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset); // Because Dropout is different during training and inference
 
         void evaluateOnceForRegression(const std::vector<float>& inputs,
                                        const std::vector<float>& desired,

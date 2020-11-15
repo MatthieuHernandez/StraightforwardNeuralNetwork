@@ -3,12 +3,8 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "FilterLayer.hpp"
-#include "../Optimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
 #include "neuron/Neuron.hpp"
-
-namespace snn {
-    struct LayerModel;
-}
 
 namespace snn::internal
 {

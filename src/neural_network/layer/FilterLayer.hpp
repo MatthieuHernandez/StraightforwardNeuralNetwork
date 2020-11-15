@@ -2,7 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
-#include "../Optimizer.hpp"
+#include "../optimizer/StochasticGradientDescent.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
@@ -28,7 +28,7 @@ namespace snn::internal
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;

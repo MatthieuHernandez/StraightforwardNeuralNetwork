@@ -5,7 +5,7 @@
 #include <boost/serialization/access.hpp>
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
-#include "../../Optimizer.hpp"
+#include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
 #include "../../../tools/Tools.hpp"
 

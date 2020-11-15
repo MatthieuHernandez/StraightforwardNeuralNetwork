@@ -10,7 +10,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, unsigned version) {}
 
     protected:
 
@@ -41,10 +41,4 @@ namespace snn::internal
             return !(*this == neuron);
         }
     };
-
-    template <class Derived>
-    template <class Archive>
-    void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
-    {
-    }
 }

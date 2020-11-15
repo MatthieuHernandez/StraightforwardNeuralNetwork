@@ -17,7 +17,7 @@ std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(StochasticGradientDescent* opti
 }
 
 template <class N>
-std::vector<float> SimpleLayer<N>::output(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)

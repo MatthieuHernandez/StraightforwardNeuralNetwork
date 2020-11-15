@@ -1,3 +1,4 @@
+#include "Layer.hpp"
 
 template <class N>
 Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
@@ -8,6 +9,45 @@ Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
+    LayerOptimizerFactory::build(this->optimizers, model);
+}
+
+template<class N>
+Layer<N>::Layer(const Layer& layer)
+{
+    this->numberOfInputs = layer.numberOfInputs;
+    this->neurons = layer.neurons;
+
+    this->optimizers.reserve(layer.optimizers.size());
+    for(auto& optimizer : layer.optimizers)
+        this->optimizers.emplace_back(optimizer->clone(optimizer.get()));
+}
+
+template <class N>
+std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
+{
+    if(this->optimizers.size() > 0)
+    {
+        auto copyOfInputs = std::vector(inputs);
+        for (auto& optimizer : this->optimizers)
+            optimizer->applyBefore(copyOfInputs);
+        auto output = this->computeOutput(copyOfInputs, temporalReset);
+        return output;
+    }
+    else
+    {
+        auto output = this->computeOutput(inputs, temporalReset);
+        return output;
+    }
+}
+
+template <class N>
+std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
+{
+    auto output = this->computeOutput(inputs, temporalReset);
+    for(auto& optimizer : this->optimizers)
+        optimizer->applyAfterForBackpropagation(output);
+    return output;
 }
 
 template <class N>
@@ -79,9 +119,19 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
     try
     {
         const Layer& l = dynamic_cast<const Layer&>(layer);
+
         return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs
-            && this->neurons == l.neurons;
+            && this->neurons == l.neurons
+            && [this, &l]()
+            {
+                for (size_t o = 0; o < this->optimizers.size(); ++o)
+                {
+                    if (*this->optimizers[o] != *l.optimizers[o])
+                        return false;
+                }
+                return true;
+            }();
     }
     catch (std::bad_cast&)
     {

@@ -3,11 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "FilterLayer.hpp"
-#include "../Optimizer.hpp"
-
-namespace snn {
-    struct LayerModel;
-}
+#include "../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
 {

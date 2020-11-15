@@ -22,7 +22,7 @@ namespace snn::internal
 
         float derivative(const float x) const override
         {
-            return std::exp(x) / std::pow((std::exp(x) + 1.0f), 2);
+            return std::exp(x) / powf((std::exp(x) + 1.0f), 2);
         }
     };
 }

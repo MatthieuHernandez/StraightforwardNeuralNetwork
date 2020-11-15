@@ -4,7 +4,7 @@
 #include <boost/serialization/access.hpp>
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
-#include "../../Optimizer.hpp"
+#include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
@@ -47,8 +47,8 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfParameters() const override;
         [[nodiscard]] int getNumberOfInputs() const override;
 
-        virtual bool operator==(const BaseNeuron& neuron) const override;
-        virtual bool operator!=(const BaseNeuron& neuron) const override;
+        bool operator==(const BaseNeuron& neuron) const override;
+        bool operator!=(const BaseNeuron& neuron) const override;
     };
 
     template <class Archive>

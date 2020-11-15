@@ -35,7 +35,7 @@ void Dropout::applyAfterForBackpropagation(std::vector<float>& outputs)
     }
 }
 
-bool Dropout::operator==(const Optimizer& optimizer) const
+bool Dropout::operator==(const LayerOptimizer& optimizer) const
 {
     try
     {
@@ -50,7 +50,7 @@ bool Dropout::operator==(const Optimizer& optimizer) const
     }
 }
 
-bool Dropout::operator!=(const Optimizer& optimizer) const
+bool Dropout::operator!=(const LayerOptimizer& optimizer) const
 {
     return !(*this == optimizer);
 }

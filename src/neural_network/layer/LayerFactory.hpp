@@ -147,11 +147,11 @@ namespace snn
         {
         private:
             static std::unique_ptr<BaseLayer> build(LayerModel& model, std::vector<int>& shapeOfInput,
-                                                    StochasticGradientDescent* optimizer);
+                                                    std::shared_ptr<NeuralNetworkOptimizer> optimizer);
 
         public:
             static void build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::vector<LayerModel>& models,
-                              StochasticGradientDescent* optimizer);
+                              std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         };
     }
 }

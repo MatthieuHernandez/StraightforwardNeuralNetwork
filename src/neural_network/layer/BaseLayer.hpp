@@ -19,7 +19,7 @@ namespace snn::internal
 
     public:
         virtual ~BaseLayer() = default;
-        virtual std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const = 0;
+        virtual std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const = 0;
 
         [[nodiscard]] virtual void* getNeuron(int index) = 0;
         [[nodiscard]] virtual int getNumberOfInputs() const = 0;

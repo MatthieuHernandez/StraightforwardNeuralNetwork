@@ -2,7 +2,6 @@
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
-#include "Optimizer.hpp"
 
 namespace snn::internal
 {
@@ -11,7 +10,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, unsigned version) {}
 
     public:
         LayerOptimizer() = default; // use restricted to Boost library only
@@ -23,14 +22,7 @@ namespace snn::internal
         virtual void applyBefore(std::vector<float>& inputs) = 0;
         virtual void applyAfterForBackpropagation(std::vector<float>& outputs) = 0;
 
-        bool operator==(const Optimizer& optimizer) const;
-        bool operator!=(const Optimizer& optimizer) const;
+        virtual bool operator==(const LayerOptimizer& optimizer) const = 0;
+        virtual bool operator!=(const LayerOptimizer& optimizer) const = 0;
     };
-
-    template <class Archive>
-    void LayerOptimizer::serialize(Archive& ar, unsigned version)
-    {
-        boost::serialization::void_cast_register<LayerOptimizer, Optimizer>();
-        ar & boost::serialization::base_object<Optimizer>(*this);
-    }
 }

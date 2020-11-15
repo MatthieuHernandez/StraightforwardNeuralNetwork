@@ -1,10 +1,11 @@
 #pragma once
 #include <boost/serialization/access.hpp>
-#include "Optimizer.hpp"
+#include "neuralNetworkOptimizer.hpp"
+
 
 namespace snn::internal
 {
-    class StochasticGradientDescent : public Optimizer
+    class StochasticGradientDescent : public NeuralNetworkOptimizer
     {
     private:
         friend class boost::serialization::access;

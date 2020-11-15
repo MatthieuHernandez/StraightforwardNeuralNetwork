@@ -28,8 +28,8 @@ namespace snn::internal
         void applyBefore(std::vector<float>& inputs) override;
         void applyAfterForBackpropagation(std::vector<float>& outputs) override;
 
-        bool operator==(const Optimizer& optimizer) const override;
-        bool operator!=(const Optimizer& optimizer) const override;
+        bool operator==(const LayerOptimizer& optimizer) const override;
+        bool operator!=(const LayerOptimizer& optimizer) const override;
     };
 
     template <class Archive>

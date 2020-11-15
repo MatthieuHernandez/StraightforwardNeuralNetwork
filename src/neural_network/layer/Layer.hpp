@@ -27,11 +27,11 @@ namespace snn::internal
 
     public:
         Layer() = default; // use restricted to Boost library only
-        Layer(LayerModel& model, StochasticGradientDescent* optimizer);
+        Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
 
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override = 0;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;

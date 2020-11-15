@@ -2,7 +2,6 @@
 #include <memory>
 #include <boost/serialization/vector.hpp>
 #include "optimizer/StochasticGradientDescent.hpp"
-#include "layer/Layer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/FullyConnected.hpp"
 #include "layer/Convolution1D.hpp"
@@ -60,7 +59,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfNeurons() const;
         [[nodiscard]] int getNumberOfParameters() const;
 
-        StochasticGradientDescent optimizer;
+        std::shared_ptr<StochasticGradientDescent> optimizer{};
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 

@@ -1,7 +1,5 @@
-#include "Layer.hpp"
-
 template <class N>
-Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
+Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     this->numberOfInputs = model.numberOfInputs;
     this->neurons.reserve(model.numberOfNeurons);

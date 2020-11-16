@@ -7,7 +7,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(SimpleNeuron)
 
-SimpleNeuron::SimpleNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
+SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {
 }
@@ -45,16 +45,9 @@ void SimpleNeuron::train(float error)
 
 void SimpleNeuron::updateWeights(const float error)
 {
-     const auto learningRate = this->optimizer->learningRate; 
-     const auto momentum = this->optimizer->momentum;
-
     for (size_t w = 0; w < this->weights.size(); ++w)
     {
-        auto &previousDeltaWeight = this->previousDeltaWeights[w];
-        auto deltaWeights = learningRate * error * this->lastInputs[w];
-        deltaWeights += momentum * previousDeltaWeight;
-        weights[w] += deltaWeights;
-        previousDeltaWeight = deltaWeights;
+        this->optimizer->updateWeight(error, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
     }
 }
 

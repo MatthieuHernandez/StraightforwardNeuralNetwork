@@ -2,7 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal

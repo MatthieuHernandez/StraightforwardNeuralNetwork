@@ -12,7 +12,7 @@ FullyConnected::FullyConnected(LayerModel& model, shared_ptr<NeuralNetworkOptimi
 {
 }
 
-unique_ptr<BaseLayer> FullyConnected::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+unique_ptr<BaseLayer> FullyConnected::clone(shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)

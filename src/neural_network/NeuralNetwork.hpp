@@ -1,7 +1,8 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include "optimizer/StochasticGradientDescent.hpp"
+#include <boost/serialization/shared_ptr.hpp>
+#include "optimizer/NeuralNetworkOptimizer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/FullyConnected.hpp"
 #include "layer/Convolution1D.hpp"
@@ -59,7 +60,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfNeurons() const;
         [[nodiscard]] int getNumberOfParameters() const;
 
-        std::shared_ptr<StochasticGradientDescent> optimizer{};
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer{};
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 
@@ -76,8 +77,6 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-        ar & this->optimizer.learningRate;
-        ar & this->optimizer.momentum;
         ar.template register_type<FullyConnected>();
         ar.template register_type<Recurrence>();
         ar.template register_type<GruLayer>();
@@ -86,5 +85,7 @@ namespace snn::internal
         ar.template register_type<LocallyConnected1D>();
         ar.template register_type<LocallyConnected2D>();
         ar & layers;
+        ar.template register_type<StochasticGradientDescent>();
+        ar & this->optimizer;
     }
 }

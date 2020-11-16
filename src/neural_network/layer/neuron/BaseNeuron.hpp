@@ -1,6 +1,8 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <boost/serialization/access.hpp>
+#include "../../optimizer/NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
@@ -10,14 +12,18 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version) {}
+        void serialize(Archive& ar, unsigned version);
 
     protected:
 
         void updateWeights(const float error) { return static_cast<Derived*>(this)->updateWeights(error); }
 
     public:
+        BaseNeuron() = default;
+        BaseNeuron(std::shared_ptr<NeuralNetworkOptimizer> optimizer) : optimizer(optimizer) {}
         ~BaseNeuron() = default;
+        
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         [[nodiscard]] float output(const std::vector<float>& inputs) { return static_cast<Derived*>(this)->output(inputs); }
         [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
@@ -41,4 +47,12 @@ namespace snn::internal
             return !(*this == neuron);
         }
     };
+
+    
+    template <class Derived>
+    template <class Archive>
+    void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
+    {
+        ar & this->optimizer;
+    }
 }

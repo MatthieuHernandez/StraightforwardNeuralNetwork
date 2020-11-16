@@ -16,7 +16,7 @@ namespace snn::internal
 
     public:
         SimpleNeuron() = default; // use restricted to Boost library only
-        SimpleNeuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        SimpleNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleNeuron(const SimpleNeuron& neuron) = default;
         ~SimpleNeuron() = default;
 

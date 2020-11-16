@@ -1,8 +1,8 @@
 template <class Derived>
-Neuron<Derived>::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : numberOfInputs(model.numberOfInputs),
-      activationFunction(model.activationFunction),
-      optimizer(optimizer)
+Neuron<Derived>::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    : BaseNeuron<Derived>(optimizer),
+      numberOfInputs(model.numberOfInputs),
+      activationFunction(model.activationFunction)
 {
     this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->lastInputs.resize(model.numberOfInputs, 0);

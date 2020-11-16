@@ -1,11 +1,12 @@
 #pragma once
+#include <memory>
 #include <boost/serialization/access.hpp>
-#include "neuralNetworkOptimizer.hpp"
+#include "NeuralNetworkOptimizer.hpp"
 
 
 namespace snn::internal
 {
-    class StochasticGradientDescent : public NeuralNetworkOptimizer
+    class StochasticGradientDescent final : public NeuralNetworkOptimizer
     {
     private:
         friend class boost::serialization::access;
@@ -19,16 +20,13 @@ namespace snn::internal
         StochasticGradientDescent() = default;
         StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
         ~StochasticGradientDescent() = default;
+        [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
 
-        bool operator==(const StochasticGradientDescent& sgd) const 
-        {
-            return this->learningRate == sgd.learningRate
-                && this->momentum == sgd.momentum;
-        }
-        bool operator!=(const StochasticGradientDescent& sgd) const 
-        { 
-            return !(*this == sgd); 
-        }
+        void updateWeight(const float& error, float& weight, float& previousDeltaWeight, const float& lastInput) const override;
+        [[nodiscard]] int isValid() override;
+
+        bool operator==(const NeuralNetworkOptimizer& sgd) const override;
+        bool operator!=(const NeuralNetworkOptimizer& sgd) const override;
     };
 
     template <class Archive>

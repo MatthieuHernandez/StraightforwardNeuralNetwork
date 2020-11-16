@@ -4,9 +4,8 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
 
-BOOST_CLASS_EXPORT(Optimizer)
+//BOOST_CLASS_EXPORT(NeuralNetworkOptimizer)
 
 bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
 {

@@ -3,7 +3,7 @@
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "Layer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/OptimizerModel.hpp"
 
 namespace snn

@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
@@ -17,7 +17,7 @@ namespace snn::internal
 
     public:
         FullyConnected() = default;  // use restricted to Boost library only
-        FullyConnected(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer);
+        FullyConnected(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         FullyConnected(const FullyConnected&) = default;
         ~FullyConnected() = default;
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;

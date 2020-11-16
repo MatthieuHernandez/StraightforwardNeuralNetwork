@@ -25,17 +25,17 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, models, &this->optimizer);
+    LayerFactory::build(this->layers, models, this->optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
-      optimizer(neuralNetwork.optimizer)
+      optimizer(neuralNetwork.optimizer->clone())
 {
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
-        this->layers.push_back(layer->clone(&this->optimizer));
+        this->layers.push_back(layer->clone(this->optimizer));
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
@@ -172,7 +172,7 @@ int NeuralNetwork::isValid() const
 
     for (const auto& layer : this->layers)
     {
-        int err = layer->isValid();
+        err = layer->isValid();
         if(err != 0)
             return err;
     }

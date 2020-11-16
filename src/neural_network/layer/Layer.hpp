@@ -7,7 +7,7 @@
 #include "LayerModel.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
 #include "../optimizer/LayerOptimizerFactory.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Dropout.hpp"
 
 namespace snn::internal

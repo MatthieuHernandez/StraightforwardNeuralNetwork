@@ -8,7 +8,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(RecurrentNeuron)
 
-RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
+RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {
 }
@@ -54,25 +54,13 @@ void RecurrentNeuron::train(float error)
 inline
 void RecurrentNeuron::updateWeights(const float error)
 {
-     const auto learningRate = this->optimizer->learningRate; 
-     const auto momentum = this->optimizer->momentum;
-
     size_t w;
     for (w = 0; w < this->lastInputs.size(); ++w)
     {
-        auto &previousDeltaWeight = this->previousDeltaWeights[w];
-        auto deltaWeights = learningRate * error * this->lastInputs[w];
-        deltaWeights += momentum * previousDeltaWeight;
-        this->weights[w] += deltaWeights;
-        previousDeltaWeight = deltaWeights;
+        this->optimizer->updateWeight(error, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
     }
     this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-
-    auto &previousDeltaWeight = this->previousDeltaWeights[w];
-    auto deltaWeights = learningRate * this->recurrentError * this->previousOutput;
-    deltaWeights += momentum * previousDeltaWeight;
-    this->weights[w] += deltaWeights;
-    previousDeltaWeight = deltaWeights;
+    this->optimizer->updateWeight(this->recurrentError, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
 }
 
 inline

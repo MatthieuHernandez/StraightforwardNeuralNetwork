@@ -7,13 +7,12 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(GatedRecurrentUnit)
 
-GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer)
+GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
       resetGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
       updateGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
       outputGate({model.numberOfInputs, model.numberOfWeights, activation::tanh}, optimizer)
 {
-    this->optimizer = optimizer;
 }
 
 float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)

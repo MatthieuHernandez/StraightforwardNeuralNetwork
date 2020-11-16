@@ -24,11 +24,11 @@ namespace snn::internal
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only
-        RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset);
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
         [[nodiscard]] std::vector<float>& backOutput(float error);
         void train(float error);
 

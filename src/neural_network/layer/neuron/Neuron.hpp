@@ -42,8 +42,6 @@ namespace snn::internal
         Neuron(const Neuron& neuron) = default;
         ~Neuron() = default;
 
-        std::shared_ptr<NeuralNetworkOptimizer> optimizer;
-
         [[nodiscard]] int isValid() const;
 
         [[nodiscard]] std::vector<float> getWeights() const;
@@ -69,7 +67,6 @@ namespace snn::internal
         ar & this->sum;
         ar & this->activationFunction;
         this->outputFunction = ActivationFunction::get(activationFunction);
-        ar & this->optimizer;
     }
 
     #include "Neuron.tpp"

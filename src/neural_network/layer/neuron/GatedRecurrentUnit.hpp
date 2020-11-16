@@ -32,11 +32,9 @@ namespace snn::internal
 
     public:
         GatedRecurrentUnit() = default; // use restricted to Boost library only
-        GatedRecurrentUnit(NeuronModel model, StochasticGradientDescent* optimizer);
+        GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
         ~GatedRecurrentUnit() = default;
-
-        StochasticGradientDescent* optimizer{};
 
         [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
         [[nodiscard]] std::vector<float>& backOutput(float error);

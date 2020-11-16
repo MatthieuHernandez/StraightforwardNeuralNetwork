@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
-#include "../optimizer/Optimizer.hpp"
+#include "../optimizer/LayerOptimizer.hpp"
 #include "neuron/RecurrentNeuron.hpp"
 #include "neuron/GatedRecurrentUnit.hpp"
 
@@ -19,10 +19,10 @@ namespace snn::internal
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
-        SimpleLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
         ~SimpleLayer() = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;

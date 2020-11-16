@@ -166,11 +166,9 @@ int NeuralNetwork::isValid() const
     || this->getNumberOfLayers() > 1000)
         return 102;
 
-    if (this->optimizer.learningRate <= 0.0f || this->optimizer.learningRate >= 1.0f)
-        return 103;
-
-    if (this->optimizer.momentum < 0.0f || this->optimizer.momentum > 1.0f)
-        return 104;
+    int err = this->optimizer->isValid();
+    if (err != 0)
+        return err;
 
     for (const auto& layer : this->layers)
     {

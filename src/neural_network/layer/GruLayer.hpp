@@ -17,10 +17,10 @@ namespace snn::internal
 
     public:
         GruLayer() = default;  // use restricted to Boost library only
-        GruLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        GruLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer);
         GruLayer(const GruLayer&) = default;
         ~GruLayer() = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
     };
 
     template <class Archive>

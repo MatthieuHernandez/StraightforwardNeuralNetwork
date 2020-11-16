@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "FilterLayer.hpp"
-#include "../optimizer/Optimizer.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
@@ -20,11 +20,11 @@ namespace snn::internal
 
     public:
         Convolution1D() = default; // use restricted to Boost library only
-        Convolution1D(LayerModel& model, StochasticGradientDescent* optimizer);
+        Convolution1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~Convolution1D() = default;
         Convolution1D(const Convolution1D&) = default;
 
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;

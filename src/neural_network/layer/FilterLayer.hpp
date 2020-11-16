@@ -24,7 +24,7 @@ namespace snn::internal
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only
-        FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 

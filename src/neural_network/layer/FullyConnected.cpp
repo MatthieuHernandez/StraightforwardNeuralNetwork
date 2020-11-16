@@ -7,12 +7,12 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(FullyConnected)
 
-FullyConnected::FullyConnected(LayerModel& model, StochasticGradientDescent* optimizer)
+FullyConnected::FullyConnected(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
      : SimpleLayer(model, optimizer)
 {
 }
 
-unique_ptr<BaseLayer> FullyConnected::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> FullyConnected::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)

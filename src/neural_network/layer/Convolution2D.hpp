@@ -19,10 +19,10 @@ namespace snn::internal
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
-        Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer);
+        Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~Convolution2D() = default;
         Convolution2D(const Convolution2D&) = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;

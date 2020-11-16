@@ -1,6 +1,6 @@
 #include <typeinfo>
 #include <boost/serialization/export.hpp>
-#include "Optimizer.hpp"
+#include "NeuralNetworkOptimizer.hpp"
 
 using namespace std;
 using namespace snn;
@@ -8,12 +8,12 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Optimizer)
 
-bool Optimizer::operator==(const Optimizer& optimizer) const
+bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code();
 }
 
-bool Optimizer::operator!=(const Optimizer& optimizer) const
+bool NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const
 {
     return !(*this == optimizer);
 }

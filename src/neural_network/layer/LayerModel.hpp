@@ -1,6 +1,6 @@
 #pragma once
 #include "LayerType.hpp"
-#include "../optimizer/OptimizerModel.hpp"
+#include "../optimizer/LayerOptimizerModel.hpp"
 #include "neuron/NeuronModel.hpp"
 
 namespace snn

@@ -20,8 +20,8 @@ StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
     this->stopTraining();
 }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> models)
-    : NeuralNetwork(models)
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> architecture, NeuralNetworkOptimizerModel optimizer)
+    : NeuralNetwork(architecture, optimizer)
 {
     int err = this->isValid();
     if (err != 0)

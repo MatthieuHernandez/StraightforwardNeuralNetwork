@@ -3,6 +3,7 @@
 #include <vector>
 #include <boost/serialization/access.hpp>
 #include "../../optimizer/NeuralNetworkOptimizer.hpp"
+#include "../../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
 {
@@ -53,6 +54,7 @@ namespace snn::internal
     template <class Archive>
     void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
     {
+        ar.template register_type<StochasticGradientDescent>();
         ar & this->optimizer;
     }
 }

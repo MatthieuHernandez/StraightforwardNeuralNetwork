@@ -22,12 +22,12 @@ void NeuralNetwork::initialize()
     isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(vector<LayerModel>& models, NeuralNetworkOptimizerModel optimizer)
+NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, models, this->optimizer);
-    NeuralNetworkOptimizerFactory::Build(optimizer);
+    LayerFactory::build(this->layers, architecture, this->optimizer);
+    this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 

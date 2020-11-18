@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/access.hpp>
 
 namespace snn

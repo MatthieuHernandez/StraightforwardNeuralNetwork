@@ -12,7 +12,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, unsigned version) {}
 
     protected:
         virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
@@ -37,9 +37,4 @@ namespace snn::internal
         virtual bool operator==(const BaseLayer& layer) const = 0;
         virtual bool operator!=(const BaseLayer& layer) const = 0;
     };
-
-    template <class Archive>
-    void BaseLayer::serialize(Archive& ar, unsigned version)
-    {
-    }
 }

@@ -4,7 +4,7 @@
 #include "LayerModel.hpp"
 #include "Layer.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
-#include "../optimizer/OptimizerModel.hpp"
+#include "../optimizer/LayerOptimizerModel.hpp"
 
 namespace snn
 {

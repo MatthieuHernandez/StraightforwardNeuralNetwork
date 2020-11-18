@@ -5,7 +5,7 @@
 
 namespace snn
 {
-    extern NeuralNetworkOptimizerModel StochasticGradientDescent(float value);
+    extern NeuralNetworkOptimizerModel StochasticGradientDescent(float learningRate  = 0.03f, float momentum = 0.0f);
 
     namespace internal
     {
@@ -16,3 +16,4 @@ namespace snn
         };
     }
 }
+

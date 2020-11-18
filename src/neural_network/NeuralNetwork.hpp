@@ -64,7 +64,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfNeurons() const;
         [[nodiscard]] int getNumberOfParameters() const;
 
-        std::shared_ptr<NeuralNetworkOptimizer> optimizer{};
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 

@@ -1,8 +1,11 @@
+#include <boost/serialization/export.hpp>
 #include "StochasticGradientDescent.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
+
+BOOST_CLASS_EXPORT(StochasticGradientDescent)
 
 StochasticGradientDescent::StochasticGradientDescent(const float learningRate, const float momentum)
     : learningRate(learningRate), momentum(momentum)
@@ -11,7 +14,7 @@ StochasticGradientDescent::StochasticGradientDescent(const float learningRate, c
 
 shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
 {
-    return make_shared<NeuralNetworkOptimizer>(*this);
+    return make_shared<StochasticGradientDescent>(*this);
 }
 
 inline

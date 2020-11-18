@@ -12,9 +12,8 @@ TEST(Identity, WorksWithSmallNumbers)
 
     Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)});
-    neuralNetwork.optimizer.learningRate = 0.02f;
-    neuralNetwork.optimizer.momentum = 0.99f;
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)},
+        StochasticGradientDescent(0.02f, 0.99f));
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(0.01_mae || 3_s);
@@ -41,9 +40,8 @@ TEST(Identity, WorksWithBigNumbers)
         FullyConnected(8),
         FullyConnected(4, activation::tanh),
         FullyConnected(1, activation::identity)
-    });
-    neuralNetwork.optimizer.learningRate = 0.00001f;
-    neuralNetwork.optimizer.momentum = 0.95f;
+    }, 
+        StochasticGradientDescent(0.00001f, 0.95f));
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.0_mae || 5_s);
@@ -63,9 +61,8 @@ TEST(Identity, WorksWithLotsOfNumbers)
     Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)});
-    neuralNetwork.optimizer.learningRate = 0.0002f;
-    neuralNetwork.optimizer.momentum = 0.99f;
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)},
+        StochasticGradientDescent(0.0002f, 0.99f));
 
     neuralNetwork.startTraining(data);
     neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread

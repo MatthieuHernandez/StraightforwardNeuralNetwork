@@ -19,9 +19,8 @@ TEST(Recurrence, RepeatInput)
         Recurrence(12),
         FullyConnected(6),
         FullyConnected(1, activation::tanh)
-    });
-    neuralNetwork.optimizer.learningRate = 0.03f;
-    neuralNetwork.optimizer.momentum = 0.97f;
+    },
+        StochasticGradientDescent(0.003f, 0.97f));
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -38,8 +37,9 @@ TEST(Recurrence, RepeatLastInput)
         Recurrence(20),
         FullyConnected(8),
         FullyConnected(1, activation::tanh)
-    });
-    neuralNetwork.optimizer.learningRate = 0.02f;
+    },
+        StochasticGradientDescent(0.02f));
+
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -57,9 +57,9 @@ TEST(Recurrence, RepeatLastLastInput)
         GruLayer(15),
         GruLayer(5),
         FullyConnected(1)
-    });
-    neuralNetwork.optimizer.learningRate = 0.05f;
-    neuralNetwork.optimizer.momentum = 0.1f;
+    },
+        StochasticGradientDescent(0.05f, 0.1f));
+
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 

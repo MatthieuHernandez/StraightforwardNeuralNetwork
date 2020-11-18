@@ -16,12 +16,8 @@ TEST(SaveNeuralNetwork, EqualTest)
         GruLayer(3),
         Recurrence(4)
     };
-    StraightforwardNeuralNetwork A(structureOfNetwork);
-    StraightforwardNeuralNetwork C(structureOfNetwork);
-    A.optimizer.learningRate = 0.03f;
-    A.optimizer.momentum = 0.78f;
-    C.optimizer.learningRate = 0.03f;
-    C.optimizer.momentum = 0.78f;
+    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
+    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), 0);

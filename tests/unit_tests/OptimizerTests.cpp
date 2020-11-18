@@ -14,8 +14,8 @@ TEST(Optimizer, FindRightValueIn20)
         Input(20),
         FullyConnected(4, activation::tanh),
         FullyConnected(1, activation::sigmoid)
-    });
-    neuralNetwork.optimizer.momentum = 0.6f;
+    },
+        StochasticGradientDescent(0.03f, 0.6f));
 
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(1.0_acc || 5_s);

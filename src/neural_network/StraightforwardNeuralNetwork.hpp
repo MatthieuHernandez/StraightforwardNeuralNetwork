@@ -8,7 +8,7 @@
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
 #include "optimizer/NeuralNetworkOptimizerModel.hpp"
-#include "optimizer/NeuralNetworkOptimizerFactory.hpp""
+#include "optimizer/NeuralNetworkOptimizerFactory.hpp"
 
 
 namespace snn

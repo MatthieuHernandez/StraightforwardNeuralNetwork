@@ -45,11 +45,11 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
         GruLayer(20),
         GruLayer(5),
         FullyConnected(2)
-    });
+    },
+        StochasticGradientDescent(0.002f, 0.2f));
+
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.optimizer.learningRate = 0.002f;
-    neuralNetwork.optimizer.momentum = 0.2f;
     neuralNetwork.startTraining(*data);
     neuralNetwork.waitFor(100_ep || 0.6_acc || 30_s);
     neuralNetwork.stopTraining();

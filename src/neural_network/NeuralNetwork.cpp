@@ -4,6 +4,7 @@
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
+#include "optimizer/NeuralNetworkOptimizerFactory.hpp"
 
 using namespace std;
 using namespace snn;
@@ -21,11 +22,12 @@ void NeuralNetwork::initialize()
     isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
+NeuralNetwork::NeuralNetwork(vector<LayerModel>& models, NeuralNetworkOptimizerModel optimizer)
 {
     if (isTheFirst)
         this->initialize();
     LayerFactory::build(this->layers, models, this->optimizer);
+    NeuralNetworkOptimizerFactory::Build(optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 

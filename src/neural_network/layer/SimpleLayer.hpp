@@ -42,5 +42,11 @@ namespace snn::internal
         ar & boost::serialization::base_object<Layer<N>>(*this);
     }
 
+    template<>
+    std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+
+    template<>
+    std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+    
     #include "SimpleLayer.tpp"
 }

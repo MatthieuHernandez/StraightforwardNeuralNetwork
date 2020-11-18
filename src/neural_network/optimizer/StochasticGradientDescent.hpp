@@ -14,10 +14,11 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        float learningRate = 0.03f;
-        float momentum = 0.0f;
+        float learningRate{};
+        float momentum{};
 
         StochasticGradientDescent() = default;
+        StochasticGradientDescent(float learningRate = 0.03f, float momentum = 0.0f);
         StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
         ~StochasticGradientDescent() = default;
         [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;

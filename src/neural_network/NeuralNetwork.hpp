@@ -15,6 +15,10 @@
 #include "layer/LocallyConnected2D.hpp"
 
 
+namespace snn {
+    struct NeuralNetworkOptimizerModel;
+}
+
 namespace snn::internal
 {
     class NeuralNetwork : public StatisticAnalysis
@@ -50,7 +54,7 @@ namespace snn::internal
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
-        NeuralNetwork(std::vector<LayerModel>& architecture);
+        NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         ~NeuralNetwork() = default;
 

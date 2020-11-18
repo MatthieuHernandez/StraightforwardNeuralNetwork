@@ -14,6 +14,6 @@ namespace snn
         int numberOfFilters;
         int sizeOfFilerMatrix;
         std::vector<int> shapeOfInput;
-        std::vector<OptimizerModel> optimizers;
+        std::vector<LayerOptimizerModel> optimizers;
     };
 }

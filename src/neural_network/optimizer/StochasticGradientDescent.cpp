@@ -4,6 +4,11 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
+StochasticGradientDescent::StochasticGradientDescent(const float learningRate, const float momentum)
+    : learningRate(learningRate), momentum(momentum)
+{
+}
+
 shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
 {
     return make_shared<NeuralNetworkOptimizer>(*this);

@@ -1,8 +1,13 @@
 #pragma once
 namespace snn
 {
-    enum optimizerType
+    enum class layerOptimizerType
     {
-        dropout = 0
+        dropout = 0,
+    };
+
+    enum class neuralNetworkOptimizerType
+    {
+        stochasticGradientDescent = 0,
     };
 }

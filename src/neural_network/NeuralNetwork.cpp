@@ -26,8 +26,8 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOpti
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, architecture, this->optimizer);
     this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
+    LayerFactory::build(this->layers, architecture, this->optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 

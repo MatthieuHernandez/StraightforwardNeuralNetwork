@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <boost/serialization/export.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "LayerOptimizer.hpp"

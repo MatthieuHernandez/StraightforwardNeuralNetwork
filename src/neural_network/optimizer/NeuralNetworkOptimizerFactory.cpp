@@ -8,7 +8,7 @@ using namespace snn;
 using namespace internal;
 
 
-NeuralNetworkOptimizerModel StochasticGradientDescent(float learningRate, float momentum)
+NeuralNetworkOptimizerModel snn::StochasticGradientDescent(float learningRate, float momentum)
 {
     const NeuralNetworkOptimizerModel model
     {

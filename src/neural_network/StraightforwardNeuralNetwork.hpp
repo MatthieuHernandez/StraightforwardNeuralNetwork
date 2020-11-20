@@ -7,7 +7,6 @@
 #include "../data/Data.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
-#include "optimizer/NeuralNetworkOptimizerModel.hpp"
 #include "optimizer/NeuralNetworkOptimizerFactory.hpp"
 
 

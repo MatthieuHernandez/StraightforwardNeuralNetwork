@@ -41,7 +41,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(neuronA != neuronB);
 
     //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
-    EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);
+    EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer.get());
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -106,9 +106,8 @@ TEST(SaveNeuralNetwork, Save)
         LocallyConnected(2, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
         GruLayer(2)
-    });
-    A.optimizer.learningRate = 0.03f;
-    A.optimizer.momentum = 0.78f;
+    },
+        StochasticGradientDescent(0.03f, 0.78f));
 
     A.saveAs("./testSave.snn");
 

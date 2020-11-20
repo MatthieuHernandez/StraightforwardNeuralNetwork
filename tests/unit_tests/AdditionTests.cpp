@@ -28,7 +28,8 @@ TEST(Addition, WithCNN)
         Input(2),
         Convolution(6, 1, activation::sigmoid),
         FullyConnected(1, activation::identity)
-    }, StochasticGradientDescent(0.01f));
+    }, 
+        StochasticGradientDescent(0.01f));
 
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
@@ -52,7 +53,9 @@ TEST(Addition, WithRNN)
         Recurrence(12),
         Recurrence(5),
         FullyConnected(1)
-    }, StochasticGradientDescent(0.01f, 0.4f));
+    }, 
+        StochasticGradientDescent(0.01f, 0.4f));
+
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 
@@ -64,7 +67,9 @@ TEST(Addition, WithGRU)
         GruLayer(15),
          GruLayer(5),
         FullyConnected(1)
-    }, StochasticGradientDescent(0.01f, 0.4f));
+    }, 
+        StochasticGradientDescent(0.01f, 0.4f));
+
     testNeuralNetworkForAddition(neuralNetwork, *data);
 }
 

@@ -38,19 +38,18 @@ TEST_F(MnistTest, loadData)
     ASSERT_EQ(data->isValid(), 0);
 }
 
-TEST_F(MnistTest, testToDeleteLater)
+TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        //FullyConnected(30),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.03f));
+        StochasticGradientDescent(0.02f, 0.1f));
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep /*|| 45_s*/);
+    neuralNetwork.waitFor(1_ep || 5_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.30f);
+    ASSERT_ACCURACY(accuracy, 0.86f);
 }
 
 TEST_F(MnistTest, feedforwardNeuralNetwork)

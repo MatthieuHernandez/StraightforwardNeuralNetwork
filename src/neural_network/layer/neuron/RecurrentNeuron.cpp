@@ -60,7 +60,7 @@ void RecurrentNeuron::updateWeights(const float error)
         this->optimizer->updateWeight(error, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
     }
     this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-    this->optimizer->updateWeight(this->recurrentError, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
+    this->optimizer->updateWeight(this->recurrentError, this->weights[w], this->previousDeltaWeights[w], this->previousOutput);
 }
 
 inline

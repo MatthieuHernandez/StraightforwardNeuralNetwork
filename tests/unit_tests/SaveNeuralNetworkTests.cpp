@@ -29,8 +29,8 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(&A != &B);
 
 
-    EXPECT_TRUE(A.optimizer == B.optimizer);
-    EXPECT_TRUE(&A.optimizer != &B.optimizer);
+    EXPECT_TRUE(*A.optimizer == *B.optimizer);
+    EXPECT_TRUE(A.optimizer != B.optimizer);
 
     EXPECT_TRUE(*A.layers[0] == *B.layers[0]);
     EXPECT_TRUE(A.layers[0] != B.layers[0]);

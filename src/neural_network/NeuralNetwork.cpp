@@ -183,7 +183,7 @@ int NeuralNetwork::isValid() const
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-    return this->optimizer == neuralNetwork.optimizer
+    return *this->optimizer == *neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [this, &neuralNetwork]()
         {

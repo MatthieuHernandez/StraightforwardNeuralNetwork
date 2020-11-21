@@ -9,7 +9,10 @@ using namespace snn;
 
 bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
 {
-    return typeid(*this).hash_code() == typeid(optimizer).hash_code();
+    auto a = typeid(*this).hash_code();
+    auto b = typeid(optimizer).hash_code();
+    return a == b;
+
 }
 
 bool NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const

@@ -40,7 +40,7 @@ bool StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimiz
     try
     {
         const auto& o = dynamic_cast<const StochasticGradientDescent&>(optimizer);
-        return typeid(*this).hash_code() == typeid(optimizer).hash_code()
+        return this->NeuralNetworkOptimizer::operator==(optimizer)
             && this->learningRate == o.learningRate
             && this->momentum == o.momentum;
     }

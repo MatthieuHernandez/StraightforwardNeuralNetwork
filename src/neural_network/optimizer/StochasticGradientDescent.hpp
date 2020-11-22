@@ -24,11 +24,13 @@ namespace snn::internal
         ~StochasticGradientDescent() = default;
         [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
 
-        void updateWeight(const float& error, float& weight, float& previousDeltaWeight, const float& lastInput) const override;
+        void updateWeights(SimpleNeuron& neuron, float error) const override;
+        void updateWeights(RecurrentNeuron& neuron, float error) const override;
+
         [[nodiscard]] int isValid() override;
 
-        bool operator==(const NeuralNetworkOptimizer& sgd) const override;
-        bool operator!=(const NeuralNetworkOptimizer& sgd) const override;
+        bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
+        bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
     };
 
     template <class Archive>

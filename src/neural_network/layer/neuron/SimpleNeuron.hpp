@@ -8,11 +8,10 @@ namespace snn::internal
     class SimpleNeuron final : public Neuron<SimpleNeuron>
     {
     private:
+        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
-
-        void updateWeights(const float error);
 
     public:
         SimpleNeuron() = default; // use restricted to Boost library only

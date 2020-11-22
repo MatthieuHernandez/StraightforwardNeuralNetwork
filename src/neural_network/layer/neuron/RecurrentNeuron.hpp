@@ -9,7 +9,7 @@ namespace snn::internal
     {
     private:
         friend class GatedRecurrentUnit;
-
+        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
@@ -20,7 +20,6 @@ namespace snn::internal
         float previousSum = 0;
 
         void reset();
-        void updateWeights(const float error);
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only

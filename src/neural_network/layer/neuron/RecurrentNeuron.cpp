@@ -41,26 +41,14 @@ std::vector<float>& RecurrentNeuron::backOutput(float error)
     {
         this->errors[w] = error * this->weights[w];
     }
-    this->updateWeights(error);
+    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
 void RecurrentNeuron::train(float error)
 {
     error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(error);
-}
-
-inline
-void RecurrentNeuron::updateWeights(const float error)
-{
-    size_t w;
-    for (w = 0; w < this->lastInputs.size(); ++w)
-    {
-        this->optimizer->updateWeight(error, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
-    }
-    this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-    this->optimizer->updateWeight(this->recurrentError, this->weights[w], this->previousDeltaWeights[w], this->previousOutput);
+    this->optimizer->updateWeights(*this, error);
 }
 
 inline

@@ -19,7 +19,6 @@ NeuralNetworkOptimizerModel snn::StochasticGradientDescent(float learningRate, f
     return model;
 }
 
-
 shared_ptr<NeuralNetworkOptimizer> NeuralNetworkOptimizerFactory::build(const NeuralNetworkOptimizerModel& model)
 {
     switch (model.type)

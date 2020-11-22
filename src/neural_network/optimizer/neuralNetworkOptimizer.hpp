@@ -3,8 +3,11 @@
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/access.hpp>
 
-namespace snn
+namespace snn::internal
 {
+    class SimpleNeuron;
+    class RecurrentNeuron;
+
     class NeuralNetworkOptimizer
     {
     private:
@@ -15,9 +18,10 @@ namespace snn
     public:
         NeuralNetworkOptimizer() = default;
         virtual ~NeuralNetworkOptimizer() = default;
-        virtual std::shared_ptr<NeuralNetworkOptimizer> clone() const = 0;
+        [[nodiscard]] virtual std::shared_ptr<NeuralNetworkOptimizer> clone() const = 0;
 
-        virtual void updateWeight(const float& error, float& weight, float& previousDeltaWeight, const float& lastInput) const = 0;
+        virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
+        virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
 
         [[nodiscard]] virtual int isValid() = 0;
 

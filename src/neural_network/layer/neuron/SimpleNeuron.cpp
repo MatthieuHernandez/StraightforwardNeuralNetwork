@@ -32,7 +32,7 @@ vector<float>& SimpleNeuron::backOutput(float error)
     {
         this->errors[w] = error * weights[w];
     }
-    this->updateWeights(error);
+    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
@@ -40,15 +40,7 @@ void SimpleNeuron::train(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 
-    this->updateWeights(error);
-}
-
-void SimpleNeuron::updateWeights(const float error)
-{
-    for (size_t w = 0; w < this->weights.size(); ++w)
-    {
-        this->optimizer->updateWeight(error, this->weights[w], this->previousDeltaWeights[w], this->lastInputs[w]);
-    }
+    this->optimizer->updateWeights(*this, error);
 }
 
 int SimpleNeuron::isValid() const

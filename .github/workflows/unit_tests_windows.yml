@@ -11,7 +11,7 @@ jobs:
     - name: Checkout the project
       uses: actions/checkout@v2
     - name: Checkout msvc-dev-cmd
-      uses: ilammy/msvc-dev-cmd@v1.3.0
+      uses: ilammy/msvc-dev-cmd@v1.4.1
     - name: CMake
       run: |
         cd ./build

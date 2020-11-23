@@ -80,5 +80,10 @@ namespace snn
         ar & boost::serialization::base_object<NeuralNetwork>(*this);
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
+        ar & this->wantToStopTraining;
+        ar & this->currentIndex;
+        ar & this->isIdle;
+        ar & this->numberOfIteration;
+        ar & this->numberOfTrainingsBetweenTwoEvaluations;
     }
 }

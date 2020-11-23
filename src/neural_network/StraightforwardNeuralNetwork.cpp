@@ -103,8 +103,6 @@ void StraightforwardNeuralNetwork::train(Data& data)
                 this->output(data.getTrainingData(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
         }
         this->evaluate(data);
-        log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
-        log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
     }
 }
 
@@ -125,6 +123,8 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     {
         this->saveAs(autoSaveFilePath);
     }
+    log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
+    log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
 }
 
 inline
@@ -221,9 +221,14 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(string file
 
 bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
 {
-    return this->NeuralNetwork::operator==(neuralNetwork) 
+    return this->NeuralNetwork::operator==(neuralNetwork)
     && this->autoSaveFilePath == neuralNetwork.autoSaveFilePath
-    && this->autoSaveWhenBetter == neuralNetwork.autoSaveWhenBetter;
+    && this->autoSaveWhenBetter == neuralNetwork.autoSaveWhenBetter
+    && this->wantToStopTraining == neuralNetwork.wantToStopTraining
+    && this->currentIndex == neuralNetwork.currentIndex
+    && this->isIdle == neuralNetwork.isIdle
+    && this->numberOfIteration  == neuralNetwork.numberOfIteration
+    && this->numberOfTrainingsBetweenTwoEvaluations == neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
 bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const

@@ -12,7 +12,7 @@
 namespace snn::internal
 {
     template <class Derived>
-    class Neuron : public BaseNeuron<Derived>
+    class  Neuron : public BaseNeuron<Derived>
     {
     private:
         friend class boost::serialization::access;

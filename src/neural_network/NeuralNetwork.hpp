@@ -24,7 +24,7 @@ namespace snn::internal
     class NeuralNetwork : public StatisticAnalysis
     {
     private:
-        static bool isTheFirst;
+        static bool isTheFirst; // TODO: remplace by seed
         static void initialize();
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,

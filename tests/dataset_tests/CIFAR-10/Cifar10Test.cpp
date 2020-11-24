@@ -44,10 +44,12 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
         Input(3072),
         FullyConnected(200),
         FullyConnected(80),
+        FullyConnected(100),
+        FullyConnected(25),
         FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 300_s);
+    neuralNetwork.waitFor(1_ep || 240_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.24f);

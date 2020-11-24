@@ -75,7 +75,6 @@ void StraightforwardNeuralNetwork::startTraining(Data& data)
     if (!this->validData(data))
         throw std::runtime_error("Data has not the same format as the neural network");
     this->stopTraining();
-    this->isIdle = false;
     log<complete>("Start a new thread");
     this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
 }
@@ -84,6 +83,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 {
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
+    this->isIdle = false;
 
     this->evaluate(data);
 
@@ -111,8 +111,6 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     this->startTesting();
     for (this->currentIndex = 0; this->currentIndex < data.sets[testing].size; this->currentIndex++)
     {
-        if (this->wantToStopTraining)
-            return;
         if(data.needToEvaluateOnTestingData(this->currentIndex))
             this->evaluateOnce(data);
         else
@@ -167,6 +165,7 @@ void StraightforwardNeuralNetwork::stopTraining()
     }
     this->currentIndex = 0;
     this->numberOfIteration = 0;
+    this->wantToStopTraining = false;
     this->isIdle = true;
 }
 

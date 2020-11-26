@@ -15,10 +15,10 @@ TEST(Optimizer, FindRightValueIn20)
         FullyConnected(4, activation::tanh),
         FullyConnected(1, activation::sigmoid)
     },
-        StochasticGradientDescent(0.03f, 0.6f));
+        StochasticGradientDescent(0.01f, 0.4f));
 
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1.0_acc || 5_s);
+    neuralNetwork.waitFor(400_ms);
     neuralNetwork.stopTraining();
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();

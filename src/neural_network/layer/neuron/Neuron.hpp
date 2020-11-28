@@ -6,6 +6,7 @@
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
+#include "../../optimizer/Adam.hpp"
 #include "activation_function/ActivationFunction.hpp"
 #include "../../../tools/Tools.hpp"
 
@@ -25,7 +26,11 @@ namespace snn::internal
         std::vector<float> weights;
         float bias;
 
-        std::vector<float> previousDeltaWeights;
+        // TODO : find an easy way to move them in optimizer
+        std::vector<float> previousDeltaWeights; // only use for the SGD optimizer
+        std::vector<float> firstMomentWeights; // only use for the Adam optimizer
+        std::vector<float> secondRawMomentWeights; // only use for the Adam optimizer
+
         std::vector<float> lastInputs;
         std::vector<float> errors;
 

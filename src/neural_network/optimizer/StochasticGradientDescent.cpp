@@ -40,8 +40,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
-    neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) *
-        neuron.weights[w];
+    neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
     auto deltaWeights = this->learningRate * neuron.recurrentError * neuron.previousOutput;
     deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
@@ -52,9 +51,9 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
 int StochasticGradientDescent::isValid()
 {
     if (this->learningRate <= 0.0f || this->learningRate >= 1.0f)
-        return 103;
+        return 501;
     if (this->momentum < 0.0f || this->momentum > 1.0f)
-        return 104;
+        return 502;
     return 0;
 }
 

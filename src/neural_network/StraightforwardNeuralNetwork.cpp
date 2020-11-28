@@ -90,13 +90,14 @@ void StraightforwardNeuralNetwork::train(Data& data)
     for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
     {
         log<minimal>("Epoch: " + std::to_string(this->numberOfIteration));
-        
+
         data.shuffle();
 
-        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
-            this->currentIndex ++)
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining; this->currentIndex ++)
         {
-            if(data.needToLearnOnTrainingData(this->currentIndex))
+            if(this->optimizer->t < 100000)
+                this->optimizer->t++;
+            if (data.needToLearnOnTrainingData(this->currentIndex))
                 this->trainOnce(data.getTrainingData(this->currentIndex),
                                 data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
             else

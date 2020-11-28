@@ -10,9 +10,8 @@ using namespace internal;
 
 bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
 {
-    auto a = typeid(*this).hash_code();
-    auto b = typeid(optimizer).hash_code();
-    return a == b;
+    return typeid(*this).hash_code() == typeid(optimizer).hash_code()
+        && this->t == optimizer.t;
 
 }
 

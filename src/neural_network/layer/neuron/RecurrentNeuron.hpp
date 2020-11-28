@@ -10,6 +10,7 @@ namespace snn::internal
     private:
         friend class GatedRecurrentUnit;
         friend class StochasticGradientDescent;
+        friend class Adam;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);

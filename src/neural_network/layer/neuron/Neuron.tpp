@@ -4,9 +4,11 @@ Neuron<Derived>::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimize
       numberOfInputs(model.numberOfInputs),
       activationFunction(model.activationFunction)
 {
-    this->previousDeltaWeights.resize(model.numberOfWeights, 0);
-    this->lastInputs.resize(model.numberOfInputs, 0);
-    this->errors.resize(model.numberOfInputs, 0);
+    this->previousDeltaWeights.resize(model.numberOfWeights, 0.0f);
+    this->firstMomentWeights.resize(model.numberOfWeights, 0.0f);
+    this->secondRawMomentWeights.resize(model.numberOfWeights, 0.0f);
+    this->lastInputs.resize(model.numberOfInputs, 0.0f);
+    this->errors.resize(model.numberOfInputs, 0.0f);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
     for (auto& w : this->weights)

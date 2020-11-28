@@ -3,6 +3,7 @@
 #include <vector>
 #include <boost/serialization/access.hpp>
 #include "../../optimizer/StochasticGradientDescent.hpp"
+#include "../../optimizer/Adam.hpp"
 
 namespace snn::internal
 {
@@ -13,6 +14,7 @@ namespace snn::internal
     {
     private:
         friend class StochasticGradientDescent;
+        friend class Adam;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);

@@ -70,7 +70,7 @@ void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
     nn.waitFor(1.0_acc || 7_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
-    auto acc = nn.getGlobalClusteringRate();
+    auto acc = nn.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(acc, 1.0);
     ASSERT_MAE(mae, 0.5);
 }

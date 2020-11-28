@@ -46,11 +46,11 @@ void StatisticAnalysis::stopTesting()
 
     this->meanAbsoluteErrorIsBetterThanPreviously = newMeanAbsoluteError < this->meanAbsoluteError || this->meanAbsoluteError < 0;
     if(this->meanAbsoluteErrorIsBetterThanPreviously)
-        this->meanAbsoluteErrorMax = newMeanAbsoluteError;
+        this->meanAbsoluteErrorMin = newMeanAbsoluteError;
 
     this->rootMeanSquaredErrorIsBetterThanPreviously = newRootMeanSquaredError < this->rootMeanSquaredError || this->meanAbsoluteError < 0;
     if(this->rootMeanSquaredErrorIsBetterThanPreviously)
-        this->rootMeanSquaredErrorMax = newMeanAbsoluteError;
+        this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
 
     this->globalClusteringRate = newGlobalClusteringRate;
     this->weightedClusteringRate = newWeightedClusteringRate;
@@ -249,6 +249,31 @@ float StatisticAnalysis::getRootMeanSquaredError() const
     return this->rootMeanSquaredError;
 }
 
+float StatisticAnalysis::getGlobalClusteringRateMax() const
+{
+    return this->globalClusteringRateMax;
+}
+
+float StatisticAnalysis::getWeightedClusteringRateMax() const
+{
+    return this->weightedClusteringRateMax;
+}
+
+float StatisticAnalysis::getF1ScoreMax() const
+{
+    return this->f1ScoreMax;
+}
+
+float StatisticAnalysis::getMeanAbsoluteErrorMin() const
+{
+    return this->meanAbsoluteErrorMin;
+}
+
+float StatisticAnalysis::getRootMeanSquaredErrorMin() const
+{
+    return this->rootMeanSquaredErrorMin;
+}
+
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
 {
     return this->clusters == sa.clusters
@@ -262,8 +287,8 @@ bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
         && this->globalClusteringRateMax == sa.globalClusteringRateMax
         && this->weightedClusteringRateMax == sa.weightedClusteringRateMax
         && this->f1ScoreMax == sa.f1ScoreMax
-        && this->meanAbsoluteErrorMax  == sa.meanAbsoluteErrorMax
-        && this->rootMeanSquaredErrorMax == sa.rootMeanSquaredErrorMax
+        && this->meanAbsoluteErrorMin  == sa.meanAbsoluteErrorMin
+        && this->rootMeanSquaredErrorMin == sa.rootMeanSquaredErrorMin
         && this->globalClusteringRateIsBetterThanPreviously == sa.globalClusteringRateIsBetterThanPreviously
         && this->weightedClusteringRateIsBetterThanPreviously == sa.weightedClusteringRateIsBetterThanPreviously
         && this->f1ScoreIsBetterThanPreviously == sa.f1ScoreIsBetterThanPreviously

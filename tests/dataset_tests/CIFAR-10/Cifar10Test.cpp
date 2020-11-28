@@ -42,8 +42,6 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3072),
-        FullyConnected(200),
-        FullyConnected(80),
         FullyConnected(100),
         FullyConnected(25),
         FullyConnected(10)
@@ -54,19 +52,3 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.24f);
 }
-
-/*TEST_F(Cifar10Test, trainNeuralNetwork_49)
-{
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(32, 32, 3),
-        Convolution(4,16),
-        FullyConnected(60),
-        FullyConnected(10)
-    });
-    cout << "number of neurons: " << neuralNetwork.getNumberOfNeurons() << endl;
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(3_ep);
-    neuralNetwork.stopTraining();
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.24f);
-}*/

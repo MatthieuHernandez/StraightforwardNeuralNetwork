@@ -79,7 +79,7 @@ void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
     nn.waitFor(1.0_acc || 8_s);
     nn.stopTraining();
     auto mae = nn.getMeanAbsoluteError();
-    auto acc = nn.getGlobalClusteringRate();
+    auto acc = nn.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(acc, 1.0);
     ASSERT_MAE(mae, d.getPrecision());
 }

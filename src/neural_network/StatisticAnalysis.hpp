@@ -48,8 +48,8 @@ namespace snn::internal
         float globalClusteringRateMax = -1.0f;
         float weightedClusteringRateMax = -1.0f;
         float f1ScoreMax = -1.0f;
-        float meanAbsoluteErrorMax = -1.0f;
-        float rootMeanSquaredErrorMax = -1.0f;
+        float meanAbsoluteErrorMin = -1.0f;
+        float rootMeanSquaredErrorMin = -1.0f;
         
         float computeGlobalClusteringRate() const;
         float computeWeightedClusteringRate() const;
@@ -90,6 +90,12 @@ namespace snn::internal
         float getMeanAbsoluteError() const;
         float getRootMeanSquaredError() const;
 
+        float getGlobalClusteringRateMax() const;
+        float getWeightedClusteringRateMax() const;
+        float getF1ScoreMax() const;
+        float getMeanAbsoluteErrorMin() const;
+        float getRootMeanSquaredErrorMin() const;
+
         bool operator==(const StatisticAnalysis& sa) const;
         bool operator!=(const StatisticAnalysis& sa) const;
     };
@@ -108,8 +114,8 @@ namespace snn::internal
         ar & this->globalClusteringRateMax;
         ar & this->weightedClusteringRateMax;
         ar & this->f1ScoreMax;
-        ar & this->meanAbsoluteErrorMax;
-        ar & this->rootMeanSquaredErrorMax;
+        ar & this->meanAbsoluteErrorMin;
+        ar & this->rootMeanSquaredErrorMin;
         ar & this->globalClusteringRateIsBetterThanPreviously;
         ar & this->weightedClusteringRateIsBetterThanPreviously;
         ar & this->f1ScoreIsBetterThanPreviously;

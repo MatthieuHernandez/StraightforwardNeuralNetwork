@@ -26,7 +26,7 @@ int regressionExample()
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
-    float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it
     vector<float> expectedOutput = data.getOutputs(snn::testing, 0);
 

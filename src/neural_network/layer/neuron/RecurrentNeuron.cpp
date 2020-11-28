@@ -8,7 +8,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(RecurrentNeuron)
 
-RecurrentNeuron::RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer)
+RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {
 }
@@ -41,33 +41,14 @@ std::vector<float>& RecurrentNeuron::backOutput(float error)
     {
         this->errors[w] = error * this->weights[w];
     }
-    this->updateWeights(error);
+    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
 void RecurrentNeuron::train(float error)
 {
     error = error * outputFunction->derivative(this->sum);
-    this->updateWeights(error);
-}
-
-inline
-void RecurrentNeuron::updateWeights(const float error)
-{
-    int w;
-    for (w = 0; w < (int)this->lastInputs.size(); ++w)
-    {
-        auto deltaWeights = this->optimizer->learningRate * error * this->lastInputs[w];
-        deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-        this->weights[w] += deltaWeights;
-        this->previousDeltaWeights[w] = deltaWeights;
-    }
-    this->recurrentError = error + this->recurrentError * outputFunction->derivative(this->previousSum) * this->weights[w];
-
-    auto deltaWeights = this->optimizer->learningRate * this->recurrentError * this->previousOutput;
-    deltaWeights += this->optimizer->momentum * this->previousDeltaWeights[w];
-    this->weights[w] += deltaWeights;
-    this->previousDeltaWeights[w] = deltaWeights;
+    this->optimizer->updateWeights(*this, error);
 }
 
 inline
@@ -85,24 +66,16 @@ int RecurrentNeuron::isValid() const
     return this->Neuron::isValid();
 }
 
-bool RecurrentNeuron::operator==(const BaseNeuron& neuron) const
+bool RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const
 {
-    try
-    {
-        const auto& n = dynamic_cast<const RecurrentNeuron&>(neuron);
         return this->Neuron::operator==(neuron)
-            && this->lastOutput == n.lastOutput
-            && this->previousOutput == n.previousOutput
-            && this->recurrentError == n.recurrentError
-            && this->previousSum == n.previousSum;
-    }
-    catch (bad_cast&)
-    {
-        return false;
-    }
+            && this->lastOutput == neuron.lastOutput
+            && this->previousOutput == neuron.previousOutput
+            && this->recurrentError == neuron.recurrentError
+            && this->previousSum == neuron.previousSum;
 }
 
-bool RecurrentNeuron::operator!=(const BaseNeuron& neuron) const
+bool RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const
 {
     return !(*this == neuron);
 }

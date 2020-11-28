@@ -11,7 +11,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-vector<ActivationFunction*> ActivationFunction::activationFunctions;
+vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions;
 
 ActivationFunction::ActivationFunction(float min, float max)
     : min(min), max(max)
@@ -21,15 +21,15 @@ ActivationFunction::ActivationFunction(float min, float max)
 void ActivationFunction::initialize()
 {
     activationFunctions.reserve(6);
-    activationFunctions.push_back(new Sigmoid());
-    activationFunctions.push_back(new ImprovedSigmoid());
-    activationFunctions.push_back(new Tanh());
-    activationFunctions.push_back(new RectifiedLinearUnit());
-    activationFunctions.push_back(new Gaussian());
-    activationFunctions.push_back(new Identity());
+    activationFunctions.emplace_back(new Sigmoid());
+    activationFunctions.emplace_back(new ImprovedSigmoid());
+    activationFunctions.emplace_back(new Tanh());
+    activationFunctions.emplace_back(new RectifiedLinearUnit());
+    activationFunctions.emplace_back(new Gaussian());
+    activationFunctions.emplace_back(new Identity());
 }
 
-ActivationFunction* ActivationFunction::get(activation type)
+shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
 {
     switch (type)
     {

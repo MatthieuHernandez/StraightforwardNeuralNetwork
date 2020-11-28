@@ -8,13 +8,13 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(LocallyConnected1D)
 
-LocallyConnected1D::LocallyConnected1D(LayerModel& model, StochasticGradientDescent* optimizer)
+LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
 }
 
 inline
-unique_ptr<BaseLayer> LocallyConnected1D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> LocallyConnected1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<LocallyConnected1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)

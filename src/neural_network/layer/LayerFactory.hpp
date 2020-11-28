@@ -3,8 +3,8 @@
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "Layer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
-#include "../optimizer/OptimizerModel.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "../optimizer/LayerOptimizerModel.hpp"
 
 namespace snn
 {
@@ -24,7 +24,7 @@ namespace snn
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},
-            std::vector<OptimizerModel>()
+            std::vector<LayerOptimizerModel>()
         };
         return model;
     }
@@ -46,7 +46,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<OptimizerModel>(optimizers) ...}
+            {static_cast<LayerOptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -67,7 +67,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<OptimizerModel>(optimizers) ...}
+            {static_cast<LayerOptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -88,7 +88,7 @@ namespace snn
             -1,
             -1,
             std::vector<int>(),
-            {static_cast<OptimizerModel>(optimizers) ...}
+            {static_cast<LayerOptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -112,7 +112,7 @@ namespace snn
             numberOfLocallyConnected,
             sizeOfLocalMatrix,
             std::vector<int>(),
-            {static_cast<OptimizerModel>(optimizers) ...}
+            {static_cast<LayerOptimizerModel>(optimizers) ...}
 
         };
         return model;
@@ -135,7 +135,7 @@ namespace snn
             numberOfConvolution,
             sizeOfConvolutionMatrix,
             std::vector<int>(),
-            {static_cast<OptimizerModel>(optimizers) ...}
+            {static_cast<LayerOptimizerModel>(optimizers) ...}
         };
         return model;
     }
@@ -147,11 +147,11 @@ namespace snn
         {
         private:
             static std::unique_ptr<BaseLayer> build(LayerModel& model, std::vector<int>& shapeOfInput,
-                                                    StochasticGradientDescent* optimizer);
+                                                    std::shared_ptr<NeuralNetworkOptimizer> optimizer);
 
         public:
             static void build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::vector<LayerModel>& models,
-                              StochasticGradientDescent* optimizer);
+                              std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         };
     }
 }

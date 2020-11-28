@@ -3,8 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "FilterLayer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
-#include "neuron/Neuron.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
@@ -20,10 +19,10 @@ namespace snn::internal
 
     public :
         LocallyConnected2D() = default;  // use restricted to Boost library only
-        LocallyConnected2D(LayerModel& model, StochasticGradientDescent* optimizer);
+        LocallyConnected2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~LocallyConnected2D() = default;
         LocallyConnected2D(const LocallyConnected2D&) = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;

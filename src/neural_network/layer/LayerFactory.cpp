@@ -58,7 +58,7 @@ int computeNumberOfNeuronsForConvolution1D(int numberOfConvolution, int sizeOfCo
 
 inline
 unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
-                                          StochasticGradientDescent* optimizer)
+                                          shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
 
@@ -170,7 +170,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
 }
 
 void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerModel>& models,
-                         StochasticGradientDescent* optimizer)
+                         shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     if (models.size() > 1000)
         throw InvalidArchitectureException("Too much layers.");

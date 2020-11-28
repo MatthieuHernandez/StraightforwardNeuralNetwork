@@ -15,7 +15,7 @@ Dropout::Dropout(const float value)
     this->reverseValue = 1.0f - this->value;
 }
 
-std::unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
+unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
 {
     return make_unique<Dropout>(*this);
 }
@@ -35,13 +35,12 @@ void Dropout::applyAfterForBackpropagation(std::vector<float>& outputs)
     }
 }
 
-bool Dropout::operator==(const Optimizer& optimizer) const
+bool Dropout::operator==(const LayerOptimizer& optimizer) const
 {
     try
     {
         const auto& o = dynamic_cast<const Dropout&>(optimizer);
-        return this->LayerOptimizer::operator==(optimizer)
-            && this->value == o.value
+        return this->value == o.value
             && this->reverseValue == o.reverseValue;
     }
     catch (bad_cast&)
@@ -50,7 +49,7 @@ bool Dropout::operator==(const Optimizer& optimizer) const
     }
 }
 
-bool Dropout::operator!=(const Optimizer& optimizer) const
+bool Dropout::operator!=(const LayerOptimizer& optimizer) const
 {
     return !(*this == optimizer);
 }

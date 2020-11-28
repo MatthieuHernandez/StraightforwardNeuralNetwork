@@ -14,14 +14,14 @@ TEST(Optimizer, FindRightValueIn20)
         Input(20),
         FullyConnected(4, activation::tanh),
         FullyConnected(1, activation::sigmoid)
-    });
-    neuralNetwork.optimizer.momentum = 0.6f;
+    },
+        StochasticGradientDescent(0.01f, 0.4f));
 
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1.0_acc || 5_s);
+    neuralNetwork.waitFor(1.00_acc || 3_s);
     neuralNetwork.stopTraining();
     auto mae = neuralNetwork.getMeanAbsoluteError();
-    auto acc = neuralNetwork.getGlobalClusteringRate();
+    auto acc = neuralNetwork.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(acc, 1.0f);
     ASSERT_MAE(mae, 0.6f);
 }

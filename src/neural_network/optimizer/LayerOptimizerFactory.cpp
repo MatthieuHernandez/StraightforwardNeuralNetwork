@@ -7,25 +7,25 @@ using namespace snn;
 using namespace internal;
 
 
-OptimizerModel snn::Dropout(float value)
+LayerOptimizerModel snn::Dropout(float value)
 {
-    const OptimizerModel model
+    const LayerOptimizerModel model
     {
-      dropout,
-      value
+        layerOptimizerType::dropout,
+        value
     };
     return model;
 }
 
 
-std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(OptimizerModel& model)
+std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model)
 {
     switch (model.type)
     {
-    case dropout:
+    case layerOptimizerType::dropout:
         return make_unique<Dropout>(model.value);
     default:
-        throw InvalidArchitectureException("Optimizer type is not implemented.");
+        throw InvalidArchitectureException("Layer optimizer type is not implemented.");
     }
 }
 

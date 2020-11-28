@@ -8,7 +8,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(FilterLayer)
 
-FilterLayer::FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer)
+FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
      : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;

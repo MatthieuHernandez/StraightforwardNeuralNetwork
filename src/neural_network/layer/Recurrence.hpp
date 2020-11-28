@@ -17,10 +17,10 @@ namespace snn::internal
 
     public:
         Recurrence() = default;  // use restricted to Boost library only
-        Recurrence(LayerModel& model, StochasticGradientDescent* optimizer);
+        Recurrence(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Recurrence(const Recurrence&) = default;
         ~Recurrence() = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
     };
 
     template <class Archive>

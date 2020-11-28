@@ -1,7 +1,5 @@
-#include "Layer.hpp"
-
 template <class N>
-Layer<N>::Layer(LayerModel& model, StochasticGradientDescent* optimizer)
+Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     this->numberOfInputs = model.numberOfInputs;
     this->neurons.reserve(model.numberOfNeurons);
@@ -85,9 +83,9 @@ int Layer<N>::isValid() const
 }
 
 template <class N>
-BaseNeuron* Layer<N>::getNeuron(int index)
+void* Layer<N>::getNeuron(int index)
 {
-    return static_cast<BaseNeuron*>(&this->neurons[index]);
+    return static_cast<void*>(&this->neurons[index]);
 }
 
 template <class N>
@@ -118,7 +116,7 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
 {
     try
     {
-        const Layer& l = dynamic_cast<const Layer&>(layer);
+        const auto& l = dynamic_cast<const Layer&>(layer);
 
         return typeid(*this).hash_code() == typeid(layer).hash_code()
             && this->numberOfInputs == l.numberOfInputs

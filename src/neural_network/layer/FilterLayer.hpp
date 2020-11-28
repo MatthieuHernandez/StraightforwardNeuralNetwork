@@ -2,7 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Layer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
@@ -24,8 +24,8 @@ namespace snn::internal
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only
-        FilterLayer(LayerModel& model, StochasticGradientDescent* optimizer);
-        ~FilterLayer() = default;
+        FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
+        virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;

@@ -16,34 +16,32 @@ TEST(SaveNeuralNetwork, EqualTest)
         GruLayer(3),
         Recurrence(4)
     };
-    StraightforwardNeuralNetwork A(structureOfNetwork);
-    StraightforwardNeuralNetwork C(structureOfNetwork);
-    A.optimizer.learningRate = 0.03f;
-    A.optimizer.momentum = 0.78f;
-    C.optimizer.learningRate = 0.03f;
-    C.optimizer.momentum = 0.78f;
+    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
+    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
     StraightforwardNeuralNetwork B = A;
 
-    ASSERT_EQ(A.isValid(), 0) << "A is invalid";
-    ASSERT_EQ(B.isValid(), 0) << "B is invalid";
+    ASSERT_EQ(A.isValid(), 0);
+    ASSERT_EQ(B.isValid(), 0);
 
     EXPECT_TRUE(A == B);
     EXPECT_TRUE(&A != &B);
 
-    EXPECT_TRUE(&A != &B) << "&A != &B";
+    EXPECT_TRUE(&A != &B);
 
 
-    EXPECT_TRUE(A.optimizer == B.optimizer) << "Value : A.optimiser == B.optimiser";
-    EXPECT_TRUE(&A.optimizer != &B.optimizer) << "Address : A.optimiser != B.optimiser";
+    EXPECT_TRUE(*A.optimizer == *B.optimizer);
+    EXPECT_TRUE(A.optimizer != B.optimizer);
 
-    EXPECT_TRUE(*A.layers[0] == *B.layers[0]) << "Value : A.layers[0] == B.layers[0]";
-    EXPECT_TRUE(A.layers[0] != B.layers[0]) << "Address : A.layers[0] != B.layers[0]";
+    EXPECT_TRUE(*A.layers[0] == *B.layers[0]);
+    EXPECT_TRUE(A.layers[0] != B.layers[0]);
 
-    EXPECT_TRUE(*A.layers[0]->getNeuron(0) == *B.layers[0]->getNeuron(0)) << "Value : A.Layers[0].getNeuron(0) == B.Layers[0].getNeuron(0)";
-    EXPECT_TRUE(A.layers[0]->getNeuron(0) != B.layers[0]->getNeuron(0)) << "Address : A.Layers[0].getNeuron(0) != B.Layers[0].getNeuron(0)";
+    auto* neuronA = static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0));
+    auto* neuronB = static_cast<internal::SimpleNeuron*>(B.layers[0]->getNeuron(0));
+    EXPECT_TRUE(*neuronA == *neuronB);
+    EXPECT_TRUE(neuronA != neuronB);
 
     //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
-    EXPECT_TRUE(&A.optimizer == &*static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer);
+    EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer.get());
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
@@ -108,9 +106,8 @@ TEST(SaveNeuralNetwork, Save)
         LocallyConnected(2, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
         GruLayer(2)
-    });
-    A.optimizer.learningRate = 0.03f;
-    A.optimizer.momentum = 0.78f;
+    },
+        StochasticGradientDescent(0.03f, 0.78f));
 
     A.saveAs("./testSave.snn");
 

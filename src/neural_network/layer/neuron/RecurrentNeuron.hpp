@@ -5,11 +5,11 @@
 
 namespace snn::internal
 {
-    class RecurrentNeuron final : public Neuron
+    class RecurrentNeuron final : public Neuron<RecurrentNeuron>
     {
-    private:    
+    private:
         friend class GatedRecurrentUnit;
-
+        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
@@ -20,22 +20,21 @@ namespace snn::internal
         float previousSum = 0;
 
         void reset();
-        void updateWeights(const float error) override;
 
     public:
         RecurrentNeuron() = default; // use restricted to Boost library only
-        RecurrentNeuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset) override;
-        [[nodiscard]] std::vector<float>& backOutput(float error) override;
-        void train(float error) override;
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
+        [[nodiscard]] std::vector<float>& backOutput(float error);
+        void train(float error);
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] int isValid() const;
 
-        bool operator==(const BaseNeuron& neuron) const override;
-        bool operator!=(const BaseNeuron& neuron) const override;
+        bool operator==(const RecurrentNeuron& neuron) const;
+        bool operator!=(const RecurrentNeuron& neuron) const;
     };
 
     template <class Archive>

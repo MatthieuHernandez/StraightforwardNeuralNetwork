@@ -4,6 +4,7 @@
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
+#include "optimizer/NeuralNetworkOptimizerFactory.hpp"
 
 using namespace std;
 using namespace snn;
@@ -21,21 +22,22 @@ void NeuralNetwork::initialize()
     isTheFirst = false;
 }
 
-NeuralNetwork::NeuralNetwork(vector<LayerModel>& models)
+NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
 {
     if (isTheFirst)
         this->initialize();
-    LayerFactory::build(this->layers, models, &this->optimizer);
+    this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
+    LayerFactory::build(this->layers, architecture, this->optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
-      optimizer(neuralNetwork.optimizer)
+      optimizer(neuralNetwork.optimizer->clone())
 {
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
-        this->layers.push_back(layer->clone(&this->optimizer));
+        this->layers.push_back(layer->clone(this->optimizer));
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
@@ -166,15 +168,13 @@ int NeuralNetwork::isValid() const
     || this->getNumberOfLayers() > 1000)
         return 102;
 
-    if (this->optimizer.learningRate <= 0.0f || this->optimizer.learningRate >= 1.0f)
-        return 103;
-
-    if (this->optimizer.momentum < 0.0f || this->optimizer.momentum > 1.0f)
-        return 104;
+    int err = this->optimizer->isValid();
+    if (err != 0)
+        return err;
 
     for (const auto& layer : this->layers)
     {
-        int err = layer->isValid();
+        err = layer->isValid();
         if(err != 0)
             return err;
     }
@@ -183,7 +183,7 @@ int NeuralNetwork::isValid() const
 
 bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
 {
-    return this->optimizer == neuralNetwork.optimizer
+    return *this->optimizer == *neuralNetwork.optimizer
         && this->layers.size() == neuralNetwork.layers.size()
         && [this, &neuralNetwork]()
         {

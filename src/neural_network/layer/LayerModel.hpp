@@ -1,6 +1,6 @@
 #pragma once
 #include "LayerType.hpp"
-#include "../optimizer/OptimizerModel.hpp"
+#include "../optimizer/LayerOptimizerModel.hpp"
 #include "neuron/NeuronModel.hpp"
 
 namespace snn
@@ -14,6 +14,6 @@ namespace snn
         int numberOfFilters;
         int sizeOfFilerMatrix;
         std::vector<int> shapeOfInput;
-        std::vector<OptimizerModel> optimizers;
+        std::vector<LayerOptimizerModel> optimizers;
     };
 }

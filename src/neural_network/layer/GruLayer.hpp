@@ -3,7 +3,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "SimpleLayer.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/GatedRecurrentUnit.hpp"
 
 namespace snn::internal
@@ -17,10 +17,10 @@ namespace snn::internal
 
     public:
         GruLayer() = default;  // use restricted to Boost library only
-        GruLayer(LayerModel& model, StochasticGradientDescent* optimizer);
+        GruLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         GruLayer(const GruLayer&) = default;
         ~GruLayer() = default;
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
     };
 
     template <class Archive>

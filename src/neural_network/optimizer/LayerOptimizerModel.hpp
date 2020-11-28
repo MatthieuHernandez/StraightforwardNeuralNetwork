@@ -3,9 +3,9 @@
 
 namespace snn
 {
-    struct OptimizerModel
+    struct LayerOptimizerModel
     {
-        optimizerType type;
+        layerOptimizerType type;
         float value;
     };
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
@@ -6,10 +7,12 @@
 #include "NeuronModel.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
+#include "../../../tools/Tools.hpp"
 
 namespace snn::internal
 {
-    class Neuron : public BaseNeuron
+    template <class Derived>
+    class  Neuron : public BaseNeuron<Derived>
     {
     private:
         friend class boost::serialization::access;
@@ -29,33 +32,32 @@ namespace snn::internal
         float sum = 0;
 
         activation activationFunction;
-        ActivationFunction* outputFunction;
+        std::shared_ptr<ActivationFunction> outputFunction;
 
-        float randomInitializeWeight(int numberOfInputs) const;
+        static float randomInitializeWeight(int numberOfInputs);
 
     public:
         Neuron() = default; // use restricted to Boost library only
-        Neuron(NeuronModel model, StochasticGradientDescent* optimizer);
+        Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
-        virtual ~Neuron() = default;
+        ~Neuron() = default;
 
-        StochasticGradientDescent* optimizer;
+        [[nodiscard]] int isValid() const;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] int getNumberOfParameters() const;
+        [[nodiscard]] int getNumberOfInputs() const;
 
-        [[nodiscard]] std::vector<float> getWeights() const override;
-        [[nodiscard]] int getNumberOfParameters() const override;
-        [[nodiscard]] int getNumberOfInputs() const override;
-
-        bool operator==(const BaseNeuron& neuron) const override;
-        bool operator!=(const BaseNeuron& neuron) const override;
+        bool operator==(const Neuron& neuron) const;
+        bool operator!=(const Neuron& neuron) const;
     };
 
+    template <class Derived>
     template <class Archive>
-    void Neuron::serialize(Archive& ar, unsigned version)
+    void Neuron<Derived>::serialize(Archive& ar, unsigned version)
     {
-         boost::serialization::void_cast_register<Neuron, BaseNeuron>();
-        ar & boost::serialization::base_object<BaseNeuron>(*this);
+        boost::serialization::void_cast_register<Neuron, BaseNeuron<Derived>>();
+        ar & boost::serialization::base_object<BaseNeuron<Derived>>(*this);
         ar & this->numberOfInputs;
         ar & this->weights;
         ar & this->bias;
@@ -65,6 +67,7 @@ namespace snn::internal
         ar & this->sum;
         ar & this->activationFunction;
         this->outputFunction = ActivationFunction::get(activationFunction);
-        ar & this->optimizer;
     }
+
+    #include "Neuron.tpp"
 }

@@ -7,7 +7,7 @@
 #include "LayerModel.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
 #include "../optimizer/LayerOptimizerFactory.hpp"
-#include "../optimizer/StochasticGradientDescent.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Dropout.hpp"
 
 namespace snn::internal
@@ -27,11 +27,11 @@ namespace snn::internal
 
     public:
         Layer() = default; // use restricted to Boost library only
-        Layer(LayerModel& model, StochasticGradientDescent* optimizer);
+        Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
 
-        std::unique_ptr<BaseLayer> clone(StochasticGradientDescent* optimizer) const override = 0;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
@@ -40,7 +40,7 @@ namespace snn::internal
         std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
-        [[nodiscard]] BaseNeuron* getNeuron(int index) override final;
+        [[nodiscard]] void* getNeuron(int index) override final;
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;

@@ -1,3 +1,4 @@
+#include <boost/serialization/export.hpp>
 #include "Layer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 #include "neuron/RecurrentNeuron.hpp"

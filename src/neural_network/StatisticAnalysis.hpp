@@ -48,14 +48,14 @@ namespace snn::internal
         float globalClusteringRateMax = -1.0f;
         float weightedClusteringRateMax = -1.0f;
         float f1ScoreMax = -1.0f;
-        float meanAbsoluteErrorMax = -1.0f;
-        float rootMeanSquaredErrorMax = -1.0f;
+        float meanAbsoluteErrorMin = -1.0f;
+        float rootMeanSquaredErrorMin = -1.0f;
         
-        float computeGlobalClusteringRate();
-        float computeWeightedClusteringRate();
-        float computeF1Score();
-        float computeMeanAbsoluteError();
-        float computeRootMeanSquaredError();
+        float computeGlobalClusteringRate() const;
+        float computeWeightedClusteringRate() const;
+        float computeF1Score() const;
+        float computeMeanAbsoluteError() const;
+        float computeRootMeanSquaredError() const;
 
     protected:
         StatisticAnalysis() = default;
@@ -90,6 +90,12 @@ namespace snn::internal
         float getMeanAbsoluteError() const;
         float getRootMeanSquaredError() const;
 
+        float getGlobalClusteringRateMax() const;
+        float getWeightedClusteringRateMax() const;
+        float getF1ScoreMax() const;
+        float getMeanAbsoluteErrorMin() const;
+        float getRootMeanSquaredErrorMin() const;
+
         bool operator==(const StatisticAnalysis& sa) const;
         bool operator!=(const StatisticAnalysis& sa) const;
     };
@@ -100,5 +106,20 @@ namespace snn::internal
         ar & this->clusters;
         ar & this->numberOfDataWellClassified;
         ar & this->numberOfDataMisclassified;
+        ar & this->globalClusteringRate;
+        ar & this->weightedClusteringRate;
+        ar & this->f1Score;
+        ar & this->meanAbsoluteError;
+        ar & this->rootMeanSquaredError;
+        ar & this->globalClusteringRateMax;
+        ar & this->weightedClusteringRateMax;
+        ar & this->f1ScoreMax;
+        ar & this->meanAbsoluteErrorMin;
+        ar & this->rootMeanSquaredErrorMin;
+        ar & this->globalClusteringRateIsBetterThanPreviously;
+        ar & this->weightedClusteringRateIsBetterThanPreviously;
+        ar & this->f1ScoreIsBetterThanPreviously;
+        ar & this->meanAbsoluteErrorIsBetterThanPreviously;
+        ar & this->rootMeanSquaredErrorIsBetterThanPreviously;
     }
 }

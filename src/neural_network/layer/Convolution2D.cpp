@@ -8,13 +8,13 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Convolution2D)
 
-Convolution2D::Convolution2D(LayerModel& model, StochasticGradientDescent* optimizer)
+Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
 }
 
 inline
-unique_ptr<BaseLayer> Convolution2D::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> Convolution2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<Convolution2D>(*this);
     for (auto& neuron : layer->neurons)

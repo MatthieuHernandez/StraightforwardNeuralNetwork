@@ -1,49 +1,58 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <boost/serialization/access.hpp>
-#include "../../tools/ExtendedExpection.hpp"
+#include "../../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
 {
+    class NeuralNetworkOptimizer;
+
+    template <class Derived>
     class BaseNeuron
     {
     private:
+        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected:
-
-        virtual void updateWeights(const float error) = 0;
-
     public:
-        virtual ~BaseNeuron() = default;
+        BaseNeuron() = default;
+        BaseNeuron(std::shared_ptr<NeuralNetworkOptimizer> optimizer) : optimizer(optimizer) {}
+        ~BaseNeuron() = default;
+        
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs) { throw NotImplementedException(); }
-        [[nodiscard]] virtual float output(const std::vector<float>& inputs, bool reset) { throw NotImplementedException(); }
+        [[nodiscard]] float output(const std::vector<float>& inputs) { return static_cast<Derived*>(this)->output(inputs); }
+        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
 
-        [[nodiscard]] virtual std::vector<float>& backOutput(float error) = 0;
-        virtual void train(float error) = 0;
+        [[nodiscard]]  std::vector<float>& backOutput(float error) { return static_cast<Derived*>(this)->backOutput(error); }
+         void train(float error) { static_cast<Derived*>(this)->train(error); }
 
-        [[nodiscard]] virtual int isValid() const = 0;
+        [[nodiscard]]  int isValid() const { return static_cast<Derived*>(this)->isValid(); }
 
-        [[nodiscard]] virtual std::vector<float> getWeights() const = 0;
-        [[nodiscard]] virtual int getNumberOfParameters() const = 0;
-        [[nodiscard]] virtual int getNumberOfInputs() const = 0;
+        [[nodiscard]] std::vector<float> getWeights() { return static_cast<Derived*>(this)->getWeights(); }
+        [[nodiscard]] int getNumberOfParameters() { return static_cast<Derived*>(this)->getNumberOfParameters(); }
+        [[nodiscard]] int getNumberOfInputs() { return static_cast<Derived*>(this)->getNumberOfInputs(); }
 
-        virtual bool operator==(const BaseNeuron& neuron) const
+        bool operator==(const BaseNeuron& neuron) const
         {
-            return typeid(*this).hash_code() == typeid(neuron).hash_code();
+            return static_cast<Derived*>(this) == static_cast<Derived*>(neuron);
         }
 
-        virtual bool operator!=(const BaseNeuron& neuron) const
+        bool operator!=(const BaseNeuron& neuron) const
         {
             return !(*this == neuron);
         }
     };
 
+    
+    template <class Derived>
     template <class Archive>
-    void BaseNeuron::serialize(Archive& ar, unsigned version)
+    void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
     {
+        ar.template register_type<StochasticGradientDescent>();
+        ar & this->optimizer;
     }
 }

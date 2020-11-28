@@ -1,8 +1,8 @@
 #pragma once
 #include <memory>
 #include <boost/serialization/vector.hpp>
-#include "optimizer/StochasticGradientDescent.hpp"
-#include "layer/Layer.hpp"
+#include <boost/serialization/shared_ptr.hpp>
+#include "optimizer/NeuralNetworkOptimizer.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/FullyConnected.hpp"
 #include "layer/Convolution1D.hpp"
@@ -15,12 +15,16 @@
 #include "layer/LocallyConnected2D.hpp"
 
 
+namespace snn {
+    struct NeuralNetworkOptimizerModel;
+}
+
 namespace snn::internal
 {
     class NeuralNetwork : public StatisticAnalysis
     {
     private:
-        static bool isTheFirst;
+        static bool isTheFirst; // TODO: remplace by seed
         static void initialize();
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
@@ -50,7 +54,7 @@ namespace snn::internal
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
-        NeuralNetwork(std::vector<LayerModel>& architecture);
+        NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         ~NeuralNetwork() = default;
 
@@ -60,7 +64,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfNeurons() const;
         [[nodiscard]] int getNumberOfParameters() const;
 
-        StochasticGradientDescent optimizer;
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 
@@ -77,8 +81,6 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-        ar & this->optimizer.learningRate;
-        ar & this->optimizer.momentum;
         ar.template register_type<FullyConnected>();
         ar.template register_type<Recurrence>();
         ar.template register_type<GruLayer>();
@@ -87,5 +89,7 @@ namespace snn::internal
         ar.template register_type<LocallyConnected1D>();
         ar.template register_type<LocallyConnected2D>();
         ar & layers;
+        ar.template register_type<StochasticGradientDescent>();
+        ar & this->optimizer;
     }
 }

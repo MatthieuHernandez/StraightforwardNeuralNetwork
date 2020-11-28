@@ -7,12 +7,12 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(GruLayer)
 
-GruLayer::GruLayer(LayerModel& model, StochasticGradientDescent* optimizer)
+GruLayer::GruLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
      : SimpleLayer(model, optimizer)
 {
 }
 
-unique_ptr<BaseLayer> GruLayer::clone(StochasticGradientDescent* optimizer) const
+unique_ptr<BaseLayer> GruLayer::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<GruLayer>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)

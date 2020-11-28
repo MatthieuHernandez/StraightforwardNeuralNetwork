@@ -7,6 +7,8 @@
 #include "../data/Data.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
+#include "optimizer/NeuralNetworkOptimizerFactory.hpp"
+
 
 namespace snn
 {
@@ -30,7 +32,10 @@ namespace snn
 
     public:
         StraightforwardNeuralNetwork() = default; // use restricted to Boost library only
-        explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture);
+        explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
+                                              NeuralNetworkOptimizerModel optimizer = {
+                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03f, 0.0f
+                                              });
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
         ~StraightforwardNeuralNetwork();
 
@@ -75,5 +80,10 @@ namespace snn
         ar & boost::serialization::base_object<NeuralNetwork>(*this);
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
+        ar & this->wantToStopTraining;
+        ar & this->currentIndex;
+        ar & this->isIdle;
+        ar & this->numberOfIteration;
+        ar & this->numberOfTrainingsBetweenTwoEvaluations;
     }
 }

@@ -24,7 +24,7 @@ int classificationExample()
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
-    float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0)); // consult neural network to test it
     int expectedClassNumber = data.getLabel(snn::testing, 0); // return position of neuron with highest output
     if (accuracy == 100

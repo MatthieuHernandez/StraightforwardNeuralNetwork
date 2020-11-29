@@ -28,13 +28,14 @@ void Adam::updateWeights(SimpleNeuron& neuron, float error) const
     {
         auto delta = error * neuron.lastInputs[w];
         auto m = this->beta1 * neuron.firstMomentWeights[w] + (1- this->beta1) * delta;
-        auto v = this->beta2 * neuron.secondRawMomentWeights[w] + (1 - this->beta2) * sqrtf(delta);
+        auto v = this->beta2 * neuron.secondRawMomentWeights[w] + (1 - this->beta2) * powf(delta, 2);
         auto correctedM = m / (1 - powf(m, this->t));
         auto correctedV = v / (1 -  powf(m, this->t));
         auto deltaWeights = this->learningRate * correctedM / (sqrtf(correctedV) + this->epsilon);
         neuron.weights[w] += deltaWeights;
         neuron.firstMomentWeights[w] = m;
         neuron.secondRawMomentWeights[w] = v;
+
     }
 }
 

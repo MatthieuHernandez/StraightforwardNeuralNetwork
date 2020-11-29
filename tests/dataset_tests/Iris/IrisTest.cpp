@@ -52,3 +52,19 @@ TEST_F(IrisTest, trainNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(accuracy, 0.98f);
 }
+
+TEST_F(IrisTest, trainWithAdam)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(4),
+        FullyConnected(15),
+        FullyConnected(5),
+        FullyConnected(3)
+    },
+        Adam());
+    neuralNetwork.startTraining(*data);
+    neuralNetwork.waitFor(0.98_acc || 2_s);
+    neuralNetwork.stopTraining();
+    auto accuracy = neuralNetwork.getGlobalClusteringRateMax();
+    ASSERT_ACCURACY(accuracy, 0.98f);
+}

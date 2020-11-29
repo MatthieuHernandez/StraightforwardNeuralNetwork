@@ -8,5 +8,9 @@ namespace snn
         neuralNetworkOptimizerType type;
         float learningRate;
         float momentum;
+        float beta1;
+        float beta2;
+        float epsilon;
+
     };
 }

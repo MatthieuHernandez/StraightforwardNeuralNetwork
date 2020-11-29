@@ -47,7 +47,7 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
         FullyConnected(10)
     });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
+    neuralNetwork.waitFor(1_ep || 35_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.76f);
@@ -62,8 +62,34 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
         FullyConnected(10)
         });
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
+    neuralNetwork.waitFor(1_ep || 35_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.75);
+}
+
+TEST_F(FashionMnistTest, adamComparaison)
+{
+    auto architecture = {
+        Input(784),
+        FullyConnected(150),
+        FullyConnected(70),
+        FullyConnected(10)
+    };
+
+    /*StraightforwardNeuralNetwork neuralNetworkSgd(architecture, StochasticGradientDescent());
+    neuralNetworkSgd.startTraining(*data);
+    neuralNetworkSgd.waitFor(1_ep || 35_s);
+    neuralNetworkSgd.stopTraining();*/
+
+    StraightforwardNeuralNetwork neuralNetworkAdam(architecture, StochasticGradientDescent());
+    neuralNetworkAdam.startTraining(*data);
+    neuralNetworkAdam.waitFor(1_ep || 35_s);
+    neuralNetworkAdam.stopTraining();
+
+    //auto sgdAccuracy = neuralNetworkSgd.getGlobalClusteringRate();
+    auto adamAccuracy = neuralNetworkAdam.getGlobalClusteringRate();
+    //ASSERT_ACCURACY(sgdAccuracy, 0.75);
+    ASSERT_ACCURACY(adamAccuracy, 0.75);
+    //ASSERT_TRUE(adamAccuracy > sgdAccuracy);
 }

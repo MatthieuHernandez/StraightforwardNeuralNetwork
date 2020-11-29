@@ -15,10 +15,10 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        float learningRate{};
-        float beta1{};
-        float beta2{};
-        float epsilon{};
+        float learningRate;
+        float beta1;
+        float beta2;
+        float epsilon;
 
         Adam() = default;
         Adam(float learningRate, float beta1, float beta2, float epsilon);

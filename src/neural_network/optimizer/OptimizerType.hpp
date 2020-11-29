@@ -9,5 +9,6 @@ namespace snn
     enum class neuralNetworkOptimizerType
     {
         stochasticGradientDescent = 0,
+        adam = 1
     };
 }

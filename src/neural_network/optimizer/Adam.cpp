@@ -9,7 +9,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Adam)
 
-Adam::Adam(const float learningRate = 0.001f, const float beta1 = 0.9f, const float beta2 = 0.999f, const float epsilon = 1e-8)
+Adam::Adam(const float learningRate = 0.001f, const float beta1 = 0.9f, const float beta2 = 0.999f, const float epsilon = 1e-8f)
     : learningRate(learningRate),
       beta1(beta1),
       beta2(beta2),

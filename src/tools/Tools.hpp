@@ -19,7 +19,14 @@ namespace snn
         complete = 2
     };
 
-    static constexpr logLevel verbose = minimal;
+    enum class debugLevel
+    {
+        none = 0,
+        debug = 1
+    };
+
+    static constexpr logLevel logVerbose = minimal;
+    static constexpr debugLevel debugVerbose = debugLevel::debug;
 }
 
 namespace snn::internal
@@ -44,8 +51,16 @@ namespace snn::internal
     template <logLevel T, typename... Targs>
     constexpr void log(Targs&&... messages)
     {
-        if constexpr (T > none && T <= verbose)
+        if constexpr (T > none && T <= logVerbose)
             (std::cout << ... << messages) << std::endl;
+    }
+
+    template <typename... Targs>
+    constexpr void debug(bool condition, Targs&&... messages)
+    {
+        if constexpr (debugVerbose == debugLevel::debug)
+            if(condition)
+                (std::cout << ... << messages) << std::endl;
     }
 
     template <typename T>

@@ -21,7 +21,7 @@ namespace snn::internal
         StochasticGradientDescent() = default;
         StochasticGradientDescent(float learningRate, float momentum);
         StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
-        ~StochasticGradientDescent() = default;
+        ~StochasticGradientDescent() override = default;
         [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
 
         void updateWeights(SimpleNeuron& neuron, float error) const override;

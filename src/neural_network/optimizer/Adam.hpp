@@ -23,7 +23,7 @@ namespace snn::internal
         Adam() = default;
         Adam(float learningRate, float beta1, float beta2, float epsilon);
         Adam(const Adam& sgd) = default;
-        ~Adam() = default;
+        ~Adam() override = default;
         [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
 
         void updateWeights(SimpleNeuron& neuron, float error) const override;

@@ -1,5 +1,4 @@
 #pragma once
-#include <limits>
 #include <vector>
 #include <boost/serialization/access.hpp>
 
@@ -50,12 +49,12 @@ namespace snn::internal
         float f1ScoreMax = -1.0f;
         float meanAbsoluteErrorMin = -1.0f;
         float rootMeanSquaredErrorMin = -1.0f;
-        
-        float computeGlobalClusteringRate() const;
-        float computeWeightedClusteringRate() const;
-        float computeF1Score() const;
-        float computeMeanAbsoluteError() const;
-        float computeRootMeanSquaredError() const;
+
+        [[nodiscard]] float computeGlobalClusteringRate() const;
+        [[nodiscard]] float computeWeightedClusteringRate() const;
+        [[nodiscard]] float computeF1Score() const;
+        [[nodiscard]] float computeMeanAbsoluteError() const;
+        [[nodiscard]] float computeRootMeanSquaredError() const;
 
     protected:
         StatisticAnalysis() = default;
@@ -63,6 +62,8 @@ namespace snn::internal
         virtual ~StatisticAnalysis() = default;
 
         void initialize(int numberOfCluster);
+
+        void setResultsAsNan();
 
         void evaluateOnceForRegression(const std::vector<float>& outputs, 
                                        const std::vector<float>& desiredOutputs,

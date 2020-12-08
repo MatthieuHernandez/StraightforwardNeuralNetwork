@@ -94,9 +94,16 @@ void StraightforwardNeuralNetwork::train(Data& data)
         data.shuffle();
 
         for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
-            this->currentIndex ++)
+             this->currentIndex ++)
         {
-            if(data.needToLearnOnTrainingData(this->currentIndex))
+            if (this->hasNan())
+            {
+                this->setResultsAsNan();
+                this->resetTrainingValues();
+                return;
+            }
+
+            if (data.needToLearnOnTrainingData(this->currentIndex))
                 this->trainOnce(data.getTrainingData(this->currentIndex),
                                 data.getTrainingOutputs(this->currentIndex), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
             else
@@ -111,6 +118,13 @@ void StraightforwardNeuralNetwork::evaluate(Data& data)
     this->startTesting();
     for (this->currentIndex = 0; this->currentIndex < data.sets[testing].size; this->currentIndex++)
     {
+        if (this->hasNan())
+        {
+            this->setResultsAsNan();
+            this->resetTrainingValues();
+            return;
+        }
+
         if(data.needToEvaluateOnTestingData(this->currentIndex))
             this->evaluateOnce(data);
         else
@@ -153,7 +167,6 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
     }
 }
 
-
 void StraightforwardNeuralNetwork::stopTraining()
 {
     this->wantToStopTraining = true;
@@ -163,16 +176,23 @@ void StraightforwardNeuralNetwork::stopTraining()
         this->thread.join();
         log<complete>("Thread closed");
     }
+    this->resetTrainingValues();
+}
+
+
+void StraightforwardNeuralNetwork::resetTrainingValues()
+{
     this->currentIndex = 0;
     this->numberOfIteration = 0;
     this->wantToStopTraining = false;
     this->isIdle = true;
 }
 
+
 void StraightforwardNeuralNetwork::waitFor(Wait wait) const
 {
     auto startWait = system_clock::now();
-    while (true)
+    while (!this->hasNan())
     {
         this_thread::sleep_for(1ms);
 

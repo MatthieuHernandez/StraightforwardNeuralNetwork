@@ -52,3 +52,23 @@ TEST_F(IrisTest, trainNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(accuracy, 0.98f);
 }
+
+TEST_F(IrisTest, correctlyNan)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(4),
+        FullyConnected(25),
+        FullyConnected(3)
+    },
+        StochasticGradientDescent(0.99f, 0.99f));
+    neuralNetwork.startTraining(*data);
+    neuralNetwork.waitFor(2_s);
+    neuralNetwork.stopTraining();
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    auto score = neuralNetwork.getF1Score();
+    auto mae = neuralNetwork.getMeanAbsoluteError();
+    ASSERT_TRUE(neuralNetwork.hasNan());
+    ASSERT_TRUE(isnan(accuracy));
+    ASSERT_TRUE(isnan(score));
+    ASSERT_TRUE(isnan(mae));
+}

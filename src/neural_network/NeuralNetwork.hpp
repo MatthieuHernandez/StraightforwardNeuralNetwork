@@ -27,9 +27,12 @@ namespace snn::internal
         static bool isTheFirst; // TODO: remplace by seed
         static void initialize();
 
+        bool outputNan = false;
+
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
                                       bool temporalReset);
-        std::vector<float>& calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
+        std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
+
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -56,8 +59,9 @@ namespace snn::internal
         NeuralNetwork() = default; // use restricted to Boost library only
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
-        ~NeuralNetwork() = default;
-
+        virtual ~NeuralNetwork() = default;
+        
+        [[nodiscard]] bool hasNan() const;
         [[nodiscard]] int getNumberOfLayers() const;
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfOutputs() const;

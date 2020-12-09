@@ -62,14 +62,15 @@ TEST_F(IrisTest, correctlyNan)
     },
         StochasticGradientDescent(0.99f, 0.99f));
     neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(2_s);
+    neuralNetwork.waitFor(10_s);
     neuralNetwork.stopTraining();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     auto score = neuralNetwork.getF1Score();
     auto mae = neuralNetwork.getMeanAbsoluteError();
+    cout << "  accuracy = " << accuracy << endl;
+    cout << "  mae = " << mae << endl;
+    ASSERT_TRUE(neuralNetwork.hasNan());
     ASSERT_TRUE(isnan(accuracy));
     ASSERT_TRUE(isnan(score));
     ASSERT_TRUE(isnan(mae));
-    ASSERT_TRUE(neuralNetwork.hasNan());
-    
 }

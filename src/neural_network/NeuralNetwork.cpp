@@ -78,7 +78,10 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
     }
 
     if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return isnan(v); }))
+    {
+        cout << "pouet pouet pouet pouet pouet pouet pouet" << endl;
         this->outputNan = true;
+    }
 
     return outputs;
 }

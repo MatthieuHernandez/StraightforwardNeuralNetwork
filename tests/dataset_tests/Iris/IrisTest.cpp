@@ -67,8 +67,9 @@ TEST_F(IrisTest, correctlyNan)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     auto score = neuralNetwork.getF1Score();
     auto mae = neuralNetwork.getMeanAbsoluteError();
-    ASSERT_TRUE(neuralNetwork.hasNan());
     ASSERT_TRUE(isnan(accuracy));
     ASSERT_TRUE(isnan(score));
     ASSERT_TRUE(isnan(mae));
+    ASSERT_TRUE(neuralNetwork.hasNan());
+    
 }

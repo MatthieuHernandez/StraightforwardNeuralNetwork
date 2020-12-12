@@ -6,98 +6,96 @@
 using namespace std;
 using namespace snn;
 
-unique_ptr<Data> createDataForNumericLimitTests(int sizeOfTraining, int sizeOfTesting, float output);
-void testNeuralNetworkForNumericLimitTests(StraightforwardNeuralNetwork& nn, Data& d);
-
-TEST(NumericLimit, AlwaysOneWithSigmoid)
+class NumericLimitTests : public testing::Test
 {
-    unique_ptr<Data> data = createDataForNumericLimitTests(5000, 100, 1.0f);
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3),
-        FullyConnected(3, activation::sigmoid),
-        FullyConnected(1, activation::sigmoid)
-    });
-    testNeuralNetworkForNumericLimitTests(neuralNetwork, *data);
-}
-
-TEST(NumericLimit, AlwaysZeroWithSigmoid)
-{
-    unique_ptr<Data> data = createDataForNumericLimitTests(5000, 100, 0.0f);
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3),
-        FullyConnected(3, activation::sigmoid),
-        FullyConnected(1, activation::sigmoid)
-    });
-    testNeuralNetworkForNumericLimitTests(neuralNetwork, *data);
-}
-
-TEST(NumericLimit, AlwaysOneWithTanh)
-{
-    unique_ptr<Data> data = createDataForNumericLimitTests(5000, 100, 1.0f);
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3),
-        FullyConnected(3, activation::tanh),
-        FullyConnected(1, activation::tanh)
-    });
-    testNeuralNetworkForNumericLimitTests(neuralNetwork, *data);
-}
-
-TEST(NumericLimit, AlwaysZeroWithTanh)
-{
-    unique_ptr<Data> data = createDataForNumericLimitTests(5000, 100, 0.0f);
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3),
-        FullyConnected(3, activation::tanh),
-        FullyConnected(1, activation::tanh)
-    });
-    testNeuralNetworkForNumericLimitTests(neuralNetwork, *data);
-}
-
-void testNeuralNetworkForNumericLimitTests(StraightforwardNeuralNetwork& nn, Data& d)
-{
-    nn.startTraining(d);
-    nn.waitFor(10_s);
-    nn.stopTraining();
-    auto mae = nn.getMeanAbsoluteError();
-    auto acc = nn.getGlobalClusteringRateMax();
-    ASSERT_ACCURACY(acc, 1.0f);
-    ASSERT_MAE(mae, 0.01f);
-}
-
-unique_ptr<Data> createDataForNumericLimitTests(int sizeOfTraining, int sizeOfTesting, float output)
-{
-    vector2D<float> trainingInputData;
-    vector2D<float> trainingExpectedOutputs;
-    trainingInputData.reserve(sizeOfTraining);
-    trainingExpectedOutputs.resize(sizeOfTraining, {output});
-
-    for (int i = 0; i < sizeOfTraining; ++i)
+protected:
+    static void createData(int sizeOfTraining, int sizeOfTesting)
     {
-        auto r1 = internal::Tools::randomBetween(0.0f, 1.0f);
-        auto r2 = internal::Tools::randomBetween(0.0f, 1.0f);
-        auto r3 = internal::Tools::randomBetween(0.0f, 1.0f);
-        trainingInputData.push_back({r1, r2, r3});
+        vector2D<float> trainingExpectedOutputs;
+        trainingExpectedOutputs.resize(sizeOfTraining);
+        std::generate(trainingExpectedOutputs.begin(), trainingExpectedOutputs.end(), []
+        {
+            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+        });
+
+        vector2D<float> trainingInputData;
+        trainingInputData.resize(sizeOfTraining);
+        std::generate(trainingInputData.begin(), trainingInputData.end(), []
+        {
+            return vector<float>
+            {
+                internal::Tools::randomBetween(0.0f, 1.0f),
+                internal::Tools::randomBetween(0.0f, 1.0f),
+                internal::Tools::randomBetween(0.0f, 1.0f)
+            };
+        });
+
+        vector2D<float> testingExpectedOutputs;
+        testingExpectedOutputs.resize(sizeOfTesting);
+        std::generate(testingExpectedOutputs.begin(), testingExpectedOutputs.end(), []
+        {
+            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+        });
+
+        vector2D<float> testingInputData(sizeOfTesting);
+        testingInputData.resize(sizeOfTesting);
+        std::generate(testingInputData.begin(), testingInputData.end(), []
+        {
+            return vector<float>
+            {
+                internal::Tools::randomBetween(0.0f, 1.0f),
+                internal::Tools::randomBetween(0.0f, 1.0f),
+                internal::Tools::randomBetween(0.0f, 1.0f)
+            };
+        });
+
+        data = make_unique<Data>(problem::regression,
+                                 trainingInputData,
+                                 trainingExpectedOutputs,
+                                 testingInputData,
+                                 testingExpectedOutputs);
+        data->setPrecision(0.5f);
     }
 
-    vector2D<float> testingInputData(sizeOfTesting);
-    std::generate(testingInputData.begin(), testingInputData.end(), [] { return vector<float>{0.0f}; });
-
-
-    vector2D<float> testingExpectedOutputs;
-    testingExpectedOutputs.resize(sizeOfTesting, {output});
-
-    for (int i = 0; i < sizeOfTesting; ++i)
+    static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
     {
-       auto r1 = internal::Tools::randomBetween(0.0f, 1.0f);
-        auto r2 = internal::Tools::randomBetween(0.0f, 1.0f);
-        auto r3 = internal::Tools::randomBetween(0.0f, 1.0f);
-        trainingInputData.push_back({r1, r2, r3});
+        nn.startTraining(*data);
+        nn.waitFor(10_s);
+        nn.stopTraining();
+        auto mae = nn.getMeanAbsoluteError();
+        auto acc = nn.getGlobalClusteringRate();
+        ASSERT_ACCURACY(acc, 1.0f);
+        ASSERT_MAE(mae, 0.01f);
     }
 
-    auto data = make_unique<Data>(problem::regression,
-                                  trainingInputData,
-                                  trainingExpectedOutputs,
-                                  testingInputData,
-                                  testingExpectedOutputs);
-    return data;
+    static void SetUpTestSuite()
+    {
+        createData(5000, 100);
+    }
+
+    static unique_ptr<Data> data;
+};
+
+unique_ptr<Data> NumericLimitTests::data = nullptr;
+
+TEST_F(NumericLimitTests, WithSigmoid)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+                                                   Input(3),
+                                                   FullyConnected(5, activation::sigmoid),
+                                                   FullyConnected(1, activation::sigmoid)
+                                               },
+                                               StochasticGradientDescent(0.1f, 0.99f));
+    testNeuralNetwork(neuralNetwork);
+}
+
+TEST_F(NumericLimitTests, WithTanh)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+                                                   Input(3),
+                                                   FullyConnected(5, activation::tanh),
+                                                   FullyConnected(1, activation::tanh)
+                                               },
+                                               StochasticGradientDescent(0.1f, 0.99f));
+    testNeuralNetwork(neuralNetwork);
 }

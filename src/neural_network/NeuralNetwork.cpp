@@ -77,7 +77,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
         outputs = layers[l]->output(outputs, temporalReset);
     }
 
-    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return isnan(v); }))
+    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return !isnormal(v); }))
     {
         cout << "pouet pouet pouet pouet pouet pouet pouet" << endl;
         this->outputNan = true;

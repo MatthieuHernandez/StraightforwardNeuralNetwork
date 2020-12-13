@@ -23,6 +23,8 @@ namespace snn
         int numberOfIteration = 0;
         int numberOfTrainingsBetweenTwoEvaluations = 0;
 
+        void resetTrainingValues();
+
         void train(Data& data);
         void evaluateOnce(Data& data);
 

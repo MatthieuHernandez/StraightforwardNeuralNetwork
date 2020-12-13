@@ -68,7 +68,7 @@ TEST(Identity, WorksWithLotsOfNumbers)
     neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
-    float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteError();
 
     if (accuracy == 100

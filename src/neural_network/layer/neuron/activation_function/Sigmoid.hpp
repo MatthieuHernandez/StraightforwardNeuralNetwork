@@ -17,12 +17,12 @@ namespace snn::internal
 
         float function(const float x) const override
         {
-            return 1.0f / (1.0f + std::exp(-x));
+            return (tanhf(x / 2.0f) + 1.0f) / 2.0f;
         }
 
         float derivative(const float x) const override
         {
-            return std::exp(-x) / powf((std::exp(-x) + 1.0f), 2);
+            return (1 - powf(tanhf(x / 2), 2)) / 4;
         }
     };
 }

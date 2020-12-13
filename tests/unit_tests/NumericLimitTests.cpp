@@ -60,17 +60,17 @@ protected:
     static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
     {
         nn.startTraining(*data);
-        nn.waitFor(10_s);
+        nn.waitFor(1_s);
         nn.stopTraining();
         auto mae = nn.getMeanAbsoluteError();
         auto acc = nn.getGlobalClusteringRate();
-        ASSERT_ACCURACY(acc, 1.0f);
-        ASSERT_MAE(mae, 0.01f);
+        ASSERT_ACCURACY(acc, 0.1f);
+        ASSERT_MAE(mae, 1.5f);
     }
 
     static void SetUpTestSuite()
     {
-        createData(5000, 100);
+        createData(1000, 50);
     }
 
     static unique_ptr<Data> data;
@@ -85,7 +85,7 @@ TEST_F(NumericLimitTests, WithSigmoid)
                                                    FullyConnected(5, activation::sigmoid),
                                                    FullyConnected(1, activation::sigmoid)
                                                },
-                                               StochasticGradientDescent(0.1f, 0.99f));
+                                               StochasticGradientDescent(0.9999f, 0.9999f));
     testNeuralNetwork(neuralNetwork);
 }
 
@@ -96,6 +96,6 @@ TEST_F(NumericLimitTests, WithTanh)
                                                    FullyConnected(5, activation::tanh),
                                                    FullyConnected(1, activation::tanh)
                                                },
-                                               StochasticGradientDescent(0.1f, 0.99f));
+                                               StochasticGradientDescent(0.9999f, 0.9999f));
     testNeuralNetwork(neuralNetwork);
 }

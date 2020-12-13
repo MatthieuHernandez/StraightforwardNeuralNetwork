@@ -10,6 +10,26 @@ void StatisticAnalysis::initialize(int numberOfCluster)
     this->startTesting();
 }
 
+void StatisticAnalysis::setResultsAsNan()
+{
+    for (auto& c : clusters)
+    {
+        c.truePositive = NAN;
+        c.trueNegative = NAN;
+        c.falsePositive = NAN;
+        c.falseNegative = NAN;
+        c.totalError = NAN;
+    }
+    numberOfDataWellClassified = NAN;
+    numberOfDataMisclassified = NAN;
+
+    this->globalClusteringRate = NAN;
+    this->weightedClusteringRate = NAN;
+    this->f1Score = NAN;
+    this->meanAbsoluteError = NAN;
+    this->rootMeanSquaredError = NAN;
+}
+
 void StatisticAnalysis::startTesting()
 {
     for (auto& c : clusters)

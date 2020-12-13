@@ -77,10 +77,13 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
         outputs = layers[l]->output(outputs, temporalReset);
     }
 
+    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return !isnormal(v) && v != 0.0f; }))
+        this->outputNan = true;
+
     return outputs;
 }
 
-std::vector<float> snn::internal::NeuralNetwork::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> NeuralNetwork::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
 {
     auto outputs = layers[0]->outputForBackpropagation(inputs, temporalReset);
 
@@ -97,6 +100,8 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
                                              bool temporalReset)
 {
     const auto outputs = this->outputForBackpropagation(inputs, temporalReset);
+    if (this->outputNan)
+        return;
     auto errors = calculateError(outputs, desired);
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
@@ -107,19 +112,24 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 }
 
 inline
-vector<float>& NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
-    auto errors = new vector<float>(this->layers.back()->getNumberOfNeurons(), 0);
-    for (size_t n = 0; n < errors->size(); ++n)
+    vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
+    for (size_t n = 0; n < errors.size(); ++n)
     {
         if (isnan(desired[n]))
-            (*errors)[n] = 0;
+            errors[n] = 0;
         else
         {
-            (*errors)[n] = 2 * (desired[n] - outputs[n]);
+            errors[n] = 2 * (desired[n] - outputs[n]);
         }
     }
-    return *errors;
+    return errors;
+}
+
+bool NeuralNetwork::hasNan() const
+{
+    return this->outputNan;
 }
 
 int NeuralNetwork::getNumberOfLayers() const
@@ -175,7 +185,7 @@ int NeuralNetwork::isValid() const
     for (const auto& layer : this->layers)
     {
         err = layer->isValid();
-        if(err != 0)
+        if (err != 0)
             return err;
     }
     return 0;

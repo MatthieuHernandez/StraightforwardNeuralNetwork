@@ -19,7 +19,7 @@ TEST(Identity, WorksWithSmallNumbers)
     neuralNetwork.waitFor(0.01_mae || 3_s);
     neuralNetwork.stopTraining();
 
-    float mae = neuralNetwork.getMeanAbsoluteError();
+    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (mae <= 0.01)
         ASSERT_SUCCESS();
@@ -47,7 +47,7 @@ TEST(Identity, WorksWithBigNumbers)
     neuralNetwork.waitFor(1.0_mae || 5_s);
     neuralNetwork.stopTraining();
 
-    float mae = neuralNetwork.getMeanAbsoluteError();
+    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     ASSERT_MAE(mae, 2);
 }
@@ -68,8 +68,8 @@ TEST(Identity, WorksWithLotsOfNumbers)
     neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
     neuralNetwork.stopTraining();
 
-    float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
-    float mae = neuralNetwork.getMeanAbsoluteError();
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (accuracy == 100
         && mae < precision

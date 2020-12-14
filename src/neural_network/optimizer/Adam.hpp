@@ -20,6 +20,11 @@ namespace snn::internal
         float beta2;
         float epsilon;
 
+        float reverseBeta1;
+        float reverseBeta2;
+        float precomputedM;
+        float precomputedV;
+
         Adam() = default;
         Adam(float learningRate, float beta1, float beta2, float epsilon);
         Adam(const Adam& sgd) = default;
@@ -31,6 +36,7 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() override;
 
+        void operator++() override;
         bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
         bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
     };

@@ -15,6 +15,8 @@ Adam::Adam(const float learningRate = 0.001f, const float beta1 = 0.9f, const fl
       beta2(beta2),
       epsilon(epsilon)
 {
+    this->reverseBeta1 = 1.0f - this->beta1;
+    this->reverseBeta2 = 1.0f - this->beta2;
 }
 
 shared_ptr<NeuralNetworkOptimizer> Adam::clone() const
@@ -27,15 +29,12 @@ void Adam::updateWeights(SimpleNeuron& neuron, float error) const
     for (size_t w = 0; w < neuron.weights.size(); ++w)
     {
         auto delta = error * neuron.lastInputs[w];
-        auto m = this->beta1 * neuron.firstMomentWeights[w] + (1.0f - this->beta1) * delta;
-        auto v = this->beta2 * neuron.secondRawMomentWeights[w] + (1.0f - this->beta2) * powf(delta, 2);
-        auto correctedM = m / (1 - powf(m, this->t));
-        auto correctedV = v / (1 -  powf(m, this->t));
+        neuron.firstMomentWeights[w] = this->beta1 * neuron.firstMomentWeights[w] + this->reverseBeta1 * delta;
+        neuron.secondRawMomentWeights[w] = this->beta2 * neuron.secondRawMomentWeights[w] + this->reverseBeta2 * delta * delta;
+        auto correctedM = neuron.firstMomentWeights[w] / this->precomputedM;
+        auto correctedV = neuron.secondRawMomentWeights[w] / this->precomputedV;
         auto deltaWeights = this->learningRate * correctedM / (sqrtf(correctedV) + this->epsilon);
         neuron.weights[w] += deltaWeights;
-        neuron.firstMomentWeights[w] = m;
-        neuron.secondRawMomentWeights[w] = v;
-
     }
 }
 
@@ -45,26 +44,29 @@ void Adam::updateWeights(RecurrentNeuron& neuron, float error) const
     for (w = 0; w < neuron.weights.size(); ++w)
     {
         auto delta = error * neuron.lastInputs[w];
-        auto m = this->beta1 * neuron.firstMomentWeights[w] + (1- this->beta1) * delta;
-        auto v = this->beta2 * neuron.secondRawMomentWeights[w] + (1 - this->beta2) * sqrtf(delta);
-        auto correctedM = m / (1 - powf(m, this->t));
-        auto correctedV = v / (1 -  powf(m, this->t));
+        neuron.firstMomentWeights[w] = this->beta1 * neuron.firstMomentWeights[w] + this->reverseBeta1 * delta;
+        neuron.secondRawMomentWeights[w] = this->beta2 * neuron.secondRawMomentWeights[w] + this->reverseBeta2 * delta * delta;
+        auto correctedM = neuron.firstMomentWeights[w] / this->precomputedM;
+        auto correctedV = neuron.secondRawMomentWeights[w] / this->precomputedV;
         auto deltaWeights = this->learningRate * correctedM / (sqrtf(correctedV) + this->epsilon);
         neuron.weights[w] += deltaWeights;
-        neuron.firstMomentWeights[w] = m;
-        neuron.secondRawMomentWeights[w] = v;
     }
     neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
     auto delta = neuron.recurrentError * neuron.lastInputs[w];
-    auto m = this->beta1 * neuron.firstMomentWeights[w] + (1 - this->beta1) * delta;
-    auto v = this->beta2 * neuron.secondRawMomentWeights[w] + (1 - this->beta2) * sqrtf(delta);
-    auto correctedM = m / (1 - powf(m, this->t));
-    auto correctedV = v / (1 - powf(m, this->t));
+    neuron.firstMomentWeights[w] = this->beta1 * neuron.firstMomentWeights[w] + this->reverseBeta1 * delta;
+    neuron.secondRawMomentWeights[w] = this->beta2 * neuron.secondRawMomentWeights[w] + this->reverseBeta2 * delta * delta;
+    auto correctedM = neuron.firstMomentWeights[w] / this->precomputedM;
+    auto correctedV = neuron.secondRawMomentWeights[w] / this->precomputedV;
     auto deltaWeights = this->learningRate * correctedM / (sqrtf(correctedV) + this->epsilon);
     neuron.weights[w] += deltaWeights;
-    neuron.firstMomentWeights[w] = m;
-    neuron.secondRawMomentWeights[w] = v;
+}
+
+void Adam::operator++()
+{
+    NeuralNetworkOptimizer::operator++();
+    this->precomputedM = 1.0f - powf(this->beta1, this->t);
+    this->precomputedV = 1.0f - powf(this->beta2, this->t);
 }
 
 int Adam::isValid()

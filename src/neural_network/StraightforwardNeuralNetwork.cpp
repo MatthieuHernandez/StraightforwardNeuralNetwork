@@ -95,8 +95,7 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
         for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining; this->currentIndex ++)
         {
-            if(this->optimizer->t < 100000)
-                this->optimizer->t++;
+            this->optimizer->operator++();
             if (this->hasNan())
             {
                 this->setResultsAsNan();

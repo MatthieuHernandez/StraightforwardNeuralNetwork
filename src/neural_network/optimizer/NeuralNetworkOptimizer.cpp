@@ -8,6 +8,12 @@ using namespace internal;
 
 //BOOST_CLASS_EXPORT(NeuralNetworkOptimizer)
 
+void NeuralNetworkOptimizer::operator++()
+{
+    if (this->t < 100000)
+        this->t++;
+}
+
 bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code()

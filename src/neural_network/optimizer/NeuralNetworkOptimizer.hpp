@@ -15,24 +15,26 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
+    protected:
+        float t = 0;
+
     public:
         NeuralNetworkOptimizer() = default;
         virtual ~NeuralNetworkOptimizer() = default;
         [[nodiscard]] virtual std::shared_ptr<NeuralNetworkOptimizer> clone() const = 0;
-
-        float t = 0;
 
         virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
         virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
 
         [[nodiscard]] virtual int isValid() = 0;
 
+        virtual void operator++();
         virtual bool operator==(const NeuralNetworkOptimizer& optimizer) const;
         virtual bool operator!=(const NeuralNetworkOptimizer& optimizer) const;
     };
 
     template <class Archive>
-        void NeuralNetworkOptimizer::serialize(Archive& ar, unsigned version)
+    void NeuralNetworkOptimizer::serialize(Archive& ar, unsigned version)
     {
         ar & this->t;
     }

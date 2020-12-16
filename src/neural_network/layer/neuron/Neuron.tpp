@@ -4,7 +4,7 @@ Neuron<Derived>::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimize
       numberOfInputs(model.numberOfInputs),
       activationFunction(model.activationFunction)
 {
-    this->previousDeltaWeights.resize(model.numberOfWeights, 0.0f);
+    this->deltaWeights.resize(model.numberOfWeights, 0.0f);
     this->firstMomentWeights.resize(model.numberOfWeights, 0.0f);
     this->secondRawMomentWeights.resize(model.numberOfWeights, 0.0f);
     this->lastInputs.resize(model.numberOfInputs, 0.0f);
@@ -67,7 +67,7 @@ bool Neuron<Derived>::operator==(const Neuron& neuron) const
     return this->numberOfInputs == neuron.numberOfInputs
         && this->weights == neuron.weights
         && this->bias == neuron.bias
-        && this->previousDeltaWeights == neuron.previousDeltaWeights
+        && this->deltaWeights == neuron.deltaWeights
         && this->lastInputs == neuron.lastInputs
         && this->errors == neuron.errors
         && this->sum == neuron.sum

@@ -21,31 +21,27 @@ shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
 
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, float error) const
 {
+    auto delta = this->learningRate * error;
     for (size_t w = 0; w < neuron.weights.size(); ++w)
     {
-        auto deltaWeights = this->learningRate * error * neuron.lastInputs[w];
-        deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
-        neuron.weights[w] += deltaWeights;
-        neuron.previousDeltaWeights[w] = deltaWeights;
+        neuron.deltaWeights[w] = delta * neuron.lastInputs[w] + this->momentum * neuron.deltaWeights[w];
+        neuron.weights[w] += neuron.deltaWeights[w];
     }
 }
 
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     size_t w;
+    auto delta = this->learningRate * error;
     for (w = 0; w < neuron.lastInputs.size(); ++w)
     {
-        auto deltaWeights = this->learningRate * error * neuron.lastInputs[w];
-        deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
-        neuron.weights[w] += deltaWeights;
-        neuron.previousDeltaWeights[w] = deltaWeights;
+        neuron.deltaWeights[w] = delta * neuron.lastInputs[w] + this->momentum * neuron.deltaWeights[w];
+        neuron.weights[w] += neuron.deltaWeights[w];
     }
     neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
-    auto deltaWeights = this->learningRate * neuron.recurrentError * neuron.previousOutput;
-    deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
-    neuron.weights[w] += deltaWeights;
-    neuron.previousDeltaWeights[w] = deltaWeights;
+    neuron.deltaWeights[w] = this->learningRate * neuron.recurrentError * neuron.previousOutput + this->momentum * neuron.deltaWeights[w];
+    neuron.weights[w] += neuron.deltaWeights[w];
 }
 
 int StochasticGradientDescent::isValid()

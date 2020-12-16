@@ -27,7 +27,7 @@ namespace snn::internal
         float bias;
 
         // TODO : find an easy way to move them in optimizer
-        std::vector<float> previousDeltaWeights; // only use for the SGD optimizer
+        std::vector<float> deltaWeights; // only use for the SGD optimizer
         std::vector<float> firstMomentWeights; // only use for the Adam optimizer
         std::vector<float> secondRawMomentWeights; // only use for the Adam optimizer
 
@@ -66,7 +66,7 @@ namespace snn::internal
         ar & this->numberOfInputs;
         ar & this->weights;
         ar & this->bias;
-        ar & this->previousDeltaWeights;
+        ar & this->deltaWeights;
         ar & this->lastInputs;
         ar & this->errors;
         ar & this->sum;

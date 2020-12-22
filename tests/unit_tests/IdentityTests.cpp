@@ -15,9 +15,9 @@ TEST(Identity, WorksWithSmallNumbers)
     StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)},
         StochasticGradientDescent(0.02f, 0.99f));
 
-    neuralNetwork.startTraining(data);
+    neuralNetwork.startTrainingAsync(data);
     neuralNetwork.waitFor(0.01_mae || 3_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
 
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
@@ -43,9 +43,9 @@ TEST(Identity, WorksWithBigNumbers)
     }, 
         StochasticGradientDescent(0.00001f, 0.95f));
 
-    neuralNetwork.startTraining(data);
+    neuralNetwork.startTrainingAsync(data);
     neuralNetwork.waitFor(1.0_mae || 5_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
 
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
@@ -64,9 +64,9 @@ TEST(Identity, WorksWithLotsOfNumbers)
     StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)},
         StochasticGradientDescent(0.0002f, 0.99f));
 
-    neuralNetwork.startTraining(data);
+    neuralNetwork.startTrainingAsync(data);
     neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();

@@ -66,9 +66,9 @@ TEST(Recurrence, RepeatLastLastInput)
 inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
 {
-    nn.startTraining(d);
+    nn.startTrainingAsync(d);
     nn.waitFor(1.0_acc || 7_s);
-    nn.stopTraining();
+    nn.stopTrainingAsync();
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(acc, 1.0);

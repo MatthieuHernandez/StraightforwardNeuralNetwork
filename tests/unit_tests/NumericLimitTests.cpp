@@ -59,9 +59,9 @@ protected:
 
     static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
     {
-        nn.startTraining(*data);
+        nn.startTrainingAsync(*data);
         nn.waitFor(1_s);
-        nn.stopTraining();
+        nn.stopTrainingAsync();
         auto mae = nn.getMeanAbsoluteError();
         auto acc = nn.getGlobalClusteringRate();
         ASSERT_ACCURACY(acc, 0.1f);

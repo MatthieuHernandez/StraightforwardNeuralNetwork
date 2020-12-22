@@ -50,9 +50,9 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
 
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.startTraining(*data);
+    neuralNetwork.startTrainingAsync(*data);
     neuralNetwork.waitFor(100_ep || 0.6_acc || 30_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
     neuralNetwork.saveAs("ACaD.snn");
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();

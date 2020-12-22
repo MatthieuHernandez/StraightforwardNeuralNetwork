@@ -3,7 +3,6 @@
 #include "../src/data/Data.hpp"
 
 using namespace std;
-using namespace chrono;
 using namespace snn;
 
 /*
@@ -22,9 +21,9 @@ int multipleClassificationExample()
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
-    neuralNetwork.startTraining(data);
+    neuralNetwork.startTrainingAsync(data);
     neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it

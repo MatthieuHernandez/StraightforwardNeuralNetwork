@@ -25,9 +25,9 @@ TEST(Memory, passingArgByCopy)
         delete inputData;
         delete expectedOutputs;
 
-        neuralNetwork.startTraining(*data);
+        neuralNetwork.startTrainingAsync(*data);
         neuralNetwork.waitFor(3_ms);
-        neuralNetwork.stopTraining();
+        neuralNetwork.stopTrainingAsync();
     }
     catch(exception& e)
     {
@@ -53,9 +53,9 @@ TEST(Memory, copyOperator)
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;
         delete neuralNetwork;
 
-        neuralNetworkCopy.startTraining(data);
+        neuralNetworkCopy.startTrainingAsync(data);
         neuralNetworkCopy.waitFor(3_ms);
-        neuralNetworkCopy.stopTraining();
+        neuralNetworkCopy.stopTrainingAsync();
     }
     catch(exception& e)
     {

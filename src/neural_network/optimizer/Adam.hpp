@@ -24,6 +24,7 @@ namespace snn::internal
         float reverseBeta2;
         float precomputedM;
         float precomputedV;
+        float precomputedDelta;
 
         Adam() = default;
         Adam(float learningRate, float beta1, float beta2, float epsilon);

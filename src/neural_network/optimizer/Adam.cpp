@@ -31,9 +31,9 @@ void Adam::updateWeights(SimpleNeuron& neuron, float error) const
         auto delta = error * neuron.lastInputs[w];
         neuron.firstMomentWeights[w] = this->beta1 * neuron.firstMomentWeights[w] + this->reverseBeta1 * delta;
         neuron.secondRawMomentWeights[w] = this->beta2 * neuron.secondRawMomentWeights[w] + this->reverseBeta2 * delta * delta;
-        auto correctedM = neuron.firstMomentWeights[w] / this->precomputedM;
-        auto correctedV = neuron.secondRawMomentWeights[w] / this->precomputedV;
-        auto deltaWeights = this->learningRate * correctedM / (sqrtf(correctedV) + this->epsilon);
+        //auto correctedM = neuron.firstMomentWeights[w] / this->precomputedM;
+        //auto correctedV = neuron.secondRawMomentWeights[w] / this->precomputedV;
+        auto deltaWeights = this->precomputedDelta * neuron.firstMomentWeights[w] / (sqrtf(neuron.secondRawMomentWeights[w]) + this->epsilon);
         neuron.weights[w] += deltaWeights;
     }
 }
@@ -67,6 +67,7 @@ void Adam::operator++()
     NeuralNetworkOptimizer::operator++();
     this->precomputedM = 1.0f - powf(this->beta1, this->t);
     this->precomputedV = 1.0f - powf(this->beta2, this->t);
+    this->precomputedDelta = this->learningRate * sqrtf(this->precomputedV) / this->precomputedM;
 }
 
 int Adam::isValid()

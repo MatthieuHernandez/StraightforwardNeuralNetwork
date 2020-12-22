@@ -54,7 +54,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
 
     for (int i = 0; !file.eof(); i++)
     {
-        unsigned char c = (char)file.get();
+        unsigned char c = static_cast<char>(file.get());
 
         const vector<float> labelsTemp(10, 0);
         labels.push_back(labelsTemp);

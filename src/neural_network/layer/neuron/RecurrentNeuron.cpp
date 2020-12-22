@@ -21,8 +21,8 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
-    int w;
-    for (w = 0; w < (int)inputs.size(); ++w)
+    size_t w;
+    for (w = 0; w < inputs.size(); ++w)
     {
         this->sum += inputs[w] * this->weights[w];
     }

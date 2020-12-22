@@ -83,6 +83,7 @@ void StraightforwardNeuralNetwork::train(Data& data, Wait wait)
     if(!this->isIdle)
         throw std::runtime_error("Neural network is already training.");
     this->stopTrainingAsync();
+    wait.startClock();
     this->trainSync(data, wait);
 }
 
@@ -100,7 +101,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait)
         
         data.shuffle();
 
-        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->currentIndex ++)
         {
             if (this->hasNan())
@@ -232,7 +233,6 @@ bool StraightforwardNeuralNetwork::validData(const Data& data) const
         return true;
     return false;
 }
-
 
 void StraightforwardNeuralNetwork::saveAs(string filePath)
 {

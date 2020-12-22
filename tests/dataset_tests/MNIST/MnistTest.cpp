@@ -142,9 +142,7 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
         Convolution(1,26, activation::sigmoid),
         FullyConnected(10)
         });
-    nn1Filer.startTrainingAsync(*data);
-    nn1Filer.waitFor(1_ep || 60_s);
-    nn1Filer.stopTrainingAsync();
+    nn1Filer.train(*data, 1_ep || 60_s);
     auto accuracy1Filter = nn1Filer.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy1Filter, 0.7f);
 

@@ -32,9 +32,7 @@ TEST_F(FashionMnistTest, convolutionalNeuralNetwork)
         FullyConnected(70),
         FullyConnected(10)
         });
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.75);
 }

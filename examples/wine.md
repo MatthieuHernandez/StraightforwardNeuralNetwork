@@ -32,9 +32,7 @@ TEST_F(WineTest, trainNeuralNetwork)
         FullyConnected(8),
         FullyConnected(3)
     });
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(1.00_acc || 3_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(*data, 1.00_acc || 3_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }

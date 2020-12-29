@@ -35,9 +35,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     });
     neuralNetwork.optimizer.learningRate = 0.002f;
     neuralNetwork.optimizer.momentum = 0.2f;
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(100_ep || 0.6_acc || 30_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(*data, 100_ep || 0.6_acc || 30_s);
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_RECALL(recall, 0.50);

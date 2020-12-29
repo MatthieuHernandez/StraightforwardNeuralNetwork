@@ -40,9 +40,7 @@ StraightforwardNeuralNetwork neuralNetwork({
 ### Train the neural network
 Train the neural network and wait until the neural network has learned.
 ```cpp
-neuralNetwork.startTraining(data);
-neuralNetwork.waitFor(20_s || 0.9_acc);
-neuralNetwork.stopTraining();
+neuralNetwork.train(data, 20_s || 0.9_acc);
 ```
 
 ### Use it

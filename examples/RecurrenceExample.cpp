@@ -26,15 +26,13 @@ int recurrenceExample()
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(1),
-        Recurrence(10),
-        FullyConnected(1, activation::sigmoid)
-    },
+            Input(1),
+            Recurrence(10),
+            FullyConnected(1, activation::sigmoid)
+        },
         StochasticGradientDescent(0.01f, 0.8f));
 
-    neuralNetwork.startTrainingAsync(data);
-    neuralNetwork.waitFor(1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
-    neuralNetwork.stopTrainingAsync();
+    neuralNetwork.train(data, 1.00_acc || 3_s); // train neural network until 100% accurary or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteError();

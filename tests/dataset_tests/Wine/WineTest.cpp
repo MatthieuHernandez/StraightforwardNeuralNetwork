@@ -46,10 +46,7 @@ TEST_F(WineTest, trainNeuralNetwork)
         FullyConnected(8),
         FullyConnected(3)
     });
-    neuralNetwork.startTrainingAsync(*data);
-    neuralNetwork.waitFor(1.00_acc || 3_s);
-    neuralNetwork.waitFor(100_ms);
-    neuralNetwork.stopTrainingAsync();
+    neuralNetwork.train(*data, 1.00_acc || 3_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }

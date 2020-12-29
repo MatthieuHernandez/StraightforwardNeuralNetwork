@@ -46,9 +46,7 @@ TEST_F(IrisTest, trainNeuralNetwork)
         FullyConnected(5),
         FullyConnected(3)
     });
-    neuralNetwork.startTrainingAsync(*data);
-    neuralNetwork.waitFor(0.98_acc || 2_s);
-    neuralNetwork.stopTrainingAsync();
-    auto accuracy = neuralNetwork.getGlobalClusteringRateMax();
+    neuralNetwork.train(*data, 0.98_acc || 2_s);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98f);
 }

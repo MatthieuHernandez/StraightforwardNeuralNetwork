@@ -46,9 +46,7 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
         FullyConnected(70),
         FullyConnected(10)
     });
-    neuralNetwork.startTrainingAsync(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
-    neuralNetwork.stopTrainingAsync();
+    neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.76f);
 }
@@ -61,9 +59,7 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
         FullyConnected(70),
         FullyConnected(10)
         });
-    neuralNetwork.startTrainingAsync(*data);
-    neuralNetwork.waitFor(1_ep || 45_s);
-    neuralNetwork.stopTrainingAsync();
+    neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.75);
 }

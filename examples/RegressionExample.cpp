@@ -21,9 +21,7 @@ int regressionExample()
 
     snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(1)});
 
-    neuralNetwork.startTrainingAsync(data);
-    neuralNetwork.waitFor(1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
-    neuralNetwork.stopTrainingAsync();
+    neuralNetwork.train(data, 1.00_acc || 3_s ); // train neural network until 100% accurary or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it

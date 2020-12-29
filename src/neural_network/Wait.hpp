@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 namespace snn
 {
@@ -15,10 +16,12 @@ namespace snn
         float accuracy = -1;
         float mae = -1;
         int duration = -1;
+        std::chrono::time_point<std::chrono::system_clock> start;
         waitOperator op = waitOperator::noneOp;
         Wait& operator||(const Wait& wait);
         Wait& operator&&(const Wait& wait);
-        bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae, int currentDuration) const;
+        void startClock();
+        bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const;
     };
 
     extern Wait operator""_ep(unsigned long long value);

@@ -9,7 +9,6 @@
 #include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
-using namespace chrono;
 using namespace snn;
 using namespace internal;
 
@@ -17,7 +16,7 @@ BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
 {
-    this->stopTraining();
+    this->stopTrainingAsync();
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> architecture, NeuralNetworkOptimizerModel optimizer)
@@ -69,17 +68,26 @@ bool StraightforwardNeuralNetwork::isTraining() const
     return !this->isIdle;
 }
 
-void StraightforwardNeuralNetwork::startTraining(Data& data)
+void StraightforwardNeuralNetwork::startTrainingAsync(Data& data)
 {
     log<minimal>("Start training");
     if (!this->validData(data))
         throw std::runtime_error("Data has not the same format as the neural network");
-    this->stopTraining();
+    this->stopTrainingAsync();
     log<complete>("Start a new thread");
-    this->thread = std::thread(&StraightforwardNeuralNetwork::train, this, std::ref(data));
+    this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(data), Wait());
 }
 
-void StraightforwardNeuralNetwork::train(Data& data)
+void StraightforwardNeuralNetwork::train(Data& data, Wait wait)
+{
+    if(!this->isIdle)
+        throw std::runtime_error("Neural network is already training.");
+    this->stopTrainingAsync();
+    wait.startClock();
+    this->trainSync(data, wait);
+}
+
+void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait)
 {
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
@@ -87,13 +95,13 @@ void StraightforwardNeuralNetwork::train(Data& data)
 
     this->evaluate(data);
 
-    for (this->numberOfIteration = 0; !this->wantToStopTraining; this->numberOfIteration++)
+    for (this->numberOfIteration = 0; this->continueTraining(wait); this->numberOfIteration++)
     {
         log<minimal>("Epoch: " + std::to_string(this->numberOfIteration));
         
         data.shuffle();
 
-        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && !this->wantToStopTraining;
+        for (this->currentIndex = 0; currentIndex < this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->currentIndex ++)
         {
             if (this->hasNan())
@@ -167,7 +175,7 @@ void StraightforwardNeuralNetwork::evaluateOnce(Data& data)
     }
 }
 
-void StraightforwardNeuralNetwork::stopTraining()
+void StraightforwardNeuralNetwork::stopTrainingAsync()
 {
     this->wantToStopTraining = true;
     if (this->thread.joinable())
@@ -179,7 +187,6 @@ void StraightforwardNeuralNetwork::stopTraining()
     this->resetTrainingValues();
 }
 
-
 void StraightforwardNeuralNetwork::resetTrainingValues()
 {
     this->currentIndex = 0;
@@ -188,10 +195,19 @@ void StraightforwardNeuralNetwork::resetTrainingValues()
     this->isIdle = true;
 }
 
+inline
+bool StraightforwardNeuralNetwork::continueTraining(Wait wait) const
+{
+    const auto epochs = this->getNumberOfIteration();
+    const auto accuracy = this->getGlobalClusteringRate();
+    const auto mae = this->getMeanAbsoluteError();
+
+    return !this->wantToStopTraining && !wait.isOver(epochs, accuracy, mae) && !this->hasNan();
+}
 
 void StraightforwardNeuralNetwork::waitFor(Wait wait) const
 {
-    auto startWait = system_clock::now();
+    wait.startClock();
     while (!this->hasNan())
     {
         this_thread::sleep_for(1ms);
@@ -199,9 +215,8 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
         const auto epochs = this->getNumberOfIteration();
         const auto accuracy = this->getGlobalClusteringRate();
         const auto mae = this->getMeanAbsoluteError();
-        const auto durationMs = (int)duration_cast<milliseconds>(system_clock::now() - startWait).count();
 
-        if (wait.isOver(epochs, accuracy, mae, durationMs))
+        if (wait.isOver(epochs, accuracy, mae))
             break;
     }
 }
@@ -219,10 +234,9 @@ bool StraightforwardNeuralNetwork::validData(const Data& data) const
     return false;
 }
 
-
 void StraightforwardNeuralNetwork::saveAs(string filePath)
 {
-    this->stopTraining();
+    this->stopTrainingAsync();
     this->autoSaveFilePath = filePath;
     ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);

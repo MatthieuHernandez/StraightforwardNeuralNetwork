@@ -25,8 +25,10 @@ namespace snn
 
         void resetTrainingValues();
 
-        void train(Data& data);
+        void trainSync(Data& data, Wait wait);
         void evaluateOnce(Data& data);
+
+        bool continueTraining(Wait wait) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -47,10 +49,11 @@ namespace snn
         [[nodiscard]] int isValid() const;
         [[nodiscard]] bool validData(const Data& data) const;
 
-        void startTraining(Data& data);
-        void stopTraining();
+        void startTrainingAsync(Data& data);
+        void stopTrainingAsync();
 
         void waitFor(Wait wait) const;
+        void train(Data& data, Wait wait);
 
         void evaluate(Data& data);
 

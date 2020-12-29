@@ -16,9 +16,7 @@ TEST(Convolution, SimpleConvolution2D)
         FullyConnected(2)
     };
     StraightforwardNeuralNetwork neuralNetwork(architectures, StochasticGradientDescent(0.5f));
-    neuralNetwork.startTraining(data);
-    neuralNetwork.waitFor(200_ep);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(data, 200_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 

@@ -2,8 +2,9 @@
 #include <stdexcept>
 #include "Wait.hpp"
 
-using namespace snn;
 using namespace std;
+using namespace chrono;
+using namespace snn;
 
 
 Wait& Wait::operator||(const Wait& wait)
@@ -45,8 +46,15 @@ Wait& Wait::operator&&(const Wait& wait)
     return *this;
 }
 
-bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae, int currentDuration) const
+void Wait::startClock()
 {
+    this->start = system_clock::now();
+}
+
+bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const
+{
+    const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
+
     const bool isValidEpochs = currentEpochs >= this->epochs && currentEpochs > 0;
     const bool isValidAccuracy = CurrentAccuracy >= this->accuracy && CurrentAccuracy > 0;
     const bool isValidMae = currentMae <= this->mae && currentMae > 0;

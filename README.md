@@ -54,9 +54,7 @@ StraightforwardNeuralNetwork neuralNetwork({
     FullyConnected(10, activation::sigmoid)
 });
 
-neuralNetwork.startTraining(data);
-neuralNetwork.waitFor(20_s);
-neuralNetwork.stopTraining();
+neuralNetwork.train(data, 0.90_acc || 30_s); // train neural network on data until 90% accuracy or 30s
 
 float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 ```

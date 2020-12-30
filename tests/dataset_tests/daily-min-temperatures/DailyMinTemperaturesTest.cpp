@@ -48,9 +48,7 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
     },
         StochasticGradientDescent(0.004f, 0.2f));
 
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(7_s || 2.0_mae);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(*data, 7_s || 2.0_mae);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     ASSERT_MAE(mae, 2.0);
 }

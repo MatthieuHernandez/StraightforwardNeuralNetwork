@@ -126,13 +126,13 @@ void Data::initialize(problem problem,
     switch (this->typeOfProblem)
     {
     case problem::classification:
-        this->problemComposite = make_unique<CompositeForClassification>(this->sets);
+        this->problemComposite = make_unique<CompositeForClassification>(this->sets, this->numberOfLabels);
         break;
     case problem::multipleClassification:
-        this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets);
+        this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets, this->numberOfLabels);
         break;
     case problem::regression:
-        this->problemComposite = make_unique<CompositeForRegression>(this->sets);
+        this->problemComposite = make_unique<CompositeForRegression>(this->sets, this->numberOfLabels);
         break;
     default:
         throw NotImplementedException();
@@ -329,7 +329,7 @@ const vector<float>& Data::getTrainingData(const int index, const int batchSize)
         const auto data = this->sets[training].inputs[i];
         transform(batchedData.begin(), batchedData.end(), data.begin(), batchedData.begin(), std::plus<float>());
     }
-    transform(batchedData.begin(), batchedData.end(), batchedData.begin(), bind(divides<float>(), placeholders::_1, batchSize));
+    transform(batchedData.begin(), batchedData.end(), batchedData.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
     return batchedData;
 }
 
@@ -358,7 +358,7 @@ const vector<float>& Data::getTestingOutputs(const int index) const
     return this->problemComposite->getTestingOutputs(index);
 }
 
-const vector<float>& Data::getData(set set, const int index) const
+const vector<float>& Data::getData(set set, const int index)
 {
     if (set == training)
         return this->getTrainingData(index);
@@ -366,7 +366,7 @@ const vector<float>& Data::getData(set set, const int index) const
     return this->getTestingData(index);
 }
 
-const vector<float>& Data::getOutputs(set set, const int index) const
+const vector<float>& Data::getOutputs(set set, const int index)
 {
     if (set == training)
         return this->getTrainingOutputs(index);

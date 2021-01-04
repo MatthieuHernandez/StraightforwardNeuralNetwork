@@ -6,7 +6,7 @@ namespace snn::internal
     class CompositeForRegression : public ProblemComposite
     {
     public:
-        CompositeForRegression(Set sets[2]);
+        CompositeForRegression(Set sets[2], int numberOfLabels);
 
         [[nodiscard]] int isValid() override;
 

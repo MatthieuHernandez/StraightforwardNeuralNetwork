@@ -20,7 +20,7 @@ int ProblemComposite::isValid()
     return 0;
 }
 
-const std::vector<float>& ProblemComposite::getTrainingOutputs(int index, const int batchSize)
+const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, const int batchSize)
 {
     int i = this->sets[training].shuffledIndexes[index];
     if (batchSize <= 1)
@@ -30,7 +30,7 @@ const std::vector<float>& ProblemComposite::getTrainingOutputs(int index, const 
 
     i = this->sets[training].shuffledIndexes[index];
     const auto data0 = this->sets[training].labels[i];
-    i = this->sets[training].shuffledIndexes[index+1];
+    i = this->sets[training].shuffledIndexes[index + 1];
     const auto data1 = this->sets[training].labels[i];
     transform(data0.begin(), data0.end(), data1.begin(), batchedLabels.begin(), plus<float>());
 
@@ -40,6 +40,6 @@ const std::vector<float>& ProblemComposite::getTrainingOutputs(int index, const 
         const auto data = this->sets[training].labels[i];
         transform(batchedLabels.begin(), batchedLabels.end(), data.begin(), batchedLabels.begin(), std::plus<float>());
     }
-    transform(batchedLabels.begin(), batchedLabels.end(), batchedLabels.begin(), bind(divides<float>(), placeholders::_1, batchSize));
+    transform(batchedLabels.begin(), batchedLabels.end(), batchedLabels.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
     return batchedLabels;
 }

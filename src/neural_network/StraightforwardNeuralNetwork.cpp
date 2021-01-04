@@ -70,7 +70,7 @@ bool StraightforwardNeuralNetwork::isTraining() const
 
 void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize)
 {
-    this->validData(data);
+    this->validData(data, batchSize);
     this->stopTrainingAsync();
     log<complete>("Start a new thread");
     this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(data), Wait(), batchSize);

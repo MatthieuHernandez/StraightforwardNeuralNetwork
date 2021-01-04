@@ -93,17 +93,17 @@ namespace snn
         [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
         [[nodiscard]] bool needToEvaluateOnTestingData(int index) const;
 
-        [[nodiscard]] const std::vector<float>& getTrainingData(int index, int batchSize);
+        [[nodiscard]] const std::vector<float>& getTrainingData(int index, int batchSize = 1);
         [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
 
         [[nodiscard]] int getTrainingLabel(int) const;
         [[nodiscard]] int getTestingLabel(int) const;
 
-        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize) const;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize = 1);
         [[nodiscard]] const std::vector<float>& getTestingOutputs(int) const;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
+        [[nodiscard]] const std::vector<float>& getData(set set, int index);
+        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
         [[nodiscard]] int getLabel(set set, int index) const;
 
         

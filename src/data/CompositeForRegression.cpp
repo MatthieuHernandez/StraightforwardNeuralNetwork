@@ -5,8 +5,8 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-CompositeForRegression::CompositeForRegression(Set sets[2])
-    : ProblemComposite(sets)
+CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
+    : ProblemComposite(sets, numberOfLabels)
 {
 }
 

@@ -6,7 +6,7 @@ namespace snn::internal
     class CompositeForClassification : public ProblemComposite
     {
     public:
-        CompositeForClassification(Set sets[2]);
+        CompositeForClassification(Set sets[2], int numberOfLabels);
 
         [[nodiscard]] int isValid() override;
 

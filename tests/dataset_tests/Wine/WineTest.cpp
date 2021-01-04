@@ -28,7 +28,7 @@ unique_ptr<Data> WineTest::data = nullptr;
 TEST_F(WineTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 13);
-    ASSERT_EQ(data->numberOfLabel, 3);
+    ASSERT_EQ(data->numberOfLabels, 3);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 178);
     ASSERT_EQ((int)data->sets[training].labels.size(), 178);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 178);

@@ -25,10 +25,11 @@ namespace snn
 
         void resetTrainingValues();
 
-        void trainSync(Data& data, Wait wait);
-        void evaluateOnce(Data& data);
+        void trainSync(Data& data, Wait wait, int batchSize);
+        void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
+        void validData(const Data& data, int batchSize) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -47,15 +48,14 @@ namespace snn
         std::string autoSaveFilePath = "AutoSave.snn";
 
         [[nodiscard]] int isValid() const;
-        [[nodiscard]] bool validData(const Data& data) const;
 
-        void startTrainingAsync(Data& data);
+        void startTrainingAsync(Data& data, int batchSize = 1);
         void stopTrainingAsync();
 
         void waitFor(Wait wait) const;
-        void train(Data& data, Wait wait);
+        void train(Data& data, Wait wait, int batchSize = 1);
 
-        void evaluate(Data& data);
+        void evaluate(const Data& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
         int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);

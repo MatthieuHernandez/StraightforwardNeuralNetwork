@@ -28,7 +28,7 @@ unique_ptr<Data> Cifar10Test::data = nullptr;
 TEST_F(Cifar10Test, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 3072);
-    ASSERT_EQ(data->numberOfLabel, 10);
+    ASSERT_EQ(data->numberOfLabels, 10);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 50000);
     ASSERT_EQ((int)data->sets[training].labels.size(), 50000);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);

@@ -20,13 +20,13 @@ unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
     return make_unique<Dropout>(*this);
 }
 
-void Dropout::applyBefore(std::vector<float>& inputs)
+void Dropout::applyBefore(vector<float>& inputs)
 {
     transform(inputs.begin(), inputs.end(), inputs.begin(),
-              std::bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
+              bind(multiplies<float>(), placeholders::_1, this->reverseValue));
 }
 
-void Dropout::applyAfterForBackpropagation(std::vector<float>& outputs)
+void Dropout::applyAfterForBackpropagation(vector<float>& outputs)
 {
     for (auto& o : outputs)
     {

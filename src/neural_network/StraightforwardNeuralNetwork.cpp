@@ -229,7 +229,7 @@ int StraightforwardNeuralNetwork::isValid() const
 
 void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) const
 {
-    if (data.numberOfLabels == this->getNumberOfOutputs() && data.sizeOfData == this->getNumberOfInputs())
+    if (data.numberOfLabels != this->getNumberOfOutputs() || data.sizeOfData != this->getNumberOfInputs())
         throw std::runtime_error("Data has not the same format as the neural network");
     if (batchSize != 1 && data.typeOfTemporal != nature::nonTemporal)
         throw std::runtime_error("Non temporal data cannot have batch size");

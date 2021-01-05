@@ -19,8 +19,8 @@ namespace snn
 
         bool wantToStopTraining = false;
         bool isIdle = true;
-        int currentIndex = 0;
-        int numberOfIteration = 0;
+        int index = 0;
+        int epoch = 0;
         int numberOfTrainingsBetweenTwoEvaluations = 0;
 
         void resetTrainingValues();
@@ -65,8 +65,8 @@ namespace snn
         void saveAs(std::string filePath);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
-        int getCurrentIndex() const { return this->currentIndex; }
-        int getNumberOfIteration() const { return this->numberOfIteration; }
+        int getCurrentIndex() const { return this->index; }
+        int getCurrentEpoch() const { return this->epoch; }
         int getNumberOfTrainingsBetweenTwoEvaluations() const { return this->numberOfTrainingsBetweenTwoEvaluations; }
 
         void setNumberOfTrainingsBetweenTwoEvaluations(int value)
@@ -86,9 +86,9 @@ namespace snn
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
         ar & this->wantToStopTraining;
-        ar & this->currentIndex;
+        ar & this->index;
         ar & this->isIdle;
-        ar & this->numberOfIteration;
+        ar & this->epoch;
         ar & this->numberOfTrainingsBetweenTwoEvaluations;
     }
 }

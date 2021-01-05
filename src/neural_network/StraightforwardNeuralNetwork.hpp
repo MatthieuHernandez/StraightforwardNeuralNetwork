@@ -25,7 +25,7 @@ namespace snn
 
         void resetTrainingValues();
 
-        void trainSync(Data& data, Wait wait, int batchSize);
+        void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
         void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
@@ -49,11 +49,11 @@ namespace snn
 
         [[nodiscard]] int isValid() const;
 
-        void startTrainingAsync(Data& data, int batchSize = 1);
+        void startTrainingAsync(Data& data, int batchSize = 1, int evaluationFrequency = 1);
         void stopTrainingAsync();
 
         void waitFor(Wait wait) const;
-        void train(Data& data, Wait wait, int batchSize = 1);
+        void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
         void evaluate(const Data& data);
 

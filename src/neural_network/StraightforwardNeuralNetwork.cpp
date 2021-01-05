@@ -68,40 +68,40 @@ bool StraightforwardNeuralNetwork::isTraining() const
     return !this->isIdle;
 }
 
-void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize)
+void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize, int evaluationFrequency)
 {
     this->validData(data, batchSize);
     this->stopTrainingAsync();
     log<complete>("Start a new thread");
-    this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(data), Wait(), batchSize);
+    this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(data), Wait(), batchSize, evaluationFrequency);
 }
 
-void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize)
+void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, int evaluationFrequency)
 {
     this->validData(data, batchSize);
     if (!this->isIdle)
         throw std::runtime_error("Neural network is already training.");
     this->stopTrainingAsync();
     wait.startClock();
-    this->trainSync(data, wait, batchSize);
+    this->trainSync(data, wait, batchSize, evaluationFrequency);
 }
 
-void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, int batchSize)
+void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency)
 {
     log<minimal>("Start training");
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
     this->isIdle = false;
 
-    this->evaluate(data);
-
     for (this->numberOfIteration = 0; this->continueTraining(wait); this->numberOfIteration++)
     {
         log<minimal>("Epoch: " + std::to_string(this->numberOfIteration));
 
+        if (evaluationFrequency > 0 && numberOfIteration % evaluationFrequency == 0)
+            this->evaluate(data);
         data.shuffle();
 
-        for (this->currentIndex = 0; currentIndex + batchSize  <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
+        for (this->currentIndex = 0; currentIndex + batchSize <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->currentIndex += batchSize)
         {
             if (this->hasNan())
@@ -117,8 +117,8 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, int batchSiz
             else
                 this->output(data.getTrainingData(this->currentIndex, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->currentIndex));
         }
-        this->evaluate(data);
     }
+    this->evaluate(data);
     log<minimal>("Stop training");
 }
 

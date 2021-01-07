@@ -93,13 +93,13 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     this->wantToStopTraining = false;
     this->isIdle = false;
 
+    if (evaluationFrequency > 0)
+        this->evaluate(data);
+
     for (this->epoch = 0; this->continueTraining(wait); this->epoch++)
     {
         log<minimal>("Epoch: " + std::to_string(this->epoch));
-        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
-            this->evaluate(data);
         data.shuffle();
-
         for (this->index = 0; index + batchSize <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->index += batchSize)
         {
@@ -116,8 +116,9 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
             else
                 this->output(data.getTrainingData(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
         }
+        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
+            this->evaluate(data);
     }
-    this->evaluate(data);
     log<minimal>("Stop training");
 }
 

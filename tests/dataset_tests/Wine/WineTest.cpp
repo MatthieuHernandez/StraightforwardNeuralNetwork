@@ -28,7 +28,7 @@ unique_ptr<Data> WineTest::data = nullptr;
 TEST_F(WineTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 13);
-    ASSERT_EQ(data->numberOfLabel, 3);
+    ASSERT_EQ(data->numberOfLabels, 3);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 178);
     ASSERT_EQ((int)data->sets[training].labels.size(), 178);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 178);
@@ -46,7 +46,7 @@ TEST_F(WineTest, trainNeuralNetwork)
         FullyConnected(8),
         FullyConnected(3)
     });
-    neuralNetwork.train(*data, 1.00_acc || 3_s);
+    neuralNetwork.train(*data, 1.00_acc || 2_s, 1, 4);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }

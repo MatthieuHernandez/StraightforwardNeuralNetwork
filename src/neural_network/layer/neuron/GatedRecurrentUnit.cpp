@@ -46,8 +46,8 @@ std::vector<float>& GatedRecurrentUnit::backOutput(float error)
     float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
-    std::transform(this->errors.begin(), this->errors.end(), e2.begin(), this->errors.begin(), std::plus<float>());
-    std::transform(this->errors.begin(), this->errors.end(), e3.begin(), this->errors.begin(), std::plus<float>());
+    transform(this->errors.begin(), this->errors.end(), e2.begin(), this->errors.begin(), plus<float>());
+    transform(this->errors.begin(), this->errors.end(), e3.begin(), this->errors.begin(), plus<float>());
     return this->errors;
 }
 

@@ -28,7 +28,7 @@ unique_ptr<Data> IrisTest::data = nullptr;
 TEST_F(IrisTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 4);
-    ASSERT_EQ(data->numberOfLabel, 3);
+    ASSERT_EQ(data->numberOfLabels, 3);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 150);
     ASSERT_EQ((int)data->sets[training].labels.size(), 150);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 150);

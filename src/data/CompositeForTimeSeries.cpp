@@ -12,7 +12,7 @@ CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurren
     : TemporalComposite(sets), numberOfRecurrences(numberOfRecurrences)
 {
     if (this->numberOfRecurrences < 1)
-        throw runtime_error("The number of recurrence must be > 1 for time series.");
+        throw runtime_error("The number of recurrence must be >= 1 for time series.");
 
     this->sets[training].numberOfTemporalSequence = 1;
     this->sets[testing].numberOfTemporalSequence = 1;

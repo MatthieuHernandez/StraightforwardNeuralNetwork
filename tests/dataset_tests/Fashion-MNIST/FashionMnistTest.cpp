@@ -28,7 +28,7 @@ unique_ptr<Data> FashionMnistTest::data = nullptr;
 TEST_F(FashionMnistTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 784);
-    ASSERT_EQ(data->numberOfLabel, 10);
+    ASSERT_EQ(data->numberOfLabels, 10);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 60000);
     ASSERT_EQ((int)data->sets[training].labels.size(), 60000);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);

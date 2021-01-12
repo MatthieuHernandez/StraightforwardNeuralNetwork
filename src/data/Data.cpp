@@ -3,6 +3,8 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
+#include <algorithm>
+#include <functional>
 #include "Data.hpp"
 #include "../tools/Tools.hpp"
 #include "CompositeForClassification.hpp"
@@ -113,7 +115,7 @@ void Data::initialize(problem problem,
     this->sets[testing].labels = testingLabels;
 
     this->sizeOfData = static_cast<int>(trainingInputs.back().size());
-    this->numberOfLabel = static_cast<int>(trainingLabels.back().size());;
+    this->numberOfLabels = static_cast<int>(trainingLabels.back().size());;
     this->sets[training].size = static_cast<int>(trainingLabels.size());
     this->sets[testing].size = static_cast<int>(testingLabels.size());
 
@@ -124,13 +126,13 @@ void Data::initialize(problem problem,
     switch (this->typeOfProblem)
     {
     case problem::classification:
-        this->problemComposite = make_unique<CompositeForClassification>(this->sets);
+        this->problemComposite = make_unique<CompositeForClassification>(this->sets, this->numberOfLabels);
         break;
     case problem::multipleClassification:
-        this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets);
+        this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets, this->numberOfLabels);
         break;
     case problem::regression:
-        this->problemComposite = make_unique<CompositeForRegression>(this->sets);
+        this->problemComposite = make_unique<CompositeForRegression>(this->sets, this->numberOfLabels);
         break;
     default:
         throw NotImplementedException();
@@ -178,7 +180,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
     size_t i = 0;
     for (vector2D<float>& v : input3D)
     {
-        std::move(v.begin(), v.end(), std::back_inserter(this->sets[set].inputs));
+        move(v.begin(), v.end(), back_inserter(this->sets[set].inputs));
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
@@ -307,10 +309,28 @@ bool Data::needToEvaluateOnTestingData(int index) const
     return this->temporalComposite->needToEvaluateOnTestingData(index);
 }
 
-const vector<float>& Data::getTrainingData(const int index) const
+const vector<float>& Data::getTrainingData(const int index, const int batchSize)
 {
-    const int i = this->sets[training].shuffledIndexes[index];
-    return this->sets[training].inputs[i];
+    int i = this->sets[training].shuffledIndexes[index];
+    if (batchSize <= 1)
+        return this->sets[training].inputs[i];
+
+    batchedData.resize(this->sizeOfData);
+
+    i = this->sets[training].shuffledIndexes[index];
+    const auto data0 = this->sets[training].inputs[i];
+    i = this->sets[training].shuffledIndexes[index + 1];
+    const auto data1 = this->sets[training].inputs[i];
+    transform(data0.begin(), data0.end(), data1.begin(), batchedData.begin(), plus<float>());
+
+    for (int j = index + 2; j < index + batchSize; ++j)
+    {
+        i = this->sets[training].shuffledIndexes[j];
+        const auto data = this->sets[training].inputs[i];
+        transform(batchedData.begin(), batchedData.end(), data.begin(), batchedData.begin(), std::plus<float>());
+    }
+    transform(batchedData.begin(), batchedData.end(), batchedData.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    return batchedData;
 }
 
 const vector<float>& Data::getTestingData(const int index) const
@@ -328,9 +348,9 @@ int Data::getTestingLabel(const int index) const
     return this->problemComposite->getTestingLabel(index);
 }
 
-const vector<float>& Data::getTrainingOutputs(const int index) const
+const vector<float>& Data::getTrainingOutputs(const int index, const int batchSize)
 {
-    return this->problemComposite->getTrainingOutputs(index);
+    return this->problemComposite->getTrainingOutputs(index, batchSize);
 }
 
 const vector<float>& Data::getTestingOutputs(const int index) const
@@ -338,7 +358,7 @@ const vector<float>& Data::getTestingOutputs(const int index) const
     return this->problemComposite->getTestingOutputs(index);
 }
 
-const vector<float>& Data::getData(set set, const int index) const
+const vector<float>& Data::getData(set set, const int index)
 {
     if (set == training)
         return this->getTrainingData(index);
@@ -346,7 +366,7 @@ const vector<float>& Data::getData(set set, const int index) const
     return this->getTestingData(index);
 }
 
-const vector<float>& Data::getOutputs(set set, const int index) const
+const vector<float>& Data::getOutputs(set set, const int index)
 {
     if (set == training)
         return this->getTrainingOutputs(index);
@@ -367,7 +387,7 @@ void Data::setPrecision(const float value)
     if (this->typeOfProblem == problem::regression)
         this->precision = value;
     else
-        throw std::runtime_error("Precision is only for regression problems.");
+        throw runtime_error("Precision is only for regression problems.");
 }
 
 float Data::getPrecision() const
@@ -375,7 +395,7 @@ float Data::getPrecision() const
     if (this->typeOfProblem == problem::regression)
         return this->precision;
     else
-        throw std::runtime_error("Precision is only for regression problems.");
+        throw runtime_error("Precision is only for regression problems.");
 }
 
 void Data::setSeparator(const float value)
@@ -384,7 +404,7 @@ void Data::setSeparator(const float value)
         || this->typeOfProblem == problem::multipleClassification)
         this->separator = value;
     else
-        throw std::runtime_error("Separator is only for classification and multiple classification problems.");
+        throw runtime_error("Separator is only for classification and multiple classification problems.");
 }
 
 float Data::getSeparator() const
@@ -393,5 +413,5 @@ float Data::getSeparator() const
         || this->typeOfProblem == problem::multipleClassification)
         return this->separator;
     else
-        throw std::runtime_error("Separator is only for classification and multiple classification problems.");
+        throw runtime_error("Separator is only for classification and multiple classification problems.");
 }

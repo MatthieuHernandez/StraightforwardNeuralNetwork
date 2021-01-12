@@ -57,7 +57,6 @@ void RecurrentNeuron::reset()
     this->previousOutput = 0;
     this->recurrentError = 0;
     this->previousSum = 0;
-    this->lastOutput = 0;
 }
 
 int RecurrentNeuron::isValid() const

@@ -10,6 +10,8 @@ void ASSERT_FAIL(std::string message = "");
 
 void PRINT_LOG(std::string message);
 
+void PRINT_NUMBER_OF_PARAMETERS(int value);
+
 void PRINT_RESULT(std::string message);
 
 void ASSERT_ACCURACY(float actual, float expected);

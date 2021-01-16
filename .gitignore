@@ -8,7 +8,7 @@ boost_1_71_0/
 *.obj
 *.bin
 *.out
-*.snn
+*.tmp
 
 DatasetTests
 UnitTests

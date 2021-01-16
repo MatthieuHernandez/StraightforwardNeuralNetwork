@@ -80,7 +80,7 @@ void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, i
 {
     this->validData(data, batchSize);
     if (!this->isIdle)
-        throw std::runtime_error("Neural network is already training.");
+        throw std::runtime_error("Neural network is already training");
     this->stopTrainingAsync();
     wait.startClock();
     this->trainSync(data, wait, batchSize, evaluationFrequency);
@@ -119,6 +119,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
             this->evaluate(data);
     }
+    this->resetTrainingValues();
     log<minimal>("Stop training");
 }
 
@@ -144,8 +145,7 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
     log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
     {
-        this->saveAs(autoSaveFilePath);
-        log<minimal>("Neural network saved");
+        this->saveSync(autoSaveFilePath);
     }
 }
 
@@ -186,7 +186,6 @@ void StraightforwardNeuralNetwork::stopTrainingAsync()
         this->thread.join();
         log<complete>("Thread closed");
     }
-    this->resetTrainingValues();
 }
 
 void StraightforwardNeuralNetwork::resetTrainingValues()
@@ -240,16 +239,24 @@ void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) co
         throw std::runtime_error("Batch size is too large");
 }
 
-void StraightforwardNeuralNetwork::saveAs(string filePath)
+void StraightforwardNeuralNetwork::saveAs(const string filePath)
 {
-    this->stopTrainingAsync();
+    if(!this->isIdle)
+        throw std::runtime_error("Neural network cannot be saved during training, stop training before saving or use auto save");
+    saveSync(filePath);
+}
+
+void StraightforwardNeuralNetwork::saveSync(const string filePath)
+{
     this->autoSaveFilePath = filePath;
     ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
+            log<minimal>("Neural network saved: ", filePath);
 }
 
-StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(string filePath)
+
+StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(const string filePath)
 {
     StraightforwardNeuralNetwork* neuralNetwork = nullptr;
     ifstream ifs(filePath);

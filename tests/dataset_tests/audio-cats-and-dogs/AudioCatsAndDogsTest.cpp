@@ -51,7 +51,7 @@ TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
     /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
     PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
     neuralNetwork.train(*data, 100_ep || 0.6_acc || 30_s);
-    neuralNetwork.saveAs("ACaD.snn");
+    neuralNetwork.saveAs("ACaD.tmp");
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_RECALL(recall, 0.50f);

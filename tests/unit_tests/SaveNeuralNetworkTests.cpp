@@ -111,7 +111,7 @@ TEST(SaveNeuralNetwork, Save)
 
     A.saveAs("./testSave.tmp");
 
-    StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
+    StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.tmp");
     EXPECT_TRUE(A == B);
     ASSERT_EQ(B.isValid(), 0);
 }

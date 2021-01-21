@@ -26,6 +26,7 @@ namespace snn
         void resetTrainingValues();
 
         void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
+        void saveSync(std::string filePath);
         void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;

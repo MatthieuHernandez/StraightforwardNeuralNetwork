@@ -83,6 +83,8 @@ namespace snn::internal
     template <class Archive>
     void NeuralNetwork::serialize(Archive& ar, unsigned version)
     {
+        if (isTheFirst)
+            this->initialize();
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
         ar.template register_type<FullyConnected>();

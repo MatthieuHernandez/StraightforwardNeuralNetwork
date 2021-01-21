@@ -27,12 +27,18 @@ void ASSERT_FAIL(string message)
 
 void PRINT_LOG(string message)
 {
-    cout << "\033[0;32m" << "[          ]" << "\033[0;0m " << message << endl;
+    cout << "[          ] " << message << endl;
 }
+
+void PRINT_NUMBER_OF_PARAMETERS(int value)
+{
+    cout << "[          ] " << value << " parameters" << endl;
+}
+
 
 void PRINT_RESULT(string message)
 {
-    cout << "\033[0;32m" << "[ RESULT   ]" << "\033[0;0m " << message << endl;
+    cout << "[ RESULT   ] " << message << endl;
 }
 
 void ASSERT_ACCURACY(float actual, float expected)

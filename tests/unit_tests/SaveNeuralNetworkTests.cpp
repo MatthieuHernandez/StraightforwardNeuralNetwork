@@ -109,9 +109,9 @@ TEST(SaveNeuralNetwork, Save)
     },
         StochasticGradientDescent(0.03f, 0.78f));
 
-    A.saveAs("./testSave.snn");
+    A.saveAs("./testSave.tmp");
 
-    StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.snn");
+    StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.tmp");
     EXPECT_TRUE(A == B);
     ASSERT_EQ(B.isValid(), 0);
 }

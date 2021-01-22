@@ -20,7 +20,7 @@
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 17   |
 | [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 52.25% Accurracy         | 1226 |
 | [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.53% Accurracy         | 230  |
-| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.32% Accurracy         | 230  |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.59% Accurracy         | 230  |
 | [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100.0% Accurracy         | 28   |
 | [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100.0% Accurracy         | 12   |
 

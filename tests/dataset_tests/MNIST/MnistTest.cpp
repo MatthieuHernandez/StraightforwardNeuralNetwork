@@ -158,3 +158,31 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 
     EXPECT_GT(accuracy10Filters, accuracy1Filter);
 }
+
+TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        Convolution(1,4),
+        FullyConnected(110),
+        FullyConnected(10)
+        },
+        StochasticGradientDescent(0.03f, 0.2f));
+
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+
+    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForMNIST.snn";
+    neuralNetwork.autoSaveWhenBetter = true;
+    neuralNetwork.train(*data, 25_ep);
+
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.20f);
+}
+
+TEST_F(MnistTest, EvaluateBestNeuralNetwork)
+{
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
+    neuralNetwork.evaluate(*data);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_FLOAT_EQ(accuracy, 0.9859f);
+}

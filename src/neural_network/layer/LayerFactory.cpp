@@ -7,6 +7,8 @@
 #include "Convolution2D.hpp"
 #include "LocallyConnected1D.hpp"
 #include "LocallyConnected2D.hpp"
+#include "MaxPooling1D.hpp"
+#include "MaxPooling2D.hpp"
 
 using namespace std;
 using namespace snn;
@@ -80,13 +82,41 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
 
     case recurrence:
         model.neuron.numberOfInputs = model.numberOfInputs;
-        model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
         return make_unique<Recurrence>(model, optimizer);
 
     case gruLayer:
         model.neuron.numberOfInputs = model.numberOfInputs;
-        model.neuron.numberOfWeights = model.neuron.numberOfInputs+1;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
         return make_unique<GruLayer>(model, optimizer);
+
+    case maxPooling:
+        if (shapeOfInput.size() == 1)
+        {
+            shapeOfInput.push_back(1);
+        }
+        if (shapeOfInput.size() == 2)
+        {
+            if (model.sizeOfFilerMatrix > shapeOfInput[0])
+            {
+                throw InvalidArchitectureException("Matrix of max pooling layer is too big.");
+            }
+            model.shapeOfInput = shapeOfInput;
+            return make_unique<MaxPooling1D>(model);
+        }
+        if (shapeOfInput.size() == 3)
+        {
+            if (model.sizeOfFilerMatrix > shapeOfInput[0]
+                || model.sizeOfFilerMatrix > shapeOfInput[1])
+            {
+                throw InvalidArchitectureException("Matrix of max pooling layer is too big.");
+            }
+            model.shapeOfInput = shapeOfInput;
+            return make_unique<MaxPooling2D>(model);
+        }
+        if (shapeOfInput.size() > 3)
+            throw InvalidArchitectureException("Input with 3 dimensions or higher is not managed.");
+        break;
 
     case locallyConnected:
         if (shapeOfInput.size() == 1)
@@ -97,7 +127,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
         {
             if (model.sizeOfFilerMatrix > shapeOfInput[0])
             {
-                throw InvalidArchitectureException("Filter matrix of locally connected layer is too big.");
+                throw InvalidArchitectureException("Matrix of locally connected layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected1D(
@@ -111,7 +141,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             if (model.sizeOfFilerMatrix > shapeOfInput[0]
                 || model.sizeOfFilerMatrix > shapeOfInput[1])
             {
-                throw InvalidArchitectureException("Filter matrix of convolutional layer is too big.");
+                throw InvalidArchitectureException("Matrix of locally connected layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(

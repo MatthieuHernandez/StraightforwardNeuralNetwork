@@ -8,7 +8,7 @@
 
 namespace snn::internal
 {
-    class MaxPooling1D final : BaseLayer
+    class MaxPooling1D final : public BaseLayer
     {
     private:
         friend class boost::serialization::access;

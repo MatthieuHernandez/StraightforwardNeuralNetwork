@@ -94,6 +94,30 @@ namespace snn
     }
 
     template <class ... TOptimizer>
+    LayerModel MaxPooling(int sizeOfPoolingMatrix)
+    {
+        LayerModel model
+        {
+            locallyConnected,
+
+            -1,
+            0,
+            {
+                0,
+                0,
+
+                nullptr
+            },
+            1,
+            sizeOfPoolingMatrix,
+            std::vector<int>(),
+            nullptr
+
+        };
+        return model;
+    }
+
+    template <class ... TOptimizer>
     LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix,
                                 activation activation = activation::sigmoid, TOptimizer ... optimizers)
     {

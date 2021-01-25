@@ -43,7 +43,10 @@ vector<int> MaxPooling1D::getShapeOfOutput() const
 {
     const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
 
-    return {this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest};
+    return {
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
+        1
+    };
 }
 
 int MaxPooling1D::isValid() const

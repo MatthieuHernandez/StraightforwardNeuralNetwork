@@ -26,10 +26,10 @@ namespace snn::internal
         MaxPooling1D(const MaxPooling1D&) = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone() const;
 
-        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
+        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
+        [[nodiscard]] std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override;
 
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const;
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const;
 
         bool operator==(const BaseLayer& layer) const;
@@ -39,7 +39,9 @@ namespace snn::internal
     template <class Archive>
     void MaxPooling1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<MaxPooling1D, FilterLayer>();
-        ar & boost::serialization::base_object<FilterLayer>(*this);
+        boost::serialization::void_cast_register<MaxPooling1D, BaseLayer>();
+        ar & boost::serialization::base_object<BaseLayer>(*this);
+        ar & this->sizeOfFilterMatrix;
+        ar & this->shapeOfInput;
     }
 }

@@ -22,7 +22,7 @@ namespace snn::internal
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
         ~SimpleLayer() = default;
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;

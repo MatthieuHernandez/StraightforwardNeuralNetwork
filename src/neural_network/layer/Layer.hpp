@@ -6,6 +6,7 @@
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
+#include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Dropout.hpp"
 

@@ -15,15 +15,16 @@ MaxPooling1D::MaxPooling1D(LayerModel& model)
 }
 
 inline
-unique_ptr<BaseLayer> MaxPooling1D::clone() const
+unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) const
 {
-    auto layer = make_unique<MaxPooling1D>(*this);
+    return make_unique<MaxPooling1D>(*this);
 }
 
-vector<float> MaxPooling1D::output(const vector<float>& inputs, bool temporalReset)
+
+std::vector<float> MaxPooling1D::computeOutput(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = vector<float>(this->shapeOfInput[0], numeric_limits<float>::lowest());
-    for(int i = 0 ;i < inputs.size(); ++i)
+    for (int i = 0; i < inputs.size(); ++i)
     {
         const int indexOutput = i / this->sizeOfFilterMatrix;
         if (output[indexOutput] <= inputs[i])
@@ -34,9 +35,20 @@ vector<float> MaxPooling1D::output(const vector<float>& inputs, bool temporalRes
     return output;
 }
 
+
+vector<float> MaxPooling1D::output(const vector<float>& inputs, bool temporalReset)
+{
+    return this->computeOutput(inputs, temporalReset);
+}
+
 vector<float> MaxPooling1D::outputForBackpropagation(const vector<float>& inputs, bool temporalReset)
 {
-    return this->output(inputs, temporalReset);
+    return this->computeOutput(inputs, temporalReset);
+}
+
+int MaxPooling1D::getNumberOfInputs() const
+{
+    return this->numberOfInputs;
 }
 
 vector<int> MaxPooling1D::getShapeOfOutput() const
@@ -51,13 +63,24 @@ vector<int> MaxPooling1D::getShapeOfOutput() const
 
 int MaxPooling1D::isValid() const
 {
-    return this->BaseLayer::isValid();
+    return 0;
 }
 
 inline
 bool MaxPooling1D::operator==(const BaseLayer& layer) const
 {
-    return this->BaseLayer::operator==(layer);
+    try
+    {
+        const auto& l = dynamic_cast<const MaxPooling1D&>(layer);
+
+        return typeid(*this).hash_code() == typeid(layer).hash_code()
+            && this->sizeOfFilterMatrix == l.sizeOfFilterMatrix
+            && this->shapeOfInput == l.shapeOfInput;
+    }
+    catch (std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 inline

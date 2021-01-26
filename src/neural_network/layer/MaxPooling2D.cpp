@@ -15,20 +15,21 @@ MaxPooling2D::MaxPooling2D(LayerModel& model)
 }
 
 inline
-unique_ptr<BaseLayer> MaxPooling2D::clone() const
+unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) const
 {
-    auto layer = make_unique<MaxPooling2D>(*this);
+    return make_unique<MaxPooling2D>(*this);
 }
 
-vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalReset)
+
+std::vector<float> MaxPooling2D::computeOutput(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = vector<float>(inputs.size(), numeric_limits<float>::lowest());
     const int rest = this->shapeOfInput[0] % sizeOfFilterMatrix == 0 ? 0 : 1;
-    for(int i = 0 ;i < inputs.size(); ++i)
+    for (int i = 0; i < inputs.size(); ++i)
     {
         const int indexOutputX = (i % this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
         const int indexOutputY = (i / this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
-        const int indexOutput = indexOutputY * (this->shapeOfInput[0]/ (this->sizeOfFilterMatrix) + rest) + indexOutputX;
+        const int indexOutput = indexOutputY * (this->shapeOfInput[0] / (this->sizeOfFilterMatrix) + rest) + indexOutputX;
         if (output[indexOutput] <= inputs[i])
         {
             output[indexOutput] = inputs[i];
@@ -37,9 +38,19 @@ vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalRes
     return output;
 }
 
+vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalReset)
+{
+    return this->computeOutput(inputs, temporalReset);
+}
+
 vector<float> MaxPooling2D::outputForBackpropagation(const vector<float>& inputs, bool temporalReset)
 {
-    return this->output(inputs, temporalReset);
+    return this->computeOutput(inputs, temporalReset);
+}
+
+int MaxPooling2D::getNumberOfInputs() const
+{
+    return this->numberOfInputs;
 }
 
 vector<int> MaxPooling2D::getShapeOfOutput() const
@@ -56,13 +67,24 @@ vector<int> MaxPooling2D::getShapeOfOutput() const
 
 int MaxPooling2D::isValid() const
 {
-    return this->BaseLayer::isValid();
+    return 0;
 }
 
 inline
 bool MaxPooling2D::operator==(const BaseLayer& layer) const
 {
-    return this->BaseLayer::operator==(layer);
+    try
+    {
+        const auto& l = dynamic_cast<const MaxPooling2D&>(layer);
+
+        return typeid(*this).hash_code() == typeid(layer).hash_code()
+            && this->sizeOfFilterMatrix == l.sizeOfFilterMatrix
+            && this->shapeOfInput == l.shapeOfInput;
+    }
+    catch (std::bad_cast&)
+    {
+        return false;
+    }
 }
 
 inline

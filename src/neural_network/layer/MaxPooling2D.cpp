@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <boost/serialization/export.hpp>
 #include "MaxPooling2D.hpp"
 #include "LayerModel.hpp"
@@ -9,6 +10,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(MaxPooling2D)
 
 MaxPooling2D::MaxPooling2D(LayerModel& model)
+    : NoNeuronLayer(model)
 {
     this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
     this->shapeOfInput = model.shapeOfInput;
@@ -46,6 +48,16 @@ vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalRes
 vector<float> MaxPooling2D::outputForBackpropagation(const vector<float>& inputs, bool temporalReset)
 {
     return this->computeOutput(inputs, temporalReset);
+}
+
+vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
+{
+    throw runtime_error("backOutput not implemented yet");
+    return inputErrors;
+}
+
+void MaxPooling2D::train(std::vector<float>& inputErrors)
+{
 }
 
 int MaxPooling2D::getNumberOfInputs() const

@@ -31,7 +31,8 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
         [[nodiscard]] std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override;
-                [[nodiscard]] std::vector<float> backOutput(std::vector<float>& inputErrors) override;
+        [[nodiscard]] std::vector<float> backOutput(std::vector<float>& inputErrors) override;
+        void train(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] int getNumberOfInputs() const override;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
@@ -40,15 +41,13 @@ namespace snn::internal
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
 
-
-        void train(std::vector<float>& inputErrors) override;
     };
 
     template <class Archive>
     void MaxPooling1D::serialize(Archive& ar, const unsigned version)
     {
-        boost::serialization::void_cast_register<MaxPooling1D, BaseLayer>();
-        ar & boost::serialization::base_object<BaseLayer>(*this);
+        boost::serialization::void_cast_register<MaxPooling1D, NoNeuronLayer>();
+        ar & boost::serialization::base_object<NoNeuronLayer>(*this);
         ar & this->sizeOfFilterMatrix;
         ar & this->shapeOfInput;
     }

@@ -9,6 +9,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(MaxPooling1D)
 
 MaxPooling1D::MaxPooling1D(LayerModel& model)
+    : NoNeuronLayer(model)
 {
     this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
     this->shapeOfInput = model.shapeOfInput;
@@ -44,6 +45,22 @@ vector<float> MaxPooling1D::output(const vector<float>& inputs, bool temporalRes
 vector<float> MaxPooling1D::outputForBackpropagation(const vector<float>& inputs, bool temporalReset)
 {
     return this->computeOutput(inputs, temporalReset);
+}
+
+std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
+{
+    std::vector<float> errors;
+    errors.reserve(this->numberOfOutputs);
+    for (int i = 0, k = 0; i < this->numberOfOutputs; ++i)
+    {
+        for(int j = 0; k < this->numberOfInputs && j < this->sizeOfFilterMatrix; ++j, ++k)
+            errors.push_back(inputErrors[i]);
+    }
+    return errors;
+}
+
+void MaxPooling1D::train(std::vector<float>& inputErrors)
+{
 }
 
 int MaxPooling1D::getNumberOfInputs() const

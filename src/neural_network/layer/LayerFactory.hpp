@@ -16,6 +16,7 @@ namespace snn
             input,
             static_cast<int>(activation::sigmoid),
             0,
+            0,
             {
                 0,
                 0,
@@ -38,6 +39,7 @@ namespace snn
             fullyConnected,
             -1,
             numberOfNeurons,
+            -1,
             {
                 -1,
                 -1,
@@ -59,6 +61,7 @@ namespace snn
             recurrence,
             -1,
             numberOfNeurons,
+            -1,
             {
                 -1,
                 -1,
@@ -80,6 +83,7 @@ namespace snn
             gruLayer,
             -1,
             numberOfNeurons,
+            -1,
             {
                 -1,
                 -1,
@@ -102,6 +106,7 @@ namespace snn
 
             -1,
             0,
+            -1,
             {
                 0,
                 0,
@@ -127,6 +132,7 @@ namespace snn
 
             -1,
             -1,
+            -1,
             {
                 -1,
                 -1,
@@ -149,6 +155,7 @@ namespace snn
         LayerModel model
         {
             convolution,
+            -1,
             -1,
             -1,
             {

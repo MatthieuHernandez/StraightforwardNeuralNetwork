@@ -68,7 +68,7 @@ int CompositeForTemporalData::isValid()
      || !this->sets[training].needToTrainOnData.empty()
      || !this->sets[testing].needToTrainOnData.empty()
      || !this->sets[training].needToEvaluateOnData.empty()
-     || (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[training].size)
+     || (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
         return 404;
 
     return this->TemporalComposite::isValid();

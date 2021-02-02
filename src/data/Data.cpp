@@ -63,7 +63,7 @@ Data::Data(problem typeOfProblem,
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
-        throw runtime_error("Vector 3D type inputs are only for temporal data.");
+        throw runtime_error("Vector 3D type inputs are only for sequential data.");
 
     this->flatten(training, trainingInputs);
     this->flatten(testing, testingInputs);
@@ -85,9 +85,9 @@ Data::Data(problem typeOfProblem,
     : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
-        throw runtime_error("Vector 3D type inputs are only for temporal data.");
+        throw runtime_error("Vector 3D type inputs are only for sequential data.");
 
-    this->flatten(training, inputs);
+    this->flatten(inputs);
 
     this->initialize(typeOfProblem,
                      this->sets[training].inputs,
@@ -167,10 +167,10 @@ void Data::initialize(problem problem,
 void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
 {
     this->sets[set].numberOfTemporalSequence = (int)input3D.size();
-    auto size = accumulate(input3D.begin(), input3D.end(), 0,
-                           [](int sum, vector2D<float>& v)
+    size_t size = accumulate(input3D.begin(), input3D.end(), (size_t)0,
+                           [](size_t sum, vector2D<float>& v)
                            {
-                               return sum + (int)v.size();
+                               return sum + v.size();
                            });
     this->sets[set].inputs.reserve(size);
     this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
@@ -188,6 +188,35 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
             this->sets[testing].needToEvaluateOnData[i - 1] = true;
     }
     this->sets[set].size = (int)this->sets[set].inputs.size();
+}
+
+void Data::flatten(vector<vector<vector<float>>>& input3D)
+{
+    this->sets[training].numberOfTemporalSequence = (int)input3D.size();
+    this->sets[testing].numberOfTemporalSequence = (int)input3D.size();
+    size_t size = accumulate(input3D.begin(), input3D.end(), (size_t)0,
+                           [](size_t sum, vector2D<float>& v)
+                           {
+                               return sum + v.size();
+                           });
+    this->sets[training].inputs.reserve(size);
+    this->sets[training].areFirstDataOfTemporalSequence.resize(size, false);
+    this->sets[testing].areFirstDataOfTemporalSequence.resize(size, false);
+    this->sets[testing].needToEvaluateOnData.resize(size, false);
+
+    size_t i = 0;
+    for (vector2D<float>& v : input3D)
+    {
+        move(v.begin(), v.end(), back_inserter(this->sets[training].inputs));
+
+        this->sets[training].areFirstDataOfTemporalSequence[i] = true;
+        this->sets[testing].areFirstDataOfTemporalSequence[i] = true;
+        i += v.size();
+        this->sets[testing].needToEvaluateOnData[i - 1] = true;
+    }
+    this->sets[testing].inputs = this->sets[training].inputs;
+    this->sets[training].size = (int)this->sets[training].inputs.size();
+    this->sets[testing].size = (int)this->sets[testing].inputs.size();
 }
 
 void Data::normalization(const float min, const float max)

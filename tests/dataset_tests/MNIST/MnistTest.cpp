@@ -41,7 +41,8 @@ TEST_F(MnistTest, loadData)
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(784),
+        Input(28, 28, 1),
+        MaxPooling(2),
         FullyConnected(10)
     },
         StochasticGradientDescent(0.02f, 0.1f));

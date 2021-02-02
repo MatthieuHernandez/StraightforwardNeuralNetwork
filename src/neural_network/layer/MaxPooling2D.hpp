@@ -16,9 +16,9 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        int numberOfInputs;
         int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
+        std::vector<int> shapeOfOutput;
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
 

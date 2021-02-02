@@ -50,7 +50,7 @@ vector<float> MaxPooling1D::outputForBackpropagation(const vector<float>& inputs
 std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
 {
     std::vector<float> errors;
-    errors.reserve(this->numberOfOutputs);
+    errors.reserve(this->numberOfInputs);
     for (int i = 0, k = 0; i < this->numberOfOutputs; ++i)
     {
         for(int j = 0; k < this->numberOfInputs && j < this->sizeOfFilterMatrix; ++j, ++k)

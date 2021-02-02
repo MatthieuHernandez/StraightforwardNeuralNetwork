@@ -14,6 +14,15 @@ MaxPooling2D::MaxPooling2D(LayerModel& model)
 {
     this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
     this->shapeOfInput = model.shapeOfInput;
+
+    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+
+    this->shapeOfOutput = {
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
+        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
+        1
+    };
 }
 
 inline
@@ -31,7 +40,7 @@ std::vector<float> MaxPooling2D::computeOutput(const std::vector<float>& inputs,
     {
         const int indexOutputX = (i % this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
         const int indexOutputY = (i / this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
-        const int indexOutput = indexOutputY * (this->shapeOfInput[0] / (this->sizeOfFilterMatrix) + rest) + indexOutputX;
+        const int indexOutput = indexOutputY * (this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest) + indexOutputX;
         if (output[indexOutput] <= inputs[i])
         {
             output[indexOutput] = inputs[i];
@@ -52,7 +61,19 @@ vector<float> MaxPooling2D::outputForBackpropagation(const vector<float>& inputs
 
 vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
 {
-    throw runtime_error("backOutput not implemented yet");
+    std::vector<float> errors;
+    errors.reserve(this->numberOfInputs);
+    for (int x = 0; x < this->shapeOfInput[0]; ++x)
+    {
+        for (int y = 0; y < this->shapeOfInput[0]; ++y)
+        {
+            const int outputX = x / this->sizeOfFilterMatrix;
+            const int outputY = y / this->sizeOfFilterMatrix;
+            const int indexOutput = outputY * this->shapeOfOutput[0] + outputY;
+
+            errors.push_back(inputErrors[indexOutput]);
+        }
+    }
     return inputErrors;
 }
 
@@ -67,14 +88,7 @@ int MaxPooling2D::getNumberOfInputs() const
 
 vector<int> MaxPooling2D::getShapeOfOutput() const
 {
-    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
-
-    return {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
-        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
-        1
-    };
+    return this->shapeOfOutput;
 }
 
 int MaxPooling2D::isValid() const

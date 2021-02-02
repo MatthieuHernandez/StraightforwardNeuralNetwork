@@ -2,7 +2,6 @@
 #include <memory>
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
-#include "Layer.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/LayerOptimizerModel.hpp"
 
@@ -31,12 +30,11 @@ namespace snn
     }
 
     template <class ... TOptimizer>
-    LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid,
-                              TOptimizer ... optimizers)
+    LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, TOptimizer ... optimizers)
     {
         LayerModel model
         {
-            fullyConnected,
+           fullyConnected,
             -1,
             numberOfNeurons,
             -1,
@@ -102,29 +100,26 @@ namespace snn
     {
         LayerModel model
         {
-            locallyConnected,
-
+            maxPooling,
             -1,
             0,
             -1,
             {
                 0,
                 0,
-
-                nullptr
+                activation::identity
             },
             1,
             sizeOfPoolingMatrix,
             std::vector<int>(),
-            nullptr
+            std::vector<LayerOptimizerModel>()
 
         };
         return model;
     }
 
     template <class ... TOptimizer>
-    LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix,
-                                activation activation = activation::sigmoid, TOptimizer ... optimizers)
+    LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, TOptimizer ... optimizers)
     {
         LayerModel model
         {
@@ -136,7 +131,6 @@ namespace snn
             {
                 -1,
                 -1,
-
                 activation
             },
             numberOfLocallyConnected,

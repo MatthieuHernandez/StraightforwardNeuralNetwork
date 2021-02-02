@@ -16,12 +16,14 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
+        int numberOfInputs;
         int numberOfOutputs;
 
     public:
         NoNeuronLayer() = default; // use restricted to Boost library only
         NoNeuronLayer(LayerModel& model)
         {
+            this->numberOfInputs = model.numberOfInputs;
             this->numberOfOutputs = model.numberOfOutputs;
         }
         virtual ~NoNeuronLayer() = default;

@@ -16,7 +16,6 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        int numberOfInputs;
         int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
 

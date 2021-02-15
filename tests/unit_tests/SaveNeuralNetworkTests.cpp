@@ -101,7 +101,8 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
 TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
-        Input(15),
+        Input(45),
+        MaxPooling(3),
         Convolution(2, 2, activation::ReLU),
         LocallyConnected(2, 2, activation::tanh),
         FullyConnected(3, activation::sigmoid, Dropout(0.1f)),

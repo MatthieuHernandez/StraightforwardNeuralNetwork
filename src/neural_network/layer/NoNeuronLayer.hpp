@@ -39,6 +39,7 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<NoNeuronLayer, BaseLayer>();
         ar & boost::serialization::base_object<BaseLayer>(*this);
+        ar & this->numberOfInputs;
         ar & this->numberOfOutputs;
     }
 }

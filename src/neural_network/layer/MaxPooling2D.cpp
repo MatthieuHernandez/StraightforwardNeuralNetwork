@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include <boost/serialization/export.hpp>
 #include "MaxPooling2D.hpp"
 #include "LayerModel.hpp"

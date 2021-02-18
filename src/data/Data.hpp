@@ -33,6 +33,7 @@ namespace snn
                         int recurrences);
 
         void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
+        void flatten(std::vector<std::vector<std::vector<float>>>& input3D);
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;

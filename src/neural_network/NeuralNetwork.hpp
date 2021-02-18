@@ -13,11 +13,9 @@
 #include "layer/GruLayer.hpp"
 #include "layer/LocallyConnected1D.hpp"
 #include "layer/LocallyConnected2D.hpp"
-
-
-namespace snn {
-    struct NeuralNetworkOptimizerModel;
-}
+#include "layer/MaxPooling1D.hpp"
+#include "layer/MaxPooling2D.hpp"
+#include "optimizer/NeuralNetworkOptimizerModel.hpp"
 
 namespace snn::internal
 {
@@ -94,8 +92,10 @@ namespace snn::internal
         ar.template register_type<Convolution2D>();
         ar.template register_type<LocallyConnected1D>();
         ar.template register_type<LocallyConnected2D>();
-        ar & layers;
         ar.template register_type<StochasticGradientDescent>();
+        ar.template register_type<MaxPooling1D>();
+        ar.template register_type<MaxPooling2D>();
+        ar & layers;
         ar & this->optimizer;
     }
 }

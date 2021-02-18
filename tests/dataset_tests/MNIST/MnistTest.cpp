@@ -41,7 +41,8 @@ TEST_F(MnistTest, loadData)
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(784),
+        Input(28, 28, 1),
+        MaxPooling(2),
         FullyConnected(10)
     },
         StochasticGradientDescent(0.02f, 0.1f));
@@ -163,17 +164,17 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,4),
-        FullyConnected(110),
+        Convolution(2,4),
+        FullyConnected(150),
         FullyConnected(10)
         },
-        StochasticGradientDescent(0.03f, 0.2f));
+        StochasticGradientDescent(0.02f, 0.6f));  
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 25_ep);
+    neuralNetwork.train(*data, 0.9859_acc);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -182,7 +183,9 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 TEST_F(MnistTest, EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
+    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_FLOAT_EQ(accuracy, 0.9859f);
+    ASSERT_EQ(numberOfParameters, 209000);
+    ASSERT_FLOAT_EQ(accuracy, 0.9862f);
 }

@@ -143,7 +143,7 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
     this->stopTesting();
     log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
     log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
-    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
+    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
     {
         this->saveSync(autoSaveFilePath);
     }

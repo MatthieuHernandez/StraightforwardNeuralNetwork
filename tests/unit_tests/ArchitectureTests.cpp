@@ -76,16 +76,18 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
     StraightforwardNeuralNetwork neuralNetwork(
         {
             Input(12, 12, 3),
+            MaxPooling(2),
             Convolution(3, 4),
-            FullyConnected(50),
+            FullyConnected(60),
+            MaxPooling(3),
             Convolution(1, 3),
             FullyConnected(20),
             Recurrence(10),
             FullyConnected(5)
         });
-    const int numberOfNeurons = 9 * 9 * 3 + 50 + 48 + 20 + 10 + 5; // = 376
+    const int numberOfNeurons = 3 * 3 * 3 + 60 + 18 + 20 + 10 + 5; // = 160
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 9 * 9 * 3 * 16 * 3 + 50 * 9 * 9 * 3 + 48 * 3 + 20 * 48 + (20 + 1) * 10 + 10 * 5; // = 25178
+    const int numberOfParameters = 3 * 3 * 3 * 16 + 60 * 3 * 3 * 3 + 18 * 3 + 20 * 18 + (20 + 1) * 10 + 10 * 5; // = 2726
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 

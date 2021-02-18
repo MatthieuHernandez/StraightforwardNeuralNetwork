@@ -72,13 +72,13 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
         FullyConnected(150),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.03f, 0.2f));
+        StochasticGradientDescent(0.02f, 0.4f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 25_ep);
+    neuralNetwork.train(*data, 0.8853_acc);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -87,7 +87,9 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 TEST_F(FashionMnistTest, EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForFashion-MNIST.snn");
+    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_FLOAT_EQ(accuracy, 0.8853f);
+    ASSERT_EQ(numberOfParameters, 95874);
+    ASSERT_FLOAT_EQ(accuracy, 0.8861f);
 }

@@ -20,7 +20,7 @@ namespace snn::internal
         FullyConnected(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         FullyConnected(const FullyConnected&) = default;
         ~FullyConnected() = default;
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
     };
 
     template <class Archive>

@@ -78,11 +78,11 @@ namespace snn::internal
         void startTesting();
         void stopTesting();
 
-        bool globalClusteringRateIsBetterThanPreviously = false;
-        bool weightedClusteringRateIsBetterThanPreviously = false;
-        bool f1ScoreIsBetterThanPreviously = false;
-        bool meanAbsoluteErrorIsBetterThanPreviously = false;
-        bool rootMeanSquaredErrorIsBetterThanPreviously = false;
+        bool globalClusteringRateIsBetterThanMax = false;
+        bool weightedClusteringRateIsBetterThanMax = false;
+        bool f1ScoreIsBetterThanMax = false;
+        bool meanAbsoluteErrorIsBetterThanMin = false;
+        bool rootMeanSquaredErrorIsBetterThanMin = false;
 
     public:
         float getGlobalClusteringRate() const;
@@ -117,10 +117,10 @@ namespace snn::internal
         ar & this->f1ScoreMax;
         ar & this->meanAbsoluteErrorMin;
         ar & this->rootMeanSquaredErrorMin;
-        ar & this->globalClusteringRateIsBetterThanPreviously;
-        ar & this->weightedClusteringRateIsBetterThanPreviously;
-        ar & this->f1ScoreIsBetterThanPreviously;
-        ar & this->meanAbsoluteErrorIsBetterThanPreviously;
-        ar & this->rootMeanSquaredErrorIsBetterThanPreviously;
+        ar & this->globalClusteringRateIsBetterThanMax;
+        ar & this->weightedClusteringRateIsBetterThanMax;
+        ar & this->f1ScoreIsBetterThanMax;
+        ar & this->meanAbsoluteErrorIsBetterThanMin;
+        ar & this->rootMeanSquaredErrorIsBetterThanMin;
     }
 }

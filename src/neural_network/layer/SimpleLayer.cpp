@@ -6,9 +6,9 @@
 using namespace snn;
 using namespace internal;
 
-extern template class SimpleLayer<SimpleNeuron>;
-extern template class SimpleLayer<RecurrentNeuron>;
-extern template class SimpleLayer<GatedRecurrentUnit>;
+extern template class internal::SimpleLayer<SimpleNeuron>; // must use a nested-name-specifier for GCC compiler
+extern template class internal::SimpleLayer<RecurrentNeuron>;
+extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 
 BOOST_CLASS_EXPORT(SimpleLayer<SimpleNeuron>)
 BOOST_CLASS_EXPORT(SimpleLayer<RecurrentNeuron>)

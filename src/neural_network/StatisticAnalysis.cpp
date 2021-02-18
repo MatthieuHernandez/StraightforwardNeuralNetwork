@@ -52,24 +52,24 @@ void StatisticAnalysis::stopTesting()
     const float newMeanAbsoluteError = this->computeMeanAbsoluteError();
     const float newRootMeanSquaredError = this->computeRootMeanSquaredError();
 
-    this->globalClusteringRateIsBetterThanPreviously = newGlobalClusteringRate > this->globalClusteringRate;
-    if (this->globalClusteringRateIsBetterThanPreviously)
+    this->globalClusteringRateIsBetterThanMax = newGlobalClusteringRate > this->globalClusteringRateMax;
+    if (this->globalClusteringRateIsBetterThanMax)
         this->globalClusteringRateMax = newGlobalClusteringRate;
 
-    this->weightedClusteringRateIsBetterThanPreviously = newWeightedClusteringRate > this->weightedClusteringRate;
-    if (this->weightedClusteringRateIsBetterThanPreviously)
+    this->weightedClusteringRateIsBetterThanMax = newWeightedClusteringRate > this->weightedClusteringRateMax;
+    if (this->weightedClusteringRateIsBetterThanMax)
         this->weightedClusteringRateMax = newWeightedClusteringRate;
 
-    this->f1ScoreIsBetterThanPreviously = newF1Score > this->f1Score;
-    if (this->f1ScoreIsBetterThanPreviously)
+    this->f1ScoreIsBetterThanMax = newF1Score > this->f1ScoreMax;
+    if (this->f1ScoreIsBetterThanMax)
         this->f1Score = newF1Score;
 
-    this->meanAbsoluteErrorIsBetterThanPreviously = newMeanAbsoluteError < this->meanAbsoluteError || this->meanAbsoluteError < 0;
-    if(this->meanAbsoluteErrorIsBetterThanPreviously)
+    this->meanAbsoluteErrorIsBetterThanMin = newMeanAbsoluteError < this->meanAbsoluteErrorMin || this->meanAbsoluteErrorMin < 0;
+    if(this->meanAbsoluteErrorIsBetterThanMin)
         this->meanAbsoluteErrorMin = newMeanAbsoluteError;
 
-    this->rootMeanSquaredErrorIsBetterThanPreviously = newRootMeanSquaredError < this->rootMeanSquaredError || this->meanAbsoluteError < 0;
-    if(this->rootMeanSquaredErrorIsBetterThanPreviously)
+    this->rootMeanSquaredErrorIsBetterThanMin = newRootMeanSquaredError < this->rootMeanSquaredErrorMin || this->meanAbsoluteErrorMin < 0;
+    if(this->rootMeanSquaredErrorIsBetterThanMin)
         this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
 
     this->globalClusteringRate = newGlobalClusteringRate;
@@ -309,11 +309,11 @@ bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
         && this->f1ScoreMax == sa.f1ScoreMax
         && this->meanAbsoluteErrorMin  == sa.meanAbsoluteErrorMin
         && this->rootMeanSquaredErrorMin == sa.rootMeanSquaredErrorMin
-        && this->globalClusteringRateIsBetterThanPreviously == sa.globalClusteringRateIsBetterThanPreviously
-        && this->weightedClusteringRateIsBetterThanPreviously == sa.weightedClusteringRateIsBetterThanPreviously
-        && this->f1ScoreIsBetterThanPreviously == sa.f1ScoreIsBetterThanPreviously
-        && this->meanAbsoluteErrorIsBetterThanPreviously == sa.meanAbsoluteErrorIsBetterThanPreviously
-        && this->rootMeanSquaredErrorIsBetterThanPreviously == sa.rootMeanSquaredErrorIsBetterThanPreviously;
+        && this->globalClusteringRateIsBetterThanMax == sa.globalClusteringRateIsBetterThanMax
+        && this->weightedClusteringRateIsBetterThanMax == sa.weightedClusteringRateIsBetterThanMax
+        && this->f1ScoreIsBetterThanMax == sa.f1ScoreIsBetterThanMax
+        && this->meanAbsoluteErrorIsBetterThanMin == sa.meanAbsoluteErrorIsBetterThanMin
+        && this->rootMeanSquaredErrorIsBetterThanMin == sa.rootMeanSquaredErrorIsBetterThanMin;
 }
 
 bool StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const

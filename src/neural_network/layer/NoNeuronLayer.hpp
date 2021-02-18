@@ -3,8 +3,6 @@
 #include <boost/serialization/access.hpp>
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
-#include "../optimizer/NeuralNetworkOptimizer.hpp"
-#include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
 {

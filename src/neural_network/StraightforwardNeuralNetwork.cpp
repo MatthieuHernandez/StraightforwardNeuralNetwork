@@ -98,7 +98,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
 
     for (this->epoch = 0; this->continueTraining(wait); this->epoch++)
     {
-        log<minimal>("Epoch: " + std::to_string(this->epoch));
+        //log<minimal>("Epoch: " + std::to_string(this->epoch));
         data.shuffle();
         for (this->index = 0; index + batchSize <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->index += batchSize)
@@ -143,7 +143,7 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
     this->stopTesting();
     log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
     log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
-    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanPreviously)
+    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
     {
         this->saveSync(autoSaveFilePath);
     }

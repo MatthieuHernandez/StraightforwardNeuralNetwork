@@ -1,16 +1,21 @@
+#include <boost/serialization/export.hpp>
 #include "NoNeuronLayer.hpp"
 
-void* snn::internal::NoNeuronLayer::getNeuron(int index)
+using namespace std;
+using namespace snn;
+using namespace internal;
+
+void* NoNeuronLayer::getNeuron(int index)
 {
     return nullptr;
 }
 
-int snn::internal::NoNeuronLayer::getNumberOfNeurons() const
+int NoNeuronLayer::getNumberOfNeurons() const
 {
     return 0;
 }
 
-int snn::internal::NoNeuronLayer::getNumberOfParameters() const
+int NoNeuronLayer::getNumberOfParameters() const
 {
     return 0;
 }

@@ -27,8 +27,8 @@ std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool tempo
     if(this->optimizers.size() > 0)
     {
         auto output = this->computeOutput(inputs, temporalReset);
-        for (auto& optimizer : this->optimizers)
-            optimizer->applyAfterOutputForTesting(output);
+        //for (auto& optimizer : this->optimizers)
+            //optimizer->applyAfterOutputForTesting(output);
         return output;
     }
     else
@@ -39,8 +39,8 @@ template <class N>
 std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for(auto& optimizer : this->optimizers)
-        optimizer->applyAfterOutputForTraining(output, temporalReset);
+    //for(auto& optimizer : this->optimizers)
+        //optimizer->applyAfterOutputForTraining(output, temporalReset);
     return output;
 }
 

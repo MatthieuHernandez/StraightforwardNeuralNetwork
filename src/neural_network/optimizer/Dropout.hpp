@@ -17,6 +17,8 @@ namespace snn::internal
         float reverseValue;
         std::vector<bool> presenceProbabilities;
 
+        bool randomProbability() const;
+
     public:
         Dropout() = default;  // use restricted to Boost library only
         Dropout(float value, BaseLayer* layer);

@@ -10,7 +10,10 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Dropout)
 
-auto randomProbability = [](const float p) -> auto { return static_cast<bool>(rand() / static_cast<float>(RAND_MAX) >= p); };
+bool Dropout::randomProbability() const
+{
+    return static_cast<bool>(rand() / static_cast<float>(RAND_MAX) >= this->value);
+}
 
 Dropout::Dropout(const float value, BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
@@ -18,7 +21,7 @@ Dropout::Dropout(const float value, BaseLayer* layer)
     this->reverseValue = 1.0f - this->value;
     auto size = static_cast<BaseLayer*>(layer)->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
-    std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), randomProbability(this->value));
+    std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
 }
 
 unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
@@ -28,9 +31,9 @@ unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
 
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
 {
-    if(temporalReset)
-         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), randomProbability(this->value));
-    transform(outputs.begin(), outputs.end(), this->presenceProbabilities.begin(), multiplies<float>());
+    if (temporalReset)
+        std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
+    transform(outputs.begin(), outputs.end(), this->presenceProbabilities.begin(), outputs.begin(), multiplies<float>());
 }
 
 void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
@@ -40,7 +43,7 @@ void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
 
 void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
-    transform(inputErrors.begin(), inputErrors.end(), this->presenceProbabilities.begin(), multiplies<float>());
+    transform(inputErrors.begin(), inputErrors.end(), this->presenceProbabilities.begin(), inputErrors.begin(), multiplies<float>());
 }
 
 bool Dropout::operator==(const LayerOptimizer& optimizer) const

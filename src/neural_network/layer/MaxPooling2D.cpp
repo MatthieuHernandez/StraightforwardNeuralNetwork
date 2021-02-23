@@ -53,7 +53,7 @@ vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalRes
     return this->computeOutput(inputs, temporalReset);
 }
 
-vector<float> MaxPooling2D::outputForBackpropagation(const vector<float>& inputs, bool temporalReset)
+vector<float> MaxPooling2D::outputForTraining(const vector<float>& inputs, bool temporalReset)
 {
     return this->computeOutput(inputs, temporalReset);
 }

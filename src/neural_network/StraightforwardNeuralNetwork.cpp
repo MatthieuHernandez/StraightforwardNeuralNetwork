@@ -114,7 +114,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
                 this->trainOnce(data.getTrainingData(this->index, batchSize),
                                 data.getTrainingOutputs(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
             else
-                this->output(data.getTrainingData(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
+                this->outputForTraining(data.getTrainingData(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
         }
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
             this->evaluate(data);

@@ -7,7 +7,7 @@ Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optim
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
-    LayerOptimizerFactory::build(this->optimizers, model);
+    LayerOptimizerFactory::build(this->optimizers, model, this);
 }
 
 template<class N>
@@ -26,25 +26,21 @@ std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool tempo
 {
     if(this->optimizers.size() > 0)
     {
-        auto copyOfInputs = std::vector(inputs);
+        auto output = this->computeOutput(inputs, temporalReset);
         for (auto& optimizer : this->optimizers)
-            optimizer->applyBefore(copyOfInputs);
-        auto output = this->computeOutput(copyOfInputs, temporalReset);
+            optimizer->applyAfterOutputForTesting(output);
         return output;
     }
     else
-    {
-        auto output = this->computeOutput(inputs, temporalReset);
-        return output;
-    }
+        return this->computeOutput(inputs, temporalReset);
 }
 
 template <class N>
-std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
     for(auto& optimizer : this->optimizers)
-        optimizer->applyAfterForBackpropagation(output);
+        optimizer->applyAfterOutputForTraining(output, temporalReset);
     return output;
 }
 

@@ -27,7 +27,7 @@ void CompositeForNonTemporalData::unshuffle()
 
 bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
 {
-    return false;
+    return true;
 }
 
 bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index) const

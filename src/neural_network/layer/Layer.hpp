@@ -37,7 +37,7 @@ namespace snn::internal
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override final;
+        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
 
         [[nodiscard]] void* getNeuron(int index) override final;

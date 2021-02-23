@@ -29,7 +29,7 @@ namespace snn::internal
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
-        [[nodiscard]] std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset) override;
+        [[nodiscard]] std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override;
         [[nodiscard]] std::vector<float> backOutput(std::vector<float>& inputErrors) override;
         void train(std::vector<float>& inputErrors) override;
 

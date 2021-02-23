@@ -18,21 +18,21 @@ LayerOptimizerModel snn::Dropout(float value)
 }
 
 
-std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model)
+std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model, BaseLayer* layer)
 {
     switch (model.type)
     {
     case layerOptimizerType::dropout:
-        return make_unique<Dropout>(model.value);
+        return make_unique<Dropout>(model.value, layer);
     default:
         throw InvalidArchitectureException("Layer optimizer type is not implemented.");
     }
 }
 
-void LayerOptimizerFactory::build(vector<unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model)
+void LayerOptimizerFactory::build(vector<unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model, BaseLayer* layer)
 {
     for (auto& optimizer : model.optimizers)
     {
-        optimizers.push_back(build(optimizer));
+        optimizers.push_back(build(optimizer, layer));
     }
 }

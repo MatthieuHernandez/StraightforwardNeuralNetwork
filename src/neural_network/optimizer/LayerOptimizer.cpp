@@ -6,3 +6,8 @@ using namespace snn;
 using namespace internal;
 
 BOOST_CLASS_EXPORT(LayerOptimizer)
+
+LayerOptimizer::LayerOptimizer(BaseLayer* layer)
+    : layer(layer)
+{
+}

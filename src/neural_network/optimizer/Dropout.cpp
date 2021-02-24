@@ -51,7 +51,8 @@ bool Dropout::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const Dropout&>(optimizer);
-        return this->value == o.value
+        return this->LayerOptimizer::operator==(optimizer)
+            && this->value == o.value
             && this->reverseValue == o.reverseValue;
     }
     catch (bad_cast&)

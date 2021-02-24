@@ -11,7 +11,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version) {}
+        void serialize(Archive& ar, unsigned version);
 
         BaseLayer* layer;
 
@@ -28,7 +28,13 @@ namespace snn::internal
 
         virtual void applyBeforeBackpropagation(std::vector<float>& inputErrors) = 0;
 
-        virtual bool operator==(const LayerOptimizer& optimizer) const = 0;
-        virtual bool operator!=(const LayerOptimizer& optimizer) const = 0;
+        virtual bool operator==(const LayerOptimizer& optimizer) const;
+        virtual bool operator!=(const LayerOptimizer& optimizer) const;
     };
+    
+    template <class Archive>
+    void LayerOptimizer::serialize(Archive& ar, unsigned version)
+    {
+        ar & this->layer;
+    }
 }

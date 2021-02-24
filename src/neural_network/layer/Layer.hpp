@@ -23,7 +23,8 @@ namespace snn::internal
     protected:
         int numberOfInputs;
 
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override = 0;
+        [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual std::vector<float> computeBackOutput(std::vector<float>& inputErrors) = 0;
 
     public:
         Layer() = default; // use restricted to Boost library only
@@ -38,7 +39,7 @@ namespace snn::internal
 
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
         std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override = 0;
+        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] void* getNeuron(int index) override final;
         [[nodiscard]] int getNumberOfInputs() const override final;

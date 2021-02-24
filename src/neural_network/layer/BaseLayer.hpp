@@ -14,9 +14,6 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version) {}
 
-    protected:
-        virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
-
     public:
         virtual ~BaseLayer() = default;
         virtual std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const = 0;

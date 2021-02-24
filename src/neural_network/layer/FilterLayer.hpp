@@ -19,6 +19,8 @@ namespace snn::internal
         int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
 
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
         [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
@@ -27,9 +29,6 @@ namespace snn::internal
         FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
-
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
         [[nodiscard]] int isValid() const override;

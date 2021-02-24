@@ -92,6 +92,9 @@ std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& in
         outputs = layers[l]->outputForTraining(outputs, temporalReset);
     }
 
+    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return !isnormal(v) && v != 0.0f; }))
+        this->outputNan = true;
+
     return outputs;
 }
 

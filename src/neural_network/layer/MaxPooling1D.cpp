@@ -21,8 +21,7 @@ unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) co
     return make_unique<MaxPooling1D>(*this);
 }
 
-
-std::vector<float> MaxPooling1D::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> MaxPooling1D::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (size_t i = 0; i < inputs.size(); ++i)
@@ -36,15 +35,9 @@ std::vector<float> MaxPooling1D::computeOutput(const std::vector<float>& inputs,
     return output;
 }
 
-
-vector<float> MaxPooling1D::output(const vector<float>& inputs, bool temporalReset)
-{
-    return this->computeOutput(inputs, temporalReset);
-}
-
 vector<float> MaxPooling1D::outputForTraining(const vector<float>& inputs, bool temporalReset)
 {
-    return this->computeOutput(inputs, temporalReset);
+    return this->output(inputs, temporalReset);
 }
 
 std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
@@ -53,7 +46,7 @@ std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
     errors.reserve(this->numberOfInputs);
     for (int i = 0, k = 0; i < this->numberOfOutputs; ++i)
     {
-        for(int j = 0; k < this->numberOfInputs && j < this->sizeOfFilterMatrix; ++j, ++k)
+        for (int j = 0; k < this->numberOfInputs && j < this->sizeOfFilterMatrix; ++j, ++k)
             errors.push_back(inputErrors[i]);
     }
     return errors;

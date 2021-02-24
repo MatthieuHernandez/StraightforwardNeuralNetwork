@@ -31,7 +31,7 @@ unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) co
 }
 
 
-std::vector<float> MaxPooling2D::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
     const int rest = this->shapeOfInput[0] % sizeOfFilterMatrix == 0 ? 0 : 1;
@@ -48,14 +48,9 @@ std::vector<float> MaxPooling2D::computeOutput(const std::vector<float>& inputs,
     return output;
 }
 
-vector<float> MaxPooling2D::output(const vector<float>& inputs, bool temporalReset)
-{
-    return this->computeOutput(inputs, temporalReset);
-}
-
 vector<float> MaxPooling2D::outputForTraining(const vector<float>& inputs, bool temporalReset)
 {
-    return this->computeOutput(inputs, temporalReset);
+    return this->output(inputs, temporalReset);
 }
 
 vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)

@@ -17,15 +17,16 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
+    protected:
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
+
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
         ~SimpleLayer() = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
-
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
         [[nodiscard]] int isValid() const override final;

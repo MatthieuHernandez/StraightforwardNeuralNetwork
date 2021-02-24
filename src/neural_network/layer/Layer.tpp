@@ -10,38 +10,42 @@ Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optim
     LayerOptimizerFactory::build(this->optimizers, model, this);
 }
 
-template<class N>
+template <class N>
 Layer<N>::Layer(const Layer& layer)
 {
     this->numberOfInputs = layer.numberOfInputs;
     this->neurons = layer.neurons;
 
     this->optimizers.reserve(layer.optimizers.size());
-    for(auto& optimizer : layer.optimizers)
+    for (auto& optimizer : layer.optimizers)
         this->optimizers.emplace_back(optimizer->clone(optimizer.get()));
 }
 
 template <class N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
-    if(this->optimizers.size() > 0)
-    {
-        auto output = this->computeOutput(inputs, temporalReset);
-        //for (auto& optimizer : this->optimizers)
-            //optimizer->applyAfterOutputForTesting(output);
-        return output;
-    }
-    else
-        return this->computeOutput(inputs, temporalReset);
+    auto output = this->computeOutput(inputs, temporalReset);
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyAfterOutputForTesting(output);
+    return output;
 }
 
 template <class N>
 std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    //for(auto& optimizer : this->optimizers)
-        //optimizer->applyAfterOutputForTraining(output, temporalReset);
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyAfterOutputForTraining(output, temporalReset);
     return output;
+}
+
+template <class N>
+std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
+{
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyBeforeBackpropagation(inputErrors);
+    auto error = this->computeBackOutput(inputErrors);
+    return error;
 }
 
 template <class N>

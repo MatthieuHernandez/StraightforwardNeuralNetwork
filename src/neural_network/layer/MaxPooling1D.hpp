@@ -19,12 +19,10 @@ namespace snn::internal
         int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
 
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
-
     public:
         MaxPooling1D() = default; // use restricted to Boost library only
         MaxPooling1D(LayerModel& model);
-         MaxPooling1D(const MaxPooling1D&) = default;
+        MaxPooling1D(const MaxPooling1D&) = default;
         ~MaxPooling1D() = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 

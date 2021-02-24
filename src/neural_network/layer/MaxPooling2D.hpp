@@ -20,8 +20,6 @@ namespace snn::internal
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
 
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
-
     public:
         MaxPooling2D() = default; // use restricted to Boost library only
         MaxPooling2D(LayerModel& model);

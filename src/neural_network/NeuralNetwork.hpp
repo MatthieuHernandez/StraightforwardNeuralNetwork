@@ -71,7 +71,7 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const;
 
-        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = false);
+        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
 
         bool operator==(const NeuralNetwork& neuralNetwork) const;
         bool operator!=(const NeuralNetwork& neuralNetwork) const;

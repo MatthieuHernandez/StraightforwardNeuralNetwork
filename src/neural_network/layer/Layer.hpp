@@ -42,6 +42,8 @@ namespace snn::internal
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] void* getNeuron(int index) override final;
+        [[nodiscard]] float getSumOfAbsNeuronWeights() const override final;
+        [[nodiscard]] float getSumOfSquareNeuronWeights() const override final;
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;

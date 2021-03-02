@@ -13,6 +13,7 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
+    protected:
         BaseLayer* layer;
 
     public:

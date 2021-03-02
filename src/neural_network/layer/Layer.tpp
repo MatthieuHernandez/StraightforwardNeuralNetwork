@@ -91,6 +91,26 @@ void* Layer<N>::getNeuron(int index)
 }
 
 template <class N>
+float Layer<N>::getSumOfAbsNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += abs(w);
+    return sum;
+}
+
+template <class N>
+float Layer<N>::getSumOfSquareNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += w*w;
+    return sum;
+}
+
+template <class N>
 int Layer<N>::getNumberOfInputs() const
 {
     return this->numberOfInputs;

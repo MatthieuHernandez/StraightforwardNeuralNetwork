@@ -14,18 +14,21 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
         float value;
-        float reverseValue;
+
+        void applyAfterOutput(std::vector<float>& outputs);
 
     public:
         L1Regularization() = default;  // use restricted to Boost library only
-        L1Regularization(float value);
-        L1Regularization(const L1Regularization& dropout) = default;
+        L1Regularization(float value, BaseLayer* layer);
+        L1Regularization(const L1Regularization& regularization) = default;
         ~L1Regularization() = default;
 
         std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const override;
 
-        void applyBefore(std::vector<float>& inputs) override;
-        void applyAfterForBackpropagation(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
+        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;
@@ -37,6 +40,5 @@ namespace snn::internal
         boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);
         ar & this->value;
-        ar & this->reverseValue;
     }
 }

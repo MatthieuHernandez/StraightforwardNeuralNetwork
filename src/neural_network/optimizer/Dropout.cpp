@@ -19,7 +19,7 @@ Dropout::Dropout(const float value, BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {
     this->reverseValue = 1.0f - this->value;
-    auto size = static_cast<BaseLayer*>(layer)->getNumberOfNeurons();
+    auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
     std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
 }

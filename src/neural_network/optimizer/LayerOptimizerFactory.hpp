@@ -14,10 +14,10 @@ namespace snn
         class LayerOptimizerFactory
         {
         private:
-            static std::unique_ptr<LayerOptimizer> build(LayerOptimizerModel& model);
+            static std::unique_ptr<LayerOptimizer> build(LayerOptimizerModel& model, BaseLayer* layer);
 
         public:
-            static void build(std::vector<std::unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model);
+            static void build(std::vector<std::unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model, BaseLayer* layer);
         };
     }
 }

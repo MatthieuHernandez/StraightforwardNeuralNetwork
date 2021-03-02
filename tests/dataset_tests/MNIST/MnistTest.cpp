@@ -55,7 +55,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        FullyConnected(150),
+        FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(70),
         FullyConnected(10)
     });

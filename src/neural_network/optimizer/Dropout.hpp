@@ -15,17 +15,22 @@ namespace snn::internal
 
         float value;
         float reverseValue;
+        std::vector<bool> presenceProbabilities;
+
+        bool randomProbability() const;
 
     public:
         Dropout() = default;  // use restricted to Boost library only
-        Dropout(float value);
+        Dropout(float value, BaseLayer* layer);
         Dropout(const Dropout& dropout) = default;
         ~Dropout() = default;
 
         std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const override;
 
-        void applyBefore(std::vector<float>& inputs) override;
-        void applyAfterForBackpropagation(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
+        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;
@@ -38,5 +43,6 @@ namespace snn::internal
         ar & boost::serialization::base_object<LayerOptimizer>(*this);
         ar & this->value;
         ar & this->reverseValue;
+        ar & this->presenceProbabilities;
     }
 }

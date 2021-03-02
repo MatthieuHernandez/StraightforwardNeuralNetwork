@@ -27,7 +27,7 @@ vector<float> FilterLayer::computeOutput(const vector<float>& inputs, bool tempo
     return outputs;
 }
 
-vector<float> FilterLayer::backOutput(vector<float>& inputErrors)
+vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < (int)this->neurons.size(); ++n)

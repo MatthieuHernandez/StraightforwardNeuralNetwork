@@ -45,7 +45,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
-    vector<float> inputs(8*8*3);
+    vector<float> inputs(8 * 8 * 3);
     inputs[30] = 1.5f;
     inputs[60] = 0.75f;
     inputs[90] = -0.25f;
@@ -53,12 +53,12 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -1.35f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
-    for(int i = 0; i < 10; ++i)
+    for (int i = 0; i < 10; ++i)
         A.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A != B);
 
-    for(int i = 0; i < 10; ++i)
+    for (int i = 0; i < 10; ++i)
         B.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A == B);
@@ -101,14 +101,14 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
 TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A({
-        Input(45),
-        MaxPooling(3),
-        Convolution(2, 2, activation::ReLU),
-        LocallyConnected(2, 2, activation::tanh),
-        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
-        GruLayer(2)
-    },
-        StochasticGradientDescent(0.03f, 0.78f));
+                                       Input(45),
+                                       MaxPooling(3),
+                                       Convolution(2, 2, activation::ReLU),
+                                       LocallyConnected(2, 2, activation::tanh),
+                                       FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
+                                       GruLayer(2)
+                                   },
+                                   StochasticGradientDescent(0.03f, 0.78f));
 
     A.saveAs("./testSave.tmp");
 

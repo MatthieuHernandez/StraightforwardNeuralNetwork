@@ -70,7 +70,7 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        FullyConnected(100),
+        FullyConnected(100, activation::sigmoid, L2Regularization(1e-4f)),
         GruLayer(10),
         FullyConnected(10)
     });
@@ -84,13 +84,13 @@ TEST_F(MnistTest, LocallyConnected1D)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         LocallyConnected(1, 7),
-        FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
+        FullyConnected(150, activation::sigmoid, L1Regularization(1e-5f)),
         FullyConnected(70),
         FullyConnected(10)
     });
     neuralNetwork.train(*data, 2_ep || 35_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70f);
+    ASSERT_ACCURACY(accuracy, 0.84f);
 }
 
 TEST_F(MnistTest, LocallyConnected2D)

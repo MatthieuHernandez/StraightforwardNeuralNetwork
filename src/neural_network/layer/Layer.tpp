@@ -91,22 +91,24 @@ void* Layer<N>::getNeuron(int index)
 }
 
 template <class N>
-float Layer<N>::getSumOfAbsNeuronWeights() const 
+float Layer<N>::getAverageOfAbsNeuronWeights() const 
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
         for (auto w : n.getWeights())
             sum += abs(w);
+    sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
 
 template <class N>
-float Layer<N>::getSumOfSquareNeuronWeights() const 
+float Layer<N>::getAverageOfSquareNeuronWeights() const 
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
         for (auto w : n.getWeights())
             sum += w*w;
+    sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
 

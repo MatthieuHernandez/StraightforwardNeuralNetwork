@@ -10,8 +10,8 @@ TEST(SaveNeuralNetwork, EqualTest)
     auto structureOfNetwork = {
         Input(8, 8, 3),
         Convolution(2, 4, activation::ReLU),
-        FullyConnected(20, activation::iSigmoid),
-        LocallyConnected(3, 2, activation::tanh),
+        FullyConnected(20, activation::iSigmoid, L1Regularization(1e-5f)),
+        LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-5f)),
         FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
         GruLayer(3),
         Recurrence(4)
@@ -53,7 +53,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -1.35f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 8; ++i)
         A.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A != B);
@@ -104,9 +104,9 @@ TEST(SaveNeuralNetwork, Save)
                                        Input(45),
                                        MaxPooling(3),
                                        Convolution(2, 2, activation::ReLU),
-                                       LocallyConnected(2, 2, activation::tanh),
+                                       LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
                                        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
-                                       GruLayer(2)
+                                       GruLayer(2, L2Regularization(1e-5f))
                                    },
                                    StochasticGradientDescent(0.03f, 0.78f));
 

@@ -62,7 +62,7 @@ int Neuron<Derived>::getNumberOfInputs() const
 template <class Derived>
 bool Neuron<Derived>::operator==(const Neuron& neuron) const
 {
-    return this->numberOfInputs == neuron.numberOfInputs
+    auto toto = this->numberOfInputs == neuron.numberOfInputs
         && this->weights == neuron.weights
         && this->bias == neuron.bias
         && this->previousDeltaWeights == neuron.previousDeltaWeights
@@ -72,6 +72,14 @@ bool Neuron<Derived>::operator==(const Neuron& neuron) const
         && this->activationFunction == neuron.activationFunction
         && this->outputFunction == neuron.outputFunction // not really good
         && *this->optimizer == *neuron.optimizer;
+
+    for(size_t n = 0; n < this->weights.size(); ++n)
+    {
+        if(this->weights[n] == neuron.weights[n])
+            return false;
+    }
+
+    return toto;
 }
 
 template <class Derived>

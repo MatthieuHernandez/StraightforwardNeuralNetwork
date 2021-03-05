@@ -29,7 +29,7 @@ void L2Regularization::applyAfterOutputForTesting(std::vector<float>& outputs)
 
 void L2Regularization::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
-    auto regularization = this->layer->getSumOfSquareNeuronWeights() * this->value;
+    auto regularization = this->layer->getAverageOfSquareNeuronWeights() * this->value;
     transform(inputErrors.begin(), inputErrors.end(), inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
 }
 
@@ -38,7 +38,8 @@ bool L2Regularization::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const L2Regularization&>(optimizer);
-        return this->value == o.value;
+        return this->LayerOptimizer::operator==(optimizer)
+            && this->value == o.value;
     }
     catch (bad_cast&)
     {

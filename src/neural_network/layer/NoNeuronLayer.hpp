@@ -27,8 +27,8 @@ namespace snn::internal
         virtual ~NoNeuronLayer() = default;
 
         [[nodiscard]] int getNumberOfOutput() const;
-        [[nodiscard]] float getSumOfAbsNeuronWeights() const override;
-        [[nodiscard]] float getSumOfSquareNeuronWeights() const override;
+        [[nodiscard]] float getAverageOfAbsNeuronWeights() const override;
+        [[nodiscard]] float getAverageOfSquareNeuronWeights() const override;
         [[nodiscard]] void* getNeuron(int index) override;
         [[nodiscard]] int getNumberOfNeurons() const override;
         [[nodiscard]] int getNumberOfParameters() const override;

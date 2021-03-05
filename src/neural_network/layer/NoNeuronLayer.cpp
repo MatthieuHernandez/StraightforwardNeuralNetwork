@@ -11,12 +11,12 @@ int NoNeuronLayer::getNumberOfOutput() const
     return numberOfOutputs;
 }
 
-float NoNeuronLayer::getSumOfAbsNeuronWeights() const
+float NoNeuronLayer::getAverageOfAbsNeuronWeights() const
 {
     return 0.0f;
 }
 
-float NoNeuronLayer::getSumOfSquareNeuronWeights() const
+float NoNeuronLayer::getAverageOfSquareNeuronWeights() const
 {
     return 0.0f;
 }

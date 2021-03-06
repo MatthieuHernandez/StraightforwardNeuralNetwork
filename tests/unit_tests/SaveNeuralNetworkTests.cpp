@@ -10,14 +10,14 @@ TEST(SaveNeuralNetwork, EqualTest)
     auto structureOfNetwork = {
         Input(8, 8, 3),
         Convolution(2, 4, activation::ReLU),
-        FullyConnected(20, activation::iSigmoid),
-        LocallyConnected(3, 2, activation::tanh),
+        FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
+        LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3f)),
         FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
         GruLayer(3),
         Recurrence(4)
     };
-    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
-    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.03f, 0.78f));
+    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
+    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), 0);
@@ -40,17 +40,17 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(*neuronA == *neuronB);
     EXPECT_TRUE(neuronA != neuronB);
 
-    //auto moto = dynamic_cast<internal::SimpleNeuron>(A.layers[0]->getNeuron(0));
     EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer.get());
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 
     vector<float> inputs(8 * 8 * 3);
-    inputs[30] = 1.5f;
+    inputs[29] = 0.99f;
+    inputs[30] = 0.88f;
     inputs[60] = 0.75f;
     inputs[90] = -0.25f;
     inputs[120] = 1.0f;
-    inputs[150] = -1.35f;
+    inputs[150] = -0.77f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
     for (int i = 0; i < 10; ++i)
@@ -66,6 +66,9 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
     EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
+
+    //A.~StraightforwardNeuralNetwork(); // doesn't work on Linux
+    //B.trainOnce(inputs, desired);
 }
 
 TEST(SaveNeuralNetwork, EqualTestWithDropout)
@@ -104,9 +107,9 @@ TEST(SaveNeuralNetwork, Save)
                                        Input(45),
                                        MaxPooling(3),
                                        Convolution(2, 2, activation::ReLU),
-                                       LocallyConnected(2, 2, activation::tanh),
+                                       LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
                                        FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
-                                       GruLayer(2)
+                                       GruLayer(2, L2Regularization(1e-5f))
                                    },
                                    StochasticGradientDescent(0.03f, 0.78f));
 

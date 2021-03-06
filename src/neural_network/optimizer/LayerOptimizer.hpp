@@ -13,15 +13,15 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        BaseLayer* layer;
+    protected:
+        const BaseLayer* layer;
 
     public:
         LayerOptimizer() = default; // use restricted to Boost library only
-        LayerOptimizer(BaseLayer* layer);
-        LayerOptimizer(const LayerOptimizer& layer) = default;
+        LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
-        virtual std::unique_ptr<LayerOptimizer> clone(LayerOptimizer* optimizer) const = 0;
+        virtual std::unique_ptr<LayerOptimizer> clone(const BaseLayer* layer) const = 0;
 
         virtual void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) = 0;
         virtual void applyAfterOutputForTesting(std::vector<float>& outputs) = 0;

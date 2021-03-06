@@ -18,7 +18,7 @@ Layer<N>::Layer(const Layer& layer)
 
     this->optimizers.reserve(layer.optimizers.size());
     for (auto& optimizer : layer.optimizers)
-        this->optimizers.emplace_back(optimizer->clone(optimizer.get()));
+        this->optimizers.emplace_back(optimizer->clone(this));
 }
 
 template <class N>
@@ -54,9 +54,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
     for (auto& optimizer : this->optimizers)
         optimizer->applyBeforeBackpropagation(inputErrors);
     for (size_t n = 0; n < this->neurons.size(); ++n)
-    {
         neurons[n].train(inputErrors[n]);
-    }
 }
 
 template <class N>
@@ -88,6 +86,28 @@ template <class N>
 void* Layer<N>::getNeuron(int index)
 {
     return static_cast<void*>(&this->neurons[index]);
+}
+
+template <class N>
+float Layer<N>::getAverageOfAbsNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += abs(w);
+    sum /= static_cast<float>(this->neurons.size());
+    return sum;
+}
+
+template <class N>
+float Layer<N>::getAverageOfSquareNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += w*w;
+    sum /= static_cast<float>(this->neurons.size());
+    return sum;
 }
 
 template <class N>

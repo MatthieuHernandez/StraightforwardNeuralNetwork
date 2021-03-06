@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class Dropout final : public LayerOptimizer
+    class L2Regularization final : public LayerOptimizer
     {
     private:
         friend class boost::serialization::access;
@@ -14,16 +14,12 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
         float value;
-        float reverseValue;
-        std::vector<bool> presenceProbabilities;
-
-        bool randomProbability() const;
 
     public:
-        Dropout() = default;  // use restricted to Boost library only
-        Dropout(float value, BaseLayer* layer);
-        Dropout(const Dropout& dropout, const BaseLayer* layer);
-        ~Dropout() = default;
+        L2Regularization() = default;  // use restricted to Boost library only
+        L2Regularization(float value, BaseLayer* layer);
+        L2Regularization(const L2Regularization& regularization, const BaseLayer* layer);
+        ~L2Regularization() = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 
@@ -37,12 +33,10 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Dropout::serialize(Archive& ar, unsigned version)
+    void L2Regularization::serialize(Archive& ar, unsigned version)
     {
-        boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
+        boost::serialization::void_cast_register<L2Regularization, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);
         ar & this->value;
-        ar & this->reverseValue;
-        ar & this->presenceProbabilities;
     }
 }

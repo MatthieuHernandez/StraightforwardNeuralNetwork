@@ -5,6 +5,22 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
+
+int NoNeuronLayer::getNumberOfOutput() const
+{
+    return numberOfOutputs;
+}
+
+float NoNeuronLayer::getAverageOfAbsNeuronWeights() const
+{
+    return 0.0f;
+}
+
+float NoNeuronLayer::getAverageOfSquareNeuronWeights() const
+{
+    return 0.0f;
+}
+
 void* NoNeuronLayer::getNeuron(int index)
 {
     return nullptr;

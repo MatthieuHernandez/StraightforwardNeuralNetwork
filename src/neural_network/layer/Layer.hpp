@@ -9,6 +9,8 @@
 #include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Dropout.hpp"
+#include "../optimizer/L1Regularization.hpp"
+#include "../optimizer/L2Regularization.hpp"
 
 namespace snn::internal
 {
@@ -42,6 +44,8 @@ namespace snn::internal
         std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
 
         [[nodiscard]] void* getNeuron(int index) override final;
+        [[nodiscard]] float getAverageOfAbsNeuronWeights() const override final;
+        [[nodiscard]] float getAverageOfSquareNeuronWeights() const override final;
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;
@@ -64,6 +68,8 @@ namespace snn::internal
         ar & this->numberOfInputs;
         ar & this->neurons;
         ar.template register_type<Dropout>();
+        ar.template register_type<L1Regularization>();
+        ar.template register_type<L2Regularization>();
         ar & this->optimizers;
     }
 

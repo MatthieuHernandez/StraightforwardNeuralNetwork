@@ -19,6 +19,8 @@ namespace snn::internal
         virtual std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const = 0;
 
         [[nodiscard]] virtual void* getNeuron(int index) = 0;
+        [[nodiscard]] virtual float getAverageOfAbsNeuronWeights() const = 0;
+        [[nodiscard]] virtual float getAverageOfSquareNeuronWeights() const = 0;
         [[nodiscard]] virtual int getNumberOfInputs() const = 0;
         [[nodiscard]] virtual int getNumberOfNeurons() const = 0;
         [[nodiscard]] virtual int getNumberOfParameters() const = 0;

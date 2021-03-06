@@ -9,6 +9,8 @@
 #include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Dropout.hpp"
+#include "../optimizer/L1Regularization.hpp"
+#include "../optimizer/L2Regularization.hpp"
 
 namespace snn::internal
 {
@@ -66,6 +68,8 @@ namespace snn::internal
         ar & this->numberOfInputs;
         ar & this->neurons;
         ar.template register_type<Dropout>();
+        ar.template register_type<L1Regularization>();
+        ar.template register_type<L2Regularization>();
         ar & this->optimizers;
     }
 

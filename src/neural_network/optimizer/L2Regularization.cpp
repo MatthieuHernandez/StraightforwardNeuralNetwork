@@ -14,9 +14,15 @@ L2Regularization::L2Regularization(const float value, BaseLayer* layer)
 {
 }
 
-unique_ptr<LayerOptimizer> L2Regularization::clone(LayerOptimizer* optimizer) const
+L2Regularization::L2Regularization(const L2Regularization& regularization, const BaseLayer* layer)
+    : LayerOptimizer(layer)
 {
-    return make_unique<L2Regularization>(*this);
+    this->value = regularization.value;
+}
+
+unique_ptr<LayerOptimizer> L2Regularization::clone(const BaseLayer* newLayer) const
+{
+    return make_unique<L2Regularization>(*this, newLayer);
 }
 
 void L2Regularization::applyAfterOutputForTraining(std::vector<float>& outputs, bool)

@@ -24,9 +24,17 @@ Dropout::Dropout(const float value, BaseLayer* layer)
     std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
 }
 
-unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
+Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
+    : LayerOptimizer(layer)
 {
-    return make_unique<Dropout>(*this);
+    this->value = dropout.value;
+    this->reverseValue = dropout.reverseValue;
+    this->presenceProbabilities = dropout.presenceProbabilities;
+}
+
+unique_ptr<LayerOptimizer> Dropout::clone(const BaseLayer* newLayer) const
+{
+    return make_unique<Dropout>(*this, newLayer);
 }
 
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)

@@ -7,7 +7,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(LayerOptimizer)
 
-LayerOptimizer::LayerOptimizer(BaseLayer* layer)
+LayerOptimizer::LayerOptimizer(const BaseLayer* layer)
     : layer(layer)
 {
 }

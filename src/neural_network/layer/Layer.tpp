@@ -18,7 +18,7 @@ Layer<N>::Layer(const Layer& layer)
 
     this->optimizers.reserve(layer.optimizers.size());
     for (auto& optimizer : layer.optimizers)
-        this->optimizers.emplace_back(optimizer->clone(optimizer.get()));
+        this->optimizers.emplace_back(optimizer->clone(this));
 }
 
 template <class N>
@@ -54,9 +54,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
     for (auto& optimizer : this->optimizers)
         optimizer->applyBeforeBackpropagation(inputErrors);
     for (size_t n = 0; n < this->neurons.size(); ++n)
-    {
         neurons[n].train(inputErrors[n]);
-    }
 }
 
 template <class N>

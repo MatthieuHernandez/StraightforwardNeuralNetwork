@@ -13,11 +13,9 @@ nav_order: 1
 
 ## Presentation
 This optimizer is a layer optimizer that randomly disable a certain percentage of neurons during the learning phase.
-<br/>
-**&#9888;** _No test from this project proves the effectiveness of Dropout._
 
 ## Declaration
-This is the function used to declare a GRU layer.
+This is the function used to declare a Dropout optimizer.
 ```cpp
 OptimizerModel Dropout(float value);
 ```

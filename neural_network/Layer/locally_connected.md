@@ -3,7 +3,7 @@ layout: default
 title: Locally Connected
 parent: Layers
 grand_parent: Neural network
-nav_order: 5
+nav_order: 6
 ---
 
 # Locally Connected layer
@@ -12,10 +12,10 @@ nav_order: 5
 </p>
 
 ## Presentation
-This layer is mainly used for reduce the size of input, the Locally Connected layer makes it easier to extract markers from the images. 
+This layer is mainly used to reduce the size of input, the Locally Connected layer makes it easier to extract markers from the images. The Locally Connected layer can be 1D or 2D depending on the previous layer.
 
 ## Declaration 
-This is the function used to declare a local connected layer.
+This is the function used to declare a Locally Connected layer.
 ```cpp
 template <class ... TOptimizer>
 LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, TOptimizer ... optimizers);
@@ -35,4 +35,4 @@ LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation
         FullyConnected(10)
     });
 ```
-[See an example of GRU layer on dataset]({{site.baseurl}}/examples/Wine.html)
+[See an example of Locally Connected layer on dataset]({{site.baseurl}}/examples/audio_cats_and_dogs.html)

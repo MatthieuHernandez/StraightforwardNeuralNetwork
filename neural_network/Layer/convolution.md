@@ -3,7 +3,7 @@ layout: default
 title: Convolution
 parent: Layers
 grand_parent: Neural network
-nav_order: 6
+nav_order: 7
 ---
 
 # Convolutional layer
@@ -14,7 +14,7 @@ nav_order: 6
 ## Presentation
 This layer is mainly used for image processing, this makes it easier to extract markers from the images. The Convolutional layer can be 1D or 2D depending on the previous layer.
 ## Declaration 
-This is the function used to declare a convolutional layer.
+This is the function used to declare a Convolutional layer.
 ```cpp
  template <class ... TOptimizer>
 LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix, activation activation = activation::ReLU, TOptimizer ... optimizers);

@@ -3,7 +3,7 @@ layout: default
 title: SGD
 parent: Optimizer
 grand_parent: Neural network
-nav_order: 1
+nav_order: 0
 ---
 
 # Stochastic Gradient Descent

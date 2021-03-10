@@ -28,7 +28,7 @@ unique_ptr<Data> IrisTest::data = nullptr;
 TEST_F(IrisTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 4);
-    ASSERT_EQ(data->numberOfLabel, 3);
+    ASSERT_EQ(data->numberOfLabels, 3);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 150);
     ASSERT_EQ((int)data->sets[training].labels.size(), 150);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 150);
@@ -46,6 +46,9 @@ TEST_F(IrisTest, trainNeuralNetwork)
         FullyConnected(5),
         FullyConnected(3)
     });
+
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+
     neuralNetwork.train(*data, 0.98_acc || 2_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98f);

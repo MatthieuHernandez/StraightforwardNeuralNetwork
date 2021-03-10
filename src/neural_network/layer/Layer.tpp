@@ -7,54 +7,54 @@ Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optim
     {
         this->neurons.emplace_back(model.neuron, optimizer);
     }
-    LayerOptimizerFactory::build(this->optimizers, model);
+    LayerOptimizerFactory::build(this->optimizers, model, this);
 }
 
-template<class N>
+template <class N>
 Layer<N>::Layer(const Layer& layer)
 {
     this->numberOfInputs = layer.numberOfInputs;
     this->neurons = layer.neurons;
 
     this->optimizers.reserve(layer.optimizers.size());
-    for(auto& optimizer : layer.optimizers)
-        this->optimizers.emplace_back(optimizer->clone(optimizer.get()));
+    for (auto& optimizer : layer.optimizers)
+        this->optimizers.emplace_back(optimizer->clone(this));
 }
 
 template <class N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
-    if(this->optimizers.size() > 0)
-    {
-        auto copyOfInputs = std::vector(inputs);
-        for (auto& optimizer : this->optimizers)
-            optimizer->applyBefore(copyOfInputs);
-        auto output = this->computeOutput(copyOfInputs, temporalReset);
-        return output;
-    }
-    else
-    {
-        auto output = this->computeOutput(inputs, temporalReset);
-        return output;
-    }
+    auto output = this->computeOutput(inputs, temporalReset);
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyAfterOutputForTesting(output);
+    return output;
 }
 
 template <class N>
-std::vector<float> Layer<N>::outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset)
+std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for(auto& optimizer : this->optimizers)
-        optimizer->applyAfterForBackpropagation(output);
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyAfterOutputForTraining(output, temporalReset);
     return output;
+}
+
+template <class N>
+std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
+{
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyBeforeBackpropagation(inputErrors);
+    auto error = this->computeBackOutput(inputErrors);
+    return error;
 }
 
 template <class N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
+    for (auto& optimizer : this->optimizers)
+        optimizer->applyBeforeBackpropagation(inputErrors);
     for (size_t n = 0; n < this->neurons.size(); ++n)
-    {
         neurons[n].train(inputErrors[n]);
-    }
 }
 
 template <class N>
@@ -86,6 +86,28 @@ template <class N>
 void* Layer<N>::getNeuron(int index)
 {
     return static_cast<void*>(&this->neurons[index]);
+}
+
+template <class N>
+float Layer<N>::getAverageOfAbsNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += abs(w);
+    sum /= static_cast<float>(this->neurons.size());
+    return sum;
+}
+
+template <class N>
+float Layer<N>::getAverageOfSquareNeuronWeights() const 
+{
+    auto sum = 0.0f;
+    for (auto& n : this->neurons)
+        for (auto w : n.getWeights())
+            sum += w*w;
+    sum /= static_cast<float>(this->neurons.size());
+    return sum;
 }
 
 template <class N>

@@ -2,6 +2,7 @@
 #include <functional>
 #include <boost/serialization/export.hpp>
 #include "Dropout.hpp"
+#include "../layer/BaseLayer.hpp"
 
 using namespace std;
 using namespace snn;
@@ -9,30 +10,48 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Dropout)
 
-Dropout::Dropout(const float value)
-    : LayerOptimizer(), value(value)
+bool Dropout::randomProbability() const
+{
+    return static_cast<bool>(rand() / static_cast<float>(RAND_MAX) >= this->value);
+}
+
+Dropout::Dropout(const float value, BaseLayer* layer)
+    : LayerOptimizer(layer), value(value)
 {
     this->reverseValue = 1.0f - this->value;
+    auto size = layer->getNumberOfNeurons();
+    this->presenceProbabilities.resize(size);
+    std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
 }
 
-unique_ptr<LayerOptimizer> Dropout::clone(LayerOptimizer* optimizer) const
+Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
+    : LayerOptimizer(layer)
 {
-    return make_unique<Dropout>(*this);
+    this->value = dropout.value;
+    this->reverseValue = dropout.reverseValue;
+    this->presenceProbabilities = dropout.presenceProbabilities;
 }
 
-void Dropout::applyBefore(std::vector<float>& inputs)
+unique_ptr<LayerOptimizer> Dropout::clone(const BaseLayer* newLayer) const
 {
-    transform(inputs.begin(), inputs.end(), inputs.begin(),
-              std::bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
+    return make_unique<Dropout>(*this, newLayer);
 }
 
-void Dropout::applyAfterForBackpropagation(std::vector<float>& outputs)
+void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
 {
-    for (auto& o : outputs)
-    {
-        if (rand() / static_cast<float>(RAND_MAX) < value)
-            o = 0.0f;
-    }
+    if (temporalReset)
+        std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
+    transform(outputs.begin(), outputs.end(), this->presenceProbabilities.begin(), outputs.begin(), multiplies<float>());
+}
+
+void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
+{
+    transform(outputs.begin(), outputs.end(), outputs.begin(), bind(multiplies<float>(), placeholders::_1, this->reverseValue));
+}
+
+void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
+{
+    transform(inputErrors.begin(), inputErrors.end(), this->presenceProbabilities.begin(), inputErrors.begin(), multiplies<float>());
 }
 
 bool Dropout::operator==(const LayerOptimizer& optimizer) const
@@ -40,7 +59,8 @@ bool Dropout::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const Dropout&>(optimizer);
-        return this->value == o.value
+        return this->LayerOptimizer::operator==(optimizer)
+            && this->value == o.value
             && this->reverseValue == o.reverseValue;
     }
     catch (bad_cast&)

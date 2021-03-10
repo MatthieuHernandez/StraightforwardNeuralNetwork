@@ -8,17 +8,18 @@ using namespace snn;
 
 unique_ptr<Data> createDataForAdditionTests();
 unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision);
-void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d);
+void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn);
 
 TEST(Addition, WithMPL)
 {
-    unique_ptr<Data> data = createDataForAdditionTests();
+    auto data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
         FullyConnected(6, activation::sigmoid),
         FullyConnected(1, activation::identity)
     });
-    testNeuralNetworkForAddition(neuralNetwork, *data);
+    neuralNetwork.train(*data, 1.0_acc || 3_s, 3, 6);
+    testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithCNN)
@@ -31,7 +32,8 @@ TEST(Addition, WithCNN)
     }, 
         StochasticGradientDescent(0.01f));
 
-    testNeuralNetworkForAddition(neuralNetwork, *data);
+    neuralNetwork.train(*data, 1.0_acc || 3_s);
+    testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithLCNN)
@@ -42,7 +44,9 @@ TEST(Addition, WithLCNN)
         LocallyConnected(6, 1, activation::sigmoid),
         FullyConnected(1, activation::identity)
     });
-    testNeuralNetworkForAddition(neuralNetwork, *data);
+
+    neuralNetwork.train(*data, 1.0_acc || 3_s);
+    testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithRNN)
@@ -56,7 +60,8 @@ TEST(Addition, WithRNN)
     }, 
         StochasticGradientDescent(0.01f, 0.4f));
 
-    testNeuralNetworkForAddition(neuralNetwork, *data);
+    neuralNetwork.train(*data, 1.0_acc || 5_s, 1, 2);
+    testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithGRU)
@@ -70,16 +75,16 @@ TEST(Addition, WithGRU)
     }, 
         StochasticGradientDescent(0.01f, 0.4f));
 
-    testNeuralNetworkForAddition(neuralNetwork, *data);
+     neuralNetwork.train(*data, 1.0_acc || 5_s, 1, 3);
+    testNeuralNetworkForAddition(neuralNetwork);
 }
 
-void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn, Data& d)
+void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn)
 {
-    nn.train(d, 1.0_acc || 8_s);
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 1.0);
-    ASSERT_MAE(mae, d.getPrecision());
+    ASSERT_ACCURACY(acc, 1.0f);
+    ASSERT_MAE(mae, 0.4f);
 }
 
 unique_ptr<Data> createDataForAdditionTests()
@@ -99,7 +104,7 @@ unique_ptr<Data> createDataForAdditionTests()
         {8}, {2}, {8}, {6}, {4}
     };
 
-    const float precision = 0.5f;
+    const float precision = 0.4f;
     unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(precision);
     return data;

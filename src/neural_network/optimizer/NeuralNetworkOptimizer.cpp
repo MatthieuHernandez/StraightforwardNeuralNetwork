@@ -18,7 +18,6 @@ bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer)
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code()
         && this->t == optimizer.t;
-
 }
 
 bool NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const

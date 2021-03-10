@@ -28,7 +28,7 @@ unique_ptr<Data> Cifar10Test::data = nullptr;
 TEST_F(Cifar10Test, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 3072);
-    ASSERT_EQ(data->numberOfLabel, 10);
+    ASSERT_EQ(data->numberOfLabels, 10);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 50000);
     ASSERT_EQ((int)data->sets[training].labels.size(), 50000);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
@@ -49,4 +49,34 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     neuralNetwork.train(*data, 1_ep || 240_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.24f);
+}
+
+TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(32, 32, 3),
+        Convolution(1,8),
+        FullyConnected(120),
+        FullyConnected(10)
+    },
+        StochasticGradientDescent(0.03f, 0.2f));
+
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+
+    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
+    neuralNetwork.autoSaveWhenBetter = true;
+    neuralNetwork.train(*data, 0.5225_acc);
+
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.20f);
+}
+
+TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
+{
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
+    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    neuralNetwork.evaluate(*data);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_EQ(numberOfParameters, 196200);
+    ASSERT_FLOAT_EQ(accuracy, 0.5230f);
 }

@@ -19,16 +19,18 @@ namespace snn
 
         bool wantToStopTraining = false;
         bool isIdle = true;
-        int currentIndex = 0;
-        int numberOfIteration = 0;
+        int index = 0;
+        int epoch = 0;
         int numberOfTrainingsBetweenTwoEvaluations = 0;
 
         void resetTrainingValues();
 
-        void trainSync(Data& data, Wait wait);
-        void evaluateOnce(Data& data);
+        void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
+        void saveSync(std::string filePath);
+        void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
+        void validData(const Data& data, int batchSize) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -47,15 +49,14 @@ namespace snn
         std::string autoSaveFilePath = "AutoSave.snn";
 
         [[nodiscard]] int isValid() const;
-        [[nodiscard]] bool validData(const Data& data) const;
 
-        void startTrainingAsync(Data& data);
+        void startTrainingAsync(Data& data, int batchSize = 1, int evaluationFrequency = 1);
         void stopTrainingAsync();
 
         void waitFor(Wait wait) const;
-        void train(Data& data, Wait wait);
+        void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
-        void evaluate(Data& data);
+        void evaluate(const Data& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
         int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);
@@ -65,8 +66,8 @@ namespace snn
         void saveAs(std::string filePath);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
-        int getCurrentIndex() const { return this->currentIndex; }
-        int getNumberOfIteration() const { return this->numberOfIteration; }
+        int getCurrentIndex() const { return this->index; }
+        int getCurrentEpoch() const { return this->epoch; }
         int getNumberOfTrainingsBetweenTwoEvaluations() const { return this->numberOfTrainingsBetweenTwoEvaluations; }
 
         void setNumberOfTrainingsBetweenTwoEvaluations(int value)
@@ -86,9 +87,9 @@ namespace snn
         ar & this->autoSaveFilePath;
         ar & this->autoSaveWhenBetter;
         ar & this->wantToStopTraining;
-        ar & this->currentIndex;
+        ar & this->index;
         ar & this->isIdle;
-        ar & this->numberOfIteration;
+        ar & this->epoch;
         ar & this->numberOfTrainingsBetweenTwoEvaluations;
     }
 }

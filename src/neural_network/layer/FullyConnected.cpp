@@ -8,7 +8,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(FullyConnected)
 
 FullyConnected::FullyConnected(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-     : SimpleLayer(model, optimizer)
+    : SimpleLayer(model, optimizer)
 {
 }
 

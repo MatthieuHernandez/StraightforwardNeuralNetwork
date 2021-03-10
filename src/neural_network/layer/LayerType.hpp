@@ -7,8 +7,8 @@ namespace snn
         fullyConnected = 1,
         recurrence = 2,
         gruLayer = 3,
-        locallyConnected = 4,
-        convolution = 5,
-
+        maxPooling = 4,
+        locallyConnected = 5,
+        convolution = 6
     };
 }

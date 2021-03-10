@@ -28,7 +28,7 @@ std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& input
 }
 
 template <class N>
-std::vector<float> SimpleLayer<N>::backOutput(std::vector<float>& inputErrors)
+std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputErrors)
 {
     std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)

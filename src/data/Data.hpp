@@ -33,12 +33,15 @@ namespace snn
                         int recurrences);
 
         void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
+        void flatten(std::vector<std::vector<std::vector<float>>>& input3D);
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
-        int numberOfRecurrences{};
-        float precision{};
-        float separator{};
+        int numberOfRecurrences;
+        float precision;
+        float separator;
+
+        std::vector<float> batchedData{};
 
     public:
         Data(problem typeOfProblem,
@@ -73,7 +76,7 @@ namespace snn
         const nature typeOfTemporal;
 
         int sizeOfData{}; // size of one data, equal to size of neural network inputs
-        int numberOfLabel{}; // the number of class, equal to size of neural network outputs
+        int numberOfLabels{}; // the number of class, equal to size of neural network outputs
 
         Set sets[2];
 
@@ -91,17 +94,17 @@ namespace snn
         [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
         [[nodiscard]] bool needToEvaluateOnTestingData(int index) const;
 
-        [[nodiscard]] const std::vector<float>& getTrainingData(int index) const;
+        [[nodiscard]] const std::vector<float>& getTrainingData(int index, int batchSize = 1);
         [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
 
         [[nodiscard]] int getTrainingLabel(int) const;
         [[nodiscard]] int getTestingLabel(int) const;
 
-        [[nodiscard]] const std::vector<float>& getTrainingOutputs(const int index) const;
-        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const;
+        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize = 1);
+        [[nodiscard]] const std::vector<float>& getTestingOutputs(int) const;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, int index) const;
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index) const;
+        [[nodiscard]] const std::vector<float>& getData(set set, int index);
+        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
         [[nodiscard]] int getLabel(set set, int index) const;
 
         

@@ -32,25 +32,25 @@ jobs:
     - name: Iris
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=IrisTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=IrisTest*
     - name: Wine
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=WineTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=WineTest*
     - name: DailyMinTemperatures
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=DailyMinTemperaturesTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=DailyMinTemperaturesTest*
     - name: MNIST
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=MnistTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=MnistTest*
     - name: Fashion MNIST
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest*
     - name: CIFAR-10
       run: |
         cd ./build
-        ./tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test* --gtest_also_run_disabled_tests
+        ./tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test*
         

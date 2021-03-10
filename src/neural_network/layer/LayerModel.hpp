@@ -10,6 +10,7 @@ namespace snn
         layerType type; 
         int numberOfInputs;
         int numberOfNeurons;
+        int numberOfOutputs;
         NeuronModel neuron;
         int numberOfFilters;
         int sizeOfFilerMatrix;

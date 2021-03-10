@@ -28,7 +28,7 @@ unique_ptr<Data> MnistTest::data = nullptr;
 TEST_F(MnistTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, 784);
-    ASSERT_EQ(data->numberOfLabel, 10);
+    ASSERT_EQ(data->numberOfLabels, 10);
     ASSERT_EQ((int)data->sets[training].inputs.size(), 60000);
     ASSERT_EQ((int)data->sets[training].labels.size(), 60000);
     ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
@@ -41,7 +41,8 @@ TEST_F(MnistTest, loadData)
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(784),
+        Input(28, 28, 1),
+        MaxPooling(2),
         FullyConnected(10)
     },
         StochasticGradientDescent(0.02f, 0.1f));
@@ -54,7 +55,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        FullyConnected(150),
+        FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(70),
         FullyConnected(10)
     },
@@ -87,7 +88,7 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
-        FullyConnected(100),
+        FullyConnected(100, activation::sigmoid, L2Regularization(1e-4f)),
         GruLayer(10),
         FullyConnected(10)
     });
@@ -101,13 +102,13 @@ TEST_F(MnistTest, LocallyConnected1D)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         LocallyConnected(1, 7),
-        FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
+        FullyConnected(150, activation::sigmoid, L1Regularization(1e-5f)),
         FullyConnected(70),
         FullyConnected(10)
     });
     neuralNetwork.train(*data, 2_ep || 35_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70f);
+    ASSERT_ACCURACY(accuracy, 0.84f);
 }
 
 TEST_F(MnistTest, LocallyConnected2D)
@@ -175,4 +176,34 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
     ASSERT_ACCURACY(accuracy10Filters, 0.8f);
 
     EXPECT_GT(accuracy10Filters, accuracy1Filter);
+}
+
+TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        Convolution(2,4),
+        FullyConnected(150),
+        FullyConnected(10)
+        },
+        StochasticGradientDescent(0.02f, 0.6f));  
+
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+
+    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForMNIST.snn";
+    neuralNetwork.autoSaveWhenBetter = true;
+    neuralNetwork.train(*data, 0.9859_acc);
+
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.20f);
+}
+
+TEST_F(MnistTest, EvaluateBestNeuralNetwork)
+{
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
+    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    neuralNetwork.evaluate(*data);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_EQ(numberOfParameters, 209000);
+    ASSERT_FLOAT_EQ(accuracy, 0.9862f);
 }

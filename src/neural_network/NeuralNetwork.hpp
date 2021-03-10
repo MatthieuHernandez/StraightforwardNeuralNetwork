@@ -13,11 +13,9 @@
 #include "layer/GruLayer.hpp"
 #include "layer/LocallyConnected1D.hpp"
 #include "layer/LocallyConnected2D.hpp"
-
-
-namespace snn {
-    struct NeuralNetworkOptimizerModel;
-}
+#include "layer/MaxPooling1D.hpp"
+#include "layer/MaxPooling2D.hpp"
+#include "optimizer/NeuralNetworkOptimizerModel.hpp"
 
 namespace snn::internal
 {
@@ -29,8 +27,7 @@ namespace snn::internal
 
         bool outputNan = false;
 
-        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
-                                      bool temporalReset);
+        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset);
         std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
 
@@ -40,7 +37,7 @@ namespace snn::internal
 
     protected:
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
-        std::vector<float> outputForBackpropagation(const std::vector<float>& inputs, bool temporalReset); // Because Dropout is different during training and inference
+        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset); // Because Dropout is different during training and inference
 
         void evaluateOnceForRegression(const std::vector<float>& inputs,
                                        const std::vector<float>& desired,
@@ -74,7 +71,7 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const;
 
-        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = false);
+        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
 
         bool operator==(const NeuralNetwork& neuralNetwork) const;
         bool operator!=(const NeuralNetwork& neuralNetwork) const;
@@ -83,6 +80,8 @@ namespace snn::internal
     template <class Archive>
     void NeuralNetwork::serialize(Archive& ar, unsigned version)
     {
+        if (isTheFirst)
+            this->initialize();
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
         ar.template register_type<FullyConnected>();
@@ -92,8 +91,10 @@ namespace snn::internal
         ar.template register_type<Convolution2D>();
         ar.template register_type<LocallyConnected1D>();
         ar.template register_type<LocallyConnected2D>();
-        ar & layers;
         ar.template register_type<StochasticGradientDescent>();
+        ar.template register_type<MaxPooling1D>();
+        ar.template register_type<MaxPooling2D>();
+        ar & layers;
         ar & this->optimizer;
     }
 }

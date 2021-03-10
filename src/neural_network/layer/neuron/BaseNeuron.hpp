@@ -55,6 +55,7 @@ namespace snn::internal
     void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
     {
         ar.template register_type<StochasticGradientDescent>();
+        ar.template register_type<Adam>();
         ar & this->optimizer;
     }
 }

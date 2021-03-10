@@ -94,6 +94,7 @@ namespace snn::internal
         ar.template register_type<StochasticGradientDescent>();
         ar.template register_type<MaxPooling1D>();
         ar.template register_type<MaxPooling2D>();
+        ar.template register_type<Adam>();
         ar & layers;
         ar & this->optimizer;
     }

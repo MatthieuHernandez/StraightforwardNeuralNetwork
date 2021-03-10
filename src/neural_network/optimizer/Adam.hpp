@@ -4,7 +4,6 @@
 #include <boost/serialization/base_object.hpp>
 #include "NeuralNetworkOptimizer.hpp"
 
-
 namespace snn::internal
 {
     class Adam final : public NeuralNetworkOptimizer
@@ -28,7 +27,7 @@ namespace snn::internal
 
         Adam() = default;
         Adam(float learningRate, float beta1, float beta2, float epsilon);
-        Adam(const Adam& sgd) = default;
+        Adam(const Adam& adam) = default;
         ~Adam() override = default;
         [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
 

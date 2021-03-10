@@ -58,11 +58,10 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
         FullyConnected(150, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(70),
         FullyConnected(10)
-    },
-        StochasticGradientDescent(0.01f, 0.9f));
-    neuralNetwork.startTraining(*data);
+    });
+    neuralNetwork.startTrainingAsync(*data);
     neuralNetwork.waitFor(1_ep || 35_s);
-    neuralNetwork.stopTraining();
+    neuralNetwork.stopTrainingAsync();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.91f);
 }
@@ -77,9 +76,7 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithAdam)
         FullyConnected(10)
     },
         Adam());
-    neuralNetwork.startTraining(*data);
-    neuralNetwork.waitFor(10_ep /*|| 55_s*/);
-    neuralNetwork.stopTraining();
+    neuralNetwork.train(*data, 10_ep || 55_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.91f);
 }

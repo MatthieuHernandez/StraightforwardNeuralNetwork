@@ -4,7 +4,6 @@
 #include <boost/serialization/base_object.hpp>
 #include "NeuralNetworkOptimizer.hpp"
 
-
 namespace snn::internal
 {
     class StochasticGradientDescent final : public NeuralNetworkOptimizer
@@ -15,8 +14,8 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     public:
-        float learningRate{};
-        float momentum{};
+        float learningRate;
+        float momentum;
 
         StochasticGradientDescent() = default;
         StochasticGradientDescent(float learningRate, float momentum);

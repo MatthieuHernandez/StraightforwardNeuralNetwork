@@ -79,9 +79,7 @@ TEST_F(FashionMnistTest, adamComparaison)
     neuralNetworkSgd.stopTraining();*/
 
     StraightforwardNeuralNetwork neuralNetworkAdam(architecture, Adam());
-    neuralNetworkAdam.startTraining(*data);
-    neuralNetworkAdam.waitFor(1_ep || 55_s);
-    neuralNetworkAdam.stopTraining();
+    neuralNetworkAdam.train(*data, 1_ep || 55_s);
 
     //auto sgdAccuracy = neuralNetworkSgd.getGlobalClusteringRate();
     auto adamAccuracy = neuralNetworkAdam.getGlobalClusteringRate();

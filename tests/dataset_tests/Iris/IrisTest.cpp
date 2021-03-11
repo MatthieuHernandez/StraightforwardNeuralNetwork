@@ -62,7 +62,7 @@ TEST_F(IrisTest, trainWithAdam)
         FullyConnected(5),
         FullyConnected(3)
     },
-        Adam());
+        Adam(0.01f));
     neuralNetwork.train(*data, 0.98_acc || 2_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRateMax();
     ASSERT_ACCURACY(accuracy, 0.98f);

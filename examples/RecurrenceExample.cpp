@@ -32,7 +32,7 @@ int recurrenceExample()
         },
         StochasticGradientDescent(0.01f, 0.8f));
 
-    neuralNetwork.train(data, 1.00_acc || 3_s); // train neural network until 100% accuracy or 3s on a parallel thread
+    neuralNetwork.train(data, 1.00_acc || 2_s); // train neural network until 100% accuracy or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteError();

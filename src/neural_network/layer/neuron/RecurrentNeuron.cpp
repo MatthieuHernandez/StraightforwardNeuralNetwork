@@ -22,12 +22,13 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->previousOutput = this->lastOutput;
     this->sum = 0;
     int w;
+    float tmp = 0.0f; // to activate the SIMD optimization
+    //#pragma omp simd
     for (w = 0; w < (int)inputs.size(); ++w)
     {
-        this->sum += inputs[w] * this->weights[w];
+        tmp += inputs[w] * this->weights[w];
     }
-    this->sum += this->previousOutput * this->weights[w];
-    this->sum += this->bias;
+    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias;
     float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
@@ -37,6 +38,7 @@ std::vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 
+    //#pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];

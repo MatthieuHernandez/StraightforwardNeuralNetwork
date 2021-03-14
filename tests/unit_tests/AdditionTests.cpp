@@ -18,7 +18,7 @@ TEST(Addition, WithMPL)
         FullyConnected(6, activation::sigmoid),
         FullyConnected(1, activation::identity)
     });
-    neuralNetwork.train(*data, 1.0_acc || 3_s, 3, 6);
+    neuralNetwork.train(*data, 1.0_acc || 2_s, 3, 6);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -32,7 +32,7 @@ TEST(Addition, WithCNN)
     }, 
         StochasticGradientDescent(0.01f));
 
-    neuralNetwork.train(*data, 1.0_acc || 3_s);
+    neuralNetwork.train(*data, 1.0_acc || 2_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -45,7 +45,7 @@ TEST(Addition, WithLCNN)
         FullyConnected(1, activation::identity)
     });
 
-    neuralNetwork.train(*data, 1.0_acc || 3_s);
+    neuralNetwork.train(*data, 1.0_acc || 2_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -60,7 +60,7 @@ TEST(Addition, WithRNN)
     }, 
         StochasticGradientDescent(0.01f, 0.4f));
 
-    neuralNetwork.train(*data, 1.0_acc || 5_s, 1, 2);
+    neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 2);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -75,7 +75,7 @@ TEST(Addition, WithGRU)
     }, 
         StochasticGradientDescent(0.01f, 0.4f));
 
-     neuralNetwork.train(*data, 1.0_acc || 5_s, 1, 3);
+     neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 3);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 

@@ -36,7 +36,7 @@ TEST_F(AudioCatsAndDogsTest, loadData)
     ASSERT_EQ(data->isValid(), 0);
 }
 
-TEST_F(AudioCatsAndDogsTest, trainNeuralNetwork)
+TEST_F(AudioCatsAndDogsTest, DISABLED_trainNeuralNetwork)
 {
 
     StraightforwardNeuralNetwork neuralNetwork({

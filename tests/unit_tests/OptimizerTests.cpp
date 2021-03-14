@@ -17,7 +17,7 @@ TEST(Optimizer, FindRightValueIn20)
     },
         StochasticGradientDescent(0.01f, 0.4f));
 
-    neuralNetwork.train(*data, 1.00_acc || 3_s);
+    neuralNetwork.train(*data, 1.00_acc || 2_s);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(acc, 1.0f);

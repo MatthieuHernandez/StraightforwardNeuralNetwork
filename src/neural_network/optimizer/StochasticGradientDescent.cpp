@@ -32,7 +32,9 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     }
 }
 
+#ifdef _MSC_VER
 #pragma warning(disable:4701)
+#endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     size_t w;
@@ -50,7 +52,9 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     auto deltaWeights = lr * neuron.recurrentError * neuron.previousOutput + m * neuron.previousDeltaWeights[w];
     neuron.weights[w] += deltaWeights;
     neuron.previousDeltaWeights[w] = deltaWeights;
+    #ifdef _MSC_VER
     #pragma warning(default:4701)
+    #endif
 }
 
 int StochasticGradientDescent::isValid()

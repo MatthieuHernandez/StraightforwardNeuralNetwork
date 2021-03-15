@@ -24,7 +24,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
-    int w;
+    int w = 0;
     float tmp = 0.0f; // to activate the SIMD optimization
     #pragma omp simd
     for (w = 0; w < (int)inputs.size(); ++w)

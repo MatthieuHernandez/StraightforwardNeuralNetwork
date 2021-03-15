@@ -71,10 +71,10 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(784),
         FullyConnected(100, activation::sigmoid, L2Regularization(1e-4f)),
-        GruLayer(10),
+        GruLayer(15),
         FullyConnected(10)
     });
-    neuralNetwork.train(*data, 1_ep || 15_s);
+    neuralNetwork.train(*data, 1_ep || 12_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.90f);
 }

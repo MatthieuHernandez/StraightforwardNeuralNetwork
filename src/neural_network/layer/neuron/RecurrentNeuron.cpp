@@ -13,6 +13,9 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOpti
 {
 }
 
+#ifdef _MSC_VER
+#pragma warning(disable:4701)
+#endif
 float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 {
     if (temporalReset)
@@ -23,7 +26,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->sum = 0;
     int w;
     float tmp = 0.0f; // to activate the SIMD optimization
-    //#pragma omp simd
+    #pragma omp simd
     for (w = 0; w < (int)inputs.size(); ++w)
     {
         tmp += inputs[w] * this->weights[w];
@@ -32,13 +35,16 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
+    #ifdef _MSC_VER
+    #pragma warning(default:4701)
+    #endif
 }
 
 std::vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 
-    //#pragma omp simd // seems to do nothing
+    #pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];

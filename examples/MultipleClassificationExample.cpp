@@ -21,7 +21,7 @@ int multipleClassificationExample()
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
-    neuralNetwork.train(data, 1.00_acc || 3_s ); // train neural network until 100% accuracy or 3s on a parallel thread
+    neuralNetwork.train(data, 1.00_acc || 2_s ); // train neural network until 100% accuracy or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it

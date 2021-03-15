@@ -15,12 +15,13 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 float SimpleNeuron::output(const vector<float>& inputs)
 {
     this->lastInputs = inputs;
-    this->sum = 0;
+    float tmp = 0.0f; // to activate the SIMD optimization
+    #pragma omp simd
     for (size_t w = 0; w < this->weights.size(); ++w)
     {
-        this->sum += inputs[w] * weights[w];
+        tmp += inputs[w] * weights[w];
     }
-    this->sum += bias;
+    this->sum = tmp + bias;
     return this->outputFunction->function(this->sum);
 }
 
@@ -28,6 +29,7 @@ vector<float>& SimpleNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
 
+    #pragma omp simd // seems to do nothing
     for (size_t w = 0; w < this->weights.size(); ++w)
     {
         this->errors[w] = error * weights[w];

@@ -24,6 +24,8 @@ Wait& Wait::operator||(const Wait& wait)
     else
         this->accuracy = max(this->accuracy, wait.accuracy);
 
+    this->mae = max(this->mae, wait.mae);
+
     if (this->duration > 0 && wait.duration > 0)
         this->duration = min(this->duration, wait.duration);
     else
@@ -41,6 +43,13 @@ Wait& Wait::operator&&(const Wait& wait)
 
     this->epochs = max(this->epochs, wait.epochs);
     this->accuracy = max(this->accuracy, wait.accuracy);
+
+    if (this->mae > 0 && wait.duration > 0)
+        this->mae = min(this->mae, wait.mae);
+    else
+        this->mae = max(this->mae, wait.mae);
+
+    this->mae = min(this->mae, wait.mae);
     this->duration = max(this->duration, wait.duration);
 
     return *this;

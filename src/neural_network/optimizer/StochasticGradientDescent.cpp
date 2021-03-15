@@ -19,34 +19,42 @@ shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
     return make_shared<StochasticGradientDescent>(*this);
 }
 
-void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, float error) const
+void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
 {
+    auto lr = this->learningRate; // to activate the SIMD optimization
+    auto m = this->momentum;
+    #pragma omp simd
     for (size_t w = 0; w < neuron.weights.size(); ++w)
     {
-        auto deltaWeights = this->learningRate * error * neuron.lastInputs[w];
-        deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
+        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
 }
 
+#ifdef _MSC_VER
+#pragma warning(disable:4701)
+#endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     size_t w;
+    auto lr = this->learningRate; // to activate the SIMD optimization
+    auto m = this->momentum; 
+    #pragma omp simd
     for (w = 0; w < neuron.lastInputs.size(); ++w)
     {
-        auto deltaWeights = this->learningRate * error * neuron.lastInputs[w];
-        deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
+        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
-    neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) *
-        neuron.weights[w];
+    neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
-    auto deltaWeights = this->learningRate * neuron.recurrentError * neuron.previousOutput;
-    deltaWeights += this->momentum * neuron.previousDeltaWeights[w];
+    auto deltaWeights = lr * neuron.recurrentError * neuron.previousOutput + m * neuron.previousDeltaWeights[w];
     neuron.weights[w] += deltaWeights;
     neuron.previousDeltaWeights[w] = deltaWeights;
+    #ifdef _MSC_VER
+    #pragma warning(default:4701)
+    #endif
 }
 
 int StochasticGradientDescent::isValid()

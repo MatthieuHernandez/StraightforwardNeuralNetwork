@@ -5,11 +5,11 @@
 using namespace std;
 using namespace snn;
 
-unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData);
+unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData);
 
 TEST(Optimizer, FindRightValueIn20)
 {
-    unique_ptr<Data> data = createDataForOptimisezTests(1000, 20);
+    unique_ptr<Data> data = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(20),
         FullyConnected(4, activation::tanh),
@@ -17,14 +17,14 @@ TEST(Optimizer, FindRightValueIn20)
     },
         StochasticGradientDescent(0.01f, 0.4f));
 
-    neuralNetwork.train(*data, 1.00_acc || 3_s);
+    neuralNetwork.train(*data, 1.00_acc || 2_s);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(acc, 1.0f);
     ASSERT_MAE(mae, 0.6f);
 }
 
-unique_ptr<Data> createDataForOptimisezTests(int numberOfData, int sizeOfData)
+unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData)
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;

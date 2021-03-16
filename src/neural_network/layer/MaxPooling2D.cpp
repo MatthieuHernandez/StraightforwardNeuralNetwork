@@ -39,7 +39,7 @@ std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, bool t
     {
         const int indexOutputX = (i % this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
         const int indexOutputY = (i / this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
-        const int indexOutput = indexOutputY * (this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest) + indexOutputX;
+        const int indexOutput = (indexOutputY * (this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest) + indexOutputX) % this->numberOfOutputs;
         if (output[indexOutput] <= inputs[i])
         {
             output[indexOutput] = inputs[i];

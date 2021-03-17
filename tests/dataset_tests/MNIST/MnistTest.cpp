@@ -93,7 +93,7 @@ TEST_F(MnistTest, LocallyConnected1D)
     ASSERT_ACCURACY(accuracy, 0.84f);
 }
 
-TEST_F(MnistTest, LocallyConnected2D)
+TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),

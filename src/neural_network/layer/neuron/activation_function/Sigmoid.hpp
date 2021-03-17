@@ -22,7 +22,7 @@ namespace snn::internal
 
         float derivative(const float x) const override
         {
-            return (1 - powf(tanhf(x / 2), 2)) / 4;
+            return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f;
         }
     };
 }

@@ -61,6 +61,7 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
     {
         for (int y = 0; y < this->shapeOfInput[1]; ++y)
         {
+            #pragma omp simd
             for (int x = 0; x < this->shapeOfInput[0]; ++x)
             {
                 const int outputX = x / this->sizeOfFilterMatrix;

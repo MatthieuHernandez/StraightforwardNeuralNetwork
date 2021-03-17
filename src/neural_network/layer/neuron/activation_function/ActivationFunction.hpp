@@ -11,6 +11,7 @@ namespace snn
         iSigmoid,
         tanh,
         ReLU,
+        GELU,
         gaussian,
         identity
     };

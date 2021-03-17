@@ -89,6 +89,7 @@ void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, i
 void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int batchSize, const int evaluationFrequency)
 {
     log<minimal>("Start training");
+    this->epoch = 0;
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
     this->isIdle = false;
@@ -96,9 +97,8 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     if (evaluationFrequency > 0)
         this->evaluate(data);
 
-    for (this->epoch = 0; this->continueTraining(wait); this->epoch++)
+    for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
-        log<minimal>("Epoch: " + std::to_string(this->epoch));
         data.shuffle();
         for (this->index = 0; index + batchSize <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->index += batchSize)
@@ -141,8 +141,9 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
     }
     this->stopTesting();
-    log<minimal>("Accuracy: " + std::to_string(this->getGlobalClusteringRate()));
-    log<minimal>("MAE: " + std::to_string(this->getMeanAbsoluteError()));
+    log<minimal>("Epoch: " + std::to_string(this->epoch)
+        + " - Accuracy: " + std::to_string(this->getGlobalClusteringRate())
+        + " - MAE: " + std::to_string(this->getMeanAbsoluteError()));
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
     {
         this->saveSync(autoSaveFilePath);
@@ -241,7 +242,7 @@ void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) co
 
 void StraightforwardNeuralNetwork::saveAs(const string filePath)
 {
-    if(!this->isIdle)
+    if (!this->isIdle)
         throw std::runtime_error("Neural network cannot be saved during training, stop training before saving or use auto save");
     saveSync(filePath);
 }
@@ -252,7 +253,7 @@ void StraightforwardNeuralNetwork::saveSync(const string filePath)
     ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
-            log<minimal>("Neural network saved: ", filePath);
+    log<minimal>("Neural network saved: ", filePath);
 }
 
 

@@ -1,0 +1,29 @@
+#pragma once
+#include <cmath>
+#include "ActivationFunction.hpp"
+
+namespace snn::internal
+{
+    class GaussianErrorLinearUnit final : public ActivationFunction
+    {
+    private:
+        activation getType() const override { return activation::GELU; }
+
+    public:
+        GaussianErrorLinearUnit()
+            : ActivationFunction(0, +INFINITY)
+        {
+        }
+
+        float function(const float x) const override
+        {
+            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f;
+        }
+
+        float derivative(const float x) const override
+        {
+            return 1.702f * x * (1.0f - powf(tanhf(1.702f * x / 2.0f), 2.0f)) / 4.0f
+                + (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f; // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
+        }
+    };
+}

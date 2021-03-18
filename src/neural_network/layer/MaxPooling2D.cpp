@@ -57,19 +57,16 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
 {
     std::vector<float> errors;
     errors.reserve(this->numberOfInputs);
-    for (int z = 0; z < this->shapeOfInput[2]; ++z) // Always 1
-    {
-        for (int y = 0; y < this->shapeOfInput[1]; ++y)
-        {
-            #pragma omp simd
-            for (int x = 0; x < this->shapeOfInput[0]; ++x)
-            {
-                const int outputX = x / this->sizeOfFilterMatrix;
-                const int outputY = y / this->sizeOfFilterMatrix;
-                const int indexOutput = outputY * this->shapeOfOutput[0] + outputX;
 
-                errors.push_back(inputErrors[indexOutput]);
-            }
+    for (int y = 0; y < this->shapeOfInput[1]; ++y)
+    {
+        for (int x = 0; x < this->shapeOfInput[0]; ++x)
+        {
+            const int outputX = x / this->sizeOfFilterMatrix;
+            const int outputY = y / this->sizeOfFilterMatrix;
+            const int indexOutput = outputY * this->shapeOfOutput[0] + outputX;
+
+            errors.push_back(inputErrors[indexOutput]);
         }
     }
     return errors;

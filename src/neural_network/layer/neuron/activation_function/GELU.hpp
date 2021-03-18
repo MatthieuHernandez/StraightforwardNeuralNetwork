@@ -17,7 +17,7 @@ namespace snn::internal
 
         float function(const float x) const override
         {
-            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f;
+            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f; // approximation
         }
 
         float derivative(const float x) const override

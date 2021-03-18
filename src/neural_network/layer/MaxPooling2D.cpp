@@ -1,6 +1,7 @@
 #include <boost/serialization/export.hpp>
 #include "MaxPooling2D.hpp"
 #include "LayerModel.hpp"
+#include "../../tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;
@@ -64,7 +65,7 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
         {
             const int outputX = x / this->sizeOfFilterMatrix;
             const int outputY = y / this->sizeOfFilterMatrix;
-            const int indexOutput = outputY * this->shapeOfOutput[0] + outputX;
+            const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[0]);
 
             errors.push_back(inputErrors[indexOutput]);
         }

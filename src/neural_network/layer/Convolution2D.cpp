@@ -42,41 +42,44 @@ int Convolution2D::isValid() const
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> Convolution2D::createInputsForNeuron(const int neuronNumber, const vector<float>& inputs) const
 {
     vector<float> neuronInputs;
     neuronInputs.reserve(this->neurons[neuronNumber].getNumberOfInputs());
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int neuronPositionX = neuronNumber % this->shapeOfInput[0];
-    const int neuronPositionY = neuronNumber / this->shapeOfInput[0];
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    const int n = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
+    const int neuronPositionX = roughenX(n, this->shapeOfInput[0]);
+    const int neuronPositionY = roughenY(n, this->shapeOfInput[0]);
+
+    for (int x = 0; x < this->sizeOfFilterMatrix; ++x)
     {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
-        const int endIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2])
-        + (neuronPositionX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
-        for (int j = beginIndex; j < endIndex; ++j)
+        for (int y = 0; y < this->sizeOfFilterMatrix; ++y)
         {
-            neuronInputs.push_back(inputs[j]);
+            for (int z = 0; z < this->shapeOfInput[2]; ++z)
+            {
+                const int i = flatten(neuronPositionX + x, neuronPositionY + y, z, this->shapeOfInput[0], this->shapeOfInput[1]);
+                neuronInputs.push_back(inputs[i]);
+            }
         }
     }
     return neuronInputs;
 }
 
-void Convolution2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
+void Convolution2D::insertBackOutputForNeuron(const int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons()/this->numberOfFilters;
-    const int neuronPositionX = neuronNumber % (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
-    const int neuronPositionY = neuronNumber / (this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1));
+    const int n = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
+    const int neuronPositionX = roughenX(n, this->shapeOfInput[0]);
+    const int neuronPositionY = roughenY(n, this->shapeOfInput[0]);
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    for (int x = 0; x < this->shapeOfInput[2]; ++x)
     {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
-        for(int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        for (int y = 0; y < this->sizeOfFilterMatrix; ++y)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            errors[indexErrors] += error[indexMatrix];
+            for (int z = 0; z < this->sizeOfFilterMatrix; ++z)
+            {
+                const int i = flatten(neuronPositionX + x, neuronPositionY + y, z, this->shapeOfInput[0], this->shapeOfInput[1]);
+                errors[i] += error[neuronNumber];
+            }
         }
     }
 }

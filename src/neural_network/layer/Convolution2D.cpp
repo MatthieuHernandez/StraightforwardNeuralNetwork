@@ -71,14 +71,15 @@ void Convolution2D::insertBackOutputForNeuron(const int neuronNumber, const std:
     const int neuronPositionX = roughenX(n, this->shapeOfInput[0]);
     const int neuronPositionY = roughenY(n, this->shapeOfInput[0]);
 
-    for (int x = 0; x < this->shapeOfInput[2]; ++x)
+    for (int x = 0; x < this->sizeOfFilterMatrix; ++x)
     {
         for (int y = 0; y < this->sizeOfFilterMatrix; ++y)
         {
-            for (int z = 0; z < this->sizeOfFilterMatrix; ++z)
+            for (int z = 0; z < this->shapeOfInput[2]; ++z)
             {
                 const int i = flatten(neuronPositionX + x, neuronPositionY + y, z, this->shapeOfInput[0], this->shapeOfInput[1]);
-                errors[i] += error[neuronNumber];
+                const int j = flatten(x, y, z, this->sizeOfFilterMatrix, this->sizeOfFilterMatrix);
+                errors[i] += error[j];
             }
         }
     }

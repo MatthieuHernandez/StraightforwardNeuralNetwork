@@ -35,16 +35,14 @@ unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) co
 std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
-    const int rest = this->shapeOfInput[0] % sizeOfFilterMatrix == 0 ? 0 : 1;
     for (int i = 0; i < (int)inputs.size(); ++i)
     {
-        const int indexOutputX = (i % this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
-        const int indexOutputY = (i / this->shapeOfInput[0]) / this->sizeOfFilterMatrix;
-        const int indexOutput = (indexOutputY * (this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest) + indexOutputX) % this->numberOfOutputs;
+        const int outputX = roughenX(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->sizeOfFilterMatrix;
+        const int outputY = roughenY(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->sizeOfFilterMatrix;
+        const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[0]);
+
         if (output[indexOutput] <= inputs[i])
-        {
             output[indexOutput] = inputs[i];
-        }
     }
     return output;
 }
@@ -59,15 +57,18 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
     std::vector<float> errors;
     errors.reserve(this->numberOfInputs);
 
-    for (int y = 0; y < this->shapeOfInput[1]; ++y)
+    for (int z = 0; z < this->shapeOfInput[2]; ++z)
     {
-        for (int x = 0; x < this->shapeOfInput[0]; ++x)
+        for (int y = 0; y < this->shapeOfInput[1]; ++y)
         {
-            const int outputX = x / this->sizeOfFilterMatrix;
-            const int outputY = y / this->sizeOfFilterMatrix;
-            const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[0]);
+            for (int x = 0; x < this->shapeOfInput[0]; ++x)
+            {
+                const int outputX = x / this->sizeOfFilterMatrix;
+                const int outputY = y / this->sizeOfFilterMatrix;
+                const int i = flatten(outputX, outputY, this->shapeOfOutput[0]);
 
-            errors.push_back(inputErrors[indexOutput]);
+                errors.push_back(inputErrors[i]);
+            }
         }
     }
     return errors;

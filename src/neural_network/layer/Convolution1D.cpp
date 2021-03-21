@@ -11,6 +11,10 @@ BOOST_CLASS_EXPORT(Convolution1D)
 Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
+    this->shapeOfOutput = {
+        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
+        this->numberOfFilters
+    };
 }
 
 inline
@@ -22,14 +26,6 @@ unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimize
         layer->neurons[n].optimizer = optimizer;
     }
     return layer;
-}
-
-std::vector<int> Convolution1D::getShapeOfOutput() const
-{
-    return {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
-        this->numberOfFilters
-    };
 }
 
 int Convolution1D::isValid() const

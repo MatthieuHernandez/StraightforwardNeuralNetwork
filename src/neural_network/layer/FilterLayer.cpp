@@ -38,6 +38,11 @@ vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
+std::vector<int> FilterLayer::getShapeOfOutput() const
+{
+    return this->shapeOfOutput;
+}
+
 int FilterLayer::isValid() const
 {
     return this->Layer::isValid();

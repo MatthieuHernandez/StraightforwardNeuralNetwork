@@ -11,6 +11,12 @@ BOOST_CLASS_EXPORT(LocallyConnected1D)
 LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
+    const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+
+    this->shapeOfOutput = {
+        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
+        this->numberOfFilters
+    };
 }
 
 inline
@@ -22,16 +28,6 @@ unique_ptr<BaseLayer> LocallyConnected1D::clone(std::shared_ptr<NeuralNetworkOpt
         layer->neurons[n].optimizer = optimizer;
     }
     return layer;
-}
-
-std::vector<int> LocallyConnected1D::getShapeOfOutput() const
-{
-    const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
-
-    return {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
-        this->numberOfFilters
-    };
 }
 
 int LocallyConnected1D::isValid() const

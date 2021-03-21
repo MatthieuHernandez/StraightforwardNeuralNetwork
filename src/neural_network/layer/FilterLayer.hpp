@@ -18,6 +18,7 @@ namespace snn::internal
         int numberOfFilters;
         int sizeOfFilterMatrix;
         std::vector<int> shapeOfInput;
+        std::vector<int> shapeOfOutput;
 
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
@@ -30,7 +31,7 @@ namespace snn::internal
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;

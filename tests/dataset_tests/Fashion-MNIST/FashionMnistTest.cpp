@@ -68,11 +68,11 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,8),
-        FullyConnected(150),
+        Convolution(2, 6),
+        FullyConnected(200),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.02f, 0.4f));
+        StochasticGradientDescent(0.005f, 0.5f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -90,6 +90,6 @@ TEST_F(FashionMnistTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 95874);
-    ASSERT_FLOAT_EQ(accuracy, 0.8861f);
+    ASSERT_EQ(numberOfParameters, 251688);
+    ASSERT_FLOAT_EQ(accuracy, 0.8862f);
 }

@@ -46,5 +46,6 @@ namespace snn::internal
         ar & this->numberOfFilters;
         ar & this->sizeOfFilterMatrix;
         ar & this->shapeOfInput;
+        ar & this->shapeOfOutput;
     }
 }

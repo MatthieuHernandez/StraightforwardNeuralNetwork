@@ -18,9 +18,9 @@
 |--------------|-----------|--------------|-------|----------------------|
 | [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | -                        | -      |
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 30     |
-| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 52.30% Accurracy         | 196200 |
-| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.61% Accurracy         | 95874  |
-| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.62% Accurracy         | 209000 |
+| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 56.73% Accurracy         | 281800 |
+| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.62% Accurracy         | 95874  |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.58% Accurracy         | 209000 |
 | [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100.0% Accurracy         | 444    |
 | [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100.0% Accurracy         | 150    |
 

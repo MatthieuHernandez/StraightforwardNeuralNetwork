@@ -4,6 +4,7 @@
 #include "ImprovedSigmoid.hpp"
 #include "Tanh.hpp"
 #include "ReLU.hpp"
+#include "GELU.hpp"
 #include "Gaussian.hpp"
 #include "Identity.hpp"
 
@@ -25,6 +26,7 @@ void ActivationFunction::initialize()
     activationFunctions.emplace_back(new ImprovedSigmoid());
     activationFunctions.emplace_back(new Tanh());
     activationFunctions.emplace_back(new RectifiedLinearUnit());
+    activationFunctions.emplace_back(new GaussianErrorLinearUnit());
     activationFunctions.emplace_back(new Gaussian());
     activationFunctions.emplace_back(new Identity());
 }
@@ -41,10 +43,12 @@ shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
         return activationFunctions[2];
     case activation::ReLU:
         return activationFunctions[3];
-    case activation::gaussian:
+        case activation::GELU:
         return activationFunctions[4];
-    case activation::identity:
+    case activation::gaussian:
         return activationFunctions[5];
+    case activation::identity:
+        return activationFunctions[6];
     default:
         throw NotImplementedException("activation");
     }

@@ -1,8 +1,10 @@
 #pragma once
 #include <chrono>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
+
 
 namespace snn
 {
@@ -32,13 +34,44 @@ namespace snn::internal
         static float randomBetween(const float min, const float max);
 
         template <typename T>
-        static T getMinValue(std::vector<T> vector);
+        static T getMinValue(std::vector<T> vector)
+        {
+            if (vector.size() > 1)
+            {
+                T minValue = vector[0];
+
+                for (size_t i = 1; i < vector.size(); i++)
+                {
+                    if (vector[i] < minValue)
+                    {
+                        minValue = vector[i];
+                    }
+                }
+                return minValue;
+            }
+            throw std::runtime_error("Vector is empty");
+        }
 
         template <typename T>
-        static T getMaxValue(std::vector<T> vector);
+        static T getMaxValue(std::vector<T> vector)
+        {
+            if (vector.size() > 1)
+            {
+                T maxValue = vector[0];
+
+                for (size_t i = 1; i < vector.size(); i++)
+                {
+                    if (vector[i] > maxValue)
+                    {
+                        maxValue = vector[i];
+                    }
+                }
+                return maxValue;
+            }
+            throw std::runtime_error("Vector is empty");
+        }
 
         static std::string toString(std::chrono::milliseconds duration);
-
     };
 
     template <logLevel T, typename... Targs>
@@ -46,6 +79,33 @@ namespace snn::internal
     {
         if constexpr (T > none && T <= verbose)
             (std::cout << ... << messages) << std::endl;
+    }
+
+    template <logLevel T, bool endLine, typename... Targs>
+    constexpr void log(Targs&&... messages)
+    {
+        if constexpr (T > none && T <= verbose)
+        {
+            (std::cout << ... << messages);
+            if constexpr (endLine)
+                std::cout << std::endl;
+        }
+    }
+
+    inline std::string toConstSizeString(int value, size_t length)
+    {
+        auto str = std::to_string(value);
+        while (str.length() < length)
+            str = " " + str;
+        return str;
+    }
+
+    inline std::string toConstSizeString(float value, size_t length)
+    {
+        auto str = std::to_string(value);
+        while (str.length() < length)
+            str += "0";
+        return str;
     }
 
     template <typename T>
@@ -59,5 +119,35 @@ namespace snn::internal
         for (const auto& v : vector2D)
             vector1D.insert(vector1D.end(), v.begin(), v.end());
         return vector1D;
+    }
+
+    constexpr int flatten(const int x, const int y, const int maxX)
+    {
+        return y * maxX + x;
+    }
+
+    constexpr int flatten(const int x, const int y, const int z, const int maxX, const int maxY)
+    {
+        return z * maxY * maxX + y * maxX + x;
+    }
+
+    constexpr int roughenX(const int index, const int maxX)
+    {
+        return index % maxX;
+    }
+
+    constexpr int roughenX(const int index, const int maxX, const int maxY)
+    {
+        return (index % (maxX * maxY)) % maxX;
+    }
+
+    constexpr int roughenY(const int index, const int maxX)
+    {
+        return index / maxX;
+    }
+
+    constexpr int roughenY(const int index, const int maxX, const int maxY)
+    {
+        return (index % (maxX * maxY)) / maxX;
     }
 }

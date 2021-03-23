@@ -55,17 +55,18 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(32, 32, 3),
-        Convolution(1,8),
-        FullyConnected(120),
+        Convolution(2, 3, activation::GELU),
+        FullyConnected(250, activation::sigmoid, Dropout(0.1f)),
+        FullyConnected(125, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.03f, 0.2f));
+        StochasticGradientDescent(0.005f, 0.6f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.5225_acc);
+    neuralNetwork.train(*data, 100_ep, 1, 1);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -77,6 +78,6 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 196200);
-    ASSERT_FLOAT_EQ(accuracy, 0.5230f);
+    ASSERT_EQ(numberOfParameters, 281800);
+    ASSERT_FLOAT_EQ(accuracy, 0.5673);
 }

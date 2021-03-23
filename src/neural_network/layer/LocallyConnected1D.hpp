@@ -27,7 +27,6 @@ namespace snn::internal
 
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;

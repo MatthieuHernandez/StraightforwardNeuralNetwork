@@ -65,7 +65,7 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
 {
     const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
 
-    const bool isValidEpochs = currentEpochs >= this->epochs && currentEpochs > 0;
+    const bool isValidEpochs = currentEpochs > this->epochs && currentEpochs > 0;
     const bool isValidAccuracy = CurrentAccuracy >= this->accuracy && CurrentAccuracy > 0;
     const bool isValidMae = currentMae <= this->mae && currentMae > 0;
     const bool isValidDuration = currentDuration >= this->duration;

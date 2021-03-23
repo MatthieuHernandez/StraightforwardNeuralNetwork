@@ -117,7 +117,19 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
                 this->outputForTraining(data.getTrainingData(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
         }
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
+        {
             this->evaluate(data);
+            log<minimal, false>("Epoch: ", toConstSizeString(this->epoch, 2),
+                                " - Accuracy: ", toConstSizeString(this->getGlobalClusteringRate(), 6),
+                                " - MAE: ", toConstSizeString(this->getMeanAbsoluteError(), 7),
+                                " - Time: ", toConstSizeString(wait.getDurationSinceLastTime(), 2), "s");
+            if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
+            {
+                this->saveSync(autoSaveFilePath);
+                log<minimal, false>(" - Saved");
+            }
+            log<minimal>();
+        }
     }
     this->resetTrainingValues();
     log<minimal>("Stop training");
@@ -141,13 +153,6 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
     }
     this->stopTesting();
-    log<minimal>("Epoch: ", this->epoch,
-                 " - Accuracy: ", this->getGlobalClusteringRate(),
-                 " - MAE: ", this->getMeanAbsoluteError());
-    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
-    {
-        this->saveSync(autoSaveFilePath);
-    }
 }
 
 inline
@@ -253,7 +258,6 @@ void StraightforwardNeuralNetwork::saveSync(const string filePath)
     ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
-    log<minimal>("Neural network saved: ", filePath);
 }
 
 

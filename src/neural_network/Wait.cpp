@@ -58,6 +58,7 @@ Wait& Wait::operator&&(const Wait& wait)
 void Wait::startClock()
 {
     this->start = system_clock::now();
+    this->last = this->start;
 }
 
 bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const
@@ -83,6 +84,13 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
         || (isValidDuration && this->duration >= 0))
         return true;
     return false;
+}
+
+int Wait::getDurationSinceLastTime()
+{
+    const auto currentDuration = static_cast<int>(duration_cast<seconds>(system_clock::now() - this->last).count());
+    this->last = system_clock::now();
+    return currentDuration;
 }
 
 Wait snn::operator""_ep(unsigned long long value)

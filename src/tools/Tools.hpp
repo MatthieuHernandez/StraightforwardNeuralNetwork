@@ -81,6 +81,33 @@ namespace snn::internal
             (std::cout << ... << messages) << std::endl;
     }
 
+    template <logLevel T, bool endLine, typename... Targs>
+    constexpr void log(Targs&&... messages)
+    {
+        if constexpr (T > none && T <= verbose)
+        {
+            (std::cout << ... << messages);
+            if constexpr (endLine)
+                std::cout << std::endl;
+        }
+    }
+
+    inline std::string toConstSizeString(int value, size_t length)
+    {
+        auto str = std::to_string(value);
+        while (str.length() < length)
+            str = " " + str;
+        return str;
+    }
+
+    inline std::string toConstSizeString(float value, size_t length)
+    {
+        auto str = std::to_string(value);
+        while (str.length() < length)
+            str += "0";
+        return str;
+    }
+
     template <typename T>
     std::vector<T> flatten(const std::vector<std::vector<T>>& vector2D)
     {

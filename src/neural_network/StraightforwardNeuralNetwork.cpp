@@ -141,9 +141,9 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
     }
     this->stopTesting();
-    log<minimal>("Epoch: " + std::to_string(this->epoch)
-        + " - Accuracy: " + std::to_string(this->getGlobalClusteringRate())
-        + " - MAE: " + std::to_string(this->getMeanAbsoluteError()));
+    log<minimal>("Epoch: ", this->epoch,
+                 " - Accuracy: ", this->getGlobalClusteringRate(),
+                 " - MAE: ", this->getMeanAbsoluteError());
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
     {
         this->saveSync(autoSaveFilePath);

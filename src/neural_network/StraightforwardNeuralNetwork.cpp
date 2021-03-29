@@ -95,7 +95,13 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     this->isIdle = false;
 
     if (evaluationFrequency > 0)
+    {
         this->evaluate(data);
+        log<minimal>("Epoch: ", toConstSizeString(this->epoch, 2),
+                     " - Accuracy: ", toConstSizeString(this->getGlobalClusteringRate(), 6),
+                     " - MAE: ", toConstSizeString(this->getMeanAbsoluteError(), 7),
+                     " - Time: ", toConstSizeString(wait.getDurationSinceLastTime(), 2), "s");
+    }
 
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {

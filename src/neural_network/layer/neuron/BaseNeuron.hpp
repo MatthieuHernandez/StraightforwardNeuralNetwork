@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <boost/serialization/access.hpp>
+#include "input/NeuronInput.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 
 namespace snn::internal
@@ -24,11 +25,14 @@ namespace snn::internal
         
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs) { return static_cast<Derived*>(this)->output(inputs); }
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
+        template <class I> requires NeuronInput
+        [[nodiscard]] float output(const I& inputs) { return static_cast<Derived*>(this)->output(inputs); }
 
-        [[nodiscard]]  std::vector<float>& backOutput(float error) { return static_cast<Derived*>(this)->backOutput(error); }
-         void train(float error) { static_cast<Derived*>(this)->train(error); }
+        template <class I> requires NeuronInput
+        [[nodiscard]] float output(const I& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
+
+        [[nodiscard]] std::vector<float>& backOutput(float error) { return static_cast<Derived*>(this)->backOutput(error); }
+        void train(float error) { static_cast<Derived*>(this)->train(error); }
 
         [[nodiscard]]  int isValid() const { return static_cast<Derived*>(this)->isValid(); }
 

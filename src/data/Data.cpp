@@ -154,7 +154,7 @@ void Data::initialize(problem problem,
     }
 
     this->normalization(-1, 1);
-    internal::log<minimal>("Data loaded");
+    tools::log<minimal>("Data loaded");
 
     int err = this->isValid();
     if (err != 0)

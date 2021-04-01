@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
@@ -7,7 +6,7 @@
 #include "NeuronModel.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
-#include "../../../tools/Tools.hpp"
+#include "../../tools/Tools.hpp"
 
 namespace snn::internal
 {

@@ -15,7 +15,7 @@ protected:
         trainingExpectedOutputs.resize(sizeOfTraining);
         std::generate(trainingExpectedOutputs.begin(), trainingExpectedOutputs.end(), []
         {
-            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+            return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> trainingInputData;
@@ -24,9 +24,9 @@ protected:
         {
             return vector<float>
             {
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f)
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f)
             };
         });
 
@@ -34,7 +34,7 @@ protected:
         testingExpectedOutputs.resize(sizeOfTesting);
         std::generate(testingExpectedOutputs.begin(), testingExpectedOutputs.end(), []
         {
-            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+            return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> testingInputData(sizeOfTesting);
@@ -43,9 +43,9 @@ protected:
         {
             return vector<float>
             {
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f)
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f)
             };
         });
 

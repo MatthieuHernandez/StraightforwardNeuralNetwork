@@ -24,55 +24,75 @@ namespace snn
     static constexpr logLevel verbose = none;
 }
 
-namespace snn::internal
+namespace snn::tools
 {
-    class Tools
+    inline int randomBetween(const int min, const int max) // [min; max[
     {
-    public:
-        static int randomBetween(const int min, const int max);
+        return rand() % (max - min) + min;
+    }
 
-        static float randomBetween(const float min, const float max);
+    inline float randomBetween(const float min, const float max)
+    {
+        return rand() / static_cast<float>(RAND_MAX) * (max - min) + min;
+    }
 
-        template <typename T>
-        static T getMinValue(std::vector<T> vector)
+    inline std::string toString(std::chrono::milliseconds duration)
+    {
+        std::string str;
+
+        if (duration.count() > 3600000)
+            return std::to_string(duration.count() / 3600000) + "h " + std::to_string(duration.count() / 60000) +
+                "min";
+
+        if (duration.count() > 60000)
+            return std::to_string(duration.count() / 60000) + "min " + std::to_string(duration.count() / 1000) + "s";
+
+        if (duration.count() > 1000)
+            return std::to_string(duration.count() / 1000) + "s";
+
+        if (duration.count() > 0)
+            return std::to_string(duration.count()) + "ms";
+
+        return "";
+    }
+
+    template <typename T>
+    static T getMinValue(std::vector<T> vector)
+    {
+        if (vector.size() > 1)
         {
-            if (vector.size() > 1)
+            T minValue = vector[0];
+
+            for (size_t i = 1; i < vector.size(); i++)
             {
-                T minValue = vector[0];
-
-                for (size_t i = 1; i < vector.size(); i++)
+                if (vector[i] < minValue)
                 {
-                    if (vector[i] < minValue)
-                    {
-                        minValue = vector[i];
-                    }
+                    minValue = vector[i];
                 }
-                return minValue;
             }
-            throw std::runtime_error("Vector is empty");
+            return minValue;
         }
+        throw std::runtime_error("Vector is empty");
+    }
 
-        template <typename T>
-        static T getMaxValue(std::vector<T> vector)
+    template <typename T>
+    static T getMaxValue(std::vector<T> vector)
+    {
+        if (vector.size() > 1)
         {
-            if (vector.size() > 1)
+            T maxValue = vector[0];
+
+            for (size_t i = 1; i < vector.size(); i++)
             {
-                T maxValue = vector[0];
-
-                for (size_t i = 1; i < vector.size(); i++)
+                if (vector[i] > maxValue)
                 {
-                    if (vector[i] > maxValue)
-                    {
-                        maxValue = vector[i];
-                    }
+                    maxValue = vector[i];
                 }
-                return maxValue;
             }
-            throw std::runtime_error("Vector is empty");
+            return maxValue;
         }
-
-        static std::string toString(std::chrono::milliseconds duration);
-    };
+        throw std::runtime_error("Vector is empty");
+    }
 
     template <logLevel T, typename... Targs>
     constexpr void log(Targs&&... messages)

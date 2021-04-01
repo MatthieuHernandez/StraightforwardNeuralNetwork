@@ -1,3 +1,5 @@
+#include "Neuron.hpp"
+
 template <class Derived>
 Neuron<Derived>::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : BaseNeuron<Derived>(optimizer),
@@ -20,7 +22,7 @@ template <class Derived>
 float Neuron<Derived>::randomInitializeWeight(int numberOfWeights)
 {
     const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfWeights));
-    return Tools::randomBetween(-valueMax, valueMax);
+    return tools::randomBetween(-valueMax, valueMax);
 }
 
 template <class Derived>
@@ -62,16 +64,26 @@ int Neuron<Derived>::getNumberOfInputs() const
 template <class Derived>
 bool Neuron<Derived>::operator==(const Neuron& neuron) const
 {
-    return this->numberOfInputs == neuron.numberOfInputs
-        && this->weights == neuron.weights
-        && this->bias == neuron.bias
-        && this->previousDeltaWeights == neuron.previousDeltaWeights
-        && this->lastInputs == neuron.lastInputs
-        && this->errors == neuron.errors
-        && this->sum == neuron.sum
-        && this->activationFunction == neuron.activationFunction
-        && this->outputFunction == neuron.outputFunction // not really good
-        && *this->optimizer == *neuron.optimizer;
+    /*try
+    {
+        const auto& n = dynamic_cast<const BaseNeuron&>(neuron);
+
+        return typeid(*this).hash_code() == typeid(n).hash_code()
+            && this->numberOfInputs == neuron.numberOfInputs
+            && this->weights == neuron.weights
+            && this->bias == neuron.bias
+            && this->previousDeltaWeights == neuron.previousDeltaWeights
+            && this->lastInputs == neuron.lastInputs
+            && this->errors == neuron.errors
+            && this->sum == neuron.sum
+            && this->activationFunction == neuron.activationFunction
+            && this->outputFunction == neuron.outputFunction // not really good
+            && *this->optimizer == *neuron.optimizer;
+    }
+    catch (std::bad_cast&)
+    {*/
+        return false;
+    //}
 }
 
 template <class Derived>

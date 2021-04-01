@@ -7,7 +7,6 @@
 
 namespace snn::internal
 {
-    class NeuralNetworkOptimizer;
 
     template <class Derived>
     class BaseNeuron
@@ -25,24 +24,24 @@ namespace snn::internal
         
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        template <class I> requires NeuronInput
+        template <NeuronInput I>
         [[nodiscard]] float output(const I& inputs) { return static_cast<Derived*>(this)->output(inputs); }
 
-        template <class I> requires NeuronInput
+        template <NeuronInput I>
         [[nodiscard]] float output(const I& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
 
         [[nodiscard]] std::vector<float>& backOutput(float error) { return static_cast<Derived*>(this)->backOutput(error); }
         void train(float error) { static_cast<Derived*>(this)->train(error); }
 
-        [[nodiscard]]  int isValid() const { return static_cast<Derived*>(this)->isValid(); }
+        [[nodiscard]]  int isValid() const { return static_cast<const Derived*>(this)->isValid(); }
 
-        [[nodiscard]] std::vector<float> getWeights() { return static_cast<Derived*>(this)->getWeights(); }
-        [[nodiscard]] int getNumberOfParameters() { return static_cast<Derived*>(this)->getNumberOfParameters(); }
-        [[nodiscard]] int getNumberOfInputs() { return static_cast<Derived*>(this)->getNumberOfInputs(); }
+        [[nodiscard]] std::vector<float> getWeights() const { return static_cast<const Derived*>(this)->getWeights(); }
+        [[nodiscard]] int getNumberOfParameters() const { return static_cast<const Derived*>(this)->getNumberOfParameters(); }
+        [[nodiscard]] int getNumberOfInputs() const { return static_cast<const Derived*>(this)->getNumberOfInputs(); }
 
         bool operator==(const BaseNeuron& neuron) const
         {
-            return static_cast<Derived*>(this) == static_cast<Derived*>(neuron);
+            return static_cast<const Derived*>(this)->operator==(static_cast<const Derived&>(neuron));
         }
 
         bool operator!=(const BaseNeuron& neuron) const

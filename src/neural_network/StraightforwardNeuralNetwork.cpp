@@ -11,6 +11,7 @@
 using namespace std;
 using namespace snn;
 using namespace internal;
+using namespace tools;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 

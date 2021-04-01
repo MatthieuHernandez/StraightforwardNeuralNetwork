@@ -64,26 +64,17 @@ int Neuron<Derived>::getNumberOfInputs() const
 template <class Derived>
 bool Neuron<Derived>::operator==(const Neuron& neuron) const
 {
-    /*try
-    {
-        const auto& n = dynamic_cast<const BaseNeuron&>(neuron);
-
-        return typeid(*this).hash_code() == typeid(n).hash_code()
-            && this->numberOfInputs == neuron.numberOfInputs
-            && this->weights == neuron.weights
-            && this->bias == neuron.bias
-            && this->previousDeltaWeights == neuron.previousDeltaWeights
-            && this->lastInputs == neuron.lastInputs
-            && this->errors == neuron.errors
-            && this->sum == neuron.sum
-            && this->activationFunction == neuron.activationFunction
-            && this->outputFunction == neuron.outputFunction // not really good
-            && *this->optimizer == *neuron.optimizer;
-    }
-    catch (std::bad_cast&)
-    {*/
-        return false;
-    //}
+    return typeid(*this).hash_code() == typeid(neuron).hash_code()
+        && this->numberOfInputs == neuron.numberOfInputs
+        && this->weights == neuron.weights
+        && this->bias == neuron.bias
+        && this->previousDeltaWeights == neuron.previousDeltaWeights
+        && this->lastInputs == neuron.lastInputs
+        && this->errors == neuron.errors
+        && this->sum == neuron.sum
+        && this->activationFunction == neuron.activationFunction
+        && this->outputFunction == neuron.outputFunction // not really good
+        && *this->optimizer == *neuron.optimizer;
 }
 
 template <class Derived>

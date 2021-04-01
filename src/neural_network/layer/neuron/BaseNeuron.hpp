@@ -5,8 +5,38 @@
 #include "input/NeuronInput.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 
+template <typename T>
+concept Float = std::is_same<float, T>::value;
+
+template <typename T>
+concept Int = std::is_same<int, T>::value;
+
 namespace snn::internal
 {
+    
+    template <class N>
+    concept HasTemporalOuputMethod =
+    requires(N neuron, std::vector<float> inputs)
+    {
+        {neuron.output(inputs) } -> Float;
+    };
+
+    template <class N>
+    concept HasNonTemporalOuputMethod =
+    requires(N neuron, std::vector<float> inputs)
+    {
+        {neuron.output(inputs, true) } -> Float;
+    };
+
+    template <class N>
+    concept HasCommonMethods =
+    requires(N neuron)
+    {
+        {neuron.isValid() } -> Int;
+    };
+
+    template <class N>
+    concept BaseNeuron2 = HasCommonMethods<N> && (HasTemporalOuputMethod<N> || HasNonTemporalOuputMethod<N>);
 
     template <class Derived>
     class BaseNeuron
@@ -25,7 +55,7 @@ namespace snn::internal
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         template <NeuronInput I>
-        [[nodiscard]] float output(const I& inputs) { return static_cast<Derived*>(this)->output(inputs); }
+        [[nodiscard]] float output(const I& inputs) { return static_cast<Derived*>(this)->output22(inputs); }
 
         template <NeuronInput I>
         [[nodiscard]] float output(const I& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }

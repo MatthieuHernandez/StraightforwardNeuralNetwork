@@ -17,7 +17,7 @@ unique_ptr<BaseLayer> Recurrence::clone(std::shared_ptr<NeuralNetworkOptimizer> 
     auto layer = make_unique<Recurrence>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }

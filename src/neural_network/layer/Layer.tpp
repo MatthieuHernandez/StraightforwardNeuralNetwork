@@ -1,4 +1,4 @@
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     this->numberOfInputs = model.numberOfInputs;
@@ -10,7 +10,7 @@ Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optim
     LayerOptimizerFactory::build(this->optimizers, model, this);
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 Layer<N>::Layer(const Layer& layer)
 {
     this->numberOfInputs = layer.numberOfInputs;
@@ -21,7 +21,7 @@ Layer<N>::Layer(const Layer& layer)
         this->optimizers.emplace_back(optimizer->clone(this));
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
@@ -30,7 +30,7 @@ std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool tempo
     return output;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
@@ -39,7 +39,7 @@ std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs,
     return output;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 {
     for (auto& optimizer : this->optimizers)
@@ -48,7 +48,7 @@ std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
     return error;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
     for (auto& optimizer : this->optimizers)
@@ -57,7 +57,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
         neurons[n].train(inputErrors[n]);
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 int Layer<N>::isValid() const
 {
     if (this->getNumberOfNeurons() != (int)this->neurons.size()
@@ -82,13 +82,13 @@ int Layer<N>::isValid() const
     return 0;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 void* Layer<N>::getNeuron(int index)
 {
     return static_cast<void*>(&this->neurons[index]);
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 float Layer<N>::getAverageOfAbsNeuronWeights() const 
 {
     auto sum = 0.0f;
@@ -99,7 +99,7 @@ float Layer<N>::getAverageOfAbsNeuronWeights() const
     return sum;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 float Layer<N>::getAverageOfSquareNeuronWeights() const 
 {
     auto sum = 0.0f;
@@ -110,19 +110,19 @@ float Layer<N>::getAverageOfSquareNeuronWeights() const
     return sum;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 int Layer<N>::getNumberOfInputs() const
 {
     return this->numberOfInputs;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 int Layer<N>::getNumberOfNeurons() const
 {
     return (int)this->neurons.size();
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 int Layer<N>::getNumberOfParameters() const
 {
     int sum = 0;
@@ -133,7 +133,7 @@ int Layer<N>::getNumberOfParameters() const
     return sum;
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 bool Layer<N>::operator==(const BaseLayer& layer) const
 {
     try
@@ -159,7 +159,7 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
     }
 }
 
-template <BaseNeuron2 N>
+template <BaseNeuron N>
 bool Layer<N>::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);

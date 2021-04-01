@@ -24,7 +24,7 @@ unique_ptr<BaseLayer> Convolution2D::clone(std::shared_ptr<NeuralNetworkOptimize
 {
     auto layer = make_unique<Convolution2D>(*this);
     for (auto& neuron : layer->neurons)
-        neuron.optimizer = optimizer;
+        neuron.setOptimizer(optimizer);
     return layer;
 }
 

@@ -9,7 +9,7 @@
 
 namespace snn::internal
 {
-    template <BaseNeuron2 N>
+    template <BaseNeuron N>
     class SimpleLayer : public Layer<N>
     {
     private:
@@ -35,7 +35,7 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override final;
     };
 
-    template <BaseNeuron2 N>
+    template <BaseNeuron N>
     template <class Archive>
     void SimpleLayer<N>::serialize(Archive& ar, const unsigned version)
     {

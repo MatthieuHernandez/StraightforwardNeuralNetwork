@@ -17,7 +17,7 @@ unique_ptr<BaseLayer> GruLayer::clone(std::shared_ptr<NeuralNetworkOptimizer> op
     auto layer = make_unique<GruLayer>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }

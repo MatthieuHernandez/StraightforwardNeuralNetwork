@@ -2,10 +2,11 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include "Neuron.hpp"
+#include "input/NeuronInput.hpp"
 
 namespace snn::internal
 {
-    class SimpleNeuron final : public Neuron<SimpleNeuron>
+    class SimpleNeuron final : public Neuron
     {
     private:
         friend class StochasticGradientDescent;

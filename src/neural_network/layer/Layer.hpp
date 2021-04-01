@@ -14,7 +14,7 @@
 
 namespace snn::internal
 {
-    template <BaseNeuron2 N>
+    template <BaseNeuron N>
     class Layer : public BaseLayer
     {
     private:
@@ -58,7 +58,7 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override;
     };
 
-    template <BaseNeuron2 N>
+    template <BaseNeuron N>
     template <class Archive>
     void Layer<N>::serialize(Archive& ar, unsigned version)
     {

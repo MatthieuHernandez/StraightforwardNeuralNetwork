@@ -40,7 +40,7 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(*neuronA == *neuronB);
     EXPECT_TRUE(neuronA != neuronB);
 
-    EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->optimizer.get());
+    EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->getOptimizer());
 
     EXPECT_TRUE(A != C); // Test A == C with same seed
 

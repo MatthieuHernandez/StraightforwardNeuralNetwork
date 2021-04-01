@@ -108,6 +108,18 @@ int GatedRecurrentUnit::isValid() const
     return 0;
 }
 
+NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const
+{
+    return this->resetGate.getOptimizer();
+}
+
+void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
+{
+    this->resetGate.setOptimizer(newOptimizer);
+    this->updateGate.setOptimizer(newOptimizer);
+    this->outputGate.setOptimizer(newOptimizer);
+}
+
 bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
 {
     return this->numberOfInputs == neuron .numberOfInputs

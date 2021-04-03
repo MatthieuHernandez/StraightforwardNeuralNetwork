@@ -64,6 +64,32 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.75);
 }
 
+TEST_F(FashionMnistTest, Convolution2DBenchmark) // 25s for 65000 parameters
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        Convolution(4,4),
+        FullyConnected(10)
+        });
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+    neuralNetwork.train(*data, 1_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.50);
+}
+
+TEST_F(FashionMnistTest, FullyConnectedBenchmark) // 4s for 65108 parameters
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        FullyConnected(82),
+        FullyConnected(10)
+        });
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+    neuralNetwork.train(*data, 1_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.50);
+}
+
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({

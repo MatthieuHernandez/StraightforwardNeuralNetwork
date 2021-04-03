@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../../optimizer/NeuralNetworkOptimizer.hpp"
+#include "input/NeuronInput.hpp"
 
 namespace snn::internal
 {

@@ -48,6 +48,6 @@ namespace snn::internal
 
     template<>
     std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
-    
+
     #include "SimpleLayer.tpp"
 }

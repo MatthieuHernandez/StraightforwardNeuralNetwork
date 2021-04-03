@@ -170,4 +170,9 @@ namespace snn::tools
     {
         return (index % (maxX * maxY)) / maxX;
     }
+
+    constexpr int roughenZ(const int index, const int maxX, const int maxY)
+    {
+        return index % (maxX * maxY);
+    }
 }

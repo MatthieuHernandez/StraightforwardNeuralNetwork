@@ -7,6 +7,7 @@
 
 namespace snn::internal
 {
+    template<NeuronInput I>
     class FilterLayer : public Layer<SimpleNeuron>
     {
     private:
@@ -22,7 +23,7 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
+        [[nodiscard]] virtual I createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
         virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
 
     public:
@@ -38,8 +39,9 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override;
     };
 
+    template<NeuronInput I>
     template <class Archive>
-    void FilterLayer::serialize(Archive& ar, const unsigned version)
+    void FilterLayer<I>::serialize(Archive& ar, const unsigned version)
     {
         boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
@@ -48,4 +50,6 @@ namespace snn::internal
         ar & this->shapeOfInput;
         ar & this->shapeOfOutput;
     }
+
+    #include "FilterLayer.tpp"
 }

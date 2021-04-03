@@ -7,7 +7,7 @@
 
 namespace snn::internal
 {
-    class Convolution1D final : public FilterLayer
+    class Convolution1D final : public FilterLayer<std::vector<float>>
     {
     private:
         friend class boost::serialization::access;

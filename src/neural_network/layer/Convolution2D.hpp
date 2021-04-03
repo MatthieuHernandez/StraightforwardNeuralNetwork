@@ -4,17 +4,18 @@
 #include <boost/serialization/base_object.hpp>
 #include "FilterLayer.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "neuron/input/NeuronInputFromConvolution2D.hpp"
 
 namespace snn::internal
 {
-    class Convolution2D final : public FilterLayer
+    class Convolution2D final : public FilterLayer<NeuronInputFromConvolution2D>
     {
     private :
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
+        NeuronInputFromConvolution2D createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
         void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
 
     public :

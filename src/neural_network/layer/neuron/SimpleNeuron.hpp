@@ -19,9 +19,7 @@ namespace snn::internal
         SimpleNeuron(const SimpleNeuron& neuron) = default;
         ~SimpleNeuron() = default;
 
-        template <NeuronInput I>
-        [[nodiscard]] float output(const I& inputs);
-
+        [[nodiscard]] float output(const std::vector<float>& inputs);
         [[nodiscard]] std::vector<float>& backOutput(float error);
 
         void train(float error);
@@ -37,19 +35,5 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);
-    }
-
-    template <NeuronInput I>
-    float SimpleNeuron::output(const I& inputs)
-    {
-        this->lastInputs = inputs;
-        float tmp = 0.0f; // to activate the SIMD optimization
-        #pragma omp simd
-        for (size_t w = 0; w < this->weights.size(); ++w)
-        {
-            tmp += inputs[w] * weights[w];
-        }
-        this->sum = tmp + bias;
-        return this->outputFunction->function(this->sum);
     }
 }

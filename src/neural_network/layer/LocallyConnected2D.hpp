@@ -7,7 +7,7 @@
 
 namespace snn::internal
 {
-    class LocallyConnected2D final : public FilterLayer<std::vector<float>>
+    class LocallyConnected2D final : public FilterLayer
     {
     private :
         friend class boost::serialization::access;

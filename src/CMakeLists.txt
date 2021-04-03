@@ -12,8 +12,6 @@ file(GLOB SOURCES
     "neural_network/layer/*.tpp"
     "neural_network/layer/neuron/*.hpp"
     "neural_network/layer/neuron/*.cpp"
-    "neural_network/layer/neuron/input/*.hpp"
-    "neural_network/layer/neuron/input/*.cpp"
     "neural_network/layer/neuron/activation_function/*.hpp"
     "neural_network/layer/neuron/activation_function/*.cpp"
 )

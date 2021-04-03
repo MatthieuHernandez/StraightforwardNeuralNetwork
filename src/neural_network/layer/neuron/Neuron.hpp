@@ -6,7 +6,7 @@
 #include "NeuronModel.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
-#include "../../tools/Tools.hpp"
+#include "../../../tools/Tools.hpp"
 
 namespace snn::internal
 {

@@ -22,7 +22,7 @@ void CompositeForTemporalData::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
+    ranges::shuffle(this->indexesForShuffles, g);
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {

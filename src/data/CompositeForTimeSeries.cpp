@@ -35,7 +35,7 @@ void CompositeForTimeSeries::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
+    ranges::shuffle(this->indexesForShuffling, g);
 
     for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
     {

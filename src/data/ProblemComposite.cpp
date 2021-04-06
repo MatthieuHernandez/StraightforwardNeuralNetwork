@@ -32,14 +32,14 @@ const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, 
     const auto data0 = this->sets[training].labels[i];
     i = this->sets[training].shuffledIndexes[index + 1];
     const auto data1 = this->sets[training].labels[i];
-    transform(data0.begin(), data0.end(), data1.begin(), batchedLabels.begin(), plus<float>());
+    ranges::transform(data0, data1, batchedLabels.begin(), plus<float>());
 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
         i = this->sets[training].shuffledIndexes[j];
         const auto data = this->sets[training].labels[i];
-        transform(batchedLabels.begin(), batchedLabels.end(), data.begin(), batchedLabels.begin(), std::plus<float>());
+        ranges::transform(batchedLabels, data, batchedLabels.begin(), std::plus<float>());
     }
-    transform(batchedLabels.begin(), batchedLabels.end(), batchedLabels.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    ranges::transform(batchedLabels, batchedLabels.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
     return batchedLabels;
 }

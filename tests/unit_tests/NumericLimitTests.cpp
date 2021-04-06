@@ -1,4 +1,3 @@
-#include <cstddef>
 #include "../ExtendedGTest.hpp"
 #include "tools/Tools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
@@ -13,14 +12,14 @@ protected:
     {
         vector2D<float> trainingExpectedOutputs;
         trainingExpectedOutputs.resize(sizeOfTraining);
-        std::generate(trainingExpectedOutputs.begin(), trainingExpectedOutputs.end(), []
+        ranges::generate(trainingExpectedOutputs, []
         {
             return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> trainingInputData;
         trainingInputData.resize(sizeOfTraining);
-        std::generate(trainingInputData.begin(), trainingInputData.end(), []
+        ranges::generate(trainingInputData, []
         {
             return vector<float>
             {
@@ -32,14 +31,14 @@ protected:
 
         vector2D<float> testingExpectedOutputs;
         testingExpectedOutputs.resize(sizeOfTesting);
-        std::generate(testingExpectedOutputs.begin(), testingExpectedOutputs.end(), []
+        ranges::generate(testingExpectedOutputs, []
         {
             return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> testingInputData(sizeOfTesting);
         testingInputData.resize(sizeOfTesting);
-        std::generate(testingInputData.begin(), testingInputData.end(), []
+        ranges::generate(testingInputData, []
         {
             return vector<float>
             {

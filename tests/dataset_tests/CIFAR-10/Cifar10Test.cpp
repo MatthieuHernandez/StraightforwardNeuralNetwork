@@ -79,5 +79,5 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 281800);
-    ASSERT_FLOAT_EQ(accuracy, 0.5673);
+    ASSERT_FLOAT_EQ(accuracy, 0.5673f);
 }

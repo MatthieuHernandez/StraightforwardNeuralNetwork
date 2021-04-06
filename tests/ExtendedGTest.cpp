@@ -30,6 +30,11 @@ void PRINT_LOG(string message)
     cout << "[          ] " << message << endl;
 }
 
+void PRINT_NUMBER_OF_NEURONS(int value)
+{
+    cout << "[          ] " << value << " neurons" << endl;
+}
+
 void PRINT_NUMBER_OF_PARAMETERS(int value)
 {
     cout << "[          ] " << value << " parameters" << endl;

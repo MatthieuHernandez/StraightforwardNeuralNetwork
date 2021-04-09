@@ -17,6 +17,8 @@ Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->shapeOfInput[1] - (this->sizeOfFilterMatrix - 1),
         this->numberOfFilters
     };
+    this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2];
+    this->neuronInputs.resize(this->sizeOfNeuronInputs);
 }
 
 inline
@@ -32,34 +34,32 @@ int Convolution2D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
+        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs * this->shapeOfInput[2])
             return 203;
     }
     return this->FilterLayer::isValid();
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs) const
+vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
 {
-    vector<float> neuronInputs;
-
     const int neuronPosX = neuronIndex % this->shapeOfInput[0];
     const int neuronPosY = neuronIndex / this->shapeOfInput[0];
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
-        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPosX * this->shapeOfInput[2];
-        const int endIndex = ((neuronPosY + i) * this->shapeOfInput[0] * this->shapeOfInput[2])
-            + (neuronPosX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
-        for (int j = beginIndex; j < endIndex; ++j)
+        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
+        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            neuronInputs.push_back(inputs[j]);
+            const int indexErrors = beginIndex + j;
+            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
+            this->neuronInputs[0] = inputs[indexErrors];
         }
     }
-    return neuronInputs;
+    return this->neuronInputs;
 }
 
-void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) const
+void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
 {
     const int neuronPosX = neuronIndex % this->shapeOfInput[0];
     const int neuronPosY = neuronIndex / this->shapeOfInput[0];

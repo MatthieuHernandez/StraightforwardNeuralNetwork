@@ -22,8 +22,8 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
-        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
+        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) = 0;
+        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) = 0;
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only

@@ -40,7 +40,7 @@ int LocallyConnected2D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs * this->shapeOfInput[2])
+        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs)
             return 203;
     }
     return this->FilterLayer::isValid();

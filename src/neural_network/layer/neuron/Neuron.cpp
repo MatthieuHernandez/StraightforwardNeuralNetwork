@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Neuron.hpp"
 
 using namespace std;
@@ -5,9 +6,10 @@ using namespace snn;
 using namespace internal;
 
 Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : optimizer(optimizer),
-      numberOfInputs(model.numberOfInputs),
-      activationFunction(model.activationFunction)
+    : numberOfInputs(model.numberOfInputs),
+      activationFunction(model.activationFunction),
+      optimizer(optimizer)
+
 {
     this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->lastInputs.resize(model.numberOfInputs, 0);

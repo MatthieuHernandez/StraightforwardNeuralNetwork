@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <random>
+#include <ranges>
 #include "CompositeForNonTemporalData.hpp"
 
 using namespace std;

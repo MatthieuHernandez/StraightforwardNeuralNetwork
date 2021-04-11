@@ -55,13 +55,12 @@ vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, c
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        const int endIndex = beginIndex + this->sizeOfFilterMatrix * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
             const int indexErrors = beginIndex + j;
             const int indexMatrix = i * this->sizeOfFilterMatrix + j;
             if (indexErrors < (int)inputs.size())
-                this->neuronInputs[0] = inputs[indexErrors];
+                this->neuronInputs[indexMatrix] = inputs[indexErrors];
             else
                 neuronInputs.push_back(0);
         }

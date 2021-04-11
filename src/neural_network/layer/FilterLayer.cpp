@@ -19,10 +19,10 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
 vector<float> FilterLayer::computeOutput(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < (int)this->neurons.size() / this->numberOfFilters; n++)
+    for (int i = 0, n = 0; n < (int)this->neurons.size(); ++i)
     {
-        auto neuronInputs = this->createInputsForNeuron(n, inputs);
-        for (int f = 0; f < this->numberOfFilters; f++)
+        auto neuronInputs = this->createInputsForNeuron(i, inputs);
+        for (int f = 0; f < this->numberOfFilters; ++f, ++n)
         {
             outputs[n] = this->neurons[n].output(neuronInputs);
         }

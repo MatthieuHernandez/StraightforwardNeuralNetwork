@@ -45,7 +45,7 @@ TEST(Addition, WithLCNN)
         FullyConnected(1, activation::identity)
     });
 
-    neuralNetwork.train(*data, 1.0_acc || 2_s);
+    neuralNetwork.train(*data, 1.0_acc || 5_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 

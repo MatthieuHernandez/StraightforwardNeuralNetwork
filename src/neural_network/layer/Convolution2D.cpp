@@ -53,7 +53,7 @@ vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const 
         {
             const int indexErrors = beginIndex + j;
             const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            this->neuronInputs[0] = inputs[indexErrors];
+            this->neuronInputs[indexMatrix] = inputs[indexErrors];
         }
     }
     return this->neuronInputs;

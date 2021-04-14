@@ -51,16 +51,15 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.24f);
 }
 
-TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
+TEST_F(Cifar10Test, trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(32, 32, 3),
-        Convolution(2, 3, activation::GELU),
-        FullyConnected(250, activation::sigmoid, Dropout(0.1f)),
-        FullyConnected(125, activation::sigmoid, Dropout(0.1f)),
+        Convolution(2, 4, activation::GELU),
+        FullyConnected(200, activation::sigmoid),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.005f, 0.6f));
+        StochasticGradientDescent(1e-3f, 0.0f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

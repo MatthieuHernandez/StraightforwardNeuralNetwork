@@ -55,50 +55,95 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,5),
+        Convolution(1, 5),
         FullyConnected(70),
         FullyConnected(10)
-        });
+    });
     neuralNetwork.train(*data, 1_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.75);
 }
 
-TEST_F(FashionMnistTest, Convolution2DBenchmark) // 25s for 65000 parameters
+TEST_F(FashionMnistTest, LocallyConnected2DBenchmark) // 3s for 5096 parameters
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(4,4),
+        LocallyConnected(4,4),
         FullyConnected(10)
         });
+    PRINT_NUMBER_OF_NEURONS(neuralNetwork.getNumberOfNeurons());
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
-    neuralNetwork.train(*data, 1_ep);
+    neuralNetwork.train(*data, 3_ep);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.50);
+    ASSERT_ACCURACY(accuracy, 0.50f);
 }
 
-TEST_F(FashionMnistTest, FullyConnectedBenchmark) // 4s for 65108 parameters
+TEST_F(FashionMnistTest, Convolution2DBenchmark) // 32s for 2510 neurons and 65000 parameters 
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        FullyConnected(82),
+        Convolution(4, 4),
         FullyConnected(10)
         });
+    PRINT_NUMBER_OF_NEURONS(neuralNetwork.getNumberOfNeurons());
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
-    neuralNetwork.train(*data, 1_ep);
+    neuralNetwork.train(*data, 3_ep);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.50);
+    ASSERT_ACCURACY(accuracy, 0.70f);
+}
+
+TEST_F(FashionMnistTest, FullyConnectedBenchmark) // 12s for 2510 neurons and 65000 parameters 
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        MaxPooling(7),
+        FullyConnected(2500, activation::sigmoid),
+        FullyConnected(10)
+        });
+    PRINT_NUMBER_OF_NEURONS(neuralNetwork.getNumberOfNeurons());
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+    neuralNetwork.train(*data, 3_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.40f);
+}
+
+TEST_F(FashionMnistTest, LocallyConnected1DBenchmark) // _s for 5096 parameters
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(784, 1),
+        LocallyConnected(4,4),
+        FullyConnected(10)
+        });
+    PRINT_NUMBER_OF_NEURONS(neuralNetwork.getNumberOfNeurons());
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+    neuralNetwork.train(*data, 3_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.70f);
+}
+
+TEST_F(FashionMnistTest, Convolution1DBenchmark) // _s for 2510 neurons and 65000 parameters 
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(784, 1),
+        Convolution(4, 4),
+        FullyConnected(10)
+        });
+    PRINT_NUMBER_OF_NEURONS(neuralNetwork.getNumberOfNeurons());
+    PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
+    neuralNetwork.train(*data, 3_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.70f);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(2, 6),
-        FullyConnected(200),
-        FullyConnected(10)
-    },
-        StochasticGradientDescent(0.005f, 0.5f));
+                                                   Input(28, 28, 1),
+                                                   Convolution(2, 6),
+                                                   FullyConnected(200),
+                                                   FullyConnected(10)
+                                               },
+                                               StochasticGradientDescent(0.005f, 0.5f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

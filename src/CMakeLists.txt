@@ -20,6 +20,9 @@ file(GLOB SOURCES
 include_directories(external_library/boost_1_71_0_minimal)
 add_subdirectory(external_library/boost_1_71_0_minimal/libs/serialization)
 
+include_directories(external_library/bitmap)
+add_subdirectory(external_library/bitmap)
+
 add_library(StraightforwardNeuralNetwork ${SOURCES})
 
-target_link_libraries(StraightforwardNeuralNetwork Boost)
+target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap)

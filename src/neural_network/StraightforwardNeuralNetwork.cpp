@@ -1,6 +1,7 @@
 #include <fstream>
 #include <thread>
 #include <stdexcept>
+#include <BitmapImage.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
@@ -250,6 +251,46 @@ void StraightforwardNeuralNetwork::saveAs(const string filePath)
     if (!this->isIdle)
         throw std::runtime_error("Neural network cannot be saved during training, stop training before saving or use auto save");
     saveSync(filePath);
+}
+
+void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string path)
+{
+    if (!this->isIdle)
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    for (int l = 0; l < (int)this->layers.size(); ++l)
+    {
+        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+        if (filterLayer != nullptr)
+        {
+            auto shape = filterLayer->getShapeOfOutput();
+            if (shape.size() == 3)
+            {
+                float length = sqrt((float)shape[2]);
+                int filterX = (int)floor(length);
+                int filterY = (int)floor(length);
+
+                if (length != ceil(sqrt(shape[2])))
+                    filterX ++;
+
+                bitmap_image image((shape[0] + 1) * filterX - 1, (shape[1] + 1) * filterY - 1);
+                image.set_all_channels(0, 0, 0);
+                for (int x = 0; x < filterX; ++x)
+                {
+                    for (int y = 0; y < filterY; ++y)
+                    {
+                        for (int i = 0; i < shape[0]; ++i)
+                        {
+                            for (int j = 0; shape[1]; ++j)
+                            {
+                                image.set_pixel(x*shape[0]+i, y*shape[1]+j, 0, 255, 0);
+                            }
+                        }
+                    }
+                }
+                image.save_image(path + "/layer_" + to_string(l) + ".bmp");
+            }
+        }
+    }
 }
 
 void StraightforwardNeuralNetwork::saveSync(const string filePath)

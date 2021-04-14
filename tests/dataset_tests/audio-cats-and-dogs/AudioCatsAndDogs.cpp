@@ -1,7 +1,7 @@
 #include <string>
+#include <AudioFile.hpp>
 #include "AudioCatsAndDogs.hpp"
 #include "tools/Tools.hpp"
-#include "AudioFile.hpp"
 #include "tools/ExtendedExpection.hpp"
 
 using namespace std;

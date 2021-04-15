@@ -49,6 +49,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override = 0;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
 
         void train(std::vector<float>& inputErrors) override final;

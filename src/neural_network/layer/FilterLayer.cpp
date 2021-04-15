@@ -38,6 +38,11 @@ vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
+std::vector<int> FilterLayer::getShapeOfInput() const
+{
+    return this->shapeOfInput;
+}
+
 std::vector<int> FilterLayer::getShapeOfOutput() const
 {
     return this->shapeOfOutput;

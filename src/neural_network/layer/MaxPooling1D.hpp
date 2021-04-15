@@ -32,6 +32,7 @@ namespace snn::internal
         void train(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] int getNumberOfInputs() const override;
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 

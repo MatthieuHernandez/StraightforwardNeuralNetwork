@@ -83,6 +83,11 @@ int MaxPooling2D::getNumberOfInputs() const
     return this->numberOfInputs;
 }
 
+std::vector<int> MaxPooling2D::getShapeOfInput() const
+{
+    return this->shapeOfInput;
+}
+
 vector<int> MaxPooling2D::getShapeOfOutput() const
 {
     return this->shapeOfOutput;

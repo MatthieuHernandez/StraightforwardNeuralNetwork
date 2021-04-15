@@ -24,6 +24,7 @@ namespace snn::internal
         [[nodiscard]] virtual int getNumberOfInputs() const = 0;
         [[nodiscard]] virtual int getNumberOfNeurons() const = 0;
         [[nodiscard]] virtual int getNumberOfParameters() const = 0;
+        [[nodiscard]] virtual std::vector<int> getShapeOfInput() const = 0;
         [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
         [[nodiscard]] virtual std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) = 0;

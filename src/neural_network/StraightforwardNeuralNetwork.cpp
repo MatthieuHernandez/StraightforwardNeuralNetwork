@@ -262,10 +262,11 @@ void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string path)
         const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
         if (filterLayer != nullptr)
         {
-            auto shape = filterLayer->getShapeOfOutput();
+            auto shape = filterLayer->getShapeOfInput();
             if (shape.size() == 3)
             {
-                float length = sqrt((float)shape[2]);
+                auto numberOfFilters = filterLayer->getShapeOfOutput()[2];
+                float length = sqrt((float)numberOfFilters);
                 int filterX = (int)floor(length);
                 int filterY = (int)floor(length);
 

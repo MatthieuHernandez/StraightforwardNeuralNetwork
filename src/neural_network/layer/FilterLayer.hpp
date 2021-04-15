@@ -31,6 +31,8 @@ namespace snn::internal
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
+
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
         [[nodiscard]] int isValid() const override;
 

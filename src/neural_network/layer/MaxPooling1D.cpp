@@ -61,6 +61,11 @@ int MaxPooling1D::getNumberOfInputs() const
     return this->numberOfInputs;
 }
 
+std::vector<int> MaxPooling1D::getShapeOfInput() const
+{
+    return this->shapeOfInput;
+}
+
 vector<int> MaxPooling1D::getShapeOfOutput() const
 {
     const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;

@@ -41,6 +41,12 @@ std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputEr
 }
 
 template <class N>
+std::vector<int> SimpleLayer<N>::getShapeOfInput() const
+{
+    return {this->getNumberOfInputs()};
+}
+
+template <class N>
 std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 {
     return {this->getNumberOfNeurons()};

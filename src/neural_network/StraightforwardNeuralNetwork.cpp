@@ -1,12 +1,12 @@
 #include <fstream>
 #include <thread>
 #include <stdexcept>
-#include <BitmapImage.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
+#include "NeuralNetworkVisualization.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
@@ -260,37 +260,7 @@ void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string path)
     for (int l = 0; l < (int)this->layers.size(); ++l)
     {
         const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
-        if (filterLayer != nullptr)
-        {
-            auto shape = filterLayer->getShapeOfInput();
-            if (shape.size() == 3)
-            {
-                auto numberOfFilters = filterLayer->getShapeOfOutput()[2];
-                float length = sqrt((float)numberOfFilters);
-                int filterX = (int)floor(length);
-                int filterY = (int)floor(length);
-
-                if (length != ceil(sqrt(shape[2])))
-                    filterX ++;
-
-                bitmap_image image((shape[0] + 1) * filterX - 1, (shape[1] + 1) * filterY - 1);
-                image.set_all_channels(0, 0, 0);
-                for (int x = 0; x < filterX; ++x)
-                {
-                    for (int y = 0; y < filterY; ++y)
-                    {
-                        for (int i = 0; i < shape[0]; ++i)
-                        {
-                            for (int j = 0; shape[1]; ++j)
-                            {
-                                image.set_pixel(x*shape[0]+i, y*shape[1]+j, 0, 255, 0);
-                            }
-                        }
-                    }
-                }
-                image.save_image(path + "/layer_" + to_string(l) + ".bmp");
-            }
-        }
+        NeuralNetworkVisualization::saveAsBitmap(filterLayer, path + "/layer_" + to_string(l) + ".bmp");
     }
 }
 

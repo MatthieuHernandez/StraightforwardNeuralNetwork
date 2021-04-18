@@ -9,6 +9,7 @@ boost_1_71_0/
 *.bin
 *.out
 *.tmp
+*.bmp
 
 DatasetTests
 UnitTests

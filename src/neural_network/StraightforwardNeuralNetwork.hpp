@@ -64,7 +64,7 @@ namespace snn
         bool isTraining() const;
 
         void saveAs(std::string filePath);
-        void saveFilterLayersAsBitmap(std::string path);
+        void saveFilterLayersAsBitmap(std::string filePath);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
         int getCurrentIndex() const { return this->index; }

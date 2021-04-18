@@ -34,6 +34,7 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
+        [[nodiscard]] int getSizeOfFilterMatrix() const;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;

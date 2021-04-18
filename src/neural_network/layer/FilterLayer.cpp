@@ -48,6 +48,11 @@ std::vector<int> FilterLayer::getShapeOfOutput() const
     return this->shapeOfOutput;
 }
 
+int FilterLayer::getSizeOfFilterMatrix() const
+{
+    return this->sizeOfFilterMatrix;
+}
+
 int FilterLayer::isValid() const
 {
     return this->Layer::isValid();

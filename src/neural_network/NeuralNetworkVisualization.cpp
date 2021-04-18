@@ -5,7 +5,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-
 void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string filePath)
 {
     if (filterLayer == nullptr)
@@ -13,15 +12,14 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string f
     auto shape = filterLayer->getShapeOfInput();
     if (shape.size() != 3)
         return;
-
-    vector<float> weights = {};//filterLayer->getWeights();
+    auto weights = filterLayer->getWeights();
     auto numberOfFilters = filterLayer->getShapeOfOutput()[2];
     float length = sqrt((float)numberOfFilters);
-    int filterX = (int)floor(length);
-    int filterY = (int)floor(length);
+    int filterX = (int)ceil(length);
+    int filterY = (int)ceil(length);
 
-    if (length != ceil(sqrt(shape[2])))
-        filterX ++;
+    if (numberOfFilters <= filterX * filterY - filterX)
+        filterY--;
 
     bitmap_image image((shape[0] + 1) * filterX - 1, (shape[1] + 1) * filterY - 1);
     image.set_all_channels(0, 0, 0);
@@ -35,7 +33,9 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string f
                 {
                     if (y * filterX + x < numberOfFilters)
                     {
-                        const char color = getColorPixel(weights, 0, 0, 0);
+                        int index = flatten(x * shape[0] + i, y * shape[1] + j, filterX * y + x, shape[0], shape[1]);
+                        int value =  (int)weights[index]/255;
+                        const char color = value > 255 ? 255 : (char)value;
                         image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color, color, color);
                     }
                 }
@@ -43,11 +43,4 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string f
         }
     }
     image.save_image(filePath);
-}
-
-char NeuralNetworkVisualization::getColorPixel(std::vector<float>& weight, int x, int y, int f)
-{
-    float w = 0.6f;
-    char color = (char)(w * 255.0f);
-    return color;
 }

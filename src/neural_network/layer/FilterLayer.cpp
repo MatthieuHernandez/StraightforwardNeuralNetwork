@@ -9,7 +9,7 @@ using namespace internal;
 BOOST_CLASS_EXPORT(FilterLayer)
 
 FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-     : Layer(model, optimizer)
+    : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
     this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
@@ -19,10 +19,13 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
 vector<float> FilterLayer::computeOutput(const vector<float>& inputs, bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < (int)this->neurons.size(); ++n)
+    for (int i = 0, n = 0; n < (int)this->neurons.size(); ++i)
     {
-        auto neuronInputs = this->createInputsForNeuron(n, inputs);
-        outputs[n] = this->neurons[n].output(neuronInputs);
+        auto neuronInputs = this->createInputsForNeuron(i, inputs);
+        for (int f = 0; f < this->numberOfFilters; ++f, ++n)
+        {
+            outputs[n] = this->neurons[n].output(neuronInputs);
+        }
     }
     return outputs;
 }
@@ -33,7 +36,8 @@ vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
     for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        this->insertBackOutputForNeuron(n, error, errors);
+        const int neuronIndex = n / this->numberOfFilters;
+        this->insertBackOutputForNeuron(neuronIndex, error, errors);
     }
     return errors;
 }
@@ -60,7 +64,7 @@ int FilterLayer::isValid() const
 
 bool FilterLayer::operator==(const BaseLayer& layer) const
 {
-   try
+    try
     {
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)

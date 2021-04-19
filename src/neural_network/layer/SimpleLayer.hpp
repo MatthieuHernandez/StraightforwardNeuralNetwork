@@ -9,7 +9,7 @@
 
 namespace snn::internal
 {
-    template <class N>
+    template <BaseNeuron N>
     class SimpleLayer : public Layer<N>
     {
     private:
@@ -25,7 +25,7 @@ namespace snn::internal
         SimpleLayer() = default;  // use restricted to Boost library only
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
-        ~SimpleLayer() = default;
+        virtual ~SimpleLayer() = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
@@ -36,7 +36,7 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override final;
     };
 
-    template <class N>
+    template <BaseNeuron N>
     template <class Archive>
     void SimpleLayer<N>::serialize(Archive& ar, const unsigned version)
     {

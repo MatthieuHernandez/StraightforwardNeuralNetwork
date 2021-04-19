@@ -8,7 +8,7 @@
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Windows/badge.svg?barnch=master)
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests/badge.svg?barnch=master)
 
-**Straightforward Neural Network** is an open source neural network library in C++17 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
+**Straightforward Neural Network** is an open source neural network library in C++20 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
 
 ## Documentation
  See the full documentation [here](https://matthieuhernandez.github.io/StraightforwardNeuralNetwork/).
@@ -26,7 +26,7 @@
 
 ## Installation (with *CMake* 3.17.1)
 
-### Linux, UNIX - GCC 10.1
+### Linux, UNIX - GCC 10.2
 * To compile open a command prompt and run `cmake -G"Unix Makefiles" ./..  && make` from the `build` folder.
 
 * To run the unit tests execute `./tests/unit_tests/UnitTests` from `build` folder.

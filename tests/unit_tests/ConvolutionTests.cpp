@@ -12,7 +12,8 @@ TEST(Convolution, SimpleConvolution2D)
     auto data = createDataForConvolutionTests();
     vector<LayerModel> architectures =
     {
-        Input(3, 3, 2), Convolution(2, 2, activation::sigmoid),
+        Input(3, 3, 2),
+        Convolution(2, 2, activation::sigmoid),
         FullyConnected(2)
     };
     StraightforwardNeuralNetwork neuralNetwork(architectures, StochasticGradientDescent(0.5f));

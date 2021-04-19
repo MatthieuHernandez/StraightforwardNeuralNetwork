@@ -1,5 +1,4 @@
 #pragma once
-#include <cmath>
 #include <vector>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
@@ -11,8 +10,7 @@
 
 namespace snn::internal
 {
-    template <class Derived>
-    class  Neuron : public BaseNeuron<Derived>
+    class Neuron
     {
     private:
         friend class boost::serialization::access;
@@ -33,6 +31,7 @@ namespace snn::internal
 
         activation activationFunction;
         std::shared_ptr<ActivationFunction> outputFunction;
+        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         static float randomInitializeWeight(int numberOfInputs);
 
@@ -48,16 +47,18 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 
+        NeuralNetworkOptimizer* getOptimizer() const;
+        void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
+
         bool operator==(const Neuron& neuron) const;
         bool operator!=(const Neuron& neuron) const;
     };
 
-    template <class Derived>
     template <class Archive>
-    void Neuron<Derived>::serialize(Archive& ar, unsigned version)
+    void Neuron::serialize(Archive& ar, unsigned version)
     {
-        boost::serialization::void_cast_register<Neuron, BaseNeuron<Derived>>();
-        ar & boost::serialization::base_object<BaseNeuron<Derived>>(*this);
+        ar.template register_type<StochasticGradientDescent>();
+        ar & this->optimizer;
         ar & this->numberOfInputs;
         ar & this->weights;
         ar & this->bias;
@@ -68,6 +69,4 @@ namespace snn::internal
         ar & this->activationFunction;
         this->outputFunction = ActivationFunction::get(activationFunction);
     }
-
-    #include "Neuron.tpp"
 }

@@ -1,58 +1,47 @@
 #pragma once
-#include <memory>
 #include <vector>
-#include <boost/serialization/access.hpp>
-#include "../../optimizer/StochasticGradientDescent.hpp"
+#include "../../optimizer/NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
-    class NeuralNetworkOptimizer;
-
-    template <class Derived>
-    class BaseNeuron
+    template <class N>
+    concept HasNonTemporalOuputMethod =
+    requires(N neuron, std::vector<float> inputs)
     {
-    private:
-        friend class StochasticGradientDescent;
-        friend class boost::serialization::access;
-        template <class Archive>
-        void serialize(Archive& ar, unsigned version);
-
-    public:
-        BaseNeuron() = default;
-        BaseNeuron(std::shared_ptr<NeuralNetworkOptimizer> optimizer) : optimizer(optimizer) {}
-        ~BaseNeuron() = default;
-        
-        std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
-
-        [[nodiscard]] float output(const std::vector<float>& inputs) { return static_cast<Derived*>(this)->output(inputs); }
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset) { return static_cast<Derived*>(this)->output(inputs, reset); }
-
-        [[nodiscard]]  std::vector<float>& backOutput(float error) { return static_cast<Derived*>(this)->backOutput(error); }
-         void train(float error) { static_cast<Derived*>(this)->train(error); }
-
-        [[nodiscard]]  int isValid() const { return static_cast<Derived*>(this)->isValid(); }
-
-        [[nodiscard]] std::vector<float> getWeights() { return static_cast<Derived*>(this)->getWeights(); }
-        [[nodiscard]] int getNumberOfParameters() { return static_cast<Derived*>(this)->getNumberOfParameters(); }
-        [[nodiscard]] int getNumberOfInputs() { return static_cast<Derived*>(this)->getNumberOfInputs(); }
-
-        bool operator==(const BaseNeuron& neuron) const
-        {
-            return static_cast<Derived*>(this) == static_cast<Derived*>(neuron);
-        }
-
-        bool operator!=(const BaseNeuron& neuron) const
-        {
-            return !(*this == neuron);
-        }
+        { neuron.output(inputs) } -> std::same_as<float>;
     };
 
-    
-    template <class Derived>
-    template <class Archive>
-    void BaseNeuron<Derived>::serialize(Archive& ar, unsigned version)
+    template <class N>
+    concept HasTemporalOuputMethod =
+    requires(N neuron, std::vector<float> inputs)
     {
-        ar.template register_type<StochasticGradientDescent>();
-        ar & this->optimizer;
-    }
+        { neuron.output(inputs, true) } -> std::same_as<float>;
+    };
+
+    template <class N>
+    concept HasCommonMethods =
+    requires(N neuron, float error, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    {
+        { neuron.backOutput(error) } -> std::same_as<std::vector<float>&>;
+        { neuron.train(error) } -> std::same_as<void>;
+        { neuron.setOptimizer(optimizer) } -> std::same_as<void>;
+    };
+
+    template <class N>
+    concept HasCommonConstMethods =
+    requires(const N neuron)
+    {
+        { neuron.isValid() } -> std::same_as<int>;
+
+        { neuron.getWeights() } -> std::same_as<std::vector<float>>;
+        { neuron.getNumberOfParameters() } -> std::same_as<int>;
+        { neuron.getNumberOfInputs() } -> std::same_as<int>;
+
+        { neuron.getNumberOfInputs() } -> std::same_as<int>;
+        { neuron.operator==(neuron) } -> std::same_as<bool>;
+        { neuron.operator!=(neuron) } -> std::same_as<bool>;
+    };
+
+    template <class N>
+    concept BaseNeuron = HasCommonMethods<N> && HasCommonConstMethods<N> && (HasNonTemporalOuputMethod<N> || HasTemporalOuputMethod<N>);
 }

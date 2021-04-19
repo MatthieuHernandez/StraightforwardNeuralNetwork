@@ -5,7 +5,7 @@
 
 namespace snn::internal
 {
-    class RecurrentNeuron final : public Neuron<RecurrentNeuron>
+    class RecurrentNeuron final : public Neuron
     {
     private:
         friend class GatedRecurrentUnit;

@@ -6,6 +6,7 @@
 using namespace std;
 using namespace snn;
 using namespace internal;
+using namespace tools;
 
 BOOST_CLASS_EXPORT(MaxPooling2D)
 

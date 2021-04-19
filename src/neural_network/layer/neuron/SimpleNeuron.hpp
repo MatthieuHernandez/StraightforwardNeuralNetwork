@@ -5,7 +5,7 @@
 
 namespace snn::internal
 {
-    class SimpleNeuron final : public Neuron<SimpleNeuron>
+    class SimpleNeuron final : public Neuron
     {
     private:
         friend class StochasticGradientDescent;
@@ -21,6 +21,7 @@ namespace snn::internal
 
         [[nodiscard]] float output(const std::vector<float>& inputs);
         [[nodiscard]] std::vector<float>& backOutput(float error);
+
         void train(float error);
 
         [[nodiscard]] int isValid() const;

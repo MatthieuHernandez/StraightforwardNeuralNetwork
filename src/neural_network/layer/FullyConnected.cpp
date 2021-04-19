@@ -17,7 +17,7 @@ unique_ptr<BaseLayer> FullyConnected::clone(shared_ptr<NeuralNetworkOptimizer> o
     auto layer = make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }

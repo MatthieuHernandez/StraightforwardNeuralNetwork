@@ -14,7 +14,7 @@
 
 namespace snn::internal
 {
-    template <class N>
+    template <BaseNeuron N>
     class Layer : public BaseLayer
     {
     private:
@@ -33,8 +33,7 @@ namespace snn::internal
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
-
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
@@ -60,7 +59,7 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override;
     };
 
-    template <class N>
+    template <BaseNeuron N>
     template <class Archive>
     void Layer<N>::serialize(Archive& ar, unsigned version)
     {

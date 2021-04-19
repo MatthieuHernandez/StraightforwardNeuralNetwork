@@ -1,9 +1,9 @@
+#include <algorithm>
 #include <cmath>
 #include <numeric>
 #include <string>
 #include <stdexcept>
 #include <vector>
-#include <algorithm>
 #include <functional>
 #include "Data.hpp"
 #include "../tools/Tools.hpp"
@@ -154,7 +154,7 @@ void Data::initialize(problem problem,
     }
 
     this->normalization(-1, 1);
-    internal::log<minimal>("Data loaded");
+    tools::log<minimal>("Data loaded");
 
     int err = this->isValid();
     if (err != 0)
@@ -180,7 +180,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
     size_t i = 0;
     for (vector2D<float>& v : input3D)
     {
-        move(v.begin(), v.end(), back_inserter(this->sets[set].inputs));
+        ranges::move(v, back_inserter(this->sets[set].inputs));
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
@@ -207,7 +207,7 @@ void Data::flatten(vector<vector<vector<float>>>& input3D)
     size_t i = 0;
     for (vector2D<float>& v : input3D)
     {
-        move(v.begin(), v.end(), back_inserter(this->sets[training].inputs));
+        ranges::move(v, back_inserter(this->sets[training].inputs));
 
         this->sets[training].areFirstDataOfTemporalSequence[i] = true;
         this->sets[testing].areFirstDataOfTemporalSequence[i] = true;
@@ -350,15 +350,15 @@ const vector<float>& Data::getTrainingData(const int index, const int batchSize)
     const auto data0 = this->sets[training].inputs[i];
     i = this->sets[training].shuffledIndexes[index + 1];
     const auto data1 = this->sets[training].inputs[i];
-    transform(data0.begin(), data0.end(), data1.begin(), batchedData.begin(), plus<float>());
+    ranges::transform(data0, data1, batchedData.begin(), plus<float>());
 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
         i = this->sets[training].shuffledIndexes[j];
         const auto data = this->sets[training].inputs[i];
-        transform(batchedData.begin(), batchedData.end(), data.begin(), batchedData.begin(), std::plus<float>());
+        ranges::transform(batchedData, data, batchedData.begin(), std::plus<float>());
     }
-    transform(batchedData.begin(), batchedData.end(), batchedData.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    ranges::transform(batchedData, batchedData.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
     return batchedData;
 }
 

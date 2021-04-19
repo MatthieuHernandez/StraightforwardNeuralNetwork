@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-    class GatedRecurrentUnit final : public BaseNeuron<GatedRecurrentUnit>
+    class GatedRecurrentUnit final
     {
     private:
         friend class boost::serialization::access;
@@ -46,6 +46,9 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const;
 
+        NeuralNetworkOptimizer* getOptimizer() const;
+        void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
+
         bool operator==(const GatedRecurrentUnit& neuron) const;
         bool operator!=(const GatedRecurrentUnit& neuron) const;
     };
@@ -53,8 +56,6 @@ namespace snn::internal
     template <class Archive>
     void GatedRecurrentUnit::serialize(Archive& ar, unsigned version)
     {
-        boost::serialization::void_cast_register<GatedRecurrentUnit, BaseNeuron<GatedRecurrentUnit>>();
-        ar & boost::serialization::base_object<BaseNeuron<GatedRecurrentUnit>>(*this);
         ar & this->numberOfInputs;
         ar & this->previousOutput;
         ar & this->recurrentError;

@@ -55,12 +55,12 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(32, 32, 3),
-        Convolution(2, 3, activation::GELU),
+        Convolution(4, 3, activation::GELU),
         FullyConnected(250, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(125, activation::sigmoid, Dropout(0.1f)),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.005f, 0.6f));
+        StochasticGradientDescent(0.005f, 0.1f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

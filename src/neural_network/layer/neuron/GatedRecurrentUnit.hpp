@@ -54,7 +54,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void GatedRecurrentUnit::serialize(Archive& ar, unsigned version)
+    void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         ar & this->numberOfInputs;
         ar & this->previousOutput;

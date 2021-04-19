@@ -35,7 +35,7 @@ namespace snn::internal
     };
     
     template <class Archive>
-    void NoNeuronLayer::serialize(Archive& ar, const unsigned version)
+    void NoNeuronLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<NoNeuronLayer, BaseLayer>();
         ar & boost::serialization::base_object<BaseLayer>(*this);

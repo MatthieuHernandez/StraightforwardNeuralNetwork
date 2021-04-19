@@ -41,7 +41,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void MaxPooling1D::serialize(Archive& ar, const unsigned version)
+    void MaxPooling1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<MaxPooling1D, NoNeuronLayer>();
         ar & boost::serialization::base_object<NoNeuronLayer>(*this);

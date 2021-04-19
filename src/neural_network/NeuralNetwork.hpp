@@ -78,7 +78,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void NeuralNetwork::serialize(Archive& ar, unsigned version)
+    void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         if (isTheFirst)
             this->initialize();

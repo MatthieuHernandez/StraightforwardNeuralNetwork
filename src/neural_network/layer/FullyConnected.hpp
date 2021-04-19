@@ -24,7 +24,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void FullyConnected::serialize(Archive& ar, const unsigned version)
+    void FullyConnected::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<FullyConnected, SimpleLayer>();
         ar & boost::serialization::base_object<SimpleLayer>(*this);

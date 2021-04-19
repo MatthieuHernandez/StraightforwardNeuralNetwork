@@ -34,7 +34,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void StochasticGradientDescent::serialize(Archive& ar, const unsigned int version)
+    void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<StochasticGradientDescent, NeuralNetworkOptimizer>();
         ar & boost::serialization::base_object<NeuralNetworkOptimizer>(*this);

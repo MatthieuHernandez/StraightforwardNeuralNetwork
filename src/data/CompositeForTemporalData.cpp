@@ -51,7 +51,7 @@ bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) c
     return this->sets[testing].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToTrainOnTrainingData(int index) const
+bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const
 {
     return true;
 }

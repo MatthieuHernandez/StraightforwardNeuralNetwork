@@ -13,7 +13,7 @@ namespace snn::internal
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version) {}
+        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version) {}
 
     public:
         NeuralNetworkOptimizer() = default;

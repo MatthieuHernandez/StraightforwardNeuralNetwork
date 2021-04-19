@@ -33,7 +33,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Convolution1D::serialize(Archive& ar, const unsigned version)
+    void Convolution1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<Convolution1D, FilterLayer>();
         ar & boost::serialization::base_object<FilterLayer>(*this);

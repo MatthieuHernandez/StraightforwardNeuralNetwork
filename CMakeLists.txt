@@ -55,7 +55,7 @@ apply_global_cxx_flags_to_all_targets()
 
 if(MSVC)
   set_target_properties(DatasetTests PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
-  target_compile_options(StraightforwardNeuralNetwork PUBLIC /openmp:experimental /W4 /WX /wd4100)
+  target_compile_options(StraightforwardNeuralNetwork PUBLIC /openmp:experimental /W4 /WX)
   target_compile_options(Boost PRIVATE /W0)
   remove_target_compile_options(Boost /W3)
   remove_target_compile_options(StraightforwardNeuralNetwork /W3)

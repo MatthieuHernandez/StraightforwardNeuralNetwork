@@ -20,12 +20,12 @@ const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(
     return this->sets[testing].labels[index];
 }
 
-int CompositeForMultipleClassification::getTrainingLabel(const int index)
+int CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index)
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForMultipleClassification::getTestingLabel(const int index)
+int CompositeForMultipleClassification::getTestingLabel([[maybe_unused]] const int index)
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }

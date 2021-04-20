@@ -20,12 +20,12 @@ const std::vector<float>& CompositeForRegression::getTestingOutputs(const int in
     return this->sets[testing].labels[index];
 }
 
-int CompositeForRegression::getTrainingLabel(const int index)
+int CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index)
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForRegression::getTestingLabel(const int index)
+int CompositeForRegression::getTestingLabel([[maybe_unused]] const int index)
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }

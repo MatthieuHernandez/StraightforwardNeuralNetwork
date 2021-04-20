@@ -55,7 +55,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Neuron::serialize(Archive& ar, unsigned version)
+    void Neuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         ar.template register_type<StochasticGradientDescent>();
         ar & this->optimizer;

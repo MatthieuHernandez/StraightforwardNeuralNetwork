@@ -35,7 +35,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void L1Regularization::serialize(Archive& ar, unsigned version)
+    void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);

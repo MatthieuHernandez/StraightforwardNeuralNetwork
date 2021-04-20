@@ -42,7 +42,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void FilterLayer::serialize(Archive& ar, const unsigned version)
+    void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);

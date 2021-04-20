@@ -36,7 +36,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void LocallyConnected2D::serialize(Archive& ar, const unsigned version)
+    void LocallyConnected2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<LocallyConnected2D, FilterLayer>();
         ar & boost::serialization::base_object<FilterLayer>(*this);

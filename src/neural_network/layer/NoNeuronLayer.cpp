@@ -21,7 +21,7 @@ float NoNeuronLayer::getAverageOfSquareNeuronWeights() const
     return 0.0f;
 }
 
-void* NoNeuronLayer::getNeuron(int index)
+void* NoNeuronLayer::getNeuron([[maybe_unused]] int index)
 {
     return nullptr;
 }

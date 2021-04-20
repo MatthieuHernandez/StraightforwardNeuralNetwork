@@ -25,11 +25,11 @@ unique_ptr<LayerOptimizer> L2Regularization::clone(const BaseLayer* newLayer) co
     return make_unique<L2Regularization>(*this, newLayer);
 }
 
-void L2Regularization::applyAfterOutputForTraining(std::vector<float>& outputs, bool)
+void L2Regularization::applyAfterOutputForTraining([[maybe_unused]] std::vector<float>& outputs, bool)
 {
 }
 
-void L2Regularization::applyAfterOutputForTesting(std::vector<float>& outputs)
+void L2Regularization::applyAfterOutputForTesting([[maybe_unused]] std::vector<float>& outputs)
 {
 }
 

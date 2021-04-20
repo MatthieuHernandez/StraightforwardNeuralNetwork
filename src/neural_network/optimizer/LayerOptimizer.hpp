@@ -33,7 +33,7 @@ namespace snn::internal
     };
     
     template <class Archive>
-    void LayerOptimizer::serialize(Archive& ar, unsigned version)
+    void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         ar & this->layer;
     }

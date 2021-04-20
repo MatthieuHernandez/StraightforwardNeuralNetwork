@@ -37,7 +37,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Dropout::serialize(Archive& ar, unsigned version)
+    void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);

@@ -19,7 +19,7 @@ namespace snn::internal
             return x;
         }
 
-        float derivative(const float x) const override
+        float derivative([[maybe_unused]] const float x) const override
         {
             return 1.0f;
         }

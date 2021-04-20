@@ -24,7 +24,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Recurrence::serialize(Archive& ar, const unsigned version)
+    void Recurrence::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<Recurrence, SimpleLayer>();
         ar & boost::serialization::base_object<SimpleLayer>(*this);

@@ -26,15 +26,14 @@ Data::Data(problem typeOfProblem,
            vector<vector<float>>& testingLabels,
            nature typeOfTemporal,
            int numberOfRecurrences)
-    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+    : numberOfRecurrences(numberOfRecurrences),
+      typeOfProblem(typeOfProblem),
+      typeOfTemporal(typeOfTemporal)
 {
-    this->initialize(typeOfProblem,
-                     trainingInputs,
+    this->initialize(trainingInputs,
                      trainingLabels,
                      testingInputs,
-                     testingLabels,
-                     typeOfTemporal,
-                     numberOfRecurrences);
+                     testingLabels);
 }
 
 Data::Data(problem typeOfProblem,
@@ -42,15 +41,14 @@ Data::Data(problem typeOfProblem,
            vector<vector<float>>& labels,
            nature typeOfTemporal,
            int numberOfRecurrences)
-    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+    : numberOfRecurrences(numberOfRecurrences),
+      typeOfProblem(typeOfProblem),
+      typeOfTemporal(typeOfTemporal)
 {
-    this->initialize(typeOfProblem,
-                     inputs,
+    this->initialize(inputs,
                      labels,
                      inputs,
-                     labels,
-                     typeOfTemporal,
-                     numberOfRecurrences);
+                     labels);
 }
 
 Data::Data(problem typeOfProblem,
@@ -60,7 +58,9 @@ Data::Data(problem typeOfProblem,
            vector<vector<float>>& testingLabels,
            nature typeOfTemporal,
            int numberOfRecurrences)
-    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+    : numberOfRecurrences(numberOfRecurrences),
+      typeOfProblem(typeOfProblem),
+      typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
         throw runtime_error("Vector 3D type inputs are only for sequential data.");
@@ -68,13 +68,10 @@ Data::Data(problem typeOfProblem,
     this->flatten(training, trainingInputs);
     this->flatten(testing, testingInputs);
 
-    this->initialize(typeOfProblem,
-                     this->sets[training].inputs,
+    this->initialize(this->sets[training].inputs,
                      trainingLabels,
                      this->sets[testing].inputs,
-                     testingLabels,
-                     typeOfTemporal,
-                     numberOfRecurrences);
+                     testingLabels);
 }
 
 Data::Data(problem typeOfProblem,
@@ -82,33 +79,28 @@ Data::Data(problem typeOfProblem,
            vector<vector<float>>& labels,
            nature typeOfTemporal,
            int numberOfRecurrences)
-    : typeOfProblem(typeOfProblem), typeOfTemporal(typeOfTemporal)
+    : numberOfRecurrences(numberOfRecurrences),
+      typeOfProblem(typeOfProblem),
+      typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
         throw runtime_error("Vector 3D type inputs are only for sequential data.");
 
     this->flatten(inputs);
 
-    this->initialize(typeOfProblem,
-                     this->sets[training].inputs,
+    this->initialize(this->sets[training].inputs,
                      labels,
                      this->sets[testing].inputs,
-                     labels,
-                     typeOfTemporal,
-                     numberOfRecurrences);
+                     labels);
 }
 
-void Data::initialize(problem problem,
-                      vector<vector<float>>& trainingInputs,
+void Data::initialize(vector<vector<float>>& trainingInputs,
                       vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs,
-                      vector<vector<float>>& testingLabels,
-                      nature nature,
-                      int recurrences)
+                      vector<vector<float>>& testingLabels)
 {
     this->precision = 0.1f;
     this->separator = 0.5f;
-    this->numberOfRecurrences = recurrences;
     this->sets[training].inputs = trainingInputs;
     this->sets[training].labels = trainingLabels;
     this->sets[testing].inputs = testingInputs;

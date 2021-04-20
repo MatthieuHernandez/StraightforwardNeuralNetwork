@@ -101,7 +101,7 @@ bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
     return this->sets[training].needToTrainOnData[index];
 }
 
-bool CompositeForTimeSeries::needToEvaluateOnTestingData(int index) const
+bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const
 {
     // Skip firsts testing data can be distort the accuracy
     /*if(index < this->numberOfRecurrences)

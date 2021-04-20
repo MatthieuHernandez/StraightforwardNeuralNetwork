@@ -95,14 +95,14 @@ namespace snn::tools
     }
 
     template <logLevel T, typename... Targs>
-    constexpr void log(Targs&&... messages)
+    constexpr void log([[maybe_unused]] Targs&&... messages)
     {
         if constexpr (T > none && T <= verbose)
             (std::cout << ... << messages) << std::endl;
     }
 
     template <logLevel T, bool endLine, typename... Targs>
-    constexpr void log(Targs&&... messages)
+    constexpr void log([[maybe_unused]] Targs&&... messages)
     {
         if constexpr (T > none && T <= verbose)
         {

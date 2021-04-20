@@ -36,7 +36,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string f
                     for (int j = 0; j < shape[1]; ++j)
                     {
                         int index = flatten(i, j, shape[0]);
-                        const char color = static_cast<const char>(round((tanhf(weights[index] / 2.0f) + 1.0f) * 127.5f));
+                        const unsigned char color = static_cast<unsigned char>(round((tanhf(weights[index] / 2.0f) + 1.0f) * 127.5f));
                         image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color, color, color);
                     }
                 }
@@ -70,4 +70,42 @@ std::vector<float> NeuralNetworkVisualization::getWeights(FilterLayer* filterLay
         }
     }
     return weights;
+}
+
+
+void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs, std::string filePath)
+{
+    if (filterLayer == nullptr)
+        return;
+    auto shape = filterLayer->getShapeOfOutput();
+    if (shape.size() != 3)
+        return;
+    float length = sqrt((float)shape[2]);
+    int filterX = (int)ceil(length);
+    int filterY = (int)ceil(length);
+
+    if (shape[2] <= filterX * filterY - filterX)
+        filterY--;
+
+    bitmap_image image((shape[0] + 1) * filterX - 1, (shape[1] + 1) * filterY - 1);
+    image.set_all_channels(0, 0, 0);
+    for (int x = 0; x < filterX; ++x)
+    {
+        for (int y = 0; y < filterY; ++y)
+        {
+            if (y * filterX + x < shape[2])
+            {
+                for (int i = 0; i < shape[0]; ++i)
+                {
+                    for (int j = 0; j < shape[1]; ++j)
+                    {
+                        int index = flatten(i, j, shape[0]);
+                        const unsigned char color = static_cast<unsigned char>(outputs[index] * 255.0f);
+                        image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color, color, color);
+                    }
+                }
+            }
+        }
+    }
+    image.save_image(filePath);
 }

@@ -260,11 +260,22 @@ void StraightforwardNeuralNetwork::saveAs(const string filePath)
     saveSync(filePath);
 }
 
-void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string filePath)
+void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(std::string filePath)
 {
     if (!this->isIdle)
         throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
     for (int l = 0; l < (int)this->layers.size(); ++l)
+    {
+        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+        NeuralNetworkVisualization::saveAsBitmap(filterLayer, filePath + "_layer_" + to_string(l) + ".bmp");
+    }
+}
+
+void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string filePath, int dataIndex)
+{
+    if (!this->isIdle)
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+        for (int l = 0; l < (int)this->layers.size(); ++l)
     {
         const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
         NeuralNetworkVisualization::saveAsBitmap(filterLayer, filePath + "_layer_" + to_string(l) + ".bmp");

@@ -130,6 +130,20 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
     return errors;
 }
 
+vector<vector<float>> NeuralNetwork::getFilterOutputs(const vector<float>& inputs)
+{
+    vector<vector<float>> filterOutputs;
+    auto outputs = layers[0]->output(inputs, true);
+
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->output(outputs, true);
+        if (dynamic_cast<FilterLayer*>(this->layers[l].get()) != nullptr)
+            filterOutputs.push_back(outputs);
+    }
+    return filterOutputs;
+}
+
 bool NeuralNetwork::hasNan() const
 {
     return this->outputNan;

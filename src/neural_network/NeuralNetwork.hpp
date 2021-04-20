@@ -52,6 +52,8 @@ namespace snn::internal
                                            const float separator,
                                            bool temporalReset);
 
+         std::vector<std::vector<float>> getFilterOutputs(const std::vector<float>& inputs);
+
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);

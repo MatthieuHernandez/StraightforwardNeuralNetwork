@@ -6,7 +6,7 @@ using namespace snn;
 using namespace internal;
 using namespace tools;
 
-void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, string filePath)
+void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const string& filePath)
 {
     if (filterLayer == nullptr)
         return;
@@ -73,7 +73,7 @@ std::vector<float> NeuralNetworkVisualization::getWeights(FilterLayer* filterLay
 }
 
 
-void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs, std::string filePath)
+void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs, const string& filePath)
 {
     if (filterLayer == nullptr)
         return;
@@ -99,11 +99,41 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
                 {
                     for (int j = 0; j < shape[1]; ++j)
                     {
+                        int filters = flatten(x, y, filterX) * shape[0] * shape[1];
                         int index = flatten(i, j, shape[0]);
-                        const unsigned char color = static_cast<unsigned char>(outputs[index] * 255.0f);
+                        const auto color = static_cast<unsigned char>(outputs[filters + index] * 255.0f);
                         image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color, color, color);
                     }
                 }
+            }
+        }
+    }
+    image.save_image(filePath);
+}
+
+void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::vector<int> shapeOfInput, const string& filePath)
+{
+    bitmap_image image(shapeOfInput[0], shapeOfInput[1]);
+    image.set_all_channels(0, 0, 0);
+    for (int x = 0; x < shapeOfInput[0]; ++x)
+    {
+        for (int y = 0; y < shapeOfInput[1]; ++y)
+        {
+            if (shapeOfInput[2] == 1)
+            {
+                const int index = flatten(x, y, shapeOfInput[0]);
+                const auto color = static_cast<unsigned char>(inputs[index] * 255.0f);
+                image.set_pixel(x, y, color, color, color);
+            }
+            else
+            {
+                const int indexR = flatten(x, y, 0, shapeOfInput[0], shapeOfInput[1]);
+                const int indexG = flatten(x, y, 1, shapeOfInput[0], shapeOfInput[1]);
+                const int indexB = flatten(x, y, 2, shapeOfInput[0], shapeOfInput[1]);
+                const auto red = static_cast<unsigned char>(inputs[indexR] * 255.0f);
+                const auto blue = static_cast<unsigned char>(inputs[indexG] * 255.0f);
+                const auto green = static_cast<unsigned char>(inputs[indexB] * 255.0f);
+                image.set_pixel(x, y, red, blue, green);
             }
         }
     }

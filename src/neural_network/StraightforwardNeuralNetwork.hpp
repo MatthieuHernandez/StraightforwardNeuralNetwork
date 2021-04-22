@@ -65,7 +65,8 @@ namespace snn
 
         void saveAs(std::string filePath);
         void saveFeatureMapsAsBitmap(std::string filePath);
-        void saveFilterLayersAsBitmap(std::string filePath, Data& data, int index);
+        void saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex);
+        void saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
         int getCurrentIndex() const { return this->index; }

@@ -145,7 +145,7 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
         throw NotImplementedException();
     }
 
-    this->normalization(-1, 1);
+    this->normalization(0, 1);
     tools::log<minimal>("Data loaded");
 
     int err = this->isValid();

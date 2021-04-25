@@ -31,7 +31,7 @@ float Neuron::randomInitializeWeight(int numberOfWeights)
 
 int Neuron::isValid() const
 {
-    if (this->bias != 1.0f)
+    if (this->bias < -100000.0f || this->bias > 10000.0f)
         return 301;
 
     if (this->weights.empty()
@@ -40,7 +40,7 @@ int Neuron::isValid() const
         return 302;
     }
     for (auto& weight : this->weights)
-        if (weight < -100000 || weight > 10000)
+        if (weight < -100000.0f || weight > 10000.0f)
             return 303;
 
     return 0;

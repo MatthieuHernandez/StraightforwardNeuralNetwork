@@ -19,8 +19,8 @@ LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetwo
         this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
         this->numberOfFilters
     };
-    this->precomputedX = this->sizeOfFilterMatrix  % this->shapeOfInput[0];
-    this->precomputedY = this->sizeOfFilterMatrix / this->shapeOfInput[0];
+    this->precomputedX = this->sizeOfFilterMatrix % this->shapeOfOutput[0];
+    this->precomputedY = this->sizeOfFilterMatrix / this->shapeOfOutput[0];
     this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2];
     this->neuronInputs.resize(this->sizeOfNeuronInputs);
 }

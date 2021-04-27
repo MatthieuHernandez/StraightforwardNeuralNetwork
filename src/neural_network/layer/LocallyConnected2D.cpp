@@ -57,12 +57,15 @@ vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, c
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            if (indexErrors < (int)inputs.size())
-                this->neuronInputs[indexMatrix] = inputs[indexErrors];
-            else
-                neuronInputs.push_back(0);
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                if (indexErrors < (int)inputs.size())
+                    this->neuronInputs[indexMatrix] = inputs[indexErrors];
+                else
+                    neuronInputs.push_back(0);
+            }
         }
     }
     return this->neuronInputs;
@@ -78,9 +81,13 @@ void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const 
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            errors[indexErrors] += error[indexMatrix];
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                if (indexErrors < (int)errors.size())
+                    errors[indexErrors] += error[indexMatrix];
+            }
         }
     }
 }

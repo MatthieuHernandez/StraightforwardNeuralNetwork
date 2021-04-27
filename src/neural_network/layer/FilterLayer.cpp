@@ -35,7 +35,7 @@ vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
-        auto& error = this->neurons[n].backOutput(inputErrors[n]);
+        auto& error = this->neurons[n].backOutput(inputErrors[n] * 10.0f);
         const int neuronIndex = n / this->numberOfFilters;
         this->insertBackOutputForNeuron(neuronIndex, error, errors);
     }

@@ -51,9 +51,12 @@ vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const 
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            this->neuronInputs[indexMatrix] = inputs[indexErrors];
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                this->neuronInputs[indexMatrix] = inputs[indexErrors];
+            }
         }
     }
     return this->neuronInputs;
@@ -61,17 +64,20 @@ vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const 
 
 void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
 {
-    const int neuronPosX = neuronIndex % this->shapeOfInput[0];
-    const int neuronPosY = neuronIndex / this->shapeOfInput[0];
+    const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
+    const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
-        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPosX * this->shapeOfInput[2];
+        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            errors[indexErrors] += error[indexMatrix];
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                errors[indexErrors] += error[indexMatrix];
+            }
         }
     }
 }

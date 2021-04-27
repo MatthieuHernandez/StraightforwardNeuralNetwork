@@ -72,7 +72,6 @@ std::vector<float> NeuralNetworkVisualization::getWeights(FilterLayer* filterLay
     return weights;
 }
 
-
 void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs, const string& filePath)
 {
     if (filterLayer == nullptr)
@@ -102,6 +101,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
                     {
                         const unsigned char color = static_cast<unsigned char>(outputs[index++] * 255.0f);
                         image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color, color, color);
+                        //image.set_pixel(x * (shape[0] + 1) + i, y * (shape[1] + 1) + j, color == 0 ? 255 : color, color == 255 ? 0 : color, color == 255 ? 0 : color);
                     }
                 }
             }
@@ -112,6 +112,8 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
 
 void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::vector<int> shapeOfInput, const string& filePath)
 {
+    if(shapeOfInput.size() != 3)
+        return;
     bitmap_image image(shapeOfInput[0], shapeOfInput[1]);
     image.set_all_channels(0, 0, 0);
     int index = 0;

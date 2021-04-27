@@ -72,7 +72,6 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         for (int j = 0; !file.eof() && j < sizeOfData; j++)
         {
             c = static_cast<char>(file.get());
-            const float value = c;
             if (j < 1024)
                 imageTemp[j*3] = c;
             else if (j < 2048)

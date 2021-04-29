@@ -62,6 +62,7 @@ vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const 
     return this->neuronInputs;
 }
 
+inline
 void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
 {
     const int neuronPosX = neuronIndex % this->shapeOfOutput[0];

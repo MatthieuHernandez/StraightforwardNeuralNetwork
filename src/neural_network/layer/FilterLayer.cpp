@@ -16,6 +16,7 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
     this->shapeOfInput = model.shapeOfInput;
 }
 
+inline
 vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
@@ -30,6 +31,7 @@ vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_un
     return outputs;
 }
 
+inline
 vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);

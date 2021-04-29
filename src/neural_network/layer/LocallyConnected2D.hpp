@@ -17,8 +17,6 @@ namespace snn::internal
         std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
         void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
 
-        int precomputedX;
-        int precomputedY;
         int sizeOfNeuronInputs;
         std::vector<float> neuronInputs;
 

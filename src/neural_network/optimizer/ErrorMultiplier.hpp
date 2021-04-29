@@ -6,20 +6,20 @@
 
 namespace snn::internal
 {
-    class L2Regularization final : public LayerOptimizer
+    class ErrorMultiplier final : public LayerOptimizer
     {
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        float value;
+        float factor;
 
     public:
-        L2Regularization() = default;  // use restricted to Boost library only
-        L2Regularization(float value, BaseLayer* layer);
-        L2Regularization(const L2Regularization& regularization, const BaseLayer* layer);
-        ~L2Regularization() override = default;
+        ErrorMultiplier() = default;  // use restricted to Boost library only
+        ErrorMultiplier(float value, BaseLayer* layer);
+        ErrorMultiplier(const ErrorMultiplier& errorMultiplier, const BaseLayer* layer);
+        ~ErrorMultiplier() override = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 
@@ -33,10 +33,10 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void L2Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+    void ErrorMultiplier::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
-        boost::serialization::void_cast_register<L2Regularization, LayerOptimizer>();
+        boost::serialization::void_cast_register<ErrorMultiplier, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);
-        ar & this->value;
+        ar & this->factor;
     }
 }

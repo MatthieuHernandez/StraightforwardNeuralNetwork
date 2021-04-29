@@ -21,12 +21,12 @@ namespace snn::internal
         L1Regularization() = default;  // use restricted to Boost library only
         L1Regularization(float value, BaseLayer* layer);
         L1Regularization(const L1Regularization& regularization, const BaseLayer* layer);
-        ~L1Regularization() = default;
+        ~L1Regularization() override = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 
-        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
-        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>&, bool) override {}
+        void applyAfterOutputForTesting(std::vector<float>&) override {}
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 

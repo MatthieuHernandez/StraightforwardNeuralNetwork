@@ -23,7 +23,7 @@ namespace snn::internal
         Dropout() = default;  // use restricted to Boost library only
         Dropout(float value, BaseLayer* layer);
         Dropout(const Dropout& dropout, const BaseLayer* layer);
-        ~Dropout() = default;
+        ~Dropout() override = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 

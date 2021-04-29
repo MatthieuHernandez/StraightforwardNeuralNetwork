@@ -12,7 +12,7 @@ BOOST_CLASS_EXPORT(Dropout)
 
 bool Dropout::randomProbability() const
 {
-    return static_cast<bool>(rand() / static_cast<float>(RAND_MAX) >= this->value);
+    return rand() / static_cast<float>(RAND_MAX) >= this->value;
 }
 
 Dropout::Dropout(const float value, BaseLayer* layer)

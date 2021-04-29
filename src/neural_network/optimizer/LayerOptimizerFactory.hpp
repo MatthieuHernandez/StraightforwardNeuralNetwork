@@ -10,6 +10,7 @@ namespace snn
     extern LayerOptimizerModel Dropout(float value);
     extern LayerOptimizerModel L1Regularization(float value);
     extern LayerOptimizerModel L2Regularization(float value);
+    extern LayerOptimizerModel ErrorMultiplier(float factor);
 
     namespace internal
     {

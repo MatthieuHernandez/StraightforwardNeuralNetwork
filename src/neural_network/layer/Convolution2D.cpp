@@ -86,7 +86,17 @@ void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::
 inline
 bool Convolution2D::operator==(const BaseLayer& layer) const
 {
-    return this->FilterLayer::operator==(layer);
+        try
+    {
+        const auto& f = dynamic_cast<const Convolution2D&>(layer);
+        return this->FilterLayer::operator==(layer)
+            && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs
+            && this->neuronInputs == f.neuronInputs;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
 inline

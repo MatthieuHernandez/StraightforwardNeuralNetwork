@@ -94,7 +94,17 @@ void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const 
 inline
 bool LocallyConnected2D::operator==(const BaseLayer& layer) const
 {
-    return this->FilterLayer::operator==(layer);
+    try
+    {
+        const auto& f = dynamic_cast<const LocallyConnected2D&>(layer);
+        return this->FilterLayer::operator==(layer)
+            && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs
+            && this->neuronInputs == f.neuronInputs;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
 inline

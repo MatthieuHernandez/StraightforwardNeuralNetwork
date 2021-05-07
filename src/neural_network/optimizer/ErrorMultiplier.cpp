@@ -29,7 +29,7 @@ void ErrorMultiplier::applyBeforeBackpropagation(std::vector<float>& inputErrors
 
 bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const
 {
-        try
+    try
     {
         const auto& o = dynamic_cast<const ErrorMultiplier&>(optimizer);
         return this->LayerOptimizer::operator==(optimizer)

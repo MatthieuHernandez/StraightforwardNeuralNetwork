@@ -9,10 +9,12 @@ TEST(SaveNeuralNetwork, EqualTest)
 {
     auto structureOfNetwork = {
         Input(8, 8, 3),
+        LocallyConnected(2, 2),
         Convolution(2, 4, activation::ReLU),
         FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
         LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3f)),
         FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
+        Convolution(1, 1, activation::tanh),
         GruLayer(3),
         Recurrence(4)
     };

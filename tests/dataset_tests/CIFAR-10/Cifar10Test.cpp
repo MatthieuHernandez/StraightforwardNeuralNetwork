@@ -55,18 +55,18 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(32, 32, 3),
-        Convolution(4, 3, activation::GELU),
-        FullyConnected(250, activation::sigmoid, Dropout(0.1f)),
-        FullyConnected(125, activation::sigmoid, Dropout(0.1f)),
+        Convolution(2, 3, activation::GELU, ErrorMultiplier(50.0f)),
+        FullyConnected(100, activation::sigmoid, Dropout(0.2f)),
+        FullyConnected(200, activation::sigmoid, Dropout(0.2f)),
         FullyConnected(10)
-    },
-        StochasticGradientDescent(0.005f, 0.1f));
+        },
+        StochasticGradientDescent(0.003f, 0.2f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 100_ep, 1, 1);
+    neuralNetwork.train(*data, 0.60_acc ||100_ep, 1, 1);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -78,6 +78,19 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 281800);
-    ASSERT_FLOAT_EQ(accuracy, 0.5673f);
+    ASSERT_EQ(numberOfParameters, 252710);
+    ASSERT_FLOAT_EQ(accuracy, 0.5985f);
+}
+
+TEST_F(Cifar10Test, SaveFeatureMap)
+{
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
+
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 15);
+
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *data, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *data, 14);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 15);
 }

@@ -190,4 +190,20 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 102444);
     ASSERT_FLOAT_EQ(accuracy, 0.986f);
 }
+
+TEST_F(MnistTest, SaveFeatureMap)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0f)),
+        LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0f)),
+        FullyConnected(10)
+        },
+        StochasticGradientDescent(0.005f, 0.1f));
+    neuralNetwork.saveData2DAsBitmap("./bitmap/data", *data, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before", *data, 13);
+    neuralNetwork.train(*data, 1_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.90f);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/after", *data, 13);
 }

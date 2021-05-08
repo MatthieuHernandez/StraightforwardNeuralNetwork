@@ -82,7 +82,7 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     ASSERT_FLOAT_EQ(accuracy, 0.5985f);
 }
 
-TEST_F(Cifar10Test, SaveFeatureMap)
+TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
 

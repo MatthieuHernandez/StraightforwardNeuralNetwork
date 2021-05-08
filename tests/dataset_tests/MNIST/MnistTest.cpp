@@ -191,7 +191,7 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
     ASSERT_FLOAT_EQ(accuracy, 0.986f);
 }
 
-TEST_F(MnistTest, SaveFeatureMap)
+TEST_F(MnistTest, DISABLED_SaveFeatureMap)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),

@@ -28,11 +28,11 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1, 5),
+        Convolution(1,5, activation::GELU, ErrorMultiplier(10.0f)),
         FullyConnected(70),
         FullyConnected(10)
         });
-    neuralNetwork.train(*data, 1_ep || 45_s);
+    neuralNetwork.train(*data, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.93f);
 }

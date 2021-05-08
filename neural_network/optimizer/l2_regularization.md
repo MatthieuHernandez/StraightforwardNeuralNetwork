@@ -6,7 +6,7 @@ grand_parent: Neural network
 nav_order: 3
 ---
 
-# Dropout
+# L2 Regularization
 <p>
     <img src="{{site.baseurl}}/assets/images/neural_network/l2_regularization.png" att="L2 Regularization" width="310px" class="center"/>
 </p>

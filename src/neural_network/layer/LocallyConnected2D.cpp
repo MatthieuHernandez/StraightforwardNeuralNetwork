@@ -19,6 +19,8 @@ LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetwo
         this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
         this->numberOfFilters
     };
+    this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2];
+    this->neuronInputs.resize(this->sizeOfNeuronInputs);
 }
 
 inline
@@ -27,7 +29,7 @@ unique_ptr<BaseLayer> LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOpt
     auto layer = make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }
@@ -36,51 +38,55 @@ int LocallyConnected2D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2])
+        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs)
             return 203;
     }
     return this->FilterLayer::isValid();
 }
 
 inline
-vector<float> LocallyConnected2D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
 {
-    vector<float> neuronInputs;
-    neuronInputs.reserve(this->neurons[neuronNumber].getNumberOfInputs());
-    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
-    const int neuronPositionX = neuronNumber * this->sizeOfFilterMatrix % this->shapeOfInput[0];
-    const int neuronPositionY = neuronNumber * this->sizeOfFilterMatrix / this->shapeOfInput[0];
+    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
+    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
 
     for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
     {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
-        const int endIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2])
-            + (neuronPositionX + this->sizeOfFilterMatrix) * this->shapeOfInput[2];
-        for (int j = beginIndex; j < endIndex; ++j)
-        {
-            if (j < (int)inputs.size())
-                neuronInputs.push_back(inputs[j]);
-            else
-                neuronInputs.push_back(inputs[0]);
-        }
-    }
-    return neuronInputs;
-}
-
-void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const
-{
-    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
-    const int neuronPositionX = neuronNumber * this->sizeOfFilterMatrix % this->shapeOfInput[0] % this->numberOfFilters;
-    const int neuronPositionY = neuronNumber * this->sizeOfFilterMatrix / this->shapeOfInput[0] % this->numberOfFilters;
-
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
-    {
-        const int beginIndex = ((neuronPositionY + i) * this->shapeOfInput[0] * this->shapeOfInput[2]) + neuronPositionX * this->shapeOfInput[2];
+        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
         for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
         {
-            const int indexErrors = beginIndex + j;
-            const int indexMatrix = i * this->sizeOfFilterMatrix + j;
-            errors[indexErrors] += error[indexMatrix];
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                if (indexErrors < (int)inputs.size()) [[likely]]
+                    this->neuronInputs[indexMatrix] = inputs[indexErrors];
+                else
+                    neuronInputs[indexMatrix] = 0.0f;
+            }
+        }
+    }
+    return this->neuronInputs;
+}
+
+inline
+void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
+{
+    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
+    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
+
+    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    {
+        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
+        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        {
+            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            {
+                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                if (indexErrors < (int)errors.size()) [[likely]]
+                    errors[indexErrors] += error[indexMatrix];
+            }
         }
     }
 }
@@ -88,7 +94,17 @@ void LocallyConnected2D::insertBackOutputForNeuron(int neuronNumber, const std::
 inline
 bool LocallyConnected2D::operator==(const BaseLayer& layer) const
 {
-    return this->FilterLayer::operator==(layer);
+    try
+    {
+        const auto& f = dynamic_cast<const LocallyConnected2D&>(layer);
+        return this->FilterLayer::operator==(layer)
+            && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs
+            && this->neuronInputs == f.neuronInputs;
+    }
+    catch (bad_cast&)
+    {
+        return false;
+    }
 }
 
 inline

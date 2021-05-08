@@ -45,7 +45,7 @@ TEST(Addition, WithLCNN)
         FullyConnected(1, activation::identity)
     });
 
-    neuralNetwork.train(*data, 1.0_acc || 2_s);
+    neuralNetwork.train(*data, 1.0_acc || 5_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -119,7 +119,7 @@ unique_ptr<Data> createRecurrentDataForAdditionTests(int numberOfData, int numbe
 
     for (int i = 0; i < numberOfData; ++i)
     {
-        auto r = internal::Tools::randomBetween(0.0f, 1.0f/(numberOfRecurrences+1));
+        auto r = tools::randomBetween(0.0f, 1.0f/(numberOfRecurrences+1));
         inputData.push_back({r});
 
         for (int j = 0; j < numberOfRecurrences+1; ++j)

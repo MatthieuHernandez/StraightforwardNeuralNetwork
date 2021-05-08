@@ -6,11 +6,13 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
+#include "NeuralNetworkVisualization.hpp"
 #include "../tools/ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;
 using namespace internal;
+using namespace tools;
 
 BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
 
@@ -95,7 +97,13 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     this->isIdle = false;
 
     if (evaluationFrequency > 0)
+    {
         this->evaluate(data);
+        log<minimal>("Epoch: ", toConstSizeString(this->epoch, 2),
+                     " - Accuracy: ", toConstSizeString(this->getGlobalClusteringRate(), 6),
+                     " - MAE: ", toConstSizeString(this->getMeanAbsoluteError(), 7),
+                     " - Time: ", toConstSizeString(wait.getDurationSinceLastTime(), 2), "s");
+    }
 
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
@@ -250,6 +258,37 @@ void StraightforwardNeuralNetwork::saveAs(const string filePath)
     if (!this->isIdle)
         throw std::runtime_error("Neural network cannot be saved during training, stop training before saving or use auto save");
     saveSync(filePath);
+}
+
+void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(string filePath)
+{
+    if (!this->isIdle)
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    for (size_t l = 0; l < this->layers.size(); ++l)
+    {
+        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+        NeuralNetworkVisualization::saveAsBitmap(filterLayer, filePath + "_layer_" + to_string(l) + ".bmp");
+    }
+}
+
+void StraightforwardNeuralNetwork::saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex)
+{
+     NeuralNetworkVisualization::saveAsBitmap(data.getTestingData(dataIndex), this->layers[0]->getShapeOfInput(), filePath + "_input" + to_string(dataIndex) + ".bmp");
+}
+
+void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(string filePath, const Data& data, int dataIndex)
+{
+    if (!this->isIdle)
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+
+    auto outputs = this->getLayerOutputs(data.getTestingData(dataIndex));
+
+    for (size_t l = 0; l < this->layers.size(); ++l)
+    {
+        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+
+        NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[l], filePath + "_layer_" + to_string(l) + ".bmp");
+    }
 }
 
 void StraightforwardNeuralNetwork::saveSync(const string filePath)

@@ -1,23 +1,23 @@
 
-template <class N>
+template <BaseNeuron N>
 SimpleLayer<N>::SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer<N>(model, optimizer)
 {
 }
 
-template <class N>
+template <BaseNeuron N>
 std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = std::make_unique<SimpleLayer<N>>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }
 
-template <class N>
-std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+template <BaseNeuron N>
+std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -27,7 +27,7 @@ std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& input
     return outputs;
 }
 
-template <class N>
+template <BaseNeuron N>
 std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputErrors)
 {
     std::vector<float> errors(this->numberOfInputs, 0);
@@ -40,13 +40,19 @@ std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputEr
     return errors;
 }
 
-template <class N>
+template <BaseNeuron N>
+std::vector<int> SimpleLayer<N>::getShapeOfInput() const
+{
+    return {this->getNumberOfInputs()};
+}
+
+template <BaseNeuron N>
 std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 {
     return {this->getNumberOfNeurons()};
 }
 
-template <class N>
+template <BaseNeuron N>
 int SimpleLayer<N>::isValid() const
 {
     for (auto& neuron : this->neurons)
@@ -54,16 +60,16 @@ int SimpleLayer<N>::isValid() const
         if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
             return 203;
     }
-    return this->Layer<N>::isValid();
+    return Layer<N>::isValid();
 }
 
-template <class N>
+template <BaseNeuron N>
 bool SimpleLayer<N>::operator==(const BaseLayer& layer) const
 {
-    return this->Layer<N>::operator==(layer);
+    return Layer<N>::operator==(layer);
 }
 
-template <class N>
+template <BaseNeuron N>
 bool SimpleLayer<N>::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);

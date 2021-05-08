@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <random>
+#include <ranges>
 #include "CompositeForNonTemporalData.hpp"
 
 using namespace std;
@@ -15,9 +16,9 @@ CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
 
 void CompositeForNonTemporalData::shuffle() //TODO: also need learning to shuffle
 {
-    std::random_device rd;
+    random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->sets[training].shuffledIndexes.begin(), this->sets[training].shuffledIndexes.end(), g);
+    ranges::shuffle(this->sets[training].shuffledIndexes, g);
 }
 
 void CompositeForNonTemporalData::unshuffle()
@@ -25,22 +26,22 @@ void CompositeForNonTemporalData::unshuffle()
     this->TemporalComposite::unshuffle();
 }
 
-bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
+bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence([[maybe_unused]] int index) const
 {
     return true;
 }
 
-bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence(int index) const
+bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence([[maybe_unused]] int index) const
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::needToTrainOnTrainingData(int index) const
+bool CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const
 {
     return true;
 }
 
-bool CompositeForNonTemporalData::needToEvaluateOnTestingData(int index) const
+bool CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const
 {
     return true;
 }

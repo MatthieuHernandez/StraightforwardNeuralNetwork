@@ -3,6 +3,7 @@
 #include "Dropout.hpp"
 #include "L1Regularization.hpp"
 #include "L2Regularization.hpp"
+#include "ErrorMultiplier.hpp"
 
 using namespace std;
 using namespace snn;
@@ -39,6 +40,16 @@ LayerOptimizerModel snn::L2Regularization(float value)
     return model;
 }
 
+LayerOptimizerModel snn::ErrorMultiplier(float factor)
+{
+    const LayerOptimizerModel model
+    {
+        layerOptimizerType::errorMultiplier,
+        factor
+    };
+    return model;
+}
+
 
 std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model, BaseLayer* layer)
 {
@@ -52,6 +63,10 @@ std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel
 
     case layerOptimizerType::l2Regularization:
         return make_unique<L2Regularization>(model.value, layer);
+
+    case layerOptimizerType::errorMultiplier:
+        return make_unique<ErrorMultiplier>(model.value, layer);
+
     default:
         throw InvalidArchitectureException("Layer optimizer type is not implemented.");
     }

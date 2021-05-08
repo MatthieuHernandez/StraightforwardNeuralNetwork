@@ -22,7 +22,7 @@ void CompositeForTemporalData::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->indexesForShuffles.begin(), this->indexesForShuffles.end(), g);
+    ranges::shuffle(this->indexesForShuffles, g);
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
@@ -51,7 +51,7 @@ bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) c
     return this->sets[testing].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToTrainOnTrainingData(int index) const
+bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const
 {
     return true;
 }

@@ -19,12 +19,12 @@ namespace snn::internal
         L2Regularization() = default;  // use restricted to Boost library only
         L2Regularization(float value, BaseLayer* layer);
         L2Regularization(const L2Regularization& regularization, const BaseLayer* layer);
-        ~L2Regularization() = default;
+        ~L2Regularization() override = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 
-        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
-        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>&, bool) override {}
+        void applyAfterOutputForTesting(std::vector<float>&) override {}
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 
@@ -33,7 +33,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void L2Regularization::serialize(Archive& ar, unsigned version)
+    void L2Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<L2Regularization, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);

@@ -45,7 +45,7 @@ vector2D<float> Cifar10::readImages(string filePaths[], int size, vector2D<float
 
 void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<float>& labels)
 {
-    static constexpr int sizeOfData = 32*32*3;
+    static constexpr int sizeOfData = 32 * 32 * 3;
     ifstream file;
     file.open(filePath, ios::in | ios::binary);
 
@@ -54,7 +54,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
 
     for (int i = 0; !file.eof(); i++)
     {
-        unsigned char c = (char)file.get();
+        unsigned char c = static_cast<char>(file.get());
 
         const vector<float> labelsTemp(10, 0);
         labels.push_back(labelsTemp);
@@ -67,16 +67,20 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
             break;
         }
 
-        const vector<float> imageTemp;
-        images.push_back(imageTemp);
-        images.back().reserve(sizeOfData);
-
-        for (int j = 0; !file.eof()  && j < sizeOfData; j++)
+        vector<float> imageTemp;
+        imageTemp.resize(sizeOfData, 0);
+        for (int j = 0; !file.eof() && j < sizeOfData; j++)
         {
-            c = (char)file.get();
-            const float value = static_cast<float>(static_cast<unsigned int>(c));
-            images.back().push_back(value);
+            c = static_cast<char>(file.get());
+            if (j < 1024)
+                imageTemp[j*3] = c;
+            else if (j < 2048)
+                imageTemp[(j-1024)*3+1] = c;
+            else
+                imageTemp[(j-2048)*3+2] = c;
         }
+
+        images.push_back(imageTemp);
     }
     file.close();
 }

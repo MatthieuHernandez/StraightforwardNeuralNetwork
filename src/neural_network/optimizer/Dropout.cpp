@@ -12,7 +12,7 @@ BOOST_CLASS_EXPORT(Dropout)
 
 bool Dropout::randomProbability() const
 {
-    return static_cast<bool>(rand() / static_cast<float>(RAND_MAX) >= this->value);
+    return rand() / static_cast<float>(RAND_MAX) >= this->value;
 }
 
 Dropout::Dropout(const float value, BaseLayer* layer)
@@ -41,17 +41,17 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
 {
     if (temporalReset)
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
-    transform(outputs.begin(), outputs.end(), this->presenceProbabilities.begin(), outputs.begin(), multiplies<float>());
+    ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
 }
 
 void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
 {
-    transform(outputs.begin(), outputs.end(), outputs.begin(), bind(multiplies<float>(), placeholders::_1, this->reverseValue));
+    ranges::transform(outputs, outputs.begin(), bind(multiplies<float>(), placeholders::_1, this->reverseValue));
 }
 
 void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
-    transform(inputErrors.begin(), inputErrors.end(), this->presenceProbabilities.begin(), inputErrors.begin(), multiplies<float>());
+    ranges::transform(inputErrors, this->presenceProbabilities, inputErrors.begin(), multiplies<float>());
 }
 
 bool Dropout::operator==(const LayerOptimizer& optimizer) const

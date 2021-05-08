@@ -8,7 +8,7 @@ using namespace internal;
 
 int NoNeuronLayer::getNumberOfOutput() const
 {
-    return numberOfOutputs;
+    return this->numberOfOutputs;
 }
 
 float NoNeuronLayer::getAverageOfAbsNeuronWeights() const
@@ -21,7 +21,7 @@ float NoNeuronLayer::getAverageOfSquareNeuronWeights() const
     return 0.0f;
 }
 
-void* NoNeuronLayer::getNeuron(int index)
+void* NoNeuronLayer::getNeuron([[maybe_unused]] int index)
 {
     return nullptr;
 }

@@ -9,38 +9,54 @@ using namespace internal;
 BOOST_CLASS_EXPORT(FilterLayer)
 
 FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-     : Layer(model, optimizer)
+    : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
     this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
     this->shapeOfInput = model.shapeOfInput;
 }
 
-vector<float> FilterLayer::computeOutput(const vector<float>& inputs, bool temporalReset)
+inline
+vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->neurons.size());
-    for (int n = 0; n < (int)this->neurons.size(); ++n)
+    for (int i = 0, n = 0; n < (int)this->neurons.size(); ++i)
     {
-        auto neuronInputs = this->createInputsForNeuron(n, inputs);
-        outputs[n] = this->neurons[n].output(neuronInputs);
+        auto neuronInputs = this->createInputsForNeuron(i, inputs);
+        for (int f = 0; f < this->numberOfFilters; ++f, ++n)
+        {
+            outputs[n] = this->neurons[n].output(neuronInputs);
+        }
     }
     return outputs;
 }
 
+inline
 vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        this->insertBackOutputForNeuron(n, error, errors);
+        const int neuronIndex = n / this->numberOfFilters;
+        this->insertBackOutputForNeuron(neuronIndex, error, errors);
     }
     return errors;
+}
+
+std::vector<int> FilterLayer::getShapeOfInput() const
+{
+    return this->shapeOfInput;
 }
 
 std::vector<int> FilterLayer::getShapeOfOutput() const
 {
     return this->shapeOfOutput;
+}
+
+int FilterLayer::getSizeOfFilterMatrix() const
+{
+    return this->sizeOfFilterMatrix;
 }
 
 int FilterLayer::isValid() const
@@ -50,12 +66,14 @@ int FilterLayer::isValid() const
 
 bool FilterLayer::operator==(const BaseLayer& layer) const
 {
-   try
+    try
     {
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
             && this->numberOfInputs == f.numberOfInputs
-            && this->neurons == f.neurons;
+            && this->sizeOfFilterMatrix == f.sizeOfFilterMatrix
+            && this->shapeOfInput == f.shapeOfInput
+            && this->shapeOfOutput == f.shapeOfOutput;
     }
     catch (bad_cast&)
     {

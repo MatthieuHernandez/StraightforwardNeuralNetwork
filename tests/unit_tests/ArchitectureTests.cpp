@@ -85,9 +85,9 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
             Recurrence(10),
             FullyConnected(5)
         });
-    const int numberOfNeurons = 3 * 3 * 3 + 60 + 18 + 20 + 10 + 5; // = 160
+    const int numberOfNeurons = 3 * 3 * 3 + 60 + 18 + 20 + 10 + 5; // = 140
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 3 * 3 * 3 * 16 + 60 * 3 * 3 * 3 + 18 * 3 + 20 * 18 + (20 + 1) * 10 + 10 * 5; // = 2726
+    const int numberOfParameters = 3 * 3 * 3 * 16 + 60 * 3 * 3 * 3 + 18 * 3 + 20 * 18 + (20 + 1) * 10 + 10 * 5 + 140; // = 2866
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 
@@ -101,9 +101,23 @@ TEST(Architecture, NumberOfNeuronesAndParameters2)
             LocallyConnected(1, 7),
             FullyConnected(2)
         });
-    const int numberOfNeurons = 36 + 200 + 29 + 2; // = 297
+    const int numberOfNeurons = 36 + 200 + 29 + 2; // = 267
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 36 * 16 * 3 + 36 * 200 + 29 * 7 + 29 * 2; //  = 9189
+    const int numberOfParameters = 36 * 16 * 3 + 36 * 200 + 29 * 7 + 29 * 2 + 267; // = 9456
+    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
+}
+
+TEST(Architecture, NumberOfNeuronesAndParameters3)
+{
+    StraightforwardNeuralNetwork neuralNetwork(
+        {
+            Input(10),
+            GruLayer(10),
+            Recurrence(10)
+        });
+    const int numberOfNeurons = 10 + 10; // = 20
+    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
+    const int numberOfParameters = (10 + 2) * 10 * 3 + (10 + 2) * 10; // = 480
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 
@@ -124,7 +138,7 @@ TEST(Architecture, InputWithSizeOf2)
 {
     StraightforwardNeuralNetwork neuralNetworkFC({Input(5, 2), FullyConnected(3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkLC({Input(5, 2), LocallyConnected(2, 3), FullyConnected(1)});
-    StraightforwardNeuralNetwork neuralNetworkC({Input(5, 2), Convolution(2,3), FullyConnected(1)});
+    StraightforwardNeuralNetwork neuralNetworkC({Input(5, 2), Convolution(2, 3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkR({Input(5, 2), Recurrence(3), FullyConnected(1)});
 
     ASSERT_EQ(neuralNetworkFC.isValid(), 0) << "FullyConnected neural network is invalid.";

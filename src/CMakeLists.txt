@@ -5,7 +5,6 @@ file(GLOB SOURCES
     "data/*.cpp"
     "neural_network/*.hpp"
     "neural_network/*.cpp"
-    "neural_network/*.tpp"
     "neural_network/optimizer/*.hpp"
     "neural_network/optimizer/*.cpp"
     "neural_network/layer/*.hpp"
@@ -20,6 +19,9 @@ file(GLOB SOURCES
 include_directories(external_library/boost_1_71_0_minimal)
 add_subdirectory(external_library/boost_1_71_0_minimal/libs/serialization)
 
+include_directories(external_library/bitmap)
+add_subdirectory(external_library/bitmap)
+
 add_library(StraightforwardNeuralNetwork ${SOURCES})
 
-target_link_libraries(StraightforwardNeuralNetwork Boost)
+target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap)

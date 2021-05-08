@@ -111,7 +111,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,5),
+        Convolution(1,5, activation::GELU, ErrorMultiplier(10.0f)),
         FullyConnected(70),
         FullyConnected(10)
         });
@@ -164,20 +164,21 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(2, 4),
-        FullyConnected(200),
+        LocallyConnected(2, 2, activation::ReLU, ErrorMultiplier(10.0f)),
+        Convolution(8, 4, activation::sigmoid),
+        FullyConnected(70, activation::sigmoid),
         FullyConnected(10)
         },
-        StochasticGradientDescent(0.02f, 0.6f));
+        StochasticGradientDescent(0.005f, 0.2f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.9862_acc);
+    neuralNetwork.train(*data, 0.9860_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20f);
+    ASSERT_ACCURACY(accuracy, 0.98f);
 }
 
 TEST_F(MnistTest, EvaluateBestNeuralNetwork)
@@ -186,6 +187,23 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 272000);
-    ASSERT_FLOAT_EQ(accuracy, 0.9858f);
+    ASSERT_EQ(numberOfParameters, 102444);
+    ASSERT_FLOAT_EQ(accuracy, 0.986f);
+}
+
+TEST_F(MnistTest, DISABLED_SaveFeatureMap)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(28, 28, 1),
+        Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0f)),
+        LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0f)),
+        FullyConnected(10)
+        },
+        StochasticGradientDescent(0.005f, 0.1f));
+    neuralNetwork.saveData2DAsBitmap("./bitmap/data", *data, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before", *data, 13);
+    neuralNetwork.train(*data, 1_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.90f);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/after", *data, 13);
 }

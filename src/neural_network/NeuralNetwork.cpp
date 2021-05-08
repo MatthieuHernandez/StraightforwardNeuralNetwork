@@ -77,7 +77,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
         outputs = layers[l]->output(outputs, temporalReset);
     }
 
-    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
         this->outputNan = true;
 
     return outputs;
@@ -92,7 +92,7 @@ std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& in
         outputs = layers[l]->outputForTraining(outputs, temporalReset);
     }
 
-    if (std::any_of(outputs.begin(), outputs.end(), [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
         this->outputNan = true;
 
     return outputs;
@@ -128,6 +128,20 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
         }
     }
     return errors;
+}
+
+vector<vector<float>> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
+{
+    vector<vector<float>> filterOutputs;
+    auto outputs = layers[0]->output(inputs, true);
+    filterOutputs.push_back(outputs);
+
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->output(outputs, true);
+        filterOutputs.push_back(outputs);
+    }
+    return filterOutputs;
 }
 
 bool NeuralNetwork::hasNan() const

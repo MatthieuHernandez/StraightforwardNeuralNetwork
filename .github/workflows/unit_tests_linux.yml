@@ -13,7 +13,7 @@ jobs:
     - name: CMake
       run: |
         cd ./build
-        CC=gcc-9 CXX=/usr/bin/g++-9 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+        CC=gcc-10 CXX=/usr/bin/g++-10 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: Make
       run: |
         cd ./build

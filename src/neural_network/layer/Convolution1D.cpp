@@ -23,7 +23,7 @@ unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimize
     auto layer = make_unique<Convolution1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
-        layer->neurons[n].optimizer = optimizer;
+        layer->neurons[n].setOptimizer(optimizer);
     }
     return layer;
 }
@@ -39,20 +39,18 @@ int Convolution1D::isValid() const
 }
 
 inline
-vector<float> Convolution1D::createInputsForNeuron(int neuronNumber, const vector<float>& inputs) const
+vector<float> Convolution1D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
-    const int beginIndex = neuronNumber * this->shapeOfInput[1];
-    const int endIndex = (neuronNumber + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
+    const int beginIndex = neuronIndex * this->shapeOfInput[1];
+    const int endIndex = (neuronIndex + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
     return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
 }
 
 inline
-void Convolution1D::insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error,
-                                              std::vector<float>& errors) const
+void Convolution1D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error,
+                                              std::vector<float>& errors)
 {
-    neuronNumber = neuronNumber % this->getNumberOfNeurons() / this->numberOfFilters;
-    const int beginIndex = neuronNumber * this->shapeOfInput[1];
+    const int beginIndex = neuronIndex * this->shapeOfInput[1];
     for (int e = 0; e < (int)error.size(); ++e)
     {
         const int i = beginIndex + e;

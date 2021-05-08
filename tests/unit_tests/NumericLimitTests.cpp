@@ -1,4 +1,3 @@
-#include <cstddef>
 #include "../ExtendedGTest.hpp"
 #include "tools/Tools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"
@@ -13,39 +12,39 @@ protected:
     {
         vector2D<float> trainingExpectedOutputs;
         trainingExpectedOutputs.resize(sizeOfTraining);
-        std::generate(trainingExpectedOutputs.begin(), trainingExpectedOutputs.end(), []
+        ranges::generate(trainingExpectedOutputs, []
         {
-            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+            return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> trainingInputData;
         trainingInputData.resize(sizeOfTraining);
-        std::generate(trainingInputData.begin(), trainingInputData.end(), []
+        ranges::generate(trainingInputData, []
         {
             return vector<float>
             {
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f)
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f)
             };
         });
 
         vector2D<float> testingExpectedOutputs;
         testingExpectedOutputs.resize(sizeOfTesting);
-        std::generate(testingExpectedOutputs.begin(), testingExpectedOutputs.end(), []
+        ranges::generate(testingExpectedOutputs, []
         {
-            return vector<float>{internal::Tools::randomBetween(0.0f, 1.0f)};
+            return vector<float>{tools::randomBetween(0.0f, 1.0f)};
         });
 
         vector2D<float> testingInputData(sizeOfTesting);
         testingInputData.resize(sizeOfTesting);
-        std::generate(testingInputData.begin(), testingInputData.end(), []
+        ranges::generate(testingInputData, []
         {
             return vector<float>
             {
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f),
-                internal::Tools::randomBetween(0.0f, 1.0f)
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f),
+                tools::randomBetween(0.0f, 1.0f)
             };
         });
 
@@ -54,16 +53,16 @@ protected:
                                  trainingExpectedOutputs,
                                  testingInputData,
                                  testingExpectedOutputs);
-        data->setPrecision(0.5f);
+        data->setPrecision(0.3f);
     }
 
     static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
     {
-        nn.train(*data, 1_s);
+        nn.train(*data, 1_s || 0.2_acc);
         auto mae = nn.getMeanAbsoluteError();
         auto acc = nn.getGlobalClusteringRate();
-        ASSERT_ACCURACY(acc, 0.1f);
-        ASSERT_MAE(mae, 1.5f);
+        ASSERT_ACCURACY(acc, 0.2f);
+        ASSERT_MAE(mae, 1.4f);
     }
 
     static void SetUpTestSuite()
@@ -80,10 +79,10 @@ TEST_F(NumericLimitTests, WithSigmoid)
 {
     StraightforwardNeuralNetwork neuralNetwork({
                                                    Input(3),
-                                                   FullyConnected(5, activation::sigmoid),
+                                                   FullyConnected(6, activation::sigmoid),
                                                    FullyConnected(1, activation::sigmoid)
                                                },
-                                               StochasticGradientDescent(0.9999f, 0.9999f));
+                                               StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }
 
@@ -91,9 +90,9 @@ TEST_F(NumericLimitTests, WithTanh)
 {
     StraightforwardNeuralNetwork neuralNetwork({
                                                    Input(3),
-                                                   FullyConnected(5, activation::tanh),
+                                                   FullyConnected(6, activation::tanh),
                                                    FullyConnected(1, activation::tanh)
                                                },
-                                               StochasticGradientDescent(0.9999f, 0.9999f));
+                                               StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }

@@ -14,8 +14,11 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const override;
-        void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const override;
+        std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
+        void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
+
+        int sizeOfNeuronInputs;
+        std::vector<float> neuronInputs;
 
     public :
         LocallyConnected2D() = default;  // use restricted to Boost library only
@@ -31,9 +34,11 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void LocallyConnected2D::serialize(Archive& ar, const unsigned version)
+    void LocallyConnected2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<LocallyConnected2D, FilterLayer>();
         ar & boost::serialization::base_object<FilterLayer>(*this);
+        ar & sizeOfNeuronInputs;
+        ar & neuronInputs;
     }
 }

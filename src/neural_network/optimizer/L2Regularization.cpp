@@ -25,18 +25,10 @@ unique_ptr<LayerOptimizer> L2Regularization::clone(const BaseLayer* newLayer) co
     return make_unique<L2Regularization>(*this, newLayer);
 }
 
-void L2Regularization::applyAfterOutputForTraining(std::vector<float>& outputs, bool)
-{
-}
-
-void L2Regularization::applyAfterOutputForTesting(std::vector<float>& outputs)
-{
-}
-
 void L2Regularization::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
     auto regularization = this->layer->getAverageOfSquareNeuronWeights() * this->value;
-    transform(inputErrors.begin(), inputErrors.end(), inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
+    ranges::transform(inputErrors, inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
 }
 
 bool L2Regularization::operator==(const LayerOptimizer& optimizer) const

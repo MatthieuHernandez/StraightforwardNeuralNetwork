@@ -30,6 +30,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
+    neuron.bias += lr * error * neuron.bias;
 }
 
 #ifdef _MSC_VER
@@ -47,6 +48,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
+    neuron.bias += lr * error * neuron.bias;
     neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
     auto deltaWeights = lr * neuron.recurrentError * neuron.previousOutput + m * neuron.previousDeltaWeights[w];

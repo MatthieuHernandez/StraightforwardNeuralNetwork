@@ -35,7 +35,7 @@ void CompositeForTimeSeries::shuffle()
 {
     std::random_device rd;
     mt19937 g(rd());
-    std::shuffle(this->indexesForShuffling.begin(), this->indexesForShuffling.end(), g);
+    ranges::shuffle(this->indexesForShuffling, g);
 
     for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
     {
@@ -101,7 +101,7 @@ bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
     return this->sets[training].needToTrainOnData[index];
 }
 
-bool CompositeForTimeSeries::needToEvaluateOnTestingData(int index) const
+bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const
 {
     // Skip firsts testing data can be distort the accuracy
     /*if(index < this->numberOfRecurrences)

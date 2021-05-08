@@ -5,7 +5,7 @@
 
 namespace snn::internal
 {
-    class RecurrentNeuron final : public Neuron<RecurrentNeuron>
+    class RecurrentNeuron final : public Neuron
     {
     private:
         friend class GatedRecurrentUnit;
@@ -38,7 +38,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void RecurrentNeuron::serialize(Archive& ar, unsigned version)
+    void RecurrentNeuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
         ar & boost::serialization::base_object<Neuron>(*this);

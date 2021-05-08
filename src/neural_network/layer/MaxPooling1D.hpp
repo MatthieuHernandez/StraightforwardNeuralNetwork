@@ -32,6 +32,7 @@ namespace snn::internal
         void train(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] int getNumberOfInputs() const override;
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
@@ -41,7 +42,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void MaxPooling1D::serialize(Archive& ar, const unsigned version)
+    void MaxPooling1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<MaxPooling1D, NoNeuronLayer>();
         ar & boost::serialization::base_object<NoNeuronLayer>(*this);

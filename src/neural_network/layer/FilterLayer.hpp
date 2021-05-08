@@ -22,8 +22,8 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) const = 0;
-        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) const = 0;
+        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) = 0;
+        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) = 0;
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only
@@ -31,7 +31,10 @@ namespace snn::internal
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
+
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
+        [[nodiscard]] int getSizeOfFilterMatrix() const;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;
@@ -39,7 +42,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void FilterLayer::serialize(Archive& ar, const unsigned version)
+    void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);

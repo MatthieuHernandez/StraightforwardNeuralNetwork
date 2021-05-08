@@ -11,10 +11,11 @@
 #include "../optimizer/Dropout.hpp"
 #include "../optimizer/L1Regularization.hpp"
 #include "../optimizer/L2Regularization.hpp"
+#include "../optimizer/ErrorMultiplier.hpp"
 
 namespace snn::internal
 {
-    template <class N>
+    template <BaseNeuron N>
     class Layer : public BaseLayer
     {
     private:
@@ -33,8 +34,7 @@ namespace snn::internal
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
-
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
@@ -49,6 +49,7 @@ namespace snn::internal
         [[nodiscard]] int getNumberOfInputs() const override final;
         [[nodiscard]] int getNumberOfNeurons() const override final;
         [[nodiscard]] int getNumberOfParameters() const override final;
+        [[nodiscard]] std::vector<int> getShapeOfInput() const override = 0;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
 
         void train(std::vector<float>& inputErrors) override final;
@@ -59,9 +60,9 @@ namespace snn::internal
         bool operator!=(const BaseLayer& layer) const override;
     };
 
-    template <class N>
+    template <BaseNeuron N>
     template <class Archive>
-    void Layer<N>::serialize(Archive& ar, unsigned version)
+    void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<Layer, BaseLayer>();
         ar & boost::serialization::base_object<BaseLayer>(*this);
@@ -70,6 +71,7 @@ namespace snn::internal
         ar.template register_type<Dropout>();
         ar.template register_type<L1Regularization>();
         ar.template register_type<L2Regularization>();
+        ar.template register_type<ErrorMultiplier>();
         ar & this->optimizers;
     }
 

@@ -8,7 +8,7 @@
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Unit%20tests%20Windows/badge.svg?barnch=master)
 ![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/workflows/Dataset%20tests/badge.svg?barnch=master)
 
-**Straightforward Neural Network** is an open source neural network library in C++17 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
+**Straightforward Neural Network** is an open source neural network library in C++20 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
 
 ## Documentation
  See the full documentation [here](https://matthieuhernandez.github.io/StraightforwardNeuralNetwork/).
@@ -18,15 +18,15 @@
 |--------------|-----------|--------------|-------|----------------------|
 | [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | -                        | -      |
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 30     |
-| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 56.73% Accurracy         | 281800 |
-| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.62% Accurracy         | 95874  |
-| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.58% Accurracy         | 209000 |
+| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 59.85% Accurracy         | 252710 |
+| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.91% Accurracy         | 193170 |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.60% Accurracy         | 102444 |
 | [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100.0% Accurracy         | 444    |
 | [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100.0% Accurracy         | 150    |
 
 ## Installation (with *CMake* 3.17.1)
 
-### Linux, UNIX - GCC 10.1
+### Linux, UNIX - GCC 10.2
 * To compile open a command prompt and run `cmake -G"Unix Makefiles" ./..  && make` from the `build` folder.
 
 * To run the unit tests execute `./tests/unit_tests/UnitTests` from `build` folder.

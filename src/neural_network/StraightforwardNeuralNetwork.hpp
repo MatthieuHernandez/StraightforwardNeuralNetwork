@@ -64,6 +64,9 @@ namespace snn
         bool isTraining() const;
 
         void saveAs(std::string filePath);
+        void saveFeatureMapsAsBitmap(std::string filePath);
+        void saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex);
+        void saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
         int getCurrentIndex() const { return this->index; }
@@ -80,7 +83,7 @@ namespace snn
     };
 
     template <class Archive>
-    void StraightforwardNeuralNetwork::serialize(Archive& ar, const unsigned version)
+    void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
         ar & boost::serialization::base_object<NeuralNetwork>(*this);

@@ -23,7 +23,7 @@ namespace snn::internal
         Dropout() = default;  // use restricted to Boost library only
         Dropout(float value, BaseLayer* layer);
         Dropout(const Dropout& dropout, const BaseLayer* layer);
-        ~Dropout() = default;
+        ~Dropout() override = default;
 
         std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
 
@@ -37,7 +37,7 @@ namespace snn::internal
     };
 
     template <class Archive>
-    void Dropout::serialize(Archive& ar, unsigned version)
+    void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
         ar & boost::serialization::base_object<LayerOptimizer>(*this);

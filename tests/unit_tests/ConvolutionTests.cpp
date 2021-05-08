@@ -10,14 +10,12 @@ Data createDataForConvolutionTests();
 TEST(Convolution, SimpleConvolution2D)
 {
     auto data = createDataForConvolutionTests();
-    vector<LayerModel> architectures =
-    {
+    StraightforwardNeuralNetwork neuralNetwork({
         Input(3, 3, 2),
         Convolution(2, 2, activation::sigmoid),
         FullyConnected(2)
-    };
-    StraightforwardNeuralNetwork neuralNetwork(architectures, StochasticGradientDescent(0.5f));
-    neuralNetwork.train(data, 200_ep);
+    }, StochasticGradientDescent(0.05f, 0.1f));
+    neuralNetwork.train(data, 3000_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 

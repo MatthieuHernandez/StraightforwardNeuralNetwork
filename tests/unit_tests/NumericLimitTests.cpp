@@ -53,16 +53,16 @@ protected:
                                  trainingExpectedOutputs,
                                  testingInputData,
                                  testingExpectedOutputs);
-        data->setPrecision(0.5f);
+        data->setPrecision(0.3f);
     }
 
     static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
     {
-        nn.train(*data, 1_s);
+        nn.train(*data, 1_s || 0.2_acc);
         auto mae = nn.getMeanAbsoluteError();
         auto acc = nn.getGlobalClusteringRate();
-        ASSERT_ACCURACY(acc, 0.1f);
-        ASSERT_MAE(mae, 1.5f);
+        ASSERT_ACCURACY(acc, 0.2f);
+        ASSERT_MAE(mae, 1.4f);
     }
 
     static void SetUpTestSuite()
@@ -79,10 +79,10 @@ TEST_F(NumericLimitTests, WithSigmoid)
 {
     StraightforwardNeuralNetwork neuralNetwork({
                                                    Input(3),
-                                                   FullyConnected(5, activation::sigmoid),
+                                                   FullyConnected(6, activation::sigmoid),
                                                    FullyConnected(1, activation::sigmoid)
                                                },
-                                               StochasticGradientDescent(0.9999f, 0.9999f));
+                                               StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }
 
@@ -90,9 +90,9 @@ TEST_F(NumericLimitTests, WithTanh)
 {
     StraightforwardNeuralNetwork neuralNetwork({
                                                    Input(3),
-                                                   FullyConnected(5, activation::tanh),
+                                                   FullyConnected(6, activation::tanh),
                                                    FullyConnected(1, activation::tanh)
                                                },
-                                               StochasticGradientDescent(0.9999f, 0.9999f));
+                                               StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }

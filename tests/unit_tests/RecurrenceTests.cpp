@@ -46,19 +46,19 @@ TEST(Recurrence, RepeatLastInput)
 //a simple recurrent neural network can't solve this problem
 TEST(Recurrence, RepeatLastLastInput)
 {
-    vector2D<float> inputData =       {{0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}, {0}, {0}};
-    vector2D<float> expectedOutputs = {{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}, {0}, {0}, {1}, {1}, {1}, {1}};
+    vector2D<float> inputData =       {{0.2}, {0}, {1}, {0}, {1}, {1}, {0.1}, {0}, {1}, {1}, {0.9}, {1}, {0.3}, {0}, {1}, {0}, {1}, {0}, {0}};
+    vector2D<float> expectedOutputs = {{0}, {0}, {0.2}, {0}, {1}, {0}, {1}, {1}, {0}, {0.1}, {1}, {1}, {0.9}, {1}, {0.3}, {0}, {1}, {0}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
     data->setPrecision(0.3f);
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        GruLayer(15),
-        GruLayer(5),
+        GruLayer(12),
+        GruLayer(8),
         FullyConnected(1)
     },
-        StochasticGradientDescent(0.05f, 0.1f));
+        StochasticGradientDescent(0.05f, 0.5f));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }

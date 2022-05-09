@@ -16,7 +16,7 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        int sizeOfFilterMatrix;
+        int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
 
@@ -46,7 +46,7 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<MaxPooling2D, NoNeuronLayer>();
         ar & boost::serialization::base_object<NoNeuronLayer>(*this);
-        ar & this->sizeOfFilterMatrix;
+        ar & this->kernelSize;
         ar & this->shapeOfInput;
     }
 }

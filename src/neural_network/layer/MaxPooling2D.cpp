@@ -13,15 +13,15 @@ BOOST_CLASS_EXPORT(MaxPooling2D)
 MaxPooling2D::MaxPooling2D(LayerModel& model)
     : NoNeuronLayer(model)
 {
-    this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
+    this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
 
-    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int restX = shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[1] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
-        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
+        this->shapeOfInput[0] / this->kernelSize + restX,
+        this->shapeOfInput[1] / this->kernelSize + restY,
         1
     };
 }
@@ -38,8 +38,8 @@ std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, [[mayb
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (int i = 0; i < (int)inputs.size(); ++i)
     {
-        const int outputX = roughenX(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->sizeOfFilterMatrix;
-        const int outputY = roughenY(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->sizeOfFilterMatrix;
+        const int outputX = roughenX(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->kernelSize;
+        const int outputY = roughenY(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->kernelSize;
         const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[0]);
 
         if (output[indexOutput] <= inputs[i])
@@ -64,8 +64,8 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
         {
             for (int x = 0; x < this->shapeOfInput[0]; ++x)
             {
-                const int outputX = x / this->sizeOfFilterMatrix;
-                const int outputY = y / this->sizeOfFilterMatrix;
+                const int outputX = x / this->kernelSize;
+                const int outputY = y / this->kernelSize;
                 const int i = flatten(outputX, outputY, this->shapeOfOutput[0]);
 
                 errors.push_back(inputErrors[i]);
@@ -107,7 +107,7 @@ bool MaxPooling2D::operator==(const BaseLayer& layer) const
         const auto& l = dynamic_cast<const MaxPooling2D&>(layer);
 
         return typeid(*this).hash_code() == typeid(layer).hash_code()
-            && this->sizeOfFilterMatrix == l.sizeOfFilterMatrix
+            && this->kernelSize == l.kernelSize
             && this->shapeOfInput == l.shapeOfInput;
     }
     catch (std::bad_cast&)

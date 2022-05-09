@@ -11,13 +11,13 @@ BOOST_CLASS_EXPORT(LocallyConnected1D)
 LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
-    const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int rest = this->shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
+        this->shapeOfInput[0] / this->kernelSize + rest,
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->shapeOfInput[1];
+    this->sizeOfNeuronInputs = this->kernelSize * this->shapeOfInput[1];
 }
 
 inline
@@ -35,7 +35,7 @@ int LocallyConnected1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->shapeOfInput[1])
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[1])
             return 203;
     }
     return this->FilterLayer::isValid();

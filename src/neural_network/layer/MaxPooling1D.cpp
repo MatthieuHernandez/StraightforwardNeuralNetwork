@@ -11,7 +11,7 @@ BOOST_CLASS_EXPORT(MaxPooling1D)
 MaxPooling1D::MaxPooling1D(LayerModel& model)
     : NoNeuronLayer(model)
 {
-    this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
+    this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
 }
 
@@ -26,7 +26,7 @@ std::vector<float> MaxPooling1D::output(const std::vector<float>& inputs, [[mayb
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (size_t i = 0; i < inputs.size(); ++i)
     {
-        const size_t indexOutput = i / this->sizeOfFilterMatrix;
+        const size_t indexOutput = i / this->kernelSize;
         if (output[indexOutput] <= inputs[i])
         {
             output[indexOutput] = inputs[i];
@@ -46,7 +46,7 @@ std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
     errors.reserve(this->numberOfInputs);
     for (int i = 0, k = 0; i < this->numberOfOutputs; ++i)
     {
-        for (int j = 0; k < this->numberOfInputs && j < this->sizeOfFilterMatrix; ++j, ++k)
+        for (int j = 0; k < this->numberOfInputs && j < this->kernelSize; ++j, ++k)
             errors.push_back(inputErrors[i]);
     }
     return errors;
@@ -68,10 +68,10 @@ std::vector<int> MaxPooling1D::getShapeOfInput() const
 
 vector<int> MaxPooling1D::getShapeOfOutput() const
 {
-    const int rest = this->shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int rest = this->shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
 
     return {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + rest,
+        this->shapeOfInput[0] / this->kernelSize + rest,
         1
     };
 }
@@ -89,7 +89,7 @@ bool MaxPooling1D::operator==(const BaseLayer& layer) const
         const auto& l = dynamic_cast<const MaxPooling1D&>(layer);
 
         return typeid(*this).hash_code() == typeid(layer).hash_code()
-            && this->sizeOfFilterMatrix == l.sizeOfFilterMatrix
+            && this->kernelSize == l.kernelSize
             && this->shapeOfInput == l.shapeOfInput;
     }
     catch (std::bad_cast&)

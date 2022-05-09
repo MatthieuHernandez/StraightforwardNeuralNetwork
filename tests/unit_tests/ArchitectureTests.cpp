@@ -53,7 +53,7 @@ TEST(Architecture, invalidArchitectures)
         "Invalid neural network architecture: Input of layer has size of 0.",
         "Invalid neural network architecture: Input of layer has size of 0.",
         "Invalid neural network architecture: Input LayerModel should be in first position.",
-        "Invalid neural network architecture: Convolution matrix is too big.",
+        "Invalid neural network architecture: Convolution kernel is too big.",
         "Invalid neural network architecture: Input with 3 dimensions or higher is not managed.",
     };
 

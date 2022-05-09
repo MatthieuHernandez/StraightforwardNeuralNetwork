@@ -16,7 +16,7 @@ namespace snn::internal
 
     protected :
         int numberOfFilters;
-        int sizeOfFilterMatrix;
+        int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
 
@@ -34,7 +34,7 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
-        [[nodiscard]] int getSizeOfFilterMatrix() const;
+        [[nodiscard]] int getKernelSize() const;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;
@@ -47,7 +47,7 @@ namespace snn::internal
         boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
         ar & this->numberOfFilters;
-        ar & this->sizeOfFilterMatrix;
+        ar & this->kernelSize;
         ar & this->shapeOfInput;
         ar & this->shapeOfOutput;
     }

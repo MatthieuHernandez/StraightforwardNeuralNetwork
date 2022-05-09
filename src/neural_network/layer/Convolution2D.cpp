@@ -13,11 +13,11 @@ Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
     : FilterLayer(model, optimizer)
 {
     this->shapeOfOutput = {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
-        this->shapeOfInput[1] - (this->sizeOfFilterMatrix - 1),
+        this->shapeOfInput[0] - (this->kernelSize - 1),
+        this->shapeOfInput[1] - (this->kernelSize - 1),
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2];
+    this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * this->shapeOfInput[2];
     this->neuronInputs.resize(this->sizeOfNeuronInputs);
 }
 
@@ -46,16 +46,16 @@ vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const 
     const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
     const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    for (int i = 0; i < this->kernelSize; ++i)
     {
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        for (int j = 0; j < this->kernelSize; ++j)
         {
             for (int k = 0; k < this->shapeOfInput[2]; ++k)
             {
                 const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
-                this->neuronInputs[indexMatrix] = inputs[indexErrors];
+                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
+                this->neuronInputs[indexKernel] = inputs[indexErrors];
             }
         }
     }
@@ -68,16 +68,16 @@ void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::
     const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
     const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    for (int i = 0; i < this->kernelSize; ++i)
     {
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        for (int j = 0; j < this->kernelSize; ++j)
         {
             for (int k = 0; k < this->shapeOfInput[2]; ++k)
             {
                 const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
-                errors[indexErrors] += error[indexMatrix];
+                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
+                errors[indexErrors] += error[indexKernel];
             }
         }
     }

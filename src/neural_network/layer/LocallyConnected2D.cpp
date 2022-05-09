@@ -11,15 +11,15 @@ BOOST_CLASS_EXPORT(LocallyConnected2D)
 LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
-    const int restX = shapeOfInput[0] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % this->sizeOfFilterMatrix == 0 ? 0 : 1;
+    const int restX = shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[1] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->sizeOfFilterMatrix + restX,
-        this->shapeOfInput[1] / this->sizeOfFilterMatrix + restY,
+        this->shapeOfInput[0] / this->kernelSize + restX,
+        this->shapeOfInput[1] / this->kernelSize + restY,
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->sizeOfFilterMatrix * this->sizeOfFilterMatrix * this->shapeOfInput[2];
+    this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * this->shapeOfInput[2];
     this->neuronInputs.resize(this->sizeOfNeuronInputs);
 }
 
@@ -47,22 +47,22 @@ int LocallyConnected2D::isValid() const
 inline
 vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
 {
-    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
-    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
+    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->kernelSize;
+    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->kernelSize;
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    for (int i = 0; i < this->kernelSize; ++i)
     {
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        for (int j = 0; j < this->kernelSize; ++j)
         {
             for (int k = 0; k < this->shapeOfInput[2]; ++k)
             {
                 const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
                 if (indexErrors < (int)inputs.size()) [[likely]]
-                    this->neuronInputs[indexMatrix] = inputs[indexErrors];
+                    this->neuronInputs[indexKernel] = inputs[indexErrors];
                 else
-                    neuronInputs[indexMatrix] = 0.0f;
+                    neuronInputs[indexKernel] = 0.0f;
             }
         }
     }
@@ -72,20 +72,20 @@ vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, c
 inline
 void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
 {
-    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
-    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
+    const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->kernelSize;
+    const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->kernelSize;
 
-    for (int i = 0; i < this->sizeOfFilterMatrix; ++i)
+    for (int i = 0; i < this->kernelSize; ++i)
     {
         const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->sizeOfFilterMatrix; ++j)
+        for (int j = 0; j < this->kernelSize; ++j)
         {
             for (int k = 0; k < this->shapeOfInput[2]; ++k)
             {
                 const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexMatrix = (i * this->sizeOfFilterMatrix + j) * this->shapeOfInput[2] + k;
+                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
                 if (indexErrors < (int)errors.size()) [[likely]]
-                    errors[indexErrors] += error[indexMatrix];
+                    errors[indexErrors] += error[indexKernel];
             }
         }
     }

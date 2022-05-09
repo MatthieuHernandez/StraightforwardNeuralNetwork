@@ -50,7 +50,7 @@ std::vector<float> NeuralNetworkVisualization::getWeights(FilterLayer* filterLay
 {
     auto inputShape = filterLayer->getShapeOfInput();
     auto outputShape = filterLayer->getShapeOfOutput();
-    auto filterSize = filterLayer->getSizeOfFilterMatrix();
+    auto filterSize = filterLayer->getKernelSize();
     auto neuronByFilter = outputShape[0] * outputShape[1];
     vector<float> weights(filterLayer->getNumberOfInputs(), 0.0f);
     for (int n = 0; n < neuronByFilter; ++n)

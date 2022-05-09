@@ -12,7 +12,7 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
     : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
-    this->sizeOfFilterMatrix = model.sizeOfFilerMatrix;
+    this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
 }
 
@@ -54,9 +54,9 @@ std::vector<int> FilterLayer::getShapeOfOutput() const
     return this->shapeOfOutput;
 }
 
-int FilterLayer::getSizeOfFilterMatrix() const
+int FilterLayer::getKernelSize() const
 {
-    return this->sizeOfFilterMatrix;
+    return this->kernelSize;
 }
 
 int FilterLayer::isValid() const
@@ -71,7 +71,7 @@ bool FilterLayer::operator==(const BaseLayer& layer) const
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
             && this->numberOfInputs == f.numberOfInputs
-            && this->sizeOfFilterMatrix == f.sizeOfFilterMatrix
+            && this->kernelSize == f.kernelSize
             && this->shapeOfInput == f.shapeOfInput
             && this->shapeOfOutput == f.shapeOfOutput;
     }

@@ -16,14 +16,14 @@ namespace snn::internal
 
     protected :
         int numberOfFilters;
+        int numberOfKernels;
+        float numberOfKernelsPerFilter;
         int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) = 0;
-        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) = 0;
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override = 0;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override = 0;
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only
@@ -47,6 +47,8 @@ namespace snn::internal
         boost::serialization::void_cast_register<FilterLayer, Layer>();
         ar & boost::serialization::base_object<Layer>(*this);
         ar & this->numberOfFilters;
+        ar & this->numberOfKernels;
+        ar & this->numberOfKernelsPerFilter;
         ar & this->kernelSize;
         ar & this->shapeOfInput;
         ar & this->shapeOfOutput;

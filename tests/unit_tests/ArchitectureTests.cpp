@@ -85,9 +85,9 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
             Recurrence(10),
             FullyConnected(5)
         });
-    const int numberOfNeurons = 3 * 3 * 3 + 60 + 18 + 20 + 10 + 5; // = 140
+    constexpr int numberOfNeurons = 3 + 60 + 1 + 20 + 10 + 5; // = 99
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 3 * 3 * 3 * 16 + 60 * 3 * 3 * 3 + 18 * 3 + 20 * 18 + (20 + 1) * 10 + 10 * 5 + 140; // = 2866
+    constexpr int numberOfParameters = 3 * 17 + 60 * 28 + 1 * 4 + 20 * 19 + 20 * 11 + 11 * 5; // = 2390
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 

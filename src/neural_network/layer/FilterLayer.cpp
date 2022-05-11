@@ -12,36 +12,10 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
     : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
+    this->numberOfKernels = model.numberOfKernels;
+    this->numberOfKernelsPerFilter = static_cast<float>(model.numberOfKernels) / this->numberOfFilters;
     this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
-}
-
-inline
-vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
-{
-    vector<float> outputs(this->neurons.size());
-    for (int i = 0, n = 0; n < (int)this->neurons.size(); ++i)
-    {
-        auto neuronInputs = this->createInputsForNeuron(i, inputs);
-        for (int f = 0; f < this->numberOfFilters; ++f, ++n)
-        {
-            outputs[n] = this->neurons[n].output(neuronInputs);
-        }
-    }
-    return outputs;
-}
-
-inline
-vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
-{
-    vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < (int)this->neurons.size(); ++n)
-    {
-        auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        const int neuronIndex = n / this->numberOfFilters;
-        this->insertBackOutputForNeuron(neuronIndex, error, errors);
-    }
-    return errors;
 }
 
 std::vector<int> FilterLayer::getShapeOfInput() const
@@ -61,6 +35,14 @@ int FilterLayer::getKernelSize() const
 
 int FilterLayer::isValid() const
 {
+    int numberOfOutput = 1;
+    auto shape = this->getShapeOfOutput();
+    for (int s : shape)
+        numberOfOutput *= s;
+
+    if (numberOfOutput != this->numberOfKernels)
+        return 202;
+
     return this->Layer::isValid();
 }
 
@@ -70,7 +52,8 @@ bool FilterLayer::operator==(const BaseLayer& layer) const
     {
         const auto& f = dynamic_cast<const FilterLayer&>(layer);
         return this->Layer::operator==(layer)
-            && this->numberOfInputs == f.numberOfInputs
+            && this->numberOfFilters == f.numberOfFilters
+            && this->numberOfKernelsPerFilter == f.numberOfKernelsPerFilter
             && this->kernelSize == f.kernelSize
             && this->shapeOfInput == f.shapeOfInput
             && this->shapeOfOutput == f.shapeOfOutput;

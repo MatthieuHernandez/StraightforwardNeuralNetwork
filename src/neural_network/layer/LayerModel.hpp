@@ -7,14 +7,15 @@ namespace snn
 {
     struct LayerModel
     {
-        layerType type; 
+        layerType type;
         int numberOfInputs;
         int numberOfNeurons;
         int numberOfOutputs;
         NeuronModel neuron;
         int numberOfFilters;
-        int kernelSize;
+        int numberOfKernels;
         int numberOfKernelsPerFilter;
+        int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<LayerOptimizerModel> optimizers;
     };

@@ -41,7 +41,8 @@ int computeNumberOfOutputsForMaxPooling2D(int kernelSize, vector<int>& shapeOfIn
 }
 
 inline
-int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int kernelSize,
+int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected,
+                                                int kernelSize,
                                                 vector<int>& shapeOfInput)
 {
     const int rest = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
@@ -50,7 +51,8 @@ int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, in
 }
 
 inline
-int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int kernelSize,
+int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected,
+                                                int kernelSize,
                                                 vector<int>& shapeOfInput)
 {
     const int restX = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
@@ -61,20 +63,26 @@ int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, in
 }
 
 inline
-int computeNumberOfNeuronsForConvolution1D(int numberOfFilters)
+int computeNumberOfKernelsForConvolution1D(int numberOfConvolution,
+                                           int kernelSize,
+                                           vector<int>& shapeOfInput)
 {
-    return numberOfFilters;
+    return numberOfConvolution * (shapeOfInput[0] - (kernelSize - 1));
 }
 
 inline
-int computeNumberOfNeuronsForConvolution2D(int numberOfFilters)
+int computeNumberOfKernelsForConvolution2D(int numberOfConvolution,
+                                           int kernelSize,
+                                           vector<int>& shapeOfInput)
 {
-    return numberOfFilters;
+    return numberOfConvolution * (shapeOfInput[0] - (kernelSize - 1)) * (shapeOfInput[1] - (
+        kernelSize - 1));
 }
 
 
 inline
-unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
+unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
+                                          vector<int>& shapeOfInput,
                                           shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
@@ -154,7 +162,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
             }
             model.shapeOfInput = shapeOfInput;
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected1D(
-                model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+                model.numberOfFilters,
+                model.kernelSize,
+                model.shapeOfInput);
+            model.numberOfKernels = model.numberOfNeurons;
+            model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[1];
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
@@ -169,8 +181,9 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
                 throw InvalidArchitectureException("Kernel of locally connected layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(
-                model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+            model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+            model.numberOfKernels = model.numberOfNeurons;
+            model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[2];
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
@@ -193,9 +206,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
                 throw InvalidArchitectureException("Convolution kernel is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForConvolution1D(model.numberOfFilters);
+            model.numberOfNeurons = model.numberOfFilters;
+            model.numberOfKernels = computeNumberOfKernelsForConvolution1D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+            model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[1];
-            model.neuron.batchSize = 1;
+            model.neuron.batchSize = model.numberOfKernelsPerFilter;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<Convolution1D>(model, optimizer);
@@ -208,9 +223,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
                 throw InvalidArchitectureException("Convolution kernel is too big.");
             }
             model.shapeOfInput = shapeOfInput;
-            model.numberOfNeurons = computeNumberOfNeuronsForConvolution2D(model.numberOfFilters);
+            model.numberOfNeurons = model.numberOfFilters;
+            model.numberOfKernels = computeNumberOfKernelsForConvolution2D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+            model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[2];
-            model.neuron.batchSize = 1;
+            model.neuron.batchSize = model.numberOfKernelsPerFilter;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<Convolution2D>(model, optimizer);
@@ -228,7 +245,8 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeO
     throw InvalidArchitectureException("The layer factory fail to build layer.");
 }
 
-void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerModel>& models,
+void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers,
+                         vector<LayerModel>& models,
                          shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
     if (models.size() > 1000)

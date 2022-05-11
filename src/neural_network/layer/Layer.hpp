@@ -28,6 +28,7 @@ namespace snn::internal
 
         [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
         [[nodiscard]] virtual std::vector<float> computeBackOutput(std::vector<float>& inputErrors) = 0;
+        virtual void computeTrain(std::vector<float>& inputErrors) = 0;
 
     public:
         Layer() = default; // use restricted to Boost library only

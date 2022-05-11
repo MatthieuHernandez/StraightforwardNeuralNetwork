@@ -38,25 +38,49 @@ int Convolution1D::isValid() const
     return this->FilterLayer::isValid();
 }
 
+
 inline
-vector<float> Convolution1D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
+vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
-    const int beginIndex = neuronIndex * this->shapeOfInput[1];
-    const int endIndex = (neuronIndex + this->kernelSize) * this->shapeOfInput[1];
-    return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+    vector<float> outputs(this->numberOfKernels);
+    for (int i = 0, k = 0; k < this->numberOfKernels; ++i)
+    {
+        const int beginIndex = i * this->shapeOfInput[1];
+        const int endIndex = (i + this->kernelSize) * this->shapeOfInput[1];
+        vector<float> neuronInputs{inputs.begin() + beginIndex, inputs.begin() + endIndex};
+        for (int f = 0; f < this->numberOfFilters; ++f, ++k)
+        {
+            outputs[k] = this->neurons[f].output(neuronInputs);
+        }
+    }
+    return outputs;
 }
 
 inline
-void Convolution1D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error,
-                                              std::vector<float>& errors)
+vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
 {
-    const int beginIndex = neuronIndex * this->shapeOfInput[1];
-    for (int e = 0; e < (int)error.size(); ++e)
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < this->numberOfFilters; ++n)
     {
-        const int i = beginIndex + e;
-        errors[i] += error[e];
+        auto& error = this->neurons[n].backOutput(inputErrors[n]);
+        const int neuronIndex = n / this->numberOfFilters;
+        const int beginIndex = neuronIndex * this->shapeOfInput[1];
+        for (int e = 0; e < static_cast<int>(error.size()); ++e)
+        {
+            const int i = beginIndex + e;
+            errors[i] += error[e];
+        }
     }
+    return errors;
 }
+
+inline
+void Convolution1D::computeTrain(std::vector<float>& inputErrors)
+{
+    for (int n = 0; n < this->numberOfFilters; ++n)
+        this->neurons[n].train(inputErrors[n]);
+}
+
 
 bool Convolution1D::operator==(const BaseLayer& layer) const
 {

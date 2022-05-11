@@ -12,7 +12,7 @@ TEST(Convolution, SimpleConvolution2D)
     auto data = createDataForConvolutionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3, 3, 2),
-        Convolution(2, 2, activation::sigmoid),
+        Convolution(4, 2, activation::sigmoid),
         FullyConnected(2)
     }, StochasticGradientDescent(0.05f, 0.1f));
     neuralNetwork.train(data, 3000_ep);

@@ -25,6 +25,7 @@ namespace snn
             0,
             0,
             0,
+            0,
             {static_cast<int>(sizeOfInput) ...},
             std::vector<LayerOptimizerModel>()
         };
@@ -46,6 +47,7 @@ namespace snn
                 -1,
                 activation
             },
+            -1,
             -1,
             -1,
             -1,
@@ -73,6 +75,7 @@ namespace snn
             -1,
             -1,
             -1,
+            -1,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
         };
@@ -94,6 +97,7 @@ namespace snn
                 -1,
                 activation::tanh,
             },
+            -1,
             -1,
             -1,
             -1,
@@ -119,8 +123,9 @@ namespace snn
                 activation::identity
             },
             1,
-            kernelSize,
             -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             std::vector<LayerOptimizerModel>()
 
@@ -145,8 +150,9 @@ namespace snn
                 activation
             },
             numberOfLocallyConnected,
-            kernelSize,
             -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
 
@@ -162,7 +168,7 @@ namespace snn
         {
             convolution,
             -1,
-            -1,
+            1,
             -1,
             {
                 -1,
@@ -171,8 +177,9 @@ namespace snn
                 activation,
             },
             numberOfConvolution,
-            kernelSize,
             -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
         };

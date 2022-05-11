@@ -41,46 +41,68 @@ int Convolution2D::isValid() const
 }
 
 inline
-vector<float> Convolution2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
+vector<float> Convolution2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
-    const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
-    const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
-
-    for (int i = 0; i < this->kernelSize; ++i)
+    vector<float> outputs(this->numberOfKernels);
+    for (int p = 0, k = 0; k < this->numberOfKernels; ++p)
     {
-        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->kernelSize; ++j)
+        const int neuronPosX = p % this->shapeOfOutput[0];
+        const int neuronPosY = p / this->shapeOfOutput[0];
+
+        for (int i = 0; i < this->kernelSize; ++i)
         {
-            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
+            for (int j = 0; j < this->kernelSize; ++j)
             {
-                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
-                this->neuronInputs[indexKernel] = inputs[indexErrors];
+                for (int l = 0; l < this->shapeOfInput[2]; ++l)
+                {
+                    const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + l);
+                    const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + l;
+                    this->neuronInputs[indexKernel] = inputs[indexErrors];
+                }
             }
         }
+        for (int f = 0; f < this->numberOfFilters; ++f, ++k)
+        {
+            outputs[k] = this->neurons[f].output(neuronInputs);
+        }
     }
-    return this->neuronInputs;
+    return outputs;
 }
 
 inline
-void Convolution2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
+vector<float> Convolution2D::computeBackOutput(vector<float>& inputErrors)
 {
-    const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
-    const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
-
-    for (int i = 0; i < this->kernelSize; ++i)
+    vector<float> errors(this->numberOfInputs, 0);
+    for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
-        const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-        for (int j = 0; j < this->kernelSize; ++j)
+        auto& error = this->neurons[n].backOutput(inputErrors[n]);
+        const int neuronIndex = n / this->numberOfFilters;
+        const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
+        const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
+
+        for (int i = 0; i < this->kernelSize; ++i)
         {
-            for (int k = 0; k < this->shapeOfInput[2]; ++k)
+            const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
+            for (int j = 0; j < this->kernelSize; ++j)
             {
-                const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
-                errors[indexErrors] += error[indexKernel];
+                for (int k = 0; k < this->shapeOfInput[2]; ++k)
+                {
+                    const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
+                    const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
+                    errors[indexErrors] += error[indexKernel] / this->numberOfKernelsPerFilter;
+                }
             }
         }
     }
+    return errors;
+}
+
+inline
+void Convolution2D::computeTrain(std::vector<float>& inputErrors)
+{
+    for (size_t n = 0; n < this->neurons.size(); ++n)
+        this->neurons[n].train(inputErrors[n]);
 }
 
 inline

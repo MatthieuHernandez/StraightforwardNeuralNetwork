@@ -15,7 +15,7 @@ TEST(Optimizer, FindRightValueIn20)
         FullyConnected(6, activation::tanh),
         FullyConnected(1, activation::sigmoid)
     },
-        StochasticGradientDescent(0.01f, 0.4f));
+        StochasticGradientDescent(0.02f, 0.5f));
 
     neuralNetwork.train(*data, 1.00_acc || 2_s);
     auto mae = neuralNetwork.getMeanAbsoluteError();

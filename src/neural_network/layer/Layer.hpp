@@ -26,8 +26,8 @@ namespace snn::internal
     protected:
         int numberOfInputs;
 
-        [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> computeBackOutput(std::vector<float>& inputErrors) = 0;
+        [[nodiscard]] virtual Tensor computeOutput(const Tensor& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual Tensor computeBackOutput(Tensor& inputErrors) = 0;
 
     public:
         Layer() = default; // use restricted to Boost library only
@@ -39,9 +39,9 @@ namespace snn::internal
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
+        Tensor output(const Tensor& inputs, bool temporalReset) override final;
+        Tensor outputForTraining(const Tensor& inputs, bool temporalReset) override final;
+        Tensor backOutput(Tensor& inputErrors) override final;
 
         [[nodiscard]] void* getNeuron(int index) override final;
         [[nodiscard]] float getAverageOfAbsNeuronWeights() const override final;
@@ -52,7 +52,7 @@ namespace snn::internal
         [[nodiscard]] std::vector<int> getShapeOfInput() const override = 0;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
 
-        void train(std::vector<float>& inputErrors) override final;
+        void train(Tensor& inputErrors) override final;
 
         [[nodiscard]] int isValid() const override;
 

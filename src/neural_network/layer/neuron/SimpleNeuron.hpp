@@ -19,8 +19,8 @@ namespace snn::internal
         SimpleNeuron(const SimpleNeuron& neuron) = default;
         ~SimpleNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] float output(const Tensor& inputs);
+        [[nodiscard]] Tensor& backOutput(float error);
 
         void train(float error);
 

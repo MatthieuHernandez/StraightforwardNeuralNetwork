@@ -33,9 +33,9 @@ unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) co
 }
 
 
-std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+Tensor MaxPooling2D::output(const Tensor& inputs, [[maybe_unused]] bool temporalReset)
 {
-    auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
+    auto output = Tensor(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (int i = 0; i < (int)inputs.size(); ++i)
     {
         const int outputX = roughenX(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->sizeOfFilterMatrix;
@@ -48,14 +48,14 @@ std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, [[mayb
     return output;
 }
 
-vector<float> MaxPooling2D::outputForTraining(const vector<float>& inputs, bool temporalReset)
+Tensor MaxPooling2D::outputForTraining(const Tensor& inputs, bool temporalReset)
 {
     return this->output(inputs, temporalReset);
 }
 
-vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
+Tensor MaxPooling2D::backOutput(Tensor& inputErrors)
 {
-    std::vector<float> errors;
+    Tensor errors;
     errors.reserve(this->numberOfInputs);
 
     for (int z = 0; z < this->shapeOfInput[2]; ++z)
@@ -75,7 +75,7 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
     return errors;
 }
 
-void MaxPooling2D::train([[maybe_unused]] std::vector<float>& inputErrors)
+void MaxPooling2D::train([[maybe_unused]] Tensor& inputErrors)
 {
 }
 

@@ -20,10 +20,10 @@ namespace snn::internal
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        [[nodiscard]] virtual std::vector<float> createInputsForNeuron(int neuronNumber, const std::vector<float>& inputs) = 0;
-        virtual void insertBackOutputForNeuron(int neuronNumber, const std::vector<float>& error, std::vector<float>& errors) = 0;
+        [[nodiscard]] Tensor computeBackOutput(Tensor& inputErrors) override final;
+        [[nodiscard]] Tensor computeOutput(const Tensor& inputs, bool temporalReset) override final;
+        [[nodiscard]] virtual Tensor createInputsForNeuron(int neuronNumber, const Tensor& inputs) = 0;
+        virtual void insertBackOutputForNeuron(int neuronNumber, const Tensor& error, Tensor& errors) = 0;
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only

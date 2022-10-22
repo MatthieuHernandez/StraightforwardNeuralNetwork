@@ -28,7 +28,7 @@ namespace snn::internal
         bool outputNan = false;
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset);
-        std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
+        Tensor calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
 
 
         friend class boost::serialization::access;

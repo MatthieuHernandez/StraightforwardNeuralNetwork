@@ -4,6 +4,7 @@
 #include <boost/serialization/access.hpp>
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/BaseNeuron.hpp"
+#include "../../tools/Tensor.hpp"
 
 namespace snn::internal
 {
@@ -27,10 +28,10 @@ namespace snn::internal
         [[nodiscard]] virtual std::vector<int> getShapeOfInput() const = 0;
         [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
-        [[nodiscard]] virtual std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
-        virtual void train(std::vector<float>& inputErrors) = 0;
+        [[nodiscard]] virtual Tensor output(const Tensor& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual Tensor outputForTraining(const Tensor& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual Tensor backOutput(Tensor& inputErrors) = 0;
+        virtual void train(Tensor& inputErrors) = 0;
 
         [[nodiscard]] virtual int isValid() const = 0;
 

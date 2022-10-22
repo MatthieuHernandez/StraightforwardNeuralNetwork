@@ -22,7 +22,7 @@ Layer<N>::Layer(const Layer& layer)
 }
 
 template <BaseNeuron N>
-std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
+Tensor Layer<N>::output(const Tensor& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
     for (auto& optimizer : this->optimizers)
@@ -31,7 +31,7 @@ std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool tempo
 }
 
 template <BaseNeuron N>
-std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+Tensor Layer<N>::outputForTraining(const Tensor& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
     for (auto& optimizer : this->optimizers)
@@ -40,7 +40,7 @@ std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs,
 }
 
 template <BaseNeuron N>
-std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
+Tensor Layer<N>::backOutput(Tensor& inputErrors)
 {
     for (auto& optimizer : this->optimizers)
         optimizer->applyBeforeBackpropagation(inputErrors);
@@ -49,7 +49,7 @@ std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 }
 
 template <BaseNeuron N>
-void Layer<N>::train(std::vector<float>& inputErrors)
+void Layer<N>::train(Tensor& inputErrors)
 {
     for (auto& optimizer : this->optimizers)
         optimizer->applyBeforeBackpropagation(inputErrors);

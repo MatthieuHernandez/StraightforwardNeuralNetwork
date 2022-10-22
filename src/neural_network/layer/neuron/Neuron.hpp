@@ -20,12 +20,12 @@ namespace snn::internal
     protected:
 
         int numberOfInputs;
-        std::vector<float> weights;
+        Tensor weights;
         float bias;
 
-        std::vector<float> previousDeltaWeights;
-        std::vector<float> lastInputs;
-        std::vector<float> errors;
+        Tensor previousDeltaWeights;
+        Tensor lastInputs;
+        Tensor errors;
 
         float sum = 0;
 
@@ -43,7 +43,7 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const;
 
-        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] Tensor getWeights() const;
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 

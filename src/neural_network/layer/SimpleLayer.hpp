@@ -18,8 +18,8 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
+        [[nodiscard]] Tensor computeBackOutput(Tensor& inputErrors) override final;
+        [[nodiscard]] Tensor computeOutput(const Tensor& inputs, bool temporalReset) override final;
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
@@ -45,10 +45,10 @@ namespace snn::internal
     }
 
     template<>
-    std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+    Tensor SimpleLayer<RecurrentNeuron>::computeOutput(const Tensor& inputs, bool temporalReset);
 
     template<>
-    std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+    Tensor SimpleLayer<GatedRecurrentUnit>::computeOutput(const Tensor& inputs, bool temporalReset);
     
     #include "SimpleLayer.tpp"
 }

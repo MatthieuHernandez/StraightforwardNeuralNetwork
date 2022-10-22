@@ -42,23 +42,23 @@ int LocallyConnected1D::isValid() const
 }
 
 inline
-vector<float> LocallyConnected1D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
+Tensor LocallyConnected1D::createInputsForNeuron(const int neuronIndex, const Tensor& inputs)
 {
     const int beginIndex = neuronIndex * this->sizeOfNeuronInputs;
     const int endIndex = beginIndex + this->sizeOfNeuronInputs;
 
     if (endIndex <= this->shapeOfInput[0])
-        return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+        return Tensor(inputs.begin() + beginIndex, inputs.begin() + endIndex);
     else
     {
-        auto v = vector<float>(inputs.begin() + beginIndex, inputs.begin() + this->shapeOfInput[1]);
+        auto v = Tensor(inputs.begin() + beginIndex, inputs.begin() + this->shapeOfInput[1]);
         v.resize(this->sizeOfNeuronInputs, 0);
         return v;
     }
 }
 
 inline
-void LocallyConnected1D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
+void LocallyConnected1D::insertBackOutputForNeuron(const int neuronIndex, const Tensor& error, Tensor& errors)
 {
     const int beginIndex = neuronIndex * this->sizeOfNeuronInputs;
     for (int e = 0; e < (int)error.size(); ++e)

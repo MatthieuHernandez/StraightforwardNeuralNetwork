@@ -16,7 +16,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOpti
 #ifdef _MSC_VER
 #pragma warning(disable:4701)
 #endif
-float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
+float RecurrentNeuron::output(const Tensor& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
@@ -40,7 +40,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     #endif
 }
 
-std::vector<float>& RecurrentNeuron::backOutput(float error)
+Tensor& RecurrentNeuron::backOutput(float error)
 {
     error = error * outputFunction->derivative(this->sum);
 

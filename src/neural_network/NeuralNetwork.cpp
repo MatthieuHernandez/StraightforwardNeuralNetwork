@@ -70,7 +70,7 @@ void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& 
 
 vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
 {
-    auto outputs = layers[0]->output(inputs, temporalReset);
+    auto outputs = layers[0]->output(static_cast<const Tensor&>(inputs), temporalReset);
 
     for (size_t l = 1; l < this->layers.size(); ++l)
     {
@@ -85,7 +85,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
 
 std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
-    auto outputs = layers[0]->outputForTraining(inputs, temporalReset);
+    auto outputs = layers[0]->outputForTraining(static_cast<const Tensor&>(inputs), temporalReset);
 
     for (size_t l = 1; l < this->layers.size(); ++l)
     {
@@ -109,15 +109,15 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
     {
-        errors = layers[l]->backOutput(errors);
+        errors = layers[l]->backOutput(static_cast<Tensor&>(errors));
     }
-    layers[0]->train(errors);
+    layers[0]->train(static_cast<Tensor&>(errors));
 }
 
 inline
-vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+Tensor NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
 {
-    vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
+    Tensor errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
     {
         if (isnan(desired[n]))
@@ -133,7 +133,7 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
 vector<vector<float>> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
 {
     vector<vector<float>> filterOutputs;
-    auto outputs = layers[0]->output(inputs, true);
+    auto outputs = layers[0]->output(static_cast<const Tensor&>(inputs), true);
     filterOutputs.push_back(outputs);
 
     for (size_t l = 1; l < this->layers.size(); ++l)

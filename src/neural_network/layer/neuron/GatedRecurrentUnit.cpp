@@ -15,7 +15,7 @@ GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetwo
 {
 }
 
-float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
+float GatedRecurrentUnit::output(const Tensor& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
@@ -33,7 +33,7 @@ float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset
     return output;
 }
 
-std::vector<float>& GatedRecurrentUnit::backOutput(float error)
+Tensor& GatedRecurrentUnit::backOutput(float error)
 {
     float d3 = error;
     float d8 = d3 * this->updateGateOutput;
@@ -65,9 +65,9 @@ void GatedRecurrentUnit::train(float error)
     auto e3 = this->resetGate.backOutput(d16);
 }
 
-vector<float> GatedRecurrentUnit::getWeights() const
+Tensor GatedRecurrentUnit::getWeights() const
 {
-    vector<float> allWeights;
+    Tensor allWeights;
     allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
     allWeights.insert(allWeights.end(), this->updateGate.weights.begin(), this->updateGate.weights.end());
     allWeights.insert(allWeights.end(), this->outputGate.weights.begin(), this->outputGate.weights.end());

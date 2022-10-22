@@ -16,8 +16,8 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
-        void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
+        Tensor createInputsForNeuron(int neuronIndex, const Tensor& inputs) override;
+        void insertBackOutputForNeuron(int neuronIndex, const Tensor& error, Tensor& errors) override;
 
         int sizeOfNeuronInputs;
 

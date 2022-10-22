@@ -15,9 +15,10 @@ BOOST_CLASS_EXPORT(SimpleLayer<RecurrentNeuron>)
 BOOST_CLASS_EXPORT(SimpleLayer<GatedRecurrentUnit>)
 
 template <>
-std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+Tensor SimpleLayer<RecurrentNeuron>::computeOutput(const Tensor& inputs, bool temporalReset)
 {
-    std::vector<float> outputs(this->neurons.size());
+    Tensor outputs(this->neurons.size());
+
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs, temporalReset);
@@ -26,9 +27,9 @@ std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector
 }
 
 template <>
-std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+Tensor SimpleLayer<GatedRecurrentUnit>::computeOutput(const Tensor& inputs, bool temporalReset)
 {
-    std::vector<float> outputs(this->neurons.size());
+    Tensor outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs, temporalReset);

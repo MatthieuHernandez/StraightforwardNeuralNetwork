@@ -27,8 +27,8 @@ namespace snn::internal
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] float output(const Tensor& inputs, bool reset);
+        [[nodiscard]] Tensor& backOutput(float error);
         void train(float error);
 
         [[nodiscard]] int isValid() const;

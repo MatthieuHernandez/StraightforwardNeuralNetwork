@@ -46,7 +46,7 @@ int Neuron::isValid() const
     return 0;
 }
 
-vector<float> Neuron::getWeights() const
+Tensor Neuron::getWeights() const
 {
     return this->weights;
 }

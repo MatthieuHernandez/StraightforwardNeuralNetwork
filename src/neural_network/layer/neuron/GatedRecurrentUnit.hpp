@@ -15,7 +15,7 @@ namespace snn::internal
 
         friend class RecurrentNeuron;
 
-        std::vector<float> errors;
+        Tensor errors;
 
         int numberOfInputs{};
 
@@ -36,11 +36,11 @@ namespace snn::internal
         GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
         ~GatedRecurrentUnit() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] float output(const Tensor& inputs, bool reset);
+        [[nodiscard]] Tensor& backOutput(float error);
         void train(float error);
 
-        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] Tensor getWeights() const;
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 

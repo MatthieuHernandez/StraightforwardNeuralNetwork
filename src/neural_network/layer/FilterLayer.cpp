@@ -17,9 +17,9 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
 }
 
 inline
-vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+Tensor FilterLayer::computeOutput(const Tensor& inputs, [[maybe_unused]] bool temporalReset)
 {
-    vector<float> outputs(this->neurons.size());
+    Tensor outputs(this->neurons.size());
     for (int i = 0, n = 0; n < (int)this->neurons.size(); ++i)
     {
         auto neuronInputs = this->createInputsForNeuron(i, inputs);
@@ -32,9 +32,9 @@ vector<float> FilterLayer::computeOutput(const vector<float>& inputs, [[maybe_un
 }
 
 inline
-vector<float> FilterLayer::computeBackOutput(vector<float>& inputErrors)
+Tensor FilterLayer::computeBackOutput(Tensor& inputErrors)
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    Tensor errors(this->numberOfInputs, 0);
     for (int n = 0; n < (int)this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);

@@ -12,7 +12,7 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 {
 }
 
-float SimpleNeuron::output(const vector<float>& inputs)
+float SimpleNeuron::output(const Tensor& inputs)
 {
     this->lastInputs = inputs;
     float tmp = 0.0f; // to activate the SIMD optimization
@@ -25,7 +25,7 @@ float SimpleNeuron::output(const vector<float>& inputs)
     return this->outputFunction->function(this->sum);
 }
 
-vector<float>& SimpleNeuron::backOutput(float error)
+Tensor& SimpleNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
 

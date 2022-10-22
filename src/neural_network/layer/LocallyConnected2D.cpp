@@ -45,7 +45,7 @@ int LocallyConnected2D::isValid() const
 }
 
 inline
-vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
+Tensor LocallyConnected2D::createInputsForNeuron(const int neuronIndex, const Tensor& inputs)
 {
     const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
     const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
@@ -70,7 +70,7 @@ vector<float> LocallyConnected2D::createInputsForNeuron(const int neuronIndex, c
 }
 
 inline
-void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error, std::vector<float>& errors)
+void LocallyConnected2D::insertBackOutputForNeuron(const int neuronIndex, const Tensor& error, Tensor& errors)
 {
     const int neuronPosX = neuronIndex % this->shapeOfOutput[0] * this->sizeOfFilterMatrix;
     const int neuronPosY = neuronIndex / this->shapeOfOutput[0] * this->sizeOfFilterMatrix;

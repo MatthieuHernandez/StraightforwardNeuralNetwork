@@ -21,9 +21,9 @@ unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) co
     return make_unique<MaxPooling1D>(*this);
 }
 
-std::vector<float> MaxPooling1D::output(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+Tensor MaxPooling1D::output(const Tensor& inputs, [[maybe_unused]] bool temporalReset)
 {
-    auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
+    auto output = Tensor(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (size_t i = 0; i < inputs.size(); ++i)
     {
         const size_t indexOutput = i / this->sizeOfFilterMatrix;
@@ -35,14 +35,14 @@ std::vector<float> MaxPooling1D::output(const std::vector<float>& inputs, [[mayb
     return output;
 }
 
-vector<float> MaxPooling1D::outputForTraining(const vector<float>& inputs, bool temporalReset)
+Tensor MaxPooling1D::outputForTraining(const Tensor& inputs, bool temporalReset)
 {
     return this->output(inputs, temporalReset);
 }
 
-std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
+Tensor MaxPooling1D::backOutput(Tensor& inputErrors)
 {
-    std::vector<float> errors;
+    Tensor errors;
     errors.reserve(this->numberOfInputs);
     for (int i = 0, k = 0; i < this->numberOfOutputs; ++i)
     {
@@ -52,7 +52,7 @@ std::vector<float> MaxPooling1D::backOutput(std::vector<float>& inputErrors)
     return errors;
 }
 
-void MaxPooling1D::train([[maybe_unused]] std::vector<float>& inputErrors)
+void MaxPooling1D::train([[maybe_unused]] Tensor& inputErrors)
 {
 }
 

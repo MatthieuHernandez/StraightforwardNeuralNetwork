@@ -17,9 +17,9 @@ std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(std::shared_ptr<NeuralNetworkOp
 }
 
 template <BaseNeuron N>
-std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+Tensor SimpleLayer<N>::computeOutput(const Tensor& inputs, [[maybe_unused]] bool temporalReset)
 {
-    std::vector<float> outputs(this->neurons.size());
+    Tensor outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         outputs[n] = this->neurons[n].output(inputs);
@@ -28,9 +28,9 @@ std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& input
 }
 
 template <BaseNeuron N>
-std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputErrors)
+Tensor SimpleLayer<N>::computeBackOutput(Tensor& inputErrors)
 {
-    std::vector<float> errors(this->numberOfInputs, 0);
+    Tensor errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);

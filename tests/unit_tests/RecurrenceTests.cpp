@@ -46,8 +46,8 @@ TEST(Recurrence, RepeatLastInput)
 //a simple recurrent neural network can't solve this problem
 TEST(Recurrence, RepeatLastLastInput)
 {
-    vector2D<float> inputData =       {{0.2}, {0}, {1}, {0}, {1}, {1}, {0.1}, {0}, {1}, {1}, {0.9}, {1}, {0.3}, {0}, {1}, {0}, {1}, {0}, {0}};
-    vector2D<float> expectedOutputs = {{0}, {0}, {0.2}, {0}, {1}, {0}, {1}, {1}, {0}, {0.1}, {1}, {1}, {0.9}, {1}, {0.3}, {0}, {1}, {0}, {1}};
+    vector2D<float> inputData =       {{0.2f}, {0}, {1}, {0}, {1}, {1}, {0.1f}, {0}, {1}, {1}, {0.9f}, {1}, {0.3f}, {0}, {1}, {0}, {1}, {0}, {0}};
+    vector2D<float> expectedOutputs = {{0}, {0}, {0.2f}, {0}, {1}, {0}, {1}, {1}, {0}, {0.1f}, {1}, {1}, {0.9f}, {1}, {0.3f}, {0}, {1}, {0}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
     data->setPrecision(0.3f);

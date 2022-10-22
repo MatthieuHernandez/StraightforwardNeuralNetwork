@@ -34,7 +34,7 @@
 * To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests` from `build` folder.
 
 ### Windows - MSVC++ 14.2
-* You can generate a Visual Studio project by running `cmake -G"Visual Studio 16 2019" ./..` from `build` folder.
+* You can generate a Visual Studio project by running `cmake -G"Visual Studio 17 2022" ./..` from `build` folder.
 
 * To run the unit tests open `./tests/unit_tests/UnitTests.vcxproj` in Visual Studio.
 
@@ -54,7 +54,7 @@ StraightforwardNeuralNetwork neuralNetwork({
     FullyConnected(10, activation::sigmoid)
 });
 
-neuralNetwork.train(data, 0.90_acc || 20_s); // train neural network on data until 90% accuracy or 30s
+neuralNetwork.train(data, 0.90_acc || 20_s); // train neural network on data until 90% accuracy or 20s
 
 float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
 ```

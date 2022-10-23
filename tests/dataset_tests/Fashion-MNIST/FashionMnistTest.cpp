@@ -68,17 +68,17 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(4, 4, activation::GELU, ErrorMultiplier(10.0f)),
-        FullyConnected(60, activation::sigmoid, Dropout(0.1f)),
+        FullyConnected(70, activation::GELU),
+        FullyConnected(30, activation::GELU),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.005f, 0.5f));
+        StochasticGradientDescent(0.0003f, 0.85f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.8853_acc);
+    neuralNetwork.train(*data, 0.8919_acc); // Reach after 109 epochs of 2 sec.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -90,6 +90,6 @@ TEST_F(FashionMnistTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 193170);
-    ASSERT_FLOAT_EQ(accuracy, 0.8891f);
+    ASSERT_EQ(numberOfParameters, 57390);
+    ASSERT_FLOAT_EQ(accuracy, 0.8919f);
 }

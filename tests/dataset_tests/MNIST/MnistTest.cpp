@@ -111,8 +111,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        Convolution(1,5, activation::GELU, ErrorMultiplier(10.0f)),
-        FullyConnected(70),
+        Convolution(4,2, activation::ReLU),
         FullyConnected(10)
         });
     neuralNetwork.train(*data, 1_ep || 15_s);

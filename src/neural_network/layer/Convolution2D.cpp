@@ -1,4 +1,5 @@
 #include <boost/serialization/export.hpp>
+#include <utility>
 #include "Convolution2D.hpp"
 #include "LayerModel.hpp"
 
@@ -10,7 +11,7 @@ using namespace tools;
 BOOST_CLASS_EXPORT(Convolution2D)
 
 Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : FilterLayer(model, optimizer)
+    : FilterLayer(model, std::move(optimizer))
 {
     this->shapeOfOutput = {
         this->shapeOfInput[0] - (this->kernelSize - 1),
@@ -18,7 +19,36 @@ Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->numberOfFilters
     };
     this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * this->shapeOfInput[2];
-    this->neuronInputs.resize(this->sizeOfNeuronInputs);
+    this->buildKernelIndexes();
+}
+
+void Convolution2D::buildKernelIndexes()
+{
+    this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
+    const int maxX = this->shapeOfInput[0];
+    const int maxC = this->shapeOfInput[2];
+    const int kSize = this->kernelSize;
+    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    {
+        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
+        const int kernelPosX = k % this->shapeOfOutput[0];
+        const int kernelPosY = k / this->shapeOfOutput[1];
+        for (int y = 0; y < kSize; ++y)
+        {
+            const int inputIndexY = (kernelPosY + y) * maxX + kernelPosX;
+            for (int x = 0; x < kSize; ++x)
+            {
+                const int inputIndexX = (inputIndexY + x) * maxC;
+                const int kernelIndexX = (y * kSize + x) * maxC;
+                for (int c = 0; c < maxC; ++c)
+                {
+                    const int inputIndex = inputIndexX + c;
+                    const int kernelIndex = kernelIndexX + c;
+                    this->kernelIndexes[k][kernelIndex] = inputIndex;
+                }
+            }
+        }
+    }
 }
 
 inline
@@ -44,27 +74,17 @@ inline
 vector<float> Convolution2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->numberOfKernels);
-    for (int p = 0, k = 0; k < this->numberOfKernels; ++p)
+    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
     {
-        const int neuronPosX = p % this->shapeOfOutput[0];
-        const int neuronPosY = p / this->shapeOfOutput[0];
-
-        for (int i = 0; i < this->kernelSize; ++i)
+        for (size_t i = 0; i < neuronInputs.size(); ++i)
         {
-            const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-            for (int j = 0; j < this->kernelSize; ++j)
-            {
-                for (int l = 0; l < this->shapeOfInput[2]; ++l)
-                {
-                    const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + l);
-                    const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + l;
-                    this->neuronInputs[indexKernel] = inputs[indexErrors];
-                }
-            }
+            const auto& index = kernelIndexes[k][i];
+            neuronInputs[i] = inputs[index];
         }
-        for (int f = 0; f < this->numberOfFilters; ++f, ++k)
+        for (size_t n = 0; n < this->neurons.size(); ++n, ++o)
         {
-            outputs[k] = this->neurons[f].output(neuronInputs);
+            outputs[o] = this->neurons[n].output(neuronInputs);
         }
     }
     return outputs;
@@ -74,25 +94,17 @@ inline
 vector<float> Convolution2D::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < (int)this->neurons.size(); ++n)
+    for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
     {
-        auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        const int neuronIndex = n / this->numberOfFilters;
-        const int neuronPosX = neuronIndex % this->shapeOfOutput[0];
-        const int neuronPosY = neuronIndex / this->shapeOfOutput[0];
-
-        for (int i = 0; i < this->kernelSize; ++i)
+        for (auto& neuron : this->neurons)
         {
-            const int beginIndex = ((neuronPosY + i) * this->shapeOfInput[0] + neuronPosX) * this->shapeOfInput[2];
-            for (int j = 0; j < this->kernelSize; ++j)
+            auto& error = neuron.backOutput(inputErrors[i]);
+            for (size_t e = 0; e < error.size(); ++e)
             {
-                for (int k = 0; k < this->shapeOfInput[2]; ++k)
-                {
-                    const int indexErrors = beginIndex + (j * this->shapeOfInput[2] + k);
-                    const int indexKernel = (i * this->kernelSize + j) * this->shapeOfInput[2] + k;
-                    errors[indexErrors] += error[indexKernel] / this->numberOfKernelsPerFilter;
-                }
+                const auto& index = kernelIndexes[k][e];
+                errors[index] += error[e];
             }
+            ++i;
         }
     }
     return errors;
@@ -108,12 +120,11 @@ void Convolution2D::computeTrain(std::vector<float>& inputErrors)
 inline
 bool Convolution2D::operator==(const BaseLayer& layer) const
 {
-        try
+    try
     {
         const auto& f = dynamic_cast<const Convolution2D&>(layer);
         return this->FilterLayer::operator==(layer)
-            && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs
-            && this->neuronInputs == f.neuronInputs;
+            && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs;
     }
     catch (bad_cast&)
     {

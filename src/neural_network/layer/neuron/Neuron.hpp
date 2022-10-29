@@ -48,6 +48,7 @@ namespace snn::internal
         [[nodiscard]] int isValid() const;
 
         [[nodiscard]] std::vector<float> getWeights() const;
+        void setWeights(std::vector<float> w);
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 

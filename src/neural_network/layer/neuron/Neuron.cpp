@@ -51,6 +51,13 @@ vector<float> Neuron::getWeights() const
     return this->weights;
 }
 
+void Neuron::setWeights(std::vector<float> w)
+{
+    if (this->weights.size() != w.size())
+        throw std::runtime_error("The size of weights does not match.");
+    this->weights = std::move(w);
+}
+
 int Neuron::getNumberOfParameters() const
 {
     return static_cast<int>(this->weights.size()) + 1;
@@ -68,7 +75,7 @@ NeuralNetworkOptimizer* Neuron::getOptimizer() const
 
 void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
-    this->optimizer = newOptimizer;
+    this->optimizer = std::move(newOptimizer);
 }
 
 bool Neuron::operator==(const Neuron& neuron) const

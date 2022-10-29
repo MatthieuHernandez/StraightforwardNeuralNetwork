@@ -17,7 +17,7 @@ namespace snn::internal
     protected :
         int numberOfFilters;
         int numberOfKernels;
-        float numberOfKernelsPerFilter;
+        int numberOfKernelsPerFilter;
         int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;

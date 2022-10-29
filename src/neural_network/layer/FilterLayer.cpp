@@ -13,7 +13,7 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
 {
     this->numberOfFilters = model.numberOfFilters;
     this->numberOfKernels = model.numberOfKernels;
-    this->numberOfKernelsPerFilter = static_cast<float>(model.numberOfKernels) / this->numberOfFilters;
+    this->numberOfKernelsPerFilter = model.numberOfKernelsPerFilter;
     this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
 }

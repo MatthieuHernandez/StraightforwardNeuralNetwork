@@ -21,12 +21,12 @@ shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
 
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
 {
-    auto lr = this->learningRate; // to activate the SIMD optimization
+    auto lr = this->learningRate / neuron.lastInputs.size(); // to activate the SIMD optimization
     auto m = this->momentum;
     #pragma omp simd
     for (size_t w = 0; w < neuron.weights.size(); ++w)
     {
-        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
+        const auto deltaWeights = lr * error * neuron.lastInputs.back()[w] + m * neuron.previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }
@@ -39,12 +39,12 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     size_t w = 0;
-    auto lr = this->learningRate; // to activate the SIMD optimization
+    auto lr = this->learningRate / neuron.lastInputs.size(); // to activate the SIMD optimization
     auto m = this->momentum; 
     #pragma omp simd
-    for (w = 0; w < neuron.lastInputs.size(); ++w)
+    for (w = 0; w < neuron.lastInputs.back().size(); ++w)
     {
-        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
+        const auto deltaWeights = lr * error * neuron.lastInputs.back()[w] + m * neuron.previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights;
         neuron.previousDeltaWeights[w] = deltaWeights;
     }

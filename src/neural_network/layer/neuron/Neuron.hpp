@@ -20,11 +20,12 @@ namespace snn::internal
     protected:
 
         int numberOfInputs;
+        int batchSize;
         std::vector<float> weights;
         float bias;
 
         std::vector<float> previousDeltaWeights;
-        std::vector<float> lastInputs;
+        std::vector<std::vector<float>> lastInputs;
         std::vector<float> errors;
 
         float sum = 0;

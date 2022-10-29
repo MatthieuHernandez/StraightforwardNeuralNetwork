@@ -14,6 +14,7 @@ namespace snn
         NeuronModel neuron;
         int numberOfFilters;
         int sizeOfFilerMatrix;
+        int numberOfKernelsPerFilter;
         std::vector<int> shapeOfInput;
         std::vector<LayerOptimizerModel> optimizers;
     };

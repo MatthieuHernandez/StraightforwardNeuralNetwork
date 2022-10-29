@@ -11,6 +11,7 @@ BOOST_CLASS_EXPORT(RecurrentNeuron)
 RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {
+    this->lastInputs.resize(1);
 }
 
 #ifdef _MSC_VER
@@ -20,7 +21,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
-    this->lastInputs = inputs;
+    this->lastInputs[0] = inputs;
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
@@ -40,9 +41,9 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     #endif
 }
 
-std::vector<float>& RecurrentNeuron::backOutput(float error)
+vector<float>& RecurrentNeuron::backOutput(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
+    error = error * this->outputFunction->derivative(this->sum);
 
     #pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
@@ -55,7 +56,7 @@ std::vector<float>& RecurrentNeuron::backOutput(float error)
 
 void RecurrentNeuron::train(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
+    error = error * this->outputFunction->derivative(this->sum);
     this->optimizer->updateWeights(*this, error);
 }
 

@@ -7,12 +7,13 @@ using namespace internal;
 
 Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
+      batchSize(model.batchSize),
       activationFunction(model.activationFunction),
       optimizer(optimizer)
 
 {
     this->previousDeltaWeights.resize(model.numberOfWeights, 0);
-    this->lastInputs.resize(model.numberOfInputs, 0);
+    this->lastInputs.reserve(model.batchSize);
     this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);

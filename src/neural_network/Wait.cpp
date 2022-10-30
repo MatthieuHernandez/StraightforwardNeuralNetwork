@@ -88,8 +88,9 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
 
 int Wait::getDurationSinceLastTime()
 {
-    const auto currentDuration = static_cast<int>(duration_cast<seconds>(system_clock::now() - this->last).count());
-    this->last = system_clock::now();
+    const auto now = system_clock::now();
+    const auto currentDuration = static_cast<int>(duration_cast<seconds>(now - this->last).count());
+    this->last = now;
     return currentDuration;
 }
 

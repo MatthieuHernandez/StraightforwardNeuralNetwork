@@ -124,13 +124,13 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(28, 28, 1),
-        LocallyConnected(1, 2, activation::sigmoid),
-        Convolution(1, 2, activation::sigmoid),
+        LocallyConnected(2, 2, activation::ReLU),
+        Convolution(2, 2, activation::ReLU),
         FullyConnected(70),
         Convolution(1, 4, activation::sigmoid),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.03f, 0.90f));
+        StochasticGradientDescent(0.02f, 0.90f));
 
     neuralNetwork.train(*data, 2_ep || 25_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();

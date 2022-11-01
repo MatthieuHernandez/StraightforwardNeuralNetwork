@@ -24,4 +24,6 @@ add_executable(DatasetTests ${SOURCES})
 
 target_link_libraries(DatasetTests ExtendedGTest AudioFile StraightforwardNeuralNetwork)
 
+set_target_properties(DatasetTests PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--gtest_catch_exceptions=$<CONFIG:Release>")
+
 install(TARGETS DatasetTests DESTINATION bin)

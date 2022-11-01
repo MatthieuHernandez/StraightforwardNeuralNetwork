@@ -9,6 +9,18 @@
 *.out
 *.tmp
 *.bmp
+*.log
+*.tlog
+*.recip
+*.lib
+*.pdb
+*.sln
+*.vcxproj*
+*.exe
+*.exp
+*.recipe
+*.user
+*.ilk
 
 DatasetTests
 UnitTests

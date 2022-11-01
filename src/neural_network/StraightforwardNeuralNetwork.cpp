@@ -84,13 +84,13 @@ void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, i
     if (!this->isIdle)
         throw std::runtime_error("Neural network is already training");
     this->stopTrainingAsync();
-    wait.startClock();
     this->trainSync(data, wait, batchSize, evaluationFrequency);
 }
 
 void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int batchSize, const int evaluationFrequency)
 {
     log<minimal>("Start training");
+    wait.startClock();
     this->epoch = 0;
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;

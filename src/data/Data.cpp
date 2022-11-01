@@ -215,39 +215,39 @@ void Data::normalization(const float min, const float max)
 {
     try
     {
-        vector2D<float>* inputsTraining = &this->sets[training].inputs;
-        vector2D<float>* inputsTesting = &this->sets[testing].inputs;
+        vector2D<float>& inputsTraining = this->sets[training].inputs;
+        vector2D<float>& inputsTesting = this->sets[testing].inputs;
         //TODO: if the first pixel of images is always black, normalization will be wrong if testing set is different
         for (int j = 0; j < this->sizeOfData; j++)
         {
-            float minValueOfVector = (*inputsTraining)[0][j];
-            float maxValueOfVector = (*inputsTraining)[0][j];
+            float minValueOfVector = inputsTraining[0][j];
+            float maxValueOfVector = inputsTraining[0][j];
 
-            for (size_t i = 1; i < (*inputsTraining).size(); i++)
+            for (size_t i = 1; i < inputsTraining.size(); i++)
             {
-                if ((*inputsTraining)[i][j] < minValueOfVector)
+                if (inputsTraining[i][j] < minValueOfVector)
                 {
-                    minValueOfVector = (*inputsTraining)[i][j];
+                    minValueOfVector = inputsTraining[i][j];
                 }
-                else if ((*inputsTraining)[i][j] > maxValueOfVector)
+                else if (inputsTraining[i][j] > maxValueOfVector)
                 {
-                    maxValueOfVector = (*inputsTraining)[i][j];
+                    maxValueOfVector = inputsTraining[i][j];
                 }
             }
 
             const float difference = maxValueOfVector - minValueOfVector;
 
-            for (size_t i = 0; i < (*inputsTraining).size(); i++)
+            for (size_t i = 0; i < inputsTraining.size(); i++)
             {
                 if (difference != 0)
-                    (*inputsTraining)[i][j] = ((*inputsTraining)[i][j] - minValueOfVector) / difference;
-                (*inputsTraining)[i][j] = (*inputsTraining)[i][j] * (max - min) + min;
+                    inputsTraining[i][j] = (inputsTraining[i][j] - minValueOfVector) / difference;
+                inputsTraining[i][j] = inputsTraining[i][j] * (max - min) + min;
             }
-            for (size_t i = 0; i < (*inputsTesting).size(); i++)
+            for (size_t i = 0; i < inputsTesting.size(); i++)
             {
                 if (difference != 0)
-                    (*inputsTesting)[i][j] = ((*inputsTesting)[i][j] - minValueOfVector) / difference;
-                (*inputsTesting)[i][j] = (*inputsTesting)[i][j] * (max - min) + min;
+                    inputsTesting[i][j] = (inputsTesting[i][j] - minValueOfVector) / difference;
+                inputsTesting[i][j] = inputsTesting[i][j] * (max - min) + min;
             }
         }
     }

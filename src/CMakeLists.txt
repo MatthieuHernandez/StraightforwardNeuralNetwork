@@ -16,8 +16,8 @@ file(GLOB SOURCES
     "neural_network/layer/neuron/activation_function/*.cpp"
 )
 
-include_directories(external_library/boost_1_71_0_minimal)
-add_subdirectory(external_library/boost_1_71_0_minimal/libs/serialization)
+include_directories(external_library/boost_1_80_0_minimal)
+add_subdirectory(external_library/boost_1_80_0_minimal/libs/serialization)
 
 include_directories(external_library/bitmap)
 add_subdirectory(external_library/bitmap)

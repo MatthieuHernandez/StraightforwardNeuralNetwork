@@ -46,6 +46,6 @@ unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData)
             expectedOutputs.push_back({0.0f});
     }
     unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
-    data->setPrecision(0.3);
+    data->setPrecision(0.3f);
     return data;
 }

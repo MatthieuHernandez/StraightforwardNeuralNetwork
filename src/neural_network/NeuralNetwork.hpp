@@ -1,20 +1,20 @@
 #pragma once
 #include <memory>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/shared_ptr.hpp>
-#include "optimizer/NeuralNetworkOptimizer.hpp"
-#include "layer/LayerModel.hpp"
-#include "layer/FullyConnected.hpp"
-#include "layer/Convolution1D.hpp"
-#include "layer/Convolution2D.hpp"
+#include <boost/serialization/vector.hpp>
 #include "StatisticAnalysis.hpp"
 #include "layer/BaseLayer.hpp"
-#include "layer/Recurrence.hpp"
+#include "layer/Convolution1D.hpp"
+#include "layer/Convolution2D.hpp"
+#include "layer/FullyConnected.hpp"
 #include "layer/GruLayer.hpp"
+#include "layer/LayerModel.hpp"
 #include "layer/LocallyConnected1D.hpp"
 #include "layer/LocallyConnected2D.hpp"
 #include "layer/MaxPooling1D.hpp"
 #include "layer/MaxPooling2D.hpp"
+#include "layer/Recurrence.hpp"
+#include "optimizer/NeuralNetworkOptimizer.hpp"
 #include "optimizer/NeuralNetworkOptimizerModel.hpp"
 
 namespace snn::internal

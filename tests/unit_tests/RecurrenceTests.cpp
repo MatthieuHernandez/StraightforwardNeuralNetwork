@@ -39,7 +39,6 @@ TEST(Recurrence, RepeatLastInput)
         FullyConnected(1, activation::tanh)
     },
         StochasticGradientDescent(0.02f));
-
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 

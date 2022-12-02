@@ -14,7 +14,9 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 
 float SimpleNeuron::output(const vector<float>& inputs)
 {
-    this->lastInputs.push_back(inputs);
+    this->lastInputs.push(inputs);
+    if (static_cast<int>(this->lastInputs.size()) > this->batchSize)
+        this->lastInputs.pop();
     float tmp = 0.0f; // to activate the SIMD optimization
     #pragma omp simd
     for (size_t w = 0; w < this->weights.size(); ++w)
@@ -37,7 +39,7 @@ vector<float>& SimpleNeuron::backOutput(float error)
     while (!this->lastInputs.empty())
     {
         this->optimizer->updateWeights(*this, error);
-        this->lastInputs.pop_back();
+        this->lastInputs.pop();
     }
     return this->errors;
 }
@@ -48,7 +50,7 @@ void SimpleNeuron::train(float error)
     while (!this->lastInputs.empty())
     {
         this->optimizer->updateWeights(*this, error);
-        this->lastInputs.pop_back();
+        this->lastInputs.pop();
     }
 }
 

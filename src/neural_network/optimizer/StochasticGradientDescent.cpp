@@ -39,9 +39,9 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     size_t w = 0;
-    auto lr = this->learningRate / neuron.lastInputs.size(); // to activate the SIMD optimization
-    auto m = this->momentum; 
-    #pragma omp simd
+    auto lr = this->learningRate / neuron.lastInputs.size();
+    auto m = this->momentum;
+    #pragma omp simd // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < neuron.lastInputs.back().size(); ++w)
     {
         const auto deltaWeights = lr * error * neuron.lastInputs.back()[w] + m * neuron.previousDeltaWeights[w];

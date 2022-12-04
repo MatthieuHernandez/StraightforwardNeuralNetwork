@@ -14,8 +14,7 @@ ProblemComposite::ProblemComposite(Set sets[2], const int numberOfLabels)
 
 int ProblemComposite::isValid()
 {
-    if (&this->sets[training] == nullptr
-        && &this->sets[testing] == nullptr)
+    if (this->sets == nullptr)
         return 402;
     return 0;
 }

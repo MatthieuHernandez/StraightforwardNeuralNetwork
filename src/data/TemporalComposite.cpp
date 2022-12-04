@@ -18,8 +18,7 @@ void TemporalComposite::unshuffle()
 
 int TemporalComposite::isValid()
 {
-    if (&this->sets[training] == nullptr
-     && &this->sets[testing] == nullptr)
+    if (this->sets == nullptr)
         return 402;
     return 0;
 }

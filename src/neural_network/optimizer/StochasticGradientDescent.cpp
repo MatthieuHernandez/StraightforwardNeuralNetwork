@@ -38,7 +38,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 #endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
-    size_t w;
+    size_t w = 0;
     auto lr = this->learningRate; // to activate the SIMD optimization
     auto m = this->momentum; 
     #pragma omp simd

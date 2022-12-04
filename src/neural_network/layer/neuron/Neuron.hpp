@@ -1,7 +1,10 @@
 #pragma once
 #include <vector>
-#include <boost/serialization/vector.hpp>
+#include <queue>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/deque.hpp> // required to include queue.hpp
+#include <boost/serialization/queue.hpp>
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"

@@ -15,6 +15,30 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->shapeOfInput[0] - (this->kernelSize - 1),
         this->numberOfFilters
     };
+    this->sizeOfNeuronInputs = this->kernelSize *  this->shapeOfInput[1];
+    this->buildKernelIndexes();
+}
+
+void Convolution1D::buildKernelIndexes()
+{
+    this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
+    const int maxC = this->shapeOfInput[1];
+    const int kSize = this->kernelSize;
+    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    {
+        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
+        for (int x = 0; x < kSize; ++x)
+        {
+            const int inputIndexX = (k + x) * maxC;
+            const int kernelIndexX = x * maxC;
+            for (int c = 0; c < maxC; ++c)
+            {
+                const int inputIndex = inputIndexX + c;
+                const int kernelIndex = kernelIndexX + c;
+                this->kernelIndexes[k][kernelIndex] = inputIndex;
+            }
+        }
+    }
 }
 
 inline
@@ -43,14 +67,17 @@ inline
 vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->numberOfKernels);
-    for (int i = 0, k = 0; k < this->numberOfKernels; ++i)
+    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
     {
-        const int beginIndex = i * this->shapeOfInput[1];
-        const int endIndex = (i + this->kernelSize) * this->shapeOfInput[1];
-        vector<float> neuronInputs{inputs.begin() + beginIndex, inputs.begin() + endIndex};
-        for (int f = 0; f < this->numberOfFilters; ++f, ++k)
+        for (size_t i = 0; i < neuronInputs.size(); ++i)
         {
-            outputs[k] = this->neurons[f].output(neuronInputs);
+            const auto& index = kernelIndexes[k][i];
+            neuronInputs[i] = inputs[index];
+        }
+        for (size_t n = 0; n < this->neurons.size(); ++n, ++o)
+        {
+            outputs[o] = this->neurons[n].output(neuronInputs);
         }
     }
     return outputs;
@@ -60,15 +87,17 @@ inline
 vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->numberOfFilters; ++n)
+    for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
     {
-        auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        const int neuronIndex = n / this->numberOfFilters;
-        const int beginIndex = neuronIndex * this->shapeOfInput[1];
-        for (int e = 0; e < static_cast<int>(error.size()); ++e)
+        for (auto& neuron : this->neurons)
         {
-            const int i = beginIndex + e;
-            errors[i] += error[e];
+            auto& error = neuron.backOutput(inputErrors[i]);
+            for (size_t e = 0; e < error.size(); ++e)
+            {
+                const auto& index = kernelIndexes[k][e];
+                errors[index] += error[e];
+            }
+            ++i;
         }
     }
     return errors;

@@ -16,6 +16,7 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->numberOfFilters
     };
     this->sizeOfNeuronInputs = this->kernelSize *  this->shapeOfInput[1];
+    this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
 }
 
@@ -61,7 +62,6 @@ int Convolution1D::isValid() const
     }
     return this->FilterLayer::isValid();
 }
-
 
 inline
 vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
@@ -109,8 +109,6 @@ void Convolution1D::computeTrain(std::vector<float>& inputErrors)
     for (int n = 0; n < this->numberOfFilters; ++n)
         this->neurons[n].train(inputErrors[n]);
 }
-
-
 bool Convolution1D::operator==(const BaseLayer& layer) const
 {
     return this->FilterLayer::operator==(layer);

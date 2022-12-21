@@ -19,10 +19,9 @@ LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetwo
         this->shapeOfInput[1] / this->kernelSize + restY,
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * this->shapeOfInput[2];
+    this->numberOfNeuronsPerFilter = this->numberOfKernelsPerFilter;
     this->buildKernelIndexes();
 }
-
 
 void LocallyConnected2D::buildKernelIndexes()
 {

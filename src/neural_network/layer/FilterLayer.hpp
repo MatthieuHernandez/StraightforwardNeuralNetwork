@@ -18,12 +18,14 @@ namespace snn::internal
         int numberOfFilters;
         int numberOfKernels;
         int numberOfKernelsPerFilter;
+        int numberOfNeuronsPerFilter;
         int kernelSize;
+        int sizeOfNeuronInputs;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
+        std::vector<std::vector<int>> kernelIndexes;
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override = 0;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override = 0;
+        virtual void buildKernelIndexes() = 0;
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only
@@ -49,6 +51,7 @@ namespace snn::internal
         ar & this->numberOfFilters;
         ar & this->numberOfKernels;
         ar & this->numberOfKernelsPerFilter;
+        ar & this->numberOfNeuronsPerFilter;
         ar & this->kernelSize;
         ar & this->shapeOfInput;
         ar & this->shapeOfOutput;

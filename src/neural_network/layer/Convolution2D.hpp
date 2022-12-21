@@ -14,14 +14,10 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        int sizeOfNeuronInputs;
-        std::vector<std::vector<size_t>> kernelIndexes;
-        std::vector<std::vector<size_t>> errorIndexes;
-
-        void buildKernelIndexes();
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
         void computeTrain(std::vector<float>& inputErrors) override;
+        void buildKernelIndexes() override;
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only

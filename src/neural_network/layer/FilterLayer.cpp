@@ -16,6 +16,7 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
     this->numberOfKernelsPerFilter = model.numberOfKernelsPerFilter;
     this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
+    this->sizeOfNeuronInputs = model.neuron.numberOfInputs;
 }
 
 std::vector<int> FilterLayer::getShapeOfInput() const

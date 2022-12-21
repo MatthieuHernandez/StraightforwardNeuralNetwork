@@ -18,7 +18,7 @@ Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->shapeOfInput[1] - (this->kernelSize - 1),
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * this->shapeOfInput[2];
+    this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
 }
 
@@ -116,7 +116,6 @@ void Convolution2D::computeTrain(std::vector<float>& inputErrors)
     for (size_t n = 0; n < this->neurons.size(); ++n)
         this->neurons[n].train(inputErrors[n]);
 }
-
 inline
 bool Convolution2D::operator==(const BaseLayer& layer) const
 {

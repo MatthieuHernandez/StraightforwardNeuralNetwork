@@ -18,7 +18,7 @@ LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetwo
         this->shapeOfInput[0] / this->kernelSize + rest,
         this->numberOfFilters
     };
-    this->sizeOfNeuronInputs = this->kernelSize * this->shapeOfInput[1];
+    this->numberOfNeuronsPerFilter = this->numberOfKernelsPerFilter;
     this->buildKernelIndexes();
 }
 

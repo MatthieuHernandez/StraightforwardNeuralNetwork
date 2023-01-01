@@ -30,7 +30,7 @@ TEST(Convolution, LayerConvolution1D)
         6,
         3,
         3,
-        {5, 2},
+        {2, 5},
         {}
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
@@ -76,7 +76,7 @@ TEST(Convolution, LayerConvolution2D)
         18,
         9,
         3,
-        {5, 5, 2},
+        {2, 5, 5},
         {}
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
@@ -95,7 +95,7 @@ TEST(Convolution, SimpleConvolution1D)
     auto data = createDataForConvolutionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {
-            Input(9, 2),
+            Input(2, 9),
             Convolution(3, 4, activation::iSigmoid),
             FullyConnected(2)
         },
@@ -109,7 +109,7 @@ TEST(Convolution, SimpleConvolution2D)
 {
     auto data = createDataForConvolutionTests();
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(3, 3, 2),
+        Input(2, 3, 3),
         Convolution(4, 2, activation::iSigmoid),
         FullyConnected(2)
     }, StochasticGradientDescent(0.03f, 0.8f));

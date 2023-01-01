@@ -16,13 +16,13 @@ MaxPooling2D::MaxPooling2D(LayerModel& model)
     this->kernelSize = model.kernelSize;
     this->shapeOfInput = model.shapeOfInput;
 
-    const int restX = shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % this->kernelSize == 0 ? 0 : 1;
+    const int restX = shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[Y] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->kernelSize + restX,
-        this->shapeOfInput[1] / this->kernelSize + restY,
-        1
+        1,
+        this->shapeOfInput[X] / this->kernelSize + restX,
+        this->shapeOfInput[Y] / this->kernelSize + restY,
     };
 }
 
@@ -38,9 +38,9 @@ std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, [[mayb
     auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
     for (int i = 0; i < (int)inputs.size(); ++i)
     {
-        const int outputX = roughenX(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->kernelSize;
-        const int outputY = roughenY(i, this->shapeOfInput[0], this->shapeOfInput[1]) / this->kernelSize;
-        const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[0]);
+        const int outputX = roughenX(i, this->shapeOfInput[X], this->shapeOfInput[Y]) / this->kernelSize;
+        const int outputY = roughenY(i, this->shapeOfInput[X], this->shapeOfInput[Y]) / this->kernelSize;
+        const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[X]);
 
         if (output[indexOutput] <= inputs[i])
             output[indexOutput] = inputs[i];
@@ -58,15 +58,15 @@ vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
     std::vector<float> errors;
     errors.reserve(this->numberOfInputs);
 
-    for (int z = 0; z < this->shapeOfInput[2]; ++z)
+    for (int y = 0; y < this->shapeOfInput[Y]; ++y)
     {
-        for (int y = 0; y < this->shapeOfInput[1]; ++y)
+        for (int x = 0; x < this->shapeOfInput[X]; ++x)
         {
-            for (int x = 0; x < this->shapeOfInput[0]; ++x)
+            for (int c = 0; c < this->shapeOfInput[C]; ++c)
             {
                 const int outputX = x / this->kernelSize;
                 const int outputY = y / this->kernelSize;
-                const int i = flatten(outputX, outputY, this->shapeOfOutput[0]);
+                const int i = flatten(outputX, outputY, this->shapeOfOutput[X]);
 
                 errors.push_back(inputErrors[i]);
             }

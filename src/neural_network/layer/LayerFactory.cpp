@@ -15,7 +15,7 @@ using namespace snn;
 using namespace internal;
 
 inline
-int computeNumberOfInputs(vector<int>& shapeOfInput)
+int computeNumberOfInputs(const vector<int>& shapeOfInput)
 {
     int numberOfInputs = 1;
     for (auto size : shapeOfInput)
@@ -24,58 +24,58 @@ int computeNumberOfInputs(vector<int>& shapeOfInput)
 }
 
 inline
-int computeNumberOfOutputsForMaxPooling1D(int kernelSize, vector<int>& shapeOfInput)
+int computeNumberOfOutputsForMaxPooling1D(int kernelSize, const vector<int>& shapeOfInput)
 {
-    const int rest = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
+    const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
-    return ((shapeOfInput[0] / kernelSize) + rest);
+    return ((shapeOfInput[X] / kernelSize) + rest);
 }
 
 inline
-int computeNumberOfOutputsForMaxPooling2D(int kernelSize, vector<int>& shapeOfInput)
+int computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<int>& shapeOfInput)
 {
-    const int restX = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % kernelSize == 0 ? 0 : 1;
+    const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
 
-    return ((shapeOfInput[0] / kernelSize) + restX) * ((shapeOfInput[1] / kernelSize) + restY);
+    return ((shapeOfInput[X] / kernelSize) + restX) * ((shapeOfInput[Y] / kernelSize) + restY);
 }
 
 inline
 int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected,
                                                 int kernelSize,
-                                                vector<int>& shapeOfInput)
+                                                const vector<int>& shapeOfInput)
 {
-    const int rest = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
+    const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
-    return numberOfLocallyConnected * ((shapeOfInput[0] / kernelSize) + rest);
+    return numberOfLocallyConnected * ((shapeOfInput[X] / kernelSize) + rest);
 }
 
 inline
 int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected,
                                                 int kernelSize,
-                                                vector<int>& shapeOfInput)
+                                                const vector<int>& shapeOfInput)
 {
-    const int restX = shapeOfInput[0] % kernelSize == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % kernelSize == 0 ? 0 : 1;
+    const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
 
-    return numberOfLocallyConnected * ((shapeOfInput[0] / kernelSize) + restX) * ((shapeOfInput[1] /
+    return numberOfLocallyConnected * ((shapeOfInput[X] / kernelSize) + restX) * ((shapeOfInput[Y] /
         kernelSize) + restY);
 }
 
 inline
 int computeNumberOfKernelsForConvolution1D(int numberOfConvolution,
                                            int kernelSize,
-                                           vector<int>& shapeOfInput)
+                                           const vector<int>& shapeOfInput)
 {
-    return numberOfConvolution * (shapeOfInput[0] - (kernelSize - 1));
+    return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1));
 }
 
 inline
 int computeNumberOfKernelsForConvolution2D(int numberOfConvolution,
                                            int kernelSize,
-                                           vector<int>& shapeOfInput)
+                                           const vector<int>& shapeOfInput)
 {
-    return numberOfConvolution * (shapeOfInput[0] - (kernelSize - 1)) * (shapeOfInput[1] - (
+    return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1)) * (shapeOfInput[Y] - (
         kernelSize - 1));
 }
 
@@ -122,11 +122,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
     case maxPooling:
         if (shapeOfInput.size() == 1)
         {
-            shapeOfInput.push_back(1);
+            shapeOfInput = {1, shapeOfInput[0]};
         }
         if (shapeOfInput.size() == 2)
         {
-            if (model.kernelSize > shapeOfInput[0])
+            if (model.kernelSize > shapeOfInput[X])
             {
                 throw InvalidArchitectureException("Kernel of max pooling layer is too big.");
             }
@@ -136,8 +136,8 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
         }
         if (shapeOfInput.size() == 3)
         {
-            if (model.kernelSize > shapeOfInput[0]
-                || model.kernelSize > shapeOfInput[1])
+            if (model.kernelSize > shapeOfInput[X]
+                || model.kernelSize > shapeOfInput[Y])
             {
                 throw InvalidArchitectureException("Kernel of max pooling layer is too big.");
             }
@@ -152,11 +152,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
     case locallyConnected:
         if (shapeOfInput.size() == 1)
         {
-            shapeOfInput.push_back(1);
+            shapeOfInput = { 1, shapeOfInput[0] };
         }
         if (shapeOfInput.size() == 2)
         {
-            if (model.kernelSize > shapeOfInput[0])
+            if (model.kernelSize > shapeOfInput[X])
             {
                 throw InvalidArchitectureException("Kernel of locally connected layer is too big.");
             }
@@ -167,7 +167,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
                 model.shapeOfInput);
             model.numberOfKernels = model.numberOfNeurons;
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
-            model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[1];
+            model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;
@@ -175,8 +175,8 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
         }
         if (shapeOfInput.size() == 3)
         {
-            if (model.kernelSize > shapeOfInput[0]
-                || model.kernelSize > shapeOfInput[1])
+            if (model.kernelSize > shapeOfInput[X]
+                || model.kernelSize > shapeOfInput[Y])
             {
                 throw InvalidArchitectureException("Kernel of locally connected layer is too big.");
             }
@@ -184,7 +184,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfNeurons = computeNumberOfNeuronsForLocallyConnected2D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
             model.numberOfKernels = model.numberOfNeurons;
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
-            model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[2];
+            model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;
@@ -197,11 +197,11 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
     case convolution:
         if (shapeOfInput.size() == 1)
         {
-            shapeOfInput.push_back(1);
+            shapeOfInput = { 1, shapeOfInput[0] };
         }
         if (shapeOfInput.size() == 2)
         {
-            if (model.kernelSize > shapeOfInput[0])
+            if (model.kernelSize > shapeOfInput[X])
             {
                 throw InvalidArchitectureException("Convolution kernel is too big.");
             }
@@ -209,7 +209,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfNeurons = model.numberOfFilters;
             model.numberOfKernels = computeNumberOfKernelsForConvolution1D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
-            model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[1];
+            model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = model.numberOfKernelsPerFilter;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;
@@ -217,8 +217,8 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
         }
         if (shapeOfInput.size() == 3)
         {
-            if (model.kernelSize > shapeOfInput[0]
-                || model.kernelSize > shapeOfInput[1])
+            if (model.kernelSize > shapeOfInput[X]
+                || model.kernelSize > shapeOfInput[Y])
             {
                 throw InvalidArchitectureException("Convolution kernel is too big.");
             }
@@ -226,7 +226,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfNeurons = model.numberOfFilters;
             model.numberOfKernels = computeNumberOfKernelsForConvolution2D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
-            model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[2];
+            model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = model.numberOfKernelsPerFilter;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs;
             model.numberOfOutputs = model.numberOfNeurons;

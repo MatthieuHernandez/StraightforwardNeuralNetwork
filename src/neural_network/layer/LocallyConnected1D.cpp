@@ -12,11 +12,11 @@ BOOST_CLASS_EXPORT(LocallyConnected1D)
 LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, std::move(optimizer))
 {
-    const int rest = this->shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
+    const int rest = this->shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->kernelSize + rest,
-        this->numberOfFilters
+        this->numberOfFilters,
+        this->shapeOfInput[X] / this->kernelSize + rest,
     };
     this->numberOfNeuronsPerFilter = this->numberOfKernelsPerFilter;
     this->buildKernelIndexes();
@@ -25,7 +25,7 @@ LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetwo
 void LocallyConnected1D::buildKernelIndexes()
 {
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
-    const int maxC = this->shapeOfInput[1];
+    const int maxC = this->shapeOfInput[C];
     const int kSize = this->kernelSize;
     for (int k = 0; k < this->kernelIndexes.size(); ++k)
     {
@@ -62,7 +62,7 @@ int LocallyConnected1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[1])
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
             return 203;
     }
     return this->FilterLayer::isValid();

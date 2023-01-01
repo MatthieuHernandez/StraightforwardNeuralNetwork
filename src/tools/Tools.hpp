@@ -24,6 +24,16 @@ namespace snn
     static constexpr logLevel verbose = none;
 }
 
+namespace snn::internal
+{
+    enum coordinateIndex
+    {
+        C = 0,
+        X = 1,
+        Y = 2
+    };
+}
+
 namespace snn::tools
 {
     inline int randomBetween(const int min, const int max) // [min; max[

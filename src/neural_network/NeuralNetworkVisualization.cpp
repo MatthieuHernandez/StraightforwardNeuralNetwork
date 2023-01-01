@@ -114,14 +114,14 @@ void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::ve
 {
     if(shapeOfInput.size() != 3)
         return;
-    bitmap_image image(shapeOfInput[0], shapeOfInput[1]);
+    bitmap_image image(shapeOfInput[X], shapeOfInput[Y]);
     image.set_all_channels(0, 0, 0);
     int index = 0;
-    for (int y = 0; y < shapeOfInput[1]; ++y)
+    for (int y = 0; y < shapeOfInput[Y]; ++y)
     {
-        for (int x = 0; x < shapeOfInput[0]; ++x)
+        for (int x = 0; x < shapeOfInput[X]; ++x)
         {
-            if (shapeOfInput[2] == 1)
+            if (shapeOfInput[C] == 1)
             {
                 const auto color = static_cast<unsigned char>(inputs[index++] * 255.0f);
                 image.set_pixel(x, y, color, color, color);

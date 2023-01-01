@@ -8,7 +8,7 @@ using namespace snn;
 TEST(SaveNeuralNetwork, EqualTest)
 {
     auto structureOfNetwork = {
-        Input(8, 8, 3),
+        Input(3, 8, 8),
         LocallyConnected(2, 2),
         Convolution(2, 4, activation::ReLU),
         FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),

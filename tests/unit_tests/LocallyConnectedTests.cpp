@@ -32,7 +32,7 @@ TEST(LocallyConnected, LayerLocallyConnected1D)
         4,
         2,
         3,
-        {5, 2},
+        {2, 5},
         {}
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
@@ -66,7 +66,7 @@ TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
         4,
         4,
         1,
-        {2, 2, 1},
+        {1, 2, 2},
         {}
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
@@ -121,7 +121,7 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
         8,
         4,
         3,
-        {5, 5, 2},
+        {2, 5, 5},
         {}
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
@@ -140,7 +140,7 @@ TEST(LocallyConnected, SimpleLocallyConnected1D)
     auto data = createDataForLocallyConnectedTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {
-            Input(9, 2),
+            Input(2, 9),
             LocallyConnected(4, 2, activation::sigmoid),
             FullyConnected(2)
         },
@@ -155,7 +155,7 @@ TEST(LocallyConnected, SimpleLocallyConnected2D)
     auto data = createDataForLocallyConnectedTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {
-            Input(3, 3, 2),
+            Input(2, 3, 3),
             LocallyConnected(4, 2, activation::sigmoid),
             FullyConnected(2)
         },

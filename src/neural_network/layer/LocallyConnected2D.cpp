@@ -11,13 +11,13 @@ BOOST_CLASS_EXPORT(LocallyConnected2D)
 LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
-    const int restX = shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
-    const int restY = shapeOfInput[1] % this->kernelSize == 0 ? 0 : 1;
+    const int restX = shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
+    const int restY = shapeOfInput[Y] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        this->shapeOfInput[0] / this->kernelSize + restX,
-        this->shapeOfInput[1] / this->kernelSize + restY,
-        this->numberOfFilters
+        this->numberOfFilters,
+        this->shapeOfInput[X] / this->kernelSize + restX,
+        this->shapeOfInput[Y] / this->kernelSize + restY
     };
     this->numberOfNeuronsPerFilter = this->numberOfKernelsPerFilter;
     this->buildKernelIndexes();
@@ -27,16 +27,15 @@ void LocallyConnected2D::buildKernelIndexes()
 {
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
     const int kSize = this->kernelSize;
-    //const int maxX = this->shapeOfInput[0];
-    const int maxC = this->shapeOfInput[2];
+    const int maxC = this->shapeOfInput[C];
     for (int k = 0; k < this->kernelIndexes.size(); ++k)
     {
         this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
-        const int kernelPosX = k % this->shapeOfOutput[0];
-        const int kernelPosY = k / this->shapeOfOutput[1];
+        const int kernelPosX = k % this->shapeOfOutput[X];
+        const int kernelPosY = k / this->shapeOfOutput[Y];
         for (int y = 0; y < kSize; ++y)
         {
-            const int inputIndexY = (kernelPosY * kSize + y) * this->shapeOfInput[0] * maxC;
+            const int inputIndexY = (kernelPosY * kSize + y) * this->shapeOfInput[X] * maxC;
 
             const int kernelIndexY = y * kSize * maxC;
             for (int x = 0; x < kSize; ++x)
@@ -47,7 +46,7 @@ void LocallyConnected2D::buildKernelIndexes()
                 {
                     const int inputIndex = inputIndexY + inputIndexX + c;
                     const int kernelIndex = kernelIndexY + kernelIndexX + c;
-                    if (inputIndexX + c < this->shapeOfInput[0] * maxC
+                    if (inputIndexX + c < this->shapeOfInput[X] * maxC
                      && inputIndex < this->numberOfInputs)
                         this->kernelIndexes[k][kernelIndex] = inputIndex;
                     else

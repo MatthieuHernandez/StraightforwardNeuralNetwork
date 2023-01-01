@@ -54,7 +54,7 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         Convolution(1,5),
         FullyConnected(70),
         FullyConnected(10)
@@ -67,7 +67,7 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         FullyConnected(70, activation::GELU),
         FullyConnected(30, activation::GELU),
         FullyConnected(10)

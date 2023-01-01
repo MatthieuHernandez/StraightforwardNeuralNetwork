@@ -12,10 +12,10 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
     : FilterLayer(model, optimizer)
 {
     this->shapeOfOutput = {
-        this->shapeOfInput[0] - (this->kernelSize - 1),
-        this->numberOfFilters
+        this->numberOfFilters,
+        this->shapeOfInput[X] - (this->kernelSize - 1),
     };
-    this->sizeOfNeuronInputs = this->kernelSize *  this->shapeOfInput[1];
+    this->sizeOfNeuronInputs = this->kernelSize *  this->shapeOfInput[C];
     this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
 }
@@ -23,7 +23,7 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
 void Convolution1D::buildKernelIndexes()
 {
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
-    const int maxC = this->shapeOfInput[1];
+    const int maxC = this->shapeOfInput[C];
     const int kSize = this->kernelSize;
     for (int k = 0; k < this->kernelIndexes.size(); ++k)
     {
@@ -57,7 +57,7 @@ int Convolution1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[1])
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
             return 203;
     }
     return this->FilterLayer::isValid();

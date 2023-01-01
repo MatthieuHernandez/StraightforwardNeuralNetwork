@@ -1,6 +1,7 @@
 #include <boost/serialization/export.hpp>
 #include "MaxPooling1D.hpp"
 #include "LayerModel.hpp"
+#include "../../tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;
@@ -68,11 +69,11 @@ std::vector<int> MaxPooling1D::getShapeOfInput() const
 
 vector<int> MaxPooling1D::getShapeOfOutput() const
 {
-    const int rest = this->shapeOfInput[0] % this->kernelSize == 0 ? 0 : 1;
+    const int rest = this->shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
 
     return {
-        this->shapeOfInput[0] / this->kernelSize + rest,
-        1
+        1,
+        this->shapeOfInput[X] / this->kernelSize + rest
     };
 }
 

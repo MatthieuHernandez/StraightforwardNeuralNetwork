@@ -41,7 +41,7 @@ TEST_F(MnistTest, loadData)
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         MaxPooling(2),
         FullyConnected(10)
     },
@@ -96,7 +96,7 @@ TEST_F(MnistTest, LocallyConnected1D)
 TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         LocallyConnected(2, 2),
         FullyConnected(150),
         FullyConnected(70),
@@ -110,8 +110,8 @@ TEST_F(MnistTest, locallyConnected2D)
 TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(4,2, activation::ReLU),
+        Input(1, 28, 28),
+        Convolution(8,3, activation::ReLU),
         FullyConnected(10)
         });
     neuralNetwork.train(*data, 1_ep || 15_s);
@@ -122,7 +122,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         LocallyConnected(2, 2, activation::ReLU),
         Convolution(2, 2, activation::ReLU),
         FullyConnected(70),
@@ -139,22 +139,22 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
 TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filter({
-        Input(28, 28, 1),
-        Convolution(1,26, activation::sigmoid),
+        Input(1, 28, 28),
+        Convolution(1,11, activation::sigmoid),
         FullyConnected(10)
         });
     nn1Filter.train(*data, 1_ep || 25_s);
     auto accuracy1Filter = nn1Filter.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy1Filter, 0.7f);
+    ASSERT_ACCURACY(accuracy1Filter, 0.8f);
 
     StraightforwardNeuralNetwork nn10Filters({
-        Input(28, 28, 1),
-        Convolution(8,26, activation::sigmoid),
+        Input(1, 28, 28),
+        Convolution(10,20, activation::sigmoid),
         FullyConnected(10)
         });
     nn10Filters.train(*data, 1_ep || 25_s);
     auto accuracy10Filters = nn10Filters.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy10Filters, 0.8f);
+    ASSERT_ACCURACY(accuracy10Filters, 0.85f);
 
     EXPECT_GT(accuracy10Filters, accuracy1Filter);
 }
@@ -162,7 +162,7 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         LocallyConnected(2, 2, activation::ReLU, ErrorMultiplier(10.0f)),
         Convolution(8, 4, activation::sigmoid),
         FullyConnected(70, activation::sigmoid),
@@ -193,7 +193,7 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0f)),
         LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0f)),
         FullyConnected(10)

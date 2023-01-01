@@ -54,10 +54,10 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(32, 32, 3),
         Convolution(2, 3, activation::GELU, ErrorMultiplier(50.0f)),
         FullyConnected(100, activation::sigmoid, Dropout(0.2f)),
         FullyConnected(200, activation::sigmoid, Dropout(0.2f)),
+        Input(3, 32, 32),
         FullyConnected(10)
         },
         StochasticGradientDescent(0.003f, 0.2f));

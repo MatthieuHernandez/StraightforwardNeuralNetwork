@@ -52,7 +52,9 @@ namespace snn::internal
         ar & this->numberOfKernelsPerFilter;
         ar & this->numberOfNeuronsPerFilter;
         ar & this->kernelSize;
+        ar & this->sizeOfNeuronInputs;
         ar & this->shapeOfInput;
         ar & this->shapeOfOutput;
+        ar & this->kernelIndexes;
     }
 }

@@ -51,13 +51,12 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.24f);
 }
 
-TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
+TEST_F(Cifar10Test, trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Convolution(2, 3, activation::GELU, ErrorMultiplier(50.0f)),
-        FullyConnected(100, activation::sigmoid, Dropout(0.2f)),
-        FullyConnected(200, activation::sigmoid, Dropout(0.2f)),
         Input(3, 32, 32),
+        Convolution(4, 3, activation::ReLU),
+        FullyConnected(30, activation::sigmoid),
         FullyConnected(10)
         },
         StochasticGradientDescent(0.003f, 0.2f));
@@ -82,7 +81,7 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     ASSERT_FLOAT_EQ(accuracy, 0.5985f);
 }
 
-TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
+TEST_F(Cifar10Test, SaveFeatureMap)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
 

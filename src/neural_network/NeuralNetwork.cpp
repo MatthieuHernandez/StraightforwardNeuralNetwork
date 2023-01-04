@@ -1,7 +1,6 @@
 #include <cmath>
 #include <ctime>
 #include <boost/serialization/export.hpp>
-#include <static_block.hpp>
 #include "NeuralNetwork.hpp"
 #include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
@@ -12,12 +11,6 @@ using namespace snn;
 using namespace internal;
 
 BOOST_CLASS_EXPORT(NeuralNetwork)
-
-static_block
-{
-    srand(static_cast<unsigned>(time(nullptr)));
-    rand();
-}
 
 NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
 {

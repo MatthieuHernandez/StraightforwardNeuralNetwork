@@ -65,6 +65,7 @@ namespace snn::internal
         ar.template register_type<StochasticGradientDescent>();
         ar & this->optimizer;
         ar & this->numberOfInputs;
+        ar & this->batchSize;
         ar & this->weights;
         ar & this->bias;
         ar & this->previousDeltaWeights;

@@ -37,6 +37,5 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<LocallyConnected2D, FilterLayer>();
         ar & boost::serialization::base_object<FilterLayer>(*this);
-        ar & sizeOfNeuronInputs;
     }
 }

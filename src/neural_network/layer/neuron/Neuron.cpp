@@ -20,7 +20,7 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     {
         w = randomInitializeWeight(model.numberOfWeights);
     }
-    this->bias = 1.0f;
+    this->bias = model.bias;
 }
 
 float Neuron::randomInitializeWeight(int numberOfWeights)

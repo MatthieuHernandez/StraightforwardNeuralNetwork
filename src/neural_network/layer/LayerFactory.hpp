@@ -20,6 +20,7 @@ namespace snn
                 0,
                 0,
                 0,
+                0,
                 activation::identity
             },
             0,
@@ -45,6 +46,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
+                1.0f,
                 activation
             },
             -1,
@@ -70,6 +72,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
+                1.0f,
                 activation
             },
             -1,
@@ -95,6 +98,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
+                1.0f,
                 activation::tanh,
             },
             -1,
@@ -120,6 +124,7 @@ namespace snn
                 0,
                 0,
                 0,
+                0.0f,
                 activation::identity
             },
             1,
@@ -147,6 +152,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
+                0.0f,
                 activation
             },
             numberOfLocallyConnected,
@@ -174,6 +180,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
+                0.0f,
                 activation,
             },
             numberOfConvolution,

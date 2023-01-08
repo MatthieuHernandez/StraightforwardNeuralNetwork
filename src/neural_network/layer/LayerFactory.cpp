@@ -37,7 +37,7 @@ int computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<int>& sha
     const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
 
-    return ((shapeOfInput[X] / kernelSize) + restX) * ((shapeOfInput[Y] / kernelSize) + restY);
+    return shapeOfInput[C] * ((shapeOfInput[X] / kernelSize) + restX) * ((shapeOfInput[Y] / kernelSize) + restY);
 }
 
 inline
@@ -131,7 +131,9 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
                 throw InvalidArchitectureException("Kernel of max pooling layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
+            model.numberOfFilters = shapeOfInput[C];
             model.numberOfOutputs = computeNumberOfOutputsForMaxPooling1D(model.kernelSize, model.shapeOfInput);
+            model.numberOfKernels = model.numberOfOutputs;
             return make_unique<MaxPooling1D>(model);
         }
         if (shapeOfInput.size() == 3)
@@ -142,7 +144,9 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
                 throw InvalidArchitectureException("Kernel of max pooling layer is too big.");
             }
             model.shapeOfInput = shapeOfInput;
+            model.numberOfFilters = shapeOfInput[C];
             model.numberOfOutputs = computeNumberOfOutputsForMaxPooling2D(model.kernelSize, model.shapeOfInput);
+            model.numberOfKernels = model.numberOfOutputs;
             return make_unique<MaxPooling2D>(model);
         }
         if (shapeOfInput.size() > 3)

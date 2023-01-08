@@ -15,7 +15,6 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
         this->numberOfFilters,
         this->shapeOfInput[X] - (this->kernelSize - 1),
     };
-    this->sizeOfNeuronInputs = this->kernelSize *  this->shapeOfInput[C];
     this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
 }

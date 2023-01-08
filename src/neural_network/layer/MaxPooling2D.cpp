@@ -6,24 +6,57 @@
 using namespace std;
 using namespace snn;
 using namespace internal;
-using namespace tools;
 
 BOOST_CLASS_EXPORT(MaxPooling2D)
 
 MaxPooling2D::MaxPooling2D(LayerModel& model)
-    : NoNeuronLayer(model)
+    : FilterLayer(model, nullptr)
 {
-    this->kernelSize = model.kernelSize;
-    this->shapeOfInput = model.shapeOfInput;
-
     const int restX = shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % this->kernelSize == 0 ? 0 : 1;
 
     this->shapeOfOutput = {
-        1,
+        this->shapeOfInput[C],
         this->shapeOfInput[X] / this->kernelSize + restX,
         this->shapeOfInput[Y] / this->kernelSize + restY,
     };
+    this->sizeOfNeuronInputs = this->kernelSize * this->kernelSize * 1;
+    this->numberOfNeuronsPerFilter = 0;
+    this->numberOfOutputs = model.numberOfOutputs;
+    this->maxValueIndexes.resize(this->numberOfOutputs);
+    this->buildKernelIndexes();
+}
+
+void MaxPooling2D::buildKernelIndexes()
+{
+    this->kernelIndexes.resize(this->numberOfOutputs);
+    const int kSize = this->kernelSize;
+    const int maxC = this->shapeOfInput[C];
+    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    {
+        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
+        const int kernelPosX = (k / maxC) % this->shapeOfOutput[X];
+        const int kernelPosY = (k / maxC) / this->shapeOfOutput[Y];
+        for (int y = 0; y < kSize; ++y)
+        {
+            const int inputIndexY = (kernelPosY * kSize + y) * this->shapeOfInput[X] * maxC;
+
+            const int kernelIndexY = y * kSize;
+            for (int x = 0; x < kSize; ++x)
+            {
+                const int inputIndexX = (kernelPosX * kSize + x) * maxC;
+
+                const int c = k % maxC;
+                const int inputIndex = inputIndexY + inputIndexX + c;
+                const int kernelIndex = kernelIndexY + x;
+                if (inputIndexX + c < this->shapeOfInput[X] * maxC
+                    && inputIndex < this->numberOfInputs)
+                    this->kernelIndexes[k][kernelIndex] = inputIndex;
+                else
+                    this->kernelIndexes[k][kernelIndex] = -1;
+            }
+        }
+    }
 }
 
 inline
@@ -32,71 +65,42 @@ unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) co
     return make_unique<MaxPooling2D>(*this);
 }
 
-
-std::vector<float> MaxPooling2D::output(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
-{
-    auto output = vector<float>(this->numberOfOutputs, numeric_limits<float>::lowest());
-    for (int i = 0; i < (int)inputs.size(); ++i)
-    {
-        const int outputX = roughenX(i, this->shapeOfInput[X], this->shapeOfInput[Y]) / this->kernelSize;
-        const int outputY = roughenY(i, this->shapeOfInput[X], this->shapeOfInput[Y]) / this->kernelSize;
-        const int indexOutput = flatten(outputX, outputY, this->shapeOfOutput[X]);
-
-        if (output[indexOutput] <= inputs[i])
-            output[indexOutput] = inputs[i];
-    }
-    return output;
-}
-
-vector<float> MaxPooling2D::outputForTraining(const vector<float>& inputs, bool temporalReset)
-{
-    return this->output(inputs, temporalReset);
-}
-
-vector<float> MaxPooling2D::backOutput(std::vector<float>& inputErrors)
-{
-    std::vector<float> errors;
-    errors.reserve(this->numberOfInputs);
-
-    for (int y = 0; y < this->shapeOfInput[Y]; ++y)
-    {
-        for (int x = 0; x < this->shapeOfInput[X]; ++x)
-        {
-            for (int c = 0; c < this->shapeOfInput[C]; ++c)
-            {
-                const int outputX = x / this->kernelSize;
-                const int outputY = y / this->kernelSize;
-                const int i = flatten(outputX, outputY, this->shapeOfOutput[X]);
-
-                errors.push_back(inputErrors[i]);
-            }
-        }
-    }
-    return errors;
-}
-
-void MaxPooling2D::train([[maybe_unused]] std::vector<float>& inputErrors)
-{
-}
-
-int MaxPooling2D::getNumberOfInputs() const
-{
-    return this->numberOfInputs;
-}
-
-std::vector<int> MaxPooling2D::getShapeOfInput() const
-{
-    return this->shapeOfInput;
-}
-
-vector<int> MaxPooling2D::getShapeOfOutput() const
-{
-    return this->shapeOfOutput;
-}
-
 int MaxPooling2D::isValid() const
 {
+    if(this->maxValueIndexes.size() != this->numberOfOutputs
+        && this->numberOfKernels != this->numberOfOutputs)
+        return 204;
     return 0;
+}
+
+inline
+vector<float> MaxPooling2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+{
+    vector<float> outputs(this->numberOfKernels);
+    for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
+    {
+        this->maxValueIndexes[k] = -1;
+        for (size_t i = 0; i < this->sizeOfNeuronInputs; ++i)
+        {
+            const auto& index = this->kernelIndexes[k][i];
+            if (index >= 0) [[likely]]
+                if(this->maxValueIndexes[k] == -1 || inputs[index] >= inputs[this->maxValueIndexes[k]])
+                    this->maxValueIndexes[k] = index;
+        }
+        outputs[k] = inputs[this->maxValueIndexes[k]];
+    }
+    return outputs;
+}
+
+inline
+vector<float> MaxPooling2D::computeBackOutput(vector<float>& inputErrors)
+{
+    vector<float> errors(this->numberOfInputs, 0);
+    for (size_t e = 0; e < inputErrors.size(); ++e)
+    {
+        errors[this->maxValueIndexes[e]] = inputErrors[e];
+    }
+    return errors;
 }
 
 inline

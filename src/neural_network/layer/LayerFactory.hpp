@@ -152,7 +152,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
-                0.0f,
+                0.001f,
                 activation
             },
             numberOfLocallyConnected,
@@ -180,7 +180,7 @@ namespace snn
                 -1,
                 -1,
                 -1,
-                0.0f,
+                0.001f,
                 activation,
             },
             numberOfConvolution,

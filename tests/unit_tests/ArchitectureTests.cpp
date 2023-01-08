@@ -85,10 +85,19 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
             Recurrence(10),
             FullyConnected(5)
         });
-    constexpr int numberOfNeurons = 3 + 60 + 1 + 20 + 10 + 5; // = 99
-    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    constexpr int numberOfParameters = 3 * 17 + 60 * 28 + 1 * 4 + 20 * 19 + 20 * 11 + 11 * 5; // = 2390
-    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
+    constexpr int numberOfNeurons = 3 + 60 + 1 + 20 + 10 + 5;
+    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons); // 99
+    constexpr int numberOfParameters =
+        0 + // MaxPooling
+        3 * ((4 * 4 * 3) + 1) // Convolution
+        + 60 * (3 * 9 + 1) // FullyConnected
+        + 0 // MaxPooling
+        + 1 * (3 + 1) //Convolution
+        + 20 * (18 + 1)// FullyConnected
+        + 10 * (20 + 2)// Recurrence
+        + 5 * (10 + 1)
+    ;// FullyConnected
+    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters); // 2390
 }
 
 TEST(Architecture, NumberOfNeuronesAndParameters2)

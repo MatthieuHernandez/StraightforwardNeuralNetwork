@@ -2,39 +2,33 @@
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
+#include "FilterLayer.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
-#include "NoNeuronLayer.hpp"
 
 namespace snn::internal
 {
-    class MaxPooling2D final : public NoNeuronLayer
+    class MaxPooling2D final : public FilterLayer
     {
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected:
-        int kernelSize;
-        std::vector<int> shapeOfInput;
-        std::vector<int> shapeOfOutput;
+        int numberOfOutputs;
+        std::vector<int> maxValueIndexes;
+
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
+        void computeTrain(std::vector<float>& [[maybe_unused]] inputErrors) override {}
+        void buildKernelIndexes() override;
 
     public:
-        MaxPooling2D() = default; // use restricted to Boost library only
+        MaxPooling2D() = default;  // use restricted to Boost library only
         MaxPooling2D(LayerModel& model);
+        ~MaxPooling2D() override = default;
         MaxPooling2D(const MaxPooling2D&) = default;
-        ~MaxPooling2D() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const;
+        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
-        [[nodiscard]] std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override;
-        [[nodiscard]] std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override;
-        [[nodiscard]] std::vector<float> backOutput(std::vector<float>& inputErrors) override;
-        void train(std::vector<float>& inputErrors) override;
-
-        [[nodiscard]] int getNumberOfInputs() const override;
-        [[nodiscard]] std::vector<int> getShapeOfInput() const override;
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override;
         [[nodiscard]] int isValid() const override;
 
         bool operator==(const BaseLayer& layer) const override;
@@ -44,9 +38,7 @@ namespace snn::internal
     template <class Archive>
     void MaxPooling2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
-        boost::serialization::void_cast_register<MaxPooling2D, NoNeuronLayer>();
-        ar & boost::serialization::base_object<NoNeuronLayer>(*this);
-        ar & this->kernelSize;
-        ar & this->shapeOfInput;
+        boost::serialization::void_cast_register<MaxPooling2D, FilterLayer>();
+        ar & boost::serialization::base_object<FilterLayer>(*this);
     }
 }

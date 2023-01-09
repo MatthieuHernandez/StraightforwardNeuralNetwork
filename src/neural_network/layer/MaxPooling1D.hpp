@@ -39,6 +39,8 @@ namespace snn::internal
     void MaxPooling1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
         boost::serialization::void_cast_register<MaxPooling1D, FilterLayer>();
-        ar& boost::serialization::base_object<FilterLayer>(*this);
+        ar & boost::serialization::base_object<FilterLayer>(*this);
+        ar & this->numberOfOutputs;
+        ar & this->maxValueIndexes;
     }
 }

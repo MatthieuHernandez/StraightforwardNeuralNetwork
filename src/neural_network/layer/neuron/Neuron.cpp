@@ -12,7 +12,6 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
       optimizer(optimizer)
 
 {
-    this->previousDeltaWeights.resize(model.numberOfWeights, 0);
     this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);

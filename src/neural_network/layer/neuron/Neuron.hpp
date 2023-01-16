@@ -27,7 +27,7 @@ namespace snn::internal
         std::vector<float> weights;
         float bias;
 
-        std::vector<float> previousDeltaWeights;
+        std::queue<std::vector<float>> previousDeltaWeights;
         std::queue<std::vector<float>> lastInputs;
         std::vector<float> errors;
 

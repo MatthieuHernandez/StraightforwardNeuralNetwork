@@ -31,14 +31,14 @@
 
 * To run the unit tests execute `./tests/unit_tests/UnitTests` from `build` folder.
 
-* To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests` from `build` folder.
+* To run the dataset tests run `./ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests` from `build` folder.
 
 ### Windows - MSVC++ 14.2
 * You can generate a Visual Studio project by running `cmake -G"Visual Studio 17 2022" ./..` from `build` folder.
 
-* To run the unit tests open `./tests/unit_tests/UnitTests.vcxproj` in Visual Studio.
+* To run the unit tests open `./build/tests/unit_tests/UnitTests.vcxproj` in Visual Studio.
 
-* To run the dataset tests run `./tests/dataset_tests/ImportDatasets.sh` and open `./tests/dataset_tests/DatasetTests.vcxproj` in Visual Studio.
+* To run the dataset tests run `./build/ImportDatasets.sh` and open `./build/tests/dataset_tests/DatasetTests.vcxproj` in Visual Studio.
 
  ## Use
 Create, train and use a neural network in few lines of code.

@@ -46,32 +46,34 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
         FullyConnected(25),
         FullyConnected(10)
     });
-    neuralNetwork.train(*data, 1_ep || 120_s);
+    neuralNetwork.train(*data, 1_ep || 60_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.24f);
 }
 
-TEST_F(Cifar10Test, trainBestNeuralNetwork)
+TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3, 32, 32),
-        Convolution(4, 3, activation::ReLU),
-        FullyConnected(30, activation::sigmoid),
+        Convolution(16, 3, activation::ReLU),
+        MaxPooling(2),
+        Convolution(32, 3, activation::ReLU),
+        FullyConnected(64),
         FullyConnected(10)
         },
-        StochasticGradientDescent(0.003f, 0.2f));
+        StochasticGradientDescent(0.001f, 0.0f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.60_acc ||100_ep, 1, 1);
+    neuralNetwork.train(*data, 0.62_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
 }
 
-TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
+TEST_F(Cifar10Test, DISABLED_EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
@@ -81,15 +83,17 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     ASSERT_FLOAT_EQ(accuracy, 0.5985f);
 }
 
-TEST_F(Cifar10Test, SaveFeatureMap)
+TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
 
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 15);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 16);
 
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *data, 13);
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *data, 14);
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 15);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 16);
 }

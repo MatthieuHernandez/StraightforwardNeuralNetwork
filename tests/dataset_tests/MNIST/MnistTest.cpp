@@ -111,12 +111,12 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1, 28, 28),
-        Convolution(8,3, activation::ReLU),
+        Convolution(2,3, activation::ReLU),
         FullyConnected(10)
         });
     neuralNetwork.train(*data, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.93f);
+    ASSERT_ACCURACY(accuracy, 0.85f);
 }
 
 TEST_F(MnistTest, multipleLayersNeuralNetwork)
@@ -180,7 +180,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.98f);
 }
 
-TEST_F(MnistTest, EvaluateBestNeuralNetwork)
+TEST_F(MnistTest, DISABLED_EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();

@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "tools.hpp"
+#include "Tools.hpp"
 
 namespace snn::tools
 {

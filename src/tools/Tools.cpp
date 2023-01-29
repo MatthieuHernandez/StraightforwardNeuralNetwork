@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "tools.hpp"
 
 namespace snn::tools

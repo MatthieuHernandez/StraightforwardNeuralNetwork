@@ -47,7 +47,7 @@ vector<float>& RecurrentNeuron::backOutput(float error)
     error = error * this->outputFunction->derivative(this->sum);
     const size_t batchSize_ = this->batchSize;
     #pragma omp simd // seems to do nothing
-    for (size_t w = 0; w < this->numberOfInputs; ++w)
+    for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];
     }

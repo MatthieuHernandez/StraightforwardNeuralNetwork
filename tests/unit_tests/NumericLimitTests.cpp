@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "../ExtendedGTest.hpp"
 #include "tools/Tools.hpp"
 #include "neural_network/StraightforwardNeuralNetwork.hpp"

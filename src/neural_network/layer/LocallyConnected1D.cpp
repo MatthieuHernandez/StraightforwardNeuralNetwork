@@ -27,7 +27,8 @@ void LocallyConnected1D::buildKernelIndexes()
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
     const int maxC = this->shapeOfInput[C];
     const int kSize = this->kernelSize;
-    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
     {
         this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
         for (int x = 0; x < kSize; ++x)
@@ -83,7 +84,7 @@ vector<float> LocallyConnected1D::computeOutput(const vector<float>& inputs, [[m
             else [[unlikely]]
                 neuronInputs[i] = 0;
         }
-        for (size_t n = 0; n < this->numberOfFilters; ++n, ++o)
+        for (int n = 0; n < this->numberOfFilters; ++n, ++o)
         {
             outputs[o] = this->neurons[o].output(neuronInputs);
         }
@@ -95,7 +96,7 @@ inline
 vector<float> LocallyConnected1D::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
-    for (int n = 0; n < this->neurons.size(); ++n)
+    for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
         for (size_t e = 0; e < error.size(); ++e)

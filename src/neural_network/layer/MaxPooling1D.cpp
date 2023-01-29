@@ -30,7 +30,8 @@ void MaxPooling1D::buildKernelIndexes()
     this->kernelIndexes.resize(this->numberOfOutputs);
     const int maxC = this->shapeOfInput[C];
     const int kSize = this->kernelSize;
-    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
     {
         this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
         const int kernelPosX = k / maxC;
@@ -58,7 +59,7 @@ unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) co
 
 int MaxPooling1D::isValid() const
 {
-    if (this->maxValueIndexes.size() != this->numberOfOutputs
+    if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs)
         && this->numberOfKernels != this->numberOfOutputs)
         return 204;
     return 0;
@@ -71,7 +72,7 @@ vector<float> MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_u
     for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
     {
         this->maxValueIndexes[k] = -1;
-        for (size_t i = 0; i < this->sizeOfNeuronInputs; ++i)
+        for (int i = 0; i < this->sizeOfNeuronInputs; ++i)
         {
             const auto& index = this->kernelIndexes[k][i];
             if (index >= 0) [[likely]]

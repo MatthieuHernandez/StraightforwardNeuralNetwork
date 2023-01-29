@@ -38,8 +38,8 @@ vector2D<float> Cifar10::readImages(string filePaths[], size_t size, vector2D<fl
 {
     vector2D<float> images;
     images.reserve(size * 10000);
-    for (int i = 0; i < size; i++)
-        this->readImages(filePaths[i], images, labels);
+    for (size_t i = 0; i < size; i++)
+        readImages(filePaths[i], images, labels);
     return images;
 }
 

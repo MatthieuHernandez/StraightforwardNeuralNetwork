@@ -28,7 +28,8 @@ void Convolution2D::buildKernelIndexes()
     const int maxC = this->shapeOfInput[C];
     const int maxX = this->shapeOfInput[X];
     const int kSize = this->kernelSize;
-    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
     {
         this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
         const int kernelPosX = k % this->shapeOfOutput[X];

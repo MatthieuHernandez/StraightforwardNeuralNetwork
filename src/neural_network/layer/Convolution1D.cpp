@@ -24,7 +24,8 @@ void Convolution1D::buildKernelIndexes()
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
     const int maxC = this->shapeOfInput[C];
     const int kSize = this->kernelSize;
-    for (int k = 0; k < this->kernelIndexes.size(); ++k)
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
     {
         this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
         for (int x = 0; x < kSize; ++x)

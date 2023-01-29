@@ -45,7 +45,6 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
-    const auto numberOfWeights = this->weights.size();
     const size_t batchSize_ = this->batchSize;
     #pragma omp simd // seems to do nothing
     for (size_t w = 0; w < this->numberOfInputs; ++w)
@@ -54,11 +53,9 @@ vector<float>& RecurrentNeuron::backOutput(float error)
     }
     while (!this->lastInputs.empty())
     {
-        if (this->previousDeltaWeights.empty())
-            this->previousDeltaWeights.push(vector<float>(numberOfWeights, 0.0f));
         this->optimizer->updateWeights(*this, error);
         if (this->previousDeltaWeights.size() > batchSize_)
-        this->previousDeltaWeights.pop();
+            this->previousDeltaWeights.pop();
         this->lastInputs.pop();
     }
     return this->errors;

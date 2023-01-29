@@ -14,9 +14,7 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 
 float SimpleNeuron::output(const vector<float>& inputs)
 {
-    this->lastInputs.push(inputs);
-    if (static_cast<int>(this->lastInputs.size()) > this->batchSize)
-        this->lastInputs.pop();
+    this->lastInputs.pushBack(inputs);
     float tmp = 0.0f; // to activate the SIMD optimization
     #pragma omp simd
     for (size_t w = 0; w < this->weights.size(); ++w)
@@ -31,36 +29,19 @@ vector<float>& SimpleNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
     const auto numberOfWeights = this->weights.size();
-    const size_t batchSize_ = this->batchSize;
     #pragma omp simd // seems to do nothing
     for (size_t w = 0; w < numberOfWeights; ++w)
     {
         this->errors[w] = error * this->weights[w];
     }
-    while (!this->lastInputs.empty())
-    {
-        this->optimizer->updateWeights(*this, error);
-        if (this->previousDeltaWeights.size() > batchSize_)
-            this->previousDeltaWeights.pop();
-        this->lastInputs.pop();
-    }
+    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
 void SimpleNeuron::train(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
-    const auto numberOfWeights = this->weights.size();
-    const size_t batchSize_ = this->batchSize;
-    while (!this->lastInputs.empty())
-    {
-        if (this->previousDeltaWeights.empty())
-            this->previousDeltaWeights.push(vector<float>(numberOfWeights, 0.0f));
-        this->optimizer->updateWeights(*this, error);
-        if (this->previousDeltaWeights.size() > batchSize_)
-        this->previousDeltaWeights.pop();
-        this->lastInputs.pop();
-    }
+    this->optimizer->updateWeights(*this, error);
 }
 
 int SimpleNeuron::isValid() const

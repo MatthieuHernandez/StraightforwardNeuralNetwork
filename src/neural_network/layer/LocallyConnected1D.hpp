@@ -2,9 +2,8 @@
 #include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
-#include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "FilterLayer.hpp"
+#include "../optimizer/NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
@@ -15,18 +14,16 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected:
-        std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
-        void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
-
-        int sizeOfNeuronInputs;
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
+        void computeTrain(std::vector<float>& inputErrors) override;
+        void buildKernelIndexes() override;
 
     public:
         LocallyConnected1D() = default; // use restricted to Boost library only
         LocallyConnected1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~LocallyConnected1D() = default;
         LocallyConnected1D(const LocallyConnected1D&) = default;
-
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] int isValid() const override;

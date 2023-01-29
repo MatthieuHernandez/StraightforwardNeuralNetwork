@@ -39,7 +39,6 @@ TEST(Recurrence, RepeatLastInput)
         FullyConnected(1, activation::tanh)
     },
         StochasticGradientDescent(0.02f));
-
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -58,7 +57,7 @@ TEST(Recurrence, RepeatLastLastInput)
         GruLayer(8),
         FullyConnected(1)
     },
-        StochasticGradientDescent(0.05f, 0.5f));
+        StochasticGradientDescent(0.04f, 0.9f));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }

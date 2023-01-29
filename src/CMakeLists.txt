@@ -22,6 +22,9 @@ add_subdirectory(external_library/boost_1_80_0_minimal/libs/serialization)
 include_directories(external_library/bitmap)
 add_subdirectory(external_library/bitmap)
 
+include_directories(external_library/cpp-static-block)
+add_subdirectory(external_library/cpp-static-block)
+
 add_library(StraightforwardNeuralNetwork ${SOURCES})
 
-target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap)
+target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap cpp-static-block)

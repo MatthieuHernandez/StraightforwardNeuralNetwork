@@ -14,16 +14,15 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
-        void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
-
-        int sizeOfNeuronInputs;
-        std::vector<float> neuronInputs;
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
+        void computeTrain(std::vector<float>& inputErrors) override;
+        void buildKernelIndexes() override;
 
     public :
         Convolution2D() = default;  // use restricted to Boost library only
         Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        ~Convolution2D() = default;
+        ~Convolution2D() override = default;
         Convolution2D(const Convolution2D&) = default;
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
@@ -38,7 +37,5 @@ namespace snn::internal
     {
         boost::serialization::void_cast_register<Convolution2D, FilterLayer>();
         ar & boost::serialization::base_object<FilterLayer>(*this);
-        ar & sizeOfNeuronInputs;
-        ar & neuronInputs;
     }
 }

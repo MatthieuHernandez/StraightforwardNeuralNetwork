@@ -9,9 +9,9 @@ BOOST_CLASS_EXPORT(GatedRecurrentUnit)
 
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
-      resetGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
-      updateGate({model.numberOfInputs, model.numberOfWeights, activation::sigmoid}, optimizer),
-      outputGate({model.numberOfInputs, model.numberOfWeights, activation::tanh}, optimizer)
+      resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid}, optimizer),
+      updateGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid}, optimizer),
+      outputGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::tanh}, optimizer)
 {
 }
 

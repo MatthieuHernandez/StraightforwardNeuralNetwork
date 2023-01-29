@@ -53,8 +53,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
 {
     for (auto& optimizer : this->optimizers)
         optimizer->applyBeforeBackpropagation(inputErrors);
-    for (size_t n = 0; n < this->neurons.size(); ++n)
-        neurons[n].train(inputErrors[n]);
+    this->computeTrain(inputErrors);
 }
 
 template <BaseNeuron N>
@@ -64,14 +63,6 @@ int Layer<N>::isValid() const
         || this->getNumberOfNeurons() < 1
         || this->getNumberOfNeurons() > 1000000)
         return 201;
-
-    int numberOfOutput = 1;
-    auto shape = this->getShapeOfOutput();
-    for (int s : shape)
-        numberOfOutput *= s;
-
-    if (numberOfOutput != this->getNumberOfNeurons())
-        return 202;
 
     for (auto& neuron : this->neurons)
     {

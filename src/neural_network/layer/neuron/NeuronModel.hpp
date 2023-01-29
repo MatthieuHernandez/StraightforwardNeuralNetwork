@@ -5,8 +5,10 @@
 {
      struct NeuronModel
      {
-         int numberOfInputs;
-         int numberOfWeights;
+         int numberOfInputs = -1;
+         int batchSize = -1;
+         int numberOfWeights = -1;
+         float bias = 1.0f;
          activation activationFunction;
      };
  }

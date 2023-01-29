@@ -20,6 +20,7 @@ namespace snn::internal
     protected:
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
+        virtual void computeTrain(std::vector<float>& inputErrors) override final;
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only

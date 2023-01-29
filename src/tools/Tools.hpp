@@ -1,10 +1,10 @@
 #pragma once
 #include <chrono>
 #include <iostream>
+#include <random>
 #include <stdexcept>
 #include <string>
 #include <vector>
-
 
 namespace snn
 {
@@ -24,17 +24,24 @@ namespace snn
     static constexpr logLevel verbose = none;
 }
 
+namespace snn::internal
+{
+    enum coordinateIndex
+    {
+        C = 0,
+        X = 1,
+        Y = 2
+    };
+}
+
 namespace snn::tools
 {
-    inline int randomBetween(const int min, const int max) // [min; max[
-    {
-        return rand() % (max - min) + min;
-    }
+    static std::random_device rd;
+    static std::mt19937 rng(rd());
 
-    inline float randomBetween(const float min, const float max)
-    {
-        return rand() / static_cast<float>(RAND_MAX) * (max - min) + min;
-    }
+    int randomBetween(const int min, const int max); // [min; max[
+    float randomBetween(const float min, const float max);
+    std::vector<float> randomVector(const float min, const float max, const size_t size);
 
     inline std::string toString(std::chrono::milliseconds duration)
     {

@@ -14,16 +14,16 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected:
-        std::vector<float> createInputsForNeuron(int neuronIndex, const std::vector<float>& inputs) override;
-        void insertBackOutputForNeuron(int neuronIndex, const std::vector<float>& error, std::vector<float>& errors) override;
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
+        void computeTrain(std::vector<float>& inputErrors) override;
+        void buildKernelIndexes() override;
 
     public:
         Convolution1D() = default; // use restricted to Boost library only
         Convolution1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        ~Convolution1D() = default;
+        ~Convolution1D() override = default;
         Convolution1D(const Convolution1D&) = default;
-
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] int isValid() const override;

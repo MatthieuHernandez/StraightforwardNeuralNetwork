@@ -20,9 +20,7 @@ CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
 
 void CompositeForTemporalData::shuffle()
 {
-    std::random_device rd;
-    mt19937 g(rd());
-    ranges::shuffle(this->indexesForShuffles, g);
+    ranges::shuffle(this->indexesForShuffles, tools::rng);
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {

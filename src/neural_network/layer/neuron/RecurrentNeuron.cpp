@@ -20,7 +20,9 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
-    this->lastInputs = inputs;
+    this->lastInputs.push(inputs);
+    if (static_cast<int>(this->lastInputs.size()) > this->batchSize)
+        this->lastInputs.pop();
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
@@ -40,23 +42,39 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     #endif
 }
 
-std::vector<float>& RecurrentNeuron::backOutput(float error)
+vector<float>& RecurrentNeuron::backOutput(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
-
+    error = error * this->outputFunction->derivative(this->sum);
+    const size_t batchSize_ = this->batchSize;
     #pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];
     }
-    this->optimizer->updateWeights(*this, error);
+    while (!this->lastInputs.empty())
+    {
+        this->optimizer->updateWeights(*this, error);
+        if (this->previousDeltaWeights.size() > batchSize_)
+            this->previousDeltaWeights.pop();
+        this->lastInputs.pop();
+    }
     return this->errors;
 }
 
 void RecurrentNeuron::train(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
-    this->optimizer->updateWeights(*this, error);
+    error = error * this->outputFunction->derivative(this->sum);
+    const auto numberOfWeights = this->weights.size();
+    const size_t batchSize_ = this->batchSize;
+    while (!this->lastInputs.empty())
+    {
+        if (this->previousDeltaWeights.empty())
+            this->previousDeltaWeights.push(vector<float>(numberOfWeights, 0.0f));
+        this->optimizer->updateWeights(*this, error);
+        if (this->previousDeltaWeights.size() > batchSize_)
+        this->previousDeltaWeights.pop();
+        this->lastInputs.pop();
+    }
 }
 
 inline

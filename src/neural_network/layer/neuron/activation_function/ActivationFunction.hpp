@@ -26,15 +26,15 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    public:
         static std::vector<std::shared_ptr<ActivationFunction>> activationFunctions;
 
+    public:
         const float min;
         const float max;
 
         ActivationFunction(float min, float max);
         virtual ~ActivationFunction() = default;
-        static void initialize();
+        static std::vector<std::shared_ptr<ActivationFunction>> initialize();
         static std::shared_ptr<ActivationFunction> get(activation type);
 
         [[nodiscard]] virtual float function(const float) const = 0;

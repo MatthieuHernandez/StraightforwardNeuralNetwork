@@ -42,7 +42,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 #endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
-    size_t w = 0;
+    int w = 0;
     const auto lr = this->learningRate / neuron.batchSize;
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;

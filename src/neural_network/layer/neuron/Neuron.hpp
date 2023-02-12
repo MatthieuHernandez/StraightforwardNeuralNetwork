@@ -3,10 +3,9 @@
 #include <queue>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
-#include <boost/serialization/deque.hpp> // required to include queue.hpp
-#include <boost/serialization/queue.hpp>
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
+#include "CircularData.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
 #include "../../../tools/Tools.hpp"
@@ -27,8 +26,8 @@ namespace snn::internal
         std::vector<float> weights;
         float bias;
 
-        std::queue<std::vector<float>> previousDeltaWeights;
-        std::queue<std::vector<float>> lastInputs;
+        CircularData previousDeltaWeights;
+        CircularData lastInputs;
         std::vector<float> errors;
 
         float sum = 0;

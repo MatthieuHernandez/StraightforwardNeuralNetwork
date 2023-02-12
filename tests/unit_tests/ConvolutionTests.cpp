@@ -90,6 +90,38 @@ TEST(Convolution, LayerConvolution2D)
     ASSERT_EQ(backOutput, expectedBackOutput);
 }
 
+TEST(Convolution, Momentum)
+{
+    vector<float> input {1.0f, 2.0f, 3.0f, 4.0f};
+
+    LayerModel model{
+        convolution,
+        4,
+        1,
+        4,
+        {1, 4, 1, 1.0f, activation::identity},
+        1,
+        4,
+        4,
+        1,
+        {1, 2, 2},
+        {}
+    };
+    auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.1f, 0.9f);
+    internal::Convolution2D conv(model, sgd);
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights({1.0f});
+  
+
+    for (auto i = 0; i < 3; ++i)
+    {
+        vector<float> error {1.0f, 2.0f, 3.0f, 4.0f};
+        auto output = conv.output(input, false);
+        auto backOutput = conv.backOutput(error);
+        ASSERT_GT(output.size(), 0);
+        ASSERT_GT(backOutput.size(), 0);
+    }
+}
+
 TEST(Convolution, SimpleConvolution1D)
 {
     auto data = createDataForConvolutionTests();

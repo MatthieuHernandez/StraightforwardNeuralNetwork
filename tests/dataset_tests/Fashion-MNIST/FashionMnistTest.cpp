@@ -58,10 +58,10 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
         Convolution(1,3, activation::ReLU),
         FullyConnected(10)
         },
-        StochasticGradientDescent(0.01f, 0.0f));
-    neuralNetwork.train(*data, 1_ep || 20_s);
+        StochasticGradientDescent(0.001f, 0.8f));
+    neuralNetwork.train(*data, 10_ep || 200_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.74);
+    ASSERT_ACCURACY(accuracy, 0.74f);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)

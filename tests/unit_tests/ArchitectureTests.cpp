@@ -27,7 +27,7 @@ TEST(Architecture, ValidArchitectures)
     }
 }
 
-TEST(Architecture, invalidArchitectures)
+TEST(Architecture, InvalidArchitectures)
 {
     vector2D<LayerModel> Architectures =
     {

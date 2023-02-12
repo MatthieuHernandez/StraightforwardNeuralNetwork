@@ -38,7 +38,7 @@ TEST(Recurrence, RepeatLastInput)
         FullyConnected(8),
         FullyConnected(1, activation::tanh)
     },
-        StochasticGradientDescent(0.02f));
+        StochasticGradientDescent(0.02f, 0.5f));
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -57,7 +57,7 @@ TEST(Recurrence, RepeatLastLastInput)
         GruLayer(8),
         FullyConnected(1)
     },
-        StochasticGradientDescent(0.04f, 0.9f));
+        StochasticGradientDescent(0.1f, 0.9f));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
@@ -65,7 +65,7 @@ TEST(Recurrence, RepeatLastLastInput)
 inline
 void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d)
 {
-    nn.train(d, 1.0_acc || 4_s, 1, 50);
+    nn.train(d, 1.0_acc || 4_s, 1, 10);
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
     ASSERT_ACCURACY(acc, 1.0);

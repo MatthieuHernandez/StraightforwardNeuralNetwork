@@ -24,14 +24,15 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
-    int w = 0;
+    size_t w = 0;
     float tmp = 0.0f; // to activate the SIMD optimization
+    assert(this->weights.size() == inputs.size() + 2);
     #pragma omp simd
-    for (w = 0; w < (int)inputs.size(); ++w)
+    for (w = 0; w < inputs.size(); ++w)
     {
         tmp += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias;
+    this->sum = tmp + this->weights[w++] * this->bias + this->previousOutput * this->weights[w];
     float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
@@ -43,6 +44,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
+    assert(this->weights.size() == this->errors.size() + 2);
     #pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
@@ -68,7 +70,7 @@ void RecurrentNeuron::reset()
 
 int RecurrentNeuron::isValid() const
 {
-    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 1)
+    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2)
         return 304;
     return this->Neuron::isValid();
 }

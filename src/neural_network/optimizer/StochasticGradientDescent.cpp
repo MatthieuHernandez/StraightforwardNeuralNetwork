@@ -24,18 +24,18 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     size_t w = 0;
     const auto lr = this->learningRate / neuron.batchSize; // to activate the SIMD optimization
     const auto& m = this->momentum;
-    const auto& numberOfWeights = neuron.weights.size();
+    const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
-    vector<float> deltaWeights(numberOfWeights+1);
+    vector<float> deltaWeights(neuron.weights.size());
     #pragma omp simd
-    for (w = 0; w < numberOfWeights; ++w)
+    for (w = 0; w < numberOfInputs; ++w)
     {
         deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights[w];
     }
-    deltaWeights[w] = lr * error + m * previousDeltaWeights[w];
-    neuron.bias += deltaWeights[w];
+    deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
+    neuron.weights[w] = deltaWeights[w];
     neuron.previousDeltaWeights.pushBack(deltaWeights);
 }
 
@@ -48,18 +48,17 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     const auto lr = this->learningRate / neuron.batchSize;
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
-    const auto& numberOfWeights = neuron.weights.size();
     const auto& lastInputs = neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
-    vector<float> deltaWeights(numberOfWeights+1);
+    vector<float> deltaWeights(neuron.weights.size());
     #pragma omp simd // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < numberOfInputs; ++w)
     {
         deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights[w];
     }
-    deltaWeights[w] = lr * error + m * previousDeltaWeights[w];
-    neuron.bias += deltaWeights[w];
+    deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
+    neuron.weights[w] += deltaWeights[w];
     neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
     deltaWeights[w] = lr * neuron.recurrentError * neuron.previousOutput + m * previousDeltaWeights[w];

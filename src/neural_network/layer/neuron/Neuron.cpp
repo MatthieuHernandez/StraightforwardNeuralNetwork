@@ -21,7 +21,7 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     }
     this->bias = model.bias;
     this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
-    this->previousDeltaWeights.initialize(this->batchSize, model.numberOfWeights + 1);
+    this->previousDeltaWeights.initialize(this->batchSize, model.numberOfWeights);
 }
 
 float Neuron::randomInitializeWeight(int numberOfWeights)
@@ -61,7 +61,7 @@ void Neuron::setWeights(std::vector<float> w)
 
 int Neuron::getNumberOfParameters() const
 {
-    return static_cast<int>(this->weights.size()) + 1;
+    return static_cast<int>(this->weights.size());
 }
 
 int Neuron::getNumberOfInputs() const

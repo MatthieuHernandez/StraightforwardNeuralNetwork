@@ -14,8 +14,8 @@ Data createDataForConvolutionTests();
 TEST(Convolution, LayerConvolution1D)
 {
     vector<float> input {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector<float> kernel0 {1, 2, 3, 4, 5, 6};
-    vector<float> kernel1 {7, 8, 9, 10, 11, 12};
+    vector<float> kernel0 {1, 2, 3, 4, 5, 6, 0};
+    vector<float> kernel1 {7, 8, 9, 10, 11, 12, 0};
     vector<float> error {1, 2, 3, 4, 5, 6};
 
     vector<float> expectedOutput {92, 218, 134, 332, 176, 446};
@@ -25,7 +25,7 @@ TEST(Convolution, LayerConvolution1D)
         10,
         2,
         6,
-        {6, 3, 6, 1.0f, activation::identity},
+        {6, 3, 7, 1.0f, activation::identity},
         2,
         6,
         3,
@@ -47,8 +47,8 @@ TEST(Convolution, LayerConvolution1D)
 TEST(Convolution, LayerConvolution2D)
 {
     vector<float> input(50);
-    vector<float> kernel0 {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9};
-    vector<float> kernel1 {10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18};
+    vector<float> kernel0 {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 0};
+    vector<float> kernel1 {10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 0};
     vector<float> error(18);
     std::iota(std::begin(input), std::end(input), 1.0f);
     std::iota(std::begin(error), std::end(error), 1.0f);
@@ -71,7 +71,7 @@ TEST(Convolution, LayerConvolution2D)
         50,
         2,
         18,
-        {18, 9, 18, 1.0f, activation::identity},
+        {18, 9, 19, 1.0f, activation::identity},
         1,
         18,
         9,
@@ -99,7 +99,7 @@ TEST(Convolution, Momentum)
         4,
         1,
         4,
-        {1, 4, 1, 1.0f, activation::identity},
+        {1, 4, 2, 1.0f, activation::identity},
         1,
         4,
         4,
@@ -109,7 +109,7 @@ TEST(Convolution, Momentum)
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.1f, 0.9f);
     internal::Convolution2D conv(model, sgd);
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights({1.0f});
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights({1.0f, 0.0f});
   
 
     for (auto i = 0; i < 3; ++i)

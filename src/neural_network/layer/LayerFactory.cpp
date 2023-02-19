@@ -101,21 +101,21 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
 
         model.neuron.numberOfInputs = model.numberOfInputs;
         model.neuron.batchSize = 1;
-        model.neuron.numberOfWeights = model.neuron.numberOfInputs;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1; // for the bias
         model.numberOfOutputs = model.numberOfNeurons;
         return make_unique<FullyConnected>(model, optimizer);
 
     case recurrence:
         model.neuron.numberOfInputs = model.numberOfInputs;
         model.neuron.batchSize = 1;
-        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
         model.numberOfOutputs = model.numberOfNeurons;
         return make_unique<Recurrence>(model, optimizer);
 
     case gruLayer:
         model.neuron.numberOfInputs = model.numberOfInputs;
         model.neuron.batchSize = 1;
-        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
+        model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
         model.numberOfOutputs = model.numberOfNeurons;
         return make_unique<GruLayer>(model, optimizer);
 
@@ -173,7 +173,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = 1;
-            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<LocallyConnected1D>(model, optimizer);
         }
@@ -190,7 +190,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = 1;
-            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<LocallyConnected2D>(model, optimizer);
         }
@@ -215,7 +215,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = model.numberOfKernelsPerFilter;
-            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<Convolution1D>(model, optimizer);
         }
@@ -232,7 +232,7 @@ unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model,
             model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
             model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
             model.neuron.batchSize = model.numberOfKernelsPerFilter;
-            model.neuron.numberOfWeights = model.neuron.numberOfInputs;
+            model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
             model.numberOfOutputs = model.numberOfNeurons;
             return make_unique<Convolution2D>(model, optimizer);
         }

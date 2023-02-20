@@ -14,10 +14,10 @@ Data createDataForLocallyConnectedTests();
 TEST(LocallyConnected, LayerLocallyConnected1D)
 {
     vector<float> input {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector<float> kernel0 {1, 3, 5, 7, 9, 11, 0};
-    vector<float> kernel1 {2, 4, 6, 8, 10, 12, 0 };
-    vector<float> kernel2 {13, 15, 17, 19, 21, 23, 0 };
-    vector<float> kernel3 {14, 16, 18, 20, 22, 24, 0 };
+    vector<float> kernel0 {1, 3, 5, 7, 9, 11, 1};
+    vector<float> kernel1 {2, 4, 6, 8, 10, 12, 1};
+    vector<float> kernel2 {13, 15, 17, 19, 21, 23, 1};
+    vector<float> kernel3 {14, 16, 18, 20, 22, 24, 1};
     vector<float> error {1, 2, 3, 4};
 
     vector<float> expectedOutput {162, 183, 555, 589};
@@ -71,10 +71,10 @@ TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
     internal::LocallyConnected2D conv(model, sgd);
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights({1, 0});
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(1))->setWeights({2, 0});
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(2))->setWeights({3, 0});
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(3))->setWeights({4, 0});
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights({1, 1});
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(1))->setWeights({2, 1});
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(2))->setWeights({3, 1});
+    static_cast<internal::SimpleNeuron*>(conv.getNeuron(3))->setWeights({4, 1});
     auto output = conv.output(input, false);
     auto backOutput = conv.backOutput(input);
 
@@ -86,16 +86,16 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
 {
     vector<float> input(50);
     vector<vector<float>> kernels {
-                              {1., 3., 5., 7., 9., 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 0},
-                              {2., 4., 6., 8., 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 0},
-                              {37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 0},
-                              {38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 0},
-                              {73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 0},
-                              {74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 0},
-                              {109, 111, 113, 115, 117, 119, 121, 123, 125, 127, 129, 131, 133, 135, 137, 139, 141, 143, 0},
-                              {110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142, 144, 0},
+        {1., 3., 5., 7., 9., 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 1},
+        {2., 4., 6., 8., 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 1},
+        {37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 1},
+        {38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70, 72, 1},
+        {73, 75, 77, 79, 81, 83, 85, 87, 89, 91, 93, 95, 97, 99, 101, 103, 105, 107, 1},
+        {74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 1},
+        {109, 111, 113, 115, 117, 119, 121, 123, 125, 127, 129, 131, 133, 135, 137, 139, 141, 143, 1},
+        {110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142, 144, 1},
 
-};
+    };
     vector<float> error(8);
     std::iota(std::begin(input), std::end(input), 1.0f);
     std::iota(std::begin(error), std::end(error), 1.0f);

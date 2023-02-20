@@ -14,8 +14,8 @@ Data createDataForConvolutionTests();
 TEST(Convolution, LayerConvolution1D)
 {
     vector<float> input {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector<float> kernel0 {1, 2, 3, 4, 5, 6, 0};
-    vector<float> kernel1 {7, 8, 9, 10, 11, 12, 0};
+    vector<float> kernel0 {1, 2, 3, 4, 5, 6, 1};
+    vector<float> kernel1 {7, 8, 9, 10, 11, 12, 1};
     vector<float> error {1, 2, 3, 4, 5, 6};
 
     vector<float> expectedOutput {92, 218, 134, 332, 176, 446};
@@ -47,8 +47,8 @@ TEST(Convolution, LayerConvolution1D)
 TEST(Convolution, LayerConvolution2D)
 {
     vector<float> input(50);
-    vector<float> kernel0 {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 0};
-    vector<float> kernel1 {10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 0};
+    vector<float> kernel0 {1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 1};
+    vector<float> kernel1 {10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 1};
     vector<float> error(18);
     std::iota(std::begin(input), std::end(input), 1.0f);
     std::iota(std::begin(error), std::end(error), 1.0f);

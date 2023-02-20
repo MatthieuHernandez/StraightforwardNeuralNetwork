@@ -32,8 +32,8 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     {
         tmp += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->weights[w+1] * this->bias + this->previousOutput * this->weights[w];
-    float output = outputFunction->function(sum);
+    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias * this->weights[w+1];
+    const float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
     #ifdef _MSC_VER

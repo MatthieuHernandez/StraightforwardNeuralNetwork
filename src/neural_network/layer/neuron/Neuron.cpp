@@ -61,7 +61,7 @@ void Neuron::setWeights(std::vector<float> w)
 
 int Neuron::getNumberOfParameters() const
 {
-    return static_cast<int>(this->weights.size()) + 1;
+    return static_cast<int>(this->weights.size());
 }
 
 int Neuron::getNumberOfInputs() const

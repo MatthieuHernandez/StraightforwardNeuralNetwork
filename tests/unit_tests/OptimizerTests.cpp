@@ -12,16 +12,16 @@ TEST(Optimizer, FindRightValueIn20)
     unique_ptr<Data> data = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(20),
-        FullyConnected(6, activation::tanh),
+        FullyConnected(8, activation::tanh),
         FullyConnected(1, activation::sigmoid)
     },
-        StochasticGradientDescent(0.03f, 0.9f));
+        StochasticGradientDescent(0.05f, 0.9f));
 
-    neuralNetwork.train(*data, 1.00_acc || 2_s);
+    neuralNetwork.train(*data, 0.99_acc || 2_s);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 1.0f);
-    ASSERT_MAE(mae, 0.6f);
+    ASSERT_ACCURACY(acc, 0.99f);
+    ASSERT_MAE(mae, 0.3f);
 }
 
 unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData)

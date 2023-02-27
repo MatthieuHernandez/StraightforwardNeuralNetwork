@@ -6,7 +6,8 @@ namespace snn
         dropout = 0,
         l1Regularization = 1,
         l2Regularization = 2,
-        errorMultiplier = 3
+        errorMultiplier = 3,
+        softmax = 4
     };
 
     enum class neuralNetworkOptimizerType

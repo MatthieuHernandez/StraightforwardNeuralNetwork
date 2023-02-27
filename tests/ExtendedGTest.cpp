@@ -25,6 +25,13 @@ void ASSERT_FAIL(string message)
     ASSERT_TRUE(false) << message;
 }
 
+void ASSERT_VECTOR_EQ(const vector<float> values, const vector<float> expected_values)
+{
+    ASSERT_EQ(values.size(), expected_values.size());
+    for (auto i = 0; i < values.size(); ++i)
+        ASSERT_NEAR(values[i], expected_values[i], 1e-6f);
+}
+
 void PRINT_LOG(string message)
 {
     cout << "[          ] " << message << endl;

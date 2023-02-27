@@ -130,6 +130,20 @@ TEST(Architecture, NumberOfNeuronesAndParameters3)
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 
+TEST(Architecture, NumberOfNeuronesAndParameters4)
+{
+    StraightforwardNeuralNetwork neuralNetwork(
+        {
+            Input(3, 15, 14),
+            Convolution(16, 4, activation::ReLU),
+            FullyConnected(9)
+        });
+    const int numberOfNeurons = 16 + 9; // = 25
+    ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
+    const int numberOfParameters = 16 * (4 * 4 * 3 + 1) + (16 * (12 * 11) + 1) * 9; // = 937
+    ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
+}
+
 TEST(Architecture, InputWithSizeOf1)
 {
     StraightforwardNeuralNetwork neuralNetworkFC({Input(5), FullyConnected(3), FullyConnected(1)});

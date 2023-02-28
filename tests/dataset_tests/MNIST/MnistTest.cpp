@@ -111,12 +111,12 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1, 28, 28),
-        Convolution(2,3, activation::ReLU),
+        Convolution(4,3, activation::ReLU),
         FullyConnected(10)
         });
     neuralNetwork.train(*data, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.85f);
+    ASSERT_ACCURACY(accuracy, 0.87f);
 }
 
 TEST_F(MnistTest, multipleLayersNeuralNetwork)

@@ -58,10 +58,11 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
         Convolution(16, 3, activation::ReLU),
         MaxPooling(2),
         Convolution(32, 3, activation::ReLU),
-        FullyConnected(64),
-        FullyConnected(10)
+        MaxPooling(2),
+        FullyConnected(128),
+        FullyConnected(10, activation::identity, Softmax())
         },
-        StochasticGradientDescent(0.001f, 0.0f));
+        StochasticGradientDescent(0.001f, 0.8f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -73,14 +74,14 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.20f);
 }
 
-TEST_F(Cifar10Test, DISABLED_EvaluateBestNeuralNetwork)
+TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 252710);
-    ASSERT_FLOAT_EQ(accuracy, 0.5985f);
+    ASSERT_EQ(numberOfParameters, 207210);
+    ASSERT_FLOAT_EQ(accuracy, 0.6028f); // Reach after 55 epochs of 770 sec.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

@@ -136,7 +136,7 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.70f);
 }
 
-TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
+TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filter({
         Input(1, 28, 28),

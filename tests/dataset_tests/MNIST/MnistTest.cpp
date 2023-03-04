@@ -163,12 +163,12 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1, 28, 28),
-        LocallyConnected(2, 2, activation::ReLU, ErrorMultiplier(10.0f)),
-        Convolution(8, 4, activation::sigmoid),
-        FullyConnected(70, activation::sigmoid),
-        FullyConnected(10)
+        Convolution(12, 4, activation::ReLU),
+        MaxPooling(2),
+        FullyConnected(128, activation::ReLU),
+        FullyConnected(10, activation::identity, Softmax())
         },
-        StochasticGradientDescent(0.005f, 0.2f));
+        StochasticGradientDescent(0.002f, 0.0f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -180,14 +180,14 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.98f);
 }
 
-TEST_F(MnistTest, DISABLED_EvaluateBestNeuralNetwork)
+TEST_F(MnistTest, EvaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 102444);
-    ASSERT_FLOAT_EQ(accuracy, 0.986f);
+    ASSERT_EQ(numberOfParameters, 261206);
+    ASSERT_FLOAT_EQ(accuracy, 0.9871f);
 }
 
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)

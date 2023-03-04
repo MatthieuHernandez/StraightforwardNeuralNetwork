@@ -56,6 +56,7 @@ LayerOptimizerModel snn::Softmax()
     const LayerOptimizerModel model
     {
         layerOptimizerType::softmax,
+        0.0
     };
     return model;
 }

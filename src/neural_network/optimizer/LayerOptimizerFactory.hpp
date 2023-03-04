@@ -11,6 +11,7 @@ namespace snn
     extern LayerOptimizerModel L1Regularization(float value);
     extern LayerOptimizerModel L2Regularization(float value);
     extern LayerOptimizerModel ErrorMultiplier(float factor);
+    extern LayerOptimizerModel Softmax();
 
     namespace internal
     {

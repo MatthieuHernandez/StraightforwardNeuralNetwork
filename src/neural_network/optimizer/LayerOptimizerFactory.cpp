@@ -4,6 +4,7 @@
 #include "L1Regularization.hpp"
 #include "L2Regularization.hpp"
 #include "ErrorMultiplier.hpp"
+#include "Softmax.hpp"
 
 using namespace std;
 using namespace snn;
@@ -50,6 +51,17 @@ LayerOptimizerModel snn::ErrorMultiplier(float factor)
     return model;
 }
 
+LayerOptimizerModel snn::Softmax()
+{
+    const LayerOptimizerModel model
+    {
+        layerOptimizerType::softmax,
+        0.0
+    };
+    return model;
+}
+
+
 
 std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model, BaseLayer* layer)
 {
@@ -66,6 +78,9 @@ std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel
 
     case layerOptimizerType::errorMultiplier:
         return make_unique<ErrorMultiplier>(model.value, layer);
+
+    case layerOptimizerType::softmax:
+        return make_unique<Softmax>(layer);
 
     default:
         throw InvalidArchitectureException("Layer optimizer type is not implemented.");

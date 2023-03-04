@@ -10,19 +10,23 @@ train_images, test_images = train_images / 255.0, test_images / 255.0
 
 model = models.Sequential()
 model.add(layers.Input(shape=(28, 28, 1)))
-model.add(layers.Conv2D(1, (3, 3), padding="valid",
+model.add(layers.Conv2D(32, (3, 3), padding="valid",
           activation='relu', use_bias=False))
+model.add(layers.MaxPooling2D((2, 2)))
+# model.add(layers.Conv2D(24, (3, 3), padding="valid",
+#          activation='relu', use_bias=False))
 model.add(layers.Flatten())
-model.add(layers.Dense(10, input_shape=(28, 28, 1)))
+model.add(layers.Dense(128))
+model.add(layers.Dense(10))
 
 model.summary()
 
-model.compile(optimizer=optimizers.SGD(learning_rate=0.005, momentum=0.0),
+model.compile(optimizer=optimizers.SGD(learning_rate=0.002, momentum=0.90),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(
                   from_logits=True),
               metrics=['accuracy'])
 
-history = model.fit(train_images, train_labels, epochs=10,  # batch_size=1
+history = model.fit(train_images, train_labels, epochs=30,  # batch_size=1
                     validation_data=(test_images, test_labels))
 
 plt.plot(history.history['accuracy'], label='accuracy')

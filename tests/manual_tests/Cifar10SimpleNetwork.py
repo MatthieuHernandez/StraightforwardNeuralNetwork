@@ -9,18 +9,20 @@ import matplotlib.pyplot as plt
 train_images, test_images = train_images / 255.0, test_images / 255.0
 
 model = models.Sequential()
-model.add(layers.Conv2D(16, (3, 3), padding="valid", activation='relu',
-                        use_bias=False, input_shape=(32, 32, 3)))
+model.add(layers.Input(shape=(32, 32, 3)))
+model.add(layers.Conv2D(24, (3, 3), padding="valid", activation='relu',
+                        use_bias=True, input_shape=(32, 32, 3)))
 model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(32, (3, 3), padding="valid", activation='relu',
                         use_bias=False))
+model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Flatten())
-model.add(layers.Dense(32, activation='sigmoid'))
+model.add(layers.Dense(128, activation='sigmoid'))
 model.add(layers.Dense(10))
 
 model.summary()
 
-model.compile(optimizer=optimizers.SGD(learning_rate=0.005, momentum=0.9),
+model.compile(optimizer=optimizers.SGD(learning_rate=0.002, momentum=0.9),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(
                   from_logits=True),
               metrics=['accuracy'])

@@ -21,7 +21,7 @@ namespace snn::internal
 
     public:
         Dropout() = default;  // use restricted to Boost library only
-        Dropout(float value, BaseLayer* layer);
+        Dropout(float value, const BaseLayer* layer);
         Dropout(const Dropout& dropout, const BaseLayer* layer);
         ~Dropout() override = default;
 

@@ -8,6 +8,8 @@ void ASSERT_SUCCESS();
 
 void ASSERT_FAIL(std::string message = "");
 
+void ASSERT_VECTOR_EQ(const std::vector<float> values, const std::vector<float> expected_values);
+
 void PRINT_LOG(std::string message);
 
 void PRINT_NUMBER_OF_PARAMETERS(int value);

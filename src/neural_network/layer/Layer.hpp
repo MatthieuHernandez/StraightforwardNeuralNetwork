@@ -12,6 +12,7 @@
 #include "../optimizer/L1Regularization.hpp"
 #include "../optimizer/L2Regularization.hpp"
 #include "../optimizer/ErrorMultiplier.hpp"
+#include "../optimizer/Softmax.hpp"
 
 namespace snn::internal
 {
@@ -73,6 +74,7 @@ namespace snn::internal
         ar.template register_type<L1Regularization>();
         ar.template register_type<L2Regularization>();
         ar.template register_type<ErrorMultiplier>();
+        ar.template register_type<Softmax>();
         ar & this->optimizers;
     }
 

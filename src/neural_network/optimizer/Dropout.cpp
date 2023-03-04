@@ -11,7 +11,7 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Dropout)
 
-Dropout::Dropout(const float value, BaseLayer* layer)
+Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {
     this->reverseValue = 1.0f - this->value;

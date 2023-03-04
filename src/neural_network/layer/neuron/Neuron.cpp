@@ -19,6 +19,7 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     {
         w = randomInitializeWeight(model.numberOfWeights);
     }
+    this->weights.back() = std::abs(this->weights.back());
     this->bias = model.bias;
     this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
     this->previousDeltaWeights.initialize(this->batchSize, model.numberOfWeights);

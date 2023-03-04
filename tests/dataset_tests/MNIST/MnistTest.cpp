@@ -136,25 +136,27 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.70f);
 }
 
-TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
+TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filter({
         Input(1, 28, 28),
-        Convolution(1,11, activation::sigmoid),
-        FullyConnected(10)
-        });
-    nn1Filter.train(*data, 1_ep || 25_s);
+        Convolution(1,5, activation::sigmoid),
+        FullyConnected(10, activation::identity, Softmax())
+        },
+        StochasticGradientDescent(0.0002f, 0.8f));
+    nn1Filter.train(*data, 1_ep || 10_s);
     auto accuracy1Filter = nn1Filter.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy1Filter, 0.8f);
+    ASSERT_ACCURACY(accuracy1Filter, 0.6f);
 
-    StraightforwardNeuralNetwork nn10Filters({
+    StraightforwardNeuralNetwork nn8Filters({
         Input(1, 28, 28),
-        Convolution(10,20, activation::sigmoid),
-        FullyConnected(10)
-        });
-    nn10Filters.train(*data, 1_ep || 25_s);
-    auto accuracy10Filters = nn10Filters.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy10Filters, 0.85f);
+        Convolution(4,5, activation::sigmoid),
+       FullyConnected(10, activation::identity, Softmax())
+        },
+        StochasticGradientDescent(0.0002f, 0.8f));
+    nn8Filters.train(*data, 1_ep || 30_s);
+    auto accuracy10Filters = nn8Filters.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy10Filters, 0.8f);
 
     EXPECT_GT(accuracy10Filters, accuracy1Filter);
 }

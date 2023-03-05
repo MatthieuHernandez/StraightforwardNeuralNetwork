@@ -15,10 +15,10 @@ TEST(Addition, WithMPL)
     auto data = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork({
         Input(2),
-        FullyConnected(6, activation::sigmoid),
+        FullyConnected(8, activation::sigmoid),
         FullyConnected(1, activation::identity)
     });
-    neuralNetwork.train(*data, 1.0_acc || 2_s, 3, 6);
+    neuralNetwork.train(*data, 1.0_acc || 2_s, 3, 4);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 

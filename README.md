@@ -18,9 +18,9 @@
 |--------------|-----------|--------------|-------|----------------------|
 | [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | -                        | -      |
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 30     |
-| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 59.85% Accurracy         | 252710 |
-| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.91% Accurracy         | 193170 |
-| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.60% Accurracy         | 102444 |
+| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 60.28% Accurracy         | 207210 |
+| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 89.65% Accurracy         | 270926 |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.71% Accurracy         | 261206 |
 | [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100.0% Accurracy         | 444    |
 | [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100.0% Accurracy         | 150    |
 
@@ -48,15 +48,15 @@ using namespace snn;
 Data data(problem::classification, inputData, expectedOutputs);
 
 StraightforwardNeuralNetwork neuralNetwork({
-    Input(28, 28, 1), 
-    Convolution(1, 3, activation::ReLU),
-    FullyConnected(70, activation::tanh),
-    FullyConnected(10, activation::sigmoid)
+    Input(1, 28, 28), // (C, X, Y)
+    Convolution(16, 3, activation::ReLU), // 16 filters and (3, 3) kernels
+    FullyConnected(92),
+    FullyConnected(10, activation::identity, Softmax())
 });
 
-neuralNetwork.train(data, 0.90_acc || 20_s); // train neural network on data until 90% accuracy or 20s
+neuralNetwork.train(data, 0.90_acc || 20_s); // Train neural network on data until 90% accuracy or 20s
 
-float accuracy = neuralNetwork.getGlobalClusteringRate() * 100.0f;
+float accuracy = neuralNetwork.getGlobalClusteringRate(); // Retrieve the accuracy
 ```
 [see more details](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki/)
 ## License

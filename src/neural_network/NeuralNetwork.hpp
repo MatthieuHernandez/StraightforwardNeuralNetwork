@@ -22,9 +22,6 @@ namespace snn::internal
     class NeuralNetwork : public StatisticAnalysis
     {
     private:
-        static bool isTheFirst; // TODO: remplace by seed
-        static void initialize();
-
         bool outputNan = false;
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset);
@@ -82,8 +79,6 @@ namespace snn::internal
     template <class Archive>
     void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     {
-        if (isTheFirst)
-            this->initialize();
         boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
         ar & boost::serialization::base_object<StatisticAnalysis>(*this);
         ar.template register_type<FullyConnected>();

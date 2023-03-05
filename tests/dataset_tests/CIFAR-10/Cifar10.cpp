@@ -34,12 +34,12 @@ void Cifar10::loadData(string folderPath)
     this->data = make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
-vector2D<float> Cifar10::readImages(string filePaths[], int size, vector2D<float>& labels)
+vector2D<float> Cifar10::readImages(string filePaths[], size_t size, vector2D<float>& labels) const
 {
     vector2D<float> images;
     images.reserve(size * 10000);
-    for (int i = 0; i < size; i++)
-        this->readImages(filePaths[i], images, labels);
+    for (size_t i = 0; i < size; i++)
+        readImages(filePaths[i], images, labels);
     return images;
 }
 
@@ -72,6 +72,7 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         for (int j = 0; !file.eof() && j < sizeOfData; j++)
         {
             c = static_cast<char>(file.get());
+            //imageTemp[j] = c;
             if (j < 1024)
                 imageTemp[j*3] = c;
             else if (j < 2048)

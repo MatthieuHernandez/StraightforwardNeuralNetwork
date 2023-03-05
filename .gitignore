@@ -25,13 +25,16 @@
 DatasetTests
 UnitTests
 
-# Ignore cmake generated directories and files.
+# Ignore CMake generated directories and files.
 generated/
 CMakeFiles/
 *.cmake
 !internal_utils.cmake
 CMakeCache.txt
 MakeFile
+
+# Ignore Python generated directories and files.
+__pycache__/
 
 # Ignore copy of datasets.
 build/datasets/

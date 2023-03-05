@@ -12,9 +12,34 @@ Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimize
     : FilterLayer(model, optimizer)
 {
     this->shapeOfOutput = {
-        this->shapeOfInput[0] - (this->sizeOfFilterMatrix - 1),
-        this->numberOfFilters
+        this->numberOfFilters,
+        this->shapeOfInput[X] - (this->kernelSize - 1),
     };
+    this->numberOfNeuronsPerFilter = 1;
+    this->buildKernelIndexes();
+}
+
+void Convolution1D::buildKernelIndexes()
+{
+    this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
+    const int maxC = this->shapeOfInput[C];
+    const int kSize = this->kernelSize;
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
+    {
+        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
+        for (int x = 0; x < kSize; ++x)
+        {
+            const int inputIndexX = (k + x) * maxC;
+            const int kernelIndexX = x * maxC;
+            for (int c = 0; c < maxC; ++c)
+            {
+                const int inputIndex = inputIndexX + c;
+                const int kernelIndex = kernelIndexX + c;
+                this->kernelIndexes[k][kernelIndex] = inputIndex;
+            }
+        }
+    }
 }
 
 inline
@@ -32,32 +57,58 @@ int Convolution1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfFilterMatrix * this->shapeOfInput[1])
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
             return 203;
     }
     return this->FilterLayer::isValid();
 }
 
 inline
-vector<float> Convolution1D::createInputsForNeuron(const int neuronIndex, const vector<float>& inputs)
+vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
-    const int beginIndex = neuronIndex * this->shapeOfInput[1];
-    const int endIndex = (neuronIndex + this->sizeOfFilterMatrix) * this->shapeOfInput[1];
-    return vector<float>(inputs.begin() + beginIndex, inputs.begin() + endIndex);
+    vector<float> outputs(this->numberOfKernels);
+    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
+    {
+        for (size_t i = 0; i < neuronInputs.size(); ++i)
+        {
+            const auto& index = kernelIndexes[k][i];
+            neuronInputs[i] = inputs[index];
+        }
+        for (size_t n = 0; n < this->neurons.size(); ++n, ++o)
+        {
+            outputs[o] = this->neurons[n].output(neuronInputs);
+        }
+    }
+    return outputs;
 }
 
 inline
-void Convolution1D::insertBackOutputForNeuron(const int neuronIndex, const std::vector<float>& error,
-                                              std::vector<float>& errors)
+vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
 {
-    const int beginIndex = neuronIndex * this->shapeOfInput[1];
-    for (int e = 0; e < (int)error.size(); ++e)
+    vector<float> errors(this->numberOfInputs, 0);
+    for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
     {
-        const int i = beginIndex + e;
-        errors[i] += error[e];
+        for (auto& neuron : this->neurons)
+        {
+            auto& error = neuron.backOutput(inputErrors[i]);
+            for (size_t e = 0; e < error.size(); ++e)
+            {
+                const auto& index = kernelIndexes[k][e];
+                errors[index] += error[e];
+            }
+            ++i;
+        }
     }
+    return errors;
 }
 
+inline
+void Convolution1D::computeTrain(std::vector<float>& inputErrors)
+{
+    for (int n = 0; n < this->numberOfFilters; ++n)
+        this->neurons[n].train(inputErrors[n]);
+}
 bool Convolution1D::operator==(const BaseLayer& layer) const
 {
     return this->FilterLayer::operator==(layer);

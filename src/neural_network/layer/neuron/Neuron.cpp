@@ -7,12 +7,11 @@ using namespace internal;
 
 Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
+      batchSize(model.batchSize),
       activationFunction(model.activationFunction),
       optimizer(optimizer)
 
 {
-    this->previousDeltaWeights.resize(model.numberOfWeights, 0);
-    this->lastInputs.resize(model.numberOfInputs, 0);
     this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
@@ -20,7 +19,10 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     {
         w = randomInitializeWeight(model.numberOfWeights);
     }
-    this->bias = 1.0f;
+    this->weights.back() = std::abs(this->weights.back());
+    this->bias = model.bias;
+    this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
+    this->previousDeltaWeights.initialize(this->batchSize, model.numberOfWeights);
 }
 
 float Neuron::randomInitializeWeight(int numberOfWeights)
@@ -51,9 +53,16 @@ vector<float> Neuron::getWeights() const
     return this->weights;
 }
 
+void Neuron::setWeights(std::vector<float> w)
+{
+    if (this->weights.size() != w.size())
+        throw std::runtime_error("The size of weights does not match.");
+    this->weights = std::move(w);
+}
+
 int Neuron::getNumberOfParameters() const
 {
-    return static_cast<int>(this->weights.size()) + 1;
+    return static_cast<int>(this->weights.size());
 }
 
 int Neuron::getNumberOfInputs() const
@@ -68,7 +77,7 @@ NeuralNetworkOptimizer* Neuron::getOptimizer() const
 
 void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
-    this->optimizer = newOptimizer;
+    this->optimizer = std::move(newOptimizer);
 }
 
 bool Neuron::operator==(const Neuron& neuron) const

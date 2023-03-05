@@ -19,8 +19,12 @@ namespace snn
             {
                 0,
                 0,
+                0,
+                0,
                 activation::identity
             },
+            0,
+            0,
             0,
             0,
             {static_cast<int>(sizeOfInput) ...},
@@ -41,8 +45,12 @@ namespace snn
             {
                 -1,
                 -1,
+                -1,
+                1.0f,
                 activation
             },
+            -1,
+            -1,
             -1,
             -1,
             std::vector<int>(),
@@ -63,8 +71,12 @@ namespace snn
             {
                 -1,
                 -1,
+                -1,
+                1.0f,
                 activation
             },
+            -1,
+            -1,
             -1,
             -1,
             std::vector<int>(),
@@ -85,8 +97,12 @@ namespace snn
             {
                 -1,
                 -1,
+                -1,
+                1.0f,
                 activation::tanh,
             },
+            -1,
+            -1,
             -1,
             -1,
             std::vector<int>(),
@@ -96,7 +112,7 @@ namespace snn
     }
 
     template <class ... TOptimizer>
-    LayerModel MaxPooling(int sizeOfPoolingMatrix)
+    LayerModel MaxPooling(int kernelSize)
     {
         LayerModel model
         {
@@ -107,10 +123,14 @@ namespace snn
             {
                 0,
                 0,
+                0,
+                0.0f,
                 activation::identity
             },
             1,
-            sizeOfPoolingMatrix,
+            -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             std::vector<LayerOptimizerModel>()
 
@@ -119,7 +139,7 @@ namespace snn
     }
 
     template <class ... TOptimizer>
-    LayerModel LocallyConnected(int numberOfLocallyConnected, int sizeOfLocalMatrix, activation activation = activation::sigmoid, TOptimizer ... optimizers)
+    LayerModel LocallyConnected(int numberOfLocallyConnected, int kernelSize, activation activation = activation::sigmoid, TOptimizer ... optimizers)
     {
         LayerModel model
         {
@@ -131,10 +151,14 @@ namespace snn
             {
                 -1,
                 -1,
+                -1,
+                0.001f,
                 activation
             },
             numberOfLocallyConnected,
-            sizeOfLocalMatrix,
+            -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
 
@@ -143,22 +167,26 @@ namespace snn
     }
 
     template <class ... TOptimizer>
-    LayerModel Convolution(int numberOfConvolution, int sizeOfConvolutionMatrix,
+    LayerModel Convolution(int numberOfConvolution, int kernelSize,
                            activation activation = activation::ReLU, TOptimizer ... optimizers)
     {
         LayerModel model
         {
             convolution,
             -1,
-            -1,
+            1,
             -1,
             {
                 -1,
                 -1,
+                -1,
+                0.001f,
                 activation,
             },
             numberOfConvolution,
-            sizeOfConvolutionMatrix,
+            -1,
+            -1,
+            kernelSize,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
         };

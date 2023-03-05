@@ -12,23 +12,26 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions;
+vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
+
+inline
+vector<shared_ptr<ActivationFunction>> ActivationFunction::initialize()
+{
+    vector<shared_ptr<ActivationFunction>> activations;
+    activations.reserve(6);
+    activations.emplace_back(new Sigmoid());
+    activations.emplace_back(new ImprovedSigmoid());
+    activations.emplace_back(new Tanh());
+    activations.emplace_back(new RectifiedLinearUnit());
+    activations.emplace_back(new GaussianErrorLinearUnit());
+    activations.emplace_back(new Gaussian());
+    activations.emplace_back(new Identity());
+    return activations;
+}
 
 ActivationFunction::ActivationFunction(float min, float max)
     : min(min), max(max)
 {
-}
-
-void ActivationFunction::initialize()
-{
-    activationFunctions.reserve(6);
-    activationFunctions.emplace_back(new Sigmoid());
-    activationFunctions.emplace_back(new ImprovedSigmoid());
-    activationFunctions.emplace_back(new Tanh());
-    activationFunctions.emplace_back(new RectifiedLinearUnit());
-    activationFunctions.emplace_back(new GaussianErrorLinearUnit());
-    activationFunctions.emplace_back(new Gaussian());
-    activationFunctions.emplace_back(new Identity());
 }
 
 shared_ptr<ActivationFunction> ActivationFunction::get(activation type)

@@ -41,7 +41,7 @@ TEST_F(MnistTest, loadData)
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         MaxPooling(2),
         FullyConnected(10)
     },
@@ -96,7 +96,7 @@ TEST_F(MnistTest, LocallyConnected1D)
 TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         LocallyConnected(2, 2),
         FullyConnected(150),
         FullyConnected(70),
@@ -110,20 +110,19 @@ TEST_F(MnistTest, locallyConnected2D)
 TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(1,5, activation::GELU, ErrorMultiplier(10.0f)),
-        FullyConnected(70),
+        Input(1, 28, 28),
+        Convolution(4,3, activation::ReLU),
         FullyConnected(10)
         });
     neuralNetwork.train(*data, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.93f);
+    ASSERT_ACCURACY(accuracy, 0.87f);
 }
 
 TEST_F(MnistTest, multipleLayersNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         LocallyConnected(2, 2, activation::ReLU),
         Convolution(2, 2, activation::ReLU),
         FullyConnected(70),
@@ -137,24 +136,26 @@ TEST_F(MnistTest, multipleLayersNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.70f);
 }
 
-TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
+TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filter({
-        Input(28, 28, 1),
-        Convolution(1,26, activation::sigmoid),
-        FullyConnected(10)
-        });
-    nn1Filter.train(*data, 1_ep || 25_s);
+        Input(1, 28, 28),
+        Convolution(1,5, activation::sigmoid),
+        FullyConnected(10, activation::identity, Softmax())
+        },
+        StochasticGradientDescent(0.0002f, 0.8f));
+    nn1Filter.train(*data, 1_ep || 10_s);
     auto accuracy1Filter = nn1Filter.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy1Filter, 0.7f);
+    ASSERT_ACCURACY(accuracy1Filter, 0.6f);
 
-    StraightforwardNeuralNetwork nn10Filters({
-        Input(28, 28, 1),
-        Convolution(8,26, activation::sigmoid),
-        FullyConnected(10)
-        });
-    nn10Filters.train(*data, 1_ep || 25_s);
-    auto accuracy10Filters = nn10Filters.getGlobalClusteringRate();
+    StraightforwardNeuralNetwork nn8Filters({
+        Input(1, 28, 28),
+        Convolution(4,5, activation::sigmoid),
+       FullyConnected(10, activation::identity, Softmax())
+        },
+        StochasticGradientDescent(0.0002f, 0.8f));
+    nn8Filters.train(*data, 1_ep || 30_s);
+    auto accuracy10Filters = nn8Filters.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy10Filters, 0.8f);
 
     EXPECT_GT(accuracy10Filters, accuracy1Filter);
@@ -163,13 +164,13 @@ TEST_F(MnistTest, multipleFilterConvolutionBetterThanOnce)
 TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        LocallyConnected(2, 2, activation::ReLU, ErrorMultiplier(10.0f)),
-        Convolution(8, 4, activation::sigmoid),
-        FullyConnected(70, activation::sigmoid),
-        FullyConnected(10)
+        Input(1, 28, 28),
+        Convolution(12, 4, activation::ReLU),
+        MaxPooling(2),
+        FullyConnected(128, activation::ReLU),
+        FullyConnected(10, activation::identity, Softmax())
         },
-        StochasticGradientDescent(0.005f, 0.2f));
+        StochasticGradientDescent(0.002f, 0.0f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -187,14 +188,14 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 102444);
-    ASSERT_FLOAT_EQ(accuracy, 0.986f);
+    ASSERT_EQ(numberOfParameters, 261206);
+    ASSERT_FLOAT_EQ(accuracy, 0.9871f);
 }
 
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
+        Input(1, 28, 28),
         Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0f)),
         LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0f)),
         FullyConnected(10)

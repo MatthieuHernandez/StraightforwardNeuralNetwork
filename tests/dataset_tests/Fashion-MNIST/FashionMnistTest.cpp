@@ -54,42 +54,44 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(1,5),
-        FullyConnected(70),
+        Input(1, 28, 28),
+        Convolution(1,3, activation::ReLU),
         FullyConnected(10)
-        });
+        },
+        StochasticGradientDescent(0.001f, 0.8f));
     neuralNetwork.train(*data, 1_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.75);
+    ASSERT_ACCURACY(accuracy, 0.74f);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(28, 28, 1),
-        Convolution(4, 4, activation::GELU, ErrorMultiplier(10.0f)),
-        FullyConnected(60, activation::sigmoid, Dropout(0.1f)),
+        Input(1, 28, 28),
+        Convolution(12, 3, activation::ReLU),
+        MaxPooling(2),
+        Convolution(24, 3, activation::ReLU),
+        FullyConnected(92),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.005f, 0.5f));
+        StochasticGradientDescent(0.005f, 0.93f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.8853_acc);
+    neuralNetwork.train(*data, 0.92_acc); // Reach after 109 epochs of 2 sec.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
 }
 
-TEST_F(FashionMnistTest, EvaluateBestNeuralNetwork)
+TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForFashion-MNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 193170);
-    ASSERT_FLOAT_EQ(accuracy, 0.8891f);
+    ASSERT_EQ(numberOfParameters, 270926);
+    ASSERT_FLOAT_EQ(accuracy, 0.8965f);
 }

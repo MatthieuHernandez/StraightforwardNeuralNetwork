@@ -20,19 +20,20 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 {
     if (temporalReset)
         this->reset();
-    this->lastInputs = inputs;
+    this->lastInputs.pushBack(inputs);
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
-    int w = 0;
+    size_t w = 0;
     float tmp = 0.0f; // to activate the SIMD optimization
+    assert(this->weights.size() == inputs.size() + 2);
     #pragma omp simd
-    for (w = 0; w < (int)inputs.size(); ++w)
+    for (w = 0; w < inputs.size(); ++w)
     {
         tmp += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias;
-    float output = outputFunction->function(sum);
+    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias * this->weights[w+1];
+    const float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
     #ifdef _MSC_VER
@@ -40,10 +41,10 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
     #endif
 }
 
-std::vector<float>& RecurrentNeuron::backOutput(float error)
+vector<float>& RecurrentNeuron::backOutput(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
-
+    error = error * this->outputFunction->derivative(this->sum);
+    assert(this->weights.size() == this->errors.size() + 2);
     #pragma omp simd // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
@@ -55,7 +56,7 @@ std::vector<float>& RecurrentNeuron::backOutput(float error)
 
 void RecurrentNeuron::train(float error)
 {
-    error = error * outputFunction->derivative(this->sum);
+    error = error * this->outputFunction->derivative(this->sum);
     this->optimizer->updateWeights(*this, error);
 }
 
@@ -69,7 +70,7 @@ void RecurrentNeuron::reset()
 
 int RecurrentNeuron::isValid() const
 {
-    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 1)
+    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2)
         return 304;
     return this->Neuron::isValid();
 }

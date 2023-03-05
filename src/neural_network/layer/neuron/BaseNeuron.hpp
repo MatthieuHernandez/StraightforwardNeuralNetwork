@@ -37,7 +37,6 @@ namespace snn::internal
         { neuron.getNumberOfParameters() } -> std::same_as<int>;
         { neuron.getNumberOfInputs() } -> std::same_as<int>;
 
-        { neuron.getNumberOfInputs() } -> std::same_as<int>;
         { neuron.operator==(neuron) } -> std::same_as<bool>;
         { neuron.operator!=(neuron) } -> std::same_as<bool>;
     };

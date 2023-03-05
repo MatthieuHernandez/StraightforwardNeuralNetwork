@@ -12,20 +12,8 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(NeuralNetwork)
 
-bool NeuralNetwork::isTheFirst = true;
-
-void NeuralNetwork::initialize()
-{
-    srand(static_cast<unsigned>(time(nullptr)));
-    rand();
-    ActivationFunction::initialize();
-    isTheFirst = false;
-}
-
 NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
 {
-    if (isTheFirst)
-        this->initialize();
     this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
     LayerFactory::build(this->layers, architecture, this->optimizer);
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());

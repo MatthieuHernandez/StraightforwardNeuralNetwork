@@ -1,4 +1,5 @@
 #pragma once
+#include <random>
 #include <vector>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
@@ -15,13 +16,12 @@ namespace snn::internal
 
         float value;
         float reverseValue;
+        std::uniform_real_distribution<> dist;
         std::vector<bool> presenceProbabilities;
-
-        bool randomProbability() const;
 
     public:
         Dropout() = default;  // use restricted to Boost library only
-        Dropout(float value, BaseLayer* layer);
+        Dropout(float value, const BaseLayer* layer);
         Dropout(const Dropout& dropout, const BaseLayer* layer);
         ~Dropout() override = default;
 

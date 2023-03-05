@@ -46,7 +46,7 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
         FullyConnected(25),
         FullyConnected(10)
     });
-    neuralNetwork.train(*data, 1_ep || 120_s);
+    neuralNetwork.train(*data, 1_ep || 60_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.24f);
 }
@@ -54,19 +54,21 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-        Input(32, 32, 3),
-        Convolution(2, 3, activation::GELU, ErrorMultiplier(50.0f)),
-        FullyConnected(100, activation::sigmoid, Dropout(0.2f)),
-        FullyConnected(200, activation::sigmoid, Dropout(0.2f)),
-        FullyConnected(10)
+        Input(3, 32, 32),
+        Convolution(16, 3, activation::ReLU),
+        MaxPooling(2),
+        Convolution(32, 3, activation::ReLU),
+        MaxPooling(2),
+        FullyConnected(128),
+        FullyConnected(10, activation::identity, Softmax())
         },
-        StochasticGradientDescent(0.003f, 0.2f));
+        StochasticGradientDescent(0.001f, 0.8f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.60_acc ||100_ep, 1, 1);
+    neuralNetwork.train(*data, 0.62_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20f);
@@ -78,8 +80,8 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 252710);
-    ASSERT_FLOAT_EQ(accuracy, 0.5985f);
+    ASSERT_EQ(numberOfParameters, 207210);
+    ASSERT_FLOAT_EQ(accuracy, 0.6028f); // Reach after 55 epochs of 770 sec.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
@@ -89,8 +91,10 @@ TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 15);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 16);
 
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *data, 13);
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *data, 14);
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 15);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 16);
 }

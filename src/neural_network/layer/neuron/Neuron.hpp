@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
-#include <boost/serialization/vector.hpp>
+#include <queue>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/vector.hpp>
 #include "BaseNeuron.hpp"
 #include "NeuronModel.hpp"
+#include "CircularData.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "activation_function/ActivationFunction.hpp"
 #include "../../../tools/Tools.hpp"
@@ -20,11 +22,12 @@ namespace snn::internal
     protected:
 
         int numberOfInputs;
+        int batchSize;
         std::vector<float> weights;
         float bias;
 
-        std::vector<float> previousDeltaWeights;
-        std::vector<float> lastInputs;
+        CircularData previousDeltaWeights;
+        CircularData lastInputs;
         std::vector<float> errors;
 
         float sum = 0;
@@ -44,6 +47,7 @@ namespace snn::internal
         [[nodiscard]] int isValid() const;
 
         [[nodiscard]] std::vector<float> getWeights() const;
+        void setWeights(std::vector<float> w);
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 
@@ -60,6 +64,7 @@ namespace snn::internal
         ar.template register_type<StochasticGradientDescent>();
         ar & this->optimizer;
         ar & this->numberOfInputs;
+        ar & this->batchSize;
         ar & this->weights;
         ar & this->bias;
         ar & this->previousDeltaWeights;

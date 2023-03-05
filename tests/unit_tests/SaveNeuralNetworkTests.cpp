@@ -8,7 +8,7 @@ using namespace snn;
 TEST(SaveNeuralNetwork, EqualTest)
 {
     auto structureOfNetwork = {
-        Input(8, 8, 3),
+        Input(3, 8, 8),
         LocallyConnected(2, 2),
         Convolution(2, 4, activation::ReLU),
         FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
@@ -103,21 +103,32 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)
+TEST(SaveNeuralNetwork, Save) // TODO: do a forward to be sure that the network is the same.
 {
     StraightforwardNeuralNetwork A({
                                        Input(45),
                                        MaxPooling(3),
                                        Convolution(2, 2, activation::ReLU),
                                        LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
-                                       FullyConnected(3, activation::sigmoid, Dropout(0.1f)),
+                                       FullyConnected(2, activation::sigmoid, Dropout(0.0f)),
                                        GruLayer(2, L2Regularization(1e-5f))
                                    },
                                    StochasticGradientDescent(0.03f, 0.78f));
 
+    auto randomInput = tools::randomVector(0, 2, 45);
+    auto randomOutput = tools::randomVector(0, 1, 2);
+
     A.saveAs("./testSave.tmp");
+    A.trainOnce(randomInput, randomOutput);
+    auto outputA = A.computeOutput(randomInput);
 
     StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.tmp");
+
+    B.trainOnce(randomInput, randomOutput);
+    auto outputB = B.computeOutput(randomInput);
+
     EXPECT_TRUE(A == B);
+    EXPECT_TRUE(sizeof(A) == sizeof(B)); // Don't count pointing objects by pointer
+    EXPECT_TRUE(outputA == outputB);
     ASSERT_EQ(B.isValid(), 0);
 }

@@ -21,16 +21,22 @@ shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
 
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
 {
-    auto lr = this->learningRate; // to activate the SIMD optimization
-    auto m = this->momentum;
+    auto w = 0;
+    const auto lr = this->learningRate / neuron.batchSize; // to activate the SIMD optimization
+    const auto& m = this->momentum;
+    const auto& numberOfInputs = neuron.numberOfInputs;
+    const auto& lastInputs = neuron.lastInputs.getBack();
+    const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
+    vector<float> deltaWeights(neuron.weights.size());
     #pragma omp simd
-    for (size_t w = 0; w < neuron.weights.size(); ++w)
+    for (w = 0; w < numberOfInputs; ++w)
     {
-        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
-        neuron.weights[w] += deltaWeights;
-        neuron.previousDeltaWeights[w] = deltaWeights;
+        deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
+        neuron.weights[w] += deltaWeights[w];
     }
-    neuron.bias += lr * error * neuron.bias;
+    deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
+    neuron.weights[w] = deltaWeights[w];
+    neuron.previousDeltaWeights.pushBack(deltaWeights);
 }
 
 #ifdef _MSC_VER
@@ -38,22 +44,26 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 #endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
-    size_t w = 0;
-    auto lr = this->learningRate; // to activate the SIMD optimization
-    auto m = this->momentum; 
-    #pragma omp simd
-    for (w = 0; w < neuron.lastInputs.size(); ++w)
+    auto w = 0;
+    const auto lr = this->learningRate / neuron.batchSize;
+    const auto& m = this->momentum;
+    const auto& numberOfInputs = neuron.numberOfInputs;
+    const auto& lastInputs = neuron.lastInputs.getBack();
+    const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
+    vector<float> deltaWeights(neuron.weights.size());
+    #pragma omp simd // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
+    for (w = 0; w < numberOfInputs; ++w)
     {
-        auto deltaWeights = lr * error * neuron.lastInputs[w] + m * neuron.previousDeltaWeights[w];
-        neuron.weights[w] += deltaWeights;
-        neuron.previousDeltaWeights[w] = deltaWeights;
+        deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
+        neuron.weights[w] += deltaWeights[w];
     }
-    neuron.bias += lr * error * neuron.bias;
+    deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
+    neuron.weights[w] += deltaWeights[w];
     neuron.recurrentError = error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
-    auto deltaWeights = lr * neuron.recurrentError * neuron.previousOutput + m * neuron.previousDeltaWeights[w];
-    neuron.weights[w] += deltaWeights;
-    neuron.previousDeltaWeights[w] = deltaWeights;
+    deltaWeights[w] = lr * neuron.recurrentError * neuron.previousOutput + m * previousDeltaWeights[w];
+    neuron.weights[w] += deltaWeights[w];
+    neuron.previousDeltaWeights.pushBack(deltaWeights);
     #ifdef _MSC_VER
     #pragma warning(default:4701)
     #endif

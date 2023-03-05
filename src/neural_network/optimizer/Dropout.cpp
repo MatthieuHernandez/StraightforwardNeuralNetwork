@@ -3,6 +3,7 @@
 #include <boost/serialization/export.hpp>
 #include "Dropout.hpp"
 #include "../layer/BaseLayer.hpp"
+#include "../../tools/Tools.hpp"
 
 using namespace std;
 using namespace snn;
@@ -10,18 +11,16 @@ using namespace internal;
 
 BOOST_CLASS_EXPORT(Dropout)
 
-bool Dropout::randomProbability() const
-{
-    return rand() / static_cast<float>(RAND_MAX) >= this->value;
-}
-
-Dropout::Dropout(const float value, BaseLayer* layer)
+Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {
     this->reverseValue = 1.0f - this->value;
     auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
-    std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
+    this->dist = uniform_real_distribution<>(0.0, 1.0);
+    std::generate(this->presenceProbabilities.begin(),
+                  this->presenceProbabilities.end(),
+                  [&] { return dist(tools::rng) >= this->value; });
 }
 
 Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
@@ -40,7 +39,9 @@ unique_ptr<LayerOptimizer> Dropout::clone(const BaseLayer* newLayer) const
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
 {
     if (temporalReset)
-        std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(), [&]() mutable { return this->randomProbability(); });
+        std::generate(this->presenceProbabilities.begin(),
+                      this->presenceProbabilities.end(),
+                      [&] { return dist(tools::rng) >= this->value; });
     ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
 }
 

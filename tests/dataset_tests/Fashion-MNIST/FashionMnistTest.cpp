@@ -71,10 +71,10 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
         Convolution(12, 3, activation::ReLU),
         MaxPooling(2),
         Convolution(24, 3, activation::ReLU),
-        FullyConnected(128),
+        FullyConnected(92),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.002f, 0.9f));
+        StochasticGradientDescent(0.005f, 0.93f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -92,6 +92,6 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 375866);
-    ASSERT_FLOAT_EQ(accuracy, 0.9013f);
+    ASSERT_EQ(numberOfParameters, 270926);
+    ASSERT_FLOAT_EQ(accuracy, 0.8965f);
 }

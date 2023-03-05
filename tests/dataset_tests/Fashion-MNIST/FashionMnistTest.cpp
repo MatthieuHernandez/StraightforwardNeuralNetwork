@@ -64,17 +64,17 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.74f);
 }
 
-TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
+TEST_F(FashionMnistTest, trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1, 28, 28),
         Convolution(12, 3, activation::ReLU),
         MaxPooling(2),
         Convolution(24, 3, activation::ReLU),
-        FullyConnected(128),
+        FullyConnected(92),
         FullyConnected(10)
     },
-        StochasticGradientDescent(0.002f, 0.9f));
+        StochasticGradientDescent(0.005f, 0.93f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

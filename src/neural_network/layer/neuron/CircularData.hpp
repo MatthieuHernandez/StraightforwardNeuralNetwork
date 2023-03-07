@@ -23,7 +23,7 @@ namespace snn::internal
         void initialize(size_t queueSize, size_t dataSize); // should be call after the ctor
         ~CircularData() = default;
 
-        [[nodiscard]] std::vector<float> getBack();
+        [[nodiscard]] const std::vector<float>* getBack();
         void pushBack(std::vector<float> data);
 
         bool operator==(const CircularData& other) const;

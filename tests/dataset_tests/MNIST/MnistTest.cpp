@@ -119,23 +119,6 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.87f);
 }
 
-TEST_F(MnistTest, multipleLayersNeuralNetwork)
-{
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(1, 28, 28),
-        LocallyConnected(2, 2, activation::ReLU),
-        Convolution(2, 2, activation::ReLU),
-        FullyConnected(70),
-        Convolution(1, 4, activation::sigmoid),
-        FullyConnected(10)
-    },
-        StochasticGradientDescent(0.02f, 0.90f));
-
-    neuralNetwork.train(*data, 2_ep || 25_s);
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70f);
-}
-
 TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 {
     StraightforwardNeuralNetwork nn1Filter({

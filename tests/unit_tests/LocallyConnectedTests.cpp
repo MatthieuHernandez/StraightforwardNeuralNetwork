@@ -85,7 +85,7 @@ TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
 TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
 {
     vector<float> input(50);
-    vector<vector<float>> kernels {
+    vector2D<float> kernels {
         {1., 3., 5., 7., 9., 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 1},
         {2., 4., 6., 8., 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 1},
         {37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59, 61, 63, 65, 67, 69, 71, 1},
@@ -167,7 +167,7 @@ TEST(LocallyConnected, SimpleLocallyConnected2D)
 
 Data createDataForLocallyConnectedTests()
 {
-    vector<vector<float>> inputData = {
+    vector2D<float> inputData = {
         {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
          -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
          -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f},

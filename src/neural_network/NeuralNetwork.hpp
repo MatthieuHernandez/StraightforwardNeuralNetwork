@@ -49,7 +49,7 @@ namespace snn::internal
                                            const float separator,
                                            bool temporalReset);
 
-         std::vector<std::vector<float>> getLayerOutputs(const std::vector<float>& inputs);
+         vector2D<float> getLayerOutputs(const std::vector<float>& inputs);
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only

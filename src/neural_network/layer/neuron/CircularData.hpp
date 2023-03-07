@@ -2,6 +2,7 @@
 #include <vector>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
+#include "../../tools/Tools.hpp"
 
 namespace snn::internal
 {
@@ -13,7 +14,7 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        std::vector<std::vector<float>> queue;
+        vector2D<float> queue;
         size_t indexPush = 0;
         size_t indexGet = 0;
 

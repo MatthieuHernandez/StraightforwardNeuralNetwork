@@ -139,7 +139,7 @@ namespace snn::tools
     }
 
     template <typename T>
-    std::vector<T> flatten(const std::vector<std::vector<T>>& vector2D)
+    std::vector<T> flatten(const vector2D<T>& vector2D)
     {
         std::vector<T> vector1D;
         size_t size = 0;

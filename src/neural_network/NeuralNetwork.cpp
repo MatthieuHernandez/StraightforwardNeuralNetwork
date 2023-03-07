@@ -110,9 +110,9 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
     return errors;
 }
 
-vector<vector<float>> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
+vector2D<float> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
 {
-    vector<vector<float>> filterOutputs;
+    vector2D<float> filterOutputs;
     auto outputs = layers[0]->output(inputs, true);
     filterOutputs.push_back(outputs);
 

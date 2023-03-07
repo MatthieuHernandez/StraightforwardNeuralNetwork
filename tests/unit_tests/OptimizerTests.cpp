@@ -31,16 +31,16 @@ unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData)
 
     inputData.reserve(numberOfData);
     expectedOutputs.reserve(numberOfData);
-    for(int i = 0; i < numberOfData; ++i)
+    for (int i = 0; i < numberOfData; ++i)
     {
         inputData.push_back(vector<float>());
         inputData.back().reserve(sizeOfData);
-        for(int j = 0; j < sizeOfData; ++j)
+        for (int j = 0; j < sizeOfData; ++j)
         {
             const float rand = tools::randomBetween(-1.0f, 1.0f);
             inputData.back().push_back(rand);
         }
-        if(inputData[i][0] > 0)
+        if (inputData[i][0] > 0)
             expectedOutputs.push_back({1.0f});
         else
             expectedOutputs.push_back({0.0f});

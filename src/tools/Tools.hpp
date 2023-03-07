@@ -43,7 +43,8 @@ namespace snn::tools
     float randomBetween(const float min, const float max);
     std::vector<float> randomVector(const float min, const float max, const size_t size);
 
-    inline std::string toString(std::chrono::milliseconds duration)
+    inline
+    std::string toString(std::chrono::milliseconds duration)
     {
         std::string str;
 
@@ -119,7 +120,8 @@ namespace snn::tools
         }
     }
 
-    inline std::string toConstSizeString(int value, size_t length)
+    inline
+    std::string toConstSizeString(int value, size_t length)
     {
         auto str = std::to_string(value);
         while (str.length() < length)
@@ -127,7 +129,8 @@ namespace snn::tools
         return str;
     }
 
-    inline std::string toConstSizeString(float value, size_t length)
+    inline
+    std::string toConstSizeString(float value, size_t length)
     {
         auto str = std::to_string(value);
         while (str.length() < length)

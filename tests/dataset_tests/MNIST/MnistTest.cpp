@@ -113,7 +113,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
         Input(1, 28, 28),
         Convolution(4,3, activation::ReLU),
         FullyConnected(10)
-        });
+    });
     neuralNetwork.train(*data, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.87f);
@@ -142,7 +142,7 @@ TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
         Input(1, 28, 28),
         Convolution(1,5, activation::sigmoid),
         FullyConnected(10, activation::identity, Softmax())
-        },
+    },
         StochasticGradientDescent(0.0002f, 0.8f));
     nn1Filter.train(*data, 1_ep || 10_s);
     auto accuracy1Filter = nn1Filter.getGlobalClusteringRate();
@@ -151,8 +151,8 @@ TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
     StraightforwardNeuralNetwork nn8Filters({
         Input(1, 28, 28),
         Convolution(4,5, activation::sigmoid),
-       FullyConnected(10, activation::identity, Softmax())
-        },
+        FullyConnected(10, activation::identity, Softmax())
+    },
         StochasticGradientDescent(0.0002f, 0.8f));
     nn8Filters.train(*data, 1_ep || 30_s);
     auto accuracy10Filters = nn8Filters.getGlobalClusteringRate();
@@ -169,7 +169,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
         MaxPooling(2),
         FullyConnected(128, activation::ReLU),
         FullyConnected(10, activation::identity, Softmax())
-        },
+    },
         StochasticGradientDescent(0.002f, 0.0f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
@@ -199,7 +199,7 @@ TEST_F(MnistTest, DISABLED_SaveFeatureMap)
         Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0f)),
         LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0f)),
         FullyConnected(10)
-        },
+    },
         StochasticGradientDescent(0.005f, 0.1f));
     neuralNetwork.saveData2DAsBitmap("./bitmap/data", *data, 13);
     neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before", *data, 13);

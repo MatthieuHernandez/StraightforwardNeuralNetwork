@@ -31,8 +31,6 @@ int multipleClassificationExample()
         && output[1] > separator
         && output[2] < separator
         && neuralNetwork.isValid() == 0)
-    {
         return EXIT_SUCCESS; // the neural network has learned
-    }
     return EXIT_FAILURE;
 }

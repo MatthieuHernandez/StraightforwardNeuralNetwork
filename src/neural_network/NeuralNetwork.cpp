@@ -61,9 +61,7 @@ vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalRe
     auto outputs = layers[0]->output(inputs, temporalReset);
 
     for (size_t l = 1; l < this->layers.size(); ++l)
-    {
         outputs = layers[l]->output(outputs, temporalReset);
-    }
 
     if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
         this->outputNan = true;
@@ -76,9 +74,7 @@ std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& in
     auto outputs = layers[0]->outputForTraining(inputs, temporalReset);
 
     for (size_t l = 1; l < this->layers.size(); ++l)
-    {
         outputs = layers[l]->outputForTraining(outputs, temporalReset);
-    }
 
     if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
         this->outputNan = true;
@@ -96,9 +92,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
     auto errors = calculateError(outputs, desired);
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
-    {
         errors = layers[l]->backOutput(errors);
-    }
     layers[0]->train(errors);
 }
 
@@ -111,9 +105,7 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
         if (isnan(desired[n]))
             errors[n] = 0;
         else
-        {
             errors[n] = 2 * (desired[n] - outputs[n]);
-        }
     }
     return errors;
 }
@@ -166,9 +158,7 @@ int NeuralNetwork::getNumberOfParameters() const
 {
     int sum = 0;
     for (const auto& layer : this->layers)
-    {
         sum += layer->getNumberOfParameters();
-    }
     return sum;
 }
 

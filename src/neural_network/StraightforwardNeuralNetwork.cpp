@@ -217,7 +217,7 @@ bool StraightforwardNeuralNetwork::continueTraining(Wait wait) const
     const auto accuracy = this->getGlobalClusteringRate();
     const auto mae = this->getMeanAbsoluteError();
 
-    if(this->hasNan())
+    if (this->hasNan())
         log<minimal>("A NaN value has been detected");
 
     return !this->wantToStopTraining && !wait.isOver(epochs, accuracy, mae) && !this->hasNan();

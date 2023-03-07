@@ -111,7 +111,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
 
 void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::vector<int> shapeOfInput, const string& filePath)
 {
-    if(shapeOfInput.size() != 3)
+    if (shapeOfInput.size() != 3)
         return;
     bitmap_image image(shapeOfInput[X], shapeOfInput[Y]);
     image.set_all_channels(0, 0, 0);

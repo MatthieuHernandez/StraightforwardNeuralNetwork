@@ -126,7 +126,7 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
     };
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0f, 0.0f);
     internal::LocallyConnected2D conv(model, sgd);
-    for(int k = 0; k < 8; ++k)
+    for (int k = 0; k < 8; ++k)
         static_cast<internal::SimpleNeuron*>(conv.getNeuron(k))->setWeights(kernels[k]);
     auto output = conv.output(input, false);
     auto backOutput = conv.backOutput(input);

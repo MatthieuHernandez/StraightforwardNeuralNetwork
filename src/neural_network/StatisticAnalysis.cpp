@@ -65,11 +65,11 @@ void StatisticAnalysis::stopTesting()
         this->f1Score = newF1Score;
 
     this->meanAbsoluteErrorIsBetterThanMin = newMeanAbsoluteError < this->meanAbsoluteErrorMin || this->meanAbsoluteErrorMin < 0;
-    if(this->meanAbsoluteErrorIsBetterThanMin)
+    if (this->meanAbsoluteErrorIsBetterThanMin)
         this->meanAbsoluteErrorMin = newMeanAbsoluteError;
 
     this->rootMeanSquaredErrorIsBetterThanMin = newRootMeanSquaredError < this->rootMeanSquaredErrorMin || this->meanAbsoluteErrorMin < 0;
-    if(this->rootMeanSquaredErrorIsBetterThanMin)
+    if (this->rootMeanSquaredErrorIsBetterThanMin)
         this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
 
     this->globalClusteringRate = newGlobalClusteringRate;

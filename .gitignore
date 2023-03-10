@@ -32,6 +32,7 @@ CMakeFiles/
 !internal_utils.cmake
 CMakeCache.txt
 MakeFile
+_deps/
 
 # Ignore Python generated directories and files.
 __pycache__/

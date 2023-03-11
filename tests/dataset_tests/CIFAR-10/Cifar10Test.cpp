@@ -81,7 +81,7 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6028f); // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6177f); // Reach after 55 epochs of 770 sec.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

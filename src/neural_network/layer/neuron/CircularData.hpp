@@ -2,6 +2,7 @@
 #include <vector>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
+#include "../../tools/Tools.hpp"
 
 namespace snn::internal
 {
@@ -13,7 +14,7 @@ namespace snn::internal
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-        std::vector<std::vector<float>> queue;
+        vector2D<float> queue;
         size_t indexPush = 0;
         size_t indexGet = 0;
 
@@ -22,7 +23,7 @@ namespace snn::internal
         void initialize(size_t queueSize, size_t dataSize); // should be call after the ctor
         ~CircularData() = default;
 
-        [[nodiscard]] std::vector<float> getBack();
+        [[nodiscard]] const std::vector<float>* getBack();
         void pushBack(std::vector<float> data);
 
         bool operator==(const CircularData& other) const;

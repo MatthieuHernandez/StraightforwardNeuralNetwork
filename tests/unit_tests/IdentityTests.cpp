@@ -7,8 +7,8 @@ using namespace snn;
 
 TEST(Identity, WorksWithSmallNumbers)
 {
-    vector<vector<float>> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}};
-    vector<vector<float>> expectedOutputs = {{0}, {0.25}, {0.50}, {0.75}, {1.00}, {1.25}};
+    vector2D<float> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}};
+    vector2D<float> expectedOutputs = {{0}, {0.25}, {0.50}, {0.75}, {1.00}, {1.25}};
 
     Data data(problem::regression, inputData, expectedOutputs);
 
@@ -27,8 +27,8 @@ TEST(Identity, WorksWithSmallNumbers)
 
 TEST(Identity, WorksWithBigNumbers)
 {
-    vector<vector<float>> inputData = {{-3}, {-2}, {-1}, {0}, {1}, {2}, {3}, {4}};
-    vector<vector<float>> expectedOutputs = {{-75}, {-50}, {-25}, {0}, {25}, {50}, {75}, {100}};
+    vector2D<float> inputData = {{-3}, {-2}, {-1}, {0}, {1}, {2}, {3}, {4}};
+    vector2D<float> expectedOutputs = {{-75}, {-50}, {-25}, {0}, {25}, {50}, {75}, {100}};
 
     Data data(problem::regression, inputData, expectedOutputs);
 
@@ -50,8 +50,8 @@ TEST(Identity, WorksWithBigNumbers)
 
 TEST(Identity, WorksWithLotsOfNumbers)
 {
-    vector<vector<float>> inputData = {{9}, {2}, {7}, {5}, {1}, {8}, {6}, {3}, {4}, {0}, {9.5}, {2.5}, {7.5}, {5.5}, {1.5}, {8.5}, {6.5}, {3.5}, {4.5}, {0.5}};
-    vector<vector<float>> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0}, {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
+    vector2D<float> inputData = {{9}, {2}, {7}, {5}, {1}, {8}, {6}, {3}, {4}, {0}, {9.5}, {2.5}, {7.5}, {5.5}, {1.5}, {8.5}, {6.5}, {3.5}, {4.5}, {0.5}};
+    vector2D<float> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0}, {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
 
     float precision = 0.4f;
     Data data(problem::regression, inputData, expectedOutputs);

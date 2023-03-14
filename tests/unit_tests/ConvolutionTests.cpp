@@ -152,7 +152,7 @@ TEST(Convolution, SimpleConvolution2D)
 
 Data createDataForConvolutionTests()
 {
-    vector<vector<float>> inputData = {
+    vector2D<float> inputData = {
         {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
          -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
          -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f},

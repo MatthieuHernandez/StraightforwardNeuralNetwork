@@ -42,13 +42,13 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(3072),
-        FullyConnected(100),
-        FullyConnected(25),
-        FullyConnected(10)
+        FullyConnected(80),
+        FullyConnected(30),
+        FullyConnected(10, activation::identity, Softmax())
     });
-    neuralNetwork.train(*data, 1_ep || 60_s);
+    neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.24f);
+    ASSERT_ACCURACY(accuracy, 0.26f);
 }
 
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
@@ -61,7 +61,7 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
         MaxPooling(2),
         FullyConnected(128),
         FullyConnected(10, activation::identity, Softmax())
-        },
+    },
         StochasticGradientDescent(0.001f, 0.8f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
@@ -81,7 +81,7 @@ TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6028f); // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6177f); // Reach after 55 epochs of 770 sec.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

@@ -23,7 +23,7 @@ namespace snn::internal
         int sizeOfNeuronInputs;
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
-        std::vector<std::vector<int>> kernelIndexes;
+        vector2D<int> kernelIndexes;
 
         virtual void buildKernelIndexes() = 0;
 

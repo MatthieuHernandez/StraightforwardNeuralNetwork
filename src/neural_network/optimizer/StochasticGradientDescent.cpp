@@ -25,13 +25,14 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     const auto lr = this->learningRate / neuron.batchSize; // to activate the SIMD optimization
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
-    const auto& lastInputs = neuron.lastInputs.getBack();
-    const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
+    const auto lastInputs = *neuron.lastInputs.getBack();
+    const auto previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     vector<float> deltaWeights(neuron.weights.size());
+    const auto lr_error = lr * error;
     #pragma omp simd
     for (w = 0; w < numberOfInputs; ++w)
     {
-        deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
+        deltaWeights[w] = lr_error * lastInputs[w] + m * previousDeltaWeights[w];
         neuron.weights[w] += deltaWeights[w];
     }
     deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
@@ -48,8 +49,8 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     const auto lr = this->learningRate / neuron.batchSize;
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
-    const auto& lastInputs = neuron.lastInputs.getBack();
-    const auto& previousDeltaWeights = neuron.previousDeltaWeights.getBack();
+    const auto lastInputs = *neuron.lastInputs.getBack();
+    const auto previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     vector<float> deltaWeights(neuron.weights.size());
     #pragma omp simd // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < numberOfInputs; ++w)

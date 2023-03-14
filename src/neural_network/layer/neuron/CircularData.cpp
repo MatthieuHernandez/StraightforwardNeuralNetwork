@@ -13,12 +13,12 @@ void snn::internal::CircularData::initialize(const size_t queueSize, const size_
         d = vector<float>(dataSize, 0.0f);
 }
 
-std::vector<float> snn::internal::CircularData::getBack()
+const std::vector<float>* snn::internal::CircularData::getBack()
 {
     assert(this->indexGet <= this->queue.size());
     if (this->indexGet >= this->queue.size())
         this->indexGet = 0;
-    return this->queue[this->indexGet++];
+    return &this->queue[this->indexGet++];
 }
 
 void snn::internal::CircularData::pushBack(std::vector<float> data)

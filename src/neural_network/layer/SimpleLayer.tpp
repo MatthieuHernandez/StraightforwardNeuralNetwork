@@ -34,7 +34,7 @@ std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputEr
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        for(size_t e = 0; e < errors.size(); ++e)
+        for (size_t e = 0; e < errors.size(); ++e)
             errors[e] += error[e];
     }
     return errors;

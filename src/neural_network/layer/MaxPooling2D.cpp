@@ -85,7 +85,7 @@ vector<float> MaxPooling2D::computeOutput(const vector<float>& inputs, [[maybe_u
         {
             const auto& index = this->kernelIndexes[k][i];
             if (index >= 0) [[likely]]
-                if(this->maxValueIndexes[k] == -1 || inputs[index] >= inputs[this->maxValueIndexes[k]])
+                if (this->maxValueIndexes[k] == -1 || inputs[index] >= inputs[this->maxValueIndexes[k]])
                     this->maxValueIndexes[k] = index;
         }
         outputs[k] = inputs[this->maxValueIndexes[k]];

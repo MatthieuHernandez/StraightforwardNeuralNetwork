@@ -9,8 +9,8 @@ TEST(Memory, passingArgByCopy)
 {
     try
     {
-        auto inputData = new vector<vector<float>> {{0, 0, 0}, {1, 1, 1}};
-        auto expectedOutputs = new vector<vector<float>> {{0}, {1}};
+        auto inputData = new vector2D<float> {{0, 0, 0}, {1, 1, 1}};
+        auto expectedOutputs = new vector2D<float> {{0}, {1}};
         auto data = new Data(problem::regression, *inputData, *expectedOutputs);
         const vector<LayerModel> achitecture = {
             Input(1, 3),
@@ -40,8 +40,8 @@ TEST(Memory, copyOperator)
 {
     try
     {
-        vector<vector<float>> inputData = {{0, 0, 0}, {1, 1, 1}};
-        vector<vector<float>> expectedOutputs = {{0}, {1}};
+        vector2D<float> inputData = {{0, 0, 0}, {1, 1, 1}};
+        vector2D<float> expectedOutputs = {{0}, {1}};
         Data data(problem::regression, inputData, expectedOutputs);
         auto neuralNetwork = new StraightforwardNeuralNetwork({
                 Input(1, 3),

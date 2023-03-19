@@ -165,7 +165,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/train/dogs/dog_barking_16.wav",
             "/train/dogs/dog_barking_17.wav",
             "/train/dogs/dog_barking_18.wav",
-            "/train/dogs/dog_barking_2.wav ",
+            "/train/dogs/dog_barking_2.wav",
             "/train/dogs/dog_barking_20.wav",
             "/train/dogs/dog_barking_21.wav",
             "/train/dogs/dog_barking_22.wav",
@@ -184,7 +184,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/train/dogs/dog_barking_37.wav",
             "/train/dogs/dog_barking_38.wav",
             "/train/dogs/dog_barking_39.wav",
-            "/train/dogs/dog_barking_4.wav ",
+            "/train/dogs/dog_barking_4.wav",
             "/train/dogs/dog_barking_40.wav",
             "/train/dogs/dog_barking_41.wav",
             "/train/dogs/dog_barking_42.wav",
@@ -251,7 +251,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/test/cats/cat_24.wav",
             "/test/cats/cat_28.wav",
             "/test/cats/cat_29.wav",
-            "/test/cats/cat_3.wav ",
+            "/test/cats/cat_3.wav",
             "/test/cats/cat_36.wav",
             "/test/cats/cat_42.wav",
             "/test/cats/cat_55.wav",
@@ -275,7 +275,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/test/dogs/dog_barking_15.wav",
             "/test/dogs/dog_barking_19.wav",
             "/test/dogs/dog_barking_24.wav",
-            "/test/dogs/dog_barking_3.wav ",
+            "/test/dogs/dog_barking_3.wav",
             "/test/dogs/dog_barking_34.wav",
             "/test/dogs/dog_barking_43.wav",
             "/test/dogs/dog_barking_44.wav",
@@ -288,13 +288,13 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/test/dogs/dog_barking_62.wav",
             "/test/dogs/dog_barking_64.wav",
             "/test/dogs/dog_barking_66.wav",
-            "/test/dogs/dog_barking_7.wav ",
+            "/test/dogs/dog_barking_7.wav",
             "/test/dogs/dog_barking_73.wav",
             "/test/dogs/dog_barking_78.wav",
-            "/test/dogs/dog_barking_8.wav ",
+            "/test/dogs/dog_barking_8.wav",
             "/test/dogs/dog_barking_82.wav",
             "/test/dogs/dog_barking_89.wav",
-            "/test/dogs/dog_barking_9.wav ",
+            "/test/dogs/dog_barking_9.wav",
             "/test/dogs/dog_barking_90.wav",
             "/test/dogs/dog_barking_91.wav",
             "/test/dogs/dog_barking_99.wav",
@@ -309,9 +309,9 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
         for (auto fileName : fileNames[i])
         {
             bool isCat;
-            if (fileName.find("cat") == std::string::npos)
+            if (fileName.find("cat") != std::string::npos)
                 isCat = true;
-            else if (fileName.find("dog") == std::string::npos)
+            else if (fileName.find("dog") != std::string::npos)
                 isCat = false;
             else
                 throw runtime_error("Wrong file name: " + fileName);

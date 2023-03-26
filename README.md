@@ -16,7 +16,7 @@
 ## Classification datasets results
 | Dataset Name | Data type | Problem type | Score | Number of Parameters |
 |--------------|-----------|--------------|-------|----------------------|
-| [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | -                        | -      |
+| [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | 65.67% Accurracy         | 2532   |
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 30     |
 | [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 61.77% Accurracy         | 207210 |
 | [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 89.65% Accurracy         | 270926 |

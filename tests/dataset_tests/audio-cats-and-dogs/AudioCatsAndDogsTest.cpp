@@ -6,7 +6,7 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
-const static int sizeOfOneData = 4000;
+const static int sizeOfOneData = 24000;
 
 class AudioCatsAndDogsTest : public testing::Test
 {
@@ -36,23 +36,33 @@ TEST_F(AudioCatsAndDogsTest, loadData)
     ASSERT_EQ(data->isValid(), 0);
 }
 
-TEST_F(AudioCatsAndDogsTest, DISABLED_trainNeuralNetwork)
+TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 {
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        MaxPooling(100),
-        Recurrence(50),
-        FullyConnected(2)
+        MaxPooling(96),
+        FullyConnected(10),
+        FullyConnected(2, activation::identity, Softmax())
     },
-        StochasticGradientDescent(1e-5f));
+        StochasticGradientDescent(1e-5f, 0.7f));
 
-    /*auto numberOfparameters = neuralNetwork.getNumberOfParameters();
-    PRINT_LOG("The number of parameter is " + to_string(numberOfparameters) + ".");*/
-    neuralNetwork.train(*data, 0.6_acc, 1, 20);
-    ///////////////neuralNetwork.saveAs("ACaD.tmp");
+    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForAudioCatsAndDogs.snn";
+    neuralNetwork.autoSaveWhenBetter = true;
+    neuralNetwork.train(*data, 1.0_acc, 1, 50);
+
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_RECALL(recall, 0.50f);
+    ASSERT_RECALL(recall, 0.51f);
     ASSERT_ACCURACY(accuracy, 0.6f);
+}
+
+TEST_F(AudioCatsAndDogsTest, EvaluateBestNeuralNetwork)
+{
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForAudioCatsAndDogs.snn");
+    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    neuralNetwork.evaluate(*data);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_EQ(numberOfParameters, 2532);
+    ASSERT_FLOAT_EQ(accuracy, 0.65671641f);
 }

@@ -42,10 +42,10 @@ TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
         MaxPooling(96),
-        FullyConnected(10),
+        GruLayer(10),
         FullyConnected(2, activation::identity, Softmax())
     },
-        StochasticGradientDescent(1e-5f, 0.7f));
+        StochasticGradientDescent(5e-6f, 0.9f));
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForAudioCatsAndDogs.snn";
     neuralNetwork.autoSaveWhenBetter = true;
@@ -63,6 +63,6 @@ TEST_F(AudioCatsAndDogsTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 2532);
-    ASSERT_FLOAT_EQ(accuracy, 0.65671641f);
+    ASSERT_EQ(numberOfParameters, 7582);
+    ASSERT_FLOAT_EQ(accuracy, 0.68656713f);
 }

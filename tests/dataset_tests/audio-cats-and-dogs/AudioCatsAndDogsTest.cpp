@@ -41,7 +41,7 @@ TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
-        MaxPooling(96),
+        MaxPooling(1000),
         GruLayer(10),
         FullyConnected(2, activation::identity, Softmax())
     },
@@ -63,6 +63,6 @@ TEST_F(AudioCatsAndDogsTest, EvaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 7582);
-    ASSERT_FLOAT_EQ(accuracy, 0.68656713f);
+    ASSERT_EQ(numberOfParameters, 802);
+    ASSERT_FLOAT_EQ(accuracy, 0.89552236f);
 }

@@ -145,15 +145,14 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
         throw NotImplementedException();
     }
 
-    this->normalization(0, 1);
-    tools::log<minimal>("Data loaded");
-
     int err = this->isValid();
     if (err != 0)
     {
         string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of data";
         throw runtime_error(message);
     }
+
+    tools::log<minimal>("Data loaded");
 }
 
 void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
@@ -211,7 +210,7 @@ void Data::flatten(vector<vector<vector<float>>>& input3D)
     this->sets[testing].size = (int)this->sets[testing].inputs.size();
 }
 
-void Data::normalization(const float min, const float max)
+void Data::normalize(const float min, const float max)
 {
     try
     {
@@ -273,9 +272,7 @@ int Data::isValid()
     {
         for (auto& value : input)
         {
-            if (value < -1
-                || value > 1
-                || isnan(value))
+            if (isnan(value))
             {
                 return 401;
             }

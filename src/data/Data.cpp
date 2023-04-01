@@ -107,7 +107,7 @@ void Data::initialize(vector<vector<float>>& trainingInputs,
     this->sets[testing].labels = testingLabels;
 
     this->sizeOfData = static_cast<int>(trainingInputs.back().size());
-    this->numberOfLabels = static_cast<int>(trainingLabels.back().size());;
+    this->numberOfLabels = static_cast<int>(trainingLabels.back().size());
     this->sets[training].size = static_cast<int>(trainingLabels.size());
     this->sets[testing].size = static_cast<int>(testingLabels.size());
 

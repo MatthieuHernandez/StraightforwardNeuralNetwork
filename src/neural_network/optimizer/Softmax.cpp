@@ -45,7 +45,6 @@ void Softmax::computeSoftmax(std::vector<float>& outputs)
         else
             output = value;
     }
-
 }
 
 inline

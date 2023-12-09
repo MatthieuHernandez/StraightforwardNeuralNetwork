@@ -29,7 +29,6 @@ TEST(Softmax, largeValues)
 
     ASSERT_VECTOR_EQ(values1, expectedValues);
     ASSERT_VECTOR_EQ(values2, expectedValues);
-
 }
 
 TEST(Softmax, smallValues)

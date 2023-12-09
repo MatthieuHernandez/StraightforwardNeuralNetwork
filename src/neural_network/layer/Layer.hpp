@@ -41,20 +41,20 @@ namespace snn::internal
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) override final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) override final;
+        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) final;
+        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) final;
+        std::vector<float> backOutput(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] void* getNeuron(int index) override final;
-        [[nodiscard]] float getAverageOfAbsNeuronWeights() const override final;
-        [[nodiscard]] float getAverageOfSquareNeuronWeights() const override final;
-        [[nodiscard]] int getNumberOfInputs() const override final;
-        [[nodiscard]] int getNumberOfNeurons() const override final;
-        [[nodiscard]] int getNumberOfParameters() const override final;
+        [[nodiscard]] void* getNeuron(int index) final;
+        [[nodiscard]] float getAverageOfAbsNeuronWeights() const final;
+        [[nodiscard]] float getAverageOfSquareNeuronWeights() const final;
+        [[nodiscard]] int getNumberOfInputs() const final;
+        [[nodiscard]] int getNumberOfNeurons() const final;
+        [[nodiscard]] int getNumberOfParameters() const final;
         [[nodiscard]] std::vector<int> getShapeOfInput() const override = 0;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
 
-        void train(std::vector<float>& inputErrors) override final;
+        void train(std::vector<float>& inputErrors) final;
 
         [[nodiscard]] int isValid() const override;
 

@@ -17,13 +17,16 @@ namespace snn
         float mae = -1;
         int duration = -1;
         std::chrono::time_point<std::chrono::system_clock> start;
-        std::chrono::time_point<std::chrono::system_clock> last;
+        std::chrono::time_point<std::chrono::system_clock> lastReset;
+        std::chrono::time_point<std::chrono::system_clock> lastTick;
         waitOperator op = waitOperator::noneOp;
         Wait& operator||(const Wait& wait);
         Wait& operator&&(const Wait& wait);
         void startClock();
-        bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const;
-        int getDurationSinceLastTime();
+        [[nodiscard]] bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const;
+        [[nodiscard]] int tick(); // Time since last tick in milliseconds
+        [[nodiscard]] float getDuration();
+        [[nodiscard]] float getDurationAndReset();
     };
 
     extern Wait operator""_ep(unsigned long long value);

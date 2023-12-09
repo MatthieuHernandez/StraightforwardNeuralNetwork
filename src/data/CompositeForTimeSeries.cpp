@@ -56,7 +56,6 @@ void CompositeForTimeSeries::shuffle()
         {
             for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
             {
-
                 const int index = iForIndex * (this->numberOfRecurrences + 1) + j + offset;
                 this->sets[training].shuffledIndexes[index] = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 

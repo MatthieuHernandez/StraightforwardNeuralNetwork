@@ -38,7 +38,6 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 {
-
     StraightforwardNeuralNetwork neuralNetwork({
         Input(sizeOfOneData),
         MaxPooling(1600),

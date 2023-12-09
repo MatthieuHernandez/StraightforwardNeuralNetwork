@@ -133,7 +133,6 @@ namespace snn
             kernelSize,
             std::vector<int>(),
             std::vector<LayerOptimizerModel>()
-
         };
         return model;
     }
@@ -161,7 +160,6 @@ namespace snn
             kernelSize,
             std::vector<int>(),
             {static_cast<LayerOptimizerModel>(optimizers) ...}
-
         };
         return model;
     }

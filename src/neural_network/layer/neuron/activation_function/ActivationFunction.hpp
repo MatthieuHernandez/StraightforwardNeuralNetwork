@@ -21,7 +21,6 @@ namespace snn::internal
     class ActivationFunction
     {
     private:
-
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);

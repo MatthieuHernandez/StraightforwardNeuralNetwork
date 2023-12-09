@@ -46,7 +46,6 @@ void MaxPooling1D::buildKernelIndexes()
                 this->kernelIndexes[k][kernelIndex] = inputIndex;
             else
                 this->kernelIndexes[k][kernelIndex] = -1;
-           
         }
     }
 }

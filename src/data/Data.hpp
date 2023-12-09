@@ -104,12 +104,9 @@ namespace snn
         [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
         [[nodiscard]] int getLabel(set set, int index) const;
 
-        
         [[nodiscard]] float getSeparator() const;
         void setSeparator(float value);
         [[nodiscard]] float getPrecision() const;
         void setPrecision(float value);
-
-
     };
 }

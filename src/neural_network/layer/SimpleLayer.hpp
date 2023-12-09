@@ -18,9 +18,9 @@ namespace snn::internal
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override final;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override final;
-        virtual void computeTrain(std::vector<float>& inputErrors) override final;
+        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) final;
+        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) final;
+        virtual void computeTrain(std::vector<float>& inputErrors) final;
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
@@ -29,12 +29,12 @@ namespace snn::internal
         virtual ~SimpleLayer() = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
-        [[nodiscard]] std::vector<int> getShapeOfInput() const override final;
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override final;
-        [[nodiscard]] int isValid() const override final;
+        [[nodiscard]] std::vector<int> getShapeOfInput() const final;
+        [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
+        [[nodiscard]] int isValid() const final;
 
-        bool operator==(const BaseLayer& layer) const override final;
-        bool operator!=(const BaseLayer& layer) const override final;
+        bool operator==(const BaseLayer& layer) const final;
+        bool operator!=(const BaseLayer& layer) const final;
     };
 
     template <BaseNeuron N>

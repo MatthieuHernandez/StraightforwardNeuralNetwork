@@ -23,6 +23,7 @@
 #ifndef _AS_AudioFile_h
 #define _AS_AudioFile_h
 
+#include <cstdint>
 #include <iostream>
 #include <vector>
 #include <assert.h>

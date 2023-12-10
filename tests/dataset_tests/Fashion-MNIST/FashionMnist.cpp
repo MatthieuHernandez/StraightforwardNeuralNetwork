@@ -20,6 +20,7 @@ void FashionMnist::loadData(string folderPath)
     vector2D<float> testingLabels = readLabels(folderPath + "/t10k-labels-idx1-ubyte", 10000);
 
     this->data = make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
+    this->data->normalize(0, 1);
 }
 
 vector2D<float> FashionMnist::readImages(string filePath, int size)

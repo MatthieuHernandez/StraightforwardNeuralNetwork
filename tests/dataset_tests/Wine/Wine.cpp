@@ -52,4 +52,5 @@ void Wine::loadData(string folderPath)
     }
     file.close();
     this->data = make_unique<Data>(problem::classification, inputs, labels);
+    this->data->normalize(0, 1);
 }

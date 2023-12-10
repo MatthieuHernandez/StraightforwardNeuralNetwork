@@ -29,7 +29,7 @@ TEST(Addition, WithCNN)
         Input(2),
         Convolution(6, 1, activation::sigmoid),
         FullyConnected(1, activation::identity)
-    }, 
+    },
         StochasticGradientDescent(0.01f));
 
     neuralNetwork.train(*data, 1.0_acc || 2_s);
@@ -43,7 +43,8 @@ TEST(Addition, WithLCNN)
         Input(2),
         LocallyConnected(6, 1, activation::sigmoid),
         FullyConnected(1, activation::identity)
-    });
+    },
+        StochasticGradientDescent(0.01f));
 
     neuralNetwork.train(*data, 1.0_acc || 5_s);
     testNeuralNetworkForAddition(neuralNetwork);

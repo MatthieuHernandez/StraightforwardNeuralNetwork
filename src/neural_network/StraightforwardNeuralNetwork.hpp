@@ -27,10 +27,16 @@ namespace snn
 
         void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
         void saveSync(std::string filePath);
+        void evaluate(const Data& data, Wait* wait);
         void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
         void validData(const Data& data, int batchSize) const;
+
+        template <logLevel T>
+        void logAccuracy(Wait& wait, const bool hasSaved) const;
+        template <logLevel T>
+        void logInProgress(Wait& wait, const Data& data, set set) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -56,7 +62,7 @@ namespace snn
         void waitFor(Wait wait) const;
         void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
-        void evaluate(const Data& data);
+        void evaluate(const Data& data) { return this->evaluate(data, nullptr); }
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
         int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);
@@ -81,6 +87,38 @@ namespace snn
         bool operator==(const StraightforwardNeuralNetwork& neuralNetwork) const;
         bool operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const;
     };
+
+
+    template <logLevel T>
+    void StraightforwardNeuralNetwork::logAccuracy(Wait& wait, const bool hasSaved) const
+    {
+        if constexpr (T > none && T <= verbose)
+        {
+            tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
+                                " - Accuracy: ", tools::toConstSizeString<2>(this->getGlobalClusteringRate(), 4),
+                                " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 7),
+                                " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 2), "s");
+            if (hasSaved)
+                tools::log<T, false>(" - Saved");
+            tools::log<T>();
+        }
+    }
+
+    template <logLevel T>
+    void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, set set) const
+    {
+        if constexpr (T > none && T <= verbose)
+        {
+            if (wait.tick() >= 100)
+            {
+                const std::string name = set == training ? "Training  " : "Evaluation";
+                const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
+                tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
+                    " - ", name, " in progress... ", tools::toConstSizeString(progress, 2), "%",
+                    " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 2), "s");
+            }
+        }
+    }
 
     template <class Archive>
     void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)

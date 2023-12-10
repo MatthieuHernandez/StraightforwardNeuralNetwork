@@ -326,7 +326,8 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             const int numberOfSamples = audioFile.getNumSamplesPerChannel();
 
             vector2D<float> dataSound;
-            const int numberOfData = numberOfSamples / this->sizeOfOneData;
+            const int rest = (numberOfSamples % this->sizeOfOneData) != 0;
+            const int numberOfData = numberOfSamples / this->sizeOfOneData + rest;
             dataSound.reserve(numberOfData);
             labels->reserve(numberOfData);
 
@@ -347,7 +348,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             }
             while (this->sizeOfOneData > (int)dataSound.back().size())
             {
-                dataSound.back().push_back(0);
+                dataSound.back().push_back(0.0f);
             }
             inputs[i].push_back(dataSound);
         }

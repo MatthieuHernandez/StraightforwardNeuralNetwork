@@ -1,4 +1,5 @@
 #pragma once
+#include <format>
 #include <chrono>
 #include <iostream>
 #include <random>
@@ -117,6 +118,8 @@ namespace snn::tools
             (std::cout << ... << messages);
             if constexpr (endLine)
                 std::cout << std::endl;
+            else
+                std::cout << std::flush;
         }
     }
 
@@ -129,12 +132,21 @@ namespace snn::tools
         return str;
     }
 
-    inline
+    template<int T>
     std::string toConstSizeString(float value, size_t length)
     {
-        auto str = std::to_string(value);
+        std::string str;
+        if constexpr (T == 0)
+            str = std::format("{:.0f}", value);
+        else if constexpr (T == 2)
+            str = std::format("{:.2f}", value);
+        else if constexpr (T == 4)
+            str = std::format("{:.4f}", value);
+        else
+            throw std::exception();
+
         while (str.length() < length)
-            str += "0";
+            str = " " + str;
         return str;
     }
 

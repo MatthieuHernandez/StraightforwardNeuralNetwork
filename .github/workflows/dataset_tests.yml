@@ -24,7 +24,7 @@ jobs:
     - name: CMake
       run: |
         cd ./build
-        CC=gcc-10 CXX=/usr/bin/g++-10 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+        CC=gcc-13 CXX=/usr/bin/g++-13 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: make
       run: |
         cd ./build

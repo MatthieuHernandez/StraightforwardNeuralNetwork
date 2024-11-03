@@ -95,16 +95,8 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
     this->wantToStopTraining = false;
     this->isIdle = false;
-
     if (evaluationFrequency > 0)
-    {
-        this->evaluate(data);
-        log<minimal>("Epoch: ", toConstSizeString(this->epoch, 2),
-                     " - Accuracy: ", toConstSizeString(this->getGlobalClusteringRate(), 6),
-                     " - MAE: ", toConstSizeString(this->getMeanAbsoluteError(), 7),
-                     " - Time: ", toConstSizeString(wait.getDurationSinceLastTime(), 2), "s");
-    }
-
+        this->evaluate(data, &wait);
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
         data.shuffle();
@@ -123,27 +115,16 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
                                 data.getTrainingOutputs(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
             else
                 this->outputForTraining(data.getTrainingData(this->index, batchSize), data.isFirstTrainingDataOfTemporalSequence(this->index));
+            this->logInProgress<minimal>(wait, data, training);
         }
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
-        {
-            this->evaluate(data);
-            log<minimal, false>("Epoch: ", toConstSizeString(this->epoch, 2),
-                                " - Accuracy: ", toConstSizeString(this->getGlobalClusteringRate(), 6),
-                                " - MAE: ", toConstSizeString(this->getMeanAbsoluteError(), 7),
-                                " - Time: ", toConstSizeString(wait.getDurationSinceLastTime(), 2), "s");
-            if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
-            {
-                this->saveSync(autoSaveFilePath);
-                log<minimal, false>(" - Saved");
-            }
-            log<minimal>();
-        }
+            this->evaluate(data, &wait);
     }
     this->resetTrainingValues();
     log<minimal>("Stop training");
 }
 
-void StraightforwardNeuralNetwork::evaluate(const Data& data)
+void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait* wait)
 {
     this->startTesting();
     for (this->index = 0; this->index < data.sets[testing].size; this->index++)
@@ -159,8 +140,19 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data)
             this->evaluateOnce(data);
         else
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
+        this->logInProgress<minimal>(*wait, data, testing);
     }
     this->stopTesting();
+    if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
+    {
+        this->saveSync(autoSaveFilePath);
+        if(wait != nullptr)
+            this->logAccuracy<minimal>(*wait, true);
+    }
+    else
+    {
+        this->logAccuracy<minimal>(*wait, false);
+    }
 }
 
 inline

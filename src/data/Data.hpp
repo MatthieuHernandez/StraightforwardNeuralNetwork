@@ -79,7 +79,7 @@ namespace snn
 
         virtual ~Data() = default;
 
-        void normalization(float min, float max);
+        void normalize(float min, float max);
 
         void shuffle();
         void unshuffle();

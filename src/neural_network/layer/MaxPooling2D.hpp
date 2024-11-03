@@ -19,7 +19,7 @@ namespace snn::internal
 
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
         [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
-        void computeTrain(std::vector<float>& [[maybe_unused]] inputErrors) override {}
+        void computeTrain([[maybe_unused]] std::vector<float>& inputErrors) override {}
         void buildKernelIndexes() override;
 
     public:

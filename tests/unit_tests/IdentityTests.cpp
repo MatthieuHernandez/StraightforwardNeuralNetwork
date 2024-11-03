@@ -57,8 +57,12 @@ TEST(Identity, WorksWithLotsOfNumbers)
     Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(8), FullyConnected(1, snn::activation::identity)},
-        StochasticGradientDescent(0.0002f, 0.99f));
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(1),
+        FullyConnected(30),
+        FullyConnected(1, activation::identity)
+    },
+        StochasticGradientDescent(0.001f, 0.80f));
 
     neuralNetwork.train(data, 1.00_acc || 2_s);
 
@@ -70,5 +74,5 @@ TEST(Identity, WorksWithLotsOfNumbers)
         && neuralNetwork.isValid() == 0)
         ASSERT_SUCCESS();
     else
-        ASSERT_FAIL("MAE > 1: " + to_string(mae));
+        ASSERT_FAIL("MAE > 0.4: " + to_string(mae));
 }

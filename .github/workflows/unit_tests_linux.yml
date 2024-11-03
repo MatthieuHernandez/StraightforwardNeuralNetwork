@@ -8,12 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set up GCC
+      uses: egor-tensin/setup-gcc@v1.3
+      with:
+        version: 13
+        platform: x64
     - name: Checkout the project
       uses: actions/checkout@v2
     - name: CMake
       run: |
         cd ./build
-        CC=gcc-13 CXX=/usr/bin/g++-13 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+        CXX=/usr/bin/g++-13 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: Make
       run: |
         cd ./build

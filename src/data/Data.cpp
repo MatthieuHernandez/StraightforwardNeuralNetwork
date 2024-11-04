@@ -268,26 +268,6 @@ void Data::unshuffle()
 
 int Data::isValid()
 {
-    for (auto& input : this->sets[training].inputs)
-    {
-        for (auto& value : input)
-        {
-            if (isnan(value))
-            {
-                return 401;
-            }
-        }
-    }
-    for (auto& input : this->sets[testing].inputs)
-    {
-        for (auto& value : input)
-        {
-            if (isnan(value))
-            {
-                return 401;
-            }
-        }
-    }
     if (!this->sets[testing].shuffledIndexes.empty()
         && this->sets[training].size != (int)this->sets[training].shuffledIndexes.size())
         return 403;

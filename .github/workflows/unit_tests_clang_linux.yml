@@ -5,20 +5,15 @@ on: [push]
 jobs:
   unit-tests:
     name: Build and run
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-    - name: Set up Clang
-      uses: egor-tensin/setup-clang@v1
-      with:
-        version: 19
-        platform: x64
     - name: Checkout the project
       uses: actions/checkout@v2
     - name: CMake
       run: |
         cd ./build
-        CXX=/usr/bin/clang-19 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+        CC=/usr/bin/clang-18 CXX=/usr/bin/clang++-18 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: Make
       run: |
         cd ./build

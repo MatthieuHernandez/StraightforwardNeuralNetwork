@@ -12,7 +12,7 @@ TEST(Identity, WorksWithSmallNumbers)
 
     Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(4), FullyConnected(1, snn::activation::identity)},
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(6), FullyConnected(1, snn::activation::identity)},
         StochasticGradientDescent(0.02f, 0.99f));
 
     neuralNetwork.train(data, 0.01_mae || 2_s);

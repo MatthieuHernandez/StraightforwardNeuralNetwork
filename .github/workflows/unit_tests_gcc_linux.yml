@@ -1,24 +1,19 @@
-name: Unit tests Linux
+name: Unit tests GCC Linux
 
 on: [push]
 
 jobs:
   unit-tests:
     name: Build and run
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-    - name: Set up GCC
-      uses: egor-tensin/setup-gcc@v1.3
-      with:
-        version: 13
-        platform: x64
     - name: Checkout the project
       uses: actions/checkout@v2
     - name: CMake
       run: |
         cd ./build
-        CXX=/usr/bin/g++-13 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+        CC=/usr/bin/gcc-14 CXX=/usr/bin/g++-14 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
     - name: Make
       run: |
         cd ./build

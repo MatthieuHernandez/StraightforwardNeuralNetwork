@@ -85,7 +85,7 @@ float Layer<N>::getAverageOfAbsNeuronWeights() const
     auto sum = 0.0f;
     for (auto& n : this->neurons)
         for (auto w : n.getWeights())
-            sum += abs(w);
+            sum += std::abs(w);
     sum /= static_cast<float>(this->neurons.size());
     return sum;
 }

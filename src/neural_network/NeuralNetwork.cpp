@@ -102,10 +102,7 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
     vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
     {
-        if (isnan(desired[n]))
-            errors[n] = 0;
-        else
-            errors[n] = 2 * (desired[n] - outputs[n]);
+        errors[n] = 2 * (desired[n] - outputs[n]);
     }
     return errors;
 }

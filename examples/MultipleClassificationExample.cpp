@@ -1,6 +1,6 @@
 #include "Examples.hpp"
-#include "../src/neural_network/StraightforwardNeuralNetwork.hpp"
-#include "../src/data/Data.hpp"
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+#include <snn/data/Data.hpp>
 
 using namespace std;
 using namespace snn;

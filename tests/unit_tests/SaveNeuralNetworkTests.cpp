@@ -1,6 +1,6 @@
 ﻿#include "../ExtendedGTest.hpp"
-#include "neural_network/StraightforwardNeuralNetwork.hpp"
-#include "neural_network/layer/neuron/Neuron.hpp"
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+#include <snn/neural_network/layer/neuron/Neuron.hpp>
 
 using namespace std;
 using namespace snn;

@@ -1,5 +1,5 @@
 #include "CompositeForMultipleClassification.hpp"
-#include "../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

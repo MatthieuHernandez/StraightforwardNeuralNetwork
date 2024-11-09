@@ -3,8 +3,8 @@
 #include <boost/serialization/smart_cast.hpp>
 
 #include "../ExtendedGTest.hpp"
-#include "tools/Tools.hpp"
-#include "neural_network/StraightforwardNeuralNetwork.hpp"
+#include <snn/tools/Tools.hpp>
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 
 using namespace std;
 using namespace snn;

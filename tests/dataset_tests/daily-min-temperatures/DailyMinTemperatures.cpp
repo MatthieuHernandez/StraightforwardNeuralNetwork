@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 #include "DailyMinTemperatures.hpp"
-#include "data/Data.hpp"
-#include "tools/Tools.hpp"
-#include "tools/ExtendedExpection.hpp"
+#include <snn/data/Data.hpp>
+#include <snn/tools/Tools.hpp>
+#include <snn/tools/ExtendedExpection.hpp>
 
 using namespace std;
 using namespace snn;

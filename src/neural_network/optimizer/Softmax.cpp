@@ -2,8 +2,8 @@
 #include <numeric>
 #include <boost/serialization/export.hpp>
 #include "Softmax.hpp"
-#include "../layer/BaseLayer.hpp"
-#include "../../tools/Tools.hpp"
+#include "BaseLayer.hpp"
+#include "Tools.hpp"
 
 using namespace std;
 using namespace snn;

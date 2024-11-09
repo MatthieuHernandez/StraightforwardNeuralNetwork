@@ -1,6 +1,6 @@
 #include "NeuralNetworkOptimizerFactory.hpp"
 #include "StochasticGradientDescent.hpp"
-#include "../../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 #include "Dropout.hpp"
 
 using namespace std;

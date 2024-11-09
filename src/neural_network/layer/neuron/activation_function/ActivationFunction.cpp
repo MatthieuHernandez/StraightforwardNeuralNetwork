@@ -1,4 +1,4 @@
-#include "../../../../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 #include "ActivationFunction.hpp"
 #include "Sigmoid.hpp"
 #include "ImprovedSigmoid.hpp"

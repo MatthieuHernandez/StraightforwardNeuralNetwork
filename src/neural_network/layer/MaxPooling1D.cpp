@@ -1,7 +1,7 @@
 #include <boost/serialization/export.hpp>
 #include "MaxPooling1D.hpp"
 #include "LayerModel.hpp"
-#include "../../tools/Tools.hpp"
+#include "Tools.hpp"
 
 using namespace std;
 using namespace snn;

@@ -7,7 +7,7 @@
 #include <boost/serialization/vector.hpp>
 #include "StraightforwardNeuralNetwork.hpp"
 #include "NeuralNetworkVisualization.hpp"
-#include "../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

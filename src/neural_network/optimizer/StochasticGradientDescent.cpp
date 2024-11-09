@@ -1,7 +1,7 @@
 #include <boost/serialization/export.hpp>
 #include "StochasticGradientDescent.hpp"
-#include "../layer/neuron/RecurrentNeuron.hpp"
-#include "../layer/neuron/SimpleNeuron.hpp"
+#include "RecurrentNeuron.hpp"
+#include "SimpleNeuron.hpp"
 
 using namespace std;
 using namespace snn;

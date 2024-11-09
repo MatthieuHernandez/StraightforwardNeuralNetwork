@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <random>
 #include "CompositeForTimeSeries.hpp"
-#include "../tools/ExtendedExpection.hpp"
-#include "../tools/Tools.hpp"
+#include "ExtendedExpection.hpp"
+#include "Tools.hpp"
 
 using namespace std;
 using namespace snn;

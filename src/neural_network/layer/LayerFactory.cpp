@@ -1,5 +1,5 @@
 #include "LayerFactory.hpp"
-#include "../../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 #include "FullyConnected.hpp"
 #include "Recurrence.hpp"
 #include "GruLayer.hpp"

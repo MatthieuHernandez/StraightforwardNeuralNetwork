@@ -6,14 +6,14 @@
 #include <vector>
 #include <functional>
 #include "Data.hpp"
-#include "../tools/Tools.hpp"
+#include "Tools.hpp"
 #include "CompositeForClassification.hpp"
 #include "CompositeForMultipleClassification.hpp"
 #include "CompositeForRegression.hpp"
 #include "CompositeForTimeSeries.hpp"
 #include "CompositeForNonTemporalData.hpp"
 #include "CompositeForTemporalData.hpp"
-#include "../tools/ExtendedExpection.hpp"
+#include "ExtendedExpection.hpp"
 
 using namespace std;
 using namespace snn;

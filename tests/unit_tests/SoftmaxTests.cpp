@@ -1,5 +1,5 @@
 #include "../ExtendedGTest.hpp"
-#include "neural_network/optimizer/Softmax.hpp"
+#include <snn/neural_network/optimizer/Softmax.hpp>
 using namespace std;
 using namespace snn::internal;
 

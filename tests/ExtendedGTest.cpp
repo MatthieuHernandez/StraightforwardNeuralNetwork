@@ -3,8 +3,6 @@
 #include <sstream>
 #include "ExtendedGTest.hpp"
 
-#include "tools/Tools.hpp"
-
 using namespace std;
 using namespace chrono;
 

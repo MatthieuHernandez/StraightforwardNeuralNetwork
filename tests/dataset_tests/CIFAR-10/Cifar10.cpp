@@ -1,7 +1,7 @@
 #include <fstream>
 #include "Cifar10.hpp"
-#include "data/Data.hpp"
-#include "tools/ExtendedExpection.hpp"
+#include <snn/data/Data.hpp>
+#include <snn/tools/ExtendedExpection.hpp>
 
 using namespace std;
 using namespace snn;

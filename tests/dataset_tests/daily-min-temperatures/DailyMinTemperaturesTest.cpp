@@ -1,5 +1,5 @@
 #include "ExtendedGTest.hpp"
-#include "neural_network/StraightforwardNeuralNetwork.hpp"
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include "DailyMinTemperatures.hpp"
 
 using namespace std;

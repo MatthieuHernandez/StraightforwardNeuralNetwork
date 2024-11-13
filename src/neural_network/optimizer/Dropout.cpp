@@ -2,8 +2,8 @@
 #include <functional>
 #include <boost/serialization/export.hpp>
 #include "Dropout.hpp"
-#include "../layer/BaseLayer.hpp"
-#include "../../tools/Tools.hpp"
+#include "BaseLayer.hpp"
+#include "Tools.hpp"
 
 using namespace std;
 using namespace snn;

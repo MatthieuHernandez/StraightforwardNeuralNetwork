@@ -1,7 +1,7 @@
 #include <fstream>
-#include "tools/ExtendedExpection.hpp"
+#include <snn/tools/ExtendedExpection.hpp>
 #include "FashionMnist.hpp"
-#include "data/Data.hpp"
+#include <snn/data/Data.hpp>
 
 using namespace std;
 using namespace snn;

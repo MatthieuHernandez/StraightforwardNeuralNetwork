@@ -1,3 +1,6 @@
+file(GLOB_RECURSE HEADERS "../include/*.hpp"
+                          "../include/*.tpp")
+
 file(GLOB SOURCES
     "tools/*.cpp"
     "data/*.cpp"
@@ -8,7 +11,6 @@ file(GLOB SOURCES
     "neural_network/layer/neuron/activation_function/*.cpp"
 )
 
-
 include_directories(external_library/boost_1_80_0_minimal)
 add_subdirectory(external_library/boost_1_80_0_minimal/libs/serialization)
 
@@ -18,7 +20,7 @@ add_subdirectory(external_library/bitmap)
 include_directories(external_library/cpp-static-block)
 add_subdirectory(external_library/cpp-static-block)
 
-add_library(StraightforwardNeuralNetwork ${SOURCES})
+add_library(StraightforwardNeuralNetwork ${HEADERS} ${SOURCES})
 
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/data")
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/neural_network")
@@ -28,6 +30,6 @@ target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/neural_network")
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/neural_network/optimizer")
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/tools")
-target_include_directories(StraightforwardNeuralNetwork INTERFACE "include")
+target_include_directories(StraightforwardNeuralNetwork INTERFACE "../include")
 
 target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap cpp-static-block)

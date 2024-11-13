@@ -2,7 +2,7 @@
 #include <vector>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "../../tools/Tools.hpp"
+#include "../../../tools/Tools.hpp"
 
 namespace snn::internal
 {

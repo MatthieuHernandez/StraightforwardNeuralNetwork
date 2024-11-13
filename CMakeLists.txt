@@ -43,12 +43,6 @@ if(MSVC)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc143-mt-s-x64-1_80.lib")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc143-mt-gd-x64-1_80.lib")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:libboost_serialization-vc143-mt-sgd-x64-1_80.lib")
-else()
-  set(CMAKE_CXX_FLAGS_DEBUG "-g")
-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ffast-math")
-  if(WIN32)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_ALL_NO_LIB  -fms-runtime-lib=static")
-  endif()
 endif()
 
 add_subdirectory(src)
@@ -65,7 +59,18 @@ if(MSVC)
   remove_target_compile_options(UnitTests /W3)
   remove_target_compile_options(DatasetTests /W3)
 else()
-  target_compile_options(StraightforwardNeuralNetwork PUBLIC -fopenmp -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
+  target_compile_options(StraightforwardNeuralNetwork PUBLIC $<$<CONFIG:Debug>:-g>
+                                                             $<$<CONFIG:Release>:-O3>
+                                                             $<$<CONFIG:Release>:-ffast-math>
+                                                             -fopenmp
+                                                             -Wall
+                                                             -Wextra
+                                                             -pedantic
+                                                             -Werror
+                                                             -Wno-unused-parameter)
+  if(WIN32)
+    target_compile_options(StraightforwardNeuralNetwork PUBLIC -DBOOST_ALL_NO_LIB)
+  endif()
   target_compile_options(Boost INTERFACE -w)
   target_compile_options(gtest INTERFACE -w)
 endif()

@@ -21,6 +21,7 @@
 *.recipe
 *.user
 *.ilk
+*.ninja*
 
 DatasetTests
 UnitTests

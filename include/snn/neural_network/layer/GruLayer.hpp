@@ -21,6 +21,8 @@ namespace snn::internal
         GruLayer(const GruLayer&) = default;
         ~GruLayer() = default;
         [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+
+        [[nodiscard]] std::string summary() const override;
     };
 
     template <class Archive>

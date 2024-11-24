@@ -75,6 +75,8 @@ namespace snn
         void saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex);
         static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
 
+        [[nodiscard]] std::string summary() const;
+
         int getCurrentIndex() const { return this->index; }
         int getCurrentEpoch() const { return this->epoch; }
         int getNumberOfTrainingsBetweenTwoEvaluations() const { return this->numberOfTrainingsBetweenTwoEvaluations; }

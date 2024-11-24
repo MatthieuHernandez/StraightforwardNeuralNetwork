@@ -64,6 +64,25 @@ int MaxPooling1D::isValid() const
     return 0;
 }
 
+std::string MaxPooling1D::summary() const
+{
+    stringstream ss;
+    ss << "------------------------------------------------------------" << endl;
+    ss << " MaxPooling1D" << endl;
+    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]" << endl;
+    ss << "                Kernel size:  " << this->kernelSize << endl;
+    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]" << endl;
+    if (!optimizers.empty())
+    {
+        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+    }
+    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    {
+        ss << "                              " << optimizers[o]->summary() << endl;
+    }
+    return ss.str();
+}
+
 inline
 vector<float> MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {

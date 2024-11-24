@@ -28,6 +28,8 @@ namespace snn::internal
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 
+        [[nodiscard]] std::string summary() const override;
+
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;
     };

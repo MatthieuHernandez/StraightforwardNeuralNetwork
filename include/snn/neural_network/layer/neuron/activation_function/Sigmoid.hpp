@@ -2,12 +2,16 @@
 #include <cmath>
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class Sigmoid final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::sigmoid; }
+
+        string getName() const override { return "sigmoid"; }
 
     public:
         Sigmoid()

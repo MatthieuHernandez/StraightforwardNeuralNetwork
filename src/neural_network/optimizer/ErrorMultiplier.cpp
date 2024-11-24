@@ -1,5 +1,7 @@
 #include "ErrorMultiplier.hpp"
 
+#include <sstream>
+
 using namespace std;
 using namespace snn;
 using namespace internal;
@@ -25,6 +27,13 @@ std::unique_ptr<LayerOptimizer> ErrorMultiplier::clone(const BaseLayer* newLayer
 void ErrorMultiplier::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
     ranges::transform(inputErrors, inputErrors.begin(), bind(multiplies<float>(), placeholders::_1, this->factor));
+}
+
+std::string ErrorMultiplier::summary() const
+{
+    stringstream ss;
+    ss << "ErrorMultiplier(" << factor << ")" << endl;
+    return ss.str();
 }
 
 bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const

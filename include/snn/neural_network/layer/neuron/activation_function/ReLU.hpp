@@ -2,12 +2,16 @@
 #include <cmath>
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class RectifiedLinearUnit final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::ReLU; }
+
+        string getName() const override { return "ReLU"; }
 
     public:
         RectifiedLinearUnit()

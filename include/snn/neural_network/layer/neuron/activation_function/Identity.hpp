@@ -1,12 +1,16 @@
 #pragma once
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class Identity final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::identity; }
+
+        string getName() const override { return "identity"; }
 
     public:
          Identity()

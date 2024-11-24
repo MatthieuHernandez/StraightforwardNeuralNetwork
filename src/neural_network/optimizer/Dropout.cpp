@@ -55,6 +55,13 @@ void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
     ranges::transform(inputErrors, this->presenceProbabilities, inputErrors.begin(), multiplies<float>());
 }
 
+std::string Dropout::summary() const
+{
+    stringstream ss;
+    ss << "Dropout(" << value << ")" << endl;
+    return ss.str();
+}
+
 bool Dropout::operator==(const LayerOptimizer& optimizer) const
 {
     try

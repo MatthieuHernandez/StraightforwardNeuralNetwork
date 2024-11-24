@@ -29,6 +29,8 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() override;
 
+        [[nodiscard]] std::string summary() const override;
+
         bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
         bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
     };

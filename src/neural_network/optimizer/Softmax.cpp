@@ -64,6 +64,13 @@ void Softmax::applyBeforeBackpropagation([[maybe_unused]] std::vector<float>& in
 {
 }
 
+std::string Softmax::summary() const
+{
+    stringstream ss;
+    ss << "Softmax";
+    return ss.str();
+}
+
 bool Softmax::operator==(const LayerOptimizer& optimizer) const
 {
     try

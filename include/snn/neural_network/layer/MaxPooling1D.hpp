@@ -31,6 +31,8 @@ namespace snn::internal
 
         [[nodiscard]] int isValid() const override;
 
+        [[nodiscard]] std::string summary() const override;
+
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
     };

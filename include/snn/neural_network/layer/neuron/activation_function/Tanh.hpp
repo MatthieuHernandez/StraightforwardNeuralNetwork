@@ -2,12 +2,16 @@
 #include <cmath>
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class Tanh final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::tanh; }
+
+        string getName() const override { return "tanh"; }
 
     public:
         Tanh()

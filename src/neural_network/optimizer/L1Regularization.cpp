@@ -31,6 +31,13 @@ void L1Regularization::applyBeforeBackpropagation(std::vector<float>& inputError
     ranges::transform(inputErrors, inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
 }
 
+std::string L1Regularization::summary() const
+{
+    stringstream ss;
+    ss << "L1Regularization(" << value << ")" << endl;
+    return ss.str();
+}
+
 bool L1Regularization::operator==(const LayerOptimizer& optimizer) const
 {
     try

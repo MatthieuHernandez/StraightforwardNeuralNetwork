@@ -2,12 +2,16 @@
 #include <cmath>
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class GaussianErrorLinearUnit final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::GELU; }
+
+        string getName() const override { return "GELU"; }
 
     public:
         GaussianErrorLinearUnit()

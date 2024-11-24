@@ -71,6 +71,28 @@ int Convolution2D::isValid() const
     return this->FilterLayer::isValid();
 }
 
+std::string Convolution2D::summary() const
+{
+    stringstream ss;
+    ss << "------------------------------------------------------------" << endl;
+    ss << " Convolution2D" << endl;
+    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", " << this->shapeOfInput[2] << "]" << endl;
+    ss << "                Filters:      " << this->numberOfFilters << endl;
+    ss << "                Kernel size:  " << this->kernelSize << "x" << this->kernelSize << endl;
+    ss << "                Parameters:   " << this->getNumberOfParameters() << endl;
+    ss << "                Activation:   " << this->neurons[0].outputFunction->getName() << endl;
+    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", " << this->shapeOfOutput[2] << "]" << endl;
+    if (!optimizers.empty())
+    {
+        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+    }
+    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    {
+        ss << "                              " << optimizers[o]->summary() << endl;
+    }
+    return ss.str();
+}
+
 inline
 vector<float> Convolution2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {

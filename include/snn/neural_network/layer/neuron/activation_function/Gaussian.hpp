@@ -2,12 +2,16 @@
 #include <cmath>
 #include "ActivationFunction.hpp"
 
+using namespace std;
+
 namespace snn::internal
 {
     class Gaussian final : public ActivationFunction
     {
     private:
         activation getType() const override { return activation::gaussian; }
+
+        string getName() const override { return "gaussian"; }
 
     public:
         Gaussian()

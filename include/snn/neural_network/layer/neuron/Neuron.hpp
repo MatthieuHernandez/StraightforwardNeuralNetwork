@@ -32,7 +32,6 @@ namespace snn::internal
         float sum = 0;
 
         activation activationFunction;
-        std::shared_ptr<ActivationFunction> outputFunction;
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         static float randomInitializeWeight(int numberOfInputs);
@@ -42,6 +41,8 @@ namespace snn::internal
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
         ~Neuron() = default;
+
+        std::shared_ptr<ActivationFunction> outputFunction;
 
         [[nodiscard]] int isValid() const;
 

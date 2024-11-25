@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(MaxPooling1D)
-
 MaxPooling1D::MaxPooling1D(LayerModel& model)
     : FilterLayer(model, nullptr)
 {

@@ -5,8 +5,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(GatedRecurrentUnit)
-
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
       resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid}, optimizer),

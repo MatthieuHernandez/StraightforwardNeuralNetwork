@@ -10,10 +10,6 @@ extern template class internal::SimpleLayer<SimpleNeuron>; // must use a nested-
 extern template class internal::SimpleLayer<RecurrentNeuron>;
 extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 
-BOOST_CLASS_EXPORT(SimpleLayer<SimpleNeuron>)
-BOOST_CLASS_EXPORT(SimpleLayer<RecurrentNeuron>)
-BOOST_CLASS_EXPORT(SimpleLayer<GatedRecurrentUnit>)
-
 template <>
 std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
 {

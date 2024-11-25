@@ -90,7 +90,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
  Name:       BestNeuralNetworkForCIFAR-10.snn
  Parameters: 207210
  Epochs:     48
- Trainnig:   50000
+ Trainnig:   0
 ============================================================
 | Layers                                                   |
 ============================================================

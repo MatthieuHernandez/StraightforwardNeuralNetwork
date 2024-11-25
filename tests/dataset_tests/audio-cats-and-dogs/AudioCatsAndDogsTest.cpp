@@ -74,7 +74,7 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
  Name:       BestNeuralNetworkForAudioCatsAndDogs.snn
  Parameters: 9242
  Epochs:     6100
- Trainnig:   1596
+ Trainnig:   0
 ============================================================
 | Layers                                                   |
 ============================================================

@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(StochasticGradientDescent)
-
 StochasticGradientDescent::StochasticGradientDescent(const float learningRate, const float momentum)
     : learningRate(learningRate), momentum(momentum)
 {

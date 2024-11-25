@@ -9,8 +9,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Dropout)
-
 Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {

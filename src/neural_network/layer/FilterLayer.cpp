@@ -6,8 +6,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(FilterLayer)
-
 FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer(model, optimizer)
 {

@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(LocallyConnected1D)
-
 LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, std::move(optimizer))
 {

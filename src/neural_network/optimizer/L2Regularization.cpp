@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(L2Regularization)
-
 L2Regularization::L2Regularization(const float value, BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {

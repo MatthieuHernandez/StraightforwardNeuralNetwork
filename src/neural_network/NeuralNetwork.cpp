@@ -10,8 +10,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(NeuralNetwork)
-
 NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
 {
     this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
@@ -23,6 +21,8 @@ NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
       optimizer(neuralNetwork.optimizer->clone())
 {
+    this->outputNan = neuralNetwork.outputNan;
+    this->numberOfTraining = neuralNetwork.numberOfTraining;
     this->layers.reserve(neuralNetwork.layers.size());
     for (const auto& layer : neuralNetwork.layers)
         this->layers.push_back(layer->clone(this->optimizer));
@@ -54,6 +54,7 @@ void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, c
 void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
 {
     this->backpropagationAlgorithm(inputs, desired, temporalReset);
+    this->numberOfTraining++;
 }
 
 vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
@@ -124,6 +125,11 @@ vector2D<float> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
 bool NeuralNetwork::hasNan() const
 {
     return this->outputNan;
+}
+
+int64_t NeuralNetwork::getNumberOfTraining() const
+{
+    return this->numberOfTraining;
 }
 
 int NeuralNetwork::getNumberOfLayers() const

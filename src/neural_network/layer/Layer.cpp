@@ -10,8 +10,3 @@ using namespace internal;
 extern template class internal::Layer<SimpleNeuron>; // must use a nested-name-specifier for GCC compiler
 extern template class internal::Layer<RecurrentNeuron>;
 extern template class internal::Layer<GatedRecurrentUnit>;
-
-BOOST_CLASS_EXPORT(Layer<SimpleNeuron>)
-BOOST_CLASS_EXPORT(Layer<RecurrentNeuron>)
-BOOST_CLASS_EXPORT(Layer<GatedRecurrentUnit>)
-

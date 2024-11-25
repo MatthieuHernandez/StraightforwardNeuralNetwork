@@ -6,8 +6,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(ErrorMultiplier)
-
 ErrorMultiplier::ErrorMultiplier(float factor, BaseLayer* layer)
     : LayerOptimizer(layer), factor(factor)
 {

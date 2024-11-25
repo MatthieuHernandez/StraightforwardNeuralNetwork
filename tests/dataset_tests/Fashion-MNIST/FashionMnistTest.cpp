@@ -103,7 +103,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
  Name:       BestNeuralNetworkForFashion-MNIST.snn
  Parameters: 270926
  Epochs:     15
- Trainnig:   60000
+ Trainnig:   0
 ============================================================
 | Layers                                                   |
 ============================================================

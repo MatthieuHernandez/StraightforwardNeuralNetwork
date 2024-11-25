@@ -181,7 +181,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
  Name:       BestNeuralNetworkForMNIST.snn
  Parameters: 261206
  Epochs:     13
- Trainnig:   60000
+ Trainnig:   0
 ============================================================
 | Layers                                                   |
 ============================================================

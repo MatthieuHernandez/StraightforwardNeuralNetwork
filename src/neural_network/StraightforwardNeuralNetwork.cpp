@@ -14,8 +14,6 @@ using namespace snn;
 using namespace internal;
 using namespace tools;
 
-BOOST_CLASS_EXPORT(StraightforwardNeuralNetwork)
-
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork()
 {
     this->stopTrainingAsync();
@@ -197,7 +195,6 @@ void StraightforwardNeuralNetwork::stopTrainingAsync()
 void StraightforwardNeuralNetwork::resetTrainingValues()
 {
     this->index = 0;
-    this->epoch = 0;
     this->wantToStopTraining = false;
     this->isIdle = true;
 }
@@ -313,7 +310,7 @@ string StraightforwardNeuralNetwork::summary() const
     ss << " Name:       " << this->autoSaveFilePath                            << endl;
     ss << " Parameters: " << this->getNumberOfParameters()                     << endl;
     ss << " Epochs:     " << this->epoch                                       << endl;
-    ss << " Trainnig:   " << this->getNumberOfTrainingsBetweenTwoEvaluations() << endl;
+    ss << " Trainnig:   " << this->getNumberOfTraining() << endl;
     ss << "============================================================"       << endl;
     ss << "| Layers                                                   |"       << endl;
     ss << "============================================================"       << endl;

@@ -8,8 +8,6 @@ using namespace snn;
 using namespace internal;
 using namespace tools;
 
-BOOST_CLASS_EXPORT(Convolution2D)
-
 Convolution2D::Convolution2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, std::move(optimizer))
 {

@@ -81,7 +81,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6177f); // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6196f); // Reach after 55 epochs of 770 sec.
 
     string expectedSummary =
  R"(============================================================
@@ -89,7 +89,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 ============================================================
  Name:       BestNeuralNetworkForCIFAR-10.snn
  Parameters: 207210
- Epochs:     48
+ Epochs:     1
  Trainnig:   0
 ============================================================
 | Layers                                                   |

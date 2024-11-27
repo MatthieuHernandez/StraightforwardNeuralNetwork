@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <cmath>
+#include <limits>
 #include "ActivationFunction.hpp"
 
 using namespace std;
@@ -15,7 +15,7 @@ namespace snn::internal
 
     public:
         ImprovedSigmoid()
-            : ActivationFunction(-INFINITY, +INFINITY)
+            : ActivationFunction(-std::numeric_limits<float>::infinity(), +std::numeric_limits<float>::infinity())
         {
         }
 

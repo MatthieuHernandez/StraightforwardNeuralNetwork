@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(L2Regularization)
-
 L2Regularization::L2Regularization(const float value, BaseLayer* layer)
     : LayerOptimizer(layer), value(value)
 {
@@ -29,6 +27,13 @@ void L2Regularization::applyBeforeBackpropagation(std::vector<float>& inputError
 {
     auto regularization = this->layer->getAverageOfSquareNeuronWeights() * this->value;
     ranges::transform(inputErrors, inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
+}
+
+std::string L2Regularization::summary() const
+{
+    stringstream ss;
+    ss << "L2Regularization(" << value << ")" << endl;
+    return ss.str();
 }
 
 bool L2Regularization::operator==(const LayerOptimizer& optimizer) const

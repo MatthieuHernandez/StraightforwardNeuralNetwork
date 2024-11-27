@@ -41,6 +41,8 @@ namespace snn::internal
 
         [[nodiscard]] virtual activation getType() const = 0;
 
+        [[nodiscard]] virtual std::string getName() const = 0;
+
         virtual bool operator==(const ActivationFunction& activationFunction) const;
         virtual bool operator!=(const ActivationFunction& activationFunction) const;
     };

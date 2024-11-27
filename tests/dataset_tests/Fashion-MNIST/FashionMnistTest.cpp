@@ -95,4 +95,61 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 270926);
     ASSERT_FLOAT_EQ(accuracy, 0.8965f);
+
+    string expectedSummary =
+        R"(============================================================
+| SNN Model Summary                                        |
+============================================================
+ Name:       BestNeuralNetworkForFashion-MNIST.snn
+ Parameters: 270926
+ Epochs:     15
+ Trainnig:   0
+============================================================
+| Layers                                                   |
+============================================================
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [1, 28, 28]
+                Filters:      12
+                Kernel size:  3x3
+                Parameters:   120
+                Activation:   ReLU
+                Output shape: [12, 26, 26]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [12, 26, 26]
+                Kernel size:  2x2
+                Output shape: [12, 13, 13]
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [12, 13, 13]
+                Filters:      24
+                Kernel size:  3x3
+                Parameters:   2616
+                Activation:   ReLU
+                Output shape: [24, 11, 11]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [2904]
+                Neurons:      92
+                Parameters:   267260
+                Activation:   sigmoid
+                Output shape: [92]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [92]
+                Neurons:      10
+                Parameters:   930
+                Activation:   sigmoid
+                Output shape: [10]
+============================================================
+|  Optimizer                                               |
+============================================================
+ StochasticGradientDescent
+                Learning rate: 0.005
+                Momentum:      0.93
+============================================================
+)";
+    string summary = neuralNetwork.summary();
+    ASSERT_EQ(summary, expectedSummary);
 }

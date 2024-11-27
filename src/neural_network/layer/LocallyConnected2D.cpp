@@ -6,8 +6,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(LocallyConnected2D)
-
 LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
@@ -77,6 +75,28 @@ int LocallyConnected2D::isValid() const
             return 203;
     }
     return this->FilterLayer::isValid();
+}
+
+std::string LocallyConnected2D::summary() const
+{
+    stringstream ss;
+    ss << "------------------------------------------------------------" << endl;
+    ss << " LocallyConnected2D";
+    ss << "                Input shape: [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", " << this->shapeOfInput[2] << "]" << endl;
+    ss << "                Filters: " << this->numberOfFilters << endl;
+    ss << "                Kernel size: " << this->kernelSize << "x" << this->kernelSize << endl;
+    ss << "                Parameters: " << this->getNumberOfParameters() << endl;
+    ss << "                Activation: " << this->neurons[0].outputFunction->getName() << endl;
+    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", " << this->shapeOfOutput[2] << "]" << endl;
+    if (!optimizers.empty())
+    {
+        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+    }
+    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    {
+        ss << "                              " << optimizers[o]->summary() << endl;
+    }
+    return ss.str();
 }
 
 inline

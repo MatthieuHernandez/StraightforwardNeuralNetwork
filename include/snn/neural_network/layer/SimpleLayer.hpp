@@ -27,7 +27,6 @@ namespace snn::internal
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
         virtual ~SimpleLayer() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const final;

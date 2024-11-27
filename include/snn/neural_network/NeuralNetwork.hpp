@@ -2,6 +2,7 @@
 #include <memory>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
+#include <boost/serialization/version.hpp>
 #include "StatisticAnalysis.hpp"
 #include "layer/BaseLayer.hpp"
 #include "layer/Convolution1D.hpp"
@@ -23,6 +24,7 @@ namespace snn::internal
     {
     private:
         bool outputNan = false;
+        int64_t numberOfTraining = 0;
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset);
         std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
@@ -49,15 +51,16 @@ namespace snn::internal
                                            const float separator,
                                            bool temporalReset);
 
-         vector2D<float> getLayerOutputs(const std::vector<float>& inputs);
+        vector2D<float> getLayerOutputs(const std::vector<float>& inputs);
 
     public:
         NeuralNetwork() = default; // use restricted to Boost library only
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         virtual ~NeuralNetwork() = default;
-        
+
         [[nodiscard]] bool hasNan() const;
+        [[nodiscard]] int64_t getNumberOfTraining() const;
         [[nodiscard]] int getNumberOfLayers() const;
         [[nodiscard]] int getNumberOfInputs() const;
         [[nodiscard]] int getNumberOfOutputs() const;
@@ -91,7 +94,11 @@ namespace snn::internal
         ar.template register_type<StochasticGradientDescent>();
         ar.template register_type<MaxPooling1D>();
         ar.template register_type<MaxPooling2D>();
-        ar & layers;
+        if (version >= 1) {
+            ar & this->numberOfTraining;
+        }
+        ar & this->layers;
         ar & this->optimizer;
     }
 }
+BOOST_CLASS_VERSION(snn::internal::NeuralNetwork, 1)

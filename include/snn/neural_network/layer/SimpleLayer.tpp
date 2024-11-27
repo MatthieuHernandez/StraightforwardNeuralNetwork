@@ -6,17 +6,6 @@ SimpleLayer<N>::SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOpti
 }
 
 template <BaseNeuron N>
-std::unique_ptr<BaseLayer> SimpleLayer<N>::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
-{
-    auto layer = std::make_unique<SimpleLayer<N>>(*this);
-    for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
-    {
-        layer->neurons[n].setOptimizer(optimizer);
-    }
-    return layer;
-}
-
-template <BaseNeuron N>
 std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     std::vector<float> outputs(this->neurons.size());

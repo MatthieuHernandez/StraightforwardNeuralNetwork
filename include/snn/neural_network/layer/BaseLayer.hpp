@@ -34,6 +34,8 @@ namespace snn::internal
 
         [[nodiscard]] virtual int isValid() const = 0;
 
+        [[nodiscard]] virtual std::string summary() const = 0;
+
         virtual bool operator==(const BaseLayer& layer) const = 0;
         virtual bool operator!=(const BaseLayer& layer) const = 0;
     };

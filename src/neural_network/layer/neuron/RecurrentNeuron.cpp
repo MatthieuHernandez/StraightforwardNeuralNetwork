@@ -6,8 +6,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(RecurrentNeuron)
-
 RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {

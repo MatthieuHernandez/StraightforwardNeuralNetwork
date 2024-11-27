@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <sstream>
 #include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
 #include "LayerOptimizer.hpp"
@@ -27,6 +28,8 @@ namespace snn::internal
         void applyAfterOutputForTesting(std::vector<float>&) override {}
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
+
+        [[nodiscard]] std::string summary() const override;
 
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;

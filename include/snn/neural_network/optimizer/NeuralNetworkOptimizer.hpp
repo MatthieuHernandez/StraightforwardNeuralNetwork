@@ -25,6 +25,8 @@ namespace snn::internal
 
         [[nodiscard]] virtual int isValid() = 0;
 
+        [[nodiscard]] virtual std::string summary() const = 0;
+
         virtual bool operator==(const NeuralNetworkOptimizer& optimizer) const;
         virtual bool operator!=(const NeuralNetworkOptimizer& optimizer) const;
     };

@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(StochasticGradientDescent)
-
 StochasticGradientDescent::StochasticGradientDescent(const float learningRate, const float momentum)
     : learningRate(learningRate), momentum(momentum)
 {
@@ -77,6 +75,15 @@ int StochasticGradientDescent::isValid()
     if (this->momentum < 0.0f || this->momentum > 1.0f)
         return 104;
     return 0;
+}
+
+string StochasticGradientDescent::summary() const
+{
+    stringstream ss;
+    ss << " StochasticGradientDescent" << endl;
+    ss << "                Learning rate: " << this->learningRate << endl;
+    ss << "                Momentum:      " << this->momentum << endl;
+    return ss.str();
 }
 
 bool StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimizer) const

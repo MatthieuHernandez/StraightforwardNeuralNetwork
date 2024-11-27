@@ -58,7 +58,7 @@ TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.6f);
 }
 
-TEST_F(AudioCatsAndDogsTest, EvaluateBestNeuralNetwork)
+TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForAudioCatsAndDogs.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
@@ -66,4 +66,45 @@ TEST_F(AudioCatsAndDogsTest, EvaluateBestNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 9242);
     ASSERT_FLOAT_EQ(accuracy, 0.91044772f);
+
+    string expectedSummary =
+        R"(============================================================
+| SNN Model Summary                                        |
+============================================================
+ Name:       BestNeuralNetworkForAudioCatsAndDogs.snn
+ Parameters: 9242
+ Epochs:     6100
+ Trainnig:   0
+============================================================
+| Layers                                                   |
+============================================================
+------------------------------------------------------------
+ MaxPooling1D
+                Input shape:  [1, 16000]
+                Kernel size:  160
+                Output shape: [1, 100]
+------------------------------------------------------------
+ GruLayer
+                Input shape:  [30]
+                Neurons:      30
+                Parameters:   9180
+                Output shape: [100]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [30]
+                Neurons:      2
+                Parameters:   62
+                Activation:   identity
+                Output shape: [2]
+                Optimizers:   Softmax
+============================================================
+|  Optimizer                                               |
+============================================================
+ StochasticGradientDescent
+                Learning rate: 5e-06
+                Momentum:      0.99
+============================================================
+)";
+    string summary = neuralNetwork.summary();
+    ASSERT_EQ(summary, expectedSummary);
 }

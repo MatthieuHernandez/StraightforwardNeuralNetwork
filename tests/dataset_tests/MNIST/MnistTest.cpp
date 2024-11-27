@@ -165,7 +165,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.98f);
 }
 
-TEST_F(MnistTest, EvaluateBestNeuralNetwork)
+TEST_F(MnistTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
@@ -173,6 +173,56 @@ TEST_F(MnistTest, EvaluateBestNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 261206);
     ASSERT_FLOAT_EQ(accuracy, 0.9871f);
+
+    string expectedSummary =
+        R"(============================================================
+| SNN Model Summary                                        |
+============================================================
+ Name:       BestNeuralNetworkForMNIST.snn
+ Parameters: 261206
+ Epochs:     13
+ Trainnig:   0
+============================================================
+| Layers                                                   |
+============================================================
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [1, 28, 28]
+                Filters:      12
+                Kernel size:  4x4
+                Parameters:   204
+                Activation:   ReLU
+                Output shape: [12, 25, 25]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [12, 25, 25]
+                Kernel size:  2x2
+                Output shape: [12, 13, 13]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [2028]
+                Neurons:      128
+                Parameters:   259712
+                Activation:   ReLU
+                Output shape: [128]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [128]
+                Neurons:      10
+                Parameters:   1290
+                Activation:   identity
+                Output shape: [10]
+                Optimizers:   Softmax
+============================================================
+|  Optimizer                                               |
+============================================================
+ StochasticGradientDescent
+                Learning rate: 0.002
+                Momentum:      0
+============================================================
+)";
+    string summary = neuralNetwork.summary();
+    ASSERT_EQ(summary, expectedSummary);
 }
 
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)

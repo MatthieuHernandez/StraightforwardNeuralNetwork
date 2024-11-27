@@ -7,8 +7,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(MaxPooling2D)
-
 MaxPooling2D::MaxPooling2D(LayerModel& model)
     : FilterLayer(model, nullptr)
 {
@@ -72,6 +70,25 @@ int MaxPooling2D::isValid() const
         && this->numberOfKernels != this->numberOfOutputs)
         return 204;
     return 0;
+}
+
+std::string MaxPooling2D::summary() const
+{
+    stringstream ss;
+    ss << "------------------------------------------------------------" << endl;
+    ss << " MaxPooling2D" << endl;
+    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", " << this->shapeOfInput[2] << "]" << endl;
+    ss << "                Kernel size:  " << this->kernelSize << "x" << this->kernelSize << endl;
+    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", " << this->shapeOfOutput[2] << "]" << endl;
+    if (!optimizers.empty())
+    {
+        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+    }
+    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    {
+        ss << "                              " << optimizers[o]->summary() << endl;
+    }
+    return ss.str();
 }
 
 inline

@@ -28,6 +28,8 @@ namespace snn::internal
 
         virtual void applyBeforeBackpropagation(std::vector<float>& inputErrors) = 0;
 
+        [[nodiscard]] virtual std::string summary() const = 0;
+
         virtual bool operator==(const LayerOptimizer& optimizer) const;
         virtual bool operator!=(const LayerOptimizer& optimizer) const;
     };

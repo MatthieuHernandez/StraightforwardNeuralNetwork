@@ -1,6 +1,8 @@
 #pragma once
-#include <cmath>
+#include <limits>
 #include "ActivationFunction.hpp"
+
+using namespace std;
 
 namespace snn::internal
 {
@@ -9,9 +11,11 @@ namespace snn::internal
     private:
         activation getType() const override { return activation::GELU; }
 
+        string getName() const override { return "GELU"; }
+
     public:
         GaussianErrorLinearUnit()
-            : ActivationFunction(0, +INFINITY)
+            : ActivationFunction(0, std::numeric_limits<float>::infinity())
         {
         }
 

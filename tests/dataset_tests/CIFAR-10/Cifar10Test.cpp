@@ -74,14 +74,77 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.20f);
 }
 
-TEST_F(Cifar10Test, EvaluateBestNeuralNetwork)
+TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6177f); // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6196f); // Reach after 55 epochs of 770 sec.
+
+    string expectedSummary =
+ R"(============================================================
+| SNN Model Summary                                        |
+============================================================
+ Name:       BestNeuralNetworkForCIFAR-10.snn
+ Parameters: 207210
+ Epochs:     1
+ Trainnig:   0
+============================================================
+| Layers                                                   |
+============================================================
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [3, 32, 32]
+                Filters:      16
+                Kernel size:  3x3
+                Parameters:   448
+                Activation:   ReLU
+                Output shape: [16, 30, 30]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [16, 30, 30]
+                Kernel size:  2x2
+                Output shape: [16, 15, 15]
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [16, 15, 15]
+                Filters:      32
+                Kernel size:  3x3
+                Parameters:   4640
+                Activation:   ReLU
+                Output shape: [32, 13, 13]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [32, 13, 13]
+                Kernel size:  2x2
+                Output shape: [32, 7, 7]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [1568]
+                Neurons:      128
+                Parameters:   200832
+                Activation:   sigmoid
+                Output shape: [128]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [128]
+                Neurons:      10
+                Parameters:   1290
+                Activation:   identity
+                Output shape: [10]
+                Optimizers:   Softmax
+============================================================
+|  Optimizer                                               |
+============================================================
+ StochasticGradientDescent
+                Learning rate: 0.001
+                Momentum:      0.8
+============================================================
+)";
+    string summary = neuralNetwork.summary();
+    ASSERT_EQ(summary, expectedSummary);
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

@@ -9,8 +9,6 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-BOOST_CLASS_EXPORT(Softmax)
-
 Softmax::Softmax(const BaseLayer* layer)
     : LayerOptimizer(layer)
 {
@@ -62,6 +60,13 @@ void Softmax::applyAfterOutputForTesting(std::vector<float>& outputs)
 inline
 void Softmax::applyBeforeBackpropagation([[maybe_unused]] std::vector<float>& inputErrors)
 {
+}
+
+std::string Softmax::summary() const
+{
+    stringstream ss;
+    ss << "Softmax";
+    return ss.str();
 }
 
 bool Softmax::operator==(const LayerOptimizer& optimizer) const

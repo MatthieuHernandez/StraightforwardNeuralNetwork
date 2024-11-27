@@ -1,5 +1,8 @@
 #pragma once
+#include <limits>
 #include "ActivationFunction.hpp"
+
+using namespace std;
 
 namespace snn::internal
 {
@@ -8,9 +11,11 @@ namespace snn::internal
     private:
         activation getType() const override { return activation::identity; }
 
+        string getName() const override { return "identity"; }
+
     public:
          Identity()
-            : ActivationFunction(-INFINITY, +INFINITY)
+            : ActivationFunction(-std::numeric_limits<float>::infinity(), +std::numeric_limits<float>::infinity())
         {
         }
 

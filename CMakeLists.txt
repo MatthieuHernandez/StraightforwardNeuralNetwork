@@ -47,7 +47,6 @@ if(MSVC)
 else()
   target_compile_options(StraightforwardNeuralNetwork PUBLIC $<$<CONFIG:Debug>:-g>
                                                              $<$<CONFIG:Release>:-O3>
-                                                             $<$<CONFIG:Release>:-ffast-math>
                                                              -fopenmp
                                                              -Wall
                                                              -Wextra

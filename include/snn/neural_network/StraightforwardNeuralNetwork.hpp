@@ -113,10 +113,10 @@ namespace snn
         {
             if (wait.tick() >= 100)
             {
-                const std::string name = set == training ? "Training  " : "Evaluation";
+                const std::string name = set == training ? "Training " : "Evaluation";
                 const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
                 tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
-                    " - ", name, " in progress... ", tools::toConstSizeString(progress, 2), "%",
+                    " - ", name, "in progress...   ", tools::toConstSizeString(progress, 2), "%",
                     " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 2), "s");
             }
         }

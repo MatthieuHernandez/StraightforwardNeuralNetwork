@@ -43,4 +43,5 @@ TEST(Train, WithNanAsExpected)
 
     ASSERT_EQ(valueBeforeTrain, valueAfterTrain1);
     ASSERT_NE(valueBeforeTrain, valueAfterTrain2);
+    ASSERT_FALSE(isnan(valueAfterTrain2));
 }

@@ -79,21 +79,21 @@ unique_ptr<Data> NumericLimitTests::data = nullptr;
 TEST_F(NumericLimitTests, WithSigmoid)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-                                                   Input(3),
-                                                   FullyConnected(6, activation::sigmoid),
-                                                   FullyConnected(1, activation::sigmoid)
-                                               },
-                                               StochasticGradientDescent(0.01f, 0.99f));
+        Input(3),
+        FullyConnected(8, activation::sigmoid),
+        FullyConnected(1, activation::sigmoid)
+    },
+        StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }
 
 TEST_F(NumericLimitTests, WithTanh)
 {
     StraightforwardNeuralNetwork neuralNetwork({
-                                                   Input(3),
-                                                   FullyConnected(6, activation::tanh),
-                                                   FullyConnected(1, activation::tanh)
-                                               },
-                                               StochasticGradientDescent(0.01f, 0.99f));
+        Input(3),
+        FullyConnected(8, activation::tanh),
+        FullyConnected(1, activation::tanh)
+    },
+        StochasticGradientDescent(0.01f, 0.99f));
     testNeuralNetwork(neuralNetwork);
 }

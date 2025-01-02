@@ -53,8 +53,8 @@ TEST(Recurrence, RepeatLastLastInput)
 
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        GruLayer(12),
-        GruLayer(8),
+        GruLayer(14),
+        GruLayer(10),
         FullyConnected(1)
     },
         StochasticGradientDescent(0.1f, 0.9f));

@@ -10,11 +10,24 @@ message("-- Compile in ${CMAKE_BUILD_TYPE} mode")
 
 if(MSVC)
   message("-- CMake run for msvc")
-  if(CMAKE_BUILD_TYPE STREQUAL "Release")
-	add_compile_options(/DNDEBUG /O2 /Ot /Ob3 /Oi /Oy /GR /GT /GL /GS- /MT /fp:fast)
-  else()
-	add_compile_options(/Od /sdl /GR /GS /Zi /MTd)
-  endif()
+  add_compile_options($<$<CONFIG:Debug>:/Od>
+                      $<$<CONFIG:Debug>:/sdl>
+                      $<$<CONFIG:Debug>:/GR>
+                      $<$<CONFIG:Debug>:/GS>
+                      $<$<CONFIG:Debug>:/Zi>
+                      $<$<CONFIG:Debug>:/MTd>
+                      $<$<CONFIG:Release>:/DNDEBUG>
+                      $<$<CONFIG:Release>:/O2>
+                      $<$<CONFIG:Release>:/Ot>
+                      $<$<CONFIG:Release>:/Ob3>
+                      $<$<CONFIG:Release>:/Oi>
+                      $<$<CONFIG:Release>:/Oy>
+                      $<$<CONFIG:Release>:/GR>
+                      $<$<CONFIG:Release>:/GT>
+                      $<$<CONFIG:Release>:/GL>
+                      $<$<CONFIG:Release>:/GS->
+                      $<$<CONFIG:Release>:/MT>
+                      $<$<CONFIG:Release>:/fp:fast>)
   add_link_options(/LTCG)
 
   add_link_options(/NODEFAULTLIB:libboost_serialization-vc143-mt-x64-1_80.lib

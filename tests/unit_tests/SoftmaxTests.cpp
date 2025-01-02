@@ -3,7 +3,7 @@
 using namespace std;
 using namespace snn::internal;
 
-TEST(Softmax, normalValues)
+TEST(Softmax, NormalValues)
 {
     vector<float> values1 {7.0f, 2.0f, 9.0f};
     vector<float> values2 = values1;
@@ -17,7 +17,7 @@ TEST(Softmax, normalValues)
     ASSERT_VECTOR_EQ(values2, expectedValues);
 }
 
-TEST(Softmax, largeValues)
+TEST(Softmax, LargeValues)
 {
     vector<float> values1 {15012.0f, 15009.0f, 15011.0f};
     vector<float> values2 = values1;
@@ -31,7 +31,7 @@ TEST(Softmax, largeValues)
     ASSERT_VECTOR_EQ(values2, expectedValues);
 }
 
-TEST(Softmax, smallValues)
+TEST(Softmax, SmallValues)
 {
     vector<float> values1 {7e-5f, -3e-6f, 1e-6f};
     vector<float> values2 = values1;

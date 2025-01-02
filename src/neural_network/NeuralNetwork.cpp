@@ -90,7 +90,7 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
     const auto outputs = this->outputForTraining(inputs, temporalReset);
     if (this->outputNan)
         return;
-    auto errors = calculateError(outputs, desired);
+    auto errors = this->calculateError(outputs, desired);
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
         errors = layers[l]->backOutput(errors);
@@ -103,7 +103,10 @@ vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const 
     vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
     {
-        errors[n] = 2 * (desired[n] - outputs[n]);
+        if (fpclassify(desired[n]) != FP_NORMAL && fpclassify(desired[n]) != FP_ZERO)
+            errors[n] = 0.0f;
+        else
+            errors[n] = 2.0f * (desired[n] - outputs[n]);
     }
     return errors;
 }

@@ -6,13 +6,30 @@
 using namespace std;
 using namespace snn;
 
+TEST(Train, WithoutError)
+{
+    StraightforwardNeuralNetwork neuralNetwork({
+        Input(4),
+        FullyConnected(4, activation::sigmoid),
+    },
+        StochasticGradientDescent(0.1f));
+    auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
+
+    vector<float> input = { 0.9f, 0.0f, -0.7f, 0.1f };
+    auto expected = neuralNetwork.computeOutput(input);
+    neuralNetwork.trainOnce(input, expected);
+
+    auto valueAfterTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
+    ASSERT_EQ(valueBeforeTrain, valueAfterTrain);
+}
+
 TEST(Train, WithNanAsExpected)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(4),
         FullyConnected(4, activation::sigmoid),
-        },
-        StochasticGradientDescent(0.1f));
+    },
+        StochasticGradientDescent(0.2f));
 
     vector<float> input = { 1, 0, 1, 0 };
     vector<float> expected1 = { NAN, NAN, NAN, NAN };
@@ -25,5 +42,5 @@ TEST(Train, WithNanAsExpected)
     auto valueAfterTrain2 = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
 
     ASSERT_EQ(valueBeforeTrain, valueAfterTrain1);
-    ASSERT_EQ(valueBeforeTrain, valueAfterTrain2);
+    ASSERT_NE(valueBeforeTrain, valueAfterTrain2);
 }

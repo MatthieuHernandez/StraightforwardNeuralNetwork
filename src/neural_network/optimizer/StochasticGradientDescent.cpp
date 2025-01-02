@@ -34,7 +34,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
         neuron.weights[w] += deltaWeights[w];
     }
     deltaWeights[w] = lr * error * neuron.bias + m * previousDeltaWeights[w];
-    neuron.weights[w] = deltaWeights[w];
+    neuron.weights[w] += deltaWeights[w];
     neuron.previousDeltaWeights.pushBack(deltaWeights);
 }
 

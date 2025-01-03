@@ -27,7 +27,7 @@ namespace snn
 
         void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
         void saveSync(std::string filePath);
-        void evaluate(const Data& data, Wait* wait);
+        void evaluate(const Data& data, Wait& wait);
         void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
@@ -62,7 +62,7 @@ namespace snn
         void waitFor(Wait wait) const;
         void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
-        void evaluate(const Data& data) { return this->evaluate(data, nullptr); }
+        void evaluate(const Data& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
         int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);

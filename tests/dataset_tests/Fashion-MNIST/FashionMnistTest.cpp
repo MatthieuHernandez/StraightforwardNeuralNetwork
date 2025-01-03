@@ -60,7 +60,7 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
         FullyConnected(10)
     },
         StochasticGradientDescent(0.0002f, 0.80f));
-    neuralNetwork.train(*data, 1_ep || 30_s);
+    neuralNetwork.train(*data, 1_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70f);
 }

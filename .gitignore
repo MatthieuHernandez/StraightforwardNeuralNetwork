@@ -5,6 +5,7 @@
 *.a
 *.o
 *.obj
+*.iobj
 *.bin
 *.out
 *.tmp

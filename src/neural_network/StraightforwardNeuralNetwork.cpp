@@ -94,7 +94,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
     this->wantToStopTraining = false;
     this->isIdle = false;
     if (evaluationFrequency > 0)
-        this->evaluate(data, &wait);
+        this->evaluate(data, wait);
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
         data.shuffle();
@@ -116,13 +116,18 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
             this->logInProgress<minimal>(wait, data, training);
         }
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
-            this->evaluate(data, &wait);
+            this->evaluate(data, wait);
     }
     this->resetTrainingValues();
     log<minimal>("Stop training");
 }
 
-void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait* wait)
+void StraightforwardNeuralNetwork::evaluate(const Data& data) {
+    auto wait = Wait();
+    this->evaluate(data, wait);
+}
+
+void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait& wait)
 {
     this->startTesting();
     for (this->index = 0; this->index < data.sets[testing].size; this->index++)
@@ -138,18 +143,17 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait* wait)
             this->evaluateOnce(data);
         else
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
-        this->logInProgress<minimal>(*wait, data, testing);
+        this->logInProgress<minimal>(wait, data, testing);
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
     {
         this->saveSync(autoSaveFilePath);
-        if(wait != nullptr)
-            this->logAccuracy<minimal>(*wait, true);
+        this->logAccuracy<minimal>(wait, true);
     }
     else
     {
-        this->logAccuracy<minimal>(*wait, false);
+        this->logAccuracy<minimal>(wait, false);
     }
 }
 

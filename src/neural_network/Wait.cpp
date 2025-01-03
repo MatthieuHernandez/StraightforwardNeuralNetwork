@@ -57,6 +57,7 @@ Wait& Wait::operator&&(const Wait& wait)
 
 void Wait::startClock()
 {
+    this->hasStarted = true;
     this->start = system_clock::now();
     this->lastTick = this->start;
     this->lastReset = this->start;
@@ -87,7 +88,7 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
     return false;
 }
 
-int Wait::tick()
+int Wait::tick() const
 {
     const auto now = system_clock::now();
     const auto tickDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastTick).count());

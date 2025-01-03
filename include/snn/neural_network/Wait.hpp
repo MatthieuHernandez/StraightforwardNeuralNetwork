@@ -12,6 +12,7 @@ namespace snn
 
     struct Wait
     {
+        bool hasStarted = false;
         int epochs = -1;
         float accuracy = -1;
         float mae = -1;
@@ -24,7 +25,7 @@ namespace snn
         Wait& operator&&(const Wait& wait);
         void startClock();
         [[nodiscard]] bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const;
-        [[nodiscard]] int tick(); // Time since last tick in milliseconds
+        [[nodiscard]] int tick() const; // Time since last tick in milliseconds
         [[nodiscard]] float getDuration();
         [[nodiscard]] float getDurationAndReset();
     };

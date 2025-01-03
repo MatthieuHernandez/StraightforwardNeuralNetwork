@@ -129,11 +129,14 @@ void Convolution1D::computeTrain(std::vector<float>& inputErrors)
     for (int n = 0; n < this->numberOfFilters; ++n)
         this->neurons[n].train(inputErrors[n]);
 }
+
+inline
 bool Convolution1D::operator==(const BaseLayer& layer) const
 {
     return this->FilterLayer::operator==(layer);
 }
 
+inline
 bool Convolution1D::operator!=(const BaseLayer& layer) const
 {
     return !(*this == layer);

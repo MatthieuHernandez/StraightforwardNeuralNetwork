@@ -27,7 +27,7 @@ namespace snn
 
         void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
         void saveSync(std::string filePath);
-        void evaluate(const Data& data, Wait* wait);
+        void evaluate(const Data& data, Wait& wait);
         void evaluateOnce(const Data& data);
 
         bool continueTraining(Wait wait) const;
@@ -62,7 +62,7 @@ namespace snn
         void waitFor(Wait wait) const;
         void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
-        void evaluate(const Data& data) { return this->evaluate(data, nullptr); }
+        void evaluate(const Data& data);
 
         std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
         int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);
@@ -98,8 +98,8 @@ namespace snn
         {
             tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
                                 " - Accuracy: ", tools::toConstSizeString<2>(this->getGlobalClusteringRate(), 4),
-                                " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 7),
-                                " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 2), "s");
+                                " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 9),
+                                " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 3), "s");
             if (hasSaved)
                 tools::log<T, false>(" - Saved");
             tools::log<T>();
@@ -111,13 +111,13 @@ namespace snn
     {
         if constexpr (T > none && T <= verbose)
         {
-            if (wait.tick() >= 100)
+            if (wait.tick() >= 300)
             {
-                const std::string name = set == training ? "Training  " : "Evaluation";
+                const std::string name = set == training ? "Training in progress...  " : "Evaluation in progress...";
                 const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
                 tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
-                    " - ", name, " in progress... ", tools::toConstSizeString(progress, 2), "%",
-                    " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 2), "s");
+                    " - ", name, tools::toConstSizeString(progress, 5), "%",
+                    " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 3), "s");
             }
         }
     }

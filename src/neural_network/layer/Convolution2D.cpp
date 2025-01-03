@@ -137,6 +137,7 @@ void Convolution2D::computeTrain(std::vector<float>& inputErrors)
     for (size_t n = 0; n < this->neurons.size(); ++n)
         this->neurons[n].train(inputErrors[n]);
 }
+
 inline
 bool Convolution2D::operator==(const BaseLayer& layer) const
 {

@@ -71,11 +71,11 @@ TEST(Addition, WithGRU)
     auto data = createRecurrentDataForAdditionTests(100, 3, 0.3f);
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1),
-        GruLayer(15),
-         GruLayer(5),
+        GruLayer(16),
+        GruLayer(12),
         FullyConnected(1)
     }, 
-        StochasticGradientDescent(0.01f, 0.4f));
+        StochasticGradientDescent(0.005f, 0.95f));
 
      neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 3);
     testNeuralNetworkForAddition(neuralNetwork);

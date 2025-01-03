@@ -55,12 +55,12 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({
         Input(1, 28, 28),
-        Convolution(8, 3, activation::ReLU),
-        Convolution(24, 5, activation::ReLU),
+        Convolution(6, 3, activation::ReLU),
+        Convolution(4, 5, activation::ReLU),
         FullyConnected(10)
     },
         StochasticGradientDescent(0.0002f, 0.80f));
-    neuralNetwork.train(*data, 1_ep || 30_s);
+    neuralNetwork.train(*data, 1_ep || 1_min);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70f);
 }

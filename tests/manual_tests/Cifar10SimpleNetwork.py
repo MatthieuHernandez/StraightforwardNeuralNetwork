@@ -10,7 +10,7 @@ train_images, test_images = train_images / 255.0, test_images / 255.0
 
 model = models.Sequential()
 model.add(layers.Input(shape=(32, 32, 3)))
-model.add(layers.Conv2D(24, (3, 3), padding="valid", activation='relu',
+model.add(layers.Conv2D(16, (3, 3), padding="valid", activation='relu',
                         use_bias=True, input_shape=(32, 32, 3)))
 model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Conv2D(32, (3, 3), padding="valid", activation='relu',

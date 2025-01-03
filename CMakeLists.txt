@@ -42,7 +42,6 @@ add_subdirectory(tests)
 if(MSVC)
   set_target_properties(DatasetTests PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "$(ProjectDir)../../../Build")
   target_compile_options(StraightforwardNeuralNetwork PUBLIC /openmp:experimental /W4 /WX)
-  target_link_options(StraightforwardNeuralNetwork PUBLIC /LTCG)
   target_compile_options(Boost PRIVATE /W0)
 else()
   target_compile_options(StraightforwardNeuralNetwork PUBLIC $<$<CONFIG:Debug>:-g>

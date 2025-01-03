@@ -57,7 +57,6 @@ Wait& Wait::operator&&(const Wait& wait)
 
 void Wait::startClock()
 {
-    this->hasStarted = true;
     this->start = system_clock::now();
     this->lastTick = this->start;
     this->lastReset = this->start;

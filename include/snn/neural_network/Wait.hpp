@@ -12,7 +12,6 @@ namespace snn
 
     struct Wait
     {
-        bool hasStarted = false;
         int epochs = -1;
         float accuracy = -1;
         float mae = -1;

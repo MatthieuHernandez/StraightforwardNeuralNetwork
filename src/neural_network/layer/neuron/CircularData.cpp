@@ -4,8 +4,9 @@
 #include <utility>
 
 using namespace std;
+using namespace snn::internal;
 
-void snn::internal::CircularData::initialize(const size_t queueSize, const size_t dataSize)
+void CircularData::initialize(const size_t queueSize, const size_t dataSize)
 {
     this->queue.clear();
     this->queue.resize(queueSize);
@@ -13,7 +14,7 @@ void snn::internal::CircularData::initialize(const size_t queueSize, const size_
         d = vector<float>(dataSize, 0.0f);
 }
 
-const std::vector<float>* snn::internal::CircularData::getBack()
+const vector<float>* CircularData::getBack()
 {
     assert(this->indexGet <= this->queue.size());
     if (this->indexGet >= this->queue.size())
@@ -21,7 +22,7 @@ const std::vector<float>* snn::internal::CircularData::getBack()
     return &this->queue[this->indexGet++];
 }
 
-void snn::internal::CircularData::pushBack(std::vector<float> data)
+void CircularData::pushBack(const vector<float>& data)
 {
     assert(this->indexPush <= this->queue.size());
     if (this->indexPush >= this->queue.size())
@@ -29,14 +30,14 @@ void snn::internal::CircularData::pushBack(std::vector<float> data)
     this->queue[this->indexPush++] = std::move(data);
 }
 
-bool snn::internal::CircularData::operator==(const CircularData& other) const
+bool CircularData::operator==(const CircularData& other) const
 {
     return this->queue == other.queue
         && this->indexGet == other.indexGet
         && this->indexPush == other.indexPush;
 }
 
-bool snn::internal::CircularData::operator!=(const CircularData& other) const
+bool CircularData::operator!=(const CircularData& other) const
 {
     return !(*this == other);
 }

@@ -24,7 +24,7 @@ namespace snn::internal
         ~CircularData() = default;
 
         [[nodiscard]] const std::vector<float>* getBack();
-        void pushBack(std::vector<float> data);
+        void pushBack(const std::vector<float>& data);
 
         bool operator==(const CircularData& other) const;
         bool operator!=(const CircularData& other) const;

@@ -11,7 +11,7 @@ class WineTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Wine dataset("./datasets/Wine");
+            Wine dataset("./resources/datasets/Wine");
         data = move(dataset.data);
     }
 

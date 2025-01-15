@@ -11,7 +11,7 @@ class DailyMinTemperaturesTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        DailyMinTemperatures dataset("./datasets/daily-min-temperatures", 5);
+            DailyMinTemperatures dataset("./resources/datasets/daily-min-temperatures", 5);
         data = move(dataset.data);
     }
     

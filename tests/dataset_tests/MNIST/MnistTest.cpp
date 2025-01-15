@@ -11,7 +11,7 @@ class MnistTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Mnist dataset("./datasets/MNIST");
+            Mnist dataset("./resources/datasets/MNIST");
         data = move(dataset.data);
     }
 

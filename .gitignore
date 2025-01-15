@@ -2,42 +2,12 @@
 .vs/
 .vcx/
 *.orig
-*.a
-*.o
-*.obj
-*.iobj
-*.bin
-*.out
-*.tmp
-*.bmp
-*.log
-*.tlog
-*.recip
-*.lib
-*.pdb
-*.sln
-*.vcxproj*
-*.exe
-*.exp
-*.recipe
-*.user
-*.ilk
-*.ninja*
 
-DatasetTests
-UnitTests
-
-# Ignore CMake generated directories and files.
-generated/
-CMakeFiles/
-*.cmake
-!internal_utils.cmake
-CMakeCache.txt
-MakeFile
-_deps/
+# Ignore build folders.
+build*/
 
 # Ignore Python generated directories and files.
 __pycache__/
 
 # Ignore copy of datasets.
-build/datasets/
+resources/datasets/

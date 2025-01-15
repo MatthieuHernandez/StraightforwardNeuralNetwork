@@ -11,7 +11,7 @@ class FashionMnistTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        FashionMnist dataset("./datasets/Fashion-MNIST");
+            FashionMnist dataset("./resources/datasets/Fashion-MNIST");
         data = move(dataset.data);
     }
 

@@ -11,7 +11,7 @@ class Cifar10Test : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        Cifar10  dataset("./datasets/CIFAR-10");
+            Cifar10 dataset("./resources/datasets/CIFAR-10");
         data = move(dataset.data);
     }
 

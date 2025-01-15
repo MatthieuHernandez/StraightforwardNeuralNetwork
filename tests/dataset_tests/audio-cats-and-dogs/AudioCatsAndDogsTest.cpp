@@ -13,7 +13,7 @@ class AudioCatsAndDogsTest : public testing::Test
 protected:
     static void SetUpTestSuite()
     {
-        AudioCatsAndDogs dataset("./datasets/audio-cats-and-dogs", sizeOfOneData);
+            AudioCatsAndDogs dataset("./resources/datasets/audio-cats-and-dogs", sizeOfOneData);
         data = move(dataset.data);
     }
     

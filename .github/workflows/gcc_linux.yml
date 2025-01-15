@@ -1,0 +1,85 @@
+name: All tests - GCC Linux
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v2
+    - name: CMake
+      run: |
+        mkdir build
+        cd ./build
+        CC=/usr/bin/gcc-14 CXX=/usr/bin/g++-14 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+    - name: Make
+      run: |
+        cd ./build
+        make
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: compiled-tests
+        path: build/tests/
+    - name: Upload models artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: compiled-tests
+        path: build/tests/
+
+  run-unit-tests:
+    name: Run unit tests
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: compiled-tests
+        path: ./build/tests/
+    - name: Run tests
+      run: |
+        chmod -R +x ./build/tests/
+        ./build/tests/unit_tests/UnitTests --gtest_also_run_disabled_tests
+
+  run-dataset-tests:
+    name: Run dataset tests
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v2
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: compiled-tests
+        path: ./build/tests/
+    - name: Checkout datasets
+      uses: actions/checkout@v2
+      with:
+        repository: MatthieuHernandez/Datasets-for-Machine-Learning
+        path: ./resources/datasets
+    - name: Iris
+      run: |
+        chmod -R +x ./build/tests/
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=IrisTest*
+    - name: Wine
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=WineTest*
+    - name: DailyMinTemperatures
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=DailyMinTemperaturesTest*
+    - name: MNIST
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=MnistTest*
+    - name: Fashion MNIST
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest*
+    - name: CIFAR-10
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test*

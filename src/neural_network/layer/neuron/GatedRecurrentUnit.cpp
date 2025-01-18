@@ -1,5 +1,6 @@
-#include <boost/serialization/export.hpp>
 #include "GatedRecurrentUnit.hpp"
+
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;
@@ -7,16 +8,18 @@ using namespace internal;
 
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
-      resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid}, optimizer),
-      updateGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid}, optimizer),
-      outputGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::tanh}, optimizer)
+      resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+                optimizer),
+      updateGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+                 optimizer),
+      outputGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::tanh},
+                 optimizer)
 {
 }
 
 float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
 {
-    if (temporalReset)
-        this->reset();
+    if (temporalReset) this->reset();
     float resetGateOutput = this->resetGate.output(inputs, temporalReset);
     this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
     this->outputGate.lastOutput *= resetGateOutput;
@@ -74,18 +77,13 @@ vector<float> GatedRecurrentUnit::getWeights() const
 
 int GatedRecurrentUnit::getNumberOfParameters() const
 {
-    return this->resetGate.getNumberOfParameters()
-        + this->updateGate.getNumberOfParameters()
-        + this->outputGate.getNumberOfParameters();
+    return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() +
+           this->outputGate.getNumberOfParameters();
 }
 
-int GatedRecurrentUnit::getNumberOfInputs() const
-{
-    return this->numberOfInputs;
-}
+int GatedRecurrentUnit::getNumberOfInputs() const { return this->numberOfInputs; }
 
-inline
-void GatedRecurrentUnit::reset()
+inline void GatedRecurrentUnit::reset()
 {
     this->previousOutput = 0;
     this->recurrentError = 0;
@@ -95,21 +93,15 @@ void GatedRecurrentUnit::reset()
 int GatedRecurrentUnit::isValid() const
 {
     auto err = resetGate.isValid();
-    if (err != 0)
-        return err;
+    if (err != 0) return err;
     err = updateGate.isValid();
-    if (err != 0)
-        return err;
+    if (err != 0) return err;
     err = outputGate.isValid();
-    if (err != 0)
-        return err;
+    if (err != 0) return err;
     return 0;
 }
 
-NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const
-{
-    return this->resetGate.getOptimizer();
-}
+NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const { return this->resetGate.getOptimizer(); }
 
 void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
@@ -120,17 +112,10 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
 
 bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
 {
-    return this->numberOfInputs == neuron .numberOfInputs
-        && this->previousOutput == neuron.previousOutput
-        && this->recurrentError == neuron.recurrentError
-        && this->updateGateOutput == neuron.updateGateOutput
-        && this->outputGateOutput == neuron.outputGateOutput
-        && this->resetGate == neuron.resetGate
-        && this->updateGate == neuron.updateGate
-        && this->outputGate == neuron.outputGate;
+    return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&
+           this->recurrentError == neuron.recurrentError && this->updateGateOutput == neuron.updateGateOutput &&
+           this->outputGateOutput == neuron.outputGateOutput && this->resetGate == neuron.resetGate &&
+           this->updateGate == neuron.updateGate && this->outputGate == neuron.outputGate;
 }
 
-bool GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const
-{
-    return !(*this == neuron);
-}
+bool GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const { return !(*this == neuron); }

@@ -1,4 +1,5 @@
 #include "CompositeForMultipleClassification.hpp"
+
 #include "ExtendedExpection.hpp"
 
 using namespace std;
@@ -10,10 +11,7 @@ CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[
 {
 }
 
-int CompositeForMultipleClassification::isValid()
-{
-    return this->ProblemComposite::isValid();
-}
+int CompositeForMultipleClassification::isValid() { return this->ProblemComposite::isValid(); }
 
 const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index) const
 {

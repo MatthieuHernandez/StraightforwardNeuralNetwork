@@ -1,14 +1,15 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "FilterLayer.hpp"
+#include <memory>
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {
-    class MaxPooling2D final : public FilterLayer
-    {
+class MaxPooling2D final : public FilterLayer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -35,14 +36,14 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
-    };
+};
 
-    template <class Archive>
-    void MaxPooling2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<MaxPooling2D, FilterLayer>();
-        ar & boost::serialization::base_object<FilterLayer>(*this);
-        ar & this->numberOfOutputs;
-        ar & this->maxValueIndexes;
-    }
+template <class Archive>
+void MaxPooling2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<MaxPooling2D, FilterLayer>();
+    ar& boost::serialization::base_object<FilterLayer>(*this);
+    ar& this->numberOfOutputs;
+    ar& this->maxValueIndexes;
 }
+}  // namespace snn::internal

@@ -1,7 +1,9 @@
-#include <algorithm>
-#include <functional>
-#include <boost/serialization/export.hpp>
 #include "Dropout.hpp"
+
+#include <algorithm>
+#include <boost/serialization/export.hpp>
+#include <functional>
+
 #include "BaseLayer.hpp"
 #include "Tools.hpp"
 
@@ -10,14 +12,14 @@ using namespace snn;
 using namespace internal;
 
 Dropout::Dropout(const float value, const BaseLayer* layer)
-    : LayerOptimizer(layer), value(value)
+    : LayerOptimizer(layer),
+      value(value)
 {
     this->reverseValue = 1.0f - this->value;
     auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
     this->dist = uniform_real_distribution<>(0.0, 1.0);
-    std::generate(this->presenceProbabilities.begin(),
-                  this->presenceProbabilities.end(),
+    std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                   [&] { return dist(tools::rng) >= this->value; });
 }
 
@@ -37,8 +39,7 @@ unique_ptr<LayerOptimizer> Dropout::clone(const BaseLayer* newLayer) const
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
 {
     if (temporalReset)
-        std::generate(this->presenceProbabilities.begin(),
-                      this->presenceProbabilities.end(),
+        std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                       [&] { return dist(tools::rng) >= this->value; });
     ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
 }
@@ -65,9 +66,8 @@ bool Dropout::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const Dropout&>(optimizer);
-        return this->LayerOptimizer::operator==(optimizer)
-            && this->value == o.value
-            && this->reverseValue == o.reverseValue;
+        return this->LayerOptimizer::operator==(optimizer) && this->value == o.value &&
+               this->reverseValue == o.reverseValue;
     }
     catch (bad_cast&)
     {
@@ -75,7 +75,4 @@ bool Dropout::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool Dropout::operator!=(const LayerOptimizer& optimizer) const
-{
-    return !(*this == optimizer);
-}
+bool Dropout::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }

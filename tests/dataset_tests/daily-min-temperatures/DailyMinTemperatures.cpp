@@ -1,15 +1,15 @@
+#include "DailyMinTemperatures.hpp"
+
 #include <fstream>
+#include <snn/data/Data.hpp>
+#include <snn/tools/ExtendedExpection.hpp>
+#include <snn/tools/Tools.hpp>
 #include <string>
 #include <vector>
-#include "DailyMinTemperatures.hpp"
-#include <snn/data/Data.hpp>
-#include <snn/tools/Tools.hpp>
-#include <snn/tools/ExtendedExpection.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
-
 
 DailyMinTemperatures::DailyMinTemperatures(string folderPath, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences)
@@ -23,13 +23,12 @@ void DailyMinTemperatures::loadData(string folderPath)
     vector2D<float> labels;
     string line;
     ifstream file(folderPath + "/daily-min-temperatures.csv", ios::in);
-        
-    if (!file.is_open())
-        throw FileOpeningFailedException();
+
+    if (!file.is_open()) throw FileOpeningFailedException();
 
     inputs.reserve(3650);
 
-    getline(file, line); // ignore headers
+    getline(file, line);  // ignore headers
     float previousValue = -273.15f;
     while (getline(file, line))
     {

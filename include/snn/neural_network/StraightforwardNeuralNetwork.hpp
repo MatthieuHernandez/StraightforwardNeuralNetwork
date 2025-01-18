@@ -1,19 +1,19 @@
 #pragma once
 #include <string>
-#include <vector>
 #include <thread>
+#include <vector>
+
+#include "../data/Data.hpp"
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
-#include "../data/Data.hpp"
-#include "layer/LayerModel.hpp"
 #include "layer/LayerFactory.hpp"
+#include "layer/LayerModel.hpp"
 #include "optimizer/NeuralNetworkOptimizerFactory.hpp"
-
 
 namespace snn
 {
-    class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
-    {
+class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
+{
     private:
         std::thread thread;
 
@@ -43,11 +43,10 @@ namespace snn
         void serialize(Archive& ar, unsigned version);
 
     public:
-        StraightforwardNeuralNetwork() = default; // use restricted to Boost library only
+        StraightforwardNeuralNetwork() = default;  // use restricted to Boost library only
         explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
                                               NeuralNetworkOptimizerModel optimizer = {
-                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03f, 0.0f
-                                              });
+                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03f, 0.0f});
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
         ~StraightforwardNeuralNetwork();
 
@@ -88,51 +87,49 @@ namespace snn
 
         bool operator==(const StraightforwardNeuralNetwork& neuralNetwork) const;
         bool operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const;
-    };
+};
 
-
-    template <logLevel T>
-    void StraightforwardNeuralNetwork::logAccuracy(Wait& wait, const bool hasSaved) const
+template <logLevel T>
+void StraightforwardNeuralNetwork::logAccuracy(Wait& wait, const bool hasSaved) const
+{
+    if constexpr (T > none && T <= verbose)
     {
-        if constexpr (T > none && T <= verbose)
-        {
-            tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
-                                " - Accuracy: ", tools::toConstSizeString<2>(this->getGlobalClusteringRate(), 4),
-                                " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 9),
-                                " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 3), "s");
-            if (hasSaved)
-                tools::log<T, false>(" - Saved");
-            tools::log<T>();
-        }
-    }
-
-    template <logLevel T>
-    void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, set set) const
-    {
-        if constexpr (T > none && T <= verbose)
-        {
-            if (wait.tick() >= 300)
-            {
-                const std::string name = set == training ? "Training in progress...  " : "Evaluation in progress...";
-                const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
-                tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
-                    " - ", name, tools::toConstSizeString(progress, 5), "%",
-                    " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 3), "s");
-            }
-        }
-    }
-
-    template <class Archive>
-    void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
-        ar & boost::serialization::base_object<NeuralNetwork>(*this);
-        ar & this->autoSaveFilePath;
-        ar & this->autoSaveWhenBetter;
-        ar & this->wantToStopTraining;
-        ar & this->index;
-        ar & this->isIdle;
-        ar & this->epoch;
-        ar & this->numberOfTrainingsBetweenTwoEvaluations;
+        tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
+                             " - Accuracy: ", tools::toConstSizeString<2>(this->getGlobalClusteringRate(), 4),
+                             " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 9),
+                             " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 3), "s");
+        if (hasSaved) tools::log<T, false>(" - Saved");
+        tools::log<T>();
     }
 }
+
+template <logLevel T>
+void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, set set) const
+{
+    if constexpr (T > none && T <= verbose)
+    {
+        if (wait.tick() >= 300)
+        {
+            const std::string name = set == training ? "Training in progress...  " : "Evaluation in progress...";
+            const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
+            tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2), " - ", name,
+                                 tools::toConstSizeString(progress, 5), "%",
+                                 " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 3), "s");
+        }
+    }
+}
+
+template <class Archive>
+void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
+    ar& boost::serialization::base_object<NeuralNetwork>(*this);
+    ar& this->autoSaveFilePath;
+    ar& this->autoSaveWhenBetter;
+    ar& this->wantToStopTraining;
+    ar& this->index;
+    ar& this->isIdle;
+    ar& this->epoch;
+    ar& this->numberOfTrainingsBetweenTwoEvaluations;
+}
+}  // namespace snn

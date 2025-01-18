@@ -1,6 +1,7 @@
-#include "ExtendedGTest.hpp"
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+
 #include "Cifar10.hpp"
+#include "ExtendedGTest.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -8,19 +9,16 @@ using namespace snn;
 
 class Cifar10Test : public testing::Test
 {
-protected:
-    static void SetUpTestSuite()
-    {
+    protected:
+        static void SetUpTestSuite()
+        {
             Cifar10 dataset("./resources/datasets/CIFAR-10");
-        data = move(dataset.data);
-    }
+            data = move(dataset.data);
+        }
 
-    void SetUp() override 
-    {
-        ASSERT_TRUE(data) << "Don't forget to download dataset";
-    }
+        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
 
-    static unique_ptr<Data> data;
+        static unique_ptr<Data> data;
 };
 
 unique_ptr<Data> Cifar10Test::data = nullptr;
@@ -40,12 +38,8 @@ TEST_F(Cifar10Test, loadData)
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3072),
-        FullyConnected(80),
-        FullyConnected(30),
-        FullyConnected(10, activation::identity, Softmax())
-    });
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(3072), FullyConnected(80), FullyConnected(30), FullyConnected(10, activation::identity, Softmax())});
     neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.26f);
@@ -53,15 +47,9 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(3, 32, 32),
-        Convolution(16, 3, activation::ReLU),
-        MaxPooling(2),
-        Convolution(32, 3, activation::ReLU),
-        MaxPooling(2),
-        FullyConnected(128),
-        FullyConnected(10, activation::identity, Softmax())
-    },
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(3, 32, 32), Convolution(16, 3, activation::ReLU), MaxPooling(2), Convolution(32, 3, activation::ReLU),
+         MaxPooling(2), FullyConnected(128), FullyConnected(10, activation::identity, Softmax())},
         StochasticGradientDescent(0.001f, 0.8f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
@@ -81,10 +69,10 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6196f); // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6196f);  // Reach after 55 epochs of 770 sec.
 
     string expectedSummary =
- R"(============================================================
+        R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
  Name:       BestNeuralNetworkForCIFAR-10.snn

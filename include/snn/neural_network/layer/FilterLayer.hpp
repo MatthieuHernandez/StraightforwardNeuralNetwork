@@ -1,20 +1,21 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "Layer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {
-    class FilterLayer : public Layer<SimpleNeuron>
-    {
+class FilterLayer : public Layer<SimpleNeuron>
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
 
-    protected :
+    protected:
         int numberOfFilters;
         int numberOfKernels;
         int numberOfKernelsPerFilter;
@@ -40,21 +41,21 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
-    };
+};
 
-    template <class Archive>
-    void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<FilterLayer, Layer>();
-        ar & boost::serialization::base_object<Layer>(*this);
-        ar & this->numberOfFilters;
-        ar & this->numberOfKernels;
-        ar & this->numberOfKernelsPerFilter;
-        ar & this->numberOfNeuronsPerFilter;
-        ar & this->kernelSize;
-        ar & this->sizeOfNeuronInputs;
-        ar & this->shapeOfInput;
-        ar & this->shapeOfOutput;
-        ar & this->kernelIndexes;
-    }
+template <class Archive>
+void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<FilterLayer, Layer>();
+    ar& boost::serialization::base_object<Layer>(*this);
+    ar& this->numberOfFilters;
+    ar& this->numberOfKernels;
+    ar& this->numberOfKernelsPerFilter;
+    ar& this->numberOfNeuronsPerFilter;
+    ar& this->kernelSize;
+    ar& this->sizeOfNeuronInputs;
+    ar& this->shapeOfInput;
+    ar& this->shapeOfOutput;
+    ar& this->kernelIndexes;
 }
+}  // namespace snn::internal

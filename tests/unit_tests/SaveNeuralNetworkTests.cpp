@@ -1,23 +1,22 @@
-﻿#include "../ExtendedGTest.hpp"
-#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+﻿#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/neural_network/layer/neuron/Neuron.hpp>
+
+#include "../ExtendedGTest.hpp"
 
 using namespace std;
 using namespace snn;
 
 TEST(SaveNeuralNetwork, EqualTest)
 {
-    auto structureOfNetwork = {
-        Input(3, 8, 8),
-        LocallyConnected(2, 2),
-        Convolution(2, 4, activation::ReLU),
-        FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
-        LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3f)),
-        FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
-        Convolution(1, 1, activation::tanh),
-        GruLayer(3),
-        Recurrence(4)
-    };
+    auto structureOfNetwork = {Input(3, 8, 8),
+                               LocallyConnected(2, 2),
+                               Convolution(2, 4, activation::ReLU),
+                               FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
+                               LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3f)),
+                               FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
+                               Convolution(1, 1, activation::tanh),
+                               GruLayer(3),
+                               Recurrence(4)};
     StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
     StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
     StraightforwardNeuralNetwork B = A;
@@ -29,7 +28,6 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(&A != &B);
 
     EXPECT_TRUE(&A != &B);
-
 
     EXPECT_TRUE(*A.optimizer == *B.optimizer);
     EXPECT_TRUE(A.optimizer != B.optimizer);
@@ -44,7 +42,7 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(A.optimizer.get() == static_cast<internal::SimpleNeuron*>(A.layers[0]->getNeuron(0))->getOptimizer());
 
-    EXPECT_TRUE(A != C); // Test A == C with same seed
+    EXPECT_TRUE(A != C);  // Test A == C with same seed
 
     vector<float> inputs(8 * 8 * 3);
     inputs[29] = 0.99f;
@@ -55,13 +53,11 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -0.77f;
     const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
 
-    for (int i = 0; i < 10; ++i)
-        A.trainOnce(inputs, desired);
+    for (int i = 0; i < 10; ++i) A.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A != B);
 
-    for (int i = 0; i < 10; ++i)
-        B.trainOnce(inputs, desired);
+    for (int i = 0; i < 10; ++i) B.trainOnce(inputs, desired);
 
     EXPECT_TRUE(A == B);
 
@@ -69,17 +65,13 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A.getGlobalClusteringRate() == B.getGlobalClusteringRate()) << "A == B";
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 
-    //A.~StraightforwardNeuralNetwork(); // doesn't work on Linux
-    //B.trainOnce(inputs, desired);
+    // A.~StraightforwardNeuralNetwork(); // doesn't work on Linux
+    // B.trainOnce(inputs, desired);
 }
 
 TEST(SaveNeuralNetwork, EqualTestWithDropout)
 {
-    auto structureOfNetwork = {
-        Input(10),
-        FullyConnected(200, activation::sigmoid, Dropout(0.4f)),
-        FullyConnected(4)
-    };
+    auto structureOfNetwork = {Input(10), FullyConnected(200, activation::sigmoid, Dropout(0.4f)), FullyConnected(4)};
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork B = A;
 
@@ -103,17 +95,13 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save) // TODO: do a forward to be sure that the network is the same.
+TEST(SaveNeuralNetwork, Save)  // TODO: do a forward to be sure that the network is the same.
 {
-    StraightforwardNeuralNetwork A({
-                                       Input(45),
-                                       MaxPooling(3),
-                                       Convolution(2, 2, activation::ReLU),
-                                       LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
-                                       FullyConnected(2, activation::sigmoid, Dropout(0.0f)),
-                                       GruLayer(2, L2Regularization(1e-5f))
-                                   },
-                                   StochasticGradientDescent(0.03f, 0.78f));
+    StraightforwardNeuralNetwork A(
+        {Input(45), MaxPooling(3), Convolution(2, 2, activation::ReLU),
+         LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
+         FullyConnected(2, activation::sigmoid, Dropout(0.0f)), GruLayer(2, L2Regularization(1e-5f))},
+        StochasticGradientDescent(0.03f, 0.78f));
 
     auto randomInput = tools::randomVector(0, 2, 45);
     auto randomOutput = tools::randomVector(0, 1, 2);
@@ -128,7 +116,7 @@ TEST(SaveNeuralNetwork, Save) // TODO: do a forward to be sure that the network 
     auto outputB = B.computeOutput(randomInput);
 
     EXPECT_TRUE(A == B);
-    EXPECT_TRUE(sizeof(A) == sizeof(B)); // Don't count pointing objects by pointer
+    EXPECT_TRUE(sizeof(A) == sizeof(B));  // Don't count pointing objects by pointer
     EXPECT_TRUE(outputA == outputB);
     ASSERT_EQ(B.isValid(), 0);
 }

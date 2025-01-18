@@ -1,13 +1,14 @@
 #pragma once
-#include <vector>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/vector.hpp>
+#include <vector>
+
 #include "../layer/BaseLayer.hpp"
 
 namespace snn::internal
 {
-    class LayerOptimizer
-    {
+class LayerOptimizer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -17,7 +18,7 @@ namespace snn::internal
         const BaseLayer* layer;
 
     public:
-        LayerOptimizer() = default; // use restricted to Boost library only
+        LayerOptimizer() = default;  // use restricted to Boost library only
         LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
@@ -32,11 +33,11 @@ namespace snn::internal
 
         virtual bool operator==(const LayerOptimizer& optimizer) const;
         virtual bool operator!=(const LayerOptimizer& optimizer) const;
-    };
-    
-    template <class Archive>
-    void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        ar & this->layer;
-    }
+};
+
+template <class Archive>
+void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    ar& this->layer;
 }
+}  // namespace snn::internal

@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include <limits>
+
 #include "ActivationFunction.hpp"
 
 using namespace std;
 
 namespace snn::internal
 {
-    class ImprovedSigmoid final : public ActivationFunction
-    {
+class ImprovedSigmoid final : public ActivationFunction
+{
     private:
         activation getType() const override { return activation::iSigmoid; }
 
@@ -19,14 +20,8 @@ namespace snn::internal
         {
         }
 
-        float function(const float x) const override
-        {
-            return 1.0f / (1.0f + std::exp(-x)) + x * 0.05f;
-        }
+        float function(const float x) const override { return 1.0f / (1.0f + std::exp(-x)) + x * 0.05f; }
 
-        float derivative(const float x) const override
-        {
-            return std::exp(x) / powf((std::exp(x) + 1.0f), 2);
-        }
-    };
-}
+        float derivative(const float x) const override { return std::exp(x) / powf((std::exp(x) + 1.0f), 2); }
+};
+}  // namespace snn::internal

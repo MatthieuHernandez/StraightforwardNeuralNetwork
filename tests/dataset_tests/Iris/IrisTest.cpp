@@ -1,5 +1,6 @@
-#include "ExtendedGTest.hpp"
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+
+#include "ExtendedGTest.hpp"
 #include "Iris.hpp"
 
 using namespace std;
@@ -8,19 +9,16 @@ using namespace snn;
 
 class IrisTest : public testing::Test
 {
-protected:
-    static void SetUpTestSuite()
-    {
+    protected:
+        static void SetUpTestSuite()
+        {
             Iris dataset("./resources/datasets/Iris");
-        data = move(dataset.data);
-    }
+            data = move(dataset.data);
+        }
 
-    void SetUp() override
-    {
-        ASSERT_TRUE(data) << "Don't forget to download dataset";
-    }
+        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
 
-    static unique_ptr<Data> data;
+        static unique_ptr<Data> data;
 };
 
 unique_ptr<Data> IrisTest::data = nullptr;
@@ -40,12 +38,7 @@ TEST_F(IrisTest, loadData)
 
 TEST_F(IrisTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(4),
-        FullyConnected(15),
-        FullyConnected(5),
-        FullyConnected(3)
-    });
+    StraightforwardNeuralNetwork neuralNetwork({Input(4), FullyConnected(15), FullyConnected(5), FullyConnected(3)});
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

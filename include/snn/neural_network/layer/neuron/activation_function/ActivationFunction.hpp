@@ -1,25 +1,26 @@
 #pragma once
-#include <memory>
-#include <vector>
 #include <boost/serialization/access.hpp>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace snn
 {
-    enum class activation
-    {
-        sigmoid = 0,
-        iSigmoid,
-        tanh,
-        ReLU,
-        GELU,
-        gaussian,
-        identity
-    };
+enum class activation
+{
+    sigmoid = 0,
+    iSigmoid,
+    tanh,
+    ReLU,
+    GELU,
+    gaussian,
+    identity
+};
 }
 namespace snn::internal
 {
-    class ActivationFunction
-    {
+class ActivationFunction
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -45,5 +46,5 @@ namespace snn::internal
 
         virtual bool operator==(const ActivationFunction& activationFunction) const;
         virtual bool operator!=(const ActivationFunction& activationFunction) const;
-    };
-}
+};
+}  // namespace snn::internal

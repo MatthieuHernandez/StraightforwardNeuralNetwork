@@ -1,12 +1,13 @@
-#include <boost/serialization/export.hpp>
 #include "GruLayer.hpp"
+
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
 GruLayer::GruLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-     : SimpleLayer(model, optimizer)
+    : SimpleLayer(model, optimizer)
 {
 }
 

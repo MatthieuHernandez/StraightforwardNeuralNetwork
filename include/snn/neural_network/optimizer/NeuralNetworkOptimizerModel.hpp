@@ -3,10 +3,10 @@
 
 namespace snn
 {
-    struct NeuralNetworkOptimizerModel
-    {
+struct NeuralNetworkOptimizerModel
+{
         neuralNetworkOptimizerType type;
         float learningRate;
         float momentum;
-    };
-}
+};
+}  // namespace snn

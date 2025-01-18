@@ -1,17 +1,18 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "Layer.hpp"
+#include <memory>
+
 #include "../optimizer/LayerOptimizer.hpp"
-#include "neuron/RecurrentNeuron.hpp"
+#include "Layer.hpp"
 #include "neuron/GatedRecurrentUnit.hpp"
+#include "neuron/RecurrentNeuron.hpp"
 
 namespace snn::internal
 {
-    template <BaseNeuron N>
-    class SimpleLayer : public Layer<N>
-    {
+template <BaseNeuron N>
+class SimpleLayer : public Layer<N>
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -34,21 +35,21 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const final;
         bool operator!=(const BaseLayer& layer) const final;
-    };
+};
 
-    template <BaseNeuron N>
-    template <class Archive>
-    void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
-        ar & boost::serialization::base_object<Layer<N>>(*this);
-    }
-
-    template<>
-    std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
-
-    template<>
-    std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
-    
-    #include "SimpleLayer.tpp"
+template <BaseNeuron N>
+template <class Archive>
+void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
+    ar& boost::serialization::base_object<Layer<N>>(*this);
 }
+
+template <>
+std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+
+template <>
+std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
+
+#include "SimpleLayer.tpp"
+}  // namespace snn::internal

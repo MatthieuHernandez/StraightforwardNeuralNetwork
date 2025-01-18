@@ -1,14 +1,16 @@
-#include <algorithm>
-#include <functional>
-#include <boost/serialization/export.hpp>
 #include "L1Regularization.hpp"
+
+#include <algorithm>
+#include <boost/serialization/export.hpp>
+#include <functional>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
 L1Regularization::L1Regularization(const float value, BaseLayer* layer)
-    : LayerOptimizer(layer), value(value)
+    : LayerOptimizer(layer),
+      value(value)
 {
 }
 
@@ -41,8 +43,7 @@ bool L1Regularization::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const L1Regularization&>(optimizer);
-        return this->LayerOptimizer::operator==(optimizer)
-            && this->value == o.value;
+        return this->LayerOptimizer::operator==(optimizer) && this->value == o.value;
     }
     catch (bad_cast&)
     {
@@ -50,7 +51,4 @@ bool L1Regularization::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool L1Regularization::operator!=(const LayerOptimizer& optimizer) const
-{
-    return !(*this == optimizer);
-}
+bool L1Regularization::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }

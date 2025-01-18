@@ -1,6 +1,7 @@
-#include <cmath>
-#include <boost/serialization/export.hpp>
 #include "RecurrentNeuron.hpp"
+
+#include <boost/serialization/export.hpp>
+#include <cmath>
 
 using namespace std;
 using namespace snn;
@@ -12,38 +13,37 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOpti
 }
 
 #ifdef _MSC_VER
-#pragma warning(disable:4701)
+#pragma warning(disable : 4701)
 #endif
 float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 {
-    if (temporalReset)
-        this->reset();
+    if (temporalReset) this->reset();
     this->lastInputs.pushBack(inputs);
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
     this->sum = 0;
     size_t w = 0;
-    float tmp = 0.0f; // to activate the SIMD optimization
+    float tmp = 0.0f;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 2);
-    #pragma omp simd
+#pragma omp simd
     for (w = 0; w < inputs.size(); ++w)
     {
         tmp += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias * this->weights[w+1];
+    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias * this->weights[w + 1];
     const float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
-    #ifdef _MSC_VER
-    #pragma warning(default:4701)
-    #endif
+#ifdef _MSC_VER
+#pragma warning(default : 4701)
+#endif
 }
 
 vector<float>& RecurrentNeuron::backOutput(float error)
 {
     error = error * this->outputFunction->derivative(this->sum);
     assert(this->weights.size() == this->errors.size() + 2);
-    #pragma omp simd // seems to do nothing
+#pragma omp simd  // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
         this->errors[w] = error * this->weights[w];
@@ -58,8 +58,7 @@ void RecurrentNeuron::train(float error)
     this->optimizer->updateWeights(*this, error);
 }
 
-inline
-void RecurrentNeuron::reset()
+inline void RecurrentNeuron::reset()
 {
     this->previousOutput = 0;
     this->recurrentError = 0;
@@ -68,21 +67,15 @@ void RecurrentNeuron::reset()
 
 int RecurrentNeuron::isValid() const
 {
-    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2)
-        return 304;
+    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2) return 304;
     return this->Neuron::isValid();
 }
 
 bool RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const
 {
-        return this->Neuron::operator==(neuron)
-            && this->lastOutput == neuron.lastOutput
-            && this->previousOutput == neuron.previousOutput
-            && this->recurrentError == neuron.recurrentError
-            && this->previousSum == neuron.previousSum;
+    return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
+           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
+           this->previousSum == neuron.previousSum;
 }
 
-bool RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const
-{
-    return !(*this == neuron);
-}
+bool RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const { return !(*this == neuron); }

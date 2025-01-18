@@ -1,19 +1,21 @@
 #pragma once
-#include <memory>
-#include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <memory>
 
 namespace snn::internal
 {
-    class SimpleNeuron;
-    class RecurrentNeuron;
+class SimpleNeuron;
+class RecurrentNeuron;
 
-    class NeuralNetworkOptimizer
-    {
+class NeuralNetworkOptimizer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version) {}
+        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version)
+        {
+        }
 
     public:
         NeuralNetworkOptimizer() = default;
@@ -29,5 +31,5 @@ namespace snn::internal
 
         virtual bool operator==(const NeuralNetworkOptimizer& optimizer) const;
         virtual bool operator!=(const NeuralNetworkOptimizer& optimizer) const;
-    };
-}
+};
+}  // namespace snn::internal

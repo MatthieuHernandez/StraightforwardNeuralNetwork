@@ -1,13 +1,14 @@
 #pragma once
 #include <limits>
+
 #include "ActivationFunction.hpp"
 
 using namespace std;
 
 namespace snn::internal
 {
-    class GaussianErrorLinearUnit final : public ActivationFunction
-    {
+class GaussianErrorLinearUnit final : public ActivationFunction
+{
     private:
         activation getType() const override { return activation::GELU; }
 
@@ -21,13 +22,14 @@ namespace snn::internal
 
         float function(const float x) const override
         {
-            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f; // approximation
+            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f;  // approximation
         }
 
         float derivative(const float x) const override
         {
-            return 1.702f * x * (1.0f - powf(tanhf(1.702f * x / 2.0f), 2.0f)) / 4.0f
-                + (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f; // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
+            return 1.702f * x * (1.0f - powf(tanhf(1.702f * x / 2.0f), 2.0f)) / 4.0f +
+                   (tanh(1.702f * x / 2.0f) + 1.0f) /
+                       2.0f;  // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
         }
-    };
-}
+};
+}  // namespace snn::internal

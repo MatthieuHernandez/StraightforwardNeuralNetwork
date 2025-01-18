@@ -1,6 +1,8 @@
+#include "CompositeForTimeSeries.hpp"
+
 #include <algorithm>
 #include <random>
-#include "CompositeForTimeSeries.hpp"
+
 #include "ExtendedExpection.hpp"
 #include "Tools.hpp"
 
@@ -9,10 +11,10 @@ using namespace snn;
 using namespace internal;
 
 CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurrences)
-    : TemporalComposite(sets), numberOfRecurrences(numberOfRecurrences)
+    : TemporalComposite(sets),
+      numberOfRecurrences(numberOfRecurrences)
 {
-    if (this->numberOfRecurrences < 1)
-        throw runtime_error("The number of recurrence must be >= 1 for time series.");
+    if (this->numberOfRecurrences < 1) throw runtime_error("The number of recurrence must be >= 1 for time series.");
 
     this->sets[training].numberOfTemporalSequence = 1;
     this->sets[testing].numberOfTemporalSequence = 1;
@@ -51,13 +53,15 @@ void CompositeForTimeSeries::shuffle()
     int iForIndex = 0;
     for (size_t i = 0; i < this->indexesForShuffling.size(); ++i)
     {
-        const int maxIndex = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
+        const int maxIndex =
+            this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
         if (maxIndex < this->sets[training].size)
         {
             for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
             {
                 const int index = iForIndex * (this->numberOfRecurrences + 1) + j + offset;
-                this->sets[training].shuffledIndexes[index] = this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
+                this->sets[training].shuffledIndexes[index] =
+                    this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 
                 if (j != 0)
                     this->sets[training].areFirstDataOfTemporalSequence[index] = false;
@@ -69,10 +73,10 @@ void CompositeForTimeSeries::shuffle()
                 else
                     this->sets[training].needToTrainOnData[index] = false;
             }
-            iForIndex ++;
+            iForIndex++;
         }
     }
-    this->offset = (this->offset+1) % (this->numberOfRecurrences+1);
+    this->offset = (this->offset + 1) % (this->numberOfRecurrences + 1);
 }
 
 void CompositeForTimeSeries::unshuffle()
@@ -88,10 +92,7 @@ bool CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) co
     return this->sets[training].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const
-{
-    return index == 0 ? true : false;
-}
+bool CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const { return index == 0 ? true : false; }
 
 bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
 {
@@ -108,12 +109,11 @@ bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int in
 
 int CompositeForTimeSeries::isValid()
 {
-    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size
-        || !this->sets[testing].areFirstDataOfTemporalSequence.empty()
-        || (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size
-        || !this->sets[testing].needToTrainOnData.empty()
-        || !this->sets[training].needToEvaluateOnData.empty()
-        || !this->sets[testing].needToEvaluateOnData.empty())
+    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
+        !this->sets[testing].areFirstDataOfTemporalSequence.empty() ||
+        (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size ||
+        !this->sets[testing].needToTrainOnData.empty() || !this->sets[training].needToEvaluateOnData.empty() ||
+        !this->sets[testing].needToEvaluateOnData.empty())
         return 404;
 
     return this->TemporalComposite::isValid();

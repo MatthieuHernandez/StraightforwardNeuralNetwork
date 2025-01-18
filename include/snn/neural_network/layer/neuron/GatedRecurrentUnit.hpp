@@ -1,13 +1,14 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
+
 #include "BaseNeuron.hpp"
 #include "RecurrentNeuron.hpp"
 
 namespace snn::internal
 {
-    class GatedRecurrentUnit final
-    {
+class GatedRecurrentUnit final
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -31,7 +32,7 @@ namespace snn::internal
         void reset();
 
     public:
-        GatedRecurrentUnit() = default; // use restricted to Boost library only
+        GatedRecurrentUnit() = default;  // use restricted to Boost library only
         GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
         ~GatedRecurrentUnit() = default;
@@ -51,18 +52,18 @@ namespace snn::internal
 
         bool operator==(const GatedRecurrentUnit& neuron) const;
         bool operator!=(const GatedRecurrentUnit& neuron) const;
-    };
+};
 
-    template <class Archive>
-    void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        ar & this->numberOfInputs;
-        ar & this->previousOutput;
-        ar & this->recurrentError;
-        ar & this->updateGateOutput;
-        ar & this->outputGateOutput;
-        ar & this->resetGate;
-        ar & this->updateGate;
-        ar & this->outputGate;
-    }
+template <class Archive>
+void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    ar& this->numberOfInputs;
+    ar& this->previousOutput;
+    ar& this->recurrentError;
+    ar& this->updateGateOutput;
+    ar& this->outputGateOutput;
+    ar& this->resetGate;
+    ar& this->updateGate;
+    ar& this->outputGate;
 }
+}  // namespace snn::internal

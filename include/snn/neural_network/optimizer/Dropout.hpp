@@ -1,14 +1,15 @@
 #pragma once
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/unique_ptr.hpp>
 #include <random>
 #include <vector>
-#include <boost/serialization/unique_ptr.hpp>
-#include <boost/serialization/access.hpp>
+
 #include "LayerOptimizer.hpp"
 
 namespace snn::internal
 {
-    class Dropout final : public LayerOptimizer
-    {
+class Dropout final : public LayerOptimizer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -36,15 +37,15 @@ namespace snn::internal
 
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;
-    };
+};
 
-    template <class Archive>
-    void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
-        ar & boost::serialization::base_object<LayerOptimizer>(*this);
-        ar & this->value;
-        ar & this->reverseValue;
-        ar & this->presenceProbabilities;
-    }
+template <class Archive>
+void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
+    ar& boost::serialization::base_object<LayerOptimizer>(*this);
+    ar& this->value;
+    ar& this->reverseValue;
+    ar& this->presenceProbabilities;
 }
+}  // namespace snn::internal

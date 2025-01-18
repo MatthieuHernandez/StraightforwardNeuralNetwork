@@ -1,7 +1,7 @@
 #pragma once
 #include <gtest/gtest.h>
 
-template<typename T>
+template <typename T>
 void ASSERT_BETWEEN(T min, T value, T max, std::string valueName = "value");
 
 void ASSERT_SUCCESS();

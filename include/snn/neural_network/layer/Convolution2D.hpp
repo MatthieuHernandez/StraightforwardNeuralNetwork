@@ -1,15 +1,16 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "FilterLayer.hpp"
+#include <memory>
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {
-    class Convolution2D final : public FilterLayer
-    {
-    private :
+class Convolution2D final : public FilterLayer
+{
+    private:
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& ar, unsigned version);
@@ -19,7 +20,7 @@ namespace snn::internal
         void computeTrain(std::vector<float>& inputErrors) override;
         void buildKernelIndexes() override;
 
-    public :
+    public:
         Convolution2D() = default;  // use restricted to Boost library only
         Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~Convolution2D() override = default;
@@ -32,12 +33,12 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
-    };
+};
 
-    template <class Archive>
-    void Convolution2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<Convolution2D, FilterLayer>();
-        ar & boost::serialization::base_object<FilterLayer>(*this);
-    }
+template <class Archive>
+void Convolution2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<Convolution2D, FilterLayer>();
+    ar& boost::serialization::base_object<FilterLayer>(*this);
 }
+}  // namespace snn::internal

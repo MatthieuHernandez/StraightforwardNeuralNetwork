@@ -1,6 +1,7 @@
+#include "ProblemComposite.hpp"
+
 #include <algorithm>
 #include <functional>
-#include "ProblemComposite.hpp"
 
 using namespace std;
 using namespace snn;
@@ -8,22 +9,20 @@ using namespace internal;
 
 ProblemComposite::ProblemComposite(Set sets[2], const int numberOfLabels)
     : numberOfLabels(numberOfLabels)
-{ 
+{
     this->sets = sets;
 }
 
 int ProblemComposite::isValid()
 {
-    if (this->sets == nullptr)
-        return 402;
+    if (this->sets == nullptr) return 402;
     return 0;
 }
 
 const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, const int batchSize)
 {
     int i = this->sets[training].shuffledIndexes[index];
-    if (batchSize <= 1)
-        return this->sets[training].labels[i];
+    if (batchSize <= 1) return this->sets[training].labels[i];
 
     batchedLabels.resize(numberOfLabels);
 
@@ -39,6 +38,7 @@ const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, 
         const auto data = this->sets[training].labels[i];
         ranges::transform(batchedLabels, data, batchedLabels.begin(), std::plus<float>());
     }
-    ranges::transform(batchedLabels, batchedLabels.begin(), bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    ranges::transform(batchedLabels, batchedLabels.begin(),
+                      bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
     return batchedLabels;
 }

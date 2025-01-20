@@ -2,6 +2,7 @@
 .vs/
 .vcx/
 *.orig
+*.tmp
 
 # Ignore build folders.
 build*/

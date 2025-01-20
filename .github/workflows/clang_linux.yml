@@ -23,7 +23,18 @@ jobs:
         make
     - name: Clang-Format
       run: |
-        find ./src ./tests ./include -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) ! -path "./src/external_library/*" -exec clang-format --dry-run --Werror -verbose {} +
+        find ./src ./tests ./include \
+          -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
+          ! -path "./src/external_library/*" \
+          -exec clang-format --dry-run --Werror --verbose \
+          {} +
+    - name: Clang-Tidy
+      run: |
+        find ./src ./tests ./include \
+          -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
+          ! -path "./src/external_library/*" \
+          -exec clang-tidy -p .\build\ -header-filter=.* \
+          {} +
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:

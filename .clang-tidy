@@ -1,4 +1,5 @@
 Checks: >
     *,
-    -llvmlibc-implementation-in-namespace
+    -llvmlibc-*,
+    -fuchsia-trailing-return
 WarningsAsErrors: '.*'

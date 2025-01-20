@@ -54,7 +54,7 @@ TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 
 TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 {
-    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForAudioCatsAndDogs.snn");
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForAudioCatsAndDogs.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();

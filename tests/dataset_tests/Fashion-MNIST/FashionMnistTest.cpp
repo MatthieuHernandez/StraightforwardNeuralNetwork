@@ -74,7 +74,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 
 TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 {
-    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForFashion-MNIST.snn");
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForFashion-MNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();

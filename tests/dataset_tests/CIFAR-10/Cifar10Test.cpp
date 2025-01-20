@@ -64,7 +64,7 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
-    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
@@ -137,7 +137,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
 {
-    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForCIFAR-10.snn");
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
 
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
     neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);

@@ -122,7 +122,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForMNIST.snn";
+    neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
     neuralNetwork.train(*data, 0.9860_acc || 100_ep);
 
@@ -132,7 +132,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
 TEST_F(MnistTest, evaluateBestNeuralNetwork)
 {
-    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./BestNeuralNetworkForMNIST.snn");
+    auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForMNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
@@ -143,7 +143,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
- Name:       BestNeuralNetworkForMNIST.snn
+ Name:       ./resources/BestNeuralNetworkForMNIST.snn
  Parameters: 261206
  Epochs:     13
  Trainnig:   0

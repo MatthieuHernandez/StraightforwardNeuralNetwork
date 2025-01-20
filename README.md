@@ -7,7 +7,7 @@
 [![All tests - GCC Linux](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/gcc_linux.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/gcc_linux.yml)
 [![Unit tests - Clang Linux](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/clang_linux.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/clang_linux.yml)
 [![Unit tests - MSVC Windows](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/msvc_windows.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/msvc_windows.yml)
-![](https://www.codefactor.io/repository/github/matthieuhernandez/straightforwardneuralnetwork/badge/master)
+[![CodeFactor](https://www.codefactor.io/repository/github/matthieuhernandez/straightforwardneuralnetwork/badge)](https://www.codefactor.io/repository/github/matthieuhernandez/straightforwardneuralnetwork)
 
 **Straightforward Neural Network** is an open source neural network library in C++20 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.
 

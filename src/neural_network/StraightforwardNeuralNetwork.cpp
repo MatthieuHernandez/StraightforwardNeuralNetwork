@@ -22,10 +22,11 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> ar
                                                            NeuralNetworkOptimizerModel optimizer)
     : NeuralNetwork(architecture, optimizer)
 {
-    int err = this->isValid();
-    if (err != 0)
+    const auto err = this->isValid();
+    if (err != ErrorType::noError)
     {
-        string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
+        const string message =
+            string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of neural networks";
         throw runtime_error(message);
     }
 }
@@ -223,7 +224,7 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
     }
 }
 
-int StraightforwardNeuralNetwork::isValid() const { return this->NeuralNetwork::isValid(); }
+auto StraightforwardNeuralNetwork::isValid() const -> ErrorType { return this->NeuralNetwork::isValid(); }
 
 void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) const
 {

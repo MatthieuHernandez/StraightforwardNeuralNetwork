@@ -1,4 +1,5 @@
 #pragma once
+#include "../tools/Error.hpp"
 #include "Set.hpp"
 
 namespace snn::internal
@@ -16,7 +17,7 @@ class ProblemComposite
         ProblemComposite(Set sets[2], int numberOfLabels);
         virtual ~ProblemComposite() = default;
 
-        [[nodiscard]] virtual int isValid();
+        [[nodiscard]] virtual auto isValid() const -> ErrorType;
 
         [[nodiscard]] virtual int getTrainingLabel(int index) = 0;
         [[nodiscard]] virtual int getTestingLabel(int index) = 0;

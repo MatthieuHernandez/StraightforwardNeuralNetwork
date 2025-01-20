@@ -32,18 +32,25 @@ float Neuron::randomInitializeWeight(int numberOfWeights)
     return tools::randomBetween(-valueMax, valueMax);
 }
 
-int Neuron::isValid() const
+auto Neuron::isValid() const -> ErrorType
 {
-    if (this->bias < -100000.0f || this->bias > 10000.0f) return 301;
+    if (this->bias < -100000.0f || this->bias > 10000.0f)
+    {
+        return ErrorType::neuronWrongBias;
+    }
 
     if (this->weights.empty() || this->weights.size() > 1000000)
     {
-        return 302;
+        return ErrorType::neuronTooMuchWeigths;
     }
-    for (auto& weight : this->weights)
-        if (weight < -100000.0f || weight > 10000.0f) return 303;
-
-    return 0;
+    for (const auto& weight : this->weights)
+    {
+        if (weight < -100000.0f || weight > 10000.0f)
+        {
+            return ErrorType::neuronWrongWeight;
+        }
+    }
+    return ErrorType::noError;
 }
 
 vector<float> Neuron::getWeights() const { return this->weights; }

@@ -14,6 +14,7 @@
 #include "CompositeForRegression.hpp"
 #include "CompositeForTemporalData.hpp"
 #include "CompositeForTimeSeries.hpp"
+#include "Error.hpp"
 #include "ExtendedExpection.hpp"
 #include "Tools.hpp"
 
@@ -119,10 +120,10 @@ void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float
             throw NotImplementedException();
     }
 
-    int err = this->isValid();
-    if (err != 0)
+    const auto err = this->isValid();
+    if (err != ErrorType::noError)
     {
-        string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of data";
+        const string message = string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of data";
         throw runtime_error(message);
     }
 
@@ -224,23 +225,33 @@ void Data::shuffle() { this->temporalComposite->shuffle(); }
 
 void Data::unshuffle() { this->temporalComposite->unshuffle(); }
 
-int Data::isValid()
+auto Data::isValid() const -> ErrorType
 {
     if (!this->sets[testing].shuffledIndexes.empty() &&
         this->sets[training].size != (int)this->sets[training].shuffledIndexes.size())
-        return 403;
+    {
+        return ErrorType::dataWrongIdexes;
+    }
 
     if (this->sets[training].size != (int)this->sets[training].inputs.size() &&
         this->sets[training].size != (int)this->sets[training].labels.size() &&
         this->sets[testing].size != (int)this->sets[training].inputs.size() &&
         this->sets[testing].size != (int)this->sets[training].labels.size())
-        return 405;
+    {
+        return ErrorType::dataWrongSize;
+    }
 
-    int err = this->problemComposite->isValid();
-    if (err != 0) return err;
+    auto err = this->problemComposite->isValid();
+    if (err != ErrorType::noError)
+    {
+        return err;
+    }
     err = this->temporalComposite->isValid();
-    if (err != 0) return err;
-    return 0;
+    if (err != ErrorType::noError)
+    {
+        return err;
+    }
+    return ErrorType::noError;
 }
 
 bool Data::isFirstTrainingDataOfTemporalSequence(const int index) const

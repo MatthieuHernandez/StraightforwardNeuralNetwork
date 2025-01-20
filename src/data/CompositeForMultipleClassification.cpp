@@ -11,7 +11,7 @@ CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[
 {
 }
 
-int CompositeForMultipleClassification::isValid() { return this->ProblemComposite::isValid(); }
+auto CompositeForMultipleClassification::isValid() const -> ErrorType { return this->ProblemComposite::isValid(); }
 
 const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index) const
 {

@@ -2,20 +2,21 @@
 #include <memory>
 #include <vector>
 
+#include "../tools/Error.hpp"
 #include "ProblemComposite.hpp"
 #include "Set.hpp"
 #include "TemporalComposite.hpp"
 
 namespace snn
 {
-enum class problem
+enum class problem : uint8_t
 {
     classification,
     multipleClassification,
     regression
 };
 
-enum class nature
+enum class nature : uint8_t
 {
     nonTemporal,
     sequential,
@@ -72,7 +73,7 @@ class Data
         void shuffle();
         void unshuffle();
 
-        [[nodiscard]] int isValid();
+        [[nodiscard]] auto isValid() const -> ErrorType;
 
         [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const;
         [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;

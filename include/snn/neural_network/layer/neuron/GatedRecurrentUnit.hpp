@@ -45,7 +45,7 @@ class GatedRecurrentUnit final
         [[nodiscard]] int getNumberOfParameters() const;
         [[nodiscard]] int getNumberOfInputs() const;
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> ErrorType;
 
         NeuralNetworkOptimizer* getOptimizer() const;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);

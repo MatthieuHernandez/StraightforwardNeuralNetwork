@@ -3,6 +3,8 @@
 #include <boost/serialization/shared_ptr.hpp>
 #include <memory>
 
+#include "../../tools/Error.hpp"
+
 namespace snn::internal
 {
 class SimpleNeuron;
@@ -25,7 +27,7 @@ class NeuralNetworkOptimizer
         virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
         virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
 
-        [[nodiscard]] virtual int isValid() = 0;
+        [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
 
         [[nodiscard]] virtual std::string summary() const = 0;
 

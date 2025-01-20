@@ -1,8 +1,6 @@
 #include "CompositeForNonTemporalData.hpp"
 
 #include <algorithm>
-#include <random>
-#include <ranges>
 
 using namespace std;
 using namespace snn;
@@ -36,12 +34,14 @@ bool CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int
 
 bool CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const { return true; }
 
-int CompositeForNonTemporalData::isValid()
+auto CompositeForNonTemporalData::isValid() const -> ErrorType
 {
     if (!this->sets[training].areFirstDataOfTemporalSequence.empty() ||
         !this->sets[testing].areFirstDataOfTemporalSequence.empty() ||
         !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
         !this->sets[training].needToEvaluateOnData.empty() || !this->sets[testing].needToEvaluateOnData.empty())
-        return 404;
+    {
+        return ErrorType::compositeForNonTemporalDataEmpty;
+    }
     return this->TemporalComposite::isValid();
 }

@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "Error.hpp"
+
 namespace snn
 {
 template <typename T>
@@ -44,22 +46,9 @@ int randomBetween(const int min, const int max);  // [min; max[
 float randomBetween(const float min, const float max);
 std::vector<float> randomVector(const float min, const float max, const size_t size);
 
-inline std::string toString(std::chrono::milliseconds duration)
-{
-    std::string str;
+auto toString(std::chrono::milliseconds duration) -> std::string;
 
-    if (duration.count() > 3600000)
-        return std::to_string(duration.count() / 3600000) + "h " + std::to_string(duration.count() / 60000) + "min";
-
-    if (duration.count() > 60000)
-        return std::to_string(duration.count() / 60000) + "min " + std::to_string(duration.count() / 1000) + "s";
-
-    if (duration.count() > 1000) return std::to_string(duration.count() / 1000) + "s";
-
-    if (duration.count() > 0) return std::to_string(duration.count()) + "ms";
-
-    return "";
-}
+auto toString(ErrorType err) -> std::string;
 
 template <typename T>
 static T getMinValue(std::vector<T> vector)

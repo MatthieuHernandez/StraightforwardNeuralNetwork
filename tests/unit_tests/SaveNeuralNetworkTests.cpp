@@ -21,8 +21,8 @@ TEST(SaveNeuralNetwork, EqualTest)
     StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
     StraightforwardNeuralNetwork B = A;
 
-    ASSERT_EQ(A.isValid(), 0);
-    ASSERT_EQ(B.isValid(), 0);
+    ASSERT_EQ(A.isValid(), ErrorType::noError);
+    ASSERT_EQ(B.isValid(), ErrorType::noError);
 
     EXPECT_TRUE(A == B);
     EXPECT_TRUE(&A != &B);
@@ -118,5 +118,5 @@ TEST(SaveNeuralNetwork, Save)  // TODO: do a forward to be sure that the network
     EXPECT_TRUE(A == B);
     EXPECT_TRUE(sizeof(A) == sizeof(B));  // Don't count pointing objects by pointer
     EXPECT_TRUE(outputA == outputB);
-    ASSERT_EQ(B.isValid(), 0);
+    ASSERT_EQ(B.isValid(), ErrorType::noError);
 }

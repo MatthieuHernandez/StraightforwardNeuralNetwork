@@ -1,4 +1,5 @@
 #pragma once
+#include "Error.hpp"
 #include "ProblemComposite.hpp"
 
 namespace snn::internal
@@ -8,7 +9,7 @@ class CompositeForClassification : public ProblemComposite
     public:
         CompositeForClassification(Set sets[2], int numberOfLabels);
 
-        [[nodiscard]] int isValid() override;
+        [[nodiscard]] auto isValid() const -> ErrorType override;
 
         [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const override;
         [[nodiscard]] int getTrainingLabel(const int) override;

@@ -52,11 +52,14 @@ inline unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkO
     return layer;
 }
 
-int Convolution1D::isValid() const
+auto Convolution1D::isValid() const -> ErrorType
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C]) return 203;
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
+        {
+            return ErrorType::conv1DLayerWrongNumberOfInputs;
+        }
     }
     return this->FilterLayer::isValid();
 }

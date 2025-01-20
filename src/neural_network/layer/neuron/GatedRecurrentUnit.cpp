@@ -90,15 +90,24 @@ inline void GatedRecurrentUnit::reset()
     this->updateGateOutput = 0;
 }
 
-int GatedRecurrentUnit::isValid() const
+auto GatedRecurrentUnit::isValid() const -> ErrorType
 {
     auto err = resetGate.isValid();
-    if (err != 0) return err;
+    if (err != ErrorType::noError)
+    {
+        return err;
+    }
     err = updateGate.isValid();
-    if (err != 0) return err;
+    if (err != ErrorType::noError)
+    {
+        return err;
+    }
     err = outputGate.isValid();
-    if (err != 0) return err;
-    return 0;
+    if (err != ErrorType::noError)
+    {
+        return err;
+    }
+    return ErrorType::noError;
 }
 
 NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const { return this->resetGate.getOptimizer(); }

@@ -1,4 +1,5 @@
 #pragma once
+#include "../tools/Error.hpp"
 #include "Set.hpp"
 
 namespace snn::internal
@@ -20,6 +21,6 @@ class TemporalComposite
         [[nodiscard]] virtual bool needToTrainOnTrainingData(int index) const = 0;
         [[nodiscard]] virtual bool needToEvaluateOnTestingData(int index) const = 0;
 
-        [[nodiscard]] virtual int isValid();
+        [[nodiscard]] virtual auto isValid() const -> ErrorType;
 };
 }  // namespace snn::internal

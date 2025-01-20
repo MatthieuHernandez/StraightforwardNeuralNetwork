@@ -3,6 +3,7 @@
 #include <boost/serialization/export.hpp>
 #include <memory>
 
+#include "../../tools/Error.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/BaseNeuron.hpp"
 
@@ -36,7 +37,7 @@ class BaseLayer
         [[nodiscard]] virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 
-        [[nodiscard]] virtual int isValid() const = 0;
+        [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
 
         [[nodiscard]] virtual std::string summary() const = 0;
 

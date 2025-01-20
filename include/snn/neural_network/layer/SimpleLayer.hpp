@@ -31,7 +31,7 @@ class SimpleLayer : public Layer<N>
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
-        [[nodiscard]] int isValid() const final;
+        [[nodiscard]] auto isValid() const -> ErrorType final;
 
         bool operator==(const BaseLayer& layer) const final;
         bool operator!=(const BaseLayer& layer) const final;

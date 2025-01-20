@@ -33,7 +33,7 @@ TEST_F(MnistTest, loadData)
     ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 10000);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), 0);
+    ASSERT_EQ(data->isValid(), ErrorType::noError);
 }
 
 TEST_F(MnistTest, simplierNeuralNetwork)

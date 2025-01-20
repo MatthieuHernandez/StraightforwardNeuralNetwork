@@ -64,12 +64,15 @@ inline unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimiz
     return make_unique<MaxPooling2D>(*this);
 }
 
-int MaxPooling2D::isValid() const
+auto MaxPooling2D::isValid() const -> ErrorType
 {
     if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs) &&
         this->numberOfKernels != this->numberOfOutputs)
-        return 204;
-    return 0;
+    {
+        return ErrorType::maxPooling2DWrongNumberOfInputs;
+    }
+    return ErrorType::noError;
+    return ErrorType::noError;
 }
 
 std::string MaxPooling2D::summary() const

@@ -34,7 +34,7 @@ TEST_F(DailyMinTemperaturesTest, loadData)
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 1);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 1);
     ASSERT_EQ(data->numberOfLabels, 1);
-    ASSERT_EQ(data->isValid(), 0);
+    ASSERT_EQ(data->isValid(), ErrorType::noError);
 }
 
 TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)

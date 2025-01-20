@@ -13,8 +13,11 @@ void TemporalComposite::unshuffle()
         this->sets[training].shuffledIndexes[i] = i;
 }
 
-int TemporalComposite::isValid()
+auto TemporalComposite::isValid() const -> ErrorType
 {
-    if (this->sets == nullptr) return 402;
-    return 0;
+    if (this->sets == nullptr)
+    {
+        return ErrorType::temporalCompositeSetNull;
+    }
+    return ErrorType::noError;
 }

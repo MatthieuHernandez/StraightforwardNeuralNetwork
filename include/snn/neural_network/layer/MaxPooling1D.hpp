@@ -30,7 +30,7 @@ class MaxPooling1D final : public FilterLayer
         MaxPooling1D(const MaxPooling1D&) = default;
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] auto isValid() const -> ErrorType override;
 
         [[nodiscard]] std::string summary() const override;
 

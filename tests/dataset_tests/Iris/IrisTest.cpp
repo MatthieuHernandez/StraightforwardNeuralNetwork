@@ -33,7 +33,7 @@ TEST_F(IrisTest, loadData)
     ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 150);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
     ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), 0);
+    ASSERT_EQ(data->isValid(), ErrorType::noError);
 }
 
 TEST_F(IrisTest, trainNeuralNetwork)

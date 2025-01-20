@@ -11,9 +11,12 @@ CompositeForClassification::CompositeForClassification(Set sets[2], int numberOf
 {
 }
 
-int CompositeForClassification::isValid()
+auto CompositeForClassification::isValid() const -> ErrorType
 {
-    if (this->sets[training].labels[0].size() < 2) return 406;
+    if (this->sets[training].labels[0].size() < 2)
+    {
+        return ErrorType::dataWrongLabelSize;
+    };
     return this->ProblemComposite::isValid();
 }
 

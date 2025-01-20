@@ -27,7 +27,7 @@ class LocallyConnected2D final : public FilterLayer
         LocallyConnected2D(const LocallyConnected2D&) = default;
         std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] auto isValid() const -> ErrorType override;
 
         [[nodiscard]] std::string summary() const override;
 

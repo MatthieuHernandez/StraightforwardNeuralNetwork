@@ -54,14 +54,14 @@ bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
     return this->sets[testing].needToEvaluateOnData[index];
 }
 
-int CompositeForTemporalData::isValid()
+auto CompositeForTemporalData::isValid() const -> ErrorType
 {
     if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
         (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size ||
         !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
         !this->sets[training].needToEvaluateOnData.empty() ||
         (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
-        return 404;
+        return ErrorType::compositeForTemporalDataEmpty;
 
     return this->TemporalComposite::isValid();
 }

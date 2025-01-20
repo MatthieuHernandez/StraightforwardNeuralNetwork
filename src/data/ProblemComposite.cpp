@@ -13,10 +13,13 @@ ProblemComposite::ProblemComposite(Set sets[2], const int numberOfLabels)
     this->sets = sets;
 }
 
-int ProblemComposite::isValid()
+auto ProblemComposite::isValid() const -> ErrorType
 {
-    if (this->sets == nullptr) return 402;
-    return 0;
+    if (this->sets == nullptr)
+    {
+        return ErrorType::dataSetNull;
+    }
+    return ErrorType::noError;
 }
 
 const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, const int batchSize)

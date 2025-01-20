@@ -25,7 +25,7 @@ class SimpleNeuron final : public Neuron
 
         void train(float error);
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> ErrorType;
 
         bool operator==(const SimpleNeuron& neuron) const;
         bool operator!=(const SimpleNeuron& neuron) const;

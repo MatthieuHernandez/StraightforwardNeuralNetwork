@@ -65,9 +65,12 @@ inline void RecurrentNeuron::reset()
     this->previousSum = 0;
 }
 
-int RecurrentNeuron::isValid() const
+auto RecurrentNeuron::isValid() const -> ErrorType
 {
-    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2) return 304;
+    if (static_cast<int>(this->weights.size()) != this->numberOfInputs + 2)
+    {
+        return ErrorType::recurrentNeuronWrongNumberOfWeight;
+    }
     return this->Neuron::isValid();
 }
 

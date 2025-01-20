@@ -20,7 +20,7 @@ TEST(Architecture, ValidArchitectures)
     for (auto&& Architecture : Architectures)
     {
         StraightforwardNeuralNetwork neuralNetwork(Architecture);
-        ASSERT_EQ(neuralNetwork.isValid(), 0);
+        ASSERT_EQ(neuralNetwork.isValid(), ErrorType::noError);
     }
 }
 
@@ -118,10 +118,10 @@ TEST(Architecture, InputWithSizeOf1)
     StraightforwardNeuralNetwork neuralNetworkC({Input(5), Convolution(2, 3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkR({Input(5), Recurrence(3), FullyConnected(1)});
 
-    ASSERT_EQ(neuralNetworkFC.isValid(), 0) << "FullyConnected neural network is invalid.";
-    ASSERT_EQ(neuralNetworkLC.isValid(), 0) << "LocallyConnected neural network is invalid.";
-    ASSERT_EQ(neuralNetworkC.isValid(), 0) << "Convolution neural network is invalid.";
-    ASSERT_EQ(neuralNetworkR.isValid(), 0) << "Recurrence neural network is invalid.";
+    ASSERT_EQ(neuralNetworkFC.isValid(), ErrorType::noError) << "FullyConnected neural network is invalid.";
+    ASSERT_EQ(neuralNetworkLC.isValid(), ErrorType::noError) << "LocallyConnected neural network is invalid.";
+    ASSERT_EQ(neuralNetworkC.isValid(), ErrorType::noError) << "Convolution neural network is invalid.";
+    ASSERT_EQ(neuralNetworkR.isValid(), ErrorType::noError) << "Recurrence neural network is invalid.";
 }
 
 TEST(Architecture, InputWithSizeOf2)
@@ -131,8 +131,8 @@ TEST(Architecture, InputWithSizeOf2)
     StraightforwardNeuralNetwork neuralNetworkC({Input(2, 5), Convolution(2, 3), FullyConnected(1)});
     StraightforwardNeuralNetwork neuralNetworkR({Input(2, 5), Recurrence(3), FullyConnected(1)});
 
-    ASSERT_EQ(neuralNetworkFC.isValid(), 0) << "FullyConnected neural network is invalid.";
-    ASSERT_EQ(neuralNetworkLC.isValid(), 0) << "LocallyConnected neural network is invalid.";
-    ASSERT_EQ(neuralNetworkC.isValid(), 0) << "Convolution neural network is invalid.";
-    ASSERT_EQ(neuralNetworkR.isValid(), 0) << "Recurrence neural network is invalid.";
+    ASSERT_EQ(neuralNetworkFC.isValid(), ErrorType::noError) << "FullyConnected neural network is invalid.";
+    ASSERT_EQ(neuralNetworkLC.isValid(), ErrorType::noError) << "LocallyConnected neural network is invalid.";
+    ASSERT_EQ(neuralNetworkC.isValid(), ErrorType::noError) << "Convolution neural network is invalid.";
+    ASSERT_EQ(neuralNetworkR.isValid(), ErrorType::noError) << "Recurrence neural network is invalid.";
 }

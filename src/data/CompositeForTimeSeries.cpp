@@ -107,14 +107,14 @@ bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int in
     return true;
 }
 
-int CompositeForTimeSeries::isValid()
+auto CompositeForTimeSeries::isValid() const -> ErrorType
 {
     if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
         !this->sets[testing].areFirstDataOfTemporalSequence.empty() ||
         (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size ||
         !this->sets[testing].needToTrainOnData.empty() || !this->sets[training].needToEvaluateOnData.empty() ||
         !this->sets[testing].needToEvaluateOnData.empty())
-        return 404;
+        return ErrorType::compositeForTimeSeriesEmpty;
 
     return this->TemporalComposite::isValid();
 }

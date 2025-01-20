@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "../data/Data.hpp"
+#include "../tools/Error.hpp"
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
 #include "layer/LayerFactory.hpp"
@@ -53,7 +54,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> ErrorType;
 
         void startTrainingAsync(Data& data, int batchSize = 1, int evaluationFrequency = 1);
         void stopTrainingAsync();

@@ -25,13 +25,16 @@ std::vector<int> FilterLayer::getShapeOfOutput() const { return this->shapeOfOut
 
 int FilterLayer::getKernelSize() const { return this->kernelSize; }
 
-int FilterLayer::isValid() const
+auto FilterLayer::isValid() const -> ErrorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
     for (int s : shape) numberOfOutput *= s;
 
-    if (numberOfOutput != this->numberOfKernels) return 202;
+    if (numberOfOutput != this->numberOfKernels)
+    {
+        return ErrorType::filterLayerWrongNumberOfOutputs;
+    }
 
     return this->Layer::isValid();
 }

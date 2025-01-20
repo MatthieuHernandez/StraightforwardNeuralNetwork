@@ -47,17 +47,23 @@ std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 }
 
 template <BaseNeuron N>
-int SimpleLayer<N>::isValid() const
+auto SimpleLayer<N>::isValid() const -> ErrorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
     for (int s : shape) numberOfOutput *= s;
 
-    if (numberOfOutput != this->getNumberOfNeurons()) return 202;
+    if (numberOfOutput != this->getNumberOfNeurons())
+    {
+        return ErrorType::layerWrongNumberOfOutputs;
+    }
 
     for (auto& neuron : this->neurons)
     {
-        if (neuron.getNumberOfInputs() != this->getNumberOfInputs()) return 203;
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
+        {
+            return ErrorType::layerWrongNumberOfInputs;
+        }
     }
     return Layer<N>::isValid();
 }

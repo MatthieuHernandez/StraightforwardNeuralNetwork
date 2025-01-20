@@ -1,6 +1,7 @@
-#include "Examples.hpp"
-#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/data/Data.hpp>
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+
+#include "Examples.hpp"
 
 using namespace std;
 using namespace snn;
@@ -21,16 +22,14 @@ int multipleClassificationExample()
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
-    neuralNetwork.train(data, 1.00_acc || 2_s ); // train neural network until 100% accuracy or 3s on a parallel thread
+    neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
-    vector<float> output = neuralNetwork.computeOutput(data.getData(snn::testing, 0)); // consult neural network to test it
+    vector<float> output =
+        neuralNetwork.computeOutput(data.getData(snn::testing, 0));  // consult neural network to test it
 
-    if (accuracy == 100
-        && output[0] < separator
-        && output[1] > separator
-        && output[2] < separator
-        && neuralNetwork.isValid() == 0)
-        return EXIT_SUCCESS; // the neural network has learned
+    if (accuracy == 100 && output[0] < separator && output[1] > separator && output[2] < separator &&
+        neuralNetwork.isValid() == snn::ErrorType::noError)
+        return EXIT_SUCCESS;  // the neural network has learned
     return EXIT_FAILURE;
 }

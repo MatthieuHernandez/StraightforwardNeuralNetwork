@@ -19,6 +19,6 @@ class CompositeForTemporalData : public TemporalComposite
         [[nodiscard]] bool needToTrainOnTrainingData(int index) const override;
         [[nodiscard]] bool needToEvaluateOnTestingData(int index) const override;
 
-        [[nodiscard]] int isValid() override;
+        [[nodiscard]] auto isValid() const -> ErrorType override;
 };
 }  // namespace snn::internal

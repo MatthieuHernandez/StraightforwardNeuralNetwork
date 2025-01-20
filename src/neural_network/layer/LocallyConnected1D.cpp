@@ -58,11 +58,14 @@ inline unique_ptr<BaseLayer> LocallyConnected1D::clone(std::shared_ptr<NeuralNet
     return layer;
 }
 
-int LocallyConnected1D::isValid() const
+auto LocallyConnected1D::isValid() const -> ErrorType
 {
-    for (auto& neuron : neurons)
+    for (const auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C]) return 203;
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
+        {
+            return ErrorType::locallyConnected1DWrongNumberOfInputs;
+        }
     }
     return this->FilterLayer::isValid();
 }

@@ -29,7 +29,8 @@ class NeuralNetwork : public StatisticAnalysis
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
                                       bool temporalReset);
-        std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
+        [[nodiscard]] auto calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const
+            -> std::vector<float>;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -48,27 +49,30 @@ class NeuralNetwork : public StatisticAnalysis
         void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, const float separator,
                                            bool temporalReset);
 
-        vector2D<float> getLayerOutputs(const std::vector<float>& inputs);
+        auto getLayerOutputs(const std::vector<float>& inputs) -> vector2D<float>;
 
     public:
         NeuralNetwork() = default;  // use restricted to Boost library only
+        NeuralNetwork(NeuralNetwork&&) = delete;
+        auto operator=(const NeuralNetwork&) -> NeuralNetwork& = default;
+        auto operator=(NeuralNetwork&&) -> NeuralNetwork& = delete;
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         virtual ~NeuralNetwork() = default;
 
-        [[nodiscard]] bool hasNan() const;
-        [[nodiscard]] int64_t getNumberOfTraining() const;
-        [[nodiscard]] int getNumberOfLayers() const;
-        [[nodiscard]] int getNumberOfInputs() const;
-        [[nodiscard]] int getNumberOfOutputs() const;
-        [[nodiscard]] int getNumberOfNeurons() const;
-        [[nodiscard]] int getNumberOfParameters() const;
+        [[nodiscard]] auto hasNan() const -> bool;
+        [[nodiscard]] auto getNumberOfTraining() const -> int64_t;
+        [[nodiscard]] auto getNumberOfLayers() const -> int;
+        [[nodiscard]] auto getNumberOfInputs() const -> int;
+        [[nodiscard]] auto getNumberOfOutputs() const -> int;
+        [[nodiscard]] auto getNumberOfNeurons() const -> int;
+        [[nodiscard]] auto getNumberOfParameters() const -> int;
 
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> ErrorType;
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
 

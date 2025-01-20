@@ -4,10 +4,9 @@
     <h1 align="center"> Straightforward Neural Network </h1>
 </p>
 
-![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/unit_tests_gcc_linux.yml/badge.svg?barnch=master)
-![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/unit_tests_clang_linux.yml/badge.svg?barnch=master)
-![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/unit_tests_windows.yml/badge.svg?barnch=master)
-![](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/dataset_tests.yml/badge.svg?barnch=master)
+[![All tests - GCC Linux](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/gcc_linux.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/gcc_linux.yml)
+[![Unit tests - Clang Linux](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/clang_linux.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/clang_linux.yml)
+[![Unit tests - MSVC Windows](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/msvc_windows.yml/badge.svg)](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/actions/workflows/msvc_windows.yml)
 ![](https://www.codefactor.io/repository/github/matthieuhernandez/straightforwardneuralnetwork/badge/master)
 
 **Straightforward Neural Network** is an open source neural network library in C++20 optimized for CPU. The goal of this library is to make the use of neural networks as easy as possible.

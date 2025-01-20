@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include <cmath>
 #include <limits>
 
 #include "ActivationFunction.hpp"

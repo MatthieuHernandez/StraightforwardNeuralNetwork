@@ -23,8 +23,7 @@ std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputEr
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
-        for (size_t e = 0; e < errors.size(); ++e)
-            errors[e] += error[e];
+        for (size_t e = 0; e < errors.size(); ++e) errors[e] += error[e];
     }
     return errors;
 }
@@ -32,8 +31,7 @@ std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputEr
 template <BaseNeuron N>
 void SimpleLayer<N>::computeTrain(std::vector<float>& inputErrors)
 {
-    for (size_t n = 0; n < this->neurons.size(); ++n)
-        this->neurons[n].train(inputErrors[n]);
+    for (size_t n = 0; n < this->neurons.size(); ++n) this->neurons[n].train(inputErrors[n]);
 }
 
 template <BaseNeuron N>
@@ -53,16 +51,13 @@ int SimpleLayer<N>::isValid() const
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
-    for (int s : shape)
-        numberOfOutput *= s;
+    for (int s : shape) numberOfOutput *= s;
 
-    if (numberOfOutput != this->getNumberOfNeurons())
-        return 202;
+    if (numberOfOutput != this->getNumberOfNeurons()) return 202;
 
     for (auto& neuron : this->neurons)
     {
-        if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
-            return 203;
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs()) return 203;
     }
     return Layer<N>::isValid();
 }

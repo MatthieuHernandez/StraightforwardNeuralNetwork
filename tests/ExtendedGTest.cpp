@@ -1,7 +1,8 @@
+#include "ExtendedGTest.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <sstream>
-#include "ExtendedGTest.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -13,43 +14,23 @@ void ASSERT_BETWEEN(T min, T value, T max, string valueName)
     ASSERT_LE(value, max);
 }
 
-void ASSERT_SUCCESS()
-{
-    ASSERT_TRUE(true);
-}
+void ASSERT_SUCCESS() { ASSERT_TRUE(true); }
 
-void ASSERT_FAIL(string message)
-{
-    ASSERT_TRUE(false) << message;
-}
+void ASSERT_FAIL(string message) { ASSERT_TRUE(false) << message; }
 
 void ASSERT_VECTOR_EQ(const vector<float> values, const vector<float> expected_values)
 {
     ASSERT_EQ(values.size(), expected_values.size());
-    for (auto i = 0; i < values.size(); ++i)
-        ASSERT_NEAR(values[i], expected_values[i], 1e-6f);
+    for (auto i = 0; i < values.size(); ++i) ASSERT_NEAR(values[i], expected_values[i], 1e-6f);
 }
 
-void PRINT_LOG(string message)
-{
-    cout << "[          ] " << message << endl;
-}
+void PRINT_LOG(string message) { cout << "[          ] " << message << endl; }
 
-void PRINT_NUMBER_OF_NEURONS(int value)
-{
-    cout << "[          ] " << value << " neurons" << endl;
-}
+void PRINT_NUMBER_OF_NEURONS(int value) { cout << "[          ] " << value << " neurons" << endl; }
 
-void PRINT_NUMBER_OF_PARAMETERS(int value)
-{
-    cout << "[          ] " << value << " parameters" << endl;
-}
+void PRINT_NUMBER_OF_PARAMETERS(int value) { cout << "[          ] " << value << " parameters" << endl; }
 
-
-void PRINT_RESULT(string message)
-{
-    cout << "[ RESULT   ] " << message << endl;
-}
+void PRINT_RESULT(string message) { cout << "[ RESULT   ] " << message << endl; }
 
 void ASSERT_ACCURACY(float actual, float expected)
 {

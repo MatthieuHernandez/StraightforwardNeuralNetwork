@@ -1,14 +1,15 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "FilterLayer.hpp"
+#include <memory>
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "FilterLayer.hpp"
 
 namespace snn::internal
 {
-    class LocallyConnected1D final : public FilterLayer
-    {
+class LocallyConnected1D final : public FilterLayer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -20,7 +21,7 @@ namespace snn::internal
         void buildKernelIndexes() override;
 
     public:
-        LocallyConnected1D() = default; // use restricted to Boost library only
+        LocallyConnected1D() = default;  // use restricted to Boost library only
         LocallyConnected1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~LocallyConnected1D() = default;
         LocallyConnected1D(const LocallyConnected1D&) = default;
@@ -32,12 +33,12 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
-    };
+};
 
-    template <class Archive>
-    void LocallyConnected1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<LocallyConnected1D, FilterLayer>();
-        ar & boost::serialization::base_object<FilterLayer>(*this);
-    }
+template <class Archive>
+void LocallyConnected1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<LocallyConnected1D, FilterLayer>();
+    ar& boost::serialization::base_object<FilterLayer>(*this);
 }
+}  // namespace snn::internal

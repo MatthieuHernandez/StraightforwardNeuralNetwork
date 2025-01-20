@@ -1,14 +1,14 @@
 #pragma once
-#include <string>
 #include <memory>
 #include <snn/data/Data.hpp>
+#include <string>
 
 class Dataset
 {
-public:
-     std::unique_ptr<snn::Data> data;
-     ~Dataset() = default;
+    public:
+        std::unique_ptr<snn::Data> data;
+        ~Dataset() = default;
 
-protected:
-    virtual void loadData(std::string folderPath) = 0;
+    protected:
+        virtual void loadData(std::string folderPath) = 0;
 };

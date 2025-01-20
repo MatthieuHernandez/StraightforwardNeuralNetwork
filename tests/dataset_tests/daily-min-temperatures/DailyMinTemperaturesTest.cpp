@@ -1,6 +1,7 @@
-#include "ExtendedGTest.hpp"
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+
 #include "DailyMinTemperatures.hpp"
+#include "ExtendedGTest.hpp"
 
 using namespace std;
 using namespace chrono;
@@ -8,19 +9,16 @@ using namespace snn;
 
 class DailyMinTemperaturesTest : public testing::Test
 {
-protected:
-    static void SetUpTestSuite()
-    {
-        DailyMinTemperatures dataset("./datasets/daily-min-temperatures", 5);
-        data = move(dataset.data);
-    }
-    
-    void SetUp() override
-    {
-        ASSERT_TRUE(data) << "Don't forget to download dataset";
-    }
-    
-    static unique_ptr<Data> data;
+    protected:
+        static void SetUpTestSuite()
+        {
+            DailyMinTemperatures dataset("./resources/datasets/daily-min-temperatures", 5);
+            data = move(dataset.data);
+        }
+
+        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+
+        static unique_ptr<Data> data;
 };
 
 unique_ptr<Data> DailyMinTemperaturesTest::data = nullptr;
@@ -41,12 +39,8 @@ TEST_F(DailyMinTemperaturesTest, loadData)
 
 TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(1),
-        Recurrence(20),
-        FullyConnected(1, activation::identity)
-    },
-        StochasticGradientDescent(0.004f, 0.2f));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(20), FullyConnected(1, activation::identity)},
+                                               StochasticGradientDescent(0.004f, 0.2f));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

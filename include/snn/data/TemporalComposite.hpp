@@ -3,8 +3,8 @@
 
 namespace snn::internal
 {
-    class TemporalComposite
-    {
+class TemporalComposite
+{
     protected:
         Set* sets;
 
@@ -21,5 +21,5 @@ namespace snn::internal
         [[nodiscard]] virtual bool needToEvaluateOnTestingData(int index) const = 0;
 
         [[nodiscard]] virtual int isValid();
-    };
-}
+};
+}  // namespace snn::internal

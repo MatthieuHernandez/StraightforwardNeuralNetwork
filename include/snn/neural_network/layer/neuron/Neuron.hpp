@@ -1,19 +1,20 @@
 #pragma once
-#include <vector>
-#include <queue>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
-#include "BaseNeuron.hpp"
-#include "NeuronModel.hpp"
-#include "CircularData.hpp"
-#include "../../optimizer/StochasticGradientDescent.hpp"
-#include "activation_function/ActivationFunction.hpp"
+#include <queue>
+#include <vector>
+
 #include "../../../tools/Tools.hpp"
+#include "../../optimizer/StochasticGradientDescent.hpp"
+#include "BaseNeuron.hpp"
+#include "CircularData.hpp"
+#include "NeuronModel.hpp"
+#include "activation_function/ActivationFunction.hpp"
 
 namespace snn::internal
 {
-    class Neuron
-    {
+class Neuron
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -37,7 +38,7 @@ namespace snn::internal
         static float randomInitializeWeight(int numberOfInputs);
 
     public:
-        Neuron() = default; // use restricted to Boost library only
+        Neuron() = default;  // use restricted to Boost library only
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
         ~Neuron() = default;
@@ -56,22 +57,22 @@ namespace snn::internal
 
         bool operator==(const Neuron& neuron) const;
         bool operator!=(const Neuron& neuron) const;
-    };
+};
 
-    template <class Archive>
-    void Neuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        ar.template register_type<StochasticGradientDescent>();
-        ar & this->optimizer;
-        ar & this->numberOfInputs;
-        ar & this->batchSize;
-        ar & this->weights;
-        ar & this->bias;
-        ar & this->previousDeltaWeights;
-        ar & this->lastInputs;
-        ar & this->errors;
-        ar & this->sum;
-        ar & this->activationFunction;
-        this->outputFunction = ActivationFunction::get(activationFunction);
-    }
+template <class Archive>
+void Neuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    ar.template register_type<StochasticGradientDescent>();
+    ar& this->optimizer;
+    ar& this->numberOfInputs;
+    ar& this->batchSize;
+    ar& this->weights;
+    ar& this->bias;
+    ar& this->previousDeltaWeights;
+    ar& this->lastInputs;
+    ar& this->errors;
+    ar& this->sum;
+    ar& this->activationFunction;
+    this->outputFunction = ActivationFunction::get(activationFunction);
 }
+}  // namespace snn::internal

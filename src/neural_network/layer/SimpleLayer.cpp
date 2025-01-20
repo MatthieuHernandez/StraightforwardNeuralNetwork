@@ -1,12 +1,13 @@
 #include "SimpleLayer.hpp"
-#include "neuron/SimpleNeuron.hpp"
-#include "neuron/RecurrentNeuron.hpp"
+
 #include "neuron/GatedRecurrentUnit.hpp"
+#include "neuron/RecurrentNeuron.hpp"
+#include "neuron/SimpleNeuron.hpp"
 
 using namespace snn;
 using namespace internal;
 
-extern template class internal::SimpleLayer<SimpleNeuron>; // must use a nested-name-specifier for GCC compiler
+extern template class internal::SimpleLayer<SimpleNeuron>;  // must use a nested-name-specifier for GCC compiler
 extern template class internal::SimpleLayer<RecurrentNeuron>;
 extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 

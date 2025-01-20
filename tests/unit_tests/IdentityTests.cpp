@@ -1,18 +1,20 @@
-#include "../ExtendedGTest.hpp"
-#include <snn/tools/Tools.hpp>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+#include <snn/tools/Tools.hpp>
+
+#include "../ExtendedGTest.hpp"
 
 using namespace std;
 using namespace snn;
 
 TEST(Identity, WorksWithSmallNumbers)
 {
-    vector2D<float> inputData       = {{0}, {1}, {2}, {3}, {4}, {5}};
+    vector2D<float> inputData = {{0}, {1}, {2}, {3}, {4}, {5}};
     vector2D<float> expectedOutputs = {{0}, {0.25}, {0.50}, {0.75}, {1.00}, {1.25}};
 
     Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(6), FullyConnected(1, snn::activation::identity)},
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(1), FullyConnected(6), FullyConnected(1, snn::activation::identity)},
         StochasticGradientDescent(0.02f, 0.99f));
 
     neuralNetwork.train(data, 0.01_mae || 2_s);
@@ -32,16 +34,12 @@ TEST(Identity, WorksWithBigNumbers)
 
     Data data(problem::regression, inputData, expectedOutputs);
 
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(1),
-        FullyConnected(20),
-        FullyConnected(8),
-        FullyConnected(4, activation::tanh),
-        FullyConnected(1, activation::identity)
-    }, 
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(1), FullyConnected(20), FullyConnected(8), FullyConnected(4, activation::tanh),
+         FullyConnected(1, activation::identity)},
         StochasticGradientDescent(0.00001f, 0.95f));
 
-    neuralNetwork.train(data,1.0_mae || 3_s);
+    neuralNetwork.train(data, 1.0_mae || 3_s);
 
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
@@ -50,28 +48,24 @@ TEST(Identity, WorksWithBigNumbers)
 
 TEST(Identity, WorksWithLotsOfNumbers)
 {
-    vector2D<float> inputData = {{9}, {2}, {7}, {5}, {1}, {8}, {6}, {3}, {4}, {0}, {9.5}, {2.5}, {7.5}, {5.5}, {1.5}, {8.5}, {6.5}, {3.5}, {4.5}, {0.5}};
-    vector2D<float> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0}, {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
+    vector2D<float> inputData = {{9},   {2},   {7},   {5},   {1},   {8},   {6},   {3},   {4},   {0},
+                                 {9.5}, {2.5}, {7.5}, {5.5}, {1.5}, {8.5}, {6.5}, {3.5}, {4.5}, {0.5}};
+    vector2D<float> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0},
+                                       {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
 
     float precision = 0.4f;
     Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({
-        Input(1),
-        FullyConnected(30),
-        FullyConnected(1, activation::identity)
-    },
-        StochasticGradientDescent(0.001f, 0.80f));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(30), FullyConnected(1, activation::identity)},
+                                               StochasticGradientDescent(0.001f, 0.80f));
 
     neuralNetwork.train(data, 1.00_acc || 2_s);
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
-    if (accuracy == 100
-        && mae < precision
-        && neuralNetwork.isValid() == 0)
+    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == 0)
         ASSERT_SUCCESS();
     else
         ASSERT_FAIL("MAE > 0.4: " + to_string(mae));

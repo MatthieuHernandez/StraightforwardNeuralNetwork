@@ -3,8 +3,8 @@
 
 namespace snn::internal
 {
-    class CompositeForNonTemporalData : public TemporalComposite
-    {
+class CompositeForNonTemporalData : public TemporalComposite
+{
     public:
         CompositeForNonTemporalData(snn::Set sets[2]);
 
@@ -17,5 +17,5 @@ namespace snn::internal
         [[nodiscard]] bool needToEvaluateOnTestingData(int index) const override;
 
         [[nodiscard]] int isValid() override;
-    };
-}
+};
+}  // namespace snn::internal

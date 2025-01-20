@@ -1,5 +1,7 @@
-#include <boost/serialization/export.hpp>
 #include "MaxPooling1D.hpp"
+
+#include <boost/serialization/export.hpp>
+
 #include "LayerModel.hpp"
 #include "Tools.hpp"
 
@@ -48,16 +50,15 @@ void MaxPooling1D::buildKernelIndexes()
     }
 }
 
-inline
-unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) const
+inline unique_ptr<BaseLayer> MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) const
 {
     return make_unique<MaxPooling1D>(*this);
 }
 
 int MaxPooling1D::isValid() const
 {
-    if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs)
-        && this->numberOfKernels != this->numberOfOutputs)
+    if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs) &&
+        this->numberOfKernels != this->numberOfOutputs)
         return 204;
     return 0;
 }
@@ -81,8 +82,7 @@ std::string MaxPooling1D::summary() const
     return ss.str();
 }
 
-inline
-vector<float> MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline vector<float> MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->numberOfKernels);
     for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
@@ -100,8 +100,7 @@ vector<float> MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_u
     return outputs;
 }
 
-inline
-vector<float> MaxPooling1D::computeBackOutput(vector<float>& inputErrors)
+inline vector<float> MaxPooling1D::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (size_t e = 0; e < inputErrors.size(); ++e)
@@ -111,16 +110,14 @@ vector<float> MaxPooling1D::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
-inline
-bool MaxPooling1D::operator==(const BaseLayer& layer) const
+inline bool MaxPooling1D::operator==(const BaseLayer& layer) const
 {
     try
     {
         const auto& l = dynamic_cast<const MaxPooling1D&>(layer);
 
-        return typeid(*this).hash_code() == typeid(layer).hash_code()
-            && this->kernelSize == l.kernelSize
-            && this->shapeOfInput == l.shapeOfInput;
+        return typeid(*this).hash_code() == typeid(layer).hash_code() && this->kernelSize == l.kernelSize &&
+               this->shapeOfInput == l.shapeOfInput;
     }
     catch (std::bad_cast&)
     {
@@ -128,8 +125,4 @@ bool MaxPooling1D::operator==(const BaseLayer& layer) const
     }
 }
 
-inline
-bool MaxPooling1D::operator!=(const BaseLayer& layer) const
-{
-    return !(*this == layer);
-}
+inline bool MaxPooling1D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }

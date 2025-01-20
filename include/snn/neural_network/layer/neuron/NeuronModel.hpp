@@ -1,14 +1,14 @@
- #pragma once
+#pragma once
 #include "activation_function/ActivationFunction.hpp"
 
- namespace snn
+namespace snn
 {
-     struct NeuronModel
-     {
-         int numberOfInputs = -1;
-         int batchSize = -1;
-         int numberOfWeights = -1;
-         float bias = 1.0f;
-         activation activationFunction;
-     };
- }
+struct NeuronModel
+{
+        int numberOfInputs = -1;
+        int batchSize = -1;
+        int numberOfWeights = -1;
+        float bias = 1.0f;
+        activation activationFunction;
+};
+}  // namespace snn

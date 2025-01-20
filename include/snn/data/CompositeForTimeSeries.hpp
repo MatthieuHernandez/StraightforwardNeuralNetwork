@@ -1,17 +1,18 @@
 #pragma once
-#include "vector"
 #include "TemporalComposite.hpp"
+#include "vector"
 
 namespace snn::internal
 {
-    class CompositeForTimeSeries : public TemporalComposite
-    {
+class CompositeForTimeSeries : public TemporalComposite
+{
     private:
         int numberOfRecurrences;
         std::vector<int> indexesForShuffling;
         int offset;
         int divide;
         int rest;
+
     public:
         CompositeForTimeSeries(snn::Set sets[2], int numberOfRecurrences);
 
@@ -24,5 +25,5 @@ namespace snn::internal
         [[nodiscard]] bool needToEvaluateOnTestingData(int index) const override;
 
         [[nodiscard]] int isValid() override;
-    };
-}
+};
+}  // namespace snn::internal

@@ -3,10 +3,11 @@
 
 namespace snn::internal
 {
-    class ProblemComposite
-    {
+class ProblemComposite
+{
     private:
         std::vector<float> batchedLabels{};
+
     protected:
         const int numberOfLabels;
         Set* sets;
@@ -22,5 +23,5 @@ namespace snn::internal
 
         [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize);
         [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(int index) const = 0;
-    };
-}
+};
+}  // namespace snn::internal

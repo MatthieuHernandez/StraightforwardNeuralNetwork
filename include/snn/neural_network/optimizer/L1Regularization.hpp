@@ -1,14 +1,15 @@
 #pragma once
-#include <vector>
-#include <sstream>
-#include <boost/serialization/unique_ptr.hpp>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/unique_ptr.hpp>
+#include <sstream>
+#include <vector>
+
 #include "LayerOptimizer.hpp"
 
 namespace snn::internal
 {
-    class L1Regularization final : public LayerOptimizer
-    {
+class L1Regularization final : public LayerOptimizer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -35,13 +36,13 @@ namespace snn::internal
 
         bool operator==(const LayerOptimizer& optimizer) const override;
         bool operator!=(const LayerOptimizer& optimizer) const override;
-    };
+};
 
-    template <class Archive>
-    void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
-        ar & boost::serialization::base_object<LayerOptimizer>(*this);
-        ar & this->value;
-    }
+template <class Archive>
+void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
+    ar& boost::serialization::base_object<LayerOptimizer>(*this);
+    ar& this->value;
 }
+}  // namespace snn::internal

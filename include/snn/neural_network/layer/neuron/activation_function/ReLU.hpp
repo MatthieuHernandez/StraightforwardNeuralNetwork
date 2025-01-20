@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include <limits>
+
 #include "ActivationFunction.hpp"
 
 using namespace std;
 
 namespace snn::internal
 {
-    class RectifiedLinearUnit final : public ActivationFunction
-    {
+class RectifiedLinearUnit final : public ActivationFunction
+{
     private:
         activation getType() const override { return activation::ReLU; }
 
@@ -19,14 +20,8 @@ namespace snn::internal
         {
         }
 
-        float function(const float x) const override
-        {
-            return (x > 0.0f) ? x : 0.0f;
-        }
+        float function(const float x) const override { return (x > 0.0f) ? x : 0.0f; }
 
-        float derivative(const float x) const override
-        {
-            return (x > 0.0f) ? 1.0f : 0.0f;
-        }
-    };
-}
+        float derivative(const float x) const override { return (x > 0.0f) ? 1.0f : 0.0f; }
+};
+}  // namespace snn::internal

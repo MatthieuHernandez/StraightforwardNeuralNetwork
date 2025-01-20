@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include <cmath>
+
 #include "ActivationFunction.hpp"
 
 using namespace std;
 
 namespace snn::internal
 {
-    class Sigmoid final : public ActivationFunction
-    {
+class Sigmoid final : public ActivationFunction
+{
     private:
         activation getType() const override { return activation::sigmoid; }
 
@@ -19,14 +20,8 @@ namespace snn::internal
         {
         }
 
-        float function(const float x) const override
-        {
-            return (tanhf(x / 2.0f) + 1.0f) / 2.0f;
-        }
+        float function(const float x) const override { return (tanhf(x / 2.0f) + 1.0f) / 2.0f; }
 
-        float derivative(const float x) const override
-        {
-            return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f;
-        }
-    };
-}
+        float derivative(const float x) const override { return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f; }
+};
+}  // namespace snn::internal

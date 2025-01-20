@@ -4,10 +4,7 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-TemporalComposite::TemporalComposite(Set sets[2])
-{
-    this->sets = sets;
-}
+TemporalComposite::TemporalComposite(Set sets[2]) { this->sets = sets; }
 
 void TemporalComposite::unshuffle()
 {
@@ -18,7 +15,6 @@ void TemporalComposite::unshuffle()
 
 int TemporalComposite::isValid()
 {
-    if (this->sets == nullptr)
-        return 402;
+    if (this->sets == nullptr) return 402;
     return 0;
 }

@@ -1,16 +1,14 @@
-#include <fstream>
-#include <snn/tools/ExtendedExpection.hpp>
 #include "FashionMnist.hpp"
+
+#include <fstream>
 #include <snn/data/Data.hpp>
+#include <snn/tools/ExtendedExpection.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-FashionMnist::FashionMnist(string folderPath)
-{
-    this->loadData(folderPath);
-}
+FashionMnist::FashionMnist(string folderPath) { this->loadData(folderPath); }
 
 void FashionMnist::loadData(string folderPath)
 {
@@ -19,7 +17,8 @@ void FashionMnist::loadData(string folderPath)
     vector2D<float> testingInputs = readImages(folderPath + "/t10k-images-idx3-ubyte", 10000);
     vector2D<float> testingLabels = readLabels(folderPath + "/t10k-labels-idx1-ubyte", 10000);
 
-    this->data = make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
+    this->data =
+        make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
     this->data->normalize(0, 1);
 }
 
@@ -31,8 +30,7 @@ vector2D<float> FashionMnist::readImages(string filePath, int size)
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
 
-    if (!file.is_open())
-        throw FileOpeningFailedException();
+    if (!file.is_open()) throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;
@@ -51,10 +49,9 @@ vector2D<float> FashionMnist::readImages(string filePath, int size)
                 j++;
             }
             else
-                shift ++;
+                shift++;
         }
-        if (images.back().size() != sizeOfData)
-            images.resize(images.size() - 1);
+        if (images.back().size() != sizeOfData) images.resize(images.size() - 1);
     }
     file.close();
     return images;
@@ -67,8 +64,7 @@ vector2D<float> FashionMnist::readLabels(string filePath, int size)
     vector2D<float> labels;
     labels.reserve(size);
 
-    if (!file.is_open())
-        throw FileOpeningFailedException();
+    if (!file.is_open()) throw FileOpeningFailedException();
 
     unsigned char c;
     int shift = 0;
@@ -85,7 +81,7 @@ vector2D<float> FashionMnist::readLabels(string filePath, int size)
             }
         }
         else
-            shift ++;
+            shift++;
     }
     file.close();
     return labels;

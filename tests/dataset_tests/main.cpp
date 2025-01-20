@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
+
 #include "../ExtendedGTest.hpp"
 
 int main(int ac, char* av[])
 {
-	testing::InitGoogleTest(&ac, av);
-	const auto tests = RUN_ALL_TESTS();
-	::testing::GTEST_FLAG(filter) = "Dataset_";
-	return tests;
+    testing::InitGoogleTest(&ac, av);
+    const auto tests = RUN_ALL_TESTS();
+    ::testing::GTEST_FLAG(filter) = "Dataset_";
+    return tests;
 }

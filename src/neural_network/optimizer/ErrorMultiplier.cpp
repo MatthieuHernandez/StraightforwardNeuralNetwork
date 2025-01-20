@@ -7,7 +7,8 @@ using namespace snn;
 using namespace internal;
 
 ErrorMultiplier::ErrorMultiplier(float factor, BaseLayer* layer)
-    : LayerOptimizer(layer), factor(factor)
+    : LayerOptimizer(layer),
+      factor(factor)
 {
 }
 
@@ -39,8 +40,7 @@ bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const
     try
     {
         const auto& o = dynamic_cast<const ErrorMultiplier&>(optimizer);
-        return this->LayerOptimizer::operator==(optimizer)
-            && this->factor == o.factor;
+        return this->LayerOptimizer::operator==(optimizer) && this->factor == o.factor;
     }
     catch (bad_cast&)
     {
@@ -48,7 +48,4 @@ bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool ErrorMultiplier::operator!=(const LayerOptimizer& optimizer) const
-{
-    return !(*this == optimizer);
-}
+bool ErrorMultiplier::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }

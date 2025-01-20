@@ -1,5 +1,6 @@
-#include <cmath>
 #include "StatisticAnalysis.hpp"
+
+#include <cmath>
 
 using namespace snn;
 using namespace internal;
@@ -53,24 +54,21 @@ void StatisticAnalysis::stopTesting()
     const float newRootMeanSquaredError = this->computeRootMeanSquaredError();
 
     this->globalClusteringRateIsBetterThanMax = newGlobalClusteringRate > this->globalClusteringRateMax;
-    if (this->globalClusteringRateIsBetterThanMax)
-        this->globalClusteringRateMax = newGlobalClusteringRate;
+    if (this->globalClusteringRateIsBetterThanMax) this->globalClusteringRateMax = newGlobalClusteringRate;
 
     this->weightedClusteringRateIsBetterThanMax = newWeightedClusteringRate > this->weightedClusteringRateMax;
-    if (this->weightedClusteringRateIsBetterThanMax)
-        this->weightedClusteringRateMax = newWeightedClusteringRate;
+    if (this->weightedClusteringRateIsBetterThanMax) this->weightedClusteringRateMax = newWeightedClusteringRate;
 
     this->f1ScoreIsBetterThanMax = newF1Score > this->f1ScoreMax;
-    if (this->f1ScoreIsBetterThanMax)
-        this->f1Score = newF1Score;
+    if (this->f1ScoreIsBetterThanMax) this->f1Score = newF1Score;
 
-    this->meanAbsoluteErrorIsBetterThanMin = newMeanAbsoluteError < this->meanAbsoluteErrorMin || this->meanAbsoluteErrorMin < 0;
-    if (this->meanAbsoluteErrorIsBetterThanMin)
-        this->meanAbsoluteErrorMin = newMeanAbsoluteError;
+    this->meanAbsoluteErrorIsBetterThanMin =
+        newMeanAbsoluteError < this->meanAbsoluteErrorMin || this->meanAbsoluteErrorMin < 0;
+    if (this->meanAbsoluteErrorIsBetterThanMin) this->meanAbsoluteErrorMin = newMeanAbsoluteError;
 
-    this->rootMeanSquaredErrorIsBetterThanMin = newRootMeanSquaredError < this->rootMeanSquaredErrorMin || this->meanAbsoluteErrorMin < 0;
-    if (this->rootMeanSquaredErrorIsBetterThanMin)
-        this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
+    this->rootMeanSquaredErrorIsBetterThanMin =
+        newRootMeanSquaredError < this->rootMeanSquaredErrorMin || this->meanAbsoluteErrorMin < 0;
+    if (this->rootMeanSquaredErrorIsBetterThanMin) this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
 
     this->globalClusteringRate = newGlobalClusteringRate;
     this->weightedClusteringRate = newWeightedClusteringRate;
@@ -80,29 +78,28 @@ void StatisticAnalysis::stopTesting()
 }
 
 void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outputs,
-                                                  const std::vector<float>& desiredOutputs,
-                                                  float precision)
+                                                  const std::vector<float>& desiredOutputs, float precision)
 {
     bool classifiedWell = true;
     for (size_t i = 0; i < clusters.size(); i++)
     {
         if (outputs[i] > desiredOutputs[i] + precision)
         {
-            clusters[i].falsePositive ++;
+            clusters[i].falsePositive++;
             classifiedWell = false;
         }
         else if (outputs[i] < desiredOutputs[i] - precision)
         {
-            clusters[i].falseNegative ++;
+            clusters[i].falseNegative++;
             classifiedWell = false;
         }
         else if (outputs[i] >= desiredOutputs[i])
         {
-            clusters[i].trueNegative ++;
+            clusters[i].trueNegative++;
         }
         else if (outputs[i] <= desiredOutputs[i])
         {
-            clusters[i].trueNegative ++;
+            clusters[i].trueNegative++;
         }
 
         clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
@@ -114,28 +111,27 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
 }
 
 void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
-                                                              const std::vector<float>& desiredOutputs,
-                                                              float separator)
+                                                              const std::vector<float>& desiredOutputs, float separator)
 {
     bool classifiedWell = true;
     for (size_t i = 0; i < clusters.size(); i++)
     {
         if (outputs[i] > separator && desiredOutputs[i] > separator)
         {
-            clusters[i].truePositive ++;
+            clusters[i].truePositive++;
         }
         else if (outputs[i] <= separator && desiredOutputs[i] <= separator)
         {
-            clusters[i].trueNegative ++;
+            clusters[i].trueNegative++;
         }
         else if (outputs[i] > separator && desiredOutputs[i] <= separator)
         {
-            clusters[i].falsePositive ++;
+            clusters[i].falsePositive++;
             classifiedWell = false;
         }
         else if (outputs[i] <= separator && desiredOutputs[i] > separator)
         {
-            clusters[i].falseNegative ++;
+            clusters[i].falseNegative++;
             classifiedWell = false;
         }
 
@@ -147,7 +143,8 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
         numberOfDataMisclassified++;
 }
 
-void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber, float separator)
+void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber,
+                                                      float separator)
 {
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
@@ -165,11 +162,11 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
 
             if (outputs[i] > separator)
             {
-                clusters[i].truePositive ++;
+                clusters[i].truePositive++;
             }
             else
             {
-                clusters[i].falseNegative ++;
+                clusters[i].falseNegative++;
             }
         }
         else
@@ -178,11 +175,11 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
 
             if (outputs[i] > separator)
             {
-                clusters[i].falsePositive ++;
+                clusters[i].falsePositive++;
             }
             else
             {
-                clusters[i].trueNegative ++;
+                clusters[i].trueNegative++;
             }
         }
     }
@@ -202,8 +199,7 @@ float StatisticAnalysis::computeWeightedClusteringRate() const
     float result = 0;
     for (const auto& c : clusters)
     {
-        if (c.truePositive > 0)
-            result += c.truePositive / (c.truePositive + c.falseNegative);
+        if (c.truePositive > 0) result += c.truePositive / (c.truePositive + c.falseNegative);
     }
     return result / clusters.size();
 }
@@ -244,79 +240,42 @@ float StatisticAnalysis::computeRootMeanSquaredError() const
     return sqrt(meanSquaredError);
 }
 
-float StatisticAnalysis::getGlobalClusteringRate() const
-{
-    return this->globalClusteringRate;
-}
+float StatisticAnalysis::getGlobalClusteringRate() const { return this->globalClusteringRate; }
 
-float StatisticAnalysis::getWeightedClusteringRate() const
-{
-    return this->weightedClusteringRate;
-}
+float StatisticAnalysis::getWeightedClusteringRate() const { return this->weightedClusteringRate; }
 
-float StatisticAnalysis::getF1Score() const
-{
-    return this->f1Score;
-}
+float StatisticAnalysis::getF1Score() const { return this->f1Score; }
 
-float StatisticAnalysis::getMeanAbsoluteError() const
-{
-    return this->meanAbsoluteError;
-}
+float StatisticAnalysis::getMeanAbsoluteError() const { return this->meanAbsoluteError; }
 
-float StatisticAnalysis::getRootMeanSquaredError() const
-{
-    return this->rootMeanSquaredError;
-}
+float StatisticAnalysis::getRootMeanSquaredError() const { return this->rootMeanSquaredError; }
 
-float StatisticAnalysis::getGlobalClusteringRateMax() const
-{
-    return this->globalClusteringRateMax;
-}
+float StatisticAnalysis::getGlobalClusteringRateMax() const { return this->globalClusteringRateMax; }
 
-float StatisticAnalysis::getWeightedClusteringRateMax() const
-{
-    return this->weightedClusteringRateMax;
-}
+float StatisticAnalysis::getWeightedClusteringRateMax() const { return this->weightedClusteringRateMax; }
 
-float StatisticAnalysis::getF1ScoreMax() const
-{
-    return this->f1ScoreMax;
-}
+float StatisticAnalysis::getF1ScoreMax() const { return this->f1ScoreMax; }
 
-float StatisticAnalysis::getMeanAbsoluteErrorMin() const
-{
-    return this->meanAbsoluteErrorMin;
-}
+float StatisticAnalysis::getMeanAbsoluteErrorMin() const { return this->meanAbsoluteErrorMin; }
 
-float StatisticAnalysis::getRootMeanSquaredErrorMin() const
-{
-    return this->rootMeanSquaredErrorMin;
-}
+float StatisticAnalysis::getRootMeanSquaredErrorMin() const { return this->rootMeanSquaredErrorMin; }
 
 bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
 {
-    return this->clusters == sa.clusters
-        && this->numberOfDataWellClassified == sa.numberOfDataWellClassified
-        && this->numberOfDataMisclassified == sa.numberOfDataMisclassified
-        && this->globalClusteringRate == sa.globalClusteringRate
-        && this->weightedClusteringRate == sa.weightedClusteringRate
-        && this->f1Score == sa.f1Score
-        && this->meanAbsoluteError == sa.meanAbsoluteError
-        && this->rootMeanSquaredError == sa.rootMeanSquaredError
-        && this->globalClusteringRateMax == sa.globalClusteringRateMax
-        && this->weightedClusteringRateMax == sa.weightedClusteringRateMax
-        && this->f1ScoreMax == sa.f1ScoreMax
-        && this->meanAbsoluteErrorMin  == sa.meanAbsoluteErrorMin
-        && this->rootMeanSquaredErrorMin == sa.rootMeanSquaredErrorMin
-        && this->globalClusteringRateIsBetterThanMax == sa.globalClusteringRateIsBetterThanMax
-        && this->weightedClusteringRateIsBetterThanMax == sa.weightedClusteringRateIsBetterThanMax
-        && this->f1ScoreIsBetterThanMax == sa.f1ScoreIsBetterThanMax
-        && this->meanAbsoluteErrorIsBetterThanMin == sa.meanAbsoluteErrorIsBetterThanMin
-        && this->rootMeanSquaredErrorIsBetterThanMin == sa.rootMeanSquaredErrorIsBetterThanMin;
+    return this->clusters == sa.clusters && this->numberOfDataWellClassified == sa.numberOfDataWellClassified &&
+           this->numberOfDataMisclassified == sa.numberOfDataMisclassified &&
+           this->globalClusteringRate == sa.globalClusteringRate &&
+           this->weightedClusteringRate == sa.weightedClusteringRate && this->f1Score == sa.f1Score &&
+           this->meanAbsoluteError == sa.meanAbsoluteError && this->rootMeanSquaredError == sa.rootMeanSquaredError &&
+           this->globalClusteringRateMax == sa.globalClusteringRateMax &&
+           this->weightedClusteringRateMax == sa.weightedClusteringRateMax && this->f1ScoreMax == sa.f1ScoreMax &&
+           this->meanAbsoluteErrorMin == sa.meanAbsoluteErrorMin &&
+           this->rootMeanSquaredErrorMin == sa.rootMeanSquaredErrorMin &&
+           this->globalClusteringRateIsBetterThanMax == sa.globalClusteringRateIsBetterThanMax &&
+           this->weightedClusteringRateIsBetterThanMax == sa.weightedClusteringRateIsBetterThanMax &&
+           this->f1ScoreIsBetterThanMax == sa.f1ScoreIsBetterThanMax &&
+           this->meanAbsoluteErrorIsBetterThanMin == sa.meanAbsoluteErrorIsBetterThanMin &&
+           this->rootMeanSquaredErrorIsBetterThanMin == sa.rootMeanSquaredErrorIsBetterThanMin;
 }
 
-bool StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const
-{
-    return !(*this == sa);
-}
+bool StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const { return !(*this == sa); }

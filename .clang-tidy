@@ -1,0 +1,4 @@
+Checks: >
+    *,
+    -llvmlibc-implementation-in-namespace
+WarningsAsErrors: '.*'

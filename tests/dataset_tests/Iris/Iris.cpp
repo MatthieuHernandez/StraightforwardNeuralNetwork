@@ -1,19 +1,17 @@
-#include <stdexcept>
-#include <string>
-#include <fstream>
 #include "Iris.hpp"
-#include <snn/tools/Tools.hpp>
+
+#include <fstream>
 #include <snn/data/Data.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
+#include <snn/tools/Tools.hpp>
+#include <stdexcept>
+#include <string>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
-Iris::Iris(string folderPath)
-{
-    this->loadData(folderPath);
-}
+Iris::Iris(string folderPath) { this->loadData(folderPath); }
 
 void Iris::loadData(string folderPath)
 {
@@ -26,8 +24,7 @@ void Iris::loadData(string folderPath)
     vector2D<string> individuals;
     individuals.reserve(150);
 
-    if (!file.is_open())
-        throw FileOpeningFailedException();
+    if (!file.is_open()) throw FileOpeningFailedException();
 
     while (getline(file, line) && line.size() > 4)
     {
@@ -52,22 +49,21 @@ void Iris::loadData(string folderPath)
 
     for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < 4; j++)
-            inputs[i].push_back(stof(individuals[i][j]));
+        for (int j = 0; j < 4; j++) inputs[i].push_back(stof(individuals[i][j]));
 
-        if (individuals[i][4][8] == 'o') // Iris-setosa
+        if (individuals[i][4][8] == 'o')  // Iris-setosa
         {
             labels[i][0] = 1;
             labels[i][1] = 0;
             labels[i][2] = 0;
         }
-        else if (individuals[i][4][8] == 's') // Iris-versicolor
+        else if (individuals[i][4][8] == 's')  // Iris-versicolor
         {
             labels[i][0] = 0;
             labels[i][1] = 1;
             labels[i][2] = 0;
         }
-        else if (individuals[i][4][8] == 'g') // Iris-virginica
+        else if (individuals[i][4][8] == 'g')  // Iris-virginica
         {
             labels[i][0] = 0;
             labels[i][1] = 0;

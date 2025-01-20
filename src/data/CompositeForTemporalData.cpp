@@ -1,6 +1,7 @@
+#include "CompositeForTemporalData.hpp"
+
 #include <algorithm>
 #include <random>
-#include "CompositeForTemporalData.hpp"
 
 using namespace std;
 using namespace snn;
@@ -34,10 +35,7 @@ void CompositeForTemporalData::shuffle()
     }
 }
 
-void CompositeForTemporalData::unshuffle()
-{
-    this->TemporalComposite::unshuffle();
-}
+void CompositeForTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
 
 bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
 {
@@ -49,10 +47,7 @@ bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) c
     return this->sets[testing].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const
-{
-    return true;
-}
+bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const { return true; }
 
 bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 {
@@ -61,12 +56,11 @@ bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
 
 int CompositeForTemporalData::isValid()
 {
-    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size
-     || (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size
-     || !this->sets[training].needToTrainOnData.empty()
-     || !this->sets[testing].needToTrainOnData.empty()
-     || !this->sets[training].needToEvaluateOnData.empty()
-     || (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
+    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
+        (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size ||
+        !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
+        !this->sets[training].needToEvaluateOnData.empty() ||
+        (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
         return 404;
 
     return this->TemporalComposite::isValid();

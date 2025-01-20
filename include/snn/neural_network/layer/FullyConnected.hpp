@@ -1,15 +1,16 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "SimpleLayer.hpp"
+#include <memory>
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
+#include "SimpleLayer.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {
-    class FullyConnected final : public SimpleLayer<SimpleNeuron>
-    {
+class FullyConnected final : public SimpleLayer<SimpleNeuron>
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -20,15 +21,16 @@ namespace snn::internal
         FullyConnected(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         FullyConnected(const FullyConnected&) = default;
         ~FullyConnected() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
+            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
 
         [[nodiscard]] std::string summary() const override;
-    };
+};
 
-    template <class Archive>
-    void FullyConnected::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<FullyConnected, SimpleLayer>();
-        ar & boost::serialization::base_object<SimpleLayer>(*this);
-    }
+template <class Archive>
+void FullyConnected::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<FullyConnected, SimpleLayer>();
+    ar& boost::serialization::base_object<SimpleLayer>(*this);
 }
+}  // namespace snn::internal

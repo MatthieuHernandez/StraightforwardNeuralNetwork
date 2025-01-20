@@ -3,8 +3,8 @@
 
 namespace snn::internal
 {
-    class NeuralNetworkVisualization
-    {
+class NeuralNetworkVisualization
+{
     private:
         static std::vector<float> getWeights(FilterLayer* filterLayer, int filterNumber);
 
@@ -12,5 +12,5 @@ namespace snn::internal
         static void saveAsBitmap(FilterLayer* filterLayer, const std::string& filePath);
         static void saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs, const std::string& filePath);
         static void saveAsBitmap(std::vector<float> inputs, std::vector<int> shapeOfInput, const std::string& filePath);
-    };
-}
+};
+}  // namespace snn::internal

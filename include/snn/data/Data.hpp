@@ -1,32 +1,32 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Set.hpp"
+
 #include "ProblemComposite.hpp"
+#include "Set.hpp"
 #include "TemporalComposite.hpp"
 
 namespace snn
 {
-    enum class problem
-    {
-        classification,
-        multipleClassification,
-        regression
-    };
+enum class problem
+{
+    classification,
+    multipleClassification,
+    regression
+};
 
-    enum class nature
-    {
-        nonTemporal,
-        sequential,
-        timeSeries,
-    };
+enum class nature
+{
+    nonTemporal,
+    sequential,
+    timeSeries,
+};
 
-    class Data
-    {
+class Data
+{
     private:
         void initialize(std::vector<std::vector<float>>& trainingInputs,
-                        std::vector<std::vector<float>>& trainingLabels,
-                        std::vector<std::vector<float>>& testingInputs,
+                        std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels);
 
         void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
@@ -41,39 +41,27 @@ namespace snn
         std::vector<float> batchedData{};
 
     public:
-        Data(problem typeOfProblem,
-             std::vector<std::vector<float>>& trainingInputs,
-             std::vector<std::vector<float>>& trainingLabels,
-             std::vector<std::vector<float>>& testingInputs,
-             std::vector<std::vector<float>>& testingLabels,
-             nature typeOfTemporal = nature::nonTemporal,
+        Data(problem typeOfProblem, std::vector<std::vector<float>>& trainingInputs,
+             std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
+             std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal = nature::nonTemporal,
              int numberOfRecurrences = 0);
 
-        Data(problem typeOfProblem,
-             std::vector<std::vector<float>>& inputs,
-             std::vector<std::vector<float>>& labels,
-             nature temporal = nature::nonTemporal,
-             int numberOfRecurrences = 0);
+        Data(problem typeOfProblem, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& labels,
+             nature temporal = nature::nonTemporal, int numberOfRecurrences = 0);
 
-        Data(problem typeOfProblem,
-             std::vector<std::vector<std::vector<float>>>& trainingInputs,
+        Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& trainingInputs,
              std::vector<std::vector<float>>& trainingLabels,
              std::vector<std::vector<std::vector<float>>>& testingInputs,
-             std::vector<std::vector<float>>& testingLabels,
-             nature typeOfTemporal,
-             int numberOfRecurrences = 0);
+             std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal, int numberOfRecurrences = 0);
 
-        Data(problem typeOfProblem,
-             std::vector<std::vector<std::vector<float>>>& inputs,
-             std::vector<std::vector<float>>& labels,
-             nature typeOfTemporal,
-             int numberOfRecurrences = 0);
+        Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& inputs,
+             std::vector<std::vector<float>>& labels, nature typeOfTemporal, int numberOfRecurrences = 0);
 
         const problem typeOfProblem;
         const nature typeOfTemporal;
 
-        int sizeOfData{}; // size of one data, equal to size of neural network inputs
-        int numberOfLabels{}; // the number of class, equal to size of neural network outputs
+        int sizeOfData{};      // size of one data, equal to size of neural network inputs
+        int numberOfLabels{};  // the number of class, equal to size of neural network outputs
 
         Set sets[2];
 
@@ -108,5 +96,5 @@ namespace snn
         void setSeparator(float value);
         [[nodiscard]] float getPrecision() const;
         void setPrecision(float value);
-    };
-}
+};
+}  // namespace snn

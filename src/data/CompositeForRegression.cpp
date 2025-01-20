@@ -1,4 +1,5 @@
 #include "CompositeForRegression.hpp"
+
 #include "ExtendedExpection.hpp"
 
 using namespace std;
@@ -10,10 +11,7 @@ CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
 {
 }
 
-int CompositeForRegression::isValid()
-{
-    return this->ProblemComposite::isValid();
-}
+int CompositeForRegression::isValid() { return this->ProblemComposite::isValid(); }
 
 const std::vector<float>& CompositeForRegression::getTestingOutputs(const int index) const
 {

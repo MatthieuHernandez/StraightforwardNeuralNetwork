@@ -1,13 +1,14 @@
 #pragma once
-#include <vector>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
+#include <vector>
+
 #include "../../../tools/Tools.hpp"
 
 namespace snn::internal
 {
-    class CircularData final
-    {
+class CircularData final
+{
     private:
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
@@ -19,8 +20,8 @@ namespace snn::internal
         size_t indexGet = 0;
 
     public:
-        CircularData() = default; // use restricted to Boost library only
-        void initialize(size_t queueSize, size_t dataSize); // should be call after the ctor
+        CircularData() = default;                            // use restricted to Boost library only
+        void initialize(size_t queueSize, size_t dataSize);  // should be call after the ctor
         ~CircularData() = default;
 
         [[nodiscard]] const std::vector<float>* getBack();
@@ -28,13 +29,13 @@ namespace snn::internal
 
         bool operator==(const CircularData& other) const;
         bool operator!=(const CircularData& other) const;
-    };
+};
 
-    template <class Archive>
-    void CircularData::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        ar & queue;
-        ar & indexGet;
-        ar & indexPush;
-    }
+template <class Archive>
+void CircularData::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    ar & queue;
+    ar & indexGet;
+    ar & indexPush;
 }
+}  // namespace snn::internal

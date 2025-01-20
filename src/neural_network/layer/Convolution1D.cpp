@@ -1,5 +1,7 @@
-#include <boost/serialization/export.hpp>
 #include "Convolution1D.hpp"
+
+#include <boost/serialization/export.hpp>
+
 #include "LayerModel.hpp"
 
 using namespace std;
@@ -40,8 +42,7 @@ void Convolution1D::buildKernelIndexes()
     }
 }
 
-inline
-unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+inline unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
 {
     auto layer = make_unique<Convolution1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -55,8 +56,7 @@ int Convolution1D::isValid() const
 {
     for (auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
-            return 203;
+        if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C]) return 203;
     }
     return this->FilterLayer::isValid();
 }
@@ -83,8 +83,7 @@ std::string Convolution1D::summary() const
     return ss.str();
 }
 
-inline
-vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
 {
     vector<float> outputs(this->numberOfKernels);
     vector<float> neuronInputs(this->sizeOfNeuronInputs);
@@ -103,8 +102,7 @@ vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_
     return outputs;
 }
 
-inline
-vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
+inline vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
@@ -123,21 +121,11 @@ vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
-inline
-void Convolution1D::computeTrain(std::vector<float>& inputErrors)
+inline void Convolution1D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (int n = 0; n < this->numberOfFilters; ++n)
-        this->neurons[n].train(inputErrors[n]);
+    for (int n = 0; n < this->numberOfFilters; ++n) this->neurons[n].train(inputErrors[n]);
 }
 
-inline
-bool Convolution1D::operator==(const BaseLayer& layer) const
-{
-    return this->FilterLayer::operator==(layer);
-}
+inline bool Convolution1D::operator==(const BaseLayer& layer) const { return this->FilterLayer::operator==(layer); }
 
-inline
-bool Convolution1D::operator!=(const BaseLayer& layer) const
-{
-    return !(*this == layer);
-}
+inline bool Convolution1D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }

@@ -1,0 +1,44 @@
+name: Unit tests - MSVC Windows
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    steps:
+    - name: Checkout the project
+      uses: actions/checkout@v2
+    - name: Checkout msvc-dev-cmd
+      uses: ilammy/msvc-dev-cmd@v1.4.1
+    - name: CMake
+      run: |
+        mkdir build
+        cd ./build
+        cmake -G"NMake Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release
+    - name: Make
+      run: |
+        cd ./build
+        nmake
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: compiled-tests
+        path: build/tests/
+  
+  run-unit-tests:
+    name: Run unit tests
+    runs-on: windows-latest
+    needs: build
+    steps:
+    - name: Download build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: compiled-tests
+        path: ./build/tests/
+    - name: Run tests
+      run: |
+        ./build/tests/unit_tests/UnitTests --gtest_also_run_disabled_tests

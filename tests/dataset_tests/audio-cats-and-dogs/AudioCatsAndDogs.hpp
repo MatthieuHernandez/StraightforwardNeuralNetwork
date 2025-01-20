@@ -3,10 +3,10 @@
 
 class AudioCatsAndDogs final : public Dataset
 {
-private:
-    void loadData(std::string folderPath) override;
+    private:
+        void loadData(std::string folderPath) override;
 
-public:
-    const int sizeOfOneData;
-    AudioCatsAndDogs(std::string folderPath, int sizeOfOneData);
+    public:
+        const int sizeOfOneData;
+        AudioCatsAndDogs(std::string folderPath, int sizeOfOneData);
 };

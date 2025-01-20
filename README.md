@@ -28,19 +28,24 @@
 
 ## Installation (with *CMake* 3.17.1)
 
-### Linux, UNIX - GCC 13.1.0 or Clang 18.1.3
-* To compile open a command prompt and run `cmake -G"Unix Makefiles" ./..  && make` from the `build` folder.
+* First of all, move to a build folder: `mkdir build && cd ./build`
+* For dataset tests, the datasets must be downloaded: `./resources/ImportDatasets.sh`
 
-* To run the unit tests execute `./tests/unit_tests/UnitTests` from `build` folder.
+### Linux, UNIX - GCC 14.2.0 or Clang 18.1.3
 
-* To run the dataset tests run `./ImportDatasets.sh` and execute `./tests/dataset_tests/DatasetTests` from `build` folder.
+* Use CMake to build: `cmake -G"Unix Makefiles" ./..  && make`
+
+* Run the unit tests: `./build/tests/unit_tests/UnitTests`
+
+* Run the dataset tests: `./tests/dataset_tests/DatasetTests`
 
 ### Windows - MSVC 19.41
-* You can generate a Visual Studio project by running `cmake -G"Visual Studio 17 2022" ./..` from `build` folder.
 
-* To run the unit tests open `./build/tests/unit_tests/UnitTests.vcxproj` in Visual Studio.
+* Use CMake to generate a VS2022 project : `cmake -G"Visual Studio 17 2022" ./..`
 
-* To run the dataset tests run `./build/ImportDatasets.sh` and open `./build/tests/dataset_tests/DatasetTests.vcxproj` in Visual Studio.
+* To run the unit tests open the generated project: `./build/tests/unit_tests/UnitTests.vcxproj`
+
+* To run the dataset tests open the generated project: `./build/tests/dataset_tests/DatasetTests.vcxproj`
 
  ## Use
 Create, train and use a neural network in few lines of code.

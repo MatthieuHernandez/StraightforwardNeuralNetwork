@@ -1,12 +1,12 @@
 #pragma once
-#include "LayerType.hpp"
 #include "../optimizer/LayerOptimizerModel.hpp"
+#include "LayerType.hpp"
 #include "neuron/NeuronModel.hpp"
 
 namespace snn
 {
-    struct LayerModel
-    {
+struct LayerModel
+{
         layerType type;
         int numberOfInputs;
         int numberOfNeurons;
@@ -18,5 +18,5 @@ namespace snn
         int kernelSize;
         std::vector<int> shapeOfInput;
         std::vector<LayerOptimizerModel> optimizers;
-    };
-}
+};
+}  // namespace snn

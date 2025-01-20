@@ -1,18 +1,21 @@
 #pragma once
-#include <memory>
-#include <boost/serialization/export.hpp>
 #include <boost/serialization/access.hpp>
+#include <boost/serialization/export.hpp>
+#include <memory>
+
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
 {
-    class BaseLayer
-    {
+class BaseLayer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version) {}
+        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version)
+        {
+        }
 
     public:
         virtual ~BaseLayer() = default;
@@ -28,7 +31,8 @@ namespace snn::internal
         [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
 
         [[nodiscard]] virtual std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual std::vector<float> outputForTraining(const std::vector<float>& inputs,
+                                                                   bool temporalReset) = 0;
         [[nodiscard]] virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 
@@ -38,5 +42,5 @@ namespace snn::internal
 
         virtual bool operator==(const BaseLayer& layer) const = 0;
         virtual bool operator!=(const BaseLayer& layer) const = 0;
-    };
-}
+};
+}  // namespace snn::internal

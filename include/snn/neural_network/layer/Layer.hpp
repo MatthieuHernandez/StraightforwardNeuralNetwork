@@ -1,24 +1,25 @@
 #pragma once
+#include <boost/serialization/access.hpp>
+#include <boost/serialization/unique_ptr.hpp>
 #include <memory>
 #include <typeinfo>
-#include <boost/serialization/unique_ptr.hpp>
-#include <boost/serialization/access.hpp>
-#include "BaseLayer.hpp"
-#include "LayerModel.hpp"
+
+#include "../optimizer/Dropout.hpp"
+#include "../optimizer/ErrorMultiplier.hpp"
+#include "../optimizer/L1Regularization.hpp"
+#include "../optimizer/L2Regularization.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
 #include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
-#include "../optimizer/Dropout.hpp"
-#include "../optimizer/L1Regularization.hpp"
-#include "../optimizer/L2Regularization.hpp"
-#include "../optimizer/ErrorMultiplier.hpp"
 #include "../optimizer/Softmax.hpp"
+#include "BaseLayer.hpp"
+#include "LayerModel.hpp"
 
 namespace snn::internal
 {
-    template <BaseNeuron N>
-    class Layer : public BaseLayer
-    {
+template <BaseNeuron N>
+class Layer : public BaseLayer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -27,16 +28,18 @@ namespace snn::internal
     protected:
         int numberOfInputs;
 
-        [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) = 0;
+        [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs,
+                                                               bool temporalReset) = 0;
         [[nodiscard]] virtual std::vector<float> computeBackOutput(std::vector<float>& inputErrors) = 0;
         virtual void computeTrain(std::vector<float>& inputErrors) = 0;
 
     public:
-        Layer() = default; // use restricted to Boost library only
+        Layer() = default;  // use restricted to Boost library only
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
+        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
+            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
@@ -60,23 +63,23 @@ namespace snn::internal
 
         bool operator==(const BaseLayer& layer) const override;
         bool operator!=(const BaseLayer& layer) const override;
-    };
+};
 
-    template <BaseNeuron N>
-    template <class Archive>
-    void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<Layer, BaseLayer>();
-        ar & boost::serialization::base_object<BaseLayer>(*this);
-        ar & this->numberOfInputs;
-        ar & this->neurons;
-        ar.template register_type<Dropout>();
-        ar.template register_type<L1Regularization>();
-        ar.template register_type<L2Regularization>();
-        ar.template register_type<ErrorMultiplier>();
-        ar.template register_type<Softmax>();
-        ar & this->optimizers;
-    }
-
-    #include "Layer.tpp"
+template <BaseNeuron N>
+template <class Archive>
+void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<Layer, BaseLayer>();
+    ar& boost::serialization::base_object<BaseLayer>(*this);
+    ar& this->numberOfInputs;
+    ar& this->neurons;
+    ar.template register_type<Dropout>();
+    ar.template register_type<L1Regularization>();
+    ar.template register_type<L2Regularization>();
+    ar.template register_type<ErrorMultiplier>();
+    ar.template register_type<Softmax>();
+    ar& this->optimizers;
 }
+
+#include "Layer.tpp"
+}  // namespace snn::internal

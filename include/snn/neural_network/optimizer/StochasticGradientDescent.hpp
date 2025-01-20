@@ -1,14 +1,14 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
-#include "NeuralNetworkOptimizer.hpp"
+#include <memory>
 
+#include "NeuralNetworkOptimizer.hpp"
 
 namespace snn::internal
 {
-    class StochasticGradientDescent final : public NeuralNetworkOptimizer
-    {
+class StochasticGradientDescent final : public NeuralNetworkOptimizer
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -33,14 +33,14 @@ namespace snn::internal
 
         bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
         bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
-    };
+};
 
-    template <class Archive>
-    void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
-    {
-        boost::serialization::void_cast_register<StochasticGradientDescent, NeuralNetworkOptimizer>();
-        ar & boost::serialization::base_object<NeuralNetworkOptimizer>(*this);
-        ar & this->learningRate;
-        ar & this->momentum;
-    }
+template <class Archive>
+void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<StochasticGradientDescent, NeuralNetworkOptimizer>();
+    ar& boost::serialization::base_object<NeuralNetworkOptimizer>(*this);
+    ar& this->learningRate;
+    ar& this->momentum;
 }
+}  // namespace snn::internal

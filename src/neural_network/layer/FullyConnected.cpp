@@ -1,5 +1,6 @@
-#include <boost/serialization/export.hpp>
 #include "FullyConnected.hpp"
+
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;

@@ -17,16 +17,14 @@ Layer<N>::Layer(const Layer& layer)
     this->neurons = layer.neurons;
 
     this->optimizers.reserve(layer.optimizers.size());
-    for (auto& optimizer : layer.optimizers)
-        this->optimizers.emplace_back(optimizer->clone(this));
+    for (auto& optimizer : layer.optimizers) this->optimizers.emplace_back(optimizer->clone(this));
 }
 
 template <BaseNeuron N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for (auto& optimizer : this->optimizers)
-        optimizer->applyAfterOutputForTesting(output);
+    for (auto& optimizer : this->optimizers) optimizer->applyAfterOutputForTesting(output);
     return output;
 }
 
@@ -34,16 +32,14 @@ template <BaseNeuron N>
 std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for (auto& optimizer : this->optimizers)
-        optimizer->applyAfterOutputForTraining(output, temporalReset);
+    for (auto& optimizer : this->optimizers) optimizer->applyAfterOutputForTraining(output, temporalReset);
     return output;
 }
 
 template <BaseNeuron N>
 std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 {
-    for (auto& optimizer : this->optimizers)
-        optimizer->applyBeforeBackpropagation(inputErrors);
+    for (auto& optimizer : this->optimizers) optimizer->applyBeforeBackpropagation(inputErrors);
     auto error = this->computeBackOutput(inputErrors);
     return error;
 }
@@ -51,24 +47,21 @@ std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 template <BaseNeuron N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
-    for (auto& optimizer : this->optimizers)
-        optimizer->applyBeforeBackpropagation(inputErrors);
+    for (auto& optimizer : this->optimizers) optimizer->applyBeforeBackpropagation(inputErrors);
     this->computeTrain(inputErrors);
 }
 
 template <BaseNeuron N>
 int Layer<N>::isValid() const
 {
-    if (this->getNumberOfNeurons() != (int)this->neurons.size()
-        || this->getNumberOfNeurons() < 1
-        || this->getNumberOfNeurons() > 1000000)
+    if (this->getNumberOfNeurons() != (int)this->neurons.size() || this->getNumberOfNeurons() < 1 ||
+        this->getNumberOfNeurons() > 1000000)
         return 201;
 
     for (auto& neuron : this->neurons)
     {
         int err = neuron.isValid();
-        if (err != 0)
-            return err;
+        if (err != 0) return err;
     }
     return 0;
 }
@@ -80,23 +73,21 @@ void* Layer<N>::getNeuron(int index)
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfAbsNeuronWeights() const 
+float Layer<N>::getAverageOfAbsNeuronWeights() const
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
-        for (auto w : n.getWeights())
-            sum += std::abs(w);
+        for (auto w : n.getWeights()) sum += std::abs(w);
     sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfSquareNeuronWeights() const 
+float Layer<N>::getAverageOfSquareNeuronWeights() const
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
-        for (auto w : n.getWeights())
-            sum += w*w;
+        for (auto w : n.getWeights()) sum += w * w;
     sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
@@ -131,18 +122,15 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
     {
         const auto& l = dynamic_cast<const Layer&>(layer);
 
-        return typeid(*this).hash_code() == typeid(layer).hash_code()
-            && this->numberOfInputs == l.numberOfInputs
-            && this->neurons == l.neurons
-            && [this, &l]()
+        return typeid(*this).hash_code() == typeid(layer).hash_code() && this->numberOfInputs == l.numberOfInputs &&
+               this->neurons == l.neurons && [this, &l]()
+        {
+            for (size_t o = 0; o < this->optimizers.size(); ++o)
             {
-                for (size_t o = 0; o < this->optimizers.size(); ++o)
-                {
-                    if (*this->optimizers[o] != *l.optimizers[o])
-                        return false;
-                }
-                return true;
-            }();
+                if (*this->optimizers[o] != *l.optimizers[o]) return false;
+            }
+            return true;
+        }();
     }
     catch (std::bad_cast&)
     {

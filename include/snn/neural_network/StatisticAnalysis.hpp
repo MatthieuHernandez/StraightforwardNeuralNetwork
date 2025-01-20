@@ -1,21 +1,18 @@
 #pragma once
-#include <vector>
 #include <boost/serialization/access.hpp>
+#include <vector>
 
 namespace snn::internal
 {
-    struct binaryClassification
-    {
+struct binaryClassification
+{
         float truePositive{};
         float trueNegative{};
         float falsePositive{};
         float falseNegative{};
         float totalError{};
 
-        bool operator==(const binaryClassification&) const
-        {
-            return true;
-        };
+        bool operator==(const binaryClassification&) const { return true; };
 
         template <typename Archive>
         void serialize(Archive& ar, unsigned)
@@ -25,10 +22,10 @@ namespace snn::internal
             ar & falsePositive;
             ar & falseNegative;
         }
-    };
+};
 
-    class StatisticAnalysis
-    {
+class StatisticAnalysis
+{
     private:
         friend class boost::serialization::access;
         template <class Archive>
@@ -65,15 +62,11 @@ namespace snn::internal
 
         void setResultsAsNan();
 
-        void evaluateOnceForRegression(const std::vector<float>& outputs, 
-                                       const std::vector<float>& desiredOutputs,
+        void evaluateOnceForRegression(const std::vector<float>& outputs, const std::vector<float>& desiredOutputs,
                                        float precision);
         void evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
-                                                   const std::vector<float>& desiredOutputs,
-                                                   float separator);
-        void evaluateOnceForClassification(const std::vector<float>& outputs,
-                                           int classNumber,
-                                           float separator);
+                                                   const std::vector<float>& desiredOutputs, float separator);
+        void evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber, float separator);
 
         void startTesting();
         void stopTesting();
@@ -99,28 +92,28 @@ namespace snn::internal
 
         bool operator==(const StatisticAnalysis& sa) const;
         bool operator!=(const StatisticAnalysis& sa) const;
-    };
+};
 
-    template <class Archive>
-    void StatisticAnalysis::serialize(Archive& ar, unsigned)
-    {
-        ar & this->clusters;
-        ar & this->numberOfDataWellClassified;
-        ar & this->numberOfDataMisclassified;
-        ar & this->globalClusteringRate;
-        ar & this->weightedClusteringRate;
-        ar & this->f1Score;
-        ar & this->meanAbsoluteError;
-        ar & this->rootMeanSquaredError;
-        ar & this->globalClusteringRateMax;
-        ar & this->weightedClusteringRateMax;
-        ar & this->f1ScoreMax;
-        ar & this->meanAbsoluteErrorMin;
-        ar & this->rootMeanSquaredErrorMin;
-        ar & this->globalClusteringRateIsBetterThanMax;
-        ar & this->weightedClusteringRateIsBetterThanMax;
-        ar & this->f1ScoreIsBetterThanMax;
-        ar & this->meanAbsoluteErrorIsBetterThanMin;
-        ar & this->rootMeanSquaredErrorIsBetterThanMin;
-    }
+template <class Archive>
+void StatisticAnalysis::serialize(Archive& ar, unsigned)
+{
+    ar& this->clusters;
+    ar& this->numberOfDataWellClassified;
+    ar& this->numberOfDataMisclassified;
+    ar& this->globalClusteringRate;
+    ar& this->weightedClusteringRate;
+    ar& this->f1Score;
+    ar& this->meanAbsoluteError;
+    ar& this->rootMeanSquaredError;
+    ar& this->globalClusteringRateMax;
+    ar& this->weightedClusteringRateMax;
+    ar& this->f1ScoreMax;
+    ar& this->meanAbsoluteErrorMin;
+    ar& this->rootMeanSquaredErrorMin;
+    ar& this->globalClusteringRateIsBetterThanMax;
+    ar& this->weightedClusteringRateIsBetterThanMax;
+    ar& this->f1ScoreIsBetterThanMax;
+    ar& this->meanAbsoluteErrorIsBetterThanMin;
+    ar& this->rootMeanSquaredErrorIsBetterThanMin;
 }
+}  // namespace snn::internal

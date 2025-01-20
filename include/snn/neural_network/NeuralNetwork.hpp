@@ -1,8 +1,9 @@
 #pragma once
-#include <memory>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/version.hpp>
+#include <memory>
+
 #include "StatisticAnalysis.hpp"
 #include "layer/BaseLayer.hpp"
 #include "layer/Convolution1D.hpp"
@@ -20,15 +21,15 @@
 
 namespace snn::internal
 {
-    class NeuralNetwork : public StatisticAnalysis
-    {
+class NeuralNetwork : public StatisticAnalysis
+{
     private:
         bool outputNan = false;
         int64_t numberOfTraining = 0;
 
-        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset);
+        void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
+                                      bool temporalReset);
         std::vector<float> calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const;
-
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -36,25 +37,21 @@ namespace snn::internal
 
     protected:
         std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
-        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset); // Because Dropout is different during training and inference
+        std::vector<float> outputForTraining(
+            const std::vector<float>& inputs,
+            bool temporalReset);  // Because Dropout is different during training and inference
 
-        void evaluateOnceForRegression(const std::vector<float>& inputs,
-                                       const std::vector<float>& desired,
-                                       float precision,
-                                       bool temporalReset);
-        void evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
-                                                   const std::vector<float>& desired,
-                                                   float separator,
-                                                   bool temporalReset);
-        void evaluateOnceForClassification(const std::vector<float>& inputs,
-                                           int classNumber,
-                                           const float separator,
+        void evaluateOnceForRegression(const std::vector<float>& inputs, const std::vector<float>& desired,
+                                       float precision, bool temporalReset);
+        void evaluateOnceForMultipleClassification(const std::vector<float>& inputs, const std::vector<float>& desired,
+                                                   float separator, bool temporalReset);
+        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, const float separator,
                                            bool temporalReset);
 
         vector2D<float> getLayerOutputs(const std::vector<float>& inputs);
 
     public:
-        NeuralNetwork() = default; // use restricted to Boost library only
+        NeuralNetwork() = default;  // use restricted to Boost library only
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
         virtual ~NeuralNetwork() = default;
@@ -77,28 +74,29 @@ namespace snn::internal
 
         bool operator==(const NeuralNetwork& neuralNetwork) const;
         bool operator!=(const NeuralNetwork& neuralNetwork) const;
-    };
+};
 
-    template <class Archive>
-    void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+template <class Archive>
+void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+{
+    boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
+    ar& boost::serialization::base_object<StatisticAnalysis>(*this);
+    ar.template register_type<FullyConnected>();
+    ar.template register_type<Recurrence>();
+    ar.template register_type<GruLayer>();
+    ar.template register_type<Convolution1D>();
+    ar.template register_type<Convolution2D>();
+    ar.template register_type<LocallyConnected1D>();
+    ar.template register_type<LocallyConnected2D>();
+    ar.template register_type<StochasticGradientDescent>();
+    ar.template register_type<MaxPooling1D>();
+    ar.template register_type<MaxPooling2D>();
+    if (version >= 1)
     {
-        boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
-        ar & boost::serialization::base_object<StatisticAnalysis>(*this);
-        ar.template register_type<FullyConnected>();
-        ar.template register_type<Recurrence>();
-        ar.template register_type<GruLayer>();
-        ar.template register_type<Convolution1D>();
-        ar.template register_type<Convolution2D>();
-        ar.template register_type<LocallyConnected1D>();
-        ar.template register_type<LocallyConnected2D>();
-        ar.template register_type<StochasticGradientDescent>();
-        ar.template register_type<MaxPooling1D>();
-        ar.template register_type<MaxPooling2D>();
-        if (version >= 1) {
-            ar & this->numberOfTraining;
-        }
-        ar & this->layers;
-        ar & this->optimizer;
+        ar& this->numberOfTraining;
     }
+    ar& this->layers;
+    ar& this->optimizer;
 }
+}  // namespace snn::internal
 BOOST_CLASS_VERSION(snn::internal::NeuralNetwork, 1)

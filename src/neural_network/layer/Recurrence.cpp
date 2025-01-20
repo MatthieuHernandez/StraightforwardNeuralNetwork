@@ -1,12 +1,13 @@
-#include <boost/serialization/export.hpp>
 #include "Recurrence.hpp"
+
+#include <boost/serialization/export.hpp>
 
 using namespace std;
 using namespace snn;
 using namespace internal;
 
 Recurrence::Recurrence(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-     : SimpleLayer(model, optimizer)
+    : SimpleLayer(model, optimizer)
 {
 }
 

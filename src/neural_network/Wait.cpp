@@ -1,16 +1,15 @@
+#include "Wait.hpp"
+
 #include <algorithm>
 #include <stdexcept>
-#include "Wait.hpp"
 
 using namespace std;
 using namespace chrono;
 using namespace snn;
 
-
 Wait& Wait::operator||(const Wait& wait)
 {
-    if (op == waitOperator::andOp)
-        throw runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::andOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
 
     this->op = waitOperator::orOp;
 
@@ -36,8 +35,7 @@ Wait& Wait::operator||(const Wait& wait)
 
 Wait& Wait::operator&&(const Wait& wait)
 {
-    if (op == waitOperator::orOp)
-        throw runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::orOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
 
     this->op = waitOperator::andOp;
 
@@ -64,7 +62,8 @@ void Wait::startClock()
 
 bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const
 {
-    const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
+    const auto currentDuration =
+        static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
 
     const bool isValidEpochs = currentEpochs > this->epochs && currentEpochs > 0;
     const bool isValidAccuracy = CurrentAccuracy >= this->accuracy && CurrentAccuracy > 0;
@@ -73,16 +72,12 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
 
     if (this->op == waitOperator::andOp)
     {
-        if ((isValidEpochs || this->epochs < 0)
-            && (isValidAccuracy || this->accuracy < 0)
-            && (isValidMae || this->mae < 0)
-            && (isValidDuration || this->duration < 0))
+        if ((isValidEpochs || this->epochs < 0) && (isValidAccuracy || this->accuracy < 0) &&
+            (isValidMae || this->mae < 0) && (isValidDuration || this->duration < 0))
             return true;
     }
-    else if ((isValidEpochs && this->epochs >= 0)
-        || (isValidAccuracy && this->accuracy >= 0)
-        || (isValidMae && this->mae >= 0)
-        || (isValidDuration && this->duration >= 0))
+    else if ((isValidEpochs && this->epochs >= 0) || (isValidAccuracy && this->accuracy >= 0) ||
+             (isValidMae && this->mae >= 0) || (isValidDuration && this->duration >= 0))
         return true;
     return false;
 }

@@ -41,7 +41,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     public:
         StraightforwardNeuralNetwork() = default;  // use restricted to Boost library only
@@ -124,7 +124,7 @@ void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, s
 }
 
 template <class Archive>
-void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
     ar& boost::serialization::base_object<NeuralNetwork>(*this);

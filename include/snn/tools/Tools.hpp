@@ -101,9 +101,13 @@ constexpr void log([[maybe_unused]] Targs&&... messages)
     {
         (std::cout << ... << messages);
         if constexpr (endLine)
+        {
             std::cout << std::endl;
+        }
         else
+        {
             std::cout << std::flush;
+        }
     }
 }
 
@@ -119,13 +123,21 @@ auto toConstSizeString(float value, size_t length) -> std::string
 {
     std::string str;
     if constexpr (T == 0)
+    {
         str = std::format("{:.0f}", value);
+    }
     else if constexpr (T == 2)
+    {
         str = std::format("{:.2f}", value);
+    }
     else if constexpr (T == 4)
+    {
         str = std::format("{:.4f}", value);
+    }
     else
+    {
         throw std::exception();
+    }
 
     while (str.length() < length) str = " " + str;
     return str;

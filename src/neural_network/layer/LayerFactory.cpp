@@ -131,7 +131,9 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 return make_unique<MaxPooling2D>(model);
             }
             if (shapeOfInput.size() > 3)
+            {
                 throw InvalidArchitectureException("Input with 3 dimensions or higher is not managed.");
+            }
             break;
 
         case locallyConnected:
@@ -174,7 +176,9 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 return make_unique<LocallyConnected2D>(model, optimizer);
             }
             if (shapeOfInput.size() > 3)
+            {
                 throw InvalidArchitectureException("Input with 3 dimensions or higher is not managed.");
+            }
             break;
 
         case convolution:
@@ -217,7 +221,9 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 return make_unique<Convolution2D>(model, optimizer);
             }
             if (shapeOfInput.size() > 3)
+            {
                 throw InvalidArchitectureException("Input with 3 dimensions or higher is not managed.");
+            }
             break;
 
         case input:
@@ -235,7 +241,9 @@ void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerMode
     if (models.size() > 1000) throw InvalidArchitectureException("Too much layers.");
 
     if (models.empty() || models[0].type != input)
+    {
         throw InvalidArchitectureException("First LayerModel must be a Input type LayerModel.");
+    }
 
     if (models.size() < 2) throw InvalidArchitectureException("Neural Network must have at least 1 layer.");
 

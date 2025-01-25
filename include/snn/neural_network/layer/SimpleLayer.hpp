@@ -16,7 +16,7 @@ class SimpleLayer : public Layer<N>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) final;
@@ -39,7 +39,7 @@ class SimpleLayer : public Layer<N>
 
 template <BaseNeuron N>
 template <class Archive>
-void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
     ar& boost::serialization::base_object<Layer<N>>(*this);
@@ -51,5 +51,5 @@ std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector
 template <>
 std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
 
-#include "SimpleLayer.tpp"
 }  // namespace snn::internal
+#include "SimpleLayer.tpp"

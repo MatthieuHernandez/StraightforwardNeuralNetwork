@@ -40,9 +40,13 @@ inline void Softmax::computeSoftmax(std::vector<float>& outputs)
     {
         const auto value = exp(output) / sumExp;
         if (fpclassify(value) != FP_NORMAL && fpclassify(value) != FP_ZERO)
+        {
             output = 0;
+        }
         else
+        {
             output = value;
+        }
     }
 }
 

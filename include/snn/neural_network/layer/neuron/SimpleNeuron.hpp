@@ -12,7 +12,7 @@ class SimpleNeuron final : public Neuron
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     public:
         SimpleNeuron() = default;  // use restricted to Boost library only
@@ -32,7 +32,7 @@ class SimpleNeuron final : public Neuron
 };
 
 template <class Archive>
-void SimpleNeuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void SimpleNeuron::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
     ar& boost::serialization::base_object<Neuron>(*this);

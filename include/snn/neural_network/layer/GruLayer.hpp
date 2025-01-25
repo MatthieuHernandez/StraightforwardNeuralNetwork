@@ -14,7 +14,7 @@ class GruLayer final : public SimpleLayer<GatedRecurrentUnit>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     public:
         GruLayer() = default;  // use restricted to Boost library only
@@ -28,7 +28,7 @@ class GruLayer final : public SimpleLayer<GatedRecurrentUnit>
 };
 
 template <class Archive>
-void GruLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void GruLayer::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<GruLayer, SimpleLayer>();
     ar& boost::serialization::base_object<SimpleLayer>(*this);

@@ -13,7 +13,7 @@ class RecurrentNeuron final : public Neuron
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         float lastOutput = 0;
         float previousOutput = 0;
@@ -39,7 +39,7 @@ class RecurrentNeuron final : public Neuron
 };
 
 template <class Archive>
-void RecurrentNeuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void RecurrentNeuron::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
     ar& boost::serialization::base_object<Neuron>(*this);

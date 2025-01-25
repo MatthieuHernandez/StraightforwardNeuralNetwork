@@ -2,7 +2,6 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 #include <memory>
-#include <typeinfo>
 
 #include "../optimizer/Dropout.hpp"
 #include "../optimizer/ErrorMultiplier.hpp"
@@ -23,7 +22,7 @@ class Layer : public BaseLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         int numberOfInputs;
@@ -67,7 +66,7 @@ class Layer : public BaseLayer
 
 template <BaseNeuron N>
 template <class Archive>
-void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Layer, BaseLayer>();
     ar& boost::serialization::base_object<BaseLayer>(*this);
@@ -81,5 +80,5 @@ void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
     ar& this->optimizers;
 }
 
-#include "Layer.tpp"
 }  // namespace snn::internal
+#include "Layer.tpp"

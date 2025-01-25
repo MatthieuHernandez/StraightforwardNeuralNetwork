@@ -70,7 +70,9 @@ void Iris::loadData(string folderPath)
             labels[i][2] = 1;
         }
         else
+        {
             throw runtime_error("Cannot load iris dataset");
+        }
     }
     this->data = make_unique<Data>(problem::classification, inputs, labels);
 }

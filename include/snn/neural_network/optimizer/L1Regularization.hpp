@@ -13,7 +13,7 @@ class L1Regularization final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         float value;
 
@@ -39,7 +39,7 @@ class L1Regularization final : public LayerOptimizer
 };
 
 template <class Archive>
-void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
     ar& boost::serialization::base_object<LayerOptimizer>(*this);

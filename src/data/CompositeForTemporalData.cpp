@@ -61,7 +61,9 @@ auto CompositeForTemporalData::isValid() const -> ErrorType
         !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
         !this->sets[training].needToEvaluateOnData.empty() ||
         (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
+    {
         return ErrorType::compositeForTemporalDataEmpty;
+    }
 
     return this->TemporalComposite::isValid();
 }

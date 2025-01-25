@@ -13,7 +13,7 @@ class LocallyConnected1D final : public FilterLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> override;
         [[nodiscard]] auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
@@ -37,7 +37,7 @@ class LocallyConnected1D final : public FilterLayer
 };
 
 template <class Archive>
-void LocallyConnected1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void LocallyConnected1D::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<LocallyConnected1D, FilterLayer>();
     ar& boost::serialization::base_object<FilterLayer>(*this);

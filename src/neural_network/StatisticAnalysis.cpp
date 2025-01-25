@@ -105,9 +105,13 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
         clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
+    {
         numberOfDataWellClassified++;
+    }
     else
+    {
         numberOfDataMisclassified++;
+    }
 }
 
 void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<float>& outputs,
@@ -138,9 +142,13 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
         clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
+    {
         numberOfDataWellClassified++;
+    }
     else
+    {
         numberOfDataMisclassified++;
+    }
 }
 
 void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& outputs, int classNumber,
@@ -184,9 +192,13 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         }
     }
     if (maxOutputIndex == classNumber)
+    {
         numberOfDataWellClassified++;
+    }
     else
+    {
         numberOfDataMisclassified++;
+    }
 }
 
 auto StatisticAnalysis::computeGlobalClusteringRate() const -> float

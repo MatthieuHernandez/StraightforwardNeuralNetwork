@@ -13,7 +13,7 @@ class Dropout final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         float value;
         float reverseValue;
@@ -40,7 +40,7 @@ class Dropout final : public LayerOptimizer
 };
 
 template <class Archive>
-void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Dropout::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
     ar& boost::serialization::base_object<LayerOptimizer>(*this);

@@ -80,7 +80,9 @@ auto NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool tem
     for (size_t l = 1; l < this->layers.size(); ++l) outputs = layers[l]->outputForTraining(outputs, temporalReset);
 
     if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    {
         this->outputNan = true;
+    }
 
     return outputs;
 }
@@ -103,9 +105,13 @@ inline auto NeuralNetwork::calculateError(const vector<float>& outputs, const ve
     for (size_t n = 0; n < errors.size(); ++n)
     {
         if (fpclassify(desired[n]) != FP_NORMAL && fpclassify(desired[n]) != FP_ZERO)
+        {
             errors[n] = 0.0F;
+        }
         else
+        {
             errors[n] = 2.0F * (desired[n] - outputs[n]);
+        }
     }
     return errors;
 }

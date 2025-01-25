@@ -39,9 +39,13 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr
             inputData.back().push_back(rand);
         }
         if (inputData[i][0] > 0)
+        {
             expectedOutputs.push_back({1.0F});
+        }
         else
+        {
             expectedOutputs.push_back({0.0F});
+        }
     }
     unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(0.3F);

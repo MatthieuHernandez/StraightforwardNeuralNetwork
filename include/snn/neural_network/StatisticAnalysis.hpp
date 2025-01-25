@@ -29,7 +29,7 @@ class StatisticAnalysis
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         std::vector<binaryClassification> clusters;
         float numberOfDataWellClassified;
@@ -95,7 +95,7 @@ class StatisticAnalysis
 };
 
 template <class Archive>
-void StatisticAnalysis::serialize(Archive& ar, unsigned)
+void StatisticAnalysis::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     ar& this->clusters;
     ar& this->numberOfDataWellClassified;

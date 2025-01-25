@@ -14,21 +14,33 @@ auto Wait::operator||(const Wait& wait) -> Wait&
     this->op = waitOperator::orOp;
 
     if (this->epochs > 0 && wait.epochs > 0)
+    {
         this->epochs = min(this->epochs, wait.epochs);
+    }
     else
+    {
         this->epochs = max(this->epochs, wait.epochs);
+    }
 
     if (this->accuracy > 0 && wait.accuracy > 0)
+    {
         this->accuracy = min(this->accuracy, wait.accuracy);
+    }
     else
+    {
         this->accuracy = max(this->accuracy, wait.accuracy);
+    }
 
     this->mae = max(this->mae, wait.mae);
 
     if (this->duration > 0 && wait.duration > 0)
+    {
         this->duration = min(this->duration, wait.duration);
+    }
     else
+    {
         this->duration = max(this->duration, wait.duration);
+    }
 
     return *this;
 }
@@ -43,9 +55,13 @@ auto Wait::operator&&(const Wait& wait) -> Wait&
     this->accuracy = max(this->accuracy, wait.accuracy);
 
     if (this->mae > 0 && wait.duration > 0)
+    {
         this->mae = min(this->mae, wait.mae);
+    }
     else
+    {
         this->mae = max(this->mae, wait.mae);
+    }
 
     this->mae = min(this->mae, wait.mae);
     this->duration = max(this->duration, wait.duration);
@@ -74,11 +90,15 @@ auto Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
     {
         if ((isValidEpochs || this->epochs < 0) && (isValidAccuracy || this->accuracy < 0) &&
             (isValidMae || this->mae < 0) && (isValidDuration || this->duration < 0))
+        {
             return true;
+        }
     }
     else if ((isValidEpochs && this->epochs >= 0) || (isValidAccuracy && this->accuracy >= 0) ||
              (isValidMae && this->mae >= 0) || (isValidDuration && this->duration >= 0))
+    {
         return true;
+    }
     return false;
 }
 

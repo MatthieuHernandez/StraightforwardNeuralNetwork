@@ -12,7 +12,7 @@ class LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         const BaseLayer* layer;
@@ -36,7 +36,7 @@ class LayerOptimizer
 };
 
 template <class Archive>
-void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     ar& this->layer;
 }

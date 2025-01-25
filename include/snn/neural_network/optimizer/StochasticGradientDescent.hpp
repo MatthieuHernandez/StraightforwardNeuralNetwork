@@ -12,7 +12,7 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     public:
         float learningRate{};
@@ -36,7 +36,7 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
 };
 
 template <class Archive>
-void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<StochasticGradientDescent, NeuralNetworkOptimizer>();
     ar& boost::serialization::base_object<NeuralNetworkOptimizer>(*this);

@@ -18,7 +18,7 @@ class Neuron
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         int numberOfInputs;
@@ -60,7 +60,7 @@ class Neuron
 };
 
 template <class Archive>
-void Neuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Neuron::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     ar.template register_type<StochasticGradientDescent>();
     ar& this->optimizer;

@@ -50,7 +50,9 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
         labels.push_back(labelsTemp);
 
         if (!file.eof())
+        {
             labels.back()[c] = 1.0;
+        }
         else
         {
             labels.resize(labels.size() - 1);
@@ -64,11 +66,17 @@ void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<floa
             c = static_cast<char>(file.get());
             // imageTemp[j] = c;
             if (j < 1024)
+            {
                 imageTemp[j * 3] = c;
+            }
             else if (j < 2048)
+            {
                 imageTemp[(j - 1024) * 3 + 1] = c;
+            }
             else
+            {
                 imageTemp[(j - 2048) * 3 + 2] = c;
+            }
         }
 
         images.push_back(imageTemp);

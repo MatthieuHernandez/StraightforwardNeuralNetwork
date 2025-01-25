@@ -43,9 +43,13 @@ void MaxPooling1D::buildKernelIndexes()
             const int inputIndex = inputIndexX + c;
             const int kernelIndex = x;
             if (inputIndex < this->numberOfInputs)
+            {
                 this->kernelIndexes[k][kernelIndex] = inputIndex;
+            }
             else
+            {
                 this->kernelIndexes[k][kernelIndex] = -1;
+            }
         }
     }
 }
@@ -94,9 +98,14 @@ inline auto MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unu
         for (int i = 0; i < this->sizeOfNeuronInputs; ++i)
         {
             const auto& index = this->kernelIndexes[k][i];
-            if (index >= 0) [[likely]]
+            if (index >= 0)
+            {
+                [[likely]]
                 if (this->maxValueIndexes[k] == -1 || inputs[index] >= inputs[this->maxValueIndexes[k]])
+                {
                     this->maxValueIndexes[k] = index;
+                }
+            }
         }
         outputs[k] = inputs[this->maxValueIndexes[k]];
     }

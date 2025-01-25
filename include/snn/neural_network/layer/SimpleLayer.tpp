@@ -1,4 +1,8 @@
+#pragma once
+#include "SimpleLayer.hpp"
 
+namespace snn::internal
+{
 template <BaseNeuron N>
 SimpleLayer<N>::SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer<N>(model, optimizer)
@@ -79,3 +83,4 @@ auto SimpleLayer<N>::operator!=(const BaseLayer& layer) const -> bool
 {
     return !(*this == layer);
 }
+}  // namespace snn::internal

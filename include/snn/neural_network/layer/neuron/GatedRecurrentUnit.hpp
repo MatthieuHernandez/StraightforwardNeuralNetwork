@@ -12,7 +12,7 @@ class GatedRecurrentUnit final
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
         friend class RecurrentNeuron;
 
@@ -55,7 +55,7 @@ class GatedRecurrentUnit final
 };
 
 template <class Archive>
-void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     ar& this->numberOfInputs;
     ar& this->previousOutput;

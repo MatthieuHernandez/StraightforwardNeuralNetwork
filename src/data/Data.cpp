@@ -49,7 +49,9 @@ Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& trainingInputs,
       typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
+    {
         throw runtime_error("Vector 3D type inputs are only for sequential data.");
+    }
 
     this->flatten(training, trainingInputs);
     this->flatten(testing, testingInputs);
@@ -64,7 +66,9 @@ Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& inputs, vector<
       typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
+    {
         throw runtime_error("Vector 3D type inputs are only for sequential data.");
+    }
 
     this->flatten(inputs);
 
@@ -88,7 +92,9 @@ void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float
 
     this->sets[training].shuffledIndexes.resize(this->sets[training].size);
     for (int i = 0; i < static_cast<int>(this->sets[training].shuffledIndexes.size()); i++)
+    {
         this->sets[training].shuffledIndexes[i] = i;
+    }
 
     switch (this->typeOfProblem)
     {
@@ -338,31 +344,47 @@ auto Data::getLabel(set set, const int index) const -> int
 void Data::setPrecision(const float value)
 {
     if (this->typeOfProblem == problem::regression)
+    {
         this->precision = value;
+    }
     else
+    {
         throw runtime_error("Precision is only for regression problems.");
+    }
 }
 
 auto Data::getPrecision() const -> float
 {
     if (this->typeOfProblem == problem::regression)
+    {
         return this->precision;
+    }
     else
+    {
         throw runtime_error("Precision is only for regression problems.");
+    }
 }
 
 void Data::setSeparator(const float value)
 {
     if (this->typeOfProblem == problem::classification || this->typeOfProblem == problem::multipleClassification)
+    {
         this->separator = value;
+    }
     else
+    {
         throw runtime_error("Separator is only for classification and multiple classification problems.");
+    }
 }
 
 auto Data::getSeparator() const -> float
 {
     if (this->typeOfProblem == problem::classification || this->typeOfProblem == problem::multipleClassification)
+    {
         return this->separator;
+    }
     else
+    {
         throw runtime_error("Separator is only for classification and multiple classification problems.");
+    }
 }

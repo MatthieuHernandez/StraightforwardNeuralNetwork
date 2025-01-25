@@ -106,12 +106,16 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
             }
 
             if (data.needToLearnOnTrainingData(this->index))
+            {
                 this->trainOnce(data.getTrainingData(this->index, batchSize),
                                 data.getTrainingOutputs(this->index, batchSize),
                                 data.isFirstTrainingDataOfTemporalSequence(this->index));
+            }
             else
+            {
                 this->outputForTraining(data.getTrainingData(this->index, batchSize),
                                         data.isFirstTrainingDataOfTemporalSequence(this->index));
+            }
             this->logInProgress<minimal>(wait, data, training);
         }
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0) this->evaluate(data, wait);
@@ -139,9 +143,13 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait& wait)
         }
 
         if (data.needToEvaluateOnTestingData(this->index))
+        {
             this->evaluateOnce(data);
+        }
         else
+        {
             this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
+        }
         this->logInProgress<minimal>(wait, data, testing);
     }
     this->stopTesting();
@@ -229,9 +237,13 @@ auto StraightforwardNeuralNetwork::isValid() const -> ErrorType { return this->N
 void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) const
 {
     if (data.numberOfLabels != this->getNumberOfOutputs() || data.sizeOfData != this->getNumberOfInputs())
+    {
         throw runtime_error("Data has not the same format as the neural network");
+    }
     if (batchSize != 1 && data.typeOfTemporal != nature::nonTemporal)
+    {
         throw runtime_error("Non temporal data cannot have batch size");
+    }
     if (batchSize < 1) throw runtime_error("Wrong batch size");
     if (batchSize > data.sets[training].size) throw runtime_error("Batch size is too large");
 }
@@ -239,15 +251,19 @@ void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) co
 void StraightforwardNeuralNetwork::saveAs(const string filePath)
 {
     if (!this->isIdle)
+    {
         throw runtime_error(
             "Neural network cannot be saved during training, stop training before saving or use auto save");
+    }
     saveSync(filePath);
 }
 
 void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(string filePath)
 {
     if (!this->isIdle)
+    {
         throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    }
     for (size_t l = 0; l < this->layers.size(); ++l)
     {
         const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
@@ -264,7 +280,9 @@ void StraightforwardNeuralNetwork::saveData2DAsBitmap(string filePath, const Dat
 void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(string filePath, const Data& data, int dataIndex)
 {
     if (!this->isIdle)
+    {
         throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    }
 
     auto outputs = this->getLayerOutputs(data.getTestingData(dataIndex));
 

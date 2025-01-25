@@ -30,6 +30,8 @@ auto multipleClassificationExample() -> int
 
     if (accuracy == 100 && output[0] < separator && output[1] > separator && output[2] < separator &&
         neuralNetwork.isValid() == snn::ErrorType::noError)
+    {
         return EXIT_SUCCESS;  // the neural network has learned
+    }
     return EXIT_FAILURE;
 }

@@ -125,11 +125,17 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
         {
             bool isCat;
             if (fileName.find("cat") != std::string::npos)
+            {
                 isCat = true;
+            }
             else if (fileName.find("dog") != std::string::npos)
+            {
                 isCat = false;
+            }
             else
+            {
                 throw runtime_error("Wrong file name: " + fileName);
+            }
 
             AudioFile<float> audioFile;
             audioFile.load(folderPath + fileName);
@@ -153,9 +159,13 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
                     dataSound.back().reserve(this->sizeOfOneData);
 
                     if (isCat)
+                    {
                         labels[i].push_back({1, 0});
+                    }
                     else
+                    {
                         labels[i].push_back({0, 1});
+                    }
                 }
                 const float sample = audioFile.samples[channel][j];
                 dataSound.back().push_back(sample);

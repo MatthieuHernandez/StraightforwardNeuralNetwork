@@ -13,7 +13,7 @@ class FilterLayer : public Layer<SimpleNeuron>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         int numberOfFilters;
@@ -44,7 +44,7 @@ class FilterLayer : public Layer<SimpleNeuron>
 };
 
 template <class Archive>
-void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<FilterLayer, Layer>();
     ar& boost::serialization::base_object<Layer>(*this);

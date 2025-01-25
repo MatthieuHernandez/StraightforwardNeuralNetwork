@@ -49,7 +49,9 @@ auto Mnist::readImages(string filePath, int size) -> vector2D<float>
                 j++;
             }
             else
+            {
                 shift++;
+            }
         }
         if (images.back().size() != sizeOfData) images.resize(images.size() - 1);
     }
@@ -81,7 +83,9 @@ auto Mnist::readLabels(string filePath, int size) -> vector2D<float>
             }
         }
         else
+        {
             shift++;
+        }
     }
     file.close();
     return labels;

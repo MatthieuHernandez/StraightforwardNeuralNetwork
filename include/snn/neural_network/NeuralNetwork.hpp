@@ -34,7 +34,7 @@ class NeuralNetwork : public StatisticAnalysis
 
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& ar, uint32_t version);
 
     protected:
         auto output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>;
@@ -81,7 +81,7 @@ class NeuralNetwork : public StatisticAnalysis
 };
 
 template <class Archive>
-void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
     ar& boost::serialization::base_object<StatisticAnalysis>(*this);

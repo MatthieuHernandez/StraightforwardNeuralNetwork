@@ -263,9 +263,13 @@ template <class T>
 auto AudioFile<T>::getNumSamplesPerChannel() const -> int
 {
     if (samples.size() > 0)
+    {
         return (int)samples[0].size();
+    }
     else
+    {
         return 0;
+    }
 }
 
 //=============================================================
@@ -521,8 +525,10 @@ auto AudioFile<T>::decodeWaveFile(std::vector<uint8_t>& fileData) -> bool
                 sampleAsInt =
                     (fileData[sampleIndex + 2] << 16) | (fileData[sampleIndex + 1] << 8) | fileData[sampleIndex];
 
-                if (sampleAsInt & 0x800000)  //  if the 24th bit is set, this is a negative number in 24-bit world
+                if (sampleAsInt & 0x800000)
+                {  //  if the 24th bit is set, this is a negative number in 24-bit world
                     sampleAsInt = sampleAsInt | ~0xFFFFFF;  // so make sure sign is extended to the 32 bit float
+                }
 
                 T sample = (T)sampleAsInt / (T)8388608.;
                 samples[channel].push_back(sample);
@@ -639,8 +645,10 @@ auto AudioFile<T>::decodeAiffFile(std::vector<uint8_t>& fileData) -> bool
                 sampleAsInt =
                     (fileData[sampleIndex] << 16) | (fileData[sampleIndex + 1] << 8) | fileData[sampleIndex + 2];
 
-                if (sampleAsInt & 0x800000)  //  if the 24th bit is set, this is a negative number in 24-bit world
+                if (sampleAsInt & 0x800000)
+                {  //  if the 24th bit is set, this is a negative number in 24-bit world
                     sampleAsInt = sampleAsInt | ~0xFFFFFF;  // so make sure sign is extended to the 32 bit float
+                }
 
                 T sample = (T)sampleAsInt / (T)8388608.;
                 samples[channel].push_back(sample);
@@ -971,11 +979,17 @@ auto AudioFile<T>::determineAudioFileFormat(std::vector<uint8_t>& fileData) -> A
     std::string header(fileData.begin(), fileData.begin() + 4);
 
     if (header == "RIFF")
+    {
         return AudioFileFormat::Wave;
+    }
     else if (header == "FORM")
+    {
         return AudioFileFormat::Aiff;
+    }
     else
+    {
         return AudioFileFormat::Error;
+    }
 }
 
 //=============================================================
@@ -985,11 +999,15 @@ auto AudioFile<T>::fourBytesToInt(std::vector<uint8_t>& source, int startIndex, 
     int32_t result;
 
     if (endianness == Endianness::LittleEndian)
+    {
         result = (source[startIndex + 3] << 24) | (source[startIndex + 2] << 16) | (source[startIndex + 1] << 8) |
                  source[startIndex];
+    }
     else
+    {
         result = (source[startIndex] << 24) | (source[startIndex + 1] << 16) | (source[startIndex + 2] << 8) |
                  source[startIndex + 3];
+    }
 
     return result;
 }
@@ -1001,9 +1019,13 @@ auto AudioFile<T>::twoBytesToInt(std::vector<uint8_t>& source, int startIndex, E
     int16_t result;
 
     if (endianness == Endianness::LittleEndian)
+    {
         result = (source[startIndex + 1] << 8) | source[startIndex];
+    }
     else
+    {
         result = (source[startIndex] << 8) | source[startIndex + 1];
+    }
 
     return result;
 }

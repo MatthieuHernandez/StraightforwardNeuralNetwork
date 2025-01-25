@@ -22,9 +22,13 @@ TEST(Identity, WorksWithSmallNumbers)
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (mae <= 0.01)
+    {
         ASSERT_SUCCESS();
+    }
     else
+    {
         ASSERT_FAIL("MAE > 1: " + to_string(mae));
+    }
 }
 
 TEST(Identity, WorksWithBigNumbers)
@@ -66,7 +70,11 @@ TEST(Identity, WorksWithLotsOfNumbers)
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == ErrorType::noError)
+    {
         ASSERT_SUCCESS();
+    }
     else
+    {
         ASSERT_FAIL("MAE > 0.4: " + to_string(mae));
+    }
 }

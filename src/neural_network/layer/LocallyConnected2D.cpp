@@ -45,9 +45,13 @@ void LocallyConnected2D::buildKernelIndexes()
                     const int inputIndex = inputIndexY + inputIndexX + c;
                     const int kernelIndex = kernelIndexY + kernelIndexX + c;
                     if (inputIndexX + c < this->shapeOfInput[X] * maxC && inputIndex < this->numberOfInputs)
+                    {
                         this->kernelIndexes[k][kernelIndex] = inputIndex;
+                    }
                     else
+                    {
                         this->kernelIndexes[k][kernelIndex] = -1;
+                    }
                 }
             }
         }
@@ -110,10 +114,14 @@ inline auto LocallyConnected2D::computeOutput(const vector<float>& inputs, [[may
         for (size_t i = 0; i < neuronInputs.size(); ++i)
         {
             const auto& index = this->kernelIndexes[k][i];
-            if (index >= 0) [[likely]]
-                neuronInputs[i] = inputs[index];
-            else [[unlikely]]
-                neuronInputs[i] = 0;
+            if (index >= 0)
+            {
+                [[likely]] neuronInputs[i] = inputs[index];
+            }
+            else
+            {
+                [[unlikely]] neuronInputs[i] = 0;
+            }
         }
         for (int n = 0; n < this->numberOfFilters; ++n, ++o)
         {
@@ -133,8 +141,10 @@ inline auto LocallyConnected2D::computeBackOutput(vector<float>& inputErrors) ->
         for (size_t e = 0; e < error.size(); ++e)
         {
             const auto& index = kernelIndexes[k][e];
-            if (index >= 0) [[likely]]
-                errors[index] += error[e];
+            if (index >= 0)
+            {
+                [[likely]] errors[index] += error[e];
+            }
         }
     }
     return errors;

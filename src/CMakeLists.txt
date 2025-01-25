@@ -1,5 +1,4 @@
-file(GLOB_RECURSE HEADERS "../include/*.hpp"
-                          "../include/*.tpp")
+file(GLOB_RECURSE HEADERS "../include/*.hpp")
 
 file(GLOB SOURCES
     "tools/*.cpp"

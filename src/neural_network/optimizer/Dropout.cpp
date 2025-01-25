@@ -39,8 +39,10 @@ auto Dropout::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimize
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
 {
     if (temporalReset)
+    {
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                       [&] { return dist(tools::rng) >= this->value; });
+    }
     ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
 }
 

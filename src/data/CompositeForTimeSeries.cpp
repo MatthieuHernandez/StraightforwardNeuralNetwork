@@ -64,14 +64,22 @@ void CompositeForTimeSeries::shuffle()
                     this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 
                 if (j != 0)
+                {
                     this->sets[training].areFirstDataOfTemporalSequence[index] = false;
+                }
                 else
+                {
                     this->sets[training].areFirstDataOfTemporalSequence[index] = true;
+                }
 
                 if (j == this->numberOfRecurrences && index >= offset)
+                {
                     this->sets[training].needToTrainOnData[index] = true;
+                }
                 else
+                {
                     this->sets[training].needToTrainOnData[index] = false;
+                }
             }
             iForIndex++;
         }
@@ -117,7 +125,9 @@ auto CompositeForTimeSeries::isValid() const -> ErrorType
         (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size ||
         !this->sets[testing].needToTrainOnData.empty() || !this->sets[training].needToEvaluateOnData.empty() ||
         !this->sets[testing].needToEvaluateOnData.empty())
+    {
         return ErrorType::compositeForTimeSeriesEmpty;
+    }
 
     return this->TemporalComposite::isValid();
 }

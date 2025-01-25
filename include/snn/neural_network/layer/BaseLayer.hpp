@@ -14,7 +14,7 @@ class BaseLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const unsigned version)
+        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const uint32_t version)
         {
         }
 

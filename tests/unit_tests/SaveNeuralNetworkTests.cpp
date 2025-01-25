@@ -11,14 +11,14 @@ TEST(SaveNeuralNetwork, EqualTest)
     auto structureOfNetwork = {Input(3, 8, 8),
                                LocallyConnected(2, 2),
                                Convolution(2, 4, activation::ReLU),
-                               FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3f)),
-                               LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3f)),
-                               FullyConnected(5, activation::sigmoid, Dropout(0.0f)),
+                               FullyConnected(20, activation::iSigmoid, L1Regularization(1e-3F)),
+                               LocallyConnected(3, 2, activation::tanh, L2Regularization(1e-3F)),
+                               FullyConnected(5, activation::sigmoid, Dropout(0.0F)),
                                Convolution(1, 1, activation::tanh),
                                GruLayer(3),
                                Recurrence(4)};
-    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
-    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9f, 0.78f));
+    StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
+    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), ErrorType::noError);
@@ -45,13 +45,13 @@ TEST(SaveNeuralNetwork, EqualTest)
     EXPECT_TRUE(A != C);  // Test A == C with same seed
 
     vector<float> inputs(8 * 8 * 3);
-    inputs[29] = 0.99f;
-    inputs[30] = 0.88f;
-    inputs[60] = 0.75f;
-    inputs[90] = -0.25f;
-    inputs[120] = 1.0f;
-    inputs[150] = -0.77f;
-    const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
+    inputs[29] = 0.99F;
+    inputs[30] = 0.88F;
+    inputs[60] = 0.75F;
+    inputs[90] = -0.25F;
+    inputs[120] = 1.0F;
+    inputs[150] = -0.77F;
+    const vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
     for (int i = 0; i < 10; ++i) A.trainOnce(inputs, desired);
 
@@ -71,17 +71,17 @@ TEST(SaveNeuralNetwork, EqualTest)
 
 TEST(SaveNeuralNetwork, EqualTestWithDropout)
 {
-    auto structureOfNetwork = {Input(10), FullyConnected(200, activation::sigmoid, Dropout(0.4f)), FullyConnected(4)};
+    auto structureOfNetwork = {Input(10), FullyConnected(200, activation::sigmoid, Dropout(0.4F)), FullyConnected(4)};
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork B = A;
 
     vector<float> inputs(10);
-    inputs[1] = 1.5f;
-    inputs[4] = 0.75f;
-    inputs[5] = -0.25f;
-    inputs[7] = 1.0f;
-    inputs[9] = -1.35f;
-    const vector<float> desired{1.0f, 0.0f, 0.5f, 0.07f};
+    inputs[1] = 1.5F;
+    inputs[4] = 0.75F;
+    inputs[5] = -0.25F;
+    inputs[7] = 1.0F;
+    inputs[9] = -1.35F;
+    const vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
     EXPECT_TRUE(A == B);
 
@@ -99,9 +99,9 @@ TEST(SaveNeuralNetwork, Save)  // TODO: do a forward to be sure that the network
 {
     StraightforwardNeuralNetwork A(
         {Input(45), MaxPooling(3), Convolution(2, 2, activation::ReLU),
-         LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5f)),
-         FullyConnected(2, activation::sigmoid, Dropout(0.0f)), GruLayer(2, L2Regularization(1e-5f))},
-        StochasticGradientDescent(0.03f, 0.78f));
+         LocallyConnected(2, 2, activation::tanh, L1Regularization(1e-5F)),
+         FullyConnected(2, activation::sigmoid, Dropout(0.0F)), GruLayer(2, L2Regularization(1e-5F))},
+        StochasticGradientDescent(0.03F, 0.78F));
 
     auto randomInput = tools::randomVector(0, 2, 45);
     auto randomOutput = tools::randomVector(0, 1, 2);

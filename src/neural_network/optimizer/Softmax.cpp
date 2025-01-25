@@ -30,7 +30,7 @@ inline void Softmax::computeSoftmax(std::vector<float>& outputs)
 {
     // max can be replace by a const (e.g. 10)
     const auto max = ranges::max(outputs);
-    const auto sumExp = accumulate(outputs.begin(), outputs.end(), 0.0f,
+    const auto sumExp = accumulate(outputs.begin(), outputs.end(), 0.0F,
                                    [max](float sumExp, float& value)
                                    {
                                        value -= max;

@@ -14,7 +14,7 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 auto SimpleNeuron::output(const vector<float>& inputs) -> float
 {
     this->lastInputs.pushBack(inputs);
-    float tmp = 0.0f;  // to activate the SIMD optimization
+    float tmp = 0.0F;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 1);
     size_t w = 0;
 #pragma omp simd

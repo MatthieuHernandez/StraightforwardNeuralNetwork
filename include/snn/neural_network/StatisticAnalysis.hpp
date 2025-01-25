@@ -35,17 +35,17 @@ class StatisticAnalysis
         float numberOfDataWellClassified;
         float numberOfDataMisclassified;
 
-        float globalClusteringRate = -1.0f;
-        float weightedClusteringRate = -1.0f;
-        float f1Score = -1.0f;
-        float meanAbsoluteError = -1.0f;
-        float rootMeanSquaredError = -1.0f;
+        float globalClusteringRate = -1.0F;
+        float weightedClusteringRate = -1.0F;
+        float f1Score = -1.0F;
+        float meanAbsoluteError = -1.0F;
+        float rootMeanSquaredError = -1.0F;
 
-        float globalClusteringRateMax = -1.0f;
-        float weightedClusteringRateMax = -1.0f;
-        float f1ScoreMax = -1.0f;
-        float meanAbsoluteErrorMin = -1.0f;
-        float rootMeanSquaredErrorMin = -1.0f;
+        float globalClusteringRateMax = -1.0F;
+        float weightedClusteringRateMax = -1.0F;
+        float f1ScoreMax = -1.0F;
+        float meanAbsoluteErrorMin = -1.0F;
+        float rootMeanSquaredErrorMin = -1.0F;
 
         [[nodiscard]] auto computeGlobalClusteringRate() const -> float;
         [[nodiscard]] auto computeWeightedClusteringRate() const -> float;

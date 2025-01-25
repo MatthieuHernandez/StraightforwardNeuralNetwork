@@ -21,8 +21,8 @@ class ImprovedSigmoid final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float override { return 1.0f / (1.0f + std::exp(-x)) + x * 0.05f; }
+        auto function(const float x) const -> float override { return 1.0F / (1.0F + std::exp(-x)) + x * 0.05F; }
 
-        auto derivative(const float x) const -> float override { return std::exp(x) / powf((std::exp(x) + 1.0f), 2); }
+        auto derivative(const float x) const -> float override { return std::exp(x) / powf((std::exp(x) + 1.0F), 2); }
 };
 }  // namespace snn::internal

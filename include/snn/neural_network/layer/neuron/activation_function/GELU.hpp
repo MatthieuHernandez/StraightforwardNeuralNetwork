@@ -23,14 +23,14 @@ class GaussianErrorLinearUnit final : public ActivationFunction
 
         auto function(const float x) const -> float override
         {
-            return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f;  // approximation
+            return x * (tanh(1.702F * x / 2.0F) + 1.0F) / 2.0F;  // approximation
         }
 
         auto derivative(const float x) const -> float override
         {
-            return 1.702f * x * (1.0f - powf(tanhf(1.702f * x / 2.0f), 2.0f)) / 4.0f +
-                   (tanh(1.702f * x / 2.0f) + 1.0f) /
-                       2.0f;  // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
+            return 1.702F * x * (1.0F - powf(tanhf(1.702F * x / 2.0F), 2.0F)) / 4.0F +
+                   (tanh(1.702F * x / 2.0F) + 1.0F) /
+                       2.0F;  // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
         }
 };
 }  // namespace snn::internal

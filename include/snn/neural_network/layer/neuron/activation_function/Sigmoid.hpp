@@ -20,8 +20,8 @@ class Sigmoid final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float override { return (tanhf(x / 2.0f) + 1.0f) / 2.0f; }
+        auto function(const float x) const -> float override { return (tanhf(x / 2.0F) + 1.0F) / 2.0F; }
 
-        auto derivative(const float x) const -> float override { return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f; }
+        auto derivative(const float x) const -> float override { return (1.0F - powf(tanhf(x / 2.0F), 2.0F)) / 4.0F; }
 };
 }  // namespace snn::internal

@@ -10,15 +10,15 @@ void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Data& d);
 
 TEST(Recurrence, RepeatInput)
 {
-    vector2D<float> inputData = {{0.0f}, {-1.0f}, {-0.8f}, {-0.5f}, {-0.2f}, {0.0f}, {0.3f}, {0.5f}, {0.7f}, {1.0f}};
-    vector2D<float> expectedOutputs = {{0.0f}, {-1.0f}, {-0.8f}, {-0.5f}, {-0.2f},
-                                       {0.0f}, {0.3f},  {0.5f},  {0.7f},  {1.0f}};
+    vector2D<float> inputData = {{0.0F}, {-1.0F}, {-0.8F}, {-0.5F}, {-0.2F}, {0.0F}, {0.3F}, {0.5F}, {0.7F}, {1.0F}};
+    vector2D<float> expectedOutputs = {{0.0F}, {-1.0F}, {-0.8F}, {-0.5F}, {-0.2F},
+                                       {0.0F}, {0.3F},  {0.5F},  {0.7F},  {1.0F}};
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data->setPrecision(0.15f);
+    data->setPrecision(0.15F);
 
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1), Recurrence(12), FullyConnected(6), FullyConnected(1, activation::tanh)},
-        StochasticGradientDescent(0.003f, 0.97f));
+        StochasticGradientDescent(0.003F, 0.97F));
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
@@ -28,27 +28,27 @@ TEST(Recurrence, RepeatLastInput)
     vector2D<float> expectedOutputs = {{0}, {0}, {0}, {1}, {1}, {0}, {-1}, {-1}, {0}, {1}, {-1}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data->setPrecision(0.4f);
+    data->setPrecision(0.4F);
 
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1), Recurrence(20), FullyConnected(8), FullyConnected(1, activation::tanh)},
-        StochasticGradientDescent(0.02f, 0.5f));
+        StochasticGradientDescent(0.02F, 0.5F));
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }
 
 // a simple recurrent neural network can't solve this problem
 TEST(Recurrence, RepeatLastLastInput)
 {
-    vector2D<float> inputData = {{0.2f}, {0}, {1},    {0}, {1}, {1}, {0.1f}, {0}, {1}, {1},
-                                 {0.9f}, {1}, {0.3f}, {0}, {1}, {0}, {1},    {0}, {0}};
-    vector2D<float> expectedOutputs = {{0}, {0}, {0.2f}, {0}, {1},    {0}, {1}, {1}, {0}, {0.1f},
-                                       {1}, {1}, {0.9f}, {1}, {0.3f}, {0}, {1}, {0}, {1}};
+    vector2D<float> inputData = {{0.2F}, {0}, {1},    {0}, {1}, {1}, {0.1F}, {0}, {1}, {1},
+                                 {0.9F}, {1}, {0.3F}, {0}, {1}, {0}, {1},    {0}, {0}};
+    vector2D<float> expectedOutputs = {{0}, {0}, {0.2F}, {0}, {1},    {0}, {1}, {1}, {0}, {0.1F},
+                                       {1}, {1}, {0.9F}, {1}, {0.3F}, {0}, {1}, {0}, {1}};
 
     auto data = make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
-    data->setPrecision(0.3f);
+    data->setPrecision(0.3F);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(14), GruLayer(10), FullyConnected(1)},
-                                               StochasticGradientDescent(0.1f, 0.9f));
+                                               StochasticGradientDescent(0.1F, 0.9F));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *data);
 }

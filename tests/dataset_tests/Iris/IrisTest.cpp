@@ -44,5 +44,5 @@ TEST_F(IrisTest, trainNeuralNetwork)
 
     neuralNetwork.train(*data, 0.98_acc || 2_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.98f);
+    ASSERT_ACCURACY(accuracy, 0.98F);
 }

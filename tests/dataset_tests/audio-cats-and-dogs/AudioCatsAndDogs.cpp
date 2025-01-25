@@ -162,7 +162,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             }
             while (this->sizeOfOneData > (int)dataSound.back().size())
             {
-                dataSound.back().push_back(0.0f);
+                dataSound.back().push_back(0.0F);
             }
             inputs[i].push_back(dataSound);
         }

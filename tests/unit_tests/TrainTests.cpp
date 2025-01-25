@@ -14,10 +14,10 @@ TEST(Train, WithoutError)
             Input(4),
             FullyConnected(4, activation::sigmoid),
         },
-        StochasticGradientDescent(0.1f));
+        StochasticGradientDescent(0.1F));
     auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
 
-    vector<float> input = {0.9f, 0.0f, -0.7f, 0.1f};
+    vector<float> input = {0.9F, 0.0F, -0.7F, 0.1F};
     auto expected = neuralNetwork.computeOutput(input);
     neuralNetwork.trainOnce(input, expected);
 
@@ -32,7 +32,7 @@ TEST(Train, WithNanAsExpected)
             Input(4),
             FullyConnected(4, activation::sigmoid),
         },
-        StochasticGradientDescent(0.2f));
+        StochasticGradientDescent(0.2F));
 
     vector<float> input = {1, 0, 1, 0};
     vector<float> expected1 = {NAN, NAN, NAN, NAN};

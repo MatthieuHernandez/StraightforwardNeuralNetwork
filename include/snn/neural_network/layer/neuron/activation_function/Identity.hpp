@@ -22,6 +22,6 @@ class Identity final : public ActivationFunction
 
         auto function(const float x) const -> float override { return x; }
 
-        auto derivative([[maybe_unused]] const float x) const -> float override { return 1.0f; }
+        auto derivative([[maybe_unused]] const float x) const -> float override { return 1.0F; }
 };
 }  // namespace snn::internal

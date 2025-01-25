@@ -15,7 +15,7 @@ TEST(Identity, WorksWithSmallNumbers)
 
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1), FullyConnected(6), FullyConnected(1, snn::activation::identity)},
-        StochasticGradientDescent(0.02f, 0.99f));
+        StochasticGradientDescent(0.02F, 0.99F));
 
     neuralNetwork.train(data, 0.01_mae || 2_s);
 
@@ -37,7 +37,7 @@ TEST(Identity, WorksWithBigNumbers)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1), FullyConnected(20), FullyConnected(8), FullyConnected(4, activation::tanh),
          FullyConnected(1, activation::identity)},
-        StochasticGradientDescent(0.00001f, 0.95f));
+        StochasticGradientDescent(0.00001F, 0.95F));
 
     neuralNetwork.train(data, 1.0_mae || 3_s);
 
@@ -53,16 +53,16 @@ TEST(Identity, WorksWithLotsOfNumbers)
     vector2D<float> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0},
                                        {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
 
-    float precision = 0.4f;
+    float precision = 0.4F;
     Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), FullyConnected(30), FullyConnected(1, activation::identity)},
-                                               StochasticGradientDescent(0.001f, 0.80f));
+                                               StochasticGradientDescent(0.001F, 0.80F));
 
     neuralNetwork.train(data, 1.00_acc || 2_s);
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == ErrorType::noError)

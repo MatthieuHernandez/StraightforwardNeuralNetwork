@@ -29,14 +29,14 @@ void DailyMinTemperatures::loadData(string folderPath)
     inputs.reserve(3650);
 
     getline(file, line);  // ignore headers
-    float previousValue = -273.15f;
+    float previousValue = -273.15F;
     while (getline(file, line))
     {
         string date = line.substr(0, line.find(','));
         line = line.substr(line.find(',') + 1);
         float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
-        if (previousValue != -273.15f)
+        if (previousValue != -273.15F)
         {
             inputs.push_back({previousValue});
             labels.push_back({value});

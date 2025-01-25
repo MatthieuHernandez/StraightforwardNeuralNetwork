@@ -78,7 +78,7 @@ auto Layer<N>::getNeuron(int index) -> void*
 template <BaseNeuron N>
 auto Layer<N>::getAverageOfAbsNeuronWeights() const -> float
 {
-    auto sum = 0.0f;
+    auto sum = 0.0F;
     for (auto& n : this->neurons)
         for (auto w : n.getWeights()) sum += std::abs(w);
     sum /= static_cast<float>(this->neurons.size());
@@ -88,7 +88,7 @@ auto Layer<N>::getAverageOfAbsNeuronWeights() const -> float
 template <BaseNeuron N>
 auto Layer<N>::getAverageOfSquareNeuronWeights() const -> float
 {
-    auto sum = 0.0f;
+    auto sum = 0.0F;
     for (auto& n : this->neurons)
         for (auto w : n.getWeights()) sum += w * w;
     sum /= static_cast<float>(this->neurons.size());

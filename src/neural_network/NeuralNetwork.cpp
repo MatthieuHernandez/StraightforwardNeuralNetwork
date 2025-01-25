@@ -103,9 +103,9 @@ inline auto NeuralNetwork::calculateError(const vector<float>& outputs, const ve
     for (size_t n = 0; n < errors.size(); ++n)
     {
         if (fpclassify(desired[n]) != FP_NORMAL && fpclassify(desired[n]) != FP_ZERO)
-            errors[n] = 0.0f;
+            errors[n] = 0.0F;
         else
-            errors[n] = 2.0f * (desired[n] - outputs[n]);
+            errors[n] = 2.0F * (desired[n] - outputs[n]);
     }
     return errors;
 }

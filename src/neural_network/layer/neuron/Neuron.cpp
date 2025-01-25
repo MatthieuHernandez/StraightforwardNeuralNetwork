@@ -28,13 +28,13 @@ Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
 
 auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
 {
-    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfWeights));
+    const float valueMax = 2.4F / sqrtf(static_cast<float>(numberOfWeights));
     return tools::randomBetween(-valueMax, valueMax);
 }
 
 auto Neuron::isValid() const -> ErrorType
 {
-    if (this->bias < -100000.0f || this->bias > 10000.0f)
+    if (this->bias < -100000.0F || this->bias > 10000.0F)
     {
         return ErrorType::neuronWrongBias;
     }
@@ -45,7 +45,7 @@ auto Neuron::isValid() const -> ErrorType
     }
     for (const auto& weight : this->weights)
     {
-        if (weight < -100000.0f || weight > 10000.0f)
+        if (weight < -100000.0F || weight > 10000.0F)
         {
             return ErrorType::neuronWrongWeight;
         }

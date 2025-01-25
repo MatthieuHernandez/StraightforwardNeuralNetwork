@@ -10,7 +10,7 @@ void CircularData::initialize(const size_t queueSize, const size_t dataSize)
 {
     this->queue.clear();
     this->queue.resize(queueSize);
-    for (auto& d : this->queue) d = vector<float>(dataSize, 0.0f);
+    for (auto& d : this->queue) d = vector<float>(dataSize, 0.0F);
 }
 
 auto CircularData::getBack() -> const vector<float>*

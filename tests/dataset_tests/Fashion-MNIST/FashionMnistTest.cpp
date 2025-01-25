@@ -42,17 +42,17 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
         {Input(784), FullyConnected(150), FullyConnected(70), FullyConnected(10)});
     neuralNetwork.train(*data, 1_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.76f);
+    ASSERT_ACCURACY(accuracy, 0.76F);
 }
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), Convolution(6, 3, activation::ReLU),
                                                 Convolution(4, 5, activation::ReLU), FullyConnected(10)},
-                                               StochasticGradientDescent(0.0002f, 0.80f));
+                                               StochasticGradientDescent(0.0002F, 0.80F));
     neuralNetwork.train(*data, 1_ep || 1_min);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70f);
+    ASSERT_ACCURACY(accuracy, 0.70F);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
@@ -60,7 +60,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1, 28, 28), Convolution(12, 3, activation::ReLU), MaxPooling(2), Convolution(24, 3, activation::ReLU),
          FullyConnected(92), FullyConnected(10)},
-        StochasticGradientDescent(0.005f, 0.93f));
+        StochasticGradientDescent(0.005F, 0.93F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -69,7 +69,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
     neuralNetwork.train(*data, 0.92_acc);  // Reach after 109 epochs of 2 sec.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20f);
+    ASSERT_ACCURACY(accuracy, 0.20F);
 }
 
 TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
@@ -79,7 +79,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 270926);
-    ASSERT_FLOAT_EQ(accuracy, 0.8965f);
+    ASSERT_FLOAT_EQ(accuracy, 0.8965F);
 
     string expectedSummary =
         R"(============================================================

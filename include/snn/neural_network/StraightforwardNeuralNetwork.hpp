@@ -47,7 +47,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         StraightforwardNeuralNetwork() = default;  // use restricted to Boost library only
         explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
                                               NeuralNetworkOptimizerModel optimizer = {
-                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03f, 0.0f});
+                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03F, 0.0F});
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
         ~StraightforwardNeuralNetwork();
 

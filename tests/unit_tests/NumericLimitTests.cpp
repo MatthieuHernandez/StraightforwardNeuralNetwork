@@ -14,35 +14,35 @@ class NumericLimitTests : public testing::Test
         {
             vector2D<float> trainingExpectedOutputs;
             trainingExpectedOutputs.resize(sizeOfTraining);
-            ranges::generate(trainingExpectedOutputs, [] { return vector<float>{tools::randomBetween(0.0f, 1.0f)}; });
+            ranges::generate(trainingExpectedOutputs, [] { return vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
 
             vector2D<float> trainingInputData;
             trainingInputData.resize(sizeOfTraining);
             ranges::generate(trainingInputData,
                              []
                              {
-                                 return vector<float>{tools::randomBetween(0.0f, 1.0f),
-                                                      tools::randomBetween(0.0f, 1.0f),
-                                                      tools::randomBetween(0.0f, 1.0f)};
+                                 return vector<float>{tools::randomBetween(0.0F, 1.0F),
+                                                      tools::randomBetween(0.0F, 1.0F),
+                                                      tools::randomBetween(0.0F, 1.0F)};
                              });
 
             vector2D<float> testingExpectedOutputs;
             testingExpectedOutputs.resize(sizeOfTesting);
-            ranges::generate(testingExpectedOutputs, [] { return vector<float>{tools::randomBetween(0.0f, 1.0f)}; });
+            ranges::generate(testingExpectedOutputs, [] { return vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
 
             vector2D<float> testingInputData(sizeOfTesting);
             testingInputData.resize(sizeOfTesting);
             ranges::generate(testingInputData,
                              []
                              {
-                                 return vector<float>{tools::randomBetween(0.0f, 1.0f),
-                                                      tools::randomBetween(0.0f, 1.0f),
-                                                      tools::randomBetween(0.0f, 1.0f)};
+                                 return vector<float>{tools::randomBetween(0.0F, 1.0F),
+                                                      tools::randomBetween(0.0F, 1.0F),
+                                                      tools::randomBetween(0.0F, 1.0F)};
                              });
 
             data = make_unique<Data>(problem::regression, trainingInputData, trainingExpectedOutputs, testingInputData,
                                      testingExpectedOutputs);
-            data->setPrecision(0.3f);
+            data->setPrecision(0.3F);
         }
 
         static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
@@ -50,8 +50,8 @@ class NumericLimitTests : public testing::Test
             nn.train(*data, 1_s || 0.2_acc);
             auto mae = nn.getMeanAbsoluteError();
             auto acc = nn.getGlobalClusteringRate();
-            ASSERT_ACCURACY(acc, 0.2f);
-            ASSERT_MAE(mae, 1.4f);
+            ASSERT_ACCURACY(acc, 0.2F);
+            ASSERT_MAE(mae, 1.4F);
         }
 
         static void SetUpTestSuite() { createData(1000, 50); }
@@ -65,7 +65,7 @@ TEST_F(NumericLimitTests, WithSigmoid)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3), FullyConnected(8, activation::sigmoid), FullyConnected(1, activation::sigmoid)},
-        StochasticGradientDescent(0.01f, 0.99f));
+        StochasticGradientDescent(0.01F, 0.99F));
     testNeuralNetwork(neuralNetwork);
 }
 
@@ -73,6 +73,6 @@ TEST_F(NumericLimitTests, WithTanh)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3), FullyConnected(8, activation::tanh), FullyConnected(1, activation::tanh)},
-        StochasticGradientDescent(0.01f, 0.99f));
+        StochasticGradientDescent(0.01F, 0.99F));
     testNeuralNetwork(neuralNetwork);
 }

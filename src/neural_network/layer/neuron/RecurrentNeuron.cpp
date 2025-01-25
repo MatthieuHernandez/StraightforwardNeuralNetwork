@@ -23,7 +23,7 @@ auto RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset) ->
     this->previousOutput = this->lastOutput;
     this->sum = 0;
     size_t w = 0;
-    float tmp = 0.0f;  // to activate the SIMD optimization
+    float tmp = 0.0F;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 2);
 #pragma omp simd
     for (w = 0; w < inputs.size(); ++w)

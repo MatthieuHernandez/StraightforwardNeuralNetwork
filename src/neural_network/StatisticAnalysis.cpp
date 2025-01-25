@@ -216,7 +216,7 @@ auto StatisticAnalysis::computeF1Score() const -> float
             result += (precision * recall) / (precision + recall);
         }
     }
-    return 2.0f * result / clusters.size();
+    return 2.0F * result / clusters.size();
 }
 
 auto StatisticAnalysis::computeMeanAbsoluteError() const -> float

@@ -20,8 +20,8 @@ class RectifiedLinearUnit final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float override { return (x > 0.0f) ? x : 0.0f; }
+        auto function(const float x) const -> float override { return (x > 0.0F) ? x : 0.0F; }
 
-        auto derivative(const float x) const -> float override { return (x > 0.0f) ? 1.0f : 0.0f; }
+        auto derivative(const float x) const -> float override { return (x > 0.0F) ? 1.0F : 0.0F; }
 };
 }  // namespace snn::internal

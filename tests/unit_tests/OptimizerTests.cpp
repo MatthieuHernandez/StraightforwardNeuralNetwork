@@ -13,13 +13,13 @@ TEST(Optimizer, FindRightValueIn20)
     unique_ptr<Data> data = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(20), FullyConnected(8, activation::tanh), FullyConnected(1, activation::sigmoid)},
-        StochasticGradientDescent(0.05f, 0.9f));
+        StochasticGradientDescent(0.05F, 0.9F));
 
     neuralNetwork.train(*data, 0.99_acc || 2_s);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     auto acc = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 0.99f);
-    ASSERT_MAE(mae, 0.3f);
+    ASSERT_ACCURACY(acc, 0.99F);
+    ASSERT_MAE(mae, 0.3F);
 }
 
 auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr<Data>
@@ -35,15 +35,15 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr
         inputData.back().reserve(sizeOfData);
         for (int j = 0; j < sizeOfData; ++j)
         {
-            const float rand = tools::randomBetween(-1.0f, 1.0f);
+            const float rand = tools::randomBetween(-1.0F, 1.0F);
             inputData.back().push_back(rand);
         }
         if (inputData[i][0] > 0)
-            expectedOutputs.push_back({1.0f});
+            expectedOutputs.push_back({1.0F});
         else
-            expectedOutputs.push_back({0.0f});
+            expectedOutputs.push_back({0.0F});
     }
     unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
-    data->setPrecision(0.3f);
+    data->setPrecision(0.3F);
     return data;
 }

@@ -8,9 +8,9 @@ using namespace internal;
 
 auto NoNeuronLayer::getNumberOfOutput() const -> int { return this->numberOfOutputs; }
 
-auto NoNeuronLayer::getAverageOfAbsNeuronWeights() const -> float { return 0.0f; }
+auto NoNeuronLayer::getAverageOfAbsNeuronWeights() const -> float { return 0.0F; }
 
-auto NoNeuronLayer::getAverageOfSquareNeuronWeights() const -> float { return 0.0f; }
+auto NoNeuronLayer::getAverageOfSquareNeuronWeights() const -> float { return 0.0F; }
 
 auto NoNeuronLayer::getNeuron([[maybe_unused]] int index) -> void* { return nullptr; }
 

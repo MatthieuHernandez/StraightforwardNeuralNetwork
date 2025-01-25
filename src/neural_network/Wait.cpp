@@ -94,7 +94,7 @@ auto Wait::getDuration() -> float
     const auto now = system_clock::now();
     const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
     this->lastTick = now;
-    return currentDuration / 1000.0f;
+    return currentDuration / 1000.0F;
 }
 
 auto Wait::getDurationAndReset() -> float
@@ -103,7 +103,7 @@ auto Wait::getDurationAndReset() -> float
     const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
     this->lastTick = now;
     this->lastReset = now;
-    return currentDuration / 1000.0f;
+    return currentDuration / 1000.0F;
 }
 
 auto snn::operator""_ep(unsigned long long value) -> Wait

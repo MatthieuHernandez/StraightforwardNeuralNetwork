@@ -4,5 +4,5 @@ find ../src ../tests ../include ../examples \
   -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
   ! -path "../src/external_library/*" \
   -exec clang-tidy -p ../build_clang/ -header-filter=.* \
-  -checks='-*,modernize-use-trailing-return-type' -fix-errors \
+  -checks='-*,hicpp-uppercase-literal-suffix' -fix-errors \
   {} +

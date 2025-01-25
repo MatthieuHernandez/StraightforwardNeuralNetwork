@@ -35,7 +35,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
                     {
                         int index = flatten(i, j, shape[X]);
                         const unsigned char color =
-                            static_cast<unsigned char>(round((tanhf(weights[index] / 2.0f) + 1.0f) * 127.5f));
+                            static_cast<unsigned char>(round((tanhf(weights[index] / 2.0F) + 1.0F) * 127.5F));
                         image.set_pixel(x * (shape[X] + 1) + i, y * (shape[Y] + 1) + j, color, color, color);
                     }
                 }
@@ -51,7 +51,7 @@ auto NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filter
     auto outputShape = filterLayer->getShapeOfOutput();
     auto filterSize = filterLayer->getKernelSize();
     auto neuronByFilter = outputShape[X] * outputShape[Y];
-    vector<float> weights(filterLayer->getNumberOfInputs(), 0.0f);
+    vector<float> weights(filterLayer->getNumberOfInputs(), 0.0F);
     for (int n = 0; n < neuronByFilter; ++n)
     {
         auto neuronWeight = static_cast<SimpleNeuron*>(filterLayer->getNeuron(n * (filterNumber + 1)))->getWeights();
@@ -96,7 +96,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
                 {
                     if (y * filterX + x < shape[C])
                     {
-                        const auto color = static_cast<unsigned char>(outputs[index++] * 255.0f);
+                        const auto color = static_cast<unsigned char>(outputs[index++] * 255.0F);
                         image.set_pixel(x * (shape[X] + 1) + i, y * (shape[Y] + 1) + j, color, color, color);
                     }
                 }
@@ -119,14 +119,14 @@ void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::ve
         {
             if (shapeOfInput[C] == 1)
             {
-                const auto color = static_cast<unsigned char>(inputs[index++] * 255.0f);
+                const auto color = static_cast<unsigned char>(inputs[index++] * 255.0F);
                 image.set_pixel(x, y, color, color, color);
             }
             else
             {
-                const auto red = static_cast<unsigned char>(inputs[index++] * 255.0f);
-                const auto blue = static_cast<unsigned char>(inputs[index++] * 255.0f);
-                const auto green = static_cast<unsigned char>(inputs[index++] * 255.0f);
+                const auto red = static_cast<unsigned char>(inputs[index++] * 255.0F);
+                const auto blue = static_cast<unsigned char>(inputs[index++] * 255.0F);
+                const auto green = static_cast<unsigned char>(inputs[index++] * 255.0F);
                 image.set_pixel(x, y, red, blue, green);
             }
         }

@@ -13,8 +13,8 @@ For more explanation go to wiki.
 */
 auto classificationExample() -> int
 {
-    vector<vector<float>> inputData = {{-0.1f, 0.4f, -0.6f}, {0.5f, -0.4f, -0.8f}, {-0.7f, 0.9f, -0.7f},
-                                       {-0.9f, -0.5f, 1.7f}, {0.5f, -0.5f, 0.9f},  {0.3f, 0.6f, 0.8f}};
+    vector<vector<float>> inputData = {{-0.1F, 0.4F, -0.6F}, {0.5F, -0.4F, -0.8F}, {-0.7F, 0.9F, -0.7F},
+                                       {-0.9F, -0.5F, 1.7F}, {0.5F, -0.5F, 0.9F},  {0.3F, 0.6F, 0.8F}};
     vector<vector<float>> expectedOutputs = {{1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}};
 
     Data data(problem::classification, inputData, expectedOutputs);
@@ -23,7 +23,7 @@ auto classificationExample() -> int
 
     neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0));  // consult neural network to test it
     int expectedClassNumber = data.getLabel(snn::testing, 0);  // return position of neuron with highest output
     if (accuracy == 100 && classNumber == expectedClassNumber && neuralNetwork.isValid() == ErrorType::noError)

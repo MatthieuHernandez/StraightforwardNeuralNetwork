@@ -14,9 +14,9 @@ For more explanation go to wiki.
 auto regressionExample() -> int
 {
     vector<vector<float>> inputData = {{0, 1, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
-    vector<vector<float>> expectedOutputs = {{0.333f}, {0.666f}, {0.666f}, {0.666f}, {0.0f}, {1.0f}};
+    vector<vector<float>> expectedOutputs = {{0.333F}, {0.666F}, {0.666F}, {0.666F}, {0.0F}, {1.0F}};
 
-    float precision = 0.1f;
+    float precision = 0.1F;
     Data data(problem::regression, inputData, expectedOutputs);
     data.setPrecision(precision);
 
@@ -24,7 +24,7 @@ auto regressionExample() -> int
 
     neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     vector<float> output =
         neuralNetwork.computeOutput(data.getData(snn::testing, 0));  // consult neural network to test it
     vector<float> expectedOutput = data.getOutputs(snn::testing, 0);

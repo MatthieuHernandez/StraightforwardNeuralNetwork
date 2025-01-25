@@ -74,8 +74,8 @@ Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& inputs, vector<
 void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float>>& trainingLabels,
                       vector<vector<float>>& testingInputs, vector<vector<float>>& testingLabels)
 {
-    this->precision = 0.1f;
-    this->separator = 0.5f;
+    this->precision = 0.1F;
+    this->separator = 0.5F;
     this->sets[training].inputs = trainingInputs;
     this->sets[training].labels = trainingLabels;
     this->sets[testing].inputs = testingInputs;

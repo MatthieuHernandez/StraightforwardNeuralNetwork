@@ -15,7 +15,7 @@ Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer),
       value(value)
 {
-    this->reverseValue = 1.0f - this->value;
+    this->reverseValue = 1.0F - this->value;
     auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
     this->dist = uniform_real_distribution<>(0.0, 1.0);

@@ -13,23 +13,23 @@ For more explanation go to wiki.
 */
 auto recurrenceExample() -> int
 {
-    vector<vector<float>> inputData = {{0.3f}, {0.5f}, {0.4f}, {0.2f}, {0.0f}, {0.2f}, {0.2f}, {0.4f}, {0.1f},
-                                       {0.3f}, {0.4f}, {0.0f}, {0.0f}, {0.4f}, {0.4f}, {0.3f}, {0.2f}, {0.1f},
-                                       {0.2f}, {0.0f}, {0.1f}, {0.5f}, {0.5f}, {0.3f}, {0.3f}};
-    vector<vector<float>> expectedOutputs = {{0.3f}, {0.8f}, {0.9f}, {0.6f}, {0.2f},  {0.2f}, {0.4f}, {0.6f}, {0.5f},
-                                             {0.4f}, {0.7f}, {0.4f}, {0.0f}, {0.4f},  {0.8f}, {0.7f}, {0.5f}, {0.3f},
-                                             {0.3f}, {0.2f}, {0.1f}, {0.6f}, {0.10f}, {0.8f}, {0.6f}};
+    vector<vector<float>> inputData = {{0.3F}, {0.5F}, {0.4F}, {0.2F}, {0.0F}, {0.2F}, {0.2F}, {0.4F}, {0.1F},
+                                       {0.3F}, {0.4F}, {0.0F}, {0.0F}, {0.4F}, {0.4F}, {0.3F}, {0.2F}, {0.1F},
+                                       {0.2F}, {0.0F}, {0.1F}, {0.5F}, {0.5F}, {0.3F}, {0.3F}};
+    vector<vector<float>> expectedOutputs = {{0.3F}, {0.8F}, {0.9F}, {0.6F}, {0.2F},  {0.2F}, {0.4F}, {0.6F}, {0.5F},
+                                             {0.4F}, {0.7F}, {0.4F}, {0.0F}, {0.4F},  {0.8F}, {0.7F}, {0.5F}, {0.3F},
+                                             {0.3F}, {0.2F}, {0.1F}, {0.6F}, {0.10F}, {0.8F}, {0.6F}};
 
-    const float precision = 0.5f;
+    const float precision = 0.5F;
     Data data(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
     data.setPrecision(precision);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(10), FullyConnected(1, activation::sigmoid)},
-                                               StochasticGradientDescent(0.01f, 0.8f));
+                                               StochasticGradientDescent(0.01F, 0.8F));
 
     neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteError();
 
     if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == ErrorType::noError)

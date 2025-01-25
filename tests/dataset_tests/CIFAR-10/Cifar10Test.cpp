@@ -42,7 +42,7 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
         {Input(3072), FullyConnected(80), FullyConnected(30), FullyConnected(10, activation::identity, Softmax())});
     neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.26f);
+    ASSERT_ACCURACY(accuracy, 0.26F);
 }
 
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
@@ -50,7 +50,7 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3, 32, 32), Convolution(16, 3, activation::ReLU), MaxPooling(2), Convolution(32, 3, activation::ReLU),
          MaxPooling(2), FullyConnected(128), FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.001f, 0.8f));
+        StochasticGradientDescent(0.001F, 0.8F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -59,7 +59,7 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
     neuralNetwork.train(*data, 0.62_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20f);
+    ASSERT_ACCURACY(accuracy, 0.20F);
 }
 
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
@@ -69,7 +69,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*data);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6196f);  // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
 
     string expectedSummary =
         R"(============================================================

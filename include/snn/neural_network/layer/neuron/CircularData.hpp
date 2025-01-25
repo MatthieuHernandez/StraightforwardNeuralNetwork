@@ -24,11 +24,11 @@ class CircularData final
         void initialize(size_t queueSize, size_t dataSize);  // should be call after the ctor
         ~CircularData() = default;
 
-        [[nodiscard]] const std::vector<float>* getBack();
+        [[nodiscard]] auto getBack() -> const std::vector<float>*;
         void pushBack(const std::vector<float>& data);
 
-        bool operator==(const CircularData& other) const;
-        bool operator!=(const CircularData& other) const;
+        auto operator==(const CircularData& other) const -> bool;
+        auto operator!=(const CircularData& other) const -> bool;
 };
 
 template <class Archive>

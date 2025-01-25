@@ -10,8 +10,8 @@ class CompositeForMultipleClassification : public ProblemComposite
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
-        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const override;
-        [[nodiscard]] int getTrainingLabel(const int) override;
-        [[nodiscard]] int getTestingLabel(const int) override;
+        [[nodiscard]] auto getTestingOutputs(const int) const -> const std::vector<float>& override;
+        [[nodiscard]] auto getTrainingLabel(const int) -> int override;
+        [[nodiscard]] auto getTestingLabel(const int) -> int override;
 };
 }  // namespace snn::internal

@@ -6,7 +6,7 @@
 using namespace std;
 using namespace snn;
 
-unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData);
+auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr<Data>;
 
 TEST(Optimizer, FindRightValueIn20)
 {
@@ -22,7 +22,7 @@ TEST(Optimizer, FindRightValueIn20)
     ASSERT_MAE(mae, 0.3f);
 }
 
-unique_ptr<Data> createDataForOptimizerTests(int numberOfData, int sizeOfData)
+auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr<Data>
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;

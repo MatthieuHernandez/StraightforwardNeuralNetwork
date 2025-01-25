@@ -15,7 +15,7 @@ StochasticGradientDescent::StochasticGradientDescent(const float learningRate, c
 {
 }
 
-shared_ptr<NeuralNetworkOptimizer> StochasticGradientDescent::clone() const
+auto StochasticGradientDescent::clone() const -> shared_ptr<NeuralNetworkOptimizer>
 {
     return make_shared<StochasticGradientDescent>(*this);
 }
@@ -85,7 +85,7 @@ auto StochasticGradientDescent::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-string StochasticGradientDescent::summary() const
+auto StochasticGradientDescent::summary() const -> string
 {
     stringstream ss;
     ss << " StochasticGradientDescent" << endl;
@@ -94,7 +94,7 @@ string StochasticGradientDescent::summary() const
     return ss.str();
 }
 
-bool StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimizer) const
+auto StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimizer) const -> bool
 {
     try
     {
@@ -108,7 +108,7 @@ bool StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimiz
     }
 }
 
-bool StochasticGradientDescent::operator!=(const NeuralNetworkOptimizer& optimizer) const
+auto StochasticGradientDescent::operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool
 {
     return !(*this == optimizer);
 }

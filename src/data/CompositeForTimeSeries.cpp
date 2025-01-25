@@ -87,19 +87,22 @@ void CompositeForTimeSeries::unshuffle()
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 }
 
-bool CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) const
+auto CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) const -> bool
 {
     return this->sets[training].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const { return index == 0 ? true : false; }
+auto CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const -> bool
+{
+    return index == 0 ? true : false;
+}
 
-bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
+auto CompositeForTimeSeries::needToTrainOnTrainingData(int index) const -> bool
 {
     return this->sets[training].needToTrainOnData[index];
 }
 
-bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const
+auto CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const -> bool
 {
     // Skip firsts testing data can be distort the accuracy
     /*if(index < this->numberOfRecurrences)

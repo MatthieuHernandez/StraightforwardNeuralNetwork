@@ -3,7 +3,6 @@
 
 #include "Examples.hpp"
 
-
 using namespace std;
 using namespace snn;
 
@@ -12,7 +11,7 @@ This is a simple example how to use neural network for a regression.
 In this neural network return the average of 3 inputs.
 For more explanation go to wiki.
 */
-int regressionExample()
+auto regressionExample() -> int
 {
     vector<vector<float>> inputData = {{0, 1, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
     vector<vector<float>> expectedOutputs = {{0.333f}, {0.666f}, {0.666f}, {0.666f}, {0.0f}, {1.0f}};

@@ -28,9 +28,9 @@ class Layer : public BaseLayer
     protected:
         int numberOfInputs;
 
-        [[nodiscard]] virtual std::vector<float> computeOutput(const std::vector<float>& inputs,
-                                                               bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> computeBackOutput(std::vector<float>& inputErrors) = 0;
+        [[nodiscard]] virtual auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> = 0;
+        [[nodiscard]] virtual auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> = 0;
         virtual void computeTrain(std::vector<float>& inputErrors) = 0;
 
     public:
@@ -38,8 +38,8 @@ class Layer : public BaseLayer
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         virtual ~Layer() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
-            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override = 0;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> override = 0;
 
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
@@ -48,21 +48,21 @@ class Layer : public BaseLayer
         std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] void* getNeuron(int index) final;
-        [[nodiscard]] float getAverageOfAbsNeuronWeights() const final;
-        [[nodiscard]] float getAverageOfSquareNeuronWeights() const final;
-        [[nodiscard]] int getNumberOfInputs() const final;
-        [[nodiscard]] int getNumberOfNeurons() const final;
-        [[nodiscard]] int getNumberOfParameters() const final;
-        [[nodiscard]] std::vector<int> getShapeOfInput() const override = 0;
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const override = 0;
+        [[nodiscard]] auto getNeuron(int index) -> void* final;
+        [[nodiscard]] auto getAverageOfAbsNeuronWeights() const -> float final;
+        [[nodiscard]] auto getAverageOfSquareNeuronWeights() const -> float final;
+        [[nodiscard]] auto getNumberOfInputs() const -> int final;
+        [[nodiscard]] auto getNumberOfNeurons() const -> int final;
+        [[nodiscard]] auto getNumberOfParameters() const -> int final;
+        [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> override = 0;
+        [[nodiscard]] auto getShapeOfOutput() const -> std::vector<int> override = 0;
 
         void train(std::vector<float>& inputErrors) final;
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
-        bool operator==(const BaseLayer& layer) const override;
-        bool operator!=(const BaseLayer& layer) const override;
+        auto operator==(const BaseLayer& layer) const -> bool override;
+        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <BaseNeuron N>

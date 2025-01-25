@@ -13,7 +13,7 @@ void CircularData::initialize(const size_t queueSize, const size_t dataSize)
     for (auto& d : this->queue) d = vector<float>(dataSize, 0.0f);
 }
 
-const vector<float>* CircularData::getBack()
+auto CircularData::getBack() -> const vector<float>*
 {
     assert(this->indexGet <= this->queue.size());
     if (this->indexGet >= this->queue.size()) this->indexGet = 0;
@@ -27,9 +27,9 @@ void CircularData::pushBack(const vector<float>& data)
     this->queue[this->indexPush++] = std::move(data);
 }
 
-bool CircularData::operator==(const CircularData& other) const
+auto CircularData::operator==(const CircularData& other) const -> bool
 {
     return this->queue == other.queue && this->indexGet == other.indexGet && this->indexPush == other.indexPush;
 }
 
-bool CircularData::operator!=(const CircularData& other) const { return !(*this == other); }
+auto CircularData::operator!=(const CircularData& other) const -> bool { return !(*this == other); }

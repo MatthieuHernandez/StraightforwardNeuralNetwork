@@ -54,7 +54,7 @@ void LocallyConnected2D::buildKernelIndexes()
     }
 }
 
-inline unique_ptr<BaseLayer> LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+inline auto LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
 {
     auto layer = make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -76,7 +76,7 @@ auto LocallyConnected2D::isValid() const -> ErrorType
     return this->FilterLayer::isValid();
 }
 
-std::string LocallyConnected2D::summary() const
+auto LocallyConnected2D::summary() const -> std::string
 {
     stringstream ss;
     ss << "------------------------------------------------------------" << endl;
@@ -100,7 +100,8 @@ std::string LocallyConnected2D::summary() const
     return ss.str();
 }
 
-inline vector<float> LocallyConnected2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline auto LocallyConnected2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> vector<float>
 {
     vector<float> outputs(this->numberOfKernels);
     vector<float> neuronInputs(this->sizeOfNeuronInputs);
@@ -122,7 +123,7 @@ inline vector<float> LocallyConnected2D::computeOutput(const vector<float>& inpu
     return outputs;
 }
 
-inline vector<float> LocallyConnected2D::computeBackOutput(vector<float>& inputErrors)
+inline auto LocallyConnected2D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -144,7 +145,7 @@ inline void LocallyConnected2D::computeTrain(std::vector<float>& inputErrors)
     for (size_t n = 0; n < this->neurons.size(); ++n) this->neurons[n].train(inputErrors[n]);
 }
 
-inline bool LocallyConnected2D::operator==(const BaseLayer& layer) const
+inline auto LocallyConnected2D::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -157,4 +158,4 @@ inline bool LocallyConnected2D::operator==(const BaseLayer& layer) const
     }
 }
 
-inline bool LocallyConnected2D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+inline auto LocallyConnected2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }

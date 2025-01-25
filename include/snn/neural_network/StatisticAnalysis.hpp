@@ -12,7 +12,7 @@ struct binaryClassification
         float falseNegative{};
         float totalError{};
 
-        bool operator==(const binaryClassification&) const { return true; };
+        auto operator==(const binaryClassification&) const -> bool { return true; };
 
         template <typename Archive>
         void serialize(Archive& ar, unsigned)
@@ -47,11 +47,11 @@ class StatisticAnalysis
         float meanAbsoluteErrorMin = -1.0f;
         float rootMeanSquaredErrorMin = -1.0f;
 
-        [[nodiscard]] float computeGlobalClusteringRate() const;
-        [[nodiscard]] float computeWeightedClusteringRate() const;
-        [[nodiscard]] float computeF1Score() const;
-        [[nodiscard]] float computeMeanAbsoluteError() const;
-        [[nodiscard]] float computeRootMeanSquaredError() const;
+        [[nodiscard]] auto computeGlobalClusteringRate() const -> float;
+        [[nodiscard]] auto computeWeightedClusteringRate() const -> float;
+        [[nodiscard]] auto computeF1Score() const -> float;
+        [[nodiscard]] auto computeMeanAbsoluteError() const -> float;
+        [[nodiscard]] auto computeRootMeanSquaredError() const -> float;
 
     protected:
         StatisticAnalysis() = default;
@@ -78,20 +78,20 @@ class StatisticAnalysis
         bool rootMeanSquaredErrorIsBetterThanMin = false;
 
     public:
-        float getGlobalClusteringRate() const;
-        float getWeightedClusteringRate() const;
-        float getF1Score() const;
-        float getMeanAbsoluteError() const;
-        float getRootMeanSquaredError() const;
+        auto getGlobalClusteringRate() const -> float;
+        auto getWeightedClusteringRate() const -> float;
+        auto getF1Score() const -> float;
+        auto getMeanAbsoluteError() const -> float;
+        auto getRootMeanSquaredError() const -> float;
 
-        float getGlobalClusteringRateMax() const;
-        float getWeightedClusteringRateMax() const;
-        float getF1ScoreMax() const;
-        float getMeanAbsoluteErrorMin() const;
-        float getRootMeanSquaredErrorMin() const;
+        auto getGlobalClusteringRateMax() const -> float;
+        auto getWeightedClusteringRateMax() const -> float;
+        auto getF1ScoreMax() const -> float;
+        auto getMeanAbsoluteErrorMin() const -> float;
+        auto getRootMeanSquaredErrorMin() const -> float;
 
-        bool operator==(const StatisticAnalysis& sa) const;
-        bool operator!=(const StatisticAnalysis& sa) const;
+        auto operator==(const StatisticAnalysis& sa) const -> bool;
+        auto operator!=(const StatisticAnalysis& sa) const -> bool;
 };
 
 template <class Archive>

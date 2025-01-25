@@ -33,8 +33,8 @@ class SimpleLayer : public Layer<N>
         [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
         [[nodiscard]] auto isValid() const -> ErrorType final;
 
-        bool operator==(const BaseLayer& layer) const final;
-        bool operator!=(const BaseLayer& layer) const final;
+        auto operator==(const BaseLayer& layer) const -> bool final;
+        auto operator!=(const BaseLayer& layer) const -> bool final;
 };
 
 template <BaseNeuron N>

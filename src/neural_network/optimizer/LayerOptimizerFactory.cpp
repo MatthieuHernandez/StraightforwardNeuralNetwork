@@ -11,37 +11,37 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-LayerOptimizerModel snn::Dropout(float value)
+auto snn::Dropout(float value) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::dropout, value};
     return model;
 }
 
-LayerOptimizerModel snn::L1Regularization(float value)
+auto snn::L1Regularization(float value) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::l1Regularization, value};
     return model;
 }
 
-LayerOptimizerModel snn::L2Regularization(float value)
+auto snn::L2Regularization(float value) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::l2Regularization, value};
     return model;
 }
 
-LayerOptimizerModel snn::ErrorMultiplier(float factor)
+auto snn::ErrorMultiplier(float factor) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::errorMultiplier, factor};
     return model;
 }
 
-LayerOptimizerModel snn::Softmax()
+auto snn::Softmax() -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::softmax, 0.0};
     return model;
 }
 
-std::unique_ptr<LayerOptimizer> LayerOptimizerFactory::build(LayerOptimizerModel& model, BaseLayer* layer)
+auto LayerOptimizerFactory::build(LayerOptimizerModel& model, BaseLayer* layer) -> std::unique_ptr<LayerOptimizer>
 {
     switch (model.type)
     {

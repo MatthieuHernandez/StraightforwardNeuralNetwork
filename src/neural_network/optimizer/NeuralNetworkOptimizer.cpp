@@ -7,9 +7,12 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-bool NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const
+auto NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer) const -> bool
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code();
 }
 
-bool NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const { return !(*this == optimizer); }
+auto NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool
+{
+    return !(*this == optimizer);
+}

@@ -31,7 +31,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         void evaluate(const Data& data, Wait& wait);
         void evaluateOnce(const Data& data);
 
-        bool continueTraining(Wait wait) const;
+        auto continueTraining(Wait wait) const -> bool;
         void validData(const Data& data, int batchSize) const;
 
         template <logLevel T>
@@ -64,30 +64,33 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         void evaluate(const Data& data);
 
-        std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset = false);
-        int computeCluster(const std::vector<float>& inputs, bool temporalReset = false);
+        auto computeOutput(const std::vector<float>& inputs, bool temporalReset = false) -> std::vector<float>;
+        auto computeCluster(const std::vector<float>& inputs, bool temporalReset = false) -> int;
 
-        bool isTraining() const;
+        auto isTraining() const -> bool;
 
         void saveAs(std::string filePath);
         void saveFeatureMapsAsBitmap(std::string filePath);
         void saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex);
         void saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex);
-        static StraightforwardNeuralNetwork& loadFrom(std::string filePath);
+        static auto loadFrom(std::string filePath) -> StraightforwardNeuralNetwork&;
 
-        [[nodiscard]] std::string summary() const;
+        [[nodiscard]] auto summary() const -> std::string;
 
-        int getCurrentIndex() const { return this->index; }
-        int getCurrentEpoch() const { return this->epoch; }
-        int getNumberOfTrainingsBetweenTwoEvaluations() const { return this->numberOfTrainingsBetweenTwoEvaluations; }
+        auto getCurrentIndex() const -> int { return this->index; }
+        auto getCurrentEpoch() const -> int { return this->epoch; }
+        auto getNumberOfTrainingsBetweenTwoEvaluations() const -> int
+        {
+            return this->numberOfTrainingsBetweenTwoEvaluations;
+        }
 
         void setNumberOfTrainingsBetweenTwoEvaluations(int value)
         {
             this->numberOfTrainingsBetweenTwoEvaluations = value;
         }
 
-        bool operator==(const StraightforwardNeuralNetwork& neuralNetwork) const;
-        bool operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const;
+        auto operator==(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool;
+        auto operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool;
 };
 
 template <logLevel T>

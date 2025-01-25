@@ -42,7 +42,7 @@ void Convolution1D::buildKernelIndexes()
     }
 }
 
-inline unique_ptr<BaseLayer> Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
 {
     auto layer = make_unique<Convolution1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -64,7 +64,7 @@ auto Convolution1D::isValid() const -> ErrorType
     return this->FilterLayer::isValid();
 }
 
-std::string Convolution1D::summary() const
+auto Convolution1D::summary() const -> std::string
 {
     stringstream ss;
     ss << "------------------------------------------------------------" << endl;
@@ -86,7 +86,8 @@ std::string Convolution1D::summary() const
     return ss.str();
 }
 
-inline vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline auto Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> vector<float>
 {
     vector<float> outputs(this->numberOfKernels);
     vector<float> neuronInputs(this->sizeOfNeuronInputs);
@@ -105,7 +106,7 @@ inline vector<float> Convolution1D::computeOutput(const vector<float>& inputs, [
     return outputs;
 }
 
-inline vector<float> Convolution1D::computeBackOutput(vector<float>& inputErrors)
+inline auto Convolution1D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
@@ -129,6 +130,9 @@ inline void Convolution1D::computeTrain(std::vector<float>& inputErrors)
     for (int n = 0; n < this->numberOfFilters; ++n) this->neurons[n].train(inputErrors[n]);
 }
 
-inline bool Convolution1D::operator==(const BaseLayer& layer) const { return this->FilterLayer::operator==(layer); }
+inline auto Convolution1D::operator==(const BaseLayer& layer) const -> bool
+{
+    return this->FilterLayer::operator==(layer);
+}
 
-inline bool Convolution1D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+inline auto Convolution1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }

@@ -11,7 +11,7 @@ GruLayer::GruLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimiz
 {
 }
 
-unique_ptr<BaseLayer> GruLayer::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+auto GruLayer::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
 {
     auto layer = make_unique<GruLayer>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -21,7 +21,7 @@ unique_ptr<BaseLayer> GruLayer::clone(std::shared_ptr<NeuralNetworkOptimizer> op
     return layer;
 }
 
-std::string snn::internal::GruLayer::summary() const
+auto snn::internal::GruLayer::summary() const -> std::string
 {
     stringstream ss;
     ss << "------------------------------------------------------------" << endl;

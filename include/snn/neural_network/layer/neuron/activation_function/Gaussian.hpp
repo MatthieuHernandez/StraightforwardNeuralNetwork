@@ -10,9 +10,9 @@ namespace snn::internal
 class Gaussian final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::gaussian; }
+        auto getType() const -> activation override { return activation::gaussian; }
 
-        string getName() const override { return "gaussian"; }
+        auto getName() const -> string override { return "gaussian"; }
 
     public:
         Gaussian()
@@ -20,8 +20,8 @@ class Gaussian final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return std::exp(-powf(x, 2)); }
+        auto function(const float x) const -> float override { return std::exp(-powf(x, 2)); }
 
-        float derivative(const float x) const override { return -2 * x * std::exp(-powf(x, 2)); }
+        auto derivative(const float x) const -> float override { return -2 * x * std::exp(-powf(x, 2)); }
 };
 }  // namespace snn::internal

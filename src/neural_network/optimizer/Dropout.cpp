@@ -31,7 +31,7 @@ Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
     this->presenceProbabilities = dropout.presenceProbabilities;
 }
 
-unique_ptr<LayerOptimizer> Dropout::clone(const BaseLayer* newLayer) const
+auto Dropout::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimizer>
 {
     return make_unique<Dropout>(*this, newLayer);
 }
@@ -54,14 +54,14 @@ void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
     ranges::transform(inputErrors, this->presenceProbabilities, inputErrors.begin(), multiplies<float>());
 }
 
-std::string Dropout::summary() const
+auto Dropout::summary() const -> std::string
 {
     stringstream ss;
     ss << "Dropout(" << value << ")" << endl;
     return ss.str();
 }
 
-bool Dropout::operator==(const LayerOptimizer& optimizer) const
+auto Dropout::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     try
     {
@@ -75,4 +75,4 @@ bool Dropout::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool Dropout::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }
+auto Dropout::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }

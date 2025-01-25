@@ -37,19 +37,19 @@ void CompositeForTemporalData::shuffle()
 
 void CompositeForTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
 
-bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
+auto CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const -> bool
 {
     return this->sets[training].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) const
+auto CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) const -> bool
 {
     return this->sets[testing].areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const -> bool { return true; }
 
-bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
+auto CompositeForTemporalData::needToEvaluateOnTestingData(int index) const -> bool
 {
     return this->sets[testing].needToEvaluateOnData[index];
 }

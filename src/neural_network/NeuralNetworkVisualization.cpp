@@ -45,7 +45,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
     image.save_image(filePath);
 }
 
-std::vector<float> NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filterNumber)
+auto NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filterNumber) -> std::vector<float>
 {
     auto inputShape = filterLayer->getShapeOfInput();
     auto outputShape = filterLayer->getShapeOfOutput();

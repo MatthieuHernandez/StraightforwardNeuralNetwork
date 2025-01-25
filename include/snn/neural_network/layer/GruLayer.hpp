@@ -21,10 +21,10 @@ class GruLayer final : public SimpleLayer<GatedRecurrentUnit>
         GruLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         GruLayer(const GruLayer&) = default;
         ~GruLayer() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
-            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> override;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string override;
 };
 
 template <class Archive>

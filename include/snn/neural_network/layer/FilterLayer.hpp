@@ -34,13 +34,13 @@ class FilterLayer : public Layer<SimpleNeuron>
         virtual ~FilterLayer() = default;
         FilterLayer(const FilterLayer&) = default;
 
-        [[nodiscard]] std::vector<int> getShapeOfInput() const final;
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
-        [[nodiscard]] int getKernelSize() const;
+        [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> final;
+        [[nodiscard]] auto getShapeOfOutput() const -> std::vector<int> final;
+        [[nodiscard]] auto getKernelSize() const -> int;
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
-        bool operator==(const BaseLayer& layer) const override;
-        bool operator!=(const BaseLayer& layer) const override;
+        auto operator==(const BaseLayer& layer) const -> bool override;
+        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <class Archive>

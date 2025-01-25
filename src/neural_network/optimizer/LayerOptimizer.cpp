@@ -11,10 +11,10 @@ LayerOptimizer::LayerOptimizer(const BaseLayer* layer)
 {
 }
 
-bool LayerOptimizer::operator==(const LayerOptimizer& optimizer) const
+auto LayerOptimizer::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code() &&
            typeid(this->layer).hash_code() == typeid(optimizer.layer).hash_code();
 }
 
-bool LayerOptimizer::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }
+auto LayerOptimizer::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }

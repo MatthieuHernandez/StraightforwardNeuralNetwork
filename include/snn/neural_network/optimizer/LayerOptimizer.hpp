@@ -22,17 +22,17 @@ class LayerOptimizer
         LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
-        virtual std::unique_ptr<LayerOptimizer> clone(const BaseLayer* layer) const = 0;
+        virtual auto clone(const BaseLayer* layer) const -> std::unique_ptr<LayerOptimizer> = 0;
 
         virtual void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) = 0;
         virtual void applyAfterOutputForTesting(std::vector<float>& outputs) = 0;
 
         virtual void applyBeforeBackpropagation(std::vector<float>& inputErrors) = 0;
 
-        [[nodiscard]] virtual std::string summary() const = 0;
+        [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
-        virtual bool operator==(const LayerOptimizer& optimizer) const;
-        virtual bool operator!=(const LayerOptimizer& optimizer) const;
+        virtual auto operator==(const LayerOptimizer& optimizer) const -> bool;
+        virtual auto operator!=(const LayerOptimizer& optimizer) const -> bool;
 };
 
 template <class Archive>

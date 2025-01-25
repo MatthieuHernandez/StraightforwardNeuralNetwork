@@ -20,7 +20,7 @@ L1Regularization::L1Regularization(const L1Regularization& regularization, const
     this->value = regularization.value;
 }
 
-unique_ptr<LayerOptimizer> L1Regularization::clone(const BaseLayer* newLayer) const
+auto L1Regularization::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimizer>
 {
     return make_unique<L1Regularization>(*this, newLayer);
 }
@@ -31,14 +31,14 @@ void L1Regularization::applyBeforeBackpropagation(std::vector<float>& inputError
     ranges::transform(inputErrors, inputErrors.begin(), bind(plus<float>(), placeholders::_1, regularization));
 }
 
-std::string L1Regularization::summary() const
+auto L1Regularization::summary() const -> std::string
 {
     stringstream ss;
     ss << "L1Regularization(" << value << ")" << endl;
     return ss.str();
 }
 
-bool L1Regularization::operator==(const LayerOptimizer& optimizer) const
+auto L1Regularization::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     try
     {
@@ -51,4 +51,4 @@ bool L1Regularization::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool L1Regularization::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }
+auto L1Regularization::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }

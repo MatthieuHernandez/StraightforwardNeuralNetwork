@@ -10,9 +10,9 @@ namespace snn::internal
 class RectifiedLinearUnit final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::ReLU; }
+        auto getType() const -> activation override { return activation::ReLU; }
 
-        string getName() const override { return "ReLU"; }
+        auto getName() const -> string override { return "ReLU"; }
 
     public:
         RectifiedLinearUnit()
@@ -20,8 +20,8 @@ class RectifiedLinearUnit final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return (x > 0.0f) ? x : 0.0f; }
+        auto function(const float x) const -> float override { return (x > 0.0f) ? x : 0.0f; }
 
-        float derivative(const float x) const override { return (x > 0.0f) ? 1.0f : 0.0f; }
+        auto derivative(const float x) const -> float override { return (x > 0.0f) ? 1.0f : 0.0f; }
 };
 }  // namespace snn::internal

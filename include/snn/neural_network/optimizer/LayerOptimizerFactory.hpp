@@ -8,18 +8,18 @@
 
 namespace snn
 {
-extern LayerOptimizerModel Dropout(float value);
-extern LayerOptimizerModel L1Regularization(float value);
-extern LayerOptimizerModel L2Regularization(float value);
-extern LayerOptimizerModel ErrorMultiplier(float factor);
-extern LayerOptimizerModel Softmax();
+extern auto Dropout(float value) -> LayerOptimizerModel;
+extern auto L1Regularization(float value) -> LayerOptimizerModel;
+extern auto L2Regularization(float value) -> LayerOptimizerModel;
+extern auto ErrorMultiplier(float factor) -> LayerOptimizerModel;
+extern auto Softmax() -> LayerOptimizerModel;
 
 namespace internal
 {
 class LayerOptimizerFactory
 {
     private:
-        static std::unique_ptr<LayerOptimizer> build(LayerOptimizerModel& model, BaseLayer* layer);
+        static auto build(LayerOptimizerModel& model, BaseLayer* layer) -> std::unique_ptr<LayerOptimizer>;
 
     public:
         static void build(std::vector<std::unique_ptr<LayerOptimizer>>& optimizers, LayerModel& model,

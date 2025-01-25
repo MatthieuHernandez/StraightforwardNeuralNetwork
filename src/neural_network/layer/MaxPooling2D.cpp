@@ -59,7 +59,7 @@ void MaxPooling2D::buildKernelIndexes()
     }
 }
 
-inline unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) const
+inline auto MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) const -> unique_ptr<BaseLayer>
 {
     return make_unique<MaxPooling2D>(*this);
 }
@@ -75,7 +75,7 @@ auto MaxPooling2D::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-std::string MaxPooling2D::summary() const
+auto MaxPooling2D::summary() const -> std::string
 {
     stringstream ss;
     ss << "------------------------------------------------------------" << endl;
@@ -96,7 +96,8 @@ std::string MaxPooling2D::summary() const
     return ss.str();
 }
 
-inline vector<float> MaxPooling2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline auto MaxPooling2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> vector<float>
 {
     vector<float> outputs(this->numberOfKernels);
     for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
@@ -114,7 +115,7 @@ inline vector<float> MaxPooling2D::computeOutput(const vector<float>& inputs, [[
     return outputs;
 }
 
-inline vector<float> MaxPooling2D::computeBackOutput(vector<float>& inputErrors)
+inline auto MaxPooling2D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
 {
     vector<float> errors(this->numberOfInputs, 0);
     for (size_t e = 0; e < inputErrors.size(); ++e)
@@ -124,7 +125,7 @@ inline vector<float> MaxPooling2D::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
-inline bool MaxPooling2D::operator==(const BaseLayer& layer) const
+inline auto MaxPooling2D::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -139,4 +140,4 @@ inline bool MaxPooling2D::operator==(const BaseLayer& layer) const
     }
 }
 
-inline bool MaxPooling2D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+inline auto MaxPooling2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }

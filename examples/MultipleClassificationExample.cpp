@@ -11,7 +11,7 @@ This is the simplest example how to use this library
 In this neural network return 3 ouputs AND, NAND, OR logical operator of 2 inputs.
 For more explanation go to wiki
 */
-int multipleClassificationExample()
+auto multipleClassificationExample() -> int
 {
     vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
     vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};

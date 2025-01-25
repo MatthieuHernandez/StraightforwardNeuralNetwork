@@ -15,7 +15,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOpti
 #ifdef _MSC_VER
 #pragma warning(disable : 4701)
 #endif
-float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
+auto RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset) -> float
 {
     if (temporalReset) this->reset();
     this->lastInputs.pushBack(inputs);
@@ -39,7 +39,7 @@ float RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset)
 #endif
 }
 
-vector<float>& RecurrentNeuron::backOutput(float error)
+auto RecurrentNeuron::backOutput(float error) -> vector<float>&
 {
     error = error * this->outputFunction->derivative(this->sum);
     assert(this->weights.size() == this->errors.size() + 2);
@@ -74,11 +74,11 @@ auto RecurrentNeuron::isValid() const -> ErrorType
     return this->Neuron::isValid();
 }
 
-bool RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const
+auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
 {
     return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
            this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
            this->previousSum == neuron.previousSum;
 }
 
-bool RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const { return !(*this == neuron); }
+auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }

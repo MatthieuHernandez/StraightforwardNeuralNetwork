@@ -70,13 +70,13 @@ auto Layer<N>::isValid() const -> ErrorType
 }
 
 template <BaseNeuron N>
-void* Layer<N>::getNeuron(int index)
+auto Layer<N>::getNeuron(int index) -> void*
 {
     return static_cast<void*>(&this->neurons[index]);
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfAbsNeuronWeights() const
+auto Layer<N>::getAverageOfAbsNeuronWeights() const -> float
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
@@ -86,7 +86,7 @@ float Layer<N>::getAverageOfAbsNeuronWeights() const
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfSquareNeuronWeights() const
+auto Layer<N>::getAverageOfSquareNeuronWeights() const -> float
 {
     auto sum = 0.0f;
     for (auto& n : this->neurons)
@@ -96,19 +96,19 @@ float Layer<N>::getAverageOfSquareNeuronWeights() const
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfInputs() const
+auto Layer<N>::getNumberOfInputs() const -> int
 {
     return this->numberOfInputs;
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfNeurons() const
+auto Layer<N>::getNumberOfNeurons() const -> int
 {
     return (int)this->neurons.size();
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfParameters() const
+auto Layer<N>::getNumberOfParameters() const -> int
 {
     int sum = 0;
     for (auto& neuron : this->neurons)
@@ -119,7 +119,7 @@ int Layer<N>::getNumberOfParameters() const
 }
 
 template <BaseNeuron N>
-bool Layer<N>::operator==(const BaseLayer& layer) const
+auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -142,7 +142,7 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
 }
 
 template <BaseNeuron N>
-bool Layer<N>::operator!=(const BaseLayer& layer) const
+auto Layer<N>::operator!=(const BaseLayer& layer) const -> bool
 {
     return !(*this == layer);
 }

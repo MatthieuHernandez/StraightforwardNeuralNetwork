@@ -10,9 +10,9 @@ namespace snn::internal
 class Tanh final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::tanh; }
+        auto getType() const -> activation override { return activation::tanh; }
 
-        string getName() const override { return "tanh"; }
+        auto getName() const -> string override { return "tanh"; }
 
     public:
         Tanh()
@@ -20,8 +20,8 @@ class Tanh final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return tanhf(x); }
+        auto function(const float x) const -> float override { return tanhf(x); }
 
-        float derivative(const float x) const override { return 1 - powf(tanhf(x), 2); }
+        auto derivative(const float x) const -> float override { return 1 - powf(tanhf(x), 2); }
 };
 }  // namespace snn::internal

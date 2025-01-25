@@ -9,7 +9,7 @@
 using namespace std;
 using namespace snn;
 
-Data createDataForLocallyConnectedTests();
+auto createDataForLocallyConnectedTests() -> Data;
 
 TEST(LocallyConnected, LayerLocallyConnected1D)
 {
@@ -112,7 +112,7 @@ TEST(LocallyConnected, SimpleLocallyConnected2D)
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
-Data createDataForLocallyConnectedTests()
+auto createDataForLocallyConnectedTests() -> Data
 {
     vector2D<float> inputData = {
         {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,

@@ -42,12 +42,12 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const Straightforward
     this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset)
+auto StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset) -> vector<float>
 {
     return this->output(inputs, temporalReset);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset)
+auto StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset) -> int
 {
     const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
@@ -63,7 +63,7 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bo
     return maxOutputIndex;
 }
 
-bool StraightforwardNeuralNetwork::isTraining() const { return !this->isIdle; }
+auto StraightforwardNeuralNetwork::isTraining() const -> bool { return !this->isIdle; }
 
 void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize, int evaluationFrequency)
 {
@@ -198,7 +198,7 @@ void StraightforwardNeuralNetwork::resetTrainingValues()
     this->isIdle = true;
 }
 
-inline bool StraightforwardNeuralNetwork::continueTraining(Wait wait) const
+inline auto StraightforwardNeuralNetwork::continueTraining(Wait wait) const -> bool
 {
     const auto epochs = this->getCurrentEpoch();
     const auto accuracy = this->getGlobalClusteringRate();
@@ -284,7 +284,7 @@ void StraightforwardNeuralNetwork::saveSync(const string filePath)
     archive << this;
 }
 
-StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(const string filePath)
+auto StraightforwardNeuralNetwork::loadFrom(const string filePath) -> StraightforwardNeuralNetwork&
 {
     StraightforwardNeuralNetwork* neuralNetwork = nullptr;
     ifstream ifs(filePath);
@@ -293,7 +293,7 @@ StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(const strin
     return *neuralNetwork;
 }
 
-string StraightforwardNeuralNetwork::summary() const
+auto StraightforwardNeuralNetwork::summary() const -> string
 {
     stringstream ss;
     ss << "============================================================" << endl;
@@ -315,7 +315,7 @@ string StraightforwardNeuralNetwork::summary() const
     return ss.str();
 }
 
-bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
+auto StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
 {
     return this->NeuralNetwork::operator==(neuralNetwork) && this->autoSaveFilePath == neuralNetwork.autoSaveFilePath &&
            this->autoSaveWhenBetter == neuralNetwork.autoSaveWhenBetter &&
@@ -324,7 +324,7 @@ bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork
            this->numberOfTrainingsBetweenTwoEvaluations == neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const
+auto StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
 {
     return !(*this == neuralNetwork);
 }

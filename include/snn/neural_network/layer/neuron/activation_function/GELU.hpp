@@ -11,9 +11,9 @@ namespace snn::internal
 class GaussianErrorLinearUnit final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::GELU; }
+        auto getType() const -> activation override { return activation::GELU; }
 
-        string getName() const override { return "GELU"; }
+        auto getName() const -> string override { return "GELU"; }
 
     public:
         GaussianErrorLinearUnit()
@@ -21,12 +21,12 @@ class GaussianErrorLinearUnit final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override
+        auto function(const float x) const -> float override
         {
             return x * (tanh(1.702f * x / 2.0f) + 1.0f) / 2.0f;  // approximation
         }
 
-        float derivative(const float x) const override
+        auto derivative(const float x) const -> float override
         {
             return 1.702f * x * (1.0f - powf(tanhf(1.702f * x / 2.0f), 2.0f)) / 4.0f +
                    (tanh(1.702f * x / 2.0f) + 1.0f) /

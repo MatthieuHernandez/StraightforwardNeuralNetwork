@@ -19,10 +19,10 @@ class ProblemComposite
 
         [[nodiscard]] virtual auto isValid() const -> ErrorType;
 
-        [[nodiscard]] virtual int getTrainingLabel(int index) = 0;
-        [[nodiscard]] virtual int getTestingLabel(int index) = 0;
+        [[nodiscard]] virtual auto getTrainingLabel(int index) -> int = 0;
+        [[nodiscard]] virtual auto getTestingLabel(int index) -> int = 0;
 
-        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize);
-        [[nodiscard]] virtual const std::vector<float>& getTestingOutputs(int index) const = 0;
+        [[nodiscard]] auto getTrainingOutputs(int index, int batchSize) -> const std::vector<float>&;
+        [[nodiscard]] virtual auto getTestingOutputs(int index) const -> const std::vector<float>& = 0;
 };
 }  // namespace snn::internal

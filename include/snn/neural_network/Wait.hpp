@@ -20,19 +20,19 @@ struct Wait
         std::chrono::time_point<std::chrono::system_clock> lastReset;
         std::chrono::time_point<std::chrono::system_clock> lastTick;
         waitOperator op = waitOperator::noneOp;
-        Wait& operator||(const Wait& wait);
-        Wait& operator&&(const Wait& wait);
+        auto operator||(const Wait& wait) -> Wait&;
+        auto operator&&(const Wait& wait) -> Wait&;
         void startClock();
-        [[nodiscard]] bool isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const;
-        [[nodiscard]] int tick() const;  // Time since last tick in milliseconds
-        [[nodiscard]] float getDuration();
-        [[nodiscard]] float getDurationAndReset();
+        [[nodiscard]] auto isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const -> bool;
+        [[nodiscard]] auto tick() const -> int;  // Time since last tick in milliseconds
+        [[nodiscard]] auto getDuration() -> float;
+        [[nodiscard]] auto getDurationAndReset() -> float;
 };
 
-extern Wait operator""_ep(unsigned long long value);
-extern Wait operator""_acc(long double value);
-extern Wait operator""_mae(long double value);
-extern Wait operator""_ms(unsigned long long value);
-extern Wait operator""_s(unsigned long long value);
-extern Wait operator""_min(unsigned long long value);
+extern auto operator""_ep(unsigned long long value) -> Wait;
+extern auto operator""_acc(long double value) -> Wait;
+extern auto operator""_mae(long double value) -> Wait;
+extern auto operator""_ms(unsigned long long value) -> Wait;
+extern auto operator""_s(unsigned long long value) -> Wait;
+extern auto operator""_min(unsigned long long value) -> Wait;
 }  // namespace snn

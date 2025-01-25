@@ -11,7 +11,7 @@ Recurrence::Recurrence(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> opt
 {
 }
 
-unique_ptr<BaseLayer> Recurrence::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+auto Recurrence::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
 {
     auto layer = make_unique<Recurrence>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
@@ -21,7 +21,7 @@ unique_ptr<BaseLayer> Recurrence::clone(std::shared_ptr<NeuralNetworkOptimizer> 
     return layer;
 }
 
-string Recurrence::summary() const
+auto Recurrence::summary() const -> string
 {
     stringstream ss;
     ss << "------------------------------------------------------------" << endl;

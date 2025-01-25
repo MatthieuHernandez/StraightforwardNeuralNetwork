@@ -11,9 +11,9 @@ namespace snn::internal
 class ImprovedSigmoid final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::iSigmoid; }
+        auto getType() const -> activation override { return activation::iSigmoid; }
 
-        string getName() const override { return "iSigmoid"; }
+        auto getName() const -> string override { return "iSigmoid"; }
 
     public:
         ImprovedSigmoid()
@@ -21,8 +21,8 @@ class ImprovedSigmoid final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return 1.0f / (1.0f + std::exp(-x)) + x * 0.05f; }
+        auto function(const float x) const -> float override { return 1.0f / (1.0f + std::exp(-x)) + x * 0.05f; }
 
-        float derivative(const float x) const override { return std::exp(x) / powf((std::exp(x) + 1.0f), 2); }
+        auto derivative(const float x) const -> float override { return std::exp(x) / powf((std::exp(x) + 1.0f), 2); }
 };
 }  // namespace snn::internal

@@ -28,14 +28,14 @@ class RecurrentNeuron final : public Neuron
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
         void train(float error);
 
         [[nodiscard]] auto isValid() const -> ErrorType;
 
-        bool operator==(const RecurrentNeuron& neuron) const;
-        bool operator!=(const RecurrentNeuron& neuron) const;
+        auto operator==(const RecurrentNeuron& neuron) const -> bool;
+        auto operator!=(const RecurrentNeuron& neuron) const -> bool;
 };
 
 template <class Archive>

@@ -1,9 +1,9 @@
 #pragma once
 
-extern int classificationExample();
+extern auto classificationExample() -> int;
 
-extern int multipleClassificationExample();
+extern auto multipleClassificationExample() -> int;
 
-extern int regressionExample();
+extern auto regressionExample() -> int;
 
-extern int recurrenceExample();
+extern auto recurrenceExample() -> int;

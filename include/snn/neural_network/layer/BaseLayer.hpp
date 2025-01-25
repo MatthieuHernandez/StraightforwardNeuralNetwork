@@ -20,28 +20,29 @@ class BaseLayer
 
     public:
         virtual ~BaseLayer() = default;
-        virtual std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const = 0;
+        virtual auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> = 0;
 
-        [[nodiscard]] virtual void* getNeuron(int index) = 0;
-        [[nodiscard]] virtual float getAverageOfAbsNeuronWeights() const = 0;
-        [[nodiscard]] virtual float getAverageOfSquareNeuronWeights() const = 0;
-        [[nodiscard]] virtual int getNumberOfInputs() const = 0;
-        [[nodiscard]] virtual int getNumberOfNeurons() const = 0;
-        [[nodiscard]] virtual int getNumberOfParameters() const = 0;
-        [[nodiscard]] virtual std::vector<int> getShapeOfInput() const = 0;
-        [[nodiscard]] virtual std::vector<int> getShapeOfOutput() const = 0;
+        [[nodiscard]] virtual auto getNeuron(int index) -> void* = 0;
+        [[nodiscard]] virtual auto getAverageOfAbsNeuronWeights() const -> float = 0;
+        [[nodiscard]] virtual auto getAverageOfSquareNeuronWeights() const -> float = 0;
+        [[nodiscard]] virtual auto getNumberOfInputs() const -> int = 0;
+        [[nodiscard]] virtual auto getNumberOfNeurons() const -> int = 0;
+        [[nodiscard]] virtual auto getNumberOfParameters() const -> int = 0;
+        [[nodiscard]] virtual auto getShapeOfInput() const -> std::vector<int> = 0;
+        [[nodiscard]] virtual auto getShapeOfOutput() const -> std::vector<int> = 0;
 
-        [[nodiscard]] virtual std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> outputForTraining(const std::vector<float>& inputs,
-                                                                   bool temporalReset) = 0;
-        [[nodiscard]] virtual std::vector<float> backOutput(std::vector<float>& inputErrors) = 0;
+        [[nodiscard]] virtual auto output(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> = 0;
+        [[nodiscard]] virtual auto outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> = 0;
+        [[nodiscard]] virtual auto backOutput(std::vector<float>& inputErrors) -> std::vector<float> = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 
         [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
 
-        [[nodiscard]] virtual std::string summary() const = 0;
+        [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
-        virtual bool operator==(const BaseLayer& layer) const = 0;
-        virtual bool operator!=(const BaseLayer& layer) const = 0;
+        virtual auto operator==(const BaseLayer& layer) const -> bool = 0;
+        virtual auto operator!=(const BaseLayer& layer) const -> bool = 0;
 };
 }  // namespace snn::internal

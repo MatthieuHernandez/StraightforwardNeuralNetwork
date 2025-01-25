@@ -6,14 +6,14 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-int NoNeuronLayer::getNumberOfOutput() const { return this->numberOfOutputs; }
+auto NoNeuronLayer::getNumberOfOutput() const -> int { return this->numberOfOutputs; }
 
-float NoNeuronLayer::getAverageOfAbsNeuronWeights() const { return 0.0f; }
+auto NoNeuronLayer::getAverageOfAbsNeuronWeights() const -> float { return 0.0f; }
 
-float NoNeuronLayer::getAverageOfSquareNeuronWeights() const { return 0.0f; }
+auto NoNeuronLayer::getAverageOfSquareNeuronWeights() const -> float { return 0.0f; }
 
-void* NoNeuronLayer::getNeuron([[maybe_unused]] int index) { return nullptr; }
+auto NoNeuronLayer::getNeuron([[maybe_unused]] int index) -> void* { return nullptr; }
 
-int NoNeuronLayer::getNumberOfNeurons() const { return 0; }
+auto NoNeuronLayer::getNumberOfNeurons() const -> int { return 0; }
 
-int NoNeuronLayer::getNumberOfParameters() const { return 0; }
+auto NoNeuronLayer::getNumberOfParameters() const -> int { return 0; }

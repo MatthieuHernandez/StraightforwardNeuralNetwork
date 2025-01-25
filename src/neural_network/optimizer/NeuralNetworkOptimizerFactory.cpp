@@ -8,14 +8,15 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-NeuralNetworkOptimizerModel snn::StochasticGradientDescent(float learningRate, float momentum)
+auto snn::StochasticGradientDescent(float learningRate, float momentum) -> NeuralNetworkOptimizerModel
 {
     const NeuralNetworkOptimizerModel model{neuralNetworkOptimizerType::stochasticGradientDescent, learningRate,
                                             momentum};
     return model;
 }
 
-shared_ptr<NeuralNetworkOptimizer> NeuralNetworkOptimizerFactory::build(const NeuralNetworkOptimizerModel& model)
+auto NeuralNetworkOptimizerFactory::build(const NeuralNetworkOptimizerModel& model)
+    -> shared_ptr<NeuralNetworkOptimizer>
 {
     switch (model.type)
     {

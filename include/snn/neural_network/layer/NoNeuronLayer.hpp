@@ -27,12 +27,12 @@ class NoNeuronLayer : public BaseLayer
         }
         virtual ~NoNeuronLayer() = default;
 
-        [[nodiscard]] int getNumberOfOutput() const;
-        [[nodiscard]] float getAverageOfAbsNeuronWeights() const override;
-        [[nodiscard]] float getAverageOfSquareNeuronWeights() const override;
-        [[nodiscard]] void* getNeuron(int index) override;
-        [[nodiscard]] int getNumberOfNeurons() const override;
-        [[nodiscard]] int getNumberOfParameters() const override;
+        [[nodiscard]] auto getNumberOfOutput() const -> int;
+        [[nodiscard]] auto getAverageOfAbsNeuronWeights() const -> float override;
+        [[nodiscard]] auto getAverageOfSquareNeuronWeights() const -> float override;
+        [[nodiscard]] auto getNeuron(int index) -> void* override;
+        [[nodiscard]] auto getNumberOfNeurons() const -> int override;
+        [[nodiscard]] auto getNumberOfParameters() const -> int override;
 };
 
 template <class Archive>

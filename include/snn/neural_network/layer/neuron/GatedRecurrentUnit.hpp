@@ -37,21 +37,21 @@ class GatedRecurrentUnit final
         GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
         ~GatedRecurrentUnit() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
         void train(float error);
 
-        [[nodiscard]] std::vector<float> getWeights() const;
-        [[nodiscard]] int getNumberOfParameters() const;
-        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] auto getWeights() const -> std::vector<float>;
+        [[nodiscard]] auto getNumberOfParameters() const -> int;
+        [[nodiscard]] auto getNumberOfInputs() const -> int;
 
         [[nodiscard]] auto isValid() const -> ErrorType;
 
-        NeuralNetworkOptimizer* getOptimizer() const;
+        auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
-        bool operator==(const GatedRecurrentUnit& neuron) const;
-        bool operator!=(const GatedRecurrentUnit& neuron) const;
+        auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
+        auto operator!=(const GatedRecurrentUnit& neuron) const -> bool;
 };
 
 template <class Archive>

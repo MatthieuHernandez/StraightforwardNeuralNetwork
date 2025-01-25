@@ -16,10 +16,10 @@ class TemporalComposite
         virtual void shuffle() = 0;
         virtual void unshuffle();
 
-        [[nodiscard]] virtual bool isFirstTrainingDataOfTemporalSequence(int index) const = 0;
-        [[nodiscard]] virtual bool isFirstTestingDataOfTemporalSequence(int index) const = 0;
-        [[nodiscard]] virtual bool needToTrainOnTrainingData(int index) const = 0;
-        [[nodiscard]] virtual bool needToEvaluateOnTestingData(int index) const = 0;
+        [[nodiscard]] virtual auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto isFirstTestingDataOfTemporalSequence(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto needToTrainOnTrainingData(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto needToEvaluateOnTestingData(int index) const -> bool = 0;
 
         [[nodiscard]] virtual auto isValid() const -> ErrorType;
 };

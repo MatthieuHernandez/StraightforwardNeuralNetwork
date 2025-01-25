@@ -20,19 +20,19 @@ void CompositeForNonTemporalData::shuffle()  // TODO: also need learning to shuf
 
 void CompositeForNonTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
 
-bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence([[maybe_unused]] int index) const
+auto CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence([[maybe_unused]] int index) const -> bool
 {
     return true;
 }
 
-bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence([[maybe_unused]] int index) const
+auto CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence([[maybe_unused]] int index) const -> bool
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const -> bool { return true; }
 
-bool CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const -> bool { return true; }
 
 auto CompositeForNonTemporalData::isValid() const -> ErrorType
 {

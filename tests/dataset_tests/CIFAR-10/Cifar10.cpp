@@ -26,7 +26,7 @@ void Cifar10::loadData(string folderPath)
     this->data->normalize(0, 1);
 }
 
-vector2D<float> Cifar10::readImages(string filePaths[], size_t size, vector2D<float>& labels) const
+auto Cifar10::readImages(string filePaths[], size_t size, vector2D<float>& labels) const -> vector2D<float>
 {
     vector2D<float> images;
     images.reserve(size * 10000);

@@ -42,16 +42,16 @@ namespace snn::tools
 static std::random_device rd;
 static std::mt19937 rng(rd());
 
-int randomBetween(const int min, const int max);  // [min; max[
-float randomBetween(const float min, const float max);
-std::vector<float> randomVector(const float min, const float max, const size_t size);
+auto randomBetween(const int min, const int max) -> int;  // [min; max[
+auto randomBetween(const float min, const float max) -> float;
+auto randomVector(const float min, const float max, const size_t size) -> std::vector<float>;
 
 auto toString(std::chrono::milliseconds duration) -> std::string;
 
 auto toString(ErrorType err) -> std::string;
 
 template <typename T>
-static T getMinValue(std::vector<T> vector)
+static auto getMinValue(std::vector<T> vector) -> T
 {
     if (vector.size() > 1)
     {
@@ -70,7 +70,7 @@ static T getMinValue(std::vector<T> vector)
 }
 
 template <typename T>
-static T getMaxValue(std::vector<T> vector)
+static auto getMaxValue(std::vector<T> vector) -> T
 {
     if (vector.size() > 1)
     {
@@ -107,7 +107,7 @@ constexpr void log([[maybe_unused]] Targs&&... messages)
     }
 }
 
-inline std::string toConstSizeString(int value, size_t length)
+inline auto toConstSizeString(int value, size_t length) -> std::string
 {
     auto str = std::to_string(value);
     while (str.length() < length) str = " " + str;
@@ -115,7 +115,7 @@ inline std::string toConstSizeString(int value, size_t length)
 }
 
 template <int T>
-std::string toConstSizeString(float value, size_t length)
+auto toConstSizeString(float value, size_t length) -> std::string
 {
     std::string str;
     if constexpr (T == 0)
@@ -132,7 +132,7 @@ std::string toConstSizeString(float value, size_t length)
 }
 
 template <typename T>
-std::vector<T> flatten(const vector2D<T>& vector2D)
+auto flatten(const vector2D<T>& vector2D) -> std::vector<T>
 {
     std::vector<T> vector1D;
     size_t size = 0;
@@ -142,20 +142,26 @@ std::vector<T> flatten(const vector2D<T>& vector2D)
     return vector1D;
 }
 
-constexpr int flatten(const int x, const int y, const int maxX) { return y * maxX + x; }
+constexpr auto flatten(const int x, const int y, const int maxX) -> int { return y * maxX + x; }
 
-constexpr int flatten(const int x, const int y, const int z, const int maxX, const int maxY)
+constexpr auto flatten(const int x, const int y, const int z, const int maxX, const int maxY) -> int
 {
     return z * maxY * maxX + y * maxX + x;
 }
 
-constexpr int roughenX(const int index, const int maxX) { return index % maxX; }
+constexpr auto roughenX(const int index, const int maxX) -> int { return index % maxX; }
 
-constexpr int roughenX(const int index, const int maxX, const int maxY) { return (index % (maxX * maxY)) % maxX; }
+constexpr auto roughenX(const int index, const int maxX, const int maxY) -> int
+{
+    return (index % (maxX * maxY)) % maxX;
+}
 
-constexpr int roughenY(const int index, const int maxX) { return index / maxX; }
+constexpr auto roughenY(const int index, const int maxX) -> int { return index / maxX; }
 
-constexpr int roughenY(const int index, const int maxX, const int maxY) { return (index % (maxX * maxY)) / maxX; }
+constexpr auto roughenY(const int index, const int maxX, const int maxY) -> int
+{
+    return (index % (maxX * maxY)) / maxX;
+}
 
-constexpr int roughenZ(const int index, const int maxX, const int maxY) { return index % (maxX * maxY); }
+constexpr auto roughenZ(const int index, const int maxX, const int maxY) -> int { return index % (maxX * maxY); }
 }  // namespace snn::tools

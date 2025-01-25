@@ -10,6 +10,6 @@ class Mnist final : public Dataset
 
     private:
         void loadData(std::string folderPath) override;
-        static snn::vector2D<float> readImages(std::string filePath, int size);
-        snn::vector2D<float> readLabels(std::string filePath, int size);
+        static auto readImages(std::string filePath, int size) -> snn::vector2D<float>;
+        auto readLabels(std::string filePath, int size) -> snn::vector2D<float>;
 };

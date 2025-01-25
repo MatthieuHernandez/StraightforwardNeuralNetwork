@@ -18,7 +18,7 @@ ErrorMultiplier::ErrorMultiplier(const ErrorMultiplier& errorMultiplier, const B
     this->factor = errorMultiplier.factor;
 }
 
-std::unique_ptr<LayerOptimizer> ErrorMultiplier::clone(const BaseLayer* newLayer) const
+auto ErrorMultiplier::clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer>
 {
     return make_unique<ErrorMultiplier>(*this, newLayer);
 }
@@ -28,14 +28,14 @@ void ErrorMultiplier::applyBeforeBackpropagation(std::vector<float>& inputErrors
     ranges::transform(inputErrors, inputErrors.begin(), bind(multiplies<float>(), placeholders::_1, this->factor));
 }
 
-std::string ErrorMultiplier::summary() const
+auto ErrorMultiplier::summary() const -> std::string
 {
     stringstream ss;
     ss << "ErrorMultiplier(" << factor << ")" << endl;
     return ss.str();
 }
 
-bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const
+auto ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     try
     {
@@ -48,4 +48,4 @@ bool ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool ErrorMultiplier::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }
+auto ErrorMultiplier::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }

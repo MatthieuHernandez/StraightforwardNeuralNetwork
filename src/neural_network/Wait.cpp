@@ -7,7 +7,7 @@ using namespace std;
 using namespace chrono;
 using namespace snn;
 
-Wait& Wait::operator||(const Wait& wait)
+auto Wait::operator||(const Wait& wait) -> Wait&
 {
     if (op == waitOperator::andOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
 
@@ -33,7 +33,7 @@ Wait& Wait::operator||(const Wait& wait)
     return *this;
 }
 
-Wait& Wait::operator&&(const Wait& wait)
+auto Wait::operator&&(const Wait& wait) -> Wait&
 {
     if (op == waitOperator::orOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
 
@@ -60,7 +60,7 @@ void Wait::startClock()
     this->lastReset = this->start;
 }
 
-bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const
+auto Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const -> bool
 {
     const auto currentDuration =
         static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
@@ -82,14 +82,14 @@ bool Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
     return false;
 }
 
-int Wait::tick() const
+auto Wait::tick() const -> int
 {
     const auto now = system_clock::now();
     const auto tickDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastTick).count());
     return tickDuration;
 }
 
-float Wait::getDuration()
+auto Wait::getDuration() -> float
 {
     const auto now = system_clock::now();
     const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
@@ -97,7 +97,7 @@ float Wait::getDuration()
     return currentDuration / 1000.0f;
 }
 
-float Wait::getDurationAndReset()
+auto Wait::getDurationAndReset() -> float
 {
     const auto now = system_clock::now();
     const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
@@ -106,42 +106,42 @@ float Wait::getDurationAndReset()
     return currentDuration / 1000.0f;
 }
 
-Wait snn::operator""_ep(unsigned long long value)
+auto snn::operator""_ep(unsigned long long value) -> Wait
 {
     Wait res;
     res.epochs = (int)value;
     return res;
 }
 
-Wait snn::operator""_acc(long double value)
+auto snn::operator""_acc(long double value) -> Wait
 {
     Wait res;
     res.accuracy = (float)value;
     return res;
 }
 
-Wait snn::operator""_mae(long double value)
+auto snn::operator""_mae(long double value) -> Wait
 {
     Wait res;
     res.mae = (float)value;
     return res;
 }
 
-Wait snn::operator""_ms(unsigned long long value)
+auto snn::operator""_ms(unsigned long long value) -> Wait
 {
     Wait res;
     res.duration = (int)value;
     return res;
 }
 
-Wait snn::operator""_s(unsigned long long value)
+auto snn::operator""_s(unsigned long long value) -> Wait
 {
     Wait res;
     res.duration = (int)value * 1000;
     return res;
 }
 
-Wait snn::operator""_min(unsigned long long value)
+auto snn::operator""_min(unsigned long long value) -> Wait
 {
     Wait res;
     res.duration = (int)value * 1000 * 60;

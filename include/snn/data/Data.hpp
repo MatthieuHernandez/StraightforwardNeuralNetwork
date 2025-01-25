@@ -75,27 +75,27 @@ class Data
 
         [[nodiscard]] auto isValid() const -> ErrorType;
 
-        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const;
-        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const;
-        [[nodiscard]] bool needToLearnOnTrainingData(int index) const;
-        [[nodiscard]] bool needToEvaluateOnTestingData(int index) const;
+        [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool;
+        [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool;
+        [[nodiscard]] auto needToLearnOnTrainingData(int index) const -> bool;
+        [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool;
 
-        [[nodiscard]] const std::vector<float>& getTrainingData(int index, int batchSize = 1);
-        [[nodiscard]] const std::vector<float>& getTestingData(int index) const;
+        [[nodiscard]] auto getTrainingData(int index, int batchSize = 1) -> const std::vector<float>&;
+        [[nodiscard]] auto getTestingData(int index) const -> const std::vector<float>&;
 
-        [[nodiscard]] int getTrainingLabel(int) const;
-        [[nodiscard]] int getTestingLabel(int) const;
+        [[nodiscard]] auto getTrainingLabel(int index) const -> int;
+        [[nodiscard]] auto getTestingLabel(int index) const -> int;
 
-        [[nodiscard]] const std::vector<float>& getTrainingOutputs(int index, int batchSize = 1);
-        [[nodiscard]] const std::vector<float>& getTestingOutputs(int) const;
+        [[nodiscard]] auto getTrainingOutputs(int index, int batchSize = 1) -> const std::vector<float>&;
+        [[nodiscard]] auto getTestingOutputs(int) const -> const std::vector<float>&;
 
-        [[nodiscard]] const std::vector<float>& getData(set set, int index);
-        [[nodiscard]] const std::vector<float>& getOutputs(set set, int index);
-        [[nodiscard]] int getLabel(set set, int index) const;
+        [[nodiscard]] auto getData(set set, int index) -> const std::vector<float>&;
+        [[nodiscard]] auto getOutputs(set set, int index) -> const std::vector<float>&;
+        [[nodiscard]] auto getLabel(set set, int index) const -> int;
 
-        [[nodiscard]] float getSeparator() const;
+        [[nodiscard]] auto getSeparator() const -> float;
         void setSeparator(float value);
-        [[nodiscard]] float getPrecision() const;
+        [[nodiscard]] auto getPrecision() const -> float;
         void setPrecision(float value);
 };
 }  // namespace snn

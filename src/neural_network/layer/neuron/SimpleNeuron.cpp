@@ -11,7 +11,7 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer>
 {
 }
 
-float SimpleNeuron::output(const vector<float>& inputs)
+auto SimpleNeuron::output(const vector<float>& inputs) -> float
 {
     this->lastInputs.pushBack(inputs);
     float tmp = 0.0f;  // to activate the SIMD optimization
@@ -26,7 +26,7 @@ float SimpleNeuron::output(const vector<float>& inputs)
     return this->outputFunction->function(this->sum);
 }
 
-vector<float>& SimpleNeuron::backOutput(float error)
+auto SimpleNeuron::backOutput(float error) -> vector<float>&
 {
     error = error * this->outputFunction->derivative(this->sum);
     assert(this->weights.size() == this->errors.size() + 1);
@@ -47,6 +47,6 @@ void SimpleNeuron::train(float error)
 
 auto SimpleNeuron::isValid() const -> ErrorType { return this->Neuron::isValid(); }
 
-bool SimpleNeuron::operator==(const SimpleNeuron& neuron) const { return this->Neuron::operator==(neuron); }
+auto SimpleNeuron::operator==(const SimpleNeuron& neuron) const -> bool { return this->Neuron::operator==(neuron); }
 
-bool SimpleNeuron::operator!=(const SimpleNeuron& neuron) const { return !(*this == neuron); }
+auto SimpleNeuron::operator!=(const SimpleNeuron& neuron) const -> bool { return !(*this == neuron); }

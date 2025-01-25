@@ -10,9 +10,9 @@ namespace snn::internal
 class Sigmoid final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::sigmoid; }
+        auto getType() const -> activation override { return activation::sigmoid; }
 
-        string getName() const override { return "sigmoid"; }
+        auto getName() const -> string override { return "sigmoid"; }
 
     public:
         Sigmoid()
@@ -20,8 +20,8 @@ class Sigmoid final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return (tanhf(x / 2.0f) + 1.0f) / 2.0f; }
+        auto function(const float x) const -> float override { return (tanhf(x / 2.0f) + 1.0f) / 2.0f; }
 
-        float derivative(const float x) const override { return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f; }
+        auto derivative(const float x) const -> float override { return (1.0f - powf(tanhf(x / 2.0f), 2.0f)) / 4.0f; }
 };
 }  // namespace snn::internal

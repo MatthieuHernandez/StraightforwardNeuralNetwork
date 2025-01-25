@@ -17,7 +17,7 @@ GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetwo
 {
 }
 
-float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
+auto GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset) -> float
 {
     if (temporalReset) this->reset();
     float resetGateOutput = this->resetGate.output(inputs, temporalReset);
@@ -34,7 +34,7 @@ float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset
     return output;
 }
 
-std::vector<float>& GatedRecurrentUnit::backOutput(float error)
+auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 {
     float d3 = error;
     float d8 = d3 * this->updateGateOutput;
@@ -66,7 +66,7 @@ void GatedRecurrentUnit::train(float error)
     auto e3 = this->resetGate.backOutput(d16);
 }
 
-vector<float> GatedRecurrentUnit::getWeights() const
+auto GatedRecurrentUnit::getWeights() const -> vector<float>
 {
     vector<float> allWeights;
     allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
@@ -75,13 +75,13 @@ vector<float> GatedRecurrentUnit::getWeights() const
     return allWeights;
 }
 
-int GatedRecurrentUnit::getNumberOfParameters() const
+auto GatedRecurrentUnit::getNumberOfParameters() const -> int
 {
     return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() +
            this->outputGate.getNumberOfParameters();
 }
 
-int GatedRecurrentUnit::getNumberOfInputs() const { return this->numberOfInputs; }
+auto GatedRecurrentUnit::getNumberOfInputs() const -> int { return this->numberOfInputs; }
 
 inline void GatedRecurrentUnit::reset()
 {
@@ -110,7 +110,7 @@ auto GatedRecurrentUnit::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const { return this->resetGate.getOptimizer(); }
+auto GatedRecurrentUnit::getOptimizer() const -> NeuralNetworkOptimizer* { return this->resetGate.getOptimizer(); }
 
 void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
@@ -119,7 +119,7 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
     this->outputGate.setOptimizer(newOptimizer);
 }
 
-bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
+auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> bool
 {
     return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&
            this->recurrentError == neuron.recurrentError && this->updateGateOutput == neuron.updateGateOutput &&
@@ -127,4 +127,4 @@ bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
            this->updateGate == neuron.updateGate && this->outputGate == neuron.outputGate;
 }
 
-bool GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const { return !(*this == neuron); }
+auto GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const -> bool { return !(*this == neuron); }

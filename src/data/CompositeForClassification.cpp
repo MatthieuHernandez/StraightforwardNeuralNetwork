@@ -20,7 +20,7 @@ auto CompositeForClassification::isValid() const -> ErrorType
     return this->ProblemComposite::isValid();
 }
 
-int CompositeForClassification::getTrainingLabel(const int index)
+auto CompositeForClassification::getTrainingLabel(const int index) -> int
 {
     for (int i = 0; i < (int)this->sets[training].labels[index].size(); i++)
     {
@@ -29,7 +29,7 @@ int CompositeForClassification::getTrainingLabel(const int index)
     throw std::runtime_error("wrong label");
 }
 
-int CompositeForClassification::getTestingLabel(const int index)
+auto CompositeForClassification::getTestingLabel(const int index) -> int
 {
     for (int i = 0; i < (int)this->sets[testing].labels[index].size(); i++)
     {
@@ -38,7 +38,7 @@ int CompositeForClassification::getTestingLabel(const int index)
     throw std::runtime_error("wrong label");
 }
 
-const std::vector<float>& CompositeForClassification::getTestingOutputs(const int) const
+auto CompositeForClassification::getTestingOutputs(const int) const -> const std::vector<float>&
 {
     throw ShouldNeverBeCalledException("getTestingOutputs");
 }

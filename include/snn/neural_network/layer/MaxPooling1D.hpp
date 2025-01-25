@@ -18,8 +18,9 @@ class MaxPooling1D final : public FilterLayer
         int numberOfOutputs;
         std::vector<int> maxValueIndexes;
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
+        [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> override;
+        [[nodiscard]] auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> override;
         void computeTrain([[maybe_unused]] std::vector<float>& inputErrors) override {}
         void buildKernelIndexes() override;
 
@@ -28,14 +29,14 @@ class MaxPooling1D final : public FilterLayer
         MaxPooling1D(LayerModel& model);
         ~MaxPooling1D() override = default;
         MaxPooling1D(const MaxPooling1D&) = default;
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> override;
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string override;
 
-        bool operator==(const BaseLayer& layer) const override;
-        bool operator!=(const BaseLayer& layer) const override;
+        auto operator==(const BaseLayer& layer) const -> bool override;
+        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <class Archive>

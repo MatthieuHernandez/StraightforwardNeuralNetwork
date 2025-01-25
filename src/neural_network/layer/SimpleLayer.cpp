@@ -12,7 +12,8 @@ extern template class internal::SimpleLayer<RecurrentNeuron>;
 extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 
 template <>
-std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+auto SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -23,7 +24,8 @@ std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector
 }
 
 template <>
-std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+auto SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)

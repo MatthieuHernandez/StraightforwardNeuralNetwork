@@ -3,7 +3,6 @@
 
 #include "Examples.hpp"
 
-
 using namespace std;
 using namespace snn;
 
@@ -12,7 +11,7 @@ This is a simple example how to use neural network for a classification problem.
 The neural network return class 0 if sum of inputs is negative and class 1 il sum of input is positive.
 For more explanation go to wiki.
 */
-int classificationExample()
+auto classificationExample() -> int
 {
     vector<vector<float>> inputData = {{-0.1f, 0.4f, -0.6f}, {0.5f, -0.4f, -0.8f}, {-0.7f, 0.9f, -0.7f},
                                        {-0.9f, -0.5f, 1.7f}, {0.5f, -0.5f, 0.9f},  {0.3f, 0.6f, 0.8f}};

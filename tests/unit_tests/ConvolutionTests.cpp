@@ -9,7 +9,7 @@
 using namespace std;
 using namespace snn;
 
-Data createDataForConvolutionTests();
+auto createDataForConvolutionTests() -> Data;
 
 TEST(Convolution, LayerConvolution1D)
 {
@@ -100,7 +100,7 @@ TEST(Convolution, SimpleConvolution2D)
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
-Data createDataForConvolutionTests()
+auto createDataForConvolutionTests() -> Data
 {
     vector2D<float> inputData = {
         {-1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,

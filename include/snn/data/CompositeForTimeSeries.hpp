@@ -20,10 +20,10 @@ class CompositeForTimeSeries : public TemporalComposite
         void shuffle() override;
         void unshuffle() override;
 
-        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const override;
-        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const override;
-        [[nodiscard]] bool needToTrainOnTrainingData(int index) const override;
-        [[nodiscard]] bool needToEvaluateOnTestingData(int index) const override;
+        [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool override;
+        [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool override;
+        [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool override;
+        [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool override;
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 };

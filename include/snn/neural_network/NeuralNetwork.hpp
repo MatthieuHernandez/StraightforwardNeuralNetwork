@@ -37,10 +37,10 @@ class NeuralNetwork : public StatisticAnalysis
         void serialize(Archive& ar, unsigned version);
 
     protected:
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset);
-        std::vector<float> outputForTraining(
-            const std::vector<float>& inputs,
-            bool temporalReset);  // Because Dropout is different during training and inference
+        auto output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>;
+        auto outputForTraining(const std::vector<float>& inputs,
+                               bool temporalReset)
+            -> std::vector<float>;  // Because Dropout is different during training and inference
 
         void evaluateOnceForRegression(const std::vector<float>& inputs, const std::vector<float>& desired,
                                        float precision, bool temporalReset);
@@ -76,8 +76,8 @@ class NeuralNetwork : public StatisticAnalysis
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
 
-        bool operator==(const NeuralNetwork& neuralNetwork) const;
-        bool operator!=(const NeuralNetwork& neuralNetwork) const;
+        auto operator==(const NeuralNetwork& neuralNetwork) const -> bool;
+        auto operator!=(const NeuralNetwork& neuralNetwork) const -> bool;
 };
 
 template <class Archive>

@@ -15,21 +15,21 @@ using namespace std;
 using namespace snn;
 using namespace internal;
 
-inline int computeNumberOfInputs(const vector<int>& shapeOfInput)
+inline auto computeNumberOfInputs(const vector<int>& shapeOfInput) -> int
 {
     int numberOfInputs = 1;
     for (auto size : shapeOfInput) numberOfInputs *= size;
     return numberOfInputs;
 }
 
-inline int computeNumberOfOutputsForMaxPooling1D(int kernelSize, const vector<int>& shapeOfInput)
+inline auto computeNumberOfOutputsForMaxPooling1D(int kernelSize, const vector<int>& shapeOfInput) -> int
 {
     const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
     return ((shapeOfInput[X] / kernelSize) + rest);
 }
 
-inline int computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<int>& shapeOfInput)
+inline auto computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<int>& shapeOfInput) -> int
 {
     const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
@@ -37,16 +37,16 @@ inline int computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<in
     return shapeOfInput[C] * ((shapeOfInput[X] / kernelSize) + restX) * ((shapeOfInput[Y] / kernelSize) + restY);
 }
 
-inline int computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int kernelSize,
-                                                       const vector<int>& shapeOfInput)
+inline auto computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int kernelSize,
+                                                        const vector<int>& shapeOfInput) -> int
 {
     const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
     return numberOfLocallyConnected * ((shapeOfInput[X] / kernelSize) + rest);
 }
 
-inline int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int kernelSize,
-                                                       const vector<int>& shapeOfInput)
+inline auto computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int kernelSize,
+                                                        const vector<int>& shapeOfInput) -> int
 {
     const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
@@ -55,20 +55,20 @@ inline int computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnec
            ((shapeOfInput[Y] / kernelSize) + restY);
 }
 
-inline int computeNumberOfKernelsForConvolution1D(int numberOfConvolution, int kernelSize,
-                                                  const vector<int>& shapeOfInput)
+inline auto computeNumberOfKernelsForConvolution1D(int numberOfConvolution, int kernelSize,
+                                                   const vector<int>& shapeOfInput) -> int
 {
     return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1));
 }
 
-inline int computeNumberOfKernelsForConvolution2D(int numberOfConvolution, int kernelSize,
-                                                  const vector<int>& shapeOfInput)
+inline auto computeNumberOfKernelsForConvolution2D(int numberOfConvolution, int kernelSize,
+                                                   const vector<int>& shapeOfInput) -> int
 {
     return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1)) * (shapeOfInput[Y] - (kernelSize - 1));
 }
 
-inline unique_ptr<BaseLayer> LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
-                                                 shared_ptr<NeuralNetworkOptimizer> optimizer)
+inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
+                                shared_ptr<NeuralNetworkOptimizer> optimizer) -> unique_ptr<BaseLayer>
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
 

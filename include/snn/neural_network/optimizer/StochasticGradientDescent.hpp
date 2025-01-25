@@ -22,17 +22,17 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         StochasticGradientDescent(float learningRate, float momentum);
         StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
         ~StochasticGradientDescent() = default;
-        [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
+        [[nodiscard]] auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> override;
 
         void updateWeights(SimpleNeuron& neuron, float error) const override;
         void updateWeights(RecurrentNeuron& neuron, float error) const override;
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string override;
 
-        bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
-        bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
+        auto operator==(const NeuralNetworkOptimizer& optimizer) const -> bool override;
+        auto operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool override;
 };
 
 template <class Archive>

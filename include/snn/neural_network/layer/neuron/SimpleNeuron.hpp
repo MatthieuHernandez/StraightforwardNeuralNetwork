@@ -20,15 +20,15 @@ class SimpleNeuron final : public Neuron
         SimpleNeuron(const SimpleNeuron& neuron) = default;
         ~SimpleNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
 
         void train(float error);
 
         [[nodiscard]] auto isValid() const -> ErrorType;
 
-        bool operator==(const SimpleNeuron& neuron) const;
-        bool operator!=(const SimpleNeuron& neuron) const;
+        auto operator==(const SimpleNeuron& neuron) const -> bool;
+        auto operator!=(const SimpleNeuron& neuron) const -> bool;
 };
 
 template <class Archive>

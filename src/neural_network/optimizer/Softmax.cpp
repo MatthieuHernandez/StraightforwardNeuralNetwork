@@ -21,7 +21,7 @@ Softmax::Softmax([[maybe_unused]] const Softmax& softmax, const BaseLayer* layer
 {
 }
 
-unique_ptr<LayerOptimizer> Softmax::clone(const BaseLayer* newLayer) const
+auto Softmax::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimizer>
 {
     return make_unique<Softmax>(*this, newLayer);
 }
@@ -55,14 +55,14 @@ inline void Softmax::applyAfterOutputForTesting(std::vector<float>& outputs) { c
 
 inline void Softmax::applyBeforeBackpropagation([[maybe_unused]] std::vector<float>& inputErrors) {}
 
-std::string Softmax::summary() const
+auto Softmax::summary() const -> std::string
 {
     stringstream ss;
     ss << "Softmax";
     return ss.str();
 }
 
-bool Softmax::operator==(const LayerOptimizer& optimizer) const
+auto Softmax::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     try
     {
@@ -75,4 +75,4 @@ bool Softmax::operator==(const LayerOptimizer& optimizer) const
     }
 }
 
-bool Softmax::operator!=(const LayerOptimizer& optimizer) const { return !(*this == optimizer); }
+auto Softmax::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }

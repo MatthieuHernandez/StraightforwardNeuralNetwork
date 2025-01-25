@@ -13,17 +13,17 @@ CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
 
 auto CompositeForRegression::isValid() const -> ErrorType { return this->ProblemComposite::isValid(); }
 
-const std::vector<float>& CompositeForRegression::getTestingOutputs(const int index) const
+auto CompositeForRegression::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
     return this->sets[testing].labels[index];
 }
 
-int CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index)
+auto CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForRegression::getTestingLabel([[maybe_unused]] const int index)
+auto CompositeForRegression::getTestingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }

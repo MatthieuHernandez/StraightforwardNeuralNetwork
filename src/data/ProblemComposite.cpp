@@ -22,7 +22,7 @@ auto ProblemComposite::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, const int batchSize)
+auto ProblemComposite::getTrainingOutputs(const int index, const int batchSize) -> const std::vector<float>&
 {
     int i = this->sets[training].shuffledIndexes[index];
     if (batchSize <= 1) return this->sets[training].labels[i];

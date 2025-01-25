@@ -9,7 +9,7 @@
 namespace snn
 {
 template <typename... TInt>
-extern LayerModel Input(TInt... sizeOfInput)
+extern auto Input(TInt... sizeOfInput) -> LayerModel
 {
     LayerModel model{input,
                      static_cast<int>(activation::sigmoid),
@@ -26,7 +26,8 @@ extern LayerModel Input(TInt... sizeOfInput)
 }
 
 template <class... TOptimizer>
-LayerModel FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, TOptimizer... optimizers)
+auto FullyConnected(int numberOfNeurons, activation activation = activation::sigmoid, TOptimizer... optimizers)
+    -> LayerModel
 {
     LayerModel model{fullyConnected,
                      -1,
@@ -43,7 +44,7 @@ LayerModel FullyConnected(int numberOfNeurons, activation activation = activatio
 }
 
 template <class... TOptimizer>
-LayerModel Recurrence(int numberOfNeurons, activation activation = activation::tanh, TOptimizer... optimizers)
+auto Recurrence(int numberOfNeurons, activation activation = activation::tanh, TOptimizer... optimizers) -> LayerModel
 {
     LayerModel model{recurrence,
                      -1,
@@ -60,7 +61,7 @@ LayerModel Recurrence(int numberOfNeurons, activation activation = activation::t
 }
 
 template <class... TOptimizer>
-LayerModel GruLayer(int numberOfNeurons, TOptimizer... optimizers)
+auto GruLayer(int numberOfNeurons, TOptimizer... optimizers) -> LayerModel
 {
     LayerModel model{gruLayer,
                      -1,
@@ -83,7 +84,7 @@ LayerModel GruLayer(int numberOfNeurons, TOptimizer... optimizers)
 }
 
 template <class... TOptimizer>
-LayerModel MaxPooling(int kernelSize)
+auto MaxPooling(int kernelSize) -> LayerModel
 {
     LayerModel model{maxPooling,
                      -1,
@@ -100,8 +101,8 @@ LayerModel MaxPooling(int kernelSize)
 }
 
 template <class... TOptimizer>
-LayerModel LocallyConnected(int numberOfLocallyConnected, int kernelSize, activation activation = activation::sigmoid,
-                            TOptimizer... optimizers)
+auto LocallyConnected(int numberOfLocallyConnected, int kernelSize, activation activation = activation::sigmoid,
+                      TOptimizer... optimizers) -> LayerModel
 {
     LayerModel model{locallyConnected,
                      -1,
@@ -118,8 +119,8 @@ LayerModel LocallyConnected(int numberOfLocallyConnected, int kernelSize, activa
 }
 
 template <class... TOptimizer>
-LayerModel Convolution(int numberOfConvolution, int kernelSize, activation activation = activation::ReLU,
-                       TOptimizer... optimizers)
+auto Convolution(int numberOfConvolution, int kernelSize, activation activation = activation::ReLU,
+                 TOptimizer... optimizers) -> LayerModel
 {
     LayerModel model{convolution,
                      -1,
@@ -146,8 +147,8 @@ namespace internal
 class LayerFactory
 {
     private:
-        static std::unique_ptr<BaseLayer> build(LayerModel& model, std::vector<int>& shapeOfInput,
-                                                std::shared_ptr<NeuralNetworkOptimizer> optimizer);
+        static auto build(LayerModel& model, std::vector<int>& shapeOfInput,
+                          std::shared_ptr<NeuralNetworkOptimizer> optimizer) -> std::unique_ptr<BaseLayer>;
 
     public:
         static void build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::vector<LayerModel>& models,

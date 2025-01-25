@@ -73,7 +73,7 @@ auto NeuralNetwork::output(const vector<float>& inputs, bool temporalReset) -> v
     return outputs;
 }
 
-std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+auto NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>
 {
     auto outputs = layers[0]->outputForTraining(inputs, temporalReset);
 
@@ -96,7 +96,8 @@ void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const 
     layers[0]->train(errors);
 }
 
-inline vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+inline auto NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+    -> vector<float>
 {
     vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
@@ -109,7 +110,7 @@ inline vector<float> NeuralNetwork::calculateError(const vector<float>& outputs,
     return errors;
 }
 
-snn::vector2D<float> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
+auto NeuralNetwork::getLayerOutputs(const vector<float>& inputs) -> snn::vector2D<float>
 {
     snn::vector2D<float> filterOutputs;
     auto outputs = layers[0]->output(inputs, true);

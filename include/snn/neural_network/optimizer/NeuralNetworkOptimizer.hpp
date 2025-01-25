@@ -22,16 +22,16 @@ class NeuralNetworkOptimizer
     public:
         NeuralNetworkOptimizer() = default;
         virtual ~NeuralNetworkOptimizer() = default;
-        [[nodiscard]] virtual std::shared_ptr<NeuralNetworkOptimizer> clone() const = 0;
+        [[nodiscard]] virtual auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> = 0;
 
         virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
         virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
 
         [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
 
-        [[nodiscard]] virtual std::string summary() const = 0;
+        [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
-        virtual bool operator==(const NeuralNetworkOptimizer& optimizer) const;
-        virtual bool operator!=(const NeuralNetworkOptimizer& optimizer) const;
+        virtual auto operator==(const NeuralNetworkOptimizer& optimizer) const -> bool;
+        virtual auto operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool;
 };
 }  // namespace snn::internal

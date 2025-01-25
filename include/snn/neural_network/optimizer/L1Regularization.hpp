@@ -25,17 +25,17 @@ class L1Regularization final : public LayerOptimizer
         L1Regularization(const L1Regularization& regularization, const BaseLayer* layer);
         ~L1Regularization() override = default;
 
-        std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
+        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> override;
 
         void applyAfterOutputForTraining(std::vector<float>&, bool) override {}
         void applyAfterOutputForTesting(std::vector<float>&) override {}
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string override;
 
-        bool operator==(const LayerOptimizer& optimizer) const override;
-        bool operator!=(const LayerOptimizer& optimizer) const override;
+        auto operator==(const LayerOptimizer& optimizer) const -> bool override;
+        auto operator!=(const LayerOptimizer& optimizer) const -> bool override;
 };
 
 template <class Archive>

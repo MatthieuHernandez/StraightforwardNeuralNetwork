@@ -189,12 +189,12 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         numberOfDataMisclassified++;
 }
 
-float StatisticAnalysis::computeGlobalClusteringRate() const
+auto StatisticAnalysis::computeGlobalClusteringRate() const -> float
 {
     return numberOfDataWellClassified / (numberOfDataWellClassified + numberOfDataMisclassified);
 }
 
-float StatisticAnalysis::computeWeightedClusteringRate() const
+auto StatisticAnalysis::computeWeightedClusteringRate() const -> float
 {
     float result = 0;
     for (const auto& c : clusters)
@@ -204,7 +204,7 @@ float StatisticAnalysis::computeWeightedClusteringRate() const
     return result / clusters.size();
 }
 
-float StatisticAnalysis::computeF1Score() const
+auto StatisticAnalysis::computeF1Score() const -> float
 {
     float result = 0;
     for (const auto& c : clusters)
@@ -219,7 +219,7 @@ float StatisticAnalysis::computeF1Score() const
     return 2.0f * result / clusters.size();
 }
 
-float StatisticAnalysis::computeMeanAbsoluteError() const
+auto StatisticAnalysis::computeMeanAbsoluteError() const -> float
 {
     float totalError = 0;
     for (const auto& c : clusters)
@@ -229,7 +229,7 @@ float StatisticAnalysis::computeMeanAbsoluteError() const
     return totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
 }
 
-float StatisticAnalysis::computeRootMeanSquaredError() const
+auto StatisticAnalysis::computeRootMeanSquaredError() const -> float
 {
     float totalError = 0;
     for (const auto& c : clusters)
@@ -240,27 +240,27 @@ float StatisticAnalysis::computeRootMeanSquaredError() const
     return sqrt(meanSquaredError);
 }
 
-float StatisticAnalysis::getGlobalClusteringRate() const { return this->globalClusteringRate; }
+auto StatisticAnalysis::getGlobalClusteringRate() const -> float { return this->globalClusteringRate; }
 
-float StatisticAnalysis::getWeightedClusteringRate() const { return this->weightedClusteringRate; }
+auto StatisticAnalysis::getWeightedClusteringRate() const -> float { return this->weightedClusteringRate; }
 
-float StatisticAnalysis::getF1Score() const { return this->f1Score; }
+auto StatisticAnalysis::getF1Score() const -> float { return this->f1Score; }
 
-float StatisticAnalysis::getMeanAbsoluteError() const { return this->meanAbsoluteError; }
+auto StatisticAnalysis::getMeanAbsoluteError() const -> float { return this->meanAbsoluteError; }
 
-float StatisticAnalysis::getRootMeanSquaredError() const { return this->rootMeanSquaredError; }
+auto StatisticAnalysis::getRootMeanSquaredError() const -> float { return this->rootMeanSquaredError; }
 
-float StatisticAnalysis::getGlobalClusteringRateMax() const { return this->globalClusteringRateMax; }
+auto StatisticAnalysis::getGlobalClusteringRateMax() const -> float { return this->globalClusteringRateMax; }
 
-float StatisticAnalysis::getWeightedClusteringRateMax() const { return this->weightedClusteringRateMax; }
+auto StatisticAnalysis::getWeightedClusteringRateMax() const -> float { return this->weightedClusteringRateMax; }
 
-float StatisticAnalysis::getF1ScoreMax() const { return this->f1ScoreMax; }
+auto StatisticAnalysis::getF1ScoreMax() const -> float { return this->f1ScoreMax; }
 
-float StatisticAnalysis::getMeanAbsoluteErrorMin() const { return this->meanAbsoluteErrorMin; }
+auto StatisticAnalysis::getMeanAbsoluteErrorMin() const -> float { return this->meanAbsoluteErrorMin; }
 
-float StatisticAnalysis::getRootMeanSquaredErrorMin() const { return this->rootMeanSquaredErrorMin; }
+auto StatisticAnalysis::getRootMeanSquaredErrorMin() const -> float { return this->rootMeanSquaredErrorMin; }
 
-bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
+auto StatisticAnalysis::operator==(const StatisticAnalysis& sa) const -> bool
 {
     return this->clusters == sa.clusters && this->numberOfDataWellClassified == sa.numberOfDataWellClassified &&
            this->numberOfDataMisclassified == sa.numberOfDataMisclassified &&
@@ -278,4 +278,4 @@ bool StatisticAnalysis::operator==(const StatisticAnalysis& sa) const
            this->rootMeanSquaredErrorIsBetterThanMin == sa.rootMeanSquaredErrorIsBetterThanMin;
 }
 
-bool StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const { return !(*this == sa); }
+auto StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const -> bool { return !(*this == sa); }

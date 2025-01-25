@@ -3,7 +3,6 @@
 
 #include "Examples.hpp"
 
-
 using namespace std;
 using namespace snn;
 
@@ -12,7 +11,7 @@ This is a simple example how to use neural network for a time series.
 In this neural network return the sum of 2 inputs.
 For more explanation go to wiki.
 */
-int recurrenceExample()
+auto recurrenceExample() -> int
 {
     vector<vector<float>> inputData = {{0.3f}, {0.5f}, {0.4f}, {0.2f}, {0.0f}, {0.2f}, {0.2f}, {0.4f}, {0.1f},
                                        {0.3f}, {0.4f}, {0.0f}, {0.0f}, {0.4f}, {0.4f}, {0.3f}, {0.2f}, {0.1f},

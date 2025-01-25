@@ -254,27 +254,27 @@ auto Data::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-bool Data::isFirstTrainingDataOfTemporalSequence(const int index) const
+auto Data::isFirstTrainingDataOfTemporalSequence(const int index) const -> bool
 {
     return this->temporalComposite->isFirstTrainingDataOfTemporalSequence(index);
 }
 
-bool Data::isFirstTestingDataOfTemporalSequence(const int index) const
+auto Data::isFirstTestingDataOfTemporalSequence(const int index) const -> bool
 {
     return this->temporalComposite->isFirstTestingDataOfTemporalSequence(index);
 }
 
-bool Data::needToLearnOnTrainingData(const int index) const
+auto Data::needToLearnOnTrainingData(const int index) const -> bool
 {
     return this->temporalComposite->needToTrainOnTrainingData(index);
 }
 
-bool Data::needToEvaluateOnTestingData(int index) const
+auto Data::needToEvaluateOnTestingData(int index) const -> bool
 {
     return this->temporalComposite->needToEvaluateOnTestingData(index);
 }
 
-const vector<float>& Data::getTrainingData(const int index, const int batchSize)
+auto Data::getTrainingData(const int index, const int batchSize) -> const vector<float>&
 {
     int i = this->sets[training].shuffledIndexes[index];
     if (batchSize <= 1) return this->sets[training].inputs[i];
@@ -298,37 +298,37 @@ const vector<float>& Data::getTrainingData(const int index, const int batchSize)
     return batchedData;
 }
 
-const vector<float>& Data::getTestingData(const int index) const { return this->sets[testing].inputs[index]; }
+auto Data::getTestingData(const int index) const -> const vector<float>& { return this->sets[testing].inputs[index]; }
 
-int Data::getTrainingLabel(const int index) const { return this->problemComposite->getTrainingLabel(index); }
+auto Data::getTrainingLabel(const int index) const -> int { return this->problemComposite->getTrainingLabel(index); }
 
-int Data::getTestingLabel(const int index) const { return this->problemComposite->getTestingLabel(index); }
+auto Data::getTestingLabel(const int index) const -> int { return this->problemComposite->getTestingLabel(index); }
 
-const vector<float>& Data::getTrainingOutputs(const int index, const int batchSize)
+auto Data::getTrainingOutputs(const int index, const int batchSize) -> const vector<float>&
 {
     return this->problemComposite->getTrainingOutputs(index, batchSize);
 }
 
-const vector<float>& Data::getTestingOutputs(const int index) const
+auto Data::getTestingOutputs(const int index) const -> const vector<float>&
 {
     return this->problemComposite->getTestingOutputs(index);
 }
 
-const vector<float>& Data::getData(set set, const int index)
+auto Data::getData(set set, const int index) -> const vector<float>&
 {
     if (set == training) return this->getTrainingData(index);
 
     return this->getTestingData(index);
 }
 
-const vector<float>& Data::getOutputs(set set, const int index)
+auto Data::getOutputs(set set, const int index) -> const vector<float>&
 {
     if (set == training) return this->getTrainingOutputs(index);
 
     return this->getTestingOutputs(index);
 }
 
-int Data::getLabel(set set, const int index) const
+auto Data::getLabel(set set, const int index) const -> int
 {
     if (set == training) return this->getTrainingLabel(index);
 
@@ -343,7 +343,7 @@ void Data::setPrecision(const float value)
         throw runtime_error("Precision is only for regression problems.");
 }
 
-float Data::getPrecision() const
+auto Data::getPrecision() const -> float
 {
     if (this->typeOfProblem == problem::regression)
         return this->precision;
@@ -359,7 +359,7 @@ void Data::setSeparator(const float value)
         throw runtime_error("Separator is only for classification and multiple classification problems.");
 }
 
-float Data::getSeparator() const
+auto Data::getSeparator() const -> float
 {
     if (this->typeOfProblem == problem::classification || this->typeOfProblem == problem::multipleClassification)
         return this->separator;

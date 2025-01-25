@@ -69,13 +69,13 @@ auto SimpleLayer<N>::isValid() const -> ErrorType
 }
 
 template <BaseNeuron N>
-bool SimpleLayer<N>::operator==(const BaseLayer& layer) const
+auto SimpleLayer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     return Layer<N>::operator==(layer);
 }
 
 template <BaseNeuron N>
-bool SimpleLayer<N>::operator!=(const BaseLayer& layer) const
+auto SimpleLayer<N>::operator!=(const BaseLayer& layer) const -> bool
 {
     return !(*this == layer);
 }

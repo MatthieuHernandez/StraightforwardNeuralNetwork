@@ -15,7 +15,7 @@ using namespace internal;
 
 vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
 
-inline vector<shared_ptr<ActivationFunction>> ActivationFunction::initialize()
+inline auto ActivationFunction::initialize() -> vector<shared_ptr<ActivationFunction>>
 {
     vector<shared_ptr<ActivationFunction>> activations;
     activations.reserve(6);
@@ -35,7 +35,7 @@ ActivationFunction::ActivationFunction(float min, float max)
 {
 }
 
-shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
+auto ActivationFunction::get(activation type) -> shared_ptr<ActivationFunction>
 {
     switch (type)
     {
@@ -58,12 +58,12 @@ shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
     }
 }
 
-bool ActivationFunction::operator==(const ActivationFunction& activationFunction) const
+auto ActivationFunction::operator==(const ActivationFunction& activationFunction) const -> bool
 {
     return this->getType() == activationFunction.getType();
 }
 
-bool ActivationFunction::operator!=(const ActivationFunction& activationFunction) const
+auto ActivationFunction::operator!=(const ActivationFunction& activationFunction) const -> bool
 {
     return !this->operator==(activationFunction);
 }

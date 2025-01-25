@@ -13,17 +13,17 @@ CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[
 
 auto CompositeForMultipleClassification::isValid() const -> ErrorType { return this->ProblemComposite::isValid(); }
 
-const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index) const
+auto CompositeForMultipleClassification::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
     return this->sets[testing].labels[index];
 }
 
-int CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index)
+auto CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForMultipleClassification::getTestingLabel([[maybe_unused]] const int index)
+auto CompositeForMultipleClassification::getTestingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }

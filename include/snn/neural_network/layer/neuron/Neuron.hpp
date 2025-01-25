@@ -35,7 +35,7 @@ class Neuron
         activation activationFunction;
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        static float randomInitializeWeight(int numberOfInputs);
+        static auto randomInitializeWeight(int numberOfInputs) -> float;
 
     public:
         Neuron() = default;  // use restricted to Boost library only
@@ -47,16 +47,16 @@ class Neuron
 
         [[nodiscard]] auto isValid() const -> ErrorType;
 
-        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] auto getWeights() const -> std::vector<float>;
         void setWeights(std::vector<float> w);
-        [[nodiscard]] int getNumberOfParameters() const;
-        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] auto getNumberOfParameters() const -> int;
+        [[nodiscard]] auto getNumberOfInputs() const -> int;
 
-        NeuralNetworkOptimizer* getOptimizer() const;
+        auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
-        bool operator==(const Neuron& neuron) const;
-        bool operator!=(const Neuron& neuron) const;
+        auto operator==(const Neuron& neuron) const -> bool;
+        auto operator!=(const Neuron& neuron) const -> bool;
 };
 
 template <class Archive>

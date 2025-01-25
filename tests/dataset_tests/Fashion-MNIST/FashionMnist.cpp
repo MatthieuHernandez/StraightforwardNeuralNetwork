@@ -22,7 +22,7 @@ void FashionMnist::loadData(string folderPath)
     this->data->normalize(0, 1);
 }
 
-vector2D<float> FashionMnist::readImages(string filePath, int size)
+auto FashionMnist::readImages(string filePath, int size) -> vector2D<float>
 {
     ifstream file;
     file.open(filePath, ios::in | ios::binary);
@@ -57,7 +57,7 @@ vector2D<float> FashionMnist::readImages(string filePath, int size)
     return images;
 }
 
-vector2D<float> FashionMnist::readLabels(string filePath, int size)
+auto FashionMnist::readLabels(string filePath, int size) -> vector2D<float>
 {
     ifstream file;
     file.open(filePath, ios::in | ios::binary);

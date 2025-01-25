@@ -11,30 +11,30 @@
 #include "ExtendedExpection.hpp"
 #include "NeuralNetworkVisualization.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-using namespace tools;
-
+namespace snn
+{
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork() { this->stopTrainingAsync(); }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> architecture,
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
                                                            NeuralNetworkOptimizerModel optimizer)
     : NeuralNetwork(architecture, optimizer)
 {
     const auto err = this->isValid();
     if (err != ErrorType::noError)
     {
-        const string message =
-            string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of neural networks";
-        throw runtime_error(message);
+        const std::string message =
+            std::string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of neural networks";
+        throw std::runtime_error(message);
     }
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork)
     : NeuralNetwork(neuralNetwork)
 {
-    if (!this->isIdle) throw runtime_error("StraightforwardNeuralNetwork must be idle to be copy");
+    if (!this->isIdle)
+    {
+        throw std::runtime_error("StraightforwardNeuralNetwork must be idle to be copy");
+    }
     this->autoSaveFilePath = neuralNetwork.autoSaveFilePath;
     this->autoSaveWhenBetter = neuralNetwork.autoSaveWhenBetter;
     this->index = neuralNetwork.index;
@@ -42,12 +42,13 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const Straightforward
     this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-auto StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset) -> vector<float>
+auto StraightforwardNeuralNetwork::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     return this->output(inputs, temporalReset);
 }
 
-auto StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset) -> int
+auto StraightforwardNeuralNetwork::computeCluster(const std::vector<float>& inputs, bool temporalReset) -> int
 {
     const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
@@ -69,22 +70,22 @@ void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize,
 {
     this->validData(data, batchSize);
     this->stopTrainingAsync();
-    log<complete>("Start a new thread");
-    this->thread =
-        std::thread(&StraightforwardNeuralNetwork::trainSync, this, ref(data), Wait(), batchSize, evaluationFrequency);
+    tools::log<complete>("Start a new thread");
+    this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(data), Wait(), batchSize,
+                               evaluationFrequency);
 }
 
 void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, int evaluationFrequency)
 {
     this->validData(data, batchSize);
-    if (!this->isIdle) throw runtime_error("Neural network is already training");
+    if (!this->isIdle) throw std::runtime_error("Neural network is already training");
     this->stopTrainingAsync();
     this->trainSync(data, wait, batchSize, evaluationFrequency);
 }
 
 void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int batchSize, const int evaluationFrequency)
 {
-    log<minimal>("Start training");
+    tools::log<minimal>("Start training");
     wait.startClock();
     this->epoch = 0;
     this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
@@ -121,7 +122,7 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
         if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0) this->evaluate(data, wait);
     }
     this->resetTrainingValues();
-    log<minimal>("Stop training");
+    tools::log<minimal>("Stop training");
 }
 
 void StraightforwardNeuralNetwork::evaluate(const Data& data)
@@ -193,9 +194,9 @@ void StraightforwardNeuralNetwork::stopTrainingAsync()
     this->wantToStopTraining = true;
     if (this->thread.joinable())
     {
-        log<minimal>("Stop training");
+        tools::log<minimal>("Stop training");
         this->thread.join();
-        log<complete>("Thread closed");
+        tools::log<complete>("Thread closed");
     }
 }
 
@@ -212,7 +213,7 @@ inline auto StraightforwardNeuralNetwork::continueTraining(Wait wait) const -> b
     const auto accuracy = this->getGlobalClusteringRate();
     const auto mae = this->getMeanAbsoluteError();
 
-    if (this->hasNan()) log<minimal>("A NaN value has been detected");
+    if (this->hasNan()) tools::log<minimal>("A NaN value has been detected");
 
     return !this->wantToStopTraining && !wait.isOver(epochs, accuracy, mae) && !this->hasNan();
 }
@@ -222,7 +223,8 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
     wait.startClock();
     while (!this->hasNan())
     {
-        this_thread::sleep_for(1ms);
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(1ms);
 
         const auto epochs = this->getCurrentEpoch();
         const auto accuracy = this->getGlobalClusteringRate();
@@ -238,99 +240,105 @@ void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) co
 {
     if (data.numberOfLabels != this->getNumberOfOutputs() || data.sizeOfData != this->getNumberOfInputs())
     {
-        throw runtime_error("Data has not the same format as the neural network");
+        throw std::runtime_error("Data has not the same format as the neural network");
     }
     if (batchSize != 1 && data.typeOfTemporal != nature::nonTemporal)
     {
-        throw runtime_error("Non temporal data cannot have batch size");
+        throw std::runtime_error("Non temporal data cannot have batch size");
     }
-    if (batchSize < 1) throw runtime_error("Wrong batch size");
-    if (batchSize > data.sets[training].size) throw runtime_error("Batch size is too large");
+    if (batchSize < 1) throw std::runtime_error("Wrong batch size");
+    if (batchSize > data.sets[training].size) throw std::runtime_error("Batch size is too large");
 }
 
-void StraightforwardNeuralNetwork::saveAs(const string filePath)
+void StraightforwardNeuralNetwork::saveAs(const std::string filePath)
 {
     if (!this->isIdle)
     {
-        throw runtime_error(
+        throw std::runtime_error(
             "Neural network cannot be saved during training, stop training before saving or use auto save");
     }
     saveSync(filePath);
 }
 
-void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(string filePath)
+void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(std::string filePath)
 {
     if (!this->isIdle)
     {
-        throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
     }
     for (size_t l = 0; l < this->layers.size(); ++l)
     {
-        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
-        NeuralNetworkVisualization::saveAsBitmap(filterLayer, filePath + "_layer_" + to_string(l) + ".bmp");
+        const auto filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[l].get());
+        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer,
+                                                           filePath + "_layer_" + std::to_string(l) + ".bmp");
     }
 }
 
-void StraightforwardNeuralNetwork::saveData2DAsBitmap(string filePath, const Data& data, int dataIndex)
+void StraightforwardNeuralNetwork::saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex)
 {
-    NeuralNetworkVisualization::saveAsBitmap(data.getTestingData(dataIndex), this->layers[0]->getShapeOfInput(),
-                                             filePath + "_input" + to_string(dataIndex) + ".bmp");
+    internal::NeuralNetworkVisualization::saveAsBitmap(data.getTestingData(dataIndex),
+                                                       this->layers[0]->getShapeOfInput(),
+                                                       filePath + "_input" + std::to_string(dataIndex) + ".bmp");
 }
 
-void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(string filePath, const Data& data, int dataIndex)
+void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex)
 {
     if (!this->isIdle)
     {
-        throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
     }
 
     auto outputs = this->getLayerOutputs(data.getTestingData(dataIndex));
 
     for (size_t l = 0; l < this->layers.size(); ++l)
     {
-        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+        const auto filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[l].get());
 
-        NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[l], filePath + "_layer_" + to_string(l) + ".bmp");
+        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[l],
+                                                           filePath + "_layer_" + std::to_string(l) + ".bmp");
     }
 }
 
-void StraightforwardNeuralNetwork::saveSync(const string filePath)
+void StraightforwardNeuralNetwork::saveSync(const std::string filePath)
 {
     this->autoSaveFilePath = filePath;
-    ofstream ofs(filePath);
+    std::ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
 }
 
-auto StraightforwardNeuralNetwork::loadFrom(const string filePath) -> StraightforwardNeuralNetwork&
+auto StraightforwardNeuralNetwork::loadFrom(const std::string filePath) -> StraightforwardNeuralNetwork&
 {
     StraightforwardNeuralNetwork* neuralNetwork = nullptr;
-    ifstream ifs(filePath);
+    std::ifstream ifs(filePath);
     boost::archive::text_iarchive archive(ifs);
     archive >> neuralNetwork;
     return *neuralNetwork;
 }
 
-auto StraightforwardNeuralNetwork::summary() const -> string
+auto StraightforwardNeuralNetwork::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "============================================================" << endl;
-    ss << "| SNN Model Summary                                        |" << endl;
-    ss << "============================================================" << endl;
-    ss << " Name:       " << this->autoSaveFilePath << endl;
-    ss << " Parameters: " << this->getNumberOfParameters() << endl;
-    ss << " Epochs:     " << this->epoch << endl;
-    ss << " Trainnig:   " << this->getNumberOfTraining() << endl;
-    ss << "============================================================" << endl;
-    ss << "| Layers                                                   |" << endl;
-    ss << "============================================================" << endl;
-    for (auto& layer : this->layers) ss << layer->summary();
-    ss << "============================================================" << endl;
-    ss << "|  Optimizer                                               |" << endl;
-    ss << "============================================================" << endl;
-    ss << optimizer->summary();
-    ss << "============================================================" << endl;
-    return ss.str();
+    std::stringstream summary;
+    summary << "============================================================\n";
+    summary << "| SNN Model Summary                                        |\n";
+    summary << "============================================================\n";
+    summary << " Name:       " << this->autoSaveFilePath << '\n';
+    summary << " Parameters: " << this->getNumberOfParameters() << '\n';
+    summary << " Epochs:     " << this->epoch << '\n';
+    summary << " Trainnig:   " << this->getNumberOfTraining() << '\n';
+    summary << "============================================================\n";
+    summary << "| Layers                                                   |\n";
+    summary << "============================================================\n";
+    for (const auto& layer : this->layers)
+    {
+        summary << layer->summary();
+    }
+    summary << "============================================================\n";
+    summary << "|  Optimizer                                               |\n";
+    summary << "============================================================\n";
+    summary << optimizer->summary();
+    summary << "============================================================\n";
+    return summary.str();
 }
 
 auto StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
@@ -346,3 +354,4 @@ auto StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork
 {
     return !(*this == neuralNetwork);
 }
+}  // namespace snn

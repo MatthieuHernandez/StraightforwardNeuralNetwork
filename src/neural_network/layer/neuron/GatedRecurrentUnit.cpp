@@ -2,11 +2,9 @@
 
 #include <boost/serialization/export.hpp>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
       resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
                 optimizer),
@@ -17,9 +15,12 @@ GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetwo
 {
 }
 
-auto GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset) -> float
+auto GatedRecurrentUnit::output(const std::vector<float>& inputs, bool temporalReset) -> float
 {
-    if (temporalReset) this->reset();
+    if (temporalReset)
+    {
+        this->reset();
+    }
     float resetGateOutput = this->resetGate.output(inputs, temporalReset);
     this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
     this->outputGate.lastOutput *= resetGateOutput;
@@ -47,8 +48,8 @@ auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
     float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
-    ranges::transform(this->errors, e2, this->errors.begin(), plus<float>());
-    ranges::transform(this->errors, e3, this->errors.begin(), plus<float>());
+    std::ranges::transform(this->errors, e2, this->errors.begin(), plus<float>());
+    std::ranges::transform(this->errors, e3, this->errors.begin(), plus<float>());
     return this->errors;
 }
 
@@ -66,9 +67,9 @@ void GatedRecurrentUnit::train(float error)
     auto e3 = this->resetGate.backOutput(d16);
 }
 
-auto GatedRecurrentUnit::getWeights() const -> vector<float>
+auto GatedRecurrentUnit::getWeights() const -> std::vector<float>
 {
-    vector<float> allWeights;
+    std::vector<float> allWeights;
     allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
     allWeights.insert(allWeights.end(), this->updateGate.weights.begin(), this->updateGate.weights.end());
     allWeights.insert(allWeights.end(), this->outputGate.weights.begin(), this->outputGate.weights.end());
@@ -128,3 +129,4 @@ auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> b
 }
 
 auto GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const -> bool { return !(*this == neuron); }
+}  // namespace snn::internal

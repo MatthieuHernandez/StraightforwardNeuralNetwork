@@ -5,11 +5,9 @@
 
 #include "LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-LocallyConnected1D::LocallyConnected1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+LocallyConnected1D::LocallyConnected1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, std::move(optimizer))
 {
     const int rest = this->shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
@@ -52,9 +50,10 @@ void LocallyConnected1D::buildKernelIndexes()
     }
 }
 
-inline auto LocallyConnected1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
+inline auto LocallyConnected1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+    -> std::unique_ptr<BaseLayer>
 {
-    auto layer = make_unique<LocallyConnected1D>(*this);
+    auto layer = std::make_unique<LocallyConnected1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].setOptimizer(optimizer);
@@ -76,31 +75,31 @@ auto LocallyConnected1D::isValid() const -> ErrorType
 
 auto LocallyConnected1D::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " LocallyConnected1D";
-    ss << "                Input shape: [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]" << endl;
-    ss << "                Filters: " << this->numberOfFilters << endl;
-    ss << "                Kernel size: " << this->kernelSize << endl;
-    ss << "                Parameters: " << this->getNumberOfParameters() << endl;
-    ss << "                Activation: " << this->neurons[0].outputFunction->getName() << endl;
-    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " LocallyConnected1D";
+    summary << "                Input shape: [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]\n";
+    summary << "                Filters: " << this->numberOfFilters << '\n';
+    summary << "                Kernel size: " << this->kernelSize << '\n';
+    summary << "                Parameters: " << this->getNumberOfParameters() << '\n';
+    summary << "                Activation: " << this->neurons[0].outputFunction->getName() << '\n';
+    summary << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]\n";
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
     }
-    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    for (size_t opti = 1; opti < this->optimizers.size(); ++opti)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[opti]->summary() << '\n';
     }
-    return ss.str();
+    return summary.str();
 }
 
-inline auto LocallyConnected1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
-    -> vector<float>
+inline auto LocallyConnected1D::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
-    vector<float> outputs(this->numberOfKernels);
-    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    std::vector<float> outputs(this->numberOfKernels);
+    std::vector<float> neuronInputs(this->sizeOfNeuronInputs);
     for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
     {
         for (size_t i = 0; i < neuronInputs.size(); ++i)
@@ -123,9 +122,9 @@ inline auto LocallyConnected1D::computeOutput(const vector<float>& inputs, [[may
     return outputs;
 }
 
-inline auto LocallyConnected1D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
+inline auto LocallyConnected1D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
@@ -152,3 +151,4 @@ inline auto LocallyConnected1D::operator==(const BaseLayer& layer) const -> bool
 }
 
 inline auto LocallyConnected1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

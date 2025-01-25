@@ -1,12 +1,8 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
-#include <queue>
-#include <vector>
 
-#include "../../../tools/Tools.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
-#include "BaseNeuron.hpp"
 #include "CircularData.hpp"
 #include "NeuronModel.hpp"
 #include "activation_function/ActivationFunction.hpp"
@@ -21,10 +17,10 @@ class Neuron
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        int numberOfInputs;
-        int batchSize;
+        int numberOfInputs{};
+        int batchSize{};
         std::vector<float> weights;
-        float bias;
+        float bias{};
 
         CircularData previousDeltaWeights;
         CircularData lastInputs;
@@ -35,10 +31,13 @@ class Neuron
         activation activationFunction;
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        static auto randomInitializeWeight(int numberOfInputs) -> float;
+        static auto randomInitializeWeight(int numberOfWeights) -> float;
 
     public:
         Neuron() = default;  // use restricted to Boost library only
+        Neuron(Neuron&&) = delete;
+        auto operator=(const Neuron&) -> Neuron& = default;
+        auto operator=(Neuron&&) -> Neuron& = delete;
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
         ~Neuron() = default;

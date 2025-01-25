@@ -49,11 +49,12 @@
  ## Use
 Create, train and use a neural network in few lines of code.
 ```cpp
-using namespace snn;
+#include <snn/data/Data.hpp>
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 
-Data data(problem::classification, inputData, expectedOutputs);
+snn::Data data(problem::classification, inputData, expectedOutputs);
 
-StraightforwardNeuralNetwork neuralNetwork({
+snn::StraightforwardNeuralNetwork neuralNetwork({
     Input(1, 28, 28), // (C, X, Y)
     Convolution(16, 3, activation::ReLU), // 16 filters and (3, 3) kernels
     FullyConnected(92),

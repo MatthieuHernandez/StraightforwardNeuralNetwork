@@ -13,13 +13,13 @@ auto createDataForConvolutionTests() -> Data;
 
 TEST(Convolution, LayerConvolution1D)
 {
-    vector<float> input{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector<float> kernel0{1, 2, 3, 4, 5, 6, 1};
-    vector<float> kernel1{7, 8, 9, 10, 11, 12, 1};
-    vector<float> error{1, 2, 3, 4, 5, 6};
+    std::vector<float> input{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<float> kernel0{1, 2, 3, 4, 5, 6, 1};
+    std::vector<float> kernel1{7, 8, 9, 10, 11, 12, 1};
+    std::vector<float> error{1, 2, 3, 4, 5, 6};
 
-    vector<float> expectedOutput{92, 218, 134, 332, 176, 446};
-    vector<float> expectedBackOutput{15, 18, 52, 62, 119, 140, 128, 146, 91, 102};
+    std::vector<float> expectedOutput{92, 218, 134, 332, 176, 446};
+    std::vector<float> expectedBackOutput{15, 18, 52, 62, 119, 140, 128, 146, 91, 102};
     LayerModel model{convolution, 10, 2, 6, {6, 3, 7, 1.0F, activation::identity}, 2, 6, 3, 3, {2, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::Convolution1D conv(model, sgd);
@@ -34,19 +34,19 @@ TEST(Convolution, LayerConvolution1D)
 
 TEST(Convolution, LayerConvolution2D)
 {
-    vector<float> input(50);
-    vector<float> kernel0{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 1};
-    vector<float> kernel1{10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 1};
-    vector<float> error(18);
+    std::vector<float> input(50);
+    std::vector<float> kernel0{1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 1};
+    std::vector<float> kernel1{10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17, 18, 18, 1};
+    std::vector<float> error(18);
     std::iota(std::begin(input), std::end(input), 1.0F);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    vector<float> expectedOutput{1600, 3787, 1780, 4291, 1960, 4795, 2500, 6307, 2680,
-                                 6811, 2860, 7315, 3400, 8827, 3580, 9331, 3760, 9835};
-    vector<float> expectedBackOutput{21,   21,   67,  67,  142, 142,  133,  133, 87,   87,   117,  117,  308,
-                                     308,  581,  581, 488, 488, 297,  297,  324, 324,  795,  795,  1425, 1425,
-                                     1137, 1137, 666, 666, 411, 411,  944,  944, 1607, 1607, 1220, 1220, 687,
-                                     687,  315,  315, 703, 703, 1168, 1168, 865, 865,  477,  477};
+    std::vector<float> expectedOutput{1600, 3787, 1780, 4291, 1960, 4795, 2500, 6307, 2680,
+                                      6811, 2860, 7315, 3400, 8827, 3580, 9331, 3760, 9835};
+    std::vector<float> expectedBackOutput{21,   21,   67,  67,  142, 142,  133,  133, 87,   87,   117,  117,  308,
+                                          308,  581,  581, 488, 488, 297,  297,  324, 324,  795,  795,  1425, 1425,
+                                          1137, 1137, 666, 666, 411, 411,  944,  944, 1607, 1607, 1220, 1220, 687,
+                                          687,  315,  315, 703, 703, 1168, 1168, 865, 865,  477,  477};
     LayerModel model{convolution, 50, 2, 18, {18, 9, 19, 1.0F, activation::identity}, 1, 18, 9, 3, {2, 5, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::Convolution2D conv(model, sgd);
@@ -61,7 +61,7 @@ TEST(Convolution, LayerConvolution2D)
 
 TEST(Convolution, Momentum)
 {
-    vector<float> input{1.0F, 2.0F, 3.0F, 4.0F};
+    std::vector<float> input{1.0F, 2.0F, 3.0F, 4.0F};
 
     LayerModel model{convolution, 4, 1, 4, {1, 4, 2, 1.0F, activation::identity}, 1, 4, 4, 1, {1, 2, 2}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.1F, 0.9F);
@@ -70,7 +70,7 @@ TEST(Convolution, Momentum)
 
     for (auto i = 0; i < 3; ++i)
     {
-        vector<float> error{1.0F, 2.0F, 3.0F, 4.0F};
+        std::vector<float> error{1.0F, 2.0F, 3.0F, 4.0F};
         auto output = conv.output(input, false);
         auto backOutput = conv.backOutput(error);
         ASSERT_GT(output.size(), 0);

@@ -1,12 +1,7 @@
 #include "CompositeForTemporalData.hpp"
 
-#include <algorithm>
-#include <random>
-
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
     : TemporalComposite(sets)
 {
@@ -21,7 +16,7 @@ CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
 
 void CompositeForTemporalData::shuffle()
 {
-    ranges::shuffle(this->indexesForShuffles, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffles, tools::rng);
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
@@ -67,3 +62,4 @@ auto CompositeForTemporalData::isValid() const -> ErrorType
 
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

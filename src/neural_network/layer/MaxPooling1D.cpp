@@ -5,10 +5,8 @@
 #include "LayerModel.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 MaxPooling1D::MaxPooling1D(LayerModel& model)
     : FilterLayer(model, nullptr)
 {
@@ -54,9 +52,9 @@ void MaxPooling1D::buildKernelIndexes()
     }
 }
 
-inline auto MaxPooling1D::clone(shared_ptr<NeuralNetworkOptimizer>) const -> unique_ptr<BaseLayer>
+inline auto MaxPooling1D::clone(std::shared_ptr<NeuralNetworkOptimizer>) const -> std::unique_ptr<BaseLayer>
 {
-    return make_unique<MaxPooling1D>(*this);
+    return std::make_unique<MaxPooling1D>(*this);
 }
 
 auto MaxPooling1D::isValid() const -> ErrorType
@@ -71,27 +69,27 @@ auto MaxPooling1D::isValid() const -> ErrorType
 
 auto MaxPooling1D::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " MaxPooling1D" << endl;
-    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]" << endl;
-    ss << "                Kernel size:  " << this->kernelSize << endl;
-    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " MaxPooling1D\n";
+    summary << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]\n";
+    summary << "                Kernel size:  " << this->kernelSize << '\n';
+    summary << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]\n";
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
     }
-    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    for (size_t opti = 1; opti < this->optimizers.size(); ++opti)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[opti]->summary() << '\n';
     }
-    return ss.str();
+    return summary.str();
 }
 
-inline auto MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
-    -> vector<float>
+inline auto MaxPooling1D::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
-    vector<float> outputs(this->numberOfKernels);
+    std::vector<float> outputs(this->numberOfKernels);
     for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
     {
         this->maxValueIndexes[k] = -1;
@@ -112,9 +110,9 @@ inline auto MaxPooling1D::computeOutput(const vector<float>& inputs, [[maybe_unu
     return outputs;
 }
 
-inline auto MaxPooling1D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
+inline auto MaxPooling1D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t e = 0; e < inputErrors.size(); ++e)
     {
         errors[this->maxValueIndexes[e]] = inputErrors[e];
@@ -138,3 +136,4 @@ inline auto MaxPooling1D::operator==(const BaseLayer& layer) const -> bool
 }
 
 inline auto MaxPooling1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

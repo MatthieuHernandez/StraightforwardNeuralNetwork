@@ -18,13 +18,11 @@
 #include "ExtendedExpection.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-Data::Data(problem typeOfProblem, vector<vector<float>>& trainingInputs, vector<vector<float>>& trainingLabels,
-           vector<vector<float>>& testingInputs, vector<vector<float>>& testingLabels, nature typeOfTemporal,
-           int numberOfRecurrences)
+namespace snn
+{
+Data::Data(problem typeOfProblem, std::vector<std::vector<float>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences),
       typeOfProblem(typeOfProblem),
       typeOfTemporal(typeOfTemporal)
@@ -32,8 +30,8 @@ Data::Data(problem typeOfProblem, vector<vector<float>>& trainingInputs, vector<
     this->initialize(trainingInputs, trainingLabels, testingInputs, testingLabels);
 }
 
-Data::Data(problem typeOfProblem, vector<vector<float>>& inputs, vector<vector<float>>& labels, nature typeOfTemporal,
-           int numberOfRecurrences)
+Data::Data(problem typeOfProblem, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& labels,
+           nature typeOfTemporal, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences),
       typeOfProblem(typeOfProblem),
       typeOfTemporal(typeOfTemporal)
@@ -41,16 +39,16 @@ Data::Data(problem typeOfProblem, vector<vector<float>>& inputs, vector<vector<f
     this->initialize(inputs, labels, inputs, labels);
 }
 
-Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& trainingInputs, vector<vector<float>>& trainingLabels,
-           vector<vector<vector<float>>>& testingInputs, vector<vector<float>>& testingLabels, nature typeOfTemporal,
-           int numberOfRecurrences)
+Data::Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& trainingInputs,
+           std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<std::vector<float>>>& testingInputs,
+           std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences),
       typeOfProblem(typeOfProblem),
       typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
     {
-        throw runtime_error("Vector 3D type inputs are only for sequential data.");
+        throw std::runtime_error("std::vector 3D type inputs are only for sequential data.");
     }
 
     this->flatten(training, trainingInputs);
@@ -59,15 +57,15 @@ Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& trainingInputs,
     this->initialize(this->sets[training].inputs, trainingLabels, this->sets[testing].inputs, testingLabels);
 }
 
-Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& inputs, vector<vector<float>>& labels,
-           nature typeOfTemporal, int numberOfRecurrences)
+Data::Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& inputs,
+           std::vector<std::vector<float>>& labels, nature typeOfTemporal, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences),
       typeOfProblem(typeOfProblem),
       typeOfTemporal(typeOfTemporal)
 {
     if (this->typeOfTemporal != nature::sequential)
     {
-        throw runtime_error("Vector 3D type inputs are only for sequential data.");
+        throw std::runtime_error("std::vector 3D type inputs are only for sequential data.");
     }
 
     this->flatten(inputs);
@@ -75,8 +73,8 @@ Data::Data(problem typeOfProblem, vector<vector<vector<float>>>& inputs, vector<
     this->initialize(this->sets[training].inputs, labels, this->sets[testing].inputs, labels);
 }
 
-void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float>>& trainingLabels,
-                      vector<vector<float>>& testingInputs, vector<vector<float>>& testingLabels)
+void Data::initialize(std::vector<std::vector<float>>& trainingInputs, std::vector<std::vector<float>>& trainingLabels,
+                      std::vector<std::vector<float>>& testingInputs, std::vector<std::vector<float>>& testingLabels)
 {
     this->precision = 0.1F;
     this->separator = 0.5F;
@@ -99,13 +97,16 @@ void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float
     switch (this->typeOfProblem)
     {
         case problem::classification:
-            this->problemComposite = make_unique<CompositeForClassification>(this->sets, this->numberOfLabels);
+            this->problemComposite =
+                std::make_unique<internal::CompositeForClassification>(this->sets, this->numberOfLabels);
             break;
         case problem::multipleClassification:
-            this->problemComposite = make_unique<CompositeForMultipleClassification>(this->sets, this->numberOfLabels);
+            this->problemComposite =
+                std::make_unique<internal::CompositeForMultipleClassification>(this->sets, this->numberOfLabels);
             break;
         case problem::regression:
-            this->problemComposite = make_unique<CompositeForRegression>(this->sets, this->numberOfLabels);
+            this->problemComposite =
+                std::make_unique<internal::CompositeForRegression>(this->sets, this->numberOfLabels);
             break;
         default:
             throw NotImplementedException();
@@ -114,13 +115,14 @@ void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float
     switch (this->typeOfTemporal)
     {
         case nature::nonTemporal:
-            this->temporalComposite = make_unique<CompositeForNonTemporalData>(this->sets);
+            this->temporalComposite = std::make_unique<internal::CompositeForNonTemporalData>(this->sets);
             break;
         case nature::sequential:
-            this->temporalComposite = make_unique<CompositeForTemporalData>(this->sets);
+            this->temporalComposite = std::make_unique<internal::CompositeForTemporalData>(this->sets);
             break;
         case nature::timeSeries:
-            this->temporalComposite = make_unique<CompositeForTimeSeries>(this->sets, this->numberOfRecurrences);
+            this->temporalComposite =
+                std::make_unique<internal::CompositeForTimeSeries>(this->sets, this->numberOfRecurrences);
             break;
         default:
             throw NotImplementedException();
@@ -129,14 +131,14 @@ void Data::initialize(vector<vector<float>>& trainingInputs, vector<vector<float
     const auto err = this->isValid();
     if (err != ErrorType::noError)
     {
-        const string message = string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of data";
-        throw runtime_error(message);
+        const auto message = std::string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of data";
+        throw std::runtime_error(message);
     }
 
     tools::log<minimal>("Data loaded");
 }
 
-void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
+void Data::flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D)
 {
     this->sets[set].numberOfTemporalSequence = (int)input3D.size();
     size_t size = accumulate(input3D.begin(), input3D.end(), (size_t)0,
@@ -146,9 +148,9 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
     if (set == testing) this->sets[set].needToEvaluateOnData.resize(size, false);
 
     size_t i = 0;
-    for (vector2D<float>& v : input3D)
+    for (auto& v : input3D)
     {
-        ranges::move(v, back_inserter(this->sets[set].inputs));
+        std::ranges::move(v, back_inserter(this->sets[set].inputs));
 
         this->sets[set].areFirstDataOfTemporalSequence[i] = true;
         i += v.size();
@@ -157,7 +159,7 @@ void Data::flatten(set set, vector<vector<vector<float>>>& input3D)
     this->sets[set].size = (int)this->sets[set].inputs.size();
 }
 
-void Data::flatten(vector<vector<vector<float>>>& input3D)
+void Data::flatten(std::vector<std::vector<std::vector<float>>>& input3D)
 {
     this->sets[training].numberOfTemporalSequence = (int)input3D.size();
     this->sets[testing].numberOfTemporalSequence = (int)input3D.size();
@@ -171,7 +173,7 @@ void Data::flatten(vector<vector<vector<float>>>& input3D)
     size_t i = 0;
     for (vector2D<float>& v : input3D)
     {
-        ranges::move(v, back_inserter(this->sets[training].inputs));
+        std::ranges::move(v, back_inserter(this->sets[training].inputs));
 
         this->sets[training].areFirstDataOfTemporalSequence[i] = true;
         this->sets[testing].areFirstDataOfTemporalSequence[i] = true;
@@ -189,41 +191,48 @@ void Data::normalize(const float min, const float max)
     {
         vector2D<float>& inputsTraining = this->sets[training].inputs;
         vector2D<float>& inputsTesting = this->sets[testing].inputs;
-        // TODO: if the first pixel of images is always black, normalization will be wrong if testing set is different
+        // TODO(matth): if the first pixel of images is always black, normalization will be wrong if testing set is
+        // different
         for (int j = 0; j < this->sizeOfData; j++)
         {
-            float minValueOfVector = inputsTraining[0][j];
-            float maxValueOfVector = inputsTraining[0][j];
+            float minValueOfvector = inputsTraining[0][j];
+            float maxValueOfvector = inputsTraining[0][j];
 
             for (size_t i = 1; i < inputsTraining.size(); i++)
             {
-                if (inputsTraining[i][j] < minValueOfVector)
+                if (inputsTraining[i][j] < minValueOfvector)
                 {
-                    minValueOfVector = inputsTraining[i][j];
+                    minValueOfvector = inputsTraining[i][j];
                 }
-                else if (inputsTraining[i][j] > maxValueOfVector)
+                else if (inputsTraining[i][j] > maxValueOfvector)
                 {
-                    maxValueOfVector = inputsTraining[i][j];
+                    maxValueOfvector = inputsTraining[i][j];
                 }
             }
 
-            const float difference = maxValueOfVector - minValueOfVector;
+            const float difference = maxValueOfvector - minValueOfvector;
 
             for (size_t i = 0; i < inputsTraining.size(); i++)
             {
-                if (difference != 0) inputsTraining[i][j] = (inputsTraining[i][j] - minValueOfVector) / difference;
+                if (difference != 0)
+                {
+                    inputsTraining[i][j] = (inputsTraining[i][j] - minValueOfvector) / difference;
+                }
                 inputsTraining[i][j] = inputsTraining[i][j] * (max - min) + min;
             }
             for (size_t i = 0; i < inputsTesting.size(); i++)
             {
-                if (difference != 0) inputsTesting[i][j] = (inputsTesting[i][j] - minValueOfVector) / difference;
+                if (difference != 0)
+                {
+                    inputsTesting[i][j] = (inputsTesting[i][j] - minValueOfvector) / difference;
+                }
                 inputsTesting[i][j] = inputsTesting[i][j] * (max - min) + min;
             }
         }
     }
-    catch (exception&)
+    catch (std::exception&)
     {
-        throw runtime_error("Normalization of input data failed");
+        throw std::runtime_error("Normalization of input data failed");
     }
 }
 
@@ -234,15 +243,15 @@ void Data::unshuffle() { this->temporalComposite->unshuffle(); }
 auto Data::isValid() const -> ErrorType
 {
     if (!this->sets[testing].shuffledIndexes.empty() &&
-        this->sets[training].size != (int)this->sets[training].shuffledIndexes.size())
+        this->sets[training].size != this->sets[training].shuffledIndexes.size())
     {
         return ErrorType::dataWrongIdexes;
     }
 
-    if (this->sets[training].size != (int)this->sets[training].inputs.size() &&
-        this->sets[training].size != (int)this->sets[training].labels.size() &&
-        this->sets[testing].size != (int)this->sets[training].inputs.size() &&
-        this->sets[testing].size != (int)this->sets[training].labels.size())
+    if (this->sets[training].size != this->sets[training].inputs.size() &&
+        this->sets[training].size != this->sets[training].labels.size() &&
+        this->sets[testing].size != this->sets[training].inputs.size() &&
+        this->sets[testing].size != this->sets[training].labels.size())
     {
         return ErrorType::dataWrongSize;
     }
@@ -280,63 +289,78 @@ auto Data::needToEvaluateOnTestingData(int index) const -> bool
     return this->temporalComposite->needToEvaluateOnTestingData(index);
 }
 
-auto Data::getTrainingData(const int index, const int batchSize) -> const vector<float>&
+auto Data::getTrainingData(const int index, const int batchSize) -> const std::vector<float>&
 {
-    int i = this->sets[training].shuffledIndexes[index];
-    if (batchSize <= 1) return this->sets[training].inputs[i];
+    auto idx = this->sets[training].shuffledIndexes[index];
+    if (batchSize <= 1)
+    {
+        return this->sets[training].inputs[idx];
+    }
 
     batchedData.resize(this->sizeOfData);
 
-    i = this->sets[training].shuffledIndexes[index];
-    const auto data0 = this->sets[training].inputs[i];
-    i = this->sets[training].shuffledIndexes[index + 1];
-    const auto data1 = this->sets[training].inputs[i];
-    ranges::transform(data0, data1, batchedData.begin(), plus<float>());
+    idx = this->sets[training].shuffledIndexes[index];
+    const auto data0 = this->sets[training].inputs[idx];
+    idx = this->sets[training].shuffledIndexes[index + 1];
+    const auto data1 = this->sets[training].inputs[idx];
+    std::ranges::transform(data0, data1, batchedData.begin(), std::plus<float>());
 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
-        i = this->sets[training].shuffledIndexes[j];
-        const auto data = this->sets[training].inputs[i];
-        ranges::transform(batchedData, data, batchedData.begin(), std::plus<float>());
+        idx = this->sets[training].shuffledIndexes[j];
+        const auto data = this->sets[training].inputs[idx];
+        std::ranges::transform(batchedData, data, batchedData.begin(), std::plus<float>());
     }
-    ranges::transform(batchedData, batchedData.begin(),
-                      bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    std::ranges::transform(batchedData, batchedData.begin(),
+                           bind(std::divides<float>(), std::placeholders::_1, static_cast<float>(batchSize)));
     return batchedData;
 }
 
-auto Data::getTestingData(const int index) const -> const vector<float>& { return this->sets[testing].inputs[index]; }
+auto Data::getTestingData(const int index) const -> const std::vector<float>&
+{
+    return this->sets[testing].inputs[index];
+}
 
 auto Data::getTrainingLabel(const int index) const -> int { return this->problemComposite->getTrainingLabel(index); }
 
 auto Data::getTestingLabel(const int index) const -> int { return this->problemComposite->getTestingLabel(index); }
 
-auto Data::getTrainingOutputs(const int index, const int batchSize) -> const vector<float>&
+auto Data::getTrainingOutputs(const int index, const int batchSize) -> const std::vector<float>&
 {
     return this->problemComposite->getTrainingOutputs(index, batchSize);
 }
 
-auto Data::getTestingOutputs(const int index) const -> const vector<float>&
+auto Data::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
     return this->problemComposite->getTestingOutputs(index);
 }
 
-auto Data::getData(set set, const int index) -> const vector<float>&
+auto Data::getData(set set, const int index) -> const std::vector<float>&
 {
-    if (set == training) return this->getTrainingData(index);
+    if (set == training)
+    {
+        return this->getTrainingData(index);
+    }
 
     return this->getTestingData(index);
 }
 
-auto Data::getOutputs(set set, const int index) -> const vector<float>&
+auto Data::getOutputs(set set, const int index) -> const std::vector<float>&
 {
-    if (set == training) return this->getTrainingOutputs(index);
+    if (set == training)
+    {
+        return this->getTrainingOutputs(index);
+    }
 
     return this->getTestingOutputs(index);
 }
 
 auto Data::getLabel(set set, const int index) const -> int
 {
-    if (set == training) return this->getTrainingLabel(index);
+    if (set == training)
+    {
+        return this->getTrainingLabel(index);
+    }
 
     return this->getTestingLabel(index);
 }
@@ -347,10 +371,7 @@ void Data::setPrecision(const float value)
     {
         this->precision = value;
     }
-    else
-    {
-        throw runtime_error("Precision is only for regression problems.");
-    }
+    throw std::runtime_error("Precision is only for regression problems.");
 }
 
 auto Data::getPrecision() const -> float
@@ -359,10 +380,7 @@ auto Data::getPrecision() const -> float
     {
         return this->precision;
     }
-    else
-    {
-        throw runtime_error("Precision is only for regression problems.");
-    }
+    throw std::runtime_error("Precision is only for regression problems.");
 }
 
 void Data::setSeparator(const float value)
@@ -373,7 +391,7 @@ void Data::setSeparator(const float value)
     }
     else
     {
-        throw runtime_error("Separator is only for classification and multiple classification problems.");
+        throw std::runtime_error("Separator is only for classification and multiple classification problems.");
     }
 }
 
@@ -383,8 +401,6 @@ auto Data::getSeparator() const -> float
     {
         return this->separator;
     }
-    else
-    {
-        throw runtime_error("Separator is only for classification and multiple classification problems.");
-    }
+    throw std::runtime_error("Separator is only for classification and multiple classification problems.");
 }
+}  // namespace snn

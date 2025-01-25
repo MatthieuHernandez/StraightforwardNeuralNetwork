@@ -5,19 +5,17 @@
 #include "RecurrentNeuron.hpp"
 #include "SimpleNeuron.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 StochasticGradientDescent::StochasticGradientDescent(const float learningRate, const float momentum)
     : learningRate(learningRate),
       momentum(momentum)
 {
 }
 
-auto StochasticGradientDescent::clone() const -> shared_ptr<NeuralNetworkOptimizer>
+auto StochasticGradientDescent::clone() const -> std::shared_ptr<NeuralNetworkOptimizer>
 {
-    return make_shared<StochasticGradientDescent>(*this);
+    return std::make_shared<StochasticGradientDescent>(*this);
 }
 
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
@@ -28,7 +26,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
-    vector<float> deltaWeights(neuron.weights.size());
+    std::vector<float> deltaWeights(neuron.weights.size());
     const auto lr_error = lr * error;
 #pragma omp simd
     for (w = 0; w < numberOfInputs; ++w)
@@ -52,7 +50,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
-    vector<float> deltaWeights(neuron.weights.size());
+    std::vector<float> deltaWeights(neuron.weights.size());
 #pragma omp simd  // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < numberOfInputs; ++w)
     {
@@ -87,11 +85,11 @@ auto StochasticGradientDescent::isValid() const -> ErrorType
 
 auto StochasticGradientDescent::summary() const -> string
 {
-    stringstream ss;
-    ss << " StochasticGradientDescent" << endl;
-    ss << "                Learning rate: " << this->learningRate << endl;
-    ss << "                Momentum:      " << this->momentum << endl;
-    return ss.str();
+    std::stringstream summary;
+    summary << " StochasticGradientDescent" << endl;
+    summary << "                Learning rate: " << this->learningRate << endl;
+    summary << "                Momentum:      " << this->momentum << endl;
+    return summary.str();
 }
 
 auto StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimizer) const -> bool
@@ -102,7 +100,7 @@ auto StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimiz
         return this->NeuralNetworkOptimizer::operator==(optimizer) && this->learningRate == o.learningRate &&
                this->momentum == o.momentum;
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
@@ -112,3 +110,4 @@ auto StochasticGradientDescent::operator!=(const NeuralNetworkOptimizer& optimiz
 {
     return !(*this == optimizer);
 }
+}  // namespace snn::internal

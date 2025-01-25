@@ -7,10 +7,8 @@
 #include "BaseLayer.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer),
       value(value)
@@ -31,9 +29,9 @@ Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
     this->presenceProbabilities = dropout.presenceProbabilities;
 }
 
-auto Dropout::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimizer>
+auto Dropout::clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer>
 {
-    return make_unique<Dropout>(*this, newLayer);
+    return std::make_unique<Dropout>(*this, newLayer);
 }
 
 void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset)
@@ -43,24 +41,25 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                       [&] { return dist(tools::rng) >= this->value; });
     }
-    ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
+    std::ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
 }
 
 void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
 {
-    ranges::transform(outputs, outputs.begin(), bind(multiplies<float>(), placeholders::_1, this->reverseValue));
+    std::ranges::transform(outputs, outputs.begin(),
+                           bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
 }
 
 void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
-    ranges::transform(inputErrors, this->presenceProbabilities, inputErrors.begin(), multiplies<float>());
+    std::ranges::transform(inputErrors, this->presenceProbabilities, inputErrors.begin(), std::multiplies<float>());
 }
 
 auto Dropout::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "Dropout(" << value << ")" << endl;
-    return ss.str();
+    std::stringstream summary;
+    summary << "Dropout(" << value << ")\n";
+    return summary.str();
 }
 
 auto Dropout::operator==(const LayerOptimizer& optimizer) const -> bool
@@ -71,10 +70,11 @@ auto Dropout::operator==(const LayerOptimizer& optimizer) const -> bool
         return this->LayerOptimizer::operator==(optimizer) && this->value == o.value &&
                this->reverseValue == o.reverseValue;
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
 }
 
 auto Dropout::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
+}  // namespace snn::internal

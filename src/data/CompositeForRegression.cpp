@@ -2,10 +2,8 @@
 
 #include "ExtendedExpection.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
     : ProblemComposite(sets, numberOfLabels)
 {
@@ -27,3 +25,4 @@ auto CompositeForRegression::getTestingLabel([[maybe_unused]] const int index) -
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }
+}  // namespace snn::internal

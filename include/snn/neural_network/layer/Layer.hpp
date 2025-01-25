@@ -1,7 +1,6 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/unique_ptr.hpp>
-#include <memory>
 
 #include "../optimizer/Dropout.hpp"
 #include "../optimizer/ErrorMultiplier.hpp"
@@ -24,7 +23,7 @@ class Layer : public BaseLayer
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        int numberOfInputs;
+        int numberOfInputs{};
 
         [[nodiscard]] virtual auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
             -> std::vector<float> = 0;
@@ -33,6 +32,9 @@ class Layer : public BaseLayer
 
     public:
         Layer() = default;  // use restricted to Boost library only
+        Layer(Layer&&) = delete;
+        auto operator=(const Layer&) -> Layer& = delete;
+        auto operator=(Layer&&) -> Layer& = delete;
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
         ~Layer() override = default;
@@ -42,8 +44,8 @@ class Layer : public BaseLayer
         std::vector<N> neurons;
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
-        std::vector<float> output(const std::vector<float>& inputs, bool temporalReset) final;
-        std::vector<float> outputForTraining(const std::vector<float>& inputs, bool temporalReset) final;
+        auto output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float> final;
+        auto outputForTraining(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float> final;
         std::vector<float> backOutput(std::vector<float>& inputErrors) final;
 
         [[nodiscard]] auto getNeuron(int index) -> void* final;

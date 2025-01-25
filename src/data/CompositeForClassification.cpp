@@ -2,10 +2,8 @@
 
 #include "ExtendedExpection.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 CompositeForClassification::CompositeForClassification(Set sets[2], int numberOfLabels)
     : ProblemComposite(sets, numberOfLabels)
 {
@@ -42,3 +40,4 @@ auto CompositeForClassification::getTestingOutputs(const int) const -> const std
 {
     throw ShouldNeverBeCalledException("getTestingOutputs");
 }
+}  // namespace snn::internal

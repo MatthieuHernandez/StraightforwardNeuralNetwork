@@ -20,7 +20,8 @@ class Recurrence final : public SimpleLayer<RecurrentNeuron>
         Recurrence(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Recurrence(const Recurrence&) = default;
         ~Recurrence() final = default;
-        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
         [[nodiscard]] auto summary() const -> std::string final;
 };

@@ -7,7 +7,6 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
 
 AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
     : sizeOfOneData(sizeOfOneData)
@@ -17,7 +16,7 @@ AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
 
 void AudioCatsAndDogs::loadData(std::string folderPath)
 {
-    vector<string> fileNames[2]{
+    std::vector<string> fileNames[2]{
         {
             "/train/cats/cat_1.wav",           "/train/cats/cat_10.wav",          "/train/cats/cat_100.wav",
             "/train/cats/cat_101.wav",         "/train/cats/cat_102.wav",         "/train/cats/cat_103.wav",
@@ -178,5 +177,5 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
         }
     }
     this->data =
-        make_unique<Data>(problem::classification, inputs[0], labels[0], inputs[1], labels[1], nature::sequential);
+        std::make_unique<Data>(problem::classification, inputs[0], labels[0], inputs[1], labels[1], nature::sequential);
 }

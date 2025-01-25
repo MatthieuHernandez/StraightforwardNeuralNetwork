@@ -5,12 +5,9 @@
 #include <numeric>
 
 #include "BaseLayer.hpp"
-#include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 Softmax::Softmax(const BaseLayer* layer)
     : LayerOptimizer(layer)
 {
@@ -21,21 +18,21 @@ Softmax::Softmax([[maybe_unused]] const Softmax& softmax, const BaseLayer* layer
 {
 }
 
-auto Softmax::clone(const BaseLayer* newLayer) const -> unique_ptr<LayerOptimizer>
+auto Softmax::clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer>
 {
-    return make_unique<Softmax>(*this, newLayer);
+    return std::make_unique<Softmax>(*this, newLayer);
 }
 
 inline void Softmax::computeSoftmax(std::vector<float>& outputs)
 {
     // max can be replace by a const (e.g. 10)
-    const auto max = ranges::max(outputs);
-    const auto sumExp = accumulate(outputs.begin(), outputs.end(), 0.0F,
-                                   [max](float sumExp, float& value)
-                                   {
-                                       value -= max;
-                                       return sumExp + exp(value);
-                                   });
+    const auto max = std::ranges::max(outputs);
+    const auto sumExp = std::accumulate(outputs.begin(), outputs.end(), 0.0F,
+                                        [max](float sumExp, float& value)
+                                        {
+                                            value -= max;
+                                            return sumExp + exp(value);
+                                        });
     for (auto& output : outputs)
     {
         const auto value = exp(output) / sumExp;
@@ -59,12 +56,7 @@ inline void Softmax::applyAfterOutputForTesting(std::vector<float>& outputs) { c
 
 inline void Softmax::applyBeforeBackpropagation([[maybe_unused]] std::vector<float>& inputErrors) {}
 
-auto Softmax::summary() const -> std::string
-{
-    stringstream ss;
-    ss << "Softmax";
-    return ss.str();
-}
+auto Softmax::summary() const -> std::string { return "Softmax"; }
 
 auto Softmax::operator==(const LayerOptimizer& optimizer) const -> bool
 {
@@ -73,10 +65,11 @@ auto Softmax::operator==(const LayerOptimizer& optimizer) const -> bool
         dynamic_cast<const Softmax&>(optimizer);
         return this->LayerOptimizer::operator==(optimizer);
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
 }
 
 auto Softmax::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
+}  // namespace snn::internal

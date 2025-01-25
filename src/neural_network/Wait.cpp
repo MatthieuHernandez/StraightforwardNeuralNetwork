@@ -3,43 +3,41 @@
 #include <algorithm>
 #include <stdexcept>
 
-using namespace std;
-using namespace chrono;
-using namespace snn;
-
+namespace snn
+{
 auto Wait::operator||(const Wait& wait) -> Wait&
 {
-    if (op == waitOperator::andOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::andOp) throw std::runtime_error("Cannot mix || and && operator for waitFor.");
 
     this->op = waitOperator::orOp;
 
     if (this->epochs > 0 && wait.epochs > 0)
     {
-        this->epochs = min(this->epochs, wait.epochs);
+        this->epochs = std::min(this->epochs, wait.epochs);
     }
     else
     {
-        this->epochs = max(this->epochs, wait.epochs);
+        this->epochs = std::max(this->epochs, wait.epochs);
     }
 
     if (this->accuracy > 0 && wait.accuracy > 0)
     {
-        this->accuracy = min(this->accuracy, wait.accuracy);
+        this->accuracy = std::min(this->accuracy, wait.accuracy);
     }
     else
     {
-        this->accuracy = max(this->accuracy, wait.accuracy);
+        this->accuracy = std::max(this->accuracy, wait.accuracy);
     }
 
-    this->mae = max(this->mae, wait.mae);
+    this->mae = std::max(this->mae, wait.mae);
 
     if (this->duration > 0 && wait.duration > 0)
     {
-        this->duration = min(this->duration, wait.duration);
+        this->duration = std::min(this->duration, wait.duration);
     }
     else
     {
-        this->duration = max(this->duration, wait.duration);
+        this->duration = std::max(this->duration, wait.duration);
     }
 
     return *this;
@@ -47,39 +45,39 @@ auto Wait::operator||(const Wait& wait) -> Wait&
 
 auto Wait::operator&&(const Wait& wait) -> Wait&
 {
-    if (op == waitOperator::orOp) throw runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::orOp) throw std::runtime_error("Cannot mix || and && operator for waitFor.");
 
     this->op = waitOperator::andOp;
 
-    this->epochs = max(this->epochs, wait.epochs);
-    this->accuracy = max(this->accuracy, wait.accuracy);
+    this->epochs = std::max(this->epochs, wait.epochs);
+    this->accuracy = std::max(this->accuracy, wait.accuracy);
 
     if (this->mae > 0 && wait.duration > 0)
     {
-        this->mae = min(this->mae, wait.mae);
+        this->mae = std::min(this->mae, wait.mae);
     }
     else
     {
-        this->mae = max(this->mae, wait.mae);
+        this->mae = std::max(this->mae, wait.mae);
     }
 
-    this->mae = min(this->mae, wait.mae);
-    this->duration = max(this->duration, wait.duration);
+    this->mae = std::min(this->mae, wait.mae);
+    this->duration = std::max(this->duration, wait.duration);
 
     return *this;
 }
 
 void Wait::startClock()
 {
-    this->start = system_clock::now();
+    this->start = std::chrono::system_clock::now();
     this->lastTick = this->start;
     this->lastReset = this->start;
 }
 
 auto Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) const -> bool
 {
-    const auto currentDuration =
-        static_cast<int>(duration_cast<milliseconds>(system_clock::now() - this->start).count());
+    const auto currentDuration = static_cast<int>(
+        duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - this->start).count());
 
     const bool isValidEpochs = currentEpochs > this->epochs && currentEpochs > 0;
     const bool isValidAccuracy = CurrentAccuracy >= this->accuracy && CurrentAccuracy > 0;
@@ -104,66 +102,69 @@ auto Wait::isOver(int currentEpochs, float CurrentAccuracy, float currentMae) co
 
 auto Wait::tick() const -> int
 {
-    const auto now = system_clock::now();
-    const auto tickDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastTick).count());
+    const auto now = std::chrono::system_clock::now();
+    const auto tickDuration = static_cast<int>(duration_cast<std::chrono::milliseconds>(now - this->lastTick).count());
     return tickDuration;
 }
 
 auto Wait::getDuration() -> float
 {
-    const auto now = system_clock::now();
-    const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
+    const auto now = std::chrono::system_clock::now();
+    const auto currentDuration =
+        static_cast<float>(duration_cast<std::chrono::milliseconds>(now - this->lastReset).count());
     this->lastTick = now;
-    return currentDuration / 1000.0F;
+    return currentDuration / 1000.0F;  // NOLINT(*magic-numbers)
 }
 
 auto Wait::getDurationAndReset() -> float
 {
-    const auto now = system_clock::now();
-    const auto currentDuration = static_cast<int>(duration_cast<milliseconds>(now - this->lastReset).count());
+    const auto now = std::chrono::system_clock::now();
+    const auto currentDuration =
+        static_cast<float>(duration_cast<std::chrono::milliseconds>(now - this->lastReset).count());
     this->lastTick = now;
     this->lastReset = now;
-    return currentDuration / 1000.0F;
+    return currentDuration / 1000.0F;  // NOLINT(*magic-numbers)
 }
+}  // namespace snn
 
-auto snn::operator""_ep(unsigned long long value) -> Wait
+auto operator""_ep(unsigned long long value) -> snn::Wait
 {
-    Wait res;
-    res.epochs = (int)value;
+    snn::Wait res;
+    res.epochs = static_cast<int>(value);
     return res;
 }
 
-auto snn::operator""_acc(long double value) -> Wait
+auto operator""_acc(long double value) -> snn::Wait
 {
-    Wait res;
-    res.accuracy = (float)value;
+    snn::Wait res;
+    res.accuracy = static_cast<float>(value);
     return res;
 }
 
-auto snn::operator""_mae(long double value) -> Wait
+auto operator""_mae(long double value) -> snn::Wait
 {
-    Wait res;
-    res.mae = (float)value;
+    snn::Wait res;
+    res.mae = static_cast<float>(value);
     return res;
 }
 
-auto snn::operator""_ms(unsigned long long value) -> Wait
+auto operator""_ms(unsigned long long value) -> snn::Wait
 {
-    Wait res;
-    res.duration = (int)value;
+    snn::Wait res;
+    res.duration = static_cast<int>(value);
     return res;
 }
 
-auto snn::operator""_s(unsigned long long value) -> Wait
+auto operator""_s(unsigned long long value) -> snn::Wait
 {
-    Wait res;
-    res.duration = (int)value * 1000;
+    snn::Wait res;
+    res.duration = static_cast<int>(value) * 1000;  // NOLINT(*magic-numbers)
     return res;
 }
 
-auto snn::operator""_min(unsigned long long value) -> Wait
+auto operator""_min(unsigned long long value) -> snn::Wait
 {
-    Wait res;
-    res.duration = (int)value * 1000 * 60;
+    snn::Wait res;
+    res.duration = static_cast<int>(value) * 1000 * 60;  // NOLINT(*magic-numbers)
     return res;
 }

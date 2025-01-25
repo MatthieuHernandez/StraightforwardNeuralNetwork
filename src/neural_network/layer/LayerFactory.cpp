@@ -11,25 +11,32 @@
 #include "MaxPooling2D.hpp"
 #include "Recurrence.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-inline auto computeNumberOfInputs(const vector<int>& shapeOfInput) -> int
+namespace
+{
+enum coordinateIndex : uint8_t
+{
+    C = 0,
+    X = 1,
+    Y = 2
+};
+inline auto computeNumberOfInputs(const std::vector<int>& shapeOfInput) -> int
 {
     int numberOfInputs = 1;
-    for (auto size : shapeOfInput) numberOfInputs *= size;
+    for (auto size : shapeOfInput)
+    {
+        numberOfInputs *= size;
+    }
     return numberOfInputs;
 }
 
-inline auto computeNumberOfOutputsForMaxPooling1D(int kernelSize, const vector<int>& shapeOfInput) -> int
+inline auto computeNumberOfOutputsForMaxPooling1D(int kernelSize, const std::vector<int>& shapeOfInput) -> int
 {
     const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
     return ((shapeOfInput[X] / kernelSize) + rest);
 }
 
-inline auto computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<int>& shapeOfInput) -> int
+inline auto computeNumberOfOutputsForMaxPooling2D(int kernelSize, const std::vector<int>& shapeOfInput) -> int
 {
     const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
@@ -38,7 +45,7 @@ inline auto computeNumberOfOutputsForMaxPooling2D(int kernelSize, const vector<i
 }
 
 inline auto computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConnected, int kernelSize,
-                                                        const vector<int>& shapeOfInput) -> int
+                                                        const std::vector<int>& shapeOfInput) -> int
 {
     const int rest = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
 
@@ -46,7 +53,7 @@ inline auto computeNumberOfNeuronsForLocallyConnected1D(int numberOfLocallyConne
 }
 
 inline auto computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConnected, int kernelSize,
-                                                        const vector<int>& shapeOfInput) -> int
+                                                        const std::vector<int>& shapeOfInput) -> int
 {
     const int restX = shapeOfInput[X] % kernelSize == 0 ? 0 : 1;
     const int restY = shapeOfInput[Y] % kernelSize == 0 ? 0 : 1;
@@ -56,50 +63,56 @@ inline auto computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConne
 }
 
 inline auto computeNumberOfKernelsForConvolution1D(int numberOfConvolution, int kernelSize,
-                                                   const vector<int>& shapeOfInput) -> int
+                                                   const std::vector<int>& shapeOfInput) -> int
 {
     return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1));
 }
 
 inline auto computeNumberOfKernelsForConvolution2D(int numberOfConvolution, int kernelSize,
-                                                   const vector<int>& shapeOfInput) -> int
+                                                   const std::vector<int>& shapeOfInput) -> int
 {
     return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1)) * (shapeOfInput[Y] - (kernelSize - 1));
 }
+}  // namespace
+namespace snn::internal
+{
 
-inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
-                                shared_ptr<NeuralNetworkOptimizer> optimizer) -> unique_ptr<BaseLayer>
+inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInput,
+                                std::shared_ptr<NeuralNetworkOptimizer> optimizer) -> std::unique_ptr<BaseLayer>
 {
     model.numberOfInputs = computeNumberOfInputs(shapeOfInput);
-
-    if (shapeOfInput.empty()) throw InvalidArchitectureException("Input of layer has size of 0.");
-
+    if (shapeOfInput.empty())
+    {
+        throw InvalidArchitectureException("Input of layer has size of 0.");
+    }
     if (model.numberOfInputs > 1000000) throw InvalidArchitectureException("Layer is too big.");
 
     switch (model.type)
     {
         case fullyConnected:
-            if (model.numberOfInputs <= 0) throw InvalidArchitectureException("Input of layer has size of 0.");
-
+            if (model.numberOfInputs <= 0)
+            {
+                throw InvalidArchitectureException("Input of layer has size of 0.");
+            }
             model.neuron.numberOfInputs = model.numberOfInputs;
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;  // for the bias
             model.numberOfOutputs = model.numberOfNeurons;
-            return make_unique<FullyConnected>(model, optimizer);
+            return std::make_unique<FullyConnected>(model, optimizer);
 
         case recurrence:
             model.neuron.numberOfInputs = model.numberOfInputs;
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
             model.numberOfOutputs = model.numberOfNeurons;
-            return make_unique<Recurrence>(model, optimizer);
+            return std::make_unique<Recurrence>(model, optimizer);
 
         case gruLayer:
             model.neuron.numberOfInputs = model.numberOfInputs;
             model.neuron.batchSize = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
             model.numberOfOutputs = model.numberOfNeurons;
-            return make_unique<GruLayer>(model, optimizer);
+            return std::make_unique<GruLayer>(model, optimizer);
 
         case maxPooling:
             if (shapeOfInput.size() == 1)
@@ -116,7 +129,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.numberOfFilters = shapeOfInput[C];
                 model.numberOfOutputs = computeNumberOfOutputsForMaxPooling1D(model.kernelSize, model.shapeOfInput);
                 model.numberOfKernels = model.numberOfOutputs;
-                return make_unique<MaxPooling1D>(model);
+                return std::make_unique<MaxPooling1D>(model);
             }
             if (shapeOfInput.size() == 3)
             {
@@ -128,7 +141,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.numberOfFilters = shapeOfInput[C];
                 model.numberOfOutputs = computeNumberOfOutputsForMaxPooling2D(model.kernelSize, model.shapeOfInput);
                 model.numberOfKernels = model.numberOfOutputs;
-                return make_unique<MaxPooling2D>(model);
+                return std::make_unique<MaxPooling2D>(model);
             }
             if (shapeOfInput.size() > 3)
             {
@@ -156,7 +169,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.neuron.batchSize = 1;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
-                return make_unique<LocallyConnected1D>(model, optimizer);
+                return std::make_unique<LocallyConnected1D>(model, optimizer);
             }
             if (shapeOfInput.size() == 3)
             {
@@ -173,7 +186,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.neuron.batchSize = 1;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
-                return make_unique<LocallyConnected2D>(model, optimizer);
+                return std::make_unique<LocallyConnected2D>(model, optimizer);
             }
             if (shapeOfInput.size() > 3)
             {
@@ -201,7 +214,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.neuron.batchSize = model.numberOfKernelsPerFilter;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
-                return make_unique<Convolution1D>(model, optimizer);
+                return std::make_unique<Convolution1D>(model, optimizer);
             }
             if (shapeOfInput.size() == 3)
             {
@@ -218,7 +231,7 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
                 model.neuron.batchSize = model.numberOfKernelsPerFilter;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
-                return make_unique<Convolution2D>(model, optimizer);
+                return std::make_unique<Convolution2D>(model, optimizer);
             }
             if (shapeOfInput.size() > 3)
             {
@@ -235,11 +248,13 @@ inline auto LayerFactory::build(LayerModel& model, vector<int>& shapeOfInput,
     throw InvalidArchitectureException("The layer factory fail to build layer.");
 }
 
-void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerModel>& models,
-                         shared_ptr<NeuralNetworkOptimizer> optimizer)
+void LayerFactory::build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::vector<LayerModel>& models,
+                         std::shared_ptr<NeuralNetworkOptimizer> optimizer)
 {
-    if (models.size() > 1000) throw InvalidArchitectureException("Too much layers.");
-
+    if (models.size() > 1000)
+    {
+        throw InvalidArchitectureException("Too much layers.");
+    }
     if (models.empty() || models[0].type != input)
     {
         throw InvalidArchitectureException("First LayerModel must be a Input type LayerModel.");
@@ -248,9 +263,14 @@ void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerMode
     if (models.size() < 2) throw InvalidArchitectureException("Neural Network must have at least 1 layer.");
 
     int numberOfInputs = 1;
-    for (auto size : models[0].shapeOfInput) numberOfInputs *= size;
-    if (numberOfInputs > 2073600) throw InvalidArchitectureException("Layer is too big.");
-
+    for (auto size : models[0].shapeOfInput)
+    {
+        numberOfInputs *= size;
+    }
+    if (numberOfInputs > 2073600)
+    {
+        throw InvalidArchitectureException("Layer is too big.");
+    }
     auto& currentShapeOfInput = models[0].shapeOfInput;
     for (size_t i = 1; i < models.size(); ++i)
     {
@@ -258,3 +278,4 @@ void LayerFactory::build(vector<unique_ptr<BaseLayer>>& layers, vector<LayerMode
         currentShapeOfInput = layers.back()->getShapeOfOutput();
     }
 }
+}  // namespace snn::internal

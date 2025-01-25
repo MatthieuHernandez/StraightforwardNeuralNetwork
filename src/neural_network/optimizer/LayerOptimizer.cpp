@@ -2,10 +2,8 @@
 
 #include <boost/serialization/export.hpp>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 LayerOptimizer::LayerOptimizer(const BaseLayer* layer)
     : layer(layer)
 {
@@ -18,3 +16,4 @@ auto LayerOptimizer::operator==(const LayerOptimizer& optimizer) const -> bool
 }
 
 auto LayerOptimizer::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
+}  // namespace snn::internal

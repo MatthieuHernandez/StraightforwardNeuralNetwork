@@ -9,15 +9,13 @@
 #include "Sigmoid.hpp"
 #include "Tanh.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
-
-inline auto ActivationFunction::initialize() -> vector<shared_ptr<ActivationFunction>>
+namespace snn::internal
 {
-    vector<shared_ptr<ActivationFunction>> activations;
+std::vector<std::shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
+
+inline auto ActivationFunction::initialize() -> std::vector<std::shared_ptr<ActivationFunction>>
+{
+    std::vector<std::shared_ptr<ActivationFunction>> activations;
     activations.reserve(6);
     activations.emplace_back(new Sigmoid());
     activations.emplace_back(new ImprovedSigmoid());
@@ -35,7 +33,7 @@ ActivationFunction::ActivationFunction(float min, float max)
 {
 }
 
-auto ActivationFunction::get(activation type) -> shared_ptr<ActivationFunction>
+auto ActivationFunction::get(activation type) -> std::shared_ptr<ActivationFunction>
 {
     switch (type)
     {
@@ -67,3 +65,4 @@ auto ActivationFunction::operator!=(const ActivationFunction& activationFunction
 {
     return !this->operator==(activationFunction);
 }
+}  // namespace snn::internal

@@ -4,9 +4,8 @@
 #include "neuron/RecurrentNeuron.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 extern template class internal::SimpleLayer<SimpleNeuron>;  // must use a nested-name-specifier for GCC compiler
 extern template class internal::SimpleLayer<RecurrentNeuron>;
 extern template class internal::SimpleLayer<GatedRecurrentUnit>;
@@ -34,3 +33,4 @@ auto SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& in
     }
     return outputs;
 }
+}  // namespace snn::internal

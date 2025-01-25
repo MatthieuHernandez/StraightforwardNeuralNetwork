@@ -1,11 +1,7 @@
 #include "CompositeForNonTemporalData.hpp"
 
-#include <algorithm>
-
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
     : TemporalComposite(sets)
 {
@@ -15,7 +11,7 @@ CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
 
 void CompositeForNonTemporalData::shuffle()  // TODO: also need learning to shuffle
 {
-    ranges::shuffle(this->sets[training].shuffledIndexes, tools::rng);
+    std::ranges::shuffle(this->sets[training].shuffledIndexes, tools::rng);
 }
 
 void CompositeForNonTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
@@ -45,3 +41,4 @@ auto CompositeForNonTemporalData::isValid() const -> ErrorType
     }
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

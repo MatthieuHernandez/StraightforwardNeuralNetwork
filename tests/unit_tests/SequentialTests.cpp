@@ -19,7 +19,7 @@ TEST(Sequential, TestGruLayer)
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0},
                                        {0, 1}, {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1},
                                        {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0}, {1, 0}, {1, 0}};
-    auto data = make_unique<Data>(problem::classification, inputData, expectedOutputs, nature::sequential, 2);
+    auto data = std::make_unique<Data>(problem::classification, inputData, expectedOutputs, nature::sequential, 2);
 
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), GruLayer(20), FullyConnected(2, activation::identity, Softmax())},

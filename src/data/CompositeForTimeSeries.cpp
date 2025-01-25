@@ -1,20 +1,17 @@
 #include "CompositeForTimeSeries.hpp"
 
-#include <algorithm>
-#include <random>
-
-#include "ExtendedExpection.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurrences)
     : TemporalComposite(sets),
       numberOfRecurrences(numberOfRecurrences)
 {
-    if (this->numberOfRecurrences < 1) throw runtime_error("The number of recurrence must be >= 1 for time series.");
+    if (this->numberOfRecurrences < 1)
+    {
+        throw std::runtime_error("The number of recurrence must be >= 1 for time series.");
+    }
 
     this->sets[training].numberOfTemporalSequence = 1;
     this->sets[testing].numberOfTemporalSequence = 1;
@@ -27,15 +24,15 @@ CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurren
     {
         this->indexesForShuffling[i] = i;
     }
-    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
-    this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
+    this->sets[training].needToTrainOnData = std::vector(this->sets[training].size, true);
+    this->sets[training].areFirstDataOfTemporalSequence = std::vector(this->sets[training].size, false);
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
     this->offset = 0;
 }
 
 void CompositeForTimeSeries::shuffle()
 {
-    ranges::shuffle(this->indexesForShuffling, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffling, tools::rng);
 
     for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
     {
@@ -90,8 +87,8 @@ void CompositeForTimeSeries::shuffle()
 void CompositeForTimeSeries::unshuffle()
 {
     this->TemporalComposite::unshuffle();
-    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
-    this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
+    this->sets[training].needToTrainOnData = std::vector(this->sets[training].size, true);
+    this->sets[training].areFirstDataOfTemporalSequence = std::vector(this->sets[training].size, false);
     this->sets[training].areFirstDataOfTemporalSequence[0] = true;
 }
 
@@ -131,3 +128,4 @@ auto CompositeForTimeSeries::isValid() const -> ErrorType
 
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

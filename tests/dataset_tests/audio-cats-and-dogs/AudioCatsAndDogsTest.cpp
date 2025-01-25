@@ -20,7 +20,7 @@ class AudioCatsAndDogsTest : public testing::Test
 
         void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
 
-        static unique_ptr<Data> data;
+        static std::unique_ptr<Data> data;
 };
 
 unique_ptr<Data> AudioCatsAndDogsTest::data = nullptr;

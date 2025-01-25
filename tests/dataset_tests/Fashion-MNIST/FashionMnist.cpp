@@ -6,7 +6,6 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
 
 FashionMnist::FashionMnist(string folderPath) { this->loadData(folderPath); }
 
@@ -18,7 +17,7 @@ void FashionMnist::loadData(string folderPath)
     vector2D<float> testingLabels = readLabels(folderPath + "/t10k-labels-idx1-ubyte", 10000);
 
     this->data =
-        make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
+        std::make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
     this->data->normalize(0, 1);
 }
 
@@ -36,7 +35,7 @@ auto FashionMnist::readImages(string filePath, int size) -> vector2D<float>
     int shift = 0;
     for (int i = 0; !file.eof(); i++)
     {
-        const vector<float> imageTemp;
+        const std::vector<float> imageTemp;
         images.push_back(imageTemp);
         images.back().reserve(sizeOfData);
         for (int j = 0; !file.eof() && j < sizeOfData;)
@@ -77,7 +76,7 @@ auto FashionMnist::readLabels(string filePath, int size) -> vector2D<float>
         {
             if (!file.eof())
             {
-                vector<float> labelsTemp(10, 0);
+                std::vector<float> labelsTemp(10, 0);
                 labels.push_back(labelsTemp);
                 labels.back()[c] = 1.0;
             }

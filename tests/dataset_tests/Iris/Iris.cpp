@@ -9,7 +9,6 @@
 
 using namespace std;
 using namespace snn;
-using namespace internal;
 
 Iris::Iris(string folderPath) { this->loadData(folderPath); }
 
@@ -28,7 +27,7 @@ void Iris::loadData(string folderPath)
 
     while (getline(file, line) && line.size() > 4)
     {
-        const vector<string> temp;
+        const std::vector<string> temp;
         individuals.push_back(temp);
         for (int i = 0; line != line.substr(line.find(',') + 1); i++)
         {
@@ -74,5 +73,5 @@ void Iris::loadData(string folderPath)
             throw runtime_error("Cannot load iris dataset");
         }
     }
-    this->data = make_unique<Data>(problem::classification, inputs, labels);
+    this->data = std::make_unique<Data>(problem::classification, inputs, labels);
 }

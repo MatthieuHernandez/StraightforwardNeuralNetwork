@@ -3,11 +3,9 @@
 #include <boost/serialization/export.hpp>
 #include <cmath>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+RecurrentNeuron::RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Neuron(model, optimizer)
 {
 }
@@ -15,7 +13,7 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, shared_ptr<NeuralNetworkOpti
 #ifdef _MSC_VER
 #pragma warning(disable : 4701)
 #endif
-auto RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset) -> float
+auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalReset) -> float
 {
     if (temporalReset) this->reset();
     this->lastInputs.pushBack(inputs);
@@ -39,7 +37,7 @@ auto RecurrentNeuron::output(const vector<float>& inputs, bool temporalReset) ->
 #endif
 }
 
-auto RecurrentNeuron::backOutput(float error) -> vector<float>&
+auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 {
     error = error * this->outputFunction->derivative(this->sum);
     assert(this->weights.size() == this->errors.size() + 2);
@@ -82,3 +80,4 @@ auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
 }
 
 auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }
+}  // namespace snn::internal

@@ -2,12 +2,9 @@
 
 #include <BitmapImage.hpp>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-using namespace tools;
-
-void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const string& filePath)
+namespace snn::internal
+{
+void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const std::string& filePath)
 {
     if (filterLayer == nullptr) return;
     auto shape = filterLayer->getShapeOfInput();
@@ -33,7 +30,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
                 {
                     for (int j = 0; j < shape[Y]; ++j)
                     {
-                        int index = flatten(i, j, shape[X]);
+                        int index = tools::flatten(i, j, shape[X]);
                         const unsigned char color =
                             static_cast<unsigned char>(round((tanhf(weights[index] / 2.0F) + 1.0F) * 127.5F));
                         image.set_pixel(x * (shape[X] + 1) + i, y * (shape[Y] + 1) + j, color, color, color);
@@ -51,19 +48,19 @@ auto NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filter
     auto outputShape = filterLayer->getShapeOfOutput();
     auto filterSize = filterLayer->getKernelSize();
     auto neuronByFilter = outputShape[X] * outputShape[Y];
-    vector<float> weights(filterLayer->getNumberOfInputs(), 0.0F);
+    std::vector<float> weights(filterLayer->getNumberOfInputs(), 0.0F);
     for (int n = 0; n < neuronByFilter; ++n)
     {
         auto neuronWeight = static_cast<SimpleNeuron*>(filterLayer->getNeuron(n * (filterNumber + 1)))->getWeights();
-        const int neuronPositionX = roughenX(n, outputShape[X], outputShape[Y]);
-        const int neuronPositionY = roughenY(n, outputShape[X], outputShape[Y]);
+        const int neuronPositionX = tools::roughenX(n, outputShape[X], outputShape[Y]);
+        const int neuronPositionY = tools::roughenY(n, outputShape[X], outputShape[Y]);
 
         for (int y = 0; y < filterSize; ++y)
         {
             for (int x = 0; x < filterSize; ++x)
             {
-                const int i = flatten(neuronPositionX + x, neuronPositionY + y, inputShape[X]);
-                const int j = flatten(x, y, filterSize);
+                const int i = tools::flatten(neuronPositionX + x, neuronPositionY + y, inputShape[X]);
+                const int j = tools::flatten(x, y, filterSize);
                 weights[i] += neuronWeight[j];
             }
         }
@@ -72,7 +69,7 @@ auto NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filter
 }
 
 void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs,
-                                              const string& filePath)
+                                              const std::string& filePath)
 {
     if (filterLayer == nullptr) return;
     auto shape = filterLayer->getShapeOfOutput();
@@ -107,9 +104,12 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
 }
 
 void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::vector<int> shapeOfInput,
-                                              const string& filePath)
+                                              const std::string& filePath)
 {
-    if (shapeOfInput.size() != 3) return;
+    if (shapeOfInput.size() != 3)
+    {
+        return;
+    }
     bitmap_image image(shapeOfInput[X], shapeOfInput[Y]);
     image.set_all_channels(0, 0, 0);
     int index = 0;
@@ -133,3 +133,4 @@ void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::ve
     }
     image.save_image(filePath);
 }
+}  // namespace snn::internal

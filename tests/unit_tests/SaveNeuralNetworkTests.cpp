@@ -44,14 +44,14 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(A != C);  // Test A == C with same seed
 
-    vector<float> inputs(8 * 8 * 3);
+    std::vector<float> inputs(8 * 8 * 3);
     inputs[29] = 0.99F;
     inputs[30] = 0.88F;
     inputs[60] = 0.75F;
     inputs[90] = -0.25F;
     inputs[120] = 1.0F;
     inputs[150] = -0.77F;
-    const vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
+    const std::vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
     for (int i = 0; i < 10; ++i) A.trainOnce(inputs, desired);
 
@@ -75,13 +75,13 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     StraightforwardNeuralNetwork A(structureOfNetwork);
     StraightforwardNeuralNetwork B = A;
 
-    vector<float> inputs(10);
+    std::vector<float> inputs(10);
     inputs[1] = 1.5F;
     inputs[4] = 0.75F;
     inputs[5] = -0.25F;
     inputs[7] = 1.0F;
     inputs[9] = -1.35F;
-    const vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
+    const std::vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
     EXPECT_TRUE(A == B);
 

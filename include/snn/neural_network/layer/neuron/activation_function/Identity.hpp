@@ -3,16 +3,14 @@
 
 #include "ActivationFunction.hpp"
 
-using namespace std;
-
 namespace snn::internal
 {
 class Identity final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation final { return activation::identity; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::identity; }
 
-        auto getName() const -> string final { return "identity"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "identity"; }
 
     public:
         Identity()

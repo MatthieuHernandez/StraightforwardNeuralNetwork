@@ -3,8 +3,6 @@
 
 #include "ActivationFunction.hpp"
 
-using namespace std;
-
 namespace snn::internal
 {
 class Gaussian final : public ActivationFunction
@@ -12,7 +10,7 @@ class Gaussian final : public ActivationFunction
     private:
         auto getType() const -> activation final { return activation::gaussian; }
 
-        auto getName() const -> string final { return "gaussian"; }
+        auto getName() const -> std::string final { return "gaussian"; }
 
     public:
         Gaussian()

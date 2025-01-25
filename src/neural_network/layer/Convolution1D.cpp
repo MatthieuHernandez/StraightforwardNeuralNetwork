@@ -1,15 +1,14 @@
 #include "Convolution1D.hpp"
 
 #include <boost/serialization/export.hpp>
+#include <utility>
 
 #include "LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-Convolution1D::Convolution1D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : FilterLayer(model, optimizer)
+namespace snn::internal
+{
+Convolution1D::Convolution1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    : FilterLayer(model, std::move(optimizer))
 {
     this->shapeOfOutput = {
         this->numberOfFilters,
@@ -42,9 +41,9 @@ void Convolution1D::buildKernelIndexes()
     }
 }
 
-inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> unique_ptr<BaseLayer>
+inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer>
 {
-    auto layer = make_unique<Convolution1D>(*this);
+    auto layer = std::make_unique<Convolution1D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].setOptimizer(optimizer);
@@ -66,31 +65,32 @@ auto Convolution1D::isValid() const -> ErrorType
 
 auto Convolution1D::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " Convolution1D" << endl;
-    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]" << endl;
-    ss << "                Filters:      " << this->numberOfFilters << endl;
-    ss << "                Kernel size:  " << this->kernelSize << endl;
-    ss << "                Parameters:   " << this->getNumberOfParameters() << endl;
-    ss << "                Activation:   " << this->neurons[0].outputFunction->getName() << endl;
-    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " Convolution1D\n";
+    summary << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << "]\n";
+    summary << "                Filters:      " << this->numberOfFilters << '\n';
+    summary << "                Kernel size:  " << this->kernelSize << '\n';
+    summary << "                Parameters:   " << this->getNumberOfParameters() << '\n';
+    summary << "                Activation:   " << this->neurons[0].outputFunction->getName() << '\n';
+    summary << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << "]"
+            << '\n';
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
     }
     for (size_t o = 1; o < this->optimizers.size(); ++o)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[o]->summary() << '\n';
     }
-    return ss.str();
+    return summary.str();
 }
 
-inline auto Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
-    -> vector<float>
+inline auto Convolution1D::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
-    vector<float> outputs(this->numberOfKernels);
-    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    std::vector<float> outputs(this->numberOfKernels);
+    std::vector<float> neuronInputs(this->sizeOfNeuronInputs);
     for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
     {
         for (size_t i = 0; i < neuronInputs.size(); ++i)
@@ -106,9 +106,9 @@ inline auto Convolution1D::computeOutput(const vector<float>& inputs, [[maybe_un
     return outputs;
 }
 
-inline auto Convolution1D::computeBackOutput(vector<float>& inputErrors) -> vector<float>
+inline auto Convolution1D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
     {
         for (auto& neuron : this->neurons)
@@ -136,3 +136,4 @@ inline auto Convolution1D::operator==(const BaseLayer& layer) const -> bool
 }
 
 inline auto Convolution1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

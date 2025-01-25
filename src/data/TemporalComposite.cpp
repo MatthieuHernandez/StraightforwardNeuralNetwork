@@ -1,9 +1,7 @@
 #include "TemporalComposite.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 TemporalComposite::TemporalComposite(Set sets[2]) { this->sets = sets; }
 
 void TemporalComposite::unshuffle()
@@ -23,3 +21,4 @@ auto TemporalComposite::isValid() const -> ErrorType
     }
     return ErrorType::noError;
 }
+}  // namespace snn::internal

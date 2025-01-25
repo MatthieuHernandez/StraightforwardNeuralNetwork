@@ -2,9 +2,8 @@
 
 #include <cmath>
 
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 void StatisticAnalysis::initialize(int numberOfCluster)
 {
     clusters.resize(numberOfCluster);
@@ -291,3 +290,4 @@ auto StatisticAnalysis::operator==(const StatisticAnalysis& sa) const -> bool
 }
 
 auto StatisticAnalysis::operator!=(const StatisticAnalysis& sa) const -> bool { return !(*this == sa); }
+}  // namespace snn::internal

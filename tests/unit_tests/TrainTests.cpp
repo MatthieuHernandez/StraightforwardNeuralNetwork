@@ -1,4 +1,3 @@
-#include <cstddef>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/tools/Tools.hpp>
 
@@ -17,7 +16,7 @@ TEST(Train, WithoutError)
         StochasticGradientDescent(0.1F));
     auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
 
-    vector<float> input = {0.9F, 0.0F, -0.7F, 0.1F};
+    std::vector<float> input = {0.9F, 0.0F, -0.7F, 0.1F};
     auto expected = neuralNetwork.computeOutput(input);
     neuralNetwork.trainOnce(input, expected);
 
@@ -34,9 +33,9 @@ TEST(Train, WithNanAsExpected)
         },
         StochasticGradientDescent(0.2F));
 
-    vector<float> input = {1, 0, 1, 0};
-    vector<float> expected1 = {NAN, NAN, NAN, NAN};
-    vector<float> expected2 = {1, NAN, NAN, 0};
+    std::vector<float> input = {1, 0, 1, 0};
+    std::vector<float> expected1 = {NAN, NAN, NAN, NAN};
+    std::vector<float> expected2 = {1, NAN, NAN, 0};
 
     auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
     neuralNetwork.trainOnce(input, expected1);

@@ -7,9 +7,9 @@
 using namespace std;
 using namespace snn;
 
-auto createDataForAdditionTests() -> unique_ptr<Data>;
+auto createDataForAdditionTests() -> std::unique_ptr<Data>;
 auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
-    -> unique_ptr<Data>;
+    -> std::unique_ptr<Data>;
 void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn);
 
 TEST(Addition, WithMPL)
@@ -72,7 +72,7 @@ void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn)
     ASSERT_MAE(mae, 0.4F);
 }
 
-auto createDataForAdditionTests() -> unique_ptr<Data>
+auto createDataForAdditionTests() -> std::unique_ptr<Data>
 {
     vector2D<float> inputData = {{3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2}, {2, 4}, {4, 1}, {1, 4}, {4, 3},
                                  {3, 0}, {0, 0}, {0, 4}, {4, 3}, {3, 2}, {2, 1}, {1, 2}, {2, 0}, {0, 1},
@@ -81,12 +81,13 @@ auto createDataForAdditionTests() -> unique_ptr<Data>
                                        {5}, {3}, {3}, {2}, {1}, {3}, {10}, {8}, {2}, {8}, {6}, {4}};
 
     const float precision = 0.4F;
-    unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
+    std::unique_ptr<Data> data = std::make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(precision);
     return data;
 }
 
-auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision) -> unique_ptr<Data>
+auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
+    -> std::unique_ptr<Data>
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;
@@ -104,8 +105,8 @@ auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrenc
         }
     }
 
-    auto data =
-        make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries, numberOfRecurrences);
+    auto data = std::make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries,
+                                       numberOfRecurrences);
     data->setPrecision(precision);
     return data;
 }

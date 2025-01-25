@@ -44,6 +44,7 @@ void DailyMinTemperatures::loadData(string folderPath)
         previousValue = value;
     }
     file.close();
-    this->data = make_unique<Data>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
+    this->data =
+        std::make_unique<Data>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
     this->data->normalize(0, 1);
 }

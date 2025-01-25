@@ -1,7 +1,12 @@
 Checks: >
     *,
-    -llvmlibc-*,
+    -llvmlibc-implementation-in-namespace,
+    -llvmlibc-inline-function-decl,
+    -llvmlibc-callee-namespace,
+    -llvmlibc-restrict-system-libc-headers,
     -fuchsia-trailing-return,
     -fuchsia-default-arguments-declarations,
-    -fuchsia-default-arguments-calls
+    -fuchsia-default-arguments-calls,
+    -misc-non-private-member-variables-in-classes,
+    -cppcoreguidelines-non-private-member-variables-in-classes
 WarningsAsErrors: '.*'

@@ -13,8 +13,8 @@ TEST(Memory, passingArgByCopy)
         auto inputData = new vector2D<float>{{0, 0, 0}, {1, 1, 1}};
         auto expectedOutputs = new vector2D<float>{{0}, {1}};
         auto data = new Data(problem::regression, *inputData, *expectedOutputs);
-        const vector<LayerModel> achitecture = {Input(1, 3),          Convolution(500, 1), FullyConnected(3000),
-                                                FullyConnected(3000), Convolution(1, 4),   FullyConnected(1)};
+        const std::vector<LayerModel> achitecture = {Input(1, 3),          Convolution(500, 1), FullyConnected(3000),
+                                                     FullyConnected(3000), Convolution(1, 4),   FullyConnected(1)};
         StraightforwardNeuralNetwork neuralNetwork(achitecture);
 
         delete inputData;

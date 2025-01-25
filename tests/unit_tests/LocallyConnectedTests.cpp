@@ -13,15 +13,15 @@ auto createDataForLocallyConnectedTests() -> Data;
 
 TEST(LocallyConnected, LayerLocallyConnected1D)
 {
-    vector<float> input{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    vector<float> kernel0{1, 3, 5, 7, 9, 11, 1};
-    vector<float> kernel1{2, 4, 6, 8, 10, 12, 1};
-    vector<float> kernel2{13, 15, 17, 19, 21, 23, 1};
-    vector<float> kernel3{14, 16, 18, 20, 22, 24, 1};
-    vector<float> error{1, 2, 3, 4};
+    std::vector<float> input{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<float> kernel0{1, 3, 5, 7, 9, 11, 1};
+    std::vector<float> kernel1{2, 4, 6, 8, 10, 12, 1};
+    std::vector<float> kernel2{13, 15, 17, 19, 21, 23, 1};
+    std::vector<float> kernel3{14, 16, 18, 20, 22, 24, 1};
+    std::vector<float> error{1, 2, 3, 4};
 
-    vector<float> expectedOutput{162, 183, 555, 589};
-    vector<float> expectedBackOutput{40, 48, 56, 64, 72, 80, 60, 72, 84, 96};
+    std::vector<float> expectedOutput{162, 183, 555, 589};
+    std::vector<float> expectedBackOutput{40, 48, 56, 64, 72, 80, 60, 72, 84, 96};
     LayerModel model{locallyConnected, 10, 4, 5, {6, 1, 7, 1.0F, activation::identity}, 2, 4, 2, 3, {2, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected1D conv(model, sgd);
@@ -38,12 +38,12 @@ TEST(LocallyConnected, LayerLocallyConnected1D)
 
 TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
 {
-    vector<float> input{1, 2, 3, 4};
-    vector<float> error(9);
+    std::vector<float> input{1, 2, 3, 4};
+    std::vector<float> error(9);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    vector<float> expectedOutput{2, 5, 10, 17};
-    vector<float> expectedBackOutput{1, 4, 9, 16};
+    std::vector<float> expectedOutput{2, 5, 10, 17};
+    std::vector<float> expectedBackOutput{1, 4, 9, 16};
     LayerModel model{locallyConnected, 4, 4, 4, {1, 1, 2, 1.0F, activation::identity}, 1, 4, 4, 1, {1, 2, 2}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected2D conv(model, sgd);
@@ -60,7 +60,7 @@ TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
 
 TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
 {
-    vector<float> input(50);
+    std::vector<float> input(50);
     vector2D<float> kernels{
         {1., 3., 5., 7., 9., 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35, 1},
         {2., 4., 6., 8., 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 1},
@@ -70,15 +70,15 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
         {74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 96, 98, 100, 102, 104, 106, 108, 1},
         {109, 111, 113, 115, 117, 119, 121, 123, 125, 127, 129, 131, 133, 135, 137, 139, 141, 143, 1},
         {110, 112, 114, 116, 118, 120, 122, 124, 126, 128, 130, 132, 134, 136, 138, 140, 142, 144, 1}};
-    vector<float> error(8);
+    std::vector<float> error(8);
     std::iota(std::begin(input), std::end(input), 1.0F);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    vector<float> expectedOutput{5920, 6163, 12535, 12757, 39239, 39701, 41325, 41673};
-    vector<float> expectedBackOutput{5,    11,  17,  23,  29,   35,   263,  277,  291,  305,  41,   47,   53,
-                                     59,   65,  71,  347, 361,  375,  389,  77,   83,   89,   95,   101,  107,
-                                     431,  445, 459, 473, 809,  831,  853,  875,  897,  919,  1643, 1673, 1703,
-                                     1733, 941, 963, 985, 1007, 1029, 1051, 1823, 1853, 1883, 1913};
+    std::vector<float> expectedOutput{5920, 6163, 12535, 12757, 39239, 39701, 41325, 41673};
+    std::vector<float> expectedBackOutput{5,    11,  17,  23,  29,   35,   263,  277,  291,  305,  41,   47,   53,
+                                          59,   65,  71,  347, 361,  375,  389,  77,   83,   89,   95,   101,  107,
+                                          431,  445, 459, 473, 809,  831,  853,  875,  897,  919,  1643, 1673, 1703,
+                                          1733, 941, 963, 985, 1007, 1029, 1051, 1823, 1853, 1883, 1913};
     LayerModel model{locallyConnected, 50, 8, 18, {18, 1, 19, 1.0F, activation::identity}, 2, 8, 4, 3, {2, 5, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected2D conv(model, sgd);

@@ -6,11 +6,11 @@
 using namespace std;
 using namespace snn;
 
-auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr<Data>;
+auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Data>;
 
 TEST(Optimizer, FindRightValueIn20)
 {
-    unique_ptr<Data> data = createDataForOptimizerTests(1000, 20);
+    std::unique_ptr<Data> data = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(20), FullyConnected(8, activation::tanh), FullyConnected(1, activation::sigmoid)},
         StochasticGradientDescent(0.05F, 0.9F));
@@ -22,7 +22,7 @@ TEST(Optimizer, FindRightValueIn20)
     ASSERT_MAE(mae, 0.3F);
 }
 
-auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr<Data>
+auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Data>
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;
@@ -31,7 +31,7 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr
     expectedOutputs.reserve(numberOfData);
     for (int i = 0; i < numberOfData; ++i)
     {
-        inputData.push_back(vector<float>());
+        inputData.push_back(std::vector<float>());
         inputData.back().reserve(sizeOfData);
         for (int j = 0; j < sizeOfData; ++j)
         {
@@ -47,7 +47,7 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> unique_ptr
             expectedOutputs.push_back({0.0F});
         }
     }
-    unique_ptr<Data> data = make_unique<Data>(problem::regression, inputData, expectedOutputs);
+    std::unique_ptr<Data> data = std::make_unique<Data>(problem::regression, inputData, expectedOutputs);
     data->setPrecision(0.3F);
     return data;
 }

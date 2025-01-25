@@ -29,10 +29,11 @@ struct Wait
         [[nodiscard]] auto getDurationAndReset() -> float;
 };
 
-extern auto operator""_ep(unsigned long long value) -> Wait;
-extern auto operator""_acc(long double value) -> Wait;
-extern auto operator""_mae(long double value) -> Wait;
-extern auto operator""_ms(unsigned long long value) -> Wait;
-extern auto operator""_s(unsigned long long value) -> Wait;
-extern auto operator""_min(unsigned long long value) -> Wait;
 }  // namespace snn
+
+extern auto operator""_ep(unsigned long long value) -> snn::Wait;
+extern auto operator""_acc(long double value) -> snn::Wait;
+extern auto operator""_mae(long double value) -> snn::Wait;
+extern auto operator""_ms(unsigned long long value) -> snn::Wait;
+extern auto operator""_s(unsigned long long value) -> snn::Wait;
+extern auto operator""_min(unsigned long long value) -> snn::Wait;

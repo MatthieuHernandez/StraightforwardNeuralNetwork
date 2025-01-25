@@ -4,11 +4,11 @@
 
 #include "LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
+namespace snn::internal
+{
+using std::bad_cast;
 
-FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+FilterLayer::FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
@@ -29,8 +29,10 @@ auto FilterLayer::isValid() const -> ErrorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
-    for (int s : shape) numberOfOutput *= s;
-
+    for (int s : shape)
+    {
+        numberOfOutput *= s;
+    }
     if (numberOfOutput != this->numberOfKernels)
     {
         return ErrorType::filterLayerWrongNumberOfOutputs;
@@ -51,10 +53,11 @@ auto FilterLayer::operator==(const BaseLayer& layer) const -> bool
                this->sizeOfNeuronInputs == f.sizeOfNeuronInputs && this->shapeOfInput == f.shapeOfInput &&
                this->shapeOfOutput == f.shapeOfOutput && this->kernelIndexes == f.kernelIndexes;
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
 }
 
 auto FilterLayer::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

@@ -4,17 +4,16 @@
 #include <snn/data/Data.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
-using namespace std;
 using namespace snn;
 
-Cifar10::Cifar10(string folderPath) { this->loadData(folderPath); }
+Cifar10::Cifar10(std::string folderPath) { this->loadData(folderPath); }
 
-void Cifar10::loadData(string folderPath)
+void Cifar10::loadData(std::string folderPath)
 {
-    string filePaths[] = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
-                          folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
-                          folderPath + "/data_batch_5.bin"};
-    string testFilePaths[] = {folderPath + "/test_batch.bin"};
+    std::string filePaths[] = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
+                               folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
+                               folderPath + "/data_batch_5.bin"};
+    std::string testFilePaths[] = {folderPath + "/test_batch.bin"};
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;
     vector2D<float> trainingInputs = readImages(filePaths, 5, trainingLabels);
@@ -25,7 +24,7 @@ void Cifar10::loadData(string folderPath)
     this->data->normalize(0, 1);
 }
 
-auto Cifar10::readImages(string filePaths[], size_t size, vector2D<float>& labels) const -> vector2D<float>
+auto Cifar10::readImages(std::string filePaths[], size_t size, vector2D<float>& labels) const -> vector2D<float>
 {
     vector2D<float> images;
     images.reserve(size * 10000);
@@ -33,11 +32,11 @@ auto Cifar10::readImages(string filePaths[], size_t size, vector2D<float>& label
     return images;
 }
 
-void Cifar10::readImages(string filePath, vector2D<float>& images, vector2D<float>& labels)
+void Cifar10::readImages(std::string filePath, vector2D<float>& images, vector2D<float>& labels)
 {
     static constexpr int sizeOfData = 32 * 32 * 3;
-    ifstream file;
-    file.open(filePath, ios::in | ios::binary);
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
 
     if (!file.is_open()) throw FileOpeningFailedException();
 

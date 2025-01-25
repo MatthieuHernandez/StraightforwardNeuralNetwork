@@ -5,7 +5,6 @@
 #include <snn/tools/Tools.hpp>
 #include <string>
 
-using namespace std;
 using namespace snn;
 
 AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
@@ -16,7 +15,7 @@ AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
 
 void AudioCatsAndDogs::loadData(std::string folderPath)
 {
-    std::vector<string> fileNames[2]{
+    std::vector<std::string> fileNames[2]{
         {
             "/train/cats/cat_1.wav",           "/train/cats/cat_10.wav",          "/train/cats/cat_100.wav",
             "/train/cats/cat_101.wav",         "/train/cats/cat_102.wav",         "/train/cats/cat_103.wav",
@@ -133,7 +132,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             }
             else
             {
-                throw runtime_error("Wrong file name: " + fileName);
+                throw std::runtime_error("Wrong file name: " + fileName);
             }
 
             AudioFile<float> audioFile;

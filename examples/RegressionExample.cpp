@@ -3,7 +3,6 @@
 
 #include "Examples.hpp"
 
-using namespace std;
 using namespace snn;
 
 /*
@@ -13,9 +12,9 @@ For more explanation go to wiki.
 */
 auto regressionExample() -> int
 {
-    std::vector<vector<float>> inputData = {{0, 1, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
-    std::vector<vector<float>> expectedOutputs = {{0.333F}, {0.666F}, {0.666F},  // NOLINT(*magic-numbers)
-                                                  {0.666F}, {0.0F},   {1.0F}};   // NOLINT(*magic-numbers)
+    std::vector<std::vector<float>> inputData = {{0, 1, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
+    std::vector<std::vector<float>> expectedOutputs = {{0.333F}, {0.666F}, {0.666F},  // NOLINT(*magic-numbers)
+                                                       {0.666F}, {0.0F},   {1.0F}};   // NOLINT(*magic-numbers)
 
     float precision = 0.1F;
     Data data(problem::regression, inputData, expectedOutputs);

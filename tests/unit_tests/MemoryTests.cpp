@@ -3,7 +3,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 TEST(Memory, passingArgByCopy)
@@ -24,7 +23,7 @@ TEST(Memory, passingArgByCopy)
         neuralNetwork.waitFor(3_ms);
         neuralNetwork.stopTrainingAsync();
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         EXPECT_TRUE(false) << e.what();
     }
@@ -48,7 +47,7 @@ TEST(Memory, copyOperator)
         neuralNetworkCopy.waitFor(3_ms);
         neuralNetworkCopy.stopTrainingAsync();
     }
-    catch (exception& e)
+    catch (std::exception& e)
     {
         EXPECT_TRUE(false) << e.what();
     }

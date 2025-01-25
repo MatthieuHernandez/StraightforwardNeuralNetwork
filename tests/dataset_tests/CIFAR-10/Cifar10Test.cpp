@@ -3,8 +3,6 @@
 #include "Cifar10.hpp"
 #include "ExtendedGTest.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class Cifar10Test : public testing::Test
@@ -21,7 +19,7 @@ class Cifar10Test : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> Cifar10Test::data = nullptr;
+std::unique_ptr<Data> Cifar10Test::data = nullptr;
 
 TEST_F(Cifar10Test, loadData)
 {
@@ -39,7 +37,7 @@ TEST_F(Cifar10Test, loadData)
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3072), FullyConnected(80), FullyConnected(30), FullyConnected(10, activation::identity, Softmax())});
+        {Input(3072), FullyConnected(100), FullyConnected(40), FullyConnected(10, activation::identity, Softmax())});
     neuralNetwork.train(*data, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.26F);
@@ -71,7 +69,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 207210);
     ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -131,7 +129,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Momentum:      0.8
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }
 

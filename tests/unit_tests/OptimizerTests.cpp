@@ -3,7 +3,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Data>;

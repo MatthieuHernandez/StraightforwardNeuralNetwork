@@ -3,7 +3,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 TEST(Identity, WorksWithSmallNumbers)
@@ -27,7 +26,7 @@ TEST(Identity, WorksWithSmallNumbers)
     }
     else
     {
-        ASSERT_FAIL("MAE > 1: " + to_string(mae));
+        ASSERT_FAIL("MAE > 1: " + std::to_string(mae));
     }
 }
 
@@ -75,6 +74,6 @@ TEST(Identity, WorksWithLotsOfNumbers)
     }
     else
     {
-        ASSERT_FAIL("MAE > 0.4: " + to_string(mae));
+        ASSERT_FAIL("MAE > 0.4: " + std::to_string(mae));
     }
 }

@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "Mnist.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class MnistTest : public testing::Test
@@ -21,7 +19,7 @@ class MnistTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> MnistTest::data = nullptr;
+std::unique_ptr<Data> MnistTest::data = nullptr;
 
 TEST_F(MnistTest, loadData)
 {
@@ -139,7 +137,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 261206);
     ASSERT_FLOAT_EQ(accuracy, 0.9871F);
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -186,7 +184,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
                 Momentum:      0
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }
 

@@ -1,10 +1,8 @@
-#include <cstddef>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/tools/Tools.hpp>
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 auto createDataForAdditionTests() -> std::unique_ptr<Data>;

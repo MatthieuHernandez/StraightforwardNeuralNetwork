@@ -6,7 +6,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 auto createDataForLocallyConnectedTests() -> Data;

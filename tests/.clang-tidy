@@ -8,5 +8,9 @@ Checks: >
     -fuchsia-default-arguments-declarations,
     -fuchsia-default-arguments-calls,
     -misc-non-private-member-variables-in-classes,
-    -cppcoreguidelines-non-private-member-variables-in-classes
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+
+    -cppcoreguidelines-avoid-magic-numbers,
+    -google-build-using-namespace,
+    -readability-magic-numbers
 WarningsAsErrors: '.*'

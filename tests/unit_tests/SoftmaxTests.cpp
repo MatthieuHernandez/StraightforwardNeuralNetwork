@@ -1,7 +1,7 @@
 #include <snn/neural_network/optimizer/Softmax.hpp>
 
 #include "../ExtendedGTest.hpp"
-using namespace std;
+
 using namespace snn::internal;
 
 TEST(Softmax, NormalValues)

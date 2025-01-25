@@ -19,24 +19,24 @@ auto Recurrence::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const 
     return layer;
 }
 
-auto Recurrence::summary() const -> string
+auto Recurrence::summary() const -> std::string
 {
     std::stringstream summary;
-    summary << "------------------------------------------------------------" << endl;
-    summary << " Recurrence" << endl;
-    summary << "                Input shape:  [" << this->getNumberOfNeurons() << "]" << endl;
-    summary << "                Neurons:      " << this->getNumberOfNeurons() << endl;
-    summary << "                Parameters:   " << this->getNumberOfParameters() << endl;
-    summary << "                Activation:   " << this->neurons[0].outputFunction->getName() << endl;
-    summary << "                Output shape: [" << this->getNumberOfInputs() << "]" << endl;
+    summary << "------------------------------------------------------------\n";
+    summary << " Recurrence\n";
+    summary << "                Input shape:  [" << this->getNumberOfNeurons() << "]\n";
+    summary << "                Neurons:      " << this->getNumberOfNeurons() << '\n';
+    summary << "                Parameters:   " << this->getNumberOfParameters() << '\n';
+    summary << "                Activation:   " << this->neurons[0].outputFunction->getName() << '\n';
+    summary << "                Output shape: [" << this->getNumberOfInputs() << "]\n";
     if (!optimizers.empty())
     {
-        summary << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
+        for (size_t opti = 1; opti < this->optimizers.size(); ++opti)
+        {
+            summary << "                              " << optimizers[opti]->summary() << '\n';
+        }
+        return summary.str();
     }
-    for (size_t o = 1; o < this->optimizers.size(); ++o)
-    {
-        summary << "                              " << optimizers[o]->summary() << endl;
-    }
-    return summary.str();
 }
 }  // namespace snn::internal

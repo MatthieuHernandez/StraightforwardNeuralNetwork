@@ -4,12 +4,11 @@
 #include <snn/data/Data.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
-using namespace std;
 using namespace snn;
 
-Mnist::Mnist(string folderPath) { this->loadData(folderPath); }
+Mnist::Mnist(std::string folderPath) { this->loadData(folderPath); }
 
-void Mnist::loadData(string folderPath)
+void Mnist::loadData(std::string folderPath)
 {
     vector2D<float> trainingInputs = readImages(folderPath + "/train-images.idx3-ubyte", 60000);
     vector2D<float> trainingLabels = readLabels(folderPath + "/train-labels.idx1-ubyte", 60000);
@@ -21,10 +20,10 @@ void Mnist::loadData(string folderPath)
     this->data->normalize(0, 1);
 }
 
-auto Mnist::readImages(string filePath, int size) -> vector2D<float>
+auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
 {
-    ifstream file;
-    file.open(filePath, ios::in | ios::binary);
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
     vector2D<float> images;
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
@@ -58,10 +57,10 @@ auto Mnist::readImages(string filePath, int size) -> vector2D<float>
     return images;
 }
 
-auto Mnist::readLabels(string filePath, int size) -> vector2D<float>
+auto Mnist::readLabels(std::string filePath, int size) -> vector2D<float>
 {
-    ifstream file;
-    file.open(filePath, ios::in | ios::binary);
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
     vector2D<float> labels;
     labels.reserve(size);
 

@@ -4,12 +4,11 @@
 #include <snn/data/Data.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
-using namespace std;
 using namespace snn;
 
-FashionMnist::FashionMnist(string folderPath) { this->loadData(folderPath); }
+FashionMnist::FashionMnist(std::string folderPath) { this->loadData(folderPath); }
 
-void FashionMnist::loadData(string folderPath)
+void FashionMnist::loadData(std::string folderPath)
 {
     vector2D<float> trainingInputs = readImages(folderPath + "/train-images-idx3-ubyte", 60000);
     vector2D<float> trainingLabels = readLabels(folderPath + "/train-labels-idx1-ubyte", 60000);
@@ -21,15 +20,18 @@ void FashionMnist::loadData(string folderPath)
     this->data->normalize(0, 1);
 }
 
-auto FashionMnist::readImages(string filePath, int size) -> vector2D<float>
+auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>
 {
-    ifstream file;
-    file.open(filePath, ios::in | ios::binary);
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
     vector2D<float> images;
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
 
-    if (!file.is_open()) throw FileOpeningFailedException();
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
 
     unsigned char c;
     int shift = 0;
@@ -58,10 +60,10 @@ auto FashionMnist::readImages(string filePath, int size) -> vector2D<float>
     return images;
 }
 
-auto FashionMnist::readLabels(string filePath, int size) -> vector2D<float>
+auto FashionMnist::readLabels(std::string filePath, int size) -> vector2D<float>
 {
-    ifstream file;
-    file.open(filePath, ios::in | ios::binary);
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
     vector2D<float> labels;
     labels.reserve(size);
 

@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "Iris.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class IrisTest : public testing::Test
@@ -21,7 +19,7 @@ class IrisTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> IrisTest::data = nullptr;
+std::unique_ptr<Data> IrisTest::data = nullptr;
 
 TEST_F(IrisTest, loadData)
 {

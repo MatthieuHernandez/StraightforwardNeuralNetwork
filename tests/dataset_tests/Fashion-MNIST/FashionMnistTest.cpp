@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "FashionMnist.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class FashionMnistTest : public testing::Test
@@ -21,7 +19,7 @@ class FashionMnistTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> FashionMnistTest::data = nullptr;
+std::unique_ptr<Data> FashionMnistTest::data = nullptr;
 
 TEST_F(FashionMnistTest, loadData)
 {
@@ -81,7 +79,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 270926);
     ASSERT_FLOAT_EQ(accuracy, 0.8965F);
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -135,6 +133,6 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
                 Momentum:      0.93
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }

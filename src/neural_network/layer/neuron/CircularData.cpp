@@ -3,9 +3,8 @@
 #include <cassert>
 #include <utility>
 
-using namespace std;
-using namespace snn::internal;
-
+namespace snn::internal
+{
 void CircularData::initialize(const size_t queueSize, const size_t dataSize)
 {
     this->queue.clear();
@@ -33,3 +32,4 @@ auto CircularData::operator==(const CircularData& other) const -> bool
 }
 
 auto CircularData::operator!=(const CircularData& other) const -> bool { return !(*this == other); }
+}  // namespace snn::internal

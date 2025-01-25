@@ -3,8 +3,6 @@
 #include "DailyMinTemperatures.hpp"
 #include "ExtendedGTest.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class DailyMinTemperaturesTest : public testing::Test
@@ -21,7 +19,7 @@ class DailyMinTemperaturesTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> DailyMinTemperaturesTest::data = nullptr;
+std::unique_ptr<Data> DailyMinTemperaturesTest::data = nullptr;
 
 TEST_F(DailyMinTemperaturesTest, loadData)
 {

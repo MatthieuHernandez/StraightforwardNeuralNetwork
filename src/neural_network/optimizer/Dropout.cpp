@@ -16,7 +16,7 @@ Dropout::Dropout(const float value, const BaseLayer* layer)
     this->reverseValue = 1.0F - this->value;
     auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
-    this->dist = uniform_real_distribution<>(0.0, 1.0);
+    this->dist = std::uniform_real_distribution<>(0.0, 1.0);
     std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                   [&] { return dist(tools::rng) >= this->value; });
 }
@@ -41,7 +41,7 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                       [&] { return dist(tools::rng) >= this->value; });
     }
-    std::ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), multiplies<float>());
+    std::ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), std::multiplies<float>());
 }
 
 void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)

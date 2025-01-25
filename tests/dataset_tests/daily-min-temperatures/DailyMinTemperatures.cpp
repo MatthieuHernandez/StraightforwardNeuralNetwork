@@ -7,22 +7,20 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 using namespace snn;
-using namespace internal;
 
-DailyMinTemperatures::DailyMinTemperatures(string folderPath, int numberOfRecurrences)
+DailyMinTemperatures::DailyMinTemperatures(std::string folderPath, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences)
 {
     this->loadData(folderPath);
 }
 
-void DailyMinTemperatures::loadData(string folderPath)
+void DailyMinTemperatures::loadData(std::string folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
-    string line;
-    ifstream file(folderPath + "/daily-min-temperatures.csv", ios::in);
+    std::string line;
+    std::ifstream file(folderPath + "/daily-min-temperatures.csv", std::ios::in);
 
     if (!file.is_open()) throw FileOpeningFailedException();
 
@@ -32,7 +30,7 @@ void DailyMinTemperatures::loadData(string folderPath)
     float previousValue = -273.15F;
     while (getline(file, line))
     {
-        string date = line.substr(0, line.find(','));
+        std::string date = line.substr(0, line.find(','));
         line = line.substr(line.find(',') + 1);
         float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 

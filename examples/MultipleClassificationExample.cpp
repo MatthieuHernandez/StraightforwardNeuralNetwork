@@ -3,7 +3,6 @@
 
 #include "Examples.hpp"
 
-using namespace std;
 using namespace snn;
 
 /*
@@ -13,8 +12,8 @@ For more explanation go to wiki
 */
 auto multipleClassificationExample() -> int
 {
-    std::vector<vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
-    std::vector<vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
+    std::vector<std::vector<float>> inputData = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+    std::vector<std::vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
     const float separator = 0.5F;
     Data data(problem::multipleClassification, inputData, expectedOutputs);

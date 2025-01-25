@@ -4,7 +4,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 class NumericLimitTests : public testing::Test
@@ -14,33 +13,33 @@ class NumericLimitTests : public testing::Test
         {
             vector2D<float> trainingExpectedOutputs;
             trainingExpectedOutputs.resize(sizeOfTraining);
-            ranges::generate(trainingExpectedOutputs,
-                             [] { return std::vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
+            std::ranges::generate(trainingExpectedOutputs,
+                                  [] { return std::vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
 
             vector2D<float> trainingInputData;
             trainingInputData.resize(sizeOfTraining);
-            ranges::generate(trainingInputData,
-                             []
-                             {
-                                 return std::vector<float>{tools::randomBetween(0.0F, 1.0F),
-                                                           tools::randomBetween(0.0F, 1.0F),
-                                                           tools::randomBetween(0.0F, 1.0F)};
-                             });
+            std::ranges::generate(trainingInputData,
+                                  []
+                                  {
+                                      return std::vector<float>{tools::randomBetween(0.0F, 1.0F),
+                                                                tools::randomBetween(0.0F, 1.0F),
+                                                                tools::randomBetween(0.0F, 1.0F)};
+                                  });
 
             vector2D<float> testingExpectedOutputs;
             testingExpectedOutputs.resize(sizeOfTesting);
-            ranges::generate(testingExpectedOutputs,
-                             [] { return std::vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
+            std::ranges::generate(testingExpectedOutputs,
+                                  [] { return std::vector<float>{tools::randomBetween(0.0F, 1.0F)}; });
 
             vector2D<float> testingInputData(sizeOfTesting);
             testingInputData.resize(sizeOfTesting);
-            ranges::generate(testingInputData,
-                             []
-                             {
-                                 return std::vector<float>{tools::randomBetween(0.0F, 1.0F),
-                                                           tools::randomBetween(0.0F, 1.0F),
-                                                           tools::randomBetween(0.0F, 1.0F)};
-                             });
+            std::ranges::generate(testingInputData,
+                                  []
+                                  {
+                                      return std::vector<float>{tools::randomBetween(0.0F, 1.0F),
+                                                                tools::randomBetween(0.0F, 1.0F),
+                                                                tools::randomBetween(0.0F, 1.0F)};
+                                  });
 
             data = std::make_unique<Data>(problem::regression, trainingInputData, trainingExpectedOutputs,
                                           testingInputData, testingExpectedOutputs);
@@ -61,7 +60,7 @@ class NumericLimitTests : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> NumericLimitTests::data = nullptr;
+std::unique_ptr<Data> NumericLimitTests::data = nullptr;
 
 TEST_F(NumericLimitTests, WithSigmoid)
 {

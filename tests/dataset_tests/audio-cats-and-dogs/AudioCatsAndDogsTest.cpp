@@ -3,8 +3,6 @@
 #include "AudioCatsAndDogs.hpp"
 #include "ExtendedGTest.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 const static int sizeOfOneData = 16000;
@@ -23,7 +21,7 @@ class AudioCatsAndDogsTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> AudioCatsAndDogsTest::data = nullptr;
+std::unique_ptr<Data> AudioCatsAndDogsTest::data = nullptr;
 
 TEST_F(AudioCatsAndDogsTest, loadData)
 {
@@ -61,7 +59,7 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 9242);
     ASSERT_FLOAT_EQ(accuracy, 0.91044772F);
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -99,6 +97,6 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
                 Momentum:      0.99
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }

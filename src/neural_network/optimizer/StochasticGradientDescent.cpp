@@ -83,12 +83,12 @@ auto StochasticGradientDescent::isValid() const -> ErrorType
     return ErrorType::noError;
 }
 
-auto StochasticGradientDescent::summary() const -> string
+auto StochasticGradientDescent::summary() const -> std::string
 {
     std::stringstream summary;
-    summary << " StochasticGradientDescent" << endl;
-    summary << "                Learning rate: " << this->learningRate << endl;
-    summary << "                Momentum:      " << this->momentum << endl;
+    summary << " StochasticGradientDescent\n";
+    summary << "                Learning rate: " << this->learningRate << '\n';
+    summary << "                Momentum:      " << this->momentum << '\n';
     return summary.str();
 }
 

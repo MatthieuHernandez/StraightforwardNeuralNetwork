@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "Wine.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class WineTest : public testing::Test
@@ -21,7 +19,7 @@ class WineTest : public testing::Test
         static std::unique_ptr<Data> data;
 };
 
-unique_ptr<Data> WineTest::data = nullptr;
+std::unique_ptr<Data> WineTest::data = nullptr;
 
 TEST_F(WineTest, loadData)
 {

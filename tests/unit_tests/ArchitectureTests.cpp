@@ -4,7 +4,6 @@
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 TEST(Architecture, ValidArchitectures)
@@ -37,7 +36,7 @@ TEST(Architecture, InvalidArchitectures)
                                           {Input(4, 1, 10), Convolution(1, 7), FullyConnected(1)},
                                           {Input(8, 8, 8, 8), Convolution(1, 3), FullyConnected(2)}};
 
-    const std::vector<string> expectedErrorMessages = {
+    const std::vector<std::string> expectedErrorMessages = {
         "Invalid neural network architecture: First LayerModel must be a Input type LayerModel.",
         "Invalid neural network architecture: Neural Network must have at least 1 layer.",
         "Invalid neural network architecture: Input of layer has size of 0.",

@@ -7,27 +7,26 @@
 #include <stdexcept>
 #include <string>
 
-using namespace std;
 using namespace snn;
 
-Iris::Iris(string folderPath) { this->loadData(folderPath); }
+Iris::Iris(std::string folderPath) { this->loadData(folderPath); }
 
-void Iris::loadData(string folderPath)
+void Iris::loadData(std::string folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
 
-    string line;
-    ifstream file(folderPath + "/bezdekIris.data");
+    std::string line;
+    std::ifstream file(folderPath + "/bezdekIris.data");
     int size = 0;
-    vector2D<string> individuals;
+    vector2D<std::string> individuals;
     individuals.reserve(150);
 
     if (!file.is_open()) throw FileOpeningFailedException();
 
     while (getline(file, line) && line.size() > 4)
     {
-        const std::vector<string> temp;
+        const std::vector<std::string> temp;
         individuals.push_back(temp);
         for (int i = 0; line != line.substr(line.find(',') + 1); i++)
         {
@@ -70,7 +69,7 @@ void Iris::loadData(string folderPath)
         }
         else
         {
-            throw runtime_error("Cannot load iris dataset");
+            throw std::runtime_error("Cannot load iris dataset");
         }
     }
     this->data = std::make_unique<Data>(problem::classification, inputs, labels);

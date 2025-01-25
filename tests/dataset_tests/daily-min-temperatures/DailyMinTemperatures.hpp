@@ -5,7 +5,7 @@ class DailyMinTemperatures final : public Dataset
 {
     private:
         int numberOfRecurrences;
-        void loadData(std::string folderPath) override;
+        void loadData(std::string folderPath) final;
 
     public:
         DailyMinTemperatures(std::string folderPath, int numberOfRecurrences);

@@ -12,7 +12,7 @@ class GatedRecurrentUnit final
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
         friend class RecurrentNeuron;
 
@@ -55,15 +55,15 @@ class GatedRecurrentUnit final
 };
 
 template <class Archive>
-void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar& this->numberOfInputs;
-    ar& this->previousOutput;
-    ar& this->recurrentError;
-    ar& this->updateGateOutput;
-    ar& this->outputGateOutput;
-    ar& this->resetGate;
-    ar& this->updateGate;
-    ar& this->outputGate;
+    archive& this->numberOfInputs;
+    archive& this->previousOutput;
+    archive& this->recurrentError;
+    archive& this->updateGateOutput;
+    archive& this->outputGateOutput;
+    archive& this->resetGate;
+    archive& this->updateGate;
+    archive& this->outputGate;
 }
 }  // namespace snn::internal

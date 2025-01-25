@@ -15,12 +15,12 @@ struct binaryClassification
         auto operator==(const binaryClassification&) const -> bool { return true; };
 
         template <typename Archive>
-        void serialize(Archive& ar, unsigned)
+        void serialize(Archive& archive, unsigned)
         {
-            ar & truePositive;
-            ar & trueNegative;
-            ar & falsePositive;
-            ar & falseNegative;
+            archive & truePositive;
+            archive & trueNegative;
+            archive & falsePositive;
+            archive & falseNegative;
         }
 };
 
@@ -29,7 +29,7 @@ class StatisticAnalysis
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
         std::vector<binaryClassification> clusters;
         float numberOfDataWellClassified;
@@ -95,25 +95,25 @@ class StatisticAnalysis
 };
 
 template <class Archive>
-void StatisticAnalysis::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void StatisticAnalysis::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar& this->clusters;
-    ar& this->numberOfDataWellClassified;
-    ar& this->numberOfDataMisclassified;
-    ar& this->globalClusteringRate;
-    ar& this->weightedClusteringRate;
-    ar& this->f1Score;
-    ar& this->meanAbsoluteError;
-    ar& this->rootMeanSquaredError;
-    ar& this->globalClusteringRateMax;
-    ar& this->weightedClusteringRateMax;
-    ar& this->f1ScoreMax;
-    ar& this->meanAbsoluteErrorMin;
-    ar& this->rootMeanSquaredErrorMin;
-    ar& this->globalClusteringRateIsBetterThanMax;
-    ar& this->weightedClusteringRateIsBetterThanMax;
-    ar& this->f1ScoreIsBetterThanMax;
-    ar& this->meanAbsoluteErrorIsBetterThanMin;
-    ar& this->rootMeanSquaredErrorIsBetterThanMin;
+    archive& this->clusters;
+    archive& this->numberOfDataWellClassified;
+    archive& this->numberOfDataMisclassified;
+    archive& this->globalClusteringRate;
+    archive& this->weightedClusteringRate;
+    archive& this->f1Score;
+    archive& this->meanAbsoluteError;
+    archive& this->rootMeanSquaredError;
+    archive& this->globalClusteringRateMax;
+    archive& this->weightedClusteringRateMax;
+    archive& this->f1ScoreMax;
+    archive& this->meanAbsoluteErrorMin;
+    archive& this->rootMeanSquaredErrorMin;
+    archive& this->globalClusteringRateIsBetterThanMax;
+    archive& this->weightedClusteringRateIsBetterThanMax;
+    archive& this->f1ScoreIsBetterThanMax;
+    archive& this->meanAbsoluteErrorIsBetterThanMin;
+    archive& this->rootMeanSquaredErrorIsBetterThanMin;
 }
 }  // namespace snn::internal

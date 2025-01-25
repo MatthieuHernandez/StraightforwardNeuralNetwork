@@ -12,7 +12,7 @@ class Softmax final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
         static void computeSoftmax(std::vector<float>& outputs);
 
@@ -20,25 +20,25 @@ class Softmax final : public LayerOptimizer
         Softmax() = default;  // use restricted to Boost library only
         Softmax(const BaseLayer* layer);
         Softmax(const Softmax& Softmax, const BaseLayer* layer);
-        ~Softmax() override = default;
+        ~Softmax() final = default;
 
-        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> override;
+        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> final;
 
-        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
-        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) final;
+        void applyAfterOutputForTesting(std::vector<float>& outputs) final;
 
-        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] auto summary() const -> std::string override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        auto operator==(const LayerOptimizer& optimizer) const -> bool override;
-        auto operator!=(const LayerOptimizer& optimizer) const -> bool override;
+        auto operator==(const LayerOptimizer& optimizer) const -> bool final;
+        auto operator!=(const LayerOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>
-void Softmax::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void Softmax::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Softmax, LayerOptimizer>();
-    ar& boost::serialization::base_object<LayerOptimizer>(*this);
+    archive& boost::serialization::base_object<LayerOptimizer>(*this);
 }
 }  // namespace snn::internal

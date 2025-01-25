@@ -13,7 +13,7 @@ class FilterLayer : public Layer<SimpleNeuron>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         int numberOfFilters;
@@ -31,7 +31,7 @@ class FilterLayer : public Layer<SimpleNeuron>
     public:
         FilterLayer() = default;  // use restricted to Boost library only
         FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        virtual ~FilterLayer() = default;
+        ~FilterLayer() override = default;
         FilterLayer(const FilterLayer&) = default;
 
         [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> final;
@@ -44,18 +44,18 @@ class FilterLayer : public Layer<SimpleNeuron>
 };
 
 template <class Archive>
-void FilterLayer::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void FilterLayer::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<FilterLayer, Layer>();
-    ar& boost::serialization::base_object<Layer>(*this);
-    ar& this->numberOfFilters;
-    ar& this->numberOfKernels;
-    ar& this->numberOfKernelsPerFilter;
-    ar& this->numberOfNeuronsPerFilter;
-    ar& this->kernelSize;
-    ar& this->sizeOfNeuronInputs;
-    ar& this->shapeOfInput;
-    ar& this->shapeOfOutput;
-    ar& this->kernelIndexes;
+    archive& boost::serialization::base_object<Layer>(*this);
+    archive& this->numberOfFilters;
+    archive& this->numberOfKernels;
+    archive& this->numberOfKernelsPerFilter;
+    archive& this->numberOfNeuronsPerFilter;
+    archive& this->kernelSize;
+    archive& this->sizeOfNeuronInputs;
+    archive& this->shapeOfInput;
+    archive& this->shapeOfOutput;
+    archive& this->kernelIndexes;
 }
 }  // namespace snn::internal

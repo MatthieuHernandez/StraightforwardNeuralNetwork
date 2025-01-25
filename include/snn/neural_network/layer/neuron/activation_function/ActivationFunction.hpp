@@ -24,7 +24,7 @@ class ActivationFunction
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
         static std::vector<std::shared_ptr<ActivationFunction>> activationFunctions;
 

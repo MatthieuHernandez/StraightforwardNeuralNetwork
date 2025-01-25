@@ -10,9 +10,9 @@ namespace snn::internal
 class Identity final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation override { return activation::identity; }
+        auto getType() const -> activation final { return activation::identity; }
 
-        auto getName() const -> string override { return "identity"; }
+        auto getName() const -> string final { return "identity"; }
 
     public:
         Identity()
@@ -20,8 +20,8 @@ class Identity final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float override { return x; }
+        auto function(const float x) const -> float final { return x; }
 
-        auto derivative([[maybe_unused]] const float x) const -> float override { return 1.0F; }
+        auto derivative([[maybe_unused]] const float x) const -> float final { return 1.0F; }
 };
 }  // namespace snn::internal

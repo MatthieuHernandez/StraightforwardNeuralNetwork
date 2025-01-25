@@ -34,7 +34,7 @@ class NeuralNetwork : public StatisticAnalysis
 
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         auto output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>;
@@ -58,7 +58,7 @@ class NeuralNetwork : public StatisticAnalysis
         auto operator=(NeuralNetwork&&) -> NeuralNetwork& = delete;
         NeuralNetwork(std::vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer);
         NeuralNetwork(const NeuralNetwork& neuralNetwork);
-        virtual ~NeuralNetwork() = default;
+        ~NeuralNetwork() override = default;
 
         [[nodiscard]] auto hasNan() const -> bool;
         [[nodiscard]] auto getNumberOfTraining() const -> int64_t;
@@ -81,26 +81,26 @@ class NeuralNetwork : public StatisticAnalysis
 };
 
 template <class Archive>
-void NeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void NeuralNetwork::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<NeuralNetwork, StatisticAnalysis>();
-    ar& boost::serialization::base_object<StatisticAnalysis>(*this);
-    ar.template register_type<FullyConnected>();
-    ar.template register_type<Recurrence>();
-    ar.template register_type<GruLayer>();
-    ar.template register_type<Convolution1D>();
-    ar.template register_type<Convolution2D>();
-    ar.template register_type<LocallyConnected1D>();
-    ar.template register_type<LocallyConnected2D>();
-    ar.template register_type<StochasticGradientDescent>();
-    ar.template register_type<MaxPooling1D>();
-    ar.template register_type<MaxPooling2D>();
+    archive& boost::serialization::base_object<StatisticAnalysis>(*this);
+    archive.template register_type<FullyConnected>();
+    archive.template register_type<Recurrence>();
+    archive.template register_type<GruLayer>();
+    archive.template register_type<Convolution1D>();
+    archive.template register_type<Convolution2D>();
+    archive.template register_type<LocallyConnected1D>();
+    archive.template register_type<LocallyConnected2D>();
+    archive.template register_type<StochasticGradientDescent>();
+    archive.template register_type<MaxPooling1D>();
+    archive.template register_type<MaxPooling2D>();
     if (version >= 1)
     {
-        ar& this->numberOfTraining;
+        archive& this->numberOfTraining;
     }
-    ar& this->layers;
-    ar& this->optimizer;
+    archive& this->layers;
+    archive& this->optimizer;
 }
 }  // namespace snn::internal
 BOOST_CLASS_VERSION(snn::internal::NeuralNetwork, 1)

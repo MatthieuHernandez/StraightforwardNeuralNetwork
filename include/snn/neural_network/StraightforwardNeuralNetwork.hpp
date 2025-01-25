@@ -41,7 +41,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         StraightforwardNeuralNetwork() = default;  // use restricted to Boost library only
@@ -49,7 +49,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
                                               NeuralNetworkOptimizerModel optimizer = {
                                                   neuralNetworkOptimizerType::stochasticGradientDescent, 0.03F, 0.0F});
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
-        ~StraightforwardNeuralNetwork();
+        ~StraightforwardNeuralNetwork() final;
 
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";
@@ -124,16 +124,16 @@ void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, s
 }
 
 template <class Archive>
-void StraightforwardNeuralNetwork::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void StraightforwardNeuralNetwork::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<StraightforwardNeuralNetwork, NeuralNetwork>();
-    ar& boost::serialization::base_object<NeuralNetwork>(*this);
-    ar& this->autoSaveFilePath;
-    ar& this->autoSaveWhenBetter;
-    ar& this->wantToStopTraining;
-    ar& this->index;
-    ar& this->isIdle;
-    ar& this->epoch;
-    ar& this->numberOfTrainingsBetweenTwoEvaluations;
+    archive& boost::serialization::base_object<NeuralNetwork>(*this);
+    archive& this->autoSaveFilePath;
+    archive& this->autoSaveWhenBetter;
+    archive& this->wantToStopTraining;
+    archive& this->index;
+    archive& this->isIdle;
+    archive& this->epoch;
+    archive& this->numberOfTrainingsBetweenTwoEvaluations;
 }
 }  // namespace snn

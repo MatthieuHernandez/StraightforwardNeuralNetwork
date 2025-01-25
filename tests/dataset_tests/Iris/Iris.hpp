@@ -7,5 +7,5 @@ class Iris final : public Dataset
         Iris(std::string folderPath);
 
     private:
-        void loadData(std::string folderPath) override;
+        void loadData(std::string folderPath) final;
 };

@@ -8,7 +8,6 @@
 #include "../optimizer/L1Regularization.hpp"
 #include "../optimizer/L2Regularization.hpp"
 #include "../optimizer/LayerOptimizer.hpp"
-#include "../optimizer/LayerOptimizerFactory.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "../optimizer/Softmax.hpp"
 #include "BaseLayer.hpp"
@@ -22,7 +21,7 @@ class Layer : public BaseLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         int numberOfInputs;
@@ -36,7 +35,7 @@ class Layer : public BaseLayer
         Layer() = default;  // use restricted to Boost library only
         Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Layer(const Layer& layer);
-        virtual ~Layer() = default;
+        ~Layer() override = default;
         [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
             -> std::unique_ptr<BaseLayer> override = 0;
 
@@ -56,7 +55,7 @@ class Layer : public BaseLayer
         [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> override = 0;
         [[nodiscard]] auto getShapeOfOutput() const -> std::vector<int> override = 0;
 
-        void train(std::vector<float>& inputErrors) final;
+        void train(std::vector<float>& inputErrors) override;
 
         [[nodiscard]] auto isValid() const -> ErrorType override;
 
@@ -66,19 +65,19 @@ class Layer : public BaseLayer
 
 template <BaseNeuron N>
 template <class Archive>
-void Layer<N>::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void Layer<N>::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Layer, BaseLayer>();
-    ar& boost::serialization::base_object<BaseLayer>(*this);
-    ar& this->numberOfInputs;
-    ar& this->neurons;
-    ar.template register_type<Dropout>();
-    ar.template register_type<L1Regularization>();
-    ar.template register_type<L2Regularization>();
-    ar.template register_type<ErrorMultiplier>();
-    ar.template register_type<Softmax>();
-    ar& this->optimizers;
+    archive& boost::serialization::base_object<BaseLayer>(*this);
+    archive& this->numberOfInputs;
+    archive& this->neurons;
+    archive.template register_type<Dropout>();
+    archive.template register_type<L1Regularization>();
+    archive.template register_type<L2Regularization>();
+    archive.template register_type<ErrorMultiplier>();
+    archive.template register_type<Softmax>();
+    archive& this->optimizers;
 }
 
 }  // namespace snn::internal
-#include "Layer.tpp"
+#include "Layer.tpp"  // IWYU pragma: keep

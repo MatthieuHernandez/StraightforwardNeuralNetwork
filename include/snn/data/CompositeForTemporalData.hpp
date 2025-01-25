@@ -11,14 +11,14 @@ class CompositeForTemporalData : public TemporalComposite
     public:
         CompositeForTemporalData(snn::Set sets[2]);
 
-        void shuffle() override;
-        void unshuffle() override;
+        void shuffle() final;
+        void unshuffle() final;
 
-        [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool override;
-        [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool override;
-        [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool override;
-        [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool override;
+        [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool final;
+        [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool final;
+        [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool final;
+        [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool final;
 
-        [[nodiscard]] auto isValid() const -> ErrorType override;
+        [[nodiscard]] auto isValid() const -> ErrorType final;
 };
 }  // namespace snn::internal

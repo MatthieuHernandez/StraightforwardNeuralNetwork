@@ -16,7 +16,7 @@ class SimpleLayer : public Layer<N>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) final;
@@ -25,24 +25,27 @@ class SimpleLayer : public Layer<N>
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
+        SimpleLayer(SimpleLayer&&) = delete;
+        auto operator=(const SimpleLayer&) -> SimpleLayer& = delete;
+        auto operator=(SimpleLayer&&) -> SimpleLayer& = delete;
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
-        virtual ~SimpleLayer() = default;
+        ~SimpleLayer() override = default;
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
         [[nodiscard]] auto isValid() const -> ErrorType final;
 
-        auto operator==(const BaseLayer& layer) const -> bool final;
-        auto operator!=(const BaseLayer& layer) const -> bool final;
+        auto operator==(const BaseLayer& layer) const -> bool override;
+        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <BaseNeuron N>
 template <class Archive>
-void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void SimpleLayer<N>::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
-    ar& boost::serialization::base_object<Layer<N>>(*this);
+    archive& boost::serialization::base_object<Layer<N>>(*this);
 }
 
 template <>
@@ -52,4 +55,4 @@ template <>
 std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
 
 }  // namespace snn::internal
-#include "SimpleLayer.tpp"
+#include "SimpleLayer.tpp"  // IWYU pragma: keep

@@ -2,5 +2,6 @@ Checks: >
     *,
     -llvmlibc-*,
     -fuchsia-trailing-return,
-    -fuchsia-default-arguments-declarations
+    -fuchsia-default-arguments-declarations,
+    -fuchsia-default-arguments-calls
 WarningsAsErrors: '.*'

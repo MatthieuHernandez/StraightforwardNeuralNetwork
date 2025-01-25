@@ -16,7 +16,7 @@ class WineTest : public testing::Test
             data = move(dataset.data);
         }
 
-        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
 
         static unique_ptr<Data> data;
 };

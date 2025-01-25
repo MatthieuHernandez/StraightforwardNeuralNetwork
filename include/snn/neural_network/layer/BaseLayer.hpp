@@ -20,7 +20,8 @@ class BaseLayer
 
     public:
         virtual ~BaseLayer() = default;
-        virtual auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> = 0;
+        [[nodiscard]] virtual auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> = 0;
 
         [[nodiscard]] virtual auto getNeuron(int index) -> void* = 0;
         [[nodiscard]] virtual auto getAverageOfAbsNeuronWeights() const -> float = 0;

@@ -18,7 +18,7 @@ class Neuron
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, uint32_t version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         int numberOfInputs;
@@ -60,19 +60,19 @@ class Neuron
 };
 
 template <class Archive>
-void Neuron::serialize(Archive& ar, [[maybe_unused]] const uint32_t version)
+void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar.template register_type<StochasticGradientDescent>();
-    ar& this->optimizer;
-    ar& this->numberOfInputs;
-    ar& this->batchSize;
-    ar& this->weights;
-    ar& this->bias;
-    ar& this->previousDeltaWeights;
-    ar& this->lastInputs;
-    ar& this->errors;
-    ar& this->sum;
-    ar& this->activationFunction;
+    archive.template register_type<StochasticGradientDescent>();
+    archive& this->optimizer;
+    archive& this->numberOfInputs;
+    archive& this->batchSize;
+    archive& this->weights;
+    archive& this->bias;
+    archive& this->previousDeltaWeights;
+    archive& this->lastInputs;
+    archive& this->errors;
+    archive& this->sum;
+    archive& this->activationFunction;
     this->outputFunction = ActivationFunction::get(activationFunction);
 }
 }  // namespace snn::internal

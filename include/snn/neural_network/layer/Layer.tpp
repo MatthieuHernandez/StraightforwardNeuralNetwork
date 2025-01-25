@@ -1,4 +1,5 @@
 #pragma once
+#include "../optimizer/LayerOptimizerFactory.hpp"
 #include "Layer.hpp"
 
 namespace snn::internal

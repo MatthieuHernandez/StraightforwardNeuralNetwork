@@ -15,25 +15,25 @@ auto Dropout(float value) -> LayerOptimizerModel
     return model;
 }
 
-auto snn::L1Regularization(float value) -> LayerOptimizerModel
+auto L1Regularization(float value) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::l1Regularization, value};
     return model;
 }
 
-auto snn::L2Regularization(float value) -> LayerOptimizerModel
+auto L2Regularization(float value) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::l2Regularization, value};
     return model;
 }
 
-auto snn::ErrorMultiplier(float factor) -> LayerOptimizerModel
+auto ErrorMultiplier(float factor) -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::errorMultiplier, factor};
     return model;
 }
 
-auto snn::Softmax() -> LayerOptimizerModel
+auto Softmax() -> LayerOptimizerModel
 {
     const LayerOptimizerModel model{layerOptimizerType::softmax, 0.0};
     return model;

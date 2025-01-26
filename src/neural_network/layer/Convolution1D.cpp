@@ -51,13 +51,13 @@ inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimiz
     return layer;
 }
 
-auto Convolution1D::isValid() const -> ErrorType
+auto Convolution1D::isValid() const -> errorType
 {
     for (auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
         {
-            return ErrorType::conv1DLayerWrongNumberOfInputs;
+            return errorType::conv1DLayerWrongNumberOfInputs;
         }
     }
     return this->FilterLayer::isValid();

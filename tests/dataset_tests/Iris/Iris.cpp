@@ -28,7 +28,7 @@ void Iris::loadData(std::string folderPath)
     {
         const std::vector<std::string> temp;
         individuals.push_back(temp);
-        for (int i = 0; line != line.substr(line.find(',') + 1); i++)
+        while (line != line.substr(line.find(',') + 1))
         {
             individuals[size].push_back(line.substr(0, line.find(',')));
             line = line.substr(line.find(',') + 1);

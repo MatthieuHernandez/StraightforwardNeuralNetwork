@@ -39,7 +39,7 @@ class BaseLayer
         [[nodiscard]] virtual auto backOutput(std::vector<float>& inputErrors) -> std::vector<float> = 0;
         virtual void train(std::vector<float>& inputErrors) = 0;
 
-        [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
+        [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 

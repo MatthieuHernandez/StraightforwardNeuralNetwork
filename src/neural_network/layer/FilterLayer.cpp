@@ -25,7 +25,7 @@ auto FilterLayer::getShapeOfOutput() const -> std::vector<int> { return this->sh
 
 auto FilterLayer::getKernelSize() const -> int { return this->kernelSize; }
 
-auto FilterLayer::isValid() const -> ErrorType
+auto FilterLayer::isValid() const -> errorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
@@ -35,7 +35,7 @@ auto FilterLayer::isValid() const -> ErrorType
     }
     if (numberOfOutput != this->numberOfKernels)
     {
-        return ErrorType::filterLayerWrongNumberOfOutputs;
+        return errorType::filterLayerWrongNumberOfOutputs;
     }
 
     return this->Layer::isValid();

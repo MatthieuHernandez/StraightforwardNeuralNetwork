@@ -70,17 +70,17 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
 #endif
 }
 
-auto StochasticGradientDescent::isValid() const -> ErrorType
+auto StochasticGradientDescent::isValid() const -> errorType
 {
     if (this->learningRate <= 0.0F || this->learningRate >= 1.0F)
     {
-        return ErrorType::optimizerWrongLearningRate;
+        return errorType::optimizerWrongLearningRate;
     }
     if (this->momentum < 0.0F || this->momentum > 1.0F)
     {
-        return ErrorType::optimizerWrongMomentum;
+        return errorType::optimizerWrongMomentum;
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto StochasticGradientDescent::summary() const -> std::string

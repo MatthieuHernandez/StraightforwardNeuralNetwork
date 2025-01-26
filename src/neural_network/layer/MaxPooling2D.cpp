@@ -66,15 +66,15 @@ inline auto MaxPooling2D::clone(std::shared_ptr<NeuralNetworkOptimizer>) const -
     return std::make_unique<MaxPooling2D>(*this);
 }
 
-auto MaxPooling2D::isValid() const -> ErrorType
+auto MaxPooling2D::isValid() const -> errorType
 {
     if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs) &&
         this->numberOfKernels != this->numberOfOutputs)
     {
-        return ErrorType::maxPooling2DWrongNumberOfInputs;
+        return errorType::maxPooling2DWrongNumberOfInputs;
     }
-    return ErrorType::noError;
-    return ErrorType::noError;
+    return errorType::noError;
+    return errorType::noError;
 }
 
 auto MaxPooling2D::summary() const -> std::string

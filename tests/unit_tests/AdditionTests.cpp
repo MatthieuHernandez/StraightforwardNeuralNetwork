@@ -99,7 +99,7 @@ auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrenc
 
         for (int j = 0; j < numberOfRecurrences + 1; ++j)
         {
-            if (i + j < numberOfData) expectedOutputs[(int)(i + j)][0] += r;
+            if (i + j < numberOfData) expectedOutputs[(i + j)][0] += r;
         }
     }
 

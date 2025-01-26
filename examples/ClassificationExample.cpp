@@ -21,9 +21,9 @@ auto classificationExample() -> int
     neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
-    int classNumber = neuralNetwork.computeCluster(data.getData(snn::testing, 0));  // consult neural network to test it
-    int expectedClassNumber = data.getLabel(snn::testing, 0);  // return position of neuron with highest output
-    if (accuracy == 100 && classNumber == expectedClassNumber && neuralNetwork.isValid() == snn::ErrorType::noError)
+    int classNumber = neuralNetwork.computeCluster(data.getTestingData(0));  // consult neural network to test it
+    int expectedClassNumber = data.getTestingLabel(0);  // return position of neuron with highest output
+    if (accuracy == 100 && classNumber == expectedClassNumber && neuralNetwork.isValid() == snn::errorType::noError)
     {
         return EXIT_SUCCESS;  // the neural network has learned
     }

@@ -66,8 +66,8 @@ auto NeuralNetwork::output(const std::vector<float>& inputs, bool temporalReset)
     {
         outputs = layers[l]->output(outputs, temporalReset);
     }
-    if (std::ranges::any_of(outputs,
-                            [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    if (std::ranges::any_of(
+            outputs, [](const float& v) { return std::fpclassify(v) != FP_NORMAL && std::fpclassify(v) != FP_ZERO; }))
     {
         this->outputNan = true;
     }
@@ -83,8 +83,8 @@ auto NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool tem
         outputs = layers[l]->outputForTraining(outputs, temporalReset);
     }
 
-    if (std::ranges::any_of(outputs,
-                            [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    if (std::ranges::any_of(
+            outputs, [](const float& v) { return std::fpclassify(v) != FP_NORMAL && std::fpclassify(v) != FP_ZERO; }))
     {
         this->outputNan = true;
     }
@@ -115,7 +115,7 @@ inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, con
     std::vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
     {
-        if (fpclassify(desired[n]) != FP_NORMAL && fpclassify(desired[n]) != FP_ZERO)
+        if (std::fpclassify(desired[n]) != FP_NORMAL && std::fpclassify(desired[n]) != FP_ZERO)
         {
             errors[n] = 0.0F;
         }
@@ -168,33 +168,33 @@ auto NeuralNetwork::getNumberOfParameters() const -> int
     return sum;
 }
 
-auto NeuralNetwork::isValid() const -> ErrorType
+auto NeuralNetwork::isValid() const -> errorType
 {
     // TODO(matth): rework isValid
     constexpr int big_image_size = 1920 * 1080;  // 2073600
     if (this->getNumberOfInputs() < 1 || this->getNumberOfInputs() > big_image_size)
     {
-        return ErrorType::neuralNetworkInputTooLarge;
+        return errorType::neuralNetworkInputTooLarge;
     }
     constexpr int lot_of_layers = 100;
     if (this->getNumberOfLayers() < 1 || this->getNumberOfLayers() > lot_of_layers)
     {
-        return ErrorType::neuralNetworkTooMuchLayers;
+        return errorType::neuralNetworkTooMuchLayers;
     }
     auto err = this->optimizer->isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
     for (const auto& layer : this->layers)
     {
         err = layer->isValid();
-        if (err != ErrorType::noError)
+        if (err != errorType::noError)
         {
             return err;
         }
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool

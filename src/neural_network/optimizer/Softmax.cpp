@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <boost/serialization/export.hpp>
+#include <cmath>
 #include <numeric>
 
 #include "BaseLayer.hpp"
@@ -36,7 +37,7 @@ inline void Softmax::computeSoftmax(std::vector<float>& outputs)
     for (auto& output : outputs)
     {
         const auto value = exp(output) / sumExp;
-        if (fpclassify(value) != FP_NORMAL && fpclassify(value) != FP_ZERO)
+        if (std::fpclassify(value) != FP_NORMAL && std::fpclassify(value) != FP_ZERO)
         {
             output = 0;
         }

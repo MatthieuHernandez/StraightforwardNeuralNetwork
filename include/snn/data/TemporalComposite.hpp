@@ -7,10 +7,14 @@ namespace snn::internal
 class TemporalComposite
 {
     protected:
-        Set* sets;
+        Dataset* set;
 
     public:
-        TemporalComposite(snn::Set sets[2]);
+        TemporalComposite(const TemporalComposite&) = default;
+        TemporalComposite(TemporalComposite&&) = delete;
+        auto operator=(const TemporalComposite&) -> TemporalComposite& = default;
+        auto operator=(TemporalComposite&&) -> TemporalComposite& = delete;
+        explicit TemporalComposite(Dataset* set);
         virtual ~TemporalComposite() = default;
 
         virtual void shuffle() = 0;
@@ -21,6 +25,6 @@ class TemporalComposite
         [[nodiscard]] virtual auto needToTrainOnTrainingData(int index) const -> bool = 0;
         [[nodiscard]] virtual auto needToEvaluateOnTestingData(int index) const -> bool = 0;
 
-        [[nodiscard]] virtual auto isValid() const -> ErrorType;
+        [[nodiscard]] virtual auto isValid() const -> errorType;
 };
 }  // namespace snn::internal

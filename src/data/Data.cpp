@@ -1,7 +1,6 @@
 #include "Data.hpp"
 
 #include <algorithm>
-#include <cmath>
 #include <functional>
 #include <numeric>
 #include <stdexcept>
@@ -51,10 +50,10 @@ Data::Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& 
         throw std::runtime_error("std::vector 3D type inputs are only for sequential data.");
     }
 
-    this->flatten(training, trainingInputs);
-    this->flatten(testing, testingInputs);
+    this->flatten(this->set.training, trainingInputs);
+    this->flatten(this->set.testing, testingInputs);
 
-    this->initialize(this->sets[training].inputs, trainingLabels, this->sets[testing].inputs, testingLabels);
+    this->initialize(this->set.training.inputs, trainingLabels, this->set.testing.inputs, testingLabels);
 }
 
 Data::Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& inputs,
@@ -70,7 +69,7 @@ Data::Data(problem typeOfProblem, std::vector<std::vector<std::vector<float>>>& 
 
     this->flatten(inputs);
 
-    this->initialize(this->sets[training].inputs, labels, this->sets[testing].inputs, labels);
+    this->initialize(this->set.training.inputs, labels, this->set.testing.inputs, labels);
 }
 
 void Data::initialize(std::vector<std::vector<float>>& trainingInputs, std::vector<std::vector<float>>& trainingLabels,
@@ -78,35 +77,35 @@ void Data::initialize(std::vector<std::vector<float>>& trainingInputs, std::vect
 {
     this->precision = 0.1F;
     this->separator = 0.5F;
-    this->sets[training].inputs = trainingInputs;
-    this->sets[training].labels = trainingLabels;
-    this->sets[testing].inputs = testingInputs;
-    this->sets[testing].labels = testingLabels;
+    this->set.training.inputs = trainingInputs;
+    this->set.training.labels = trainingLabels;
+    this->set.testing.inputs = testingInputs;
+    this->set.testing.labels = testingLabels;
 
     this->sizeOfData = static_cast<int>(trainingInputs.back().size());
     this->numberOfLabels = static_cast<int>(trainingLabels.back().size());
-    this->sets[training].size = static_cast<int>(trainingLabels.size());
-    this->sets[testing].size = static_cast<int>(testingLabels.size());
+    this->set.training.size = static_cast<int>(trainingLabels.size());
+    this->set.testing.size = static_cast<int>(testingLabels.size());
 
-    this->sets[training].shuffledIndexes.resize(this->sets[training].size);
-    for (int i = 0; i < static_cast<int>(this->sets[training].shuffledIndexes.size()); i++)
+    this->set.training.shuffledIndexes.resize(this->set.training.size);
+    for (int i = 0; i < static_cast<int>(this->set.training.shuffledIndexes.size()); i++)
     {
-        this->sets[training].shuffledIndexes[i] = i;
+        this->set.training.shuffledIndexes[i] = i;
     }
 
     switch (this->typeOfProblem)
     {
         case problem::classification:
             this->problemComposite =
-                std::make_unique<internal::CompositeForClassification>(this->sets, this->numberOfLabels);
+                std::make_unique<internal::CompositeForClassification>(&this->set, this->numberOfLabels);
             break;
         case problem::multipleClassification:
             this->problemComposite =
-                std::make_unique<internal::CompositeForMultipleClassification>(this->sets, this->numberOfLabels);
+                std::make_unique<internal::CompositeForMultipleClassification>(&this->set, this->numberOfLabels);
             break;
         case problem::regression:
             this->problemComposite =
-                std::make_unique<internal::CompositeForRegression>(this->sets, this->numberOfLabels);
+                std::make_unique<internal::CompositeForRegression>(&this->set, this->numberOfLabels);
             break;
         default:
             throw NotImplementedException();
@@ -115,21 +114,21 @@ void Data::initialize(std::vector<std::vector<float>>& trainingInputs, std::vect
     switch (this->typeOfTemporal)
     {
         case nature::nonTemporal:
-            this->temporalComposite = std::make_unique<internal::CompositeForNonTemporalData>(this->sets);
+            this->temporalComposite = std::make_unique<internal::CompositeForNonTemporalData>(&this->set);
             break;
         case nature::sequential:
-            this->temporalComposite = std::make_unique<internal::CompositeForTemporalData>(this->sets);
+            this->temporalComposite = std::make_unique<internal::CompositeForTemporalData>(&this->set);
             break;
         case nature::timeSeries:
             this->temporalComposite =
-                std::make_unique<internal::CompositeForTimeSeries>(this->sets, this->numberOfRecurrences);
+                std::make_unique<internal::CompositeForTimeSeries>(&this->set, this->numberOfRecurrences);
             break;
         default:
             throw NotImplementedException();
     }
 
     const auto err = this->isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         const auto message = std::string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of data";
         throw std::runtime_error(message);
@@ -138,59 +137,65 @@ void Data::initialize(std::vector<std::vector<float>>& trainingInputs, std::vect
     tools::log<minimal>("Data loaded");
 }
 
-void Data::flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D)
+void Data::flatten(Set& set, std::vector<std::vector<std::vector<float>>>& input3D)
 {
-    this->sets[set].numberOfTemporalSequence = (int)input3D.size();
-    size_t size = accumulate(input3D.begin(), input3D.end(), (size_t)0,
+    set.numberOfTemporalSequence = static_cast<int>(input3D.size());
+    size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
                              [](size_t sum, vector2D<float>& v) { return sum + v.size(); });
-    this->sets[set].inputs.reserve(size);
-    this->sets[set].areFirstDataOfTemporalSequence.resize(size, false);
-    if (set == testing) this->sets[set].needToEvaluateOnData.resize(size, false);
-
-    size_t i = 0;
-    for (auto& v : input3D)
+    set.inputs.reserve(size);
+    set.areFirstDataOfTemporalSequence.resize(size, false);
+    if (set.type == setType::testing)
     {
-        std::ranges::move(v, back_inserter(this->sets[set].inputs));
-
-        this->sets[set].areFirstDataOfTemporalSequence[i] = true;
-        i += v.size();
-        if (set == testing) this->sets[testing].needToEvaluateOnData[i - 1] = true;
+        set.needToEvaluateOnData.resize(size, false);
     }
-    this->sets[set].size = (int)this->sets[set].inputs.size();
+
+    size_t count = 0;
+    for (auto& input : input3D)
+    {
+        std::ranges::move(input, back_inserter(set.inputs));
+
+        set.areFirstDataOfTemporalSequence[count] = true;
+        count += input.size();
+        if (set.type == setType::testing)
+        {
+            this->set.testing.needToEvaluateOnData[count - 1] = true;
+        }
+    }
+    set.size = static_cast<int>(set.inputs.size());
 }
 
 void Data::flatten(std::vector<std::vector<std::vector<float>>>& input3D)
 {
-    this->sets[training].numberOfTemporalSequence = (int)input3D.size();
-    this->sets[testing].numberOfTemporalSequence = (int)input3D.size();
-    size_t size = accumulate(input3D.begin(), input3D.end(), (size_t)0,
+    this->set.training.numberOfTemporalSequence = static_cast<int>(input3D.size());
+    this->set.testing.numberOfTemporalSequence = static_cast<int>(input3D.size());
+    size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
                              [](size_t sum, vector2D<float>& v) { return sum + v.size(); });
-    this->sets[training].inputs.reserve(size);
-    this->sets[training].areFirstDataOfTemporalSequence.resize(size, false);
-    this->sets[testing].areFirstDataOfTemporalSequence.resize(size, false);
-    this->sets[testing].needToEvaluateOnData.resize(size, false);
+    this->set.training.inputs.reserve(size);
+    this->set.training.areFirstDataOfTemporalSequence.resize(size, false);
+    this->set.testing.areFirstDataOfTemporalSequence.resize(size, false);
+    this->set.testing.needToEvaluateOnData.resize(size, false);
 
-    size_t i = 0;
-    for (vector2D<float>& v : input3D)
+    size_t count = 0;
+    for (vector2D<float>& input : input3D)
     {
-        std::ranges::move(v, back_inserter(this->sets[training].inputs));
+        std::ranges::move(input, back_inserter(this->set.training.inputs));
 
-        this->sets[training].areFirstDataOfTemporalSequence[i] = true;
-        this->sets[testing].areFirstDataOfTemporalSequence[i] = true;
-        i += v.size();
-        this->sets[testing].needToEvaluateOnData[i - 1] = true;
+        this->set.training.areFirstDataOfTemporalSequence[count] = true;
+        this->set.testing.areFirstDataOfTemporalSequence[count] = true;
+        count += input.size();
+        this->set.testing.needToEvaluateOnData[count - 1] = true;
     }
-    this->sets[testing].inputs = this->sets[training].inputs;
-    this->sets[training].size = (int)this->sets[training].inputs.size();
-    this->sets[testing].size = (int)this->sets[testing].inputs.size();
+    this->set.testing.inputs = this->set.training.inputs;
+    this->set.training.size = static_cast<int>(this->set.training.inputs.size());
+    this->set.testing.size = static_cast<int>(this->set.testing.inputs.size());
 }
 
 void Data::normalize(const float min, const float max)
 {
     try
     {
-        vector2D<float>& inputsTraining = this->sets[training].inputs;
-        vector2D<float>& inputsTesting = this->sets[testing].inputs;
+        vector2D<float>& inputsTraining = this->set.training.inputs;
+        vector2D<float>& inputsTesting = this->set.testing.inputs;
         // TODO(matth): if the first pixel of images is always black, normalization will be wrong if testing set is
         // different
         for (int j = 0; j < this->sizeOfData; j++)
@@ -212,21 +217,21 @@ void Data::normalize(const float min, const float max)
 
             const float difference = maxValueOfvector - minValueOfvector;
 
-            for (size_t i = 0; i < inputsTraining.size(); i++)
+            for (auto& input : inputsTraining)
             {
                 if (difference != 0)
                 {
-                    inputsTraining[i][j] = (inputsTraining[i][j] - minValueOfvector) / difference;
+                    input[j] = (input[j] - minValueOfvector) / difference;
                 }
-                inputsTraining[i][j] = inputsTraining[i][j] * (max - min) + min;
+                input[j] = input[j] * (max - min) + min;
             }
-            for (size_t i = 0; i < inputsTesting.size(); i++)
+            for (auto& input : inputsTesting)
             {
                 if (difference != 0)
                 {
-                    inputsTesting[i][j] = (inputsTesting[i][j] - minValueOfvector) / difference;
+                    input[j] = (input[j] - minValueOfvector) / difference;
                 }
-                inputsTesting[i][j] = inputsTesting[i][j] * (max - min) + min;
+                input[j] = input[j] * (max - min) + min;
             }
         }
     }
@@ -240,33 +245,33 @@ void Data::shuffle() { this->temporalComposite->shuffle(); }
 
 void Data::unshuffle() { this->temporalComposite->unshuffle(); }
 
-auto Data::isValid() const -> ErrorType
+auto Data::isValid() const -> errorType
 {
-    if (!this->sets[testing].shuffledIndexes.empty() &&
-        this->sets[training].size != this->sets[training].shuffledIndexes.size())
+    if (!this->set.testing.shuffledIndexes.empty() &&
+        this->set.training.size != this->set.training.shuffledIndexes.size())
     {
-        return ErrorType::dataWrongIdexes;
+        return errorType::dataWrongIdexes;
     }
 
-    if (this->sets[training].size != this->sets[training].inputs.size() &&
-        this->sets[training].size != this->sets[training].labels.size() &&
-        this->sets[testing].size != this->sets[training].inputs.size() &&
-        this->sets[testing].size != this->sets[training].labels.size())
+    if (this->set.training.size != this->set.training.inputs.size() &&
+        this->set.training.size != this->set.training.labels.size() &&
+        this->set.testing.size != this->set.training.inputs.size() &&
+        this->set.testing.size != this->set.training.labels.size())
     {
-        return ErrorType::dataWrongSize;
+        return errorType::dataWrongSize;
     }
 
     auto err = this->problemComposite->isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
     err = this->temporalComposite->isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto Data::isFirstTrainingDataOfTemporalSequence(const int index) const -> bool
@@ -291,24 +296,24 @@ auto Data::needToEvaluateOnTestingData(int index) const -> bool
 
 auto Data::getTrainingData(const int index, const int batchSize) -> const std::vector<float>&
 {
-    auto idx = this->sets[training].shuffledIndexes[index];
+    auto idx = this->set.training.shuffledIndexes[index];
     if (batchSize <= 1)
     {
-        return this->sets[training].inputs[idx];
+        return this->set.training.inputs[idx];
     }
 
     batchedData.resize(this->sizeOfData);
 
-    idx = this->sets[training].shuffledIndexes[index];
-    const auto data0 = this->sets[training].inputs[idx];
-    idx = this->sets[training].shuffledIndexes[index + 1];
-    const auto data1 = this->sets[training].inputs[idx];
+    idx = this->set.training.shuffledIndexes[index];
+    const auto data0 = this->set.training.inputs[idx];
+    idx = this->set.training.shuffledIndexes[index + 1];
+    const auto data1 = this->set.training.inputs[idx];
     std::ranges::transform(data0, data1, batchedData.begin(), std::plus<float>());
 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
-        idx = this->sets[training].shuffledIndexes[j];
-        const auto data = this->sets[training].inputs[idx];
+        idx = this->set.training.shuffledIndexes[j];
+        const auto data = this->set.training.inputs[idx];
         std::ranges::transform(batchedData, data, batchedData.begin(), std::plus<float>());
     }
     std::ranges::transform(batchedData, batchedData.begin(),
@@ -318,7 +323,7 @@ auto Data::getTrainingData(const int index, const int batchSize) -> const std::v
 
 auto Data::getTestingData(const int index) const -> const std::vector<float>&
 {
-    return this->sets[testing].inputs[index];
+    return this->set.testing.inputs[index];
 }
 
 auto Data::getTrainingLabel(const int index) const -> int { return this->problemComposite->getTrainingLabel(index); }
@@ -335,43 +340,16 @@ auto Data::getTestingOutputs(const int index) const -> const std::vector<float>&
     return this->problemComposite->getTestingOutputs(index);
 }
 
-auto Data::getData(set set, const int index) -> const std::vector<float>&
-{
-    if (set == training)
-    {
-        return this->getTrainingData(index);
-    }
-
-    return this->getTestingData(index);
-}
-
-auto Data::getOutputs(set set, const int index) -> const std::vector<float>&
-{
-    if (set == training)
-    {
-        return this->getTrainingOutputs(index);
-    }
-
-    return this->getTestingOutputs(index);
-}
-
-auto Data::getLabel(set set, const int index) const -> int
-{
-    if (set == training)
-    {
-        return this->getTrainingLabel(index);
-    }
-
-    return this->getTestingLabel(index);
-}
-
 void Data::setPrecision(const float value)
 {
     if (this->typeOfProblem == problem::regression)
     {
         this->precision = value;
     }
-    throw std::runtime_error("Precision is only for regression problems.");
+    else
+    {
+        throw std::runtime_error("Precision is only for regression problems.");
+    }
 }
 
 auto Data::getPrecision() const -> float

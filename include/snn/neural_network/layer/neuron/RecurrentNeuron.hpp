@@ -32,7 +32,7 @@ class RecurrentNeuron final : public Neuron
         [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
         void train(float error);
 
-        [[nodiscard]] auto isValid() const -> ErrorType;
+        [[nodiscard]] auto isValid() const -> errorType;
 
         auto operator==(const RecurrentNeuron& neuron) const -> bool;
         auto operator!=(const RecurrentNeuron& neuron) const -> bool;

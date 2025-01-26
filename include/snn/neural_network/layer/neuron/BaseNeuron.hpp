@@ -24,7 +24,7 @@ concept HasCommonMethods = requires(N neuron, float error, std::shared_ptr<Neura
 
 template <class N>
 concept HasCommonConstMethods = requires(const N neuron) {
-    { neuron.isValid() } -> std::same_as<ErrorType>;
+    { neuron.isValid() } -> std::same_as<errorType>;
 
     { neuron.getWeights() } -> std::same_as<std::vector<float>>;
     { neuron.getNumberOfParameters() } -> std::same_as<int>;

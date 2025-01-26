@@ -68,7 +68,7 @@ TEST(Identity, WorksWithLotsOfNumbers)
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
-    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == ErrorType::noError)
+    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == errorType::noError)
     {
         ASSERT_SUCCESS();
     }

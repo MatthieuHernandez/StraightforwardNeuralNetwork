@@ -32,17 +32,17 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
 
     unsigned char c;
     int shift = 0;
-    for (int i = 0; !file.eof(); i++)
+    while (!file.eof())
     {
         const std::vector<float> imageTemp;
         images.push_back(imageTemp);
         images.back().reserve(sizeOfData);
         for (int j = 0; !file.eof() && j < sizeOfData;)
         {
-            c = (char)file.get();
+            c = static_cast<char>(file.get());
             if (shift >= 16)
             {
-                float value = (float)static_cast<int>(c);
+                float value = static_cast<float>(static_cast<int>(c));
                 images.back().push_back(value);
                 j++;
             }
@@ -68,9 +68,9 @@ auto Mnist::readLabels(std::string filePath, int size) -> vector2D<float>
 
     unsigned char c;
     int shift = 0;
-    for (int i = 0; !file.eof(); i++)
+    while (!file.eof())
     {
-        c = (char)file.get();
+        c = static_cast<char>(file.get());
         if (shift >= 8)
         {
             if (!file.eof())

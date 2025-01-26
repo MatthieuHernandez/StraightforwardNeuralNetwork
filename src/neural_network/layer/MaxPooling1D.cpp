@@ -57,14 +57,14 @@ inline auto MaxPooling1D::clone(std::shared_ptr<NeuralNetworkOptimizer>) const -
     return std::make_unique<MaxPooling1D>(*this);
 }
 
-auto MaxPooling1D::isValid() const -> ErrorType
+auto MaxPooling1D::isValid() const -> errorType
 {
     if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs) &&
         this->numberOfKernels != this->numberOfOutputs)
     {
-        return ErrorType::maxPooling1DWrongNumberOfInputs;
+        return errorType::maxPooling1DWrongNumberOfInputs;
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto MaxPooling1D::summary() const -> std::string

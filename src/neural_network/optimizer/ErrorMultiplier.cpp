@@ -1,5 +1,6 @@
 #include "ErrorMultiplier.hpp"
 
+#include <algorithm>
 #include <sstream>
 
 namespace snn::internal

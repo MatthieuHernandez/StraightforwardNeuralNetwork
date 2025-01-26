@@ -27,7 +27,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         void resetTrainingValues();
 
         void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
-        void saveSync(std::string filePath);
+        void saveSync(const std::string& filePath);
         void evaluate(const Data& data, Wait& wait);
         void evaluateOnce(const Data& data);
 
@@ -35,9 +35,9 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         void validData(const Data& data, int batchSize) const;
 
         template <logLevel T>
-        void logAccuracy(Wait& wait, const bool hasSaved) const;
+        void logAccuracy(Wait& wait, bool hasSaved) const;
         template <logLevel T>
-        void logInProgress(Wait& wait, const Data& data, set set) const;
+        void logInProgress(Wait& wait, const Data& data, setType set) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -47,14 +47,16 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         StraightforwardNeuralNetwork() = default;  // use restricted to Boost library only
         explicit StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
                                               NeuralNetworkOptimizerModel optimizer = {
-                                                  neuralNetworkOptimizerType::stochasticGradientDescent, 0.03F, 0.0F});
+                                                  .type = neuralNetworkOptimizerType::stochasticGradientDescent,
+                                                  .learningRate = 0.03F,
+                                                  .momentum = 0.0F});
         StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork);
         ~StraightforwardNeuralNetwork() final;
 
         bool autoSaveWhenBetter = false;
         std::string autoSaveFilePath = "AutoSave.snn";
 
-        [[nodiscard]] auto isValid() const -> ErrorType;
+        [[nodiscard]] auto isValid() const -> errorType;
 
         void startTrainingAsync(Data& data, int batchSize = 1, int evaluationFrequency = 1);
         void stopTrainingAsync();
@@ -69,11 +71,11 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         auto isTraining() const -> bool;
 
-        void saveAs(std::string filePath);
-        void saveFeatureMapsAsBitmap(std::string filePath);
-        void saveData2DAsBitmap(std::string filePath, const Data& data, int dataIndex);
-        void saveFilterLayersAsBitmap(std::string filePath, const Data& data, int dataIndex);
-        static auto loadFrom(std::string filePath) -> StraightforwardNeuralNetwork&;
+        void saveAs(const std::string& filePath);
+        void saveFeatureMapsAsBitmap(const std::string& filePath);
+        void saveData2DAsBitmap(const std::string& filePath, const Data& data, int dataIndex);
+        void saveFilterLayersAsBitmap(const std::string& filePath, const Data& data, int dataIndex);
+        static auto loadFrom(const std::string& filePath) -> StraightforwardNeuralNetwork&;
 
         [[nodiscard]] auto summary() const -> std::string;
 
@@ -96,28 +98,34 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 template <logLevel T>
 void StraightforwardNeuralNetwork::logAccuracy(Wait& wait, const bool hasSaved) const
 {
-    if constexpr (T > none && T <= verbose)
+    if constexpr (T > none && T <= verbose)  // NOLINT(misc-redundant-expression)
     {
         tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2),
                              " - Accuracy: ", tools::toConstSizeString<2>(this->getGlobalClusteringRate(), 4),
                              " - MAE: ", tools::toConstSizeString<4>(this->getMeanAbsoluteError(), 9),
                              " - Time: ", tools::toConstSizeString<0>(wait.getDurationAndReset(), 3), "s");
-        if (hasSaved) tools::log<T, false>(" - Saved");
+        if (hasSaved)
+        {
+            tools::log<T, false>(" - Saved");
+        }
         tools::log<T>();
     }
 }
 
 template <logLevel T>
-void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, set set) const
+void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, setType set) const
 {
-    if constexpr (T > none && T <= verbose)
+    if constexpr (T > none && T <= verbose)  // NOLINT(misc-redundant-expression)
     {
-        if (wait.tick() >= 300)
+        const int refreshRate = 300;
+        if (wait.tick() >= refreshRate)
         {
-            const std::string name = set == training ? "Training in progress...  " : "Evaluation in progress...";
-            const int progress = static_cast<int>(this->index / static_cast<float>(data.sets[set].size) * 100);
+            const std::string name =
+                set == setType::training ? "Training in progress...  " : "Evaluation in progress...";
+            const size_t size = set == setType::training ? data.set.training.size : data.set.testing.size;
+            const int progress = this->index * 100 / static_cast<int>(size);
             tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2), " - ", name,
-                                 tools::toConstSizeString(progress, 5), "%",
+                                 tools::toConstSizeString(progress, 5), "%",  // NOLINT(*magic-numbers)
                                  " - Time: ", tools::toConstSizeString<0>(wait.getDuration(), 3), "s");
         }
     }

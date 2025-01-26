@@ -1,13 +1,15 @@
 #include "CompositeForTemporalData.hpp"
 
+#include <algorithm>
+
 namespace snn::internal
 {
-CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
-    : TemporalComposite(sets)
+CompositeForTemporalData::CompositeForTemporalData(Dataset* set)
+    : TemporalComposite(set)
 {
-    for (int i = 0; i > this->sets[training].size; ++i)
+    for (int i = 0; i > this->set->training.size; ++i)
     {
-        if (this->sets[training].areFirstDataOfTemporalSequence[i])
+        if (this->set->training.areFirstDataOfTemporalSequence[i])
         {
             this->indexesForShuffles.push_back(i);
         }
@@ -20,12 +22,12 @@ void CompositeForTemporalData::shuffle()
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
-        this->sets[training].shuffledIndexes[j++] = this->indexesForShuffles[i];
+        this->set->training.shuffledIndexes[j++] = this->indexesForShuffles[i];
 
         int index = this->indexesForShuffles[i] + 1;
-        while (!this->sets[training].areFirstDataOfTemporalSequence[index])
+        while (!this->set->training.areFirstDataOfTemporalSequence[index])
         {
-            this->sets[training].shuffledIndexes[j++] = index++;
+            this->set->training.shuffledIndexes[j++] = index++;
         }
     }
 }
@@ -34,30 +36,30 @@ void CompositeForTemporalData::unshuffle() { this->TemporalComposite::unshuffle(
 
 auto CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const -> bool
 {
-    return this->sets[training].areFirstDataOfTemporalSequence[index];
+    return this->set->training.areFirstDataOfTemporalSequence[index];
 }
 
 auto CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) const -> bool
 {
-    return this->sets[testing].areFirstDataOfTemporalSequence[index];
+    return this->set->testing.areFirstDataOfTemporalSequence[index];
 }
 
 auto CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const -> bool { return true; }
 
 auto CompositeForTemporalData::needToEvaluateOnTestingData(int index) const -> bool
 {
-    return this->sets[testing].needToEvaluateOnData[index];
+    return this->set->testing.needToEvaluateOnData[index];
 }
 
-auto CompositeForTemporalData::isValid() const -> ErrorType
+auto CompositeForTemporalData::isValid() const -> errorType
 {
-    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
-        (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size ||
-        !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
-        !this->sets[training].needToEvaluateOnData.empty() ||
-        (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
+    if (static_cast<int>(this->set->training.areFirstDataOfTemporalSequence.size()) != this->set->training.size ||
+        static_cast<int>(this->set->testing.areFirstDataOfTemporalSequence.size()) != this->set->testing.size ||
+        !this->set->training.needToTrainOnData.empty() || !this->set->testing.needToTrainOnData.empty() ||
+        !this->set->training.needToEvaluateOnData.empty() ||
+        static_cast<int>(this->set->testing.needToEvaluateOnData.size()) != this->set->testing.size)
     {
-        return ErrorType::compositeForTemporalDataEmpty;
+        return errorType::compositeForTemporalDataEmpty;
     }
 
     return this->TemporalComposite::isValid();

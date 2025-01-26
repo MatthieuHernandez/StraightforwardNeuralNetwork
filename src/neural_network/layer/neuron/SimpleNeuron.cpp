@@ -44,7 +44,7 @@ void SimpleNeuron::train(float error)
     this->optimizer->updateWeights(*this, error);
 }
 
-auto SimpleNeuron::isValid() const -> ErrorType { return this->Neuron::isValid(); }
+auto SimpleNeuron::isValid() const -> errorType { return this->Neuron::isValid(); }
 
 auto SimpleNeuron::operator==(const SimpleNeuron& neuron) const -> bool { return this->Neuron::operator==(neuron); }
 

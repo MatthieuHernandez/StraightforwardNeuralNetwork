@@ -33,7 +33,7 @@ auto recurrenceExample() -> int
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteError();
 
-    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == ErrorType::noError)
+    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == errorType::noError)
     {
         return EXIT_SUCCESS;  // the neural network has learned
     }

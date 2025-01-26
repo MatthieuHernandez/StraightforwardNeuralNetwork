@@ -6,7 +6,7 @@ namespace snn::internal
 class CompositeForNonTemporalData : public TemporalComposite
 {
     public:
-        CompositeForNonTemporalData(snn::Set sets[2]);
+        explicit CompositeForNonTemporalData(Dataset* set);
 
         void shuffle() final;
         void unshuffle() final;
@@ -16,6 +16,6 @@ class CompositeForNonTemporalData : public TemporalComposite
         [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool final;
         [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool final;
 
-        [[nodiscard]] auto isValid() const -> ErrorType final;
+        [[nodiscard]] auto isValid() const -> errorType final;
 };
 }  // namespace snn::internal

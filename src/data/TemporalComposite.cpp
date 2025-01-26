@@ -2,23 +2,26 @@
 
 namespace snn::internal
 {
-TemporalComposite::TemporalComposite(Set sets[2]) { this->sets = sets; }
+TemporalComposite::TemporalComposite(Dataset* set)
+    : set(set)
+{
+}
 
 void TemporalComposite::unshuffle()
 {
-    this->sets[training].shuffledIndexes.resize(this->sets[training].size);
-    for (int i = 0; i < static_cast<int>(this->sets[training].shuffledIndexes.size()); ++i)
+    this->set->training.shuffledIndexes.resize(this->set->training.size);
+    for (int i = 0; i < static_cast<int>(this->set->training.shuffledIndexes.size()); ++i)
     {
-        this->sets[training].shuffledIndexes[i] = i;
+        this->set->training.shuffledIndexes[i] = i;
     }
 }
 
-auto TemporalComposite::isValid() const -> ErrorType
+auto TemporalComposite::isValid() const -> errorType
 {
-    if (this->sets == nullptr)
+    if (this->set == nullptr)
     {
-        return ErrorType::temporalCompositeSetNull;
+        return errorType::temporalCompositeSetNull;
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 }  // namespace snn::internal

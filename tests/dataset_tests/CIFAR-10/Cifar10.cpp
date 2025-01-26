@@ -40,7 +40,7 @@ void Cifar10::readImages(std::string filePath, vector2D<float>& images, vector2D
 
     if (!file.is_open()) throw FileOpeningFailedException();
 
-    for (int i = 0; !file.eof(); i++)
+    while (!file.eof())
     {
         unsigned char c = static_cast<char>(file.get());
 

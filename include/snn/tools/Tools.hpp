@@ -48,7 +48,7 @@ auto randomVector(const float min, const float max, const size_t size) -> std::v
 
 auto toString(std::chrono::milliseconds duration) -> std::string;
 
-auto toString(ErrorType err) -> std::string;
+auto toString(errorType err) -> std::string;
 
 template <typename T>
 static auto getMinValue(std::vector<T> vector) -> T
@@ -91,18 +91,21 @@ static auto getMaxValue(std::vector<T> vector) -> T
 template <logLevel T, typename... Targs>
 constexpr void log([[maybe_unused]] Targs&&... messages)
 {
-    if constexpr (T > none && T <= verbose) (std::cout << ... << messages) << std::endl;
+    if constexpr (T > none && T <= verbose)  // NOLINT(misc-redundant-expression)
+    {
+        (std::cout << ... << messages) << std::endl;
+    }
 }
 
 template <logLevel T, bool endLine, typename... Targs>
 constexpr void log([[maybe_unused]] Targs&&... messages)
 {
-    if constexpr (T > none && T <= verbose)
+    if constexpr (T > none && T <= verbose)  // NOLINT(misc-redundant-expression)
     {
         (std::cout << ... << messages);
         if constexpr (endLine)
         {
-            std::cout << std::endl;
+            std::cout << '\n';
         }
         else
         {
@@ -139,7 +142,10 @@ auto toConstSizeString(float value, size_t length) -> std::string
         throw std::exception();
     }
 
-    while (str.length() < length) str = " " + str;
+    while (str.length() < length)
+    {
+        str = " " + str;
+    }
     return str;
 }
 
@@ -148,17 +154,23 @@ auto flatten(const vector2D<T>& vector2D) -> std::vector<T>
 {
     std::vector<T> vector1D;
     size_t size = 0;
-    for (const auto& v : vector2D) size += vector2D.size();
+    for (const auto& v : vector2D)
+    {
+        size += vector2D.size();
+    }
     vector1D.reserve(size);
-    for (const auto& v : vector2D) vector1D.insert(vector1D.end(), v.begin(), v.end());
+    for (const auto& v : vector2D)
+    {
+        vector1D.insert(vector1D.end(), v.begin(), v.end());
+    }
     return vector1D;
 }
 
-constexpr auto flatten(const int x, const int y, const int maxX) -> int { return y * maxX + x; }
+constexpr auto flatten(const int x, const int y, const int maxX) -> int { return (y * maxX) + x; }
 
 constexpr auto flatten(const int x, const int y, const int z, const int maxX, const int maxY) -> int
 {
-    return z * maxY * maxX + y * maxX + x;
+    return (z * maxY * maxX) + (y * maxX) + x;
 }
 
 constexpr auto roughenX(const int index, const int maxX) -> int { return index % maxX; }

@@ -37,7 +37,7 @@ class FilterLayer : public Layer<SimpleNeuron>
         [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> final;
         [[nodiscard]] auto getShapeOfOutput() const -> std::vector<int> final;
         [[nodiscard]] auto getKernelSize() const -> int;
-        [[nodiscard]] auto isValid() const -> ErrorType override;
+        [[nodiscard]] auto isValid() const -> errorType override;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
         auto operator!=(const BaseLayer& layer) const -> bool override;

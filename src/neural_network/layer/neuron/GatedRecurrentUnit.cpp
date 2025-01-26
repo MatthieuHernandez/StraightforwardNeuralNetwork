@@ -1,5 +1,6 @@
 #include "GatedRecurrentUnit.hpp"
 
+#include <algorithm>
 #include <boost/serialization/export.hpp>
 
 namespace snn::internal
@@ -91,24 +92,24 @@ inline void GatedRecurrentUnit::reset()
     this->updateGateOutput = 0;
 }
 
-auto GatedRecurrentUnit::isValid() const -> ErrorType
+auto GatedRecurrentUnit::isValid() const -> errorType
 {
     auto err = resetGate.isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
     err = updateGate.isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
     err = outputGate.isValid();
-    if (err != ErrorType::noError)
+    if (err != errorType::noError)
     {
         return err;
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto GatedRecurrentUnit::getOptimizer() const -> NeuralNetworkOptimizer* { return this->resetGate.getOptimizer(); }

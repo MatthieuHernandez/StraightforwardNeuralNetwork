@@ -10,9 +10,9 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
     auto shape = filterLayer->getShapeOfInput();
     if (shape.size() != 3) return;
     auto numberOfFilters = filterLayer->getShapeOfOutput()[C];
-    float length = sqrt((float)numberOfFilters);
-    int filterX = (int)ceil(length);
-    int filterY = (int)ceil(length);
+    float length = sqrt(static_cast<float>(numberOfFilters));
+    int filterX = static_cast<int>(ceil(length));
+    int filterY = static_cast<int>(ceil(length));
 
     if (numberOfFilters <= filterX * filterY - filterX) filterY--;
 
@@ -74,9 +74,9 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
     if (filterLayer == nullptr) return;
     auto shape = filterLayer->getShapeOfOutput();
     if (shape.size() != 3) return;
-    float length = sqrt((float)shape[C]);
-    int filterX = (int)ceil(length);
-    int filterY = (int)ceil(length);
+    float length = sqrt(static_cast<float>(shape[C]));
+    int filterX = static_cast<int>(ceil(length));
+    int filterY = static_cast<int>(ceil(length));
 
     if (shape[C] <= filterX * filterY - filterX) filterY--;
 

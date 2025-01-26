@@ -26,11 +26,11 @@ auto regressionExample() -> int
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =
-        neuralNetwork.computeOutput(data.getData(snn::testing, 0));  // consult neural network to test it
-    std::vector<float> expectedOutput = data.getOutputs(snn::testing, 0);
+        neuralNetwork.computeOutput(data.getTestingData(0));  // consult neural network to test it
+    std::vector<float> expectedOutput = data.getTestingOutputs(0);
 
     if (accuracy == 100 && abs(output[0] - expectedOutput[0]) < precision &&
-        neuralNetwork.isValid() == ErrorType::noError)
+        neuralNetwork.isValid() == errorType::noError)
     {
         return EXIT_SUCCESS;  // the neural network has learned
     }

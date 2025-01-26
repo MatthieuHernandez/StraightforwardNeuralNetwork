@@ -27,7 +27,7 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         void updateWeights(SimpleNeuron& neuron, float error) const final;
         void updateWeights(RecurrentNeuron& neuron, float error) const final;
 
-        [[nodiscard]] auto isValid() const -> ErrorType final;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
         [[nodiscard]] auto summary() const -> std::string final;
 

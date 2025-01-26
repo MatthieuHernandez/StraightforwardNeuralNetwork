@@ -59,7 +59,7 @@ class Layer : public BaseLayer
 
         void train(std::vector<float>& inputErrors) override;
 
-        [[nodiscard]] auto isValid() const -> ErrorType override;
+        [[nodiscard]] auto isValid() const -> errorType override;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
         auto operator!=(const BaseLayer& layer) const -> bool override;

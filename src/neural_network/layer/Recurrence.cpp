@@ -36,7 +36,7 @@ auto Recurrence::summary() const -> std::string
         {
             summary << "                              " << optimizers[opti]->summary() << '\n';
         }
-        return summary.str();
     }
+    return summary.str();
 }
 }  // namespace snn::internal

@@ -46,7 +46,7 @@ class NeuralNetwork : public StatisticAnalysis
                                        float precision, bool temporalReset);
         void evaluateOnceForMultipleClassification(const std::vector<float>& inputs, const std::vector<float>& desired,
                                                    float separator, bool temporalReset);
-        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, const float separator,
+        void evaluateOnceForClassification(const std::vector<float>& inputs, int classNumber, float separator,
                                            bool temporalReset);
 
         auto getLayerOutputs(const std::vector<float>& inputs) -> vector2D<float>;
@@ -72,7 +72,7 @@ class NeuralNetwork : public StatisticAnalysis
 
         std::vector<std::unique_ptr<BaseLayer>> layers{};
 
-        [[nodiscard]] auto isValid() const -> ErrorType;
+        [[nodiscard]] auto isValid() const -> errorType;
 
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
 

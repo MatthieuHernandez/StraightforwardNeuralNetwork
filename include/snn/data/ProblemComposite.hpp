@@ -7,17 +7,17 @@ namespace snn::internal
 class ProblemComposite
 {
     private:
-        std::vector<float> batchedLabels{};
+        std::vector<float> batchedLabels;
 
     protected:
         const int numberOfLabels;
-        Set* sets;
+        Dataset* set;
 
     public:
-        ProblemComposite(Set sets[2], int numberOfLabels);
+        ProblemComposite(Dataset* set, int numberOfLabels);
         virtual ~ProblemComposite() = default;
 
-        [[nodiscard]] virtual auto isValid() const -> ErrorType;
+        [[nodiscard]] virtual auto isValid() const -> errorType;
 
         [[nodiscard]] virtual auto getTrainingLabel(int index) -> int = 0;
         [[nodiscard]] virtual auto getTestingLabel(int index) -> int = 0;

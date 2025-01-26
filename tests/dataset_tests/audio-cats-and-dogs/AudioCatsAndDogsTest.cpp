@@ -27,9 +27,9 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 {
     ASSERT_EQ(data->sizeOfData, sizeOfOneData);
     ASSERT_EQ(data->numberOfLabels, 2);
-    ASSERT_EQ(data->sets[training].numberOfTemporalSequence, 210);
-    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 67);
-    ASSERT_EQ(data->isValid(), ErrorType::noError);
+    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 210);
+    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 67);
+    ASSERT_EQ(data->isValid(), errorType::noError);
 }
 
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)

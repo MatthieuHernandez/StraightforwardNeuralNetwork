@@ -44,7 +44,7 @@ class Neuron
 
         std::shared_ptr<ActivationFunction> outputFunction;
 
-        [[nodiscard]] auto isValid() const -> ErrorType;
+        [[nodiscard]] auto isValid() const -> errorType;
 
         [[nodiscard]] auto getWeights() const -> std::vector<float>;
         void setWeights(std::vector<float> w);

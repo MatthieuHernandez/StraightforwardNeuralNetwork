@@ -27,7 +27,7 @@ class NeuralNetworkOptimizer
         virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
         virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
 
-        [[nodiscard]] virtual auto isValid() const -> ErrorType = 0;
+        [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 

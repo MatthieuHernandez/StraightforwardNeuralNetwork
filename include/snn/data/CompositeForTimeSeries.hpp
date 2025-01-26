@@ -15,7 +15,7 @@ class CompositeForTimeSeries : public TemporalComposite
         int rest;
 
     public:
-        CompositeForTimeSeries(snn::Set sets[2], int numberOfRecurrences);
+        CompositeForTimeSeries(Dataset* set, int numberOfRecurrences);
 
         void shuffle() final;
         void unshuffle() final;
@@ -25,6 +25,6 @@ class CompositeForTimeSeries : public TemporalComposite
         [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool final;
         [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool final;
 
-        [[nodiscard]] auto isValid() const -> ErrorType final;
+        [[nodiscard]] auto isValid() const -> errorType final;
 };
 }  // namespace snn::internal

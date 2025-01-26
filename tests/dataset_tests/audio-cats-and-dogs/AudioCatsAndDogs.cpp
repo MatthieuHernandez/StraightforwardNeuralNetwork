@@ -168,7 +168,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
                 const float sample = audioFile.samples[channel][j];
                 dataSound.back().push_back(sample);
             }
-            while (this->sizeOfOneData > (int)dataSound.back().size())
+            while (this->sizeOfOneData > static_cast<int>(dataSound.back().size()))
             {
                 dataSound.back().push_back(0.0F);
             }

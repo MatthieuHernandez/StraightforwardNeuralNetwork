@@ -4,16 +4,16 @@
 
 namespace snn::internal
 {
-CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
-    : ProblemComposite(sets, numberOfLabels)
+CompositeForRegression::CompositeForRegression(Dataset* set, int numberOfLabels)
+    : ProblemComposite(set, numberOfLabels)
 {
 }
 
-auto CompositeForRegression::isValid() const -> ErrorType { return this->ProblemComposite::isValid(); }
+auto CompositeForRegression::isValid() const -> errorType { return this->ProblemComposite::isValid(); }
 
 auto CompositeForRegression::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
-    return this->sets[testing].labels[index];
+    return this->set->testing.labels[index];
 }
 
 auto CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index) -> int

@@ -67,13 +67,13 @@ inline auto LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOptimizer> op
     return layer;
 }
 
-auto LocallyConnected2D::isValid() const -> ErrorType
+auto LocallyConnected2D::isValid() const -> errorType
 {
     for (const auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs)
         {
-            return ErrorType::locallyConnected2DWrongNumberOfInputs;
+            return errorType::locallyConnected2DWrongNumberOfInputs;
         }
     }
     return this->FilterLayer::isValid();

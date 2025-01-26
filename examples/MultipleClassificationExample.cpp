@@ -25,10 +25,10 @@ auto multipleClassificationExample() -> int
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =
-        neuralNetwork.computeOutput(data.getData(snn::testing, 0));  // consult neural network to test it
+        neuralNetwork.computeOutput(data.getTestingData(0));  // consult neural network to test it
 
     if (accuracy == 100 && output[0] < separator && output[1] > separator &&  // NOLINT(*magic-numbers)
-        output[2] < separator && neuralNetwork.isValid() == snn::ErrorType::noError)
+        output[2] < separator && neuralNetwork.isValid() == snn::errorType::noError)
     {
         return EXIT_SUCCESS;  // the neural network has learned
     }

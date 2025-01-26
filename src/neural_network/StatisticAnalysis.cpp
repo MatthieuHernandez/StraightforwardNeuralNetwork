@@ -156,7 +156,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
 
-    for (int i = 0; i < (int)clusters.size(); i++)
+    for (int i = 0; i < static_cast<int>(clusters.size()); i++)
     {
         if (maxOutputValue < outputs[i])
         {

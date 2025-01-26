@@ -28,27 +28,27 @@ auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
     return tools::randomBetween(-valueMax, valueMax);
 }
 
-auto Neuron::isValid() const -> ErrorType
+auto Neuron::isValid() const -> errorType
 {
     const auto outlier_float = 100000.0F;
     const size_t outlier_size = 1000000;
     if (this->bias < -outlier_float || this->bias > outlier_float)
     {
-        return ErrorType::neuronWrongBias;
+        return errorType::neuronWrongBias;
     }
 
     if (this->weights.empty() || this->weights.size() > outlier_size)
     {
-        return ErrorType::neuronTooMuchWeigths;
+        return errorType::neuronTooMuchWeigths;
     }
     for (const auto& weight : this->weights)
     {
         if (weight < -outlier_float || weight > outlier_float)
         {
-            return ErrorType::neuronWrongWeight;
+            return errorType::neuronWrongWeight;
         }
     }
-    return ErrorType::noError;
+    return errorType::noError;
 }
 
 auto Neuron::getWeights() const -> std::vector<float> { return this->weights; }

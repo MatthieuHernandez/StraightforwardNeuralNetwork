@@ -61,13 +61,13 @@ inline auto LocallyConnected1D::clone(std::shared_ptr<NeuralNetworkOptimizer> op
     return layer;
 }
 
-auto LocallyConnected1D::isValid() const -> ErrorType
+auto LocallyConnected1D::isValid() const -> errorType
 {
     for (const auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
         {
-            return ErrorType::locallyConnected1DWrongNumberOfInputs;
+            return errorType::locallyConnected1DWrongNumberOfInputs;
         }
     }
     return this->FilterLayer::isValid();

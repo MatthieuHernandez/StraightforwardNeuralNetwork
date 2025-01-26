@@ -30,7 +30,7 @@ class Data
                         std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
                         std::vector<std::vector<float>>& testingLabels);
 
-        void flatten(set set, std::vector<std::vector<std::vector<float>>>& input3D);
+        void flatten(Set& set, std::vector<std::vector<std::vector<float>>>& input3D);
         void flatten(std::vector<std::vector<std::vector<float>>>& input3D);
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
@@ -39,7 +39,7 @@ class Data
         float precision;
         float separator;
 
-        std::vector<float> batchedData{};
+        std::vector<float> batchedData;
 
     public:
         Data(problem typeOfProblem, std::vector<std::vector<float>>& trainingInputs,
@@ -64,7 +64,7 @@ class Data
         int sizeOfData{};      // size of one data, equal to size of neural network inputs
         int numberOfLabels{};  // the number of class, equal to size of neural network outputs
 
-        Set sets[2];
+        Dataset set;
 
         virtual ~Data() = default;
 
@@ -73,7 +73,7 @@ class Data
         void shuffle();
         void unshuffle();
 
-        [[nodiscard]] auto isValid() const -> ErrorType;
+        [[nodiscard]] auto isValid() const -> errorType;
 
         [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool;
         [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool;
@@ -87,11 +87,7 @@ class Data
         [[nodiscard]] auto getTestingLabel(int index) const -> int;
 
         [[nodiscard]] auto getTrainingOutputs(int index, int batchSize = 1) -> const std::vector<float>&;
-        [[nodiscard]] auto getTestingOutputs(int) const -> const std::vector<float>&;
-
-        [[nodiscard]] auto getData(set set, int index) -> const std::vector<float>&;
-        [[nodiscard]] auto getOutputs(set set, int index) -> const std::vector<float>&;
-        [[nodiscard]] auto getLabel(set set, int index) const -> int;
+        [[nodiscard]] auto getTestingOutputs(int index) const -> const std::vector<float>&;
 
         [[nodiscard]] auto getSeparator() const -> float;
         void setSeparator(float value);

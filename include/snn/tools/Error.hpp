@@ -1,10 +1,9 @@
 #pragma once
 #include <cstdint>
-#include <string>
 
 namespace snn
 {
-enum class ErrorType : uint8_t
+enum class errorType : uint8_t
 {
     noError = 0,
     neuralNetworkInputTooLarge,

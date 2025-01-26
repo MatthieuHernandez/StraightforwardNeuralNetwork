@@ -43,5 +43,5 @@ auto toString(std::chrono::milliseconds duration) -> std::string
 
     return "";
 }
-auto toString(const ErrorType err) -> std::string { return std::to_string(static_cast<uint8_t>(err)); }
+auto toString(const errorType err) -> std::string { return std::to_string(static_cast<uint8_t>(err)); }
 }  // namespace snn::tools

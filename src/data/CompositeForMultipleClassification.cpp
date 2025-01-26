@@ -4,16 +4,16 @@
 
 namespace snn::internal
 {
-CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[2], int numberOfLabels)
-    : ProblemComposite(sets, numberOfLabels)
+CompositeForMultipleClassification::CompositeForMultipleClassification(Dataset* set, int numberOfLabels)
+    : ProblemComposite(set, numberOfLabels)
 {
 }
 
-auto CompositeForMultipleClassification::isValid() const -> ErrorType { return this->ProblemComposite::isValid(); }
+auto CompositeForMultipleClassification::isValid() const -> errorType { return this->ProblemComposite::isValid(); }
 
 auto CompositeForMultipleClassification::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
-    return this->sets[testing].labels[index];
+    return this->set->tesing.labels[index];
 }
 
 auto CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index) -> int

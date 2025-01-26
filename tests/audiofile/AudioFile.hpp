@@ -608,7 +608,7 @@ auto AudioFile<T>::decodeAiffFile(std::vector<uint8_t>& fileData) -> bool
     int numBytesPerSample = bitDepth / 8;
     int numBytesPerFrame = numBytesPerSample * numChannels;
     int totalNumAudioSampleBytes = numSamplesPerChannel * numBytesPerFrame;
-    int samplesStartIndex = s + 16 + (int)offset;
+    int samplesStartIndex = s + 16 + static_cast<int>(offset);
 
     // sanity check the data
     if ((soundDataChunkSize - 8) != totalNumAudioSampleBytes ||
@@ -629,7 +629,7 @@ auto AudioFile<T>::decodeAiffFile(std::vector<uint8_t>& fileData) -> bool
 
             if (bitDepth == 8)
             {
-                int8_t sampleAsSigned8Bit = (int8_t)fileData[sampleIndex];
+                int8_t sampleAsSigned8Bit = static_cast<int8_t>(fileData[sampleIndex]);
                 T sample = (T)sampleAsSigned8Bit / (T)128.;
                 samples[channel].push_back(sample);
             }
@@ -773,9 +773,9 @@ auto AudioFile<T>::saveToWaveFile(std::string filePath) -> bool
                 int32_t sampleAsIntAgain = (int32_t)(samples[channel][i] * (T)8388608.);
 
                 uint8_t bytes[3];
-                bytes[2] = (uint8_t)(sampleAsIntAgain >> 16) & 0xFF;
-                bytes[1] = (uint8_t)(sampleAsIntAgain >> 8) & 0xFF;
-                bytes[0] = (uint8_t)sampleAsIntAgain & 0xFF;
+                bytes[2] = static_cast<uint8_t>(sampleAsIntAgain >> 16) & 0xFF;
+                bytes[1] = static_cast<uint8_t>(sampleAsIntAgain >> 8) & 0xFF;
+                bytes[0] = static_cast<uint8_t>(sampleAsIntAgain) & 0xFF;
 
                 fileData.push_back(bytes[0]);
                 fileData.push_back(bytes[1]);
@@ -858,9 +858,9 @@ auto AudioFile<T>::saveToAiffFile(std::string filePath) -> bool
                 int32_t sampleAsIntAgain = (int32_t)(samples[channel][i] * (T)8388608.);
 
                 uint8_t bytes[3];
-                bytes[0] = (uint8_t)(sampleAsIntAgain >> 16) & 0xFF;
-                bytes[1] = (uint8_t)(sampleAsIntAgain >> 8) & 0xFF;
-                bytes[2] = (uint8_t)sampleAsIntAgain & 0xFF;
+                bytes[0] = static_cast<uint8_t>(sampleAsIntAgain >> 16) & 0xFF;
+                bytes[1] = static_cast<uint8_t>(sampleAsIntAgain >> 8) & 0xFF;
+                bytes[2] = static_cast<uint8_t>(sampleAsIntAgain) & 0xFF;
 
                 fileData.push_back(bytes[0]);
                 fileData.push_back(bytes[1]);
@@ -896,7 +896,7 @@ auto AudioFile<T>::writeDataToFile(std::vector<uint8_t>& fileData, std::string f
     {
         for (size_t i = 0; i < fileData.size(); i++)
         {
-            char value = (char)fileData[i];
+            char value = static_cast<char>(fileData[i]);
             outputFile.write(&value, sizeof(char));
         }
 
@@ -912,7 +912,7 @@ auto AudioFile<T>::writeDataToFile(std::vector<uint8_t>& fileData, std::string f
 template <class T>
 void AudioFile<T>::addStringToFileData(std::vector<uint8_t>& fileData, std::string s)
 {
-    for (size_t i = 0; i < s.length(); i++) fileData.push_back((uint8_t)s[i]);
+    for (size_t i = 0; i < s.length(); i++) fileData.push_back(static_cast<uint8_t>(s[i]));
 }
 
 //=============================================================
@@ -1035,7 +1035,7 @@ template <class T>
 auto AudioFile<T>::getIndexOfString(std::vector<uint8_t>& source, std::string stringToSearchFor) -> int
 {
     int index = -1;
-    int stringLength = (int)stringToSearchFor.length();
+    int stringLength = static_cast<int>(stringToSearchFor.length());
 
     for (size_t i = 0; i < source.size() - stringLength; i++)
     {

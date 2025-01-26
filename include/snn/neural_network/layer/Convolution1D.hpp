@@ -29,7 +29,7 @@ class Convolution1D final : public FilterLayer
         [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
             -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] auto isValid() const -> ErrorType final;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
         [[nodiscard]] auto summary() const -> std::string final;
 

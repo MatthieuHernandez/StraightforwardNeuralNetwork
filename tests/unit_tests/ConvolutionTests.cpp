@@ -8,7 +8,7 @@
 
 using namespace snn;
 
-auto createDataForConvolutionTests() -> Data;
+auto createDataForConvolutionTests() -> Dataset;
 
 TEST(Convolution, LayerConvolution1D)
 {
@@ -79,27 +79,27 @@ TEST(Convolution, Momentum)
 
 TEST(Convolution, SimpleConvolution1D)
 {
-    auto data = createDataForConvolutionTests();
+    auto dataset = createDataForConvolutionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2, 9), Convolution(3, 4, activation::iSigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.03F, 0.8F));
-    neuralNetwork.train(data, 3000_ep);
+    neuralNetwork.train(dataset, 3000_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
 TEST(Convolution, SimpleConvolution2D)
 {
-    auto data = createDataForConvolutionTests();
+    auto dataset = createDataForConvolutionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2, 3, 3), Convolution(4, 2, activation::iSigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.03F, 0.8F));
-    neuralNetwork.train(data, 3000_ep);
+    neuralNetwork.train(dataset, 3000_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
-auto createDataForConvolutionTests() -> Data
+auto createDataForConvolutionTests() -> Dataset
 {
     vector2D<float> inputData = {
         {-1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F,
@@ -111,5 +111,5 @@ auto createDataForConvolutionTests() -> Data
          0.91F, 0.92F}};
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-    return Data(problem::classification, inputData, expectedOutputs);
+    return Dataset(problem::classification, inputData, expectedOutputs);
 }

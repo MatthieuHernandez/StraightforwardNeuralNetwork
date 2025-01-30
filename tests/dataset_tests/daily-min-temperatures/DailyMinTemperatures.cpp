@@ -1,7 +1,7 @@
 #include "DailyMinTemperatures.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <string>
@@ -42,7 +42,7 @@ void DailyMinTemperatures::loadData(std::string folderPath)
         previousValue = value;
     }
     file.close();
-    this->data =
-        std::make_unique<Data>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
-    this->data->normalize(0, 1);
+    this->dataset =
+        std::make_unique<Dataset>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
+    this->dataset->normalize(0, 1);
 }

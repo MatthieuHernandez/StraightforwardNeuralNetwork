@@ -1,7 +1,7 @@
 #include "Cifar10.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
 using namespace snn;
@@ -19,9 +19,9 @@ void Cifar10::loadData(std::string folderPath)
     vector2D<float> trainingInputs = readImages(filePaths, 5, trainingLabels);
     vector2D<float> testingInputs = readImages(testFilePaths, 1, testingLabels);
 
-    this->data =
-        std::make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
-    this->data->normalize(0, 1);
+    this->dataset = std::make_unique<Dataset>(problem::classification, trainingInputs, trainingLabels, testingInputs,
+                                              testingLabels);
+    this->dataset->normalize(0, 1);
 }
 
 auto Cifar10::readImages(std::string filePaths[], size_t size, vector2D<float>& labels) const -> vector2D<float>

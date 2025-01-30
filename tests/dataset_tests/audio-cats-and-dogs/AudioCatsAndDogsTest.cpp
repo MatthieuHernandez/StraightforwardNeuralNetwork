@@ -12,24 +12,24 @@ class AudioCatsAndDogsTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            AudioCatsAndDogs dataset("./resources/datasets/audio-cats-and-dogs", sizeOfOneData);
-            data = move(dataset.data);
+            AudioCatsAndDogs datasetTest("./resources/datasets/audio-cats-and-dogs", sizeOfOneData);
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> AudioCatsAndDogsTest::data = nullptr;
+std::unique_ptr<Dataset> AudioCatsAndDogsTest::dataset = nullptr;
 
 TEST_F(AudioCatsAndDogsTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, sizeOfOneData);
-    ASSERT_EQ(data->numberOfLabels, 2);
-    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 210);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 67);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, sizeOfOneData);
+    ASSERT_EQ(dataset->numberOfLabels, 2);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 210);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 67);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
@@ -40,9 +40,9 @@ TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
     auto optimizer = std::dynamic_pointer_cast<internal::StochasticGradientDescent>(neuralNetwork.optimizer);
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForAudioCatsAndDogs.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 2000_ep, 1, 100);
+    neuralNetwork.train(*dataset, 2000_ep, 1, 100);
     optimizer->learningRate *= 5;
-    neuralNetwork.train(*data, 1.0_acc, 1, 100);
+    neuralNetwork.train(*dataset, 1.0_acc, 1, 100);
 
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
@@ -54,7 +54,7 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForAudioCatsAndDogs.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*data);
+    neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 9242);
     ASSERT_FLOAT_EQ(accuracy, 0.91044772F);

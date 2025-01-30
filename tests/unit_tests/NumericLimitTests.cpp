@@ -41,26 +41,26 @@ class NumericLimitTests : public testing::Test
                                                                 tools::randomBetween(0.0F, 1.0F)};
                                   });
 
-            data = std::make_unique<Data>(problem::regression, trainingInputData, trainingExpectedOutputs,
-                                          testingInputData, testingExpectedOutputs);
-            data->setPrecision(0.3F);
+            dataset = std::make_unique<Dataset>(problem::regression, trainingInputData, trainingExpectedOutputs,
+                                                testingInputData, testingExpectedOutputs);
+            dataset->setPrecision(0.3F);
         }
 
-        static void testNeuralNetwork(StraightforwardNeuralNetwork& nn)
+        static void testNeuralNetwork(StraightforwardNeuralNetwork& neuralNetwork)
         {
-            nn.train(*data, 1_s || 0.2_acc);
-            auto mae = nn.getMeanAbsoluteError();
-            auto acc = nn.getGlobalClusteringRate();
+            neuralNetwork.train(*dataset, 1_s || 0.2_acc);
+            auto mae = neuralNetwork.getMeanAbsoluteError();
+            auto acc = neuralNetwork.getGlobalClusteringRate();
             ASSERT_ACCURACY(acc, 0.2F);
             ASSERT_MAE(mae, 1.4F);
         }
 
         static void SetUpTestSuite() { createData(1000, 50); }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> NumericLimitTests::data = nullptr;
+std::unique_ptr<Dataset> NumericLimitTests::dataset = nullptr;
 
 TEST_F(NumericLimitTests, WithSigmoid)
 {

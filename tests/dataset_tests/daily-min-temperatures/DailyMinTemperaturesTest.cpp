@@ -10,29 +10,29 @@ class DailyMinTemperaturesTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            DailyMinTemperatures dataset("./resources/datasets/daily-min-temperatures", 5);
-            data = move(dataset.data);
+            DailyMinTemperatures datasetTest("./resources/datasets/daily-min-temperatures", 5);
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> DailyMinTemperaturesTest::data = nullptr;
+std::unique_ptr<Dataset> DailyMinTemperaturesTest::dataset = nullptr;
 
 TEST_F(DailyMinTemperaturesTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 1);
-    ASSERT_EQ(data->numberOfLabels, 1);
-    ASSERT_EQ((int)data->set.training.inputs.size(), 3649);
-    ASSERT_EQ((int)data->set.training.labels.size(), 3649);
-    ASSERT_EQ((int)data->set.testing.inputs.size(), 3649);
-    ASSERT_EQ((int)data->set.testing.labels.size(), 3649);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 1);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 1);
-    ASSERT_EQ(data->numberOfLabels, 1);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, 1);
+    ASSERT_EQ(dataset->numberOfLabels, 1);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 3649);
+    ASSERT_EQ(dataset->data.training.labels.size(), 3649);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 3649);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 3649);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 1);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 1);
+    ASSERT_EQ(dataset->numberOfLabels, 1);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
@@ -42,7 +42,7 @@ TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.train(*data, 4_s || 2.0_mae, 1, 5);
+    neuralNetwork.train(*dataset, 4_s || 2.0_mae, 1, 5);
     auto mae = neuralNetwork.getMeanAbsoluteError();
     ASSERT_MAE(mae, 2.0);
 }

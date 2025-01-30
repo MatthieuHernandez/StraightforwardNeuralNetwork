@@ -1,7 +1,7 @@
 #pragma once
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class AudioCatsAndDogs final : public Dataset
+class AudioCatsAndDogs final : public TestDataset
 {
     private:
         void loadData(std::string folderPath) final;

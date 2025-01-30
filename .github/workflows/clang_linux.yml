@@ -3,6 +3,9 @@ name: Unit tests - Clang Linux
 on:
   pull_request:
     branches:
+      - '*'
+  push:
+    branches:
       - master
 
 jobs:
@@ -11,12 +14,18 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout the project
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+    - name: Install Clang 19
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh 19
+        sudo apt install -y clang-format-19 clang-tidy-19
     - name: CMake
       run: |
         mkdir build
         cd ./build
-        CC=/usr/bin/clang-18 CXX=/usr/bin/clang++-18 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        CC=/usr/bin/clang-19 CXX=/usr/bin/clang++-19 cmake -G"Unix Makefiles" ./.. -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - name: Make
       run: |
         cd ./build
@@ -26,17 +35,17 @@ jobs:
         find ./src ./tests ./include ./examples \
           -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
           ! -path "./src/external_library/*" \
-          -exec clang-format --dry-run --Werror --verbose \
+          -exec clang-format-19 --dry-run --Werror --verbose \
           {} +
     - name: Clang-Tidy
       run: |
         find ./src ./tests ./include ./examples \
           -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
           ! -path "./src/external_library/*" \
-          -exec clang-tidy -p .\build\ -header-filter=.* \
+          -exec clang-tidy-19 -p .\build\ \
           {} +
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: compiled-tests
         path: build/tests/
@@ -47,7 +56,7 @@ jobs:
     needs: build
     steps:
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: compiled-tests
         path: ./build/tests/

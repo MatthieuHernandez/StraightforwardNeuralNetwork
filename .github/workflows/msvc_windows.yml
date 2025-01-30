@@ -1,7 +1,10 @@
 name: Unit tests - MSVC Windows
-
+xxx
 on:
   pull_request:
+    branches:
+      - '*'
+  push:
     branches:
       - master
 
@@ -11,7 +14,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout the project
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Checkout msvc-dev-cmd
       uses: ilammy/msvc-dev-cmd@v1.4.1
     - name: CMake
@@ -24,7 +27,7 @@ jobs:
         cd ./build
         nmake
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: compiled-tests
         path: build/tests/
@@ -35,7 +38,7 @@ jobs:
     needs: build
     steps:
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: compiled-tests
         path: ./build/tests/

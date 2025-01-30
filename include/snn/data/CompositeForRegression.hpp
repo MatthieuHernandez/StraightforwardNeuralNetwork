@@ -6,7 +6,7 @@ namespace snn::internal
 class CompositeForRegression : public ProblemComposite
 {
     public:
-        CompositeForRegression(Dataset* set, int numberOfLabels);
+        CompositeForRegression(Data* data, int numberOfLabels);
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

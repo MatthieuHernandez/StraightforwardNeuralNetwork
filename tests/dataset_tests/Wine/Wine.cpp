@@ -1,7 +1,7 @@
 #include "Wine.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <string>
@@ -46,6 +46,6 @@ void Wine::loadData(std::string folderPath)
         inputs.push_back(values);
     }
     file.close();
-    this->data = std::make_unique<Data>(problem::classification, inputs, labels);
-    this->data->normalize(0, 1);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs, labels);
+    this->dataset->normalize(0, 1);
 }

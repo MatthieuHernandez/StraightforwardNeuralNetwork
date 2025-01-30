@@ -8,7 +8,7 @@
 
 using namespace snn;
 
-auto createDataForLocallyConnectedTests() -> Data;
+auto createDataForLocallyConnectedTests() -> Dataset;
 
 TEST(LocallyConnected, LayerLocallyConnected1D)
 {
@@ -91,27 +91,27 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
 
 TEST(LocallyConnected, SimpleLocallyConnected1D)
 {
-    auto data = createDataForLocallyConnectedTests();
+    auto dataset = createDataForLocallyConnectedTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2, 9), LocallyConnected(4, 2, activation::sigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.05F, 0.1F));
-    neuralNetwork.train(data, 3000_ep);
+    neuralNetwork.train(dataset, 3000_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
 TEST(LocallyConnected, SimpleLocallyConnected2D)
 {
-    auto data = createDataForLocallyConnectedTests();
+    auto dataset = createDataForLocallyConnectedTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2, 3, 3), LocallyConnected(4, 2, activation::sigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.05F, 0.1F));
-    neuralNetwork.train(data, 3000_ep);
+    neuralNetwork.train(dataset, 3000_ep);
     float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
-auto createDataForLocallyConnectedTests() -> Data
+auto createDataForLocallyConnectedTests() -> Dataset
 {
     vector2D<float> inputData = {
         {-1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F, -1.0F,
@@ -123,5 +123,5 @@ auto createDataForLocallyConnectedTests() -> Data
          0.91F, 0.92F}};
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-    return Data(problem::classification, inputData, expectedOutputs);
+    return Dataset(problem::classification, inputData, expectedOutputs);
 }

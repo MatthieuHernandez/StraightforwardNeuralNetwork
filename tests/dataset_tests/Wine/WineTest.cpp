@@ -10,28 +10,28 @@ class WineTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            Wine dataset("./resources/datasets/Wine");
-            data = move(dataset.data);
+            Wine datasetTest("./resources/datasets/Wine");
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> WineTest::data = nullptr;
+std::unique_ptr<Dataset> WineTest::dataset = nullptr;
 
 TEST_F(WineTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 13);
-    ASSERT_EQ(data->numberOfLabels, 3);
-    ASSERT_EQ((int)data->set.training.inputs.size(), 178);
-    ASSERT_EQ((int)data->set.training.labels.size(), 178);
-    ASSERT_EQ((int)data->set.testing.inputs.size(), 178);
-    ASSERT_EQ((int)data->set.testing.labels.size(), 178);
-    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, 13);
+    ASSERT_EQ(dataset->numberOfLabels, 3);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 178);
+    ASSERT_EQ(dataset->data.training.labels.size(), 178);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 178);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 178);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(WineTest, trainNeuralNetwork)
@@ -40,7 +40,7 @@ TEST_F(WineTest, trainNeuralNetwork)
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.train(*data, 1.00_acc || 2_s, 1, 4);
+    neuralNetwork.train(*dataset, 1.00_acc || 2_s, 1, 4);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }

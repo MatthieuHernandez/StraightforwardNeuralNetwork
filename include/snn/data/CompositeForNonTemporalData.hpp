@@ -6,7 +6,7 @@ namespace snn::internal
 class CompositeForNonTemporalData : public TemporalComposite
 {
     public:
-        explicit CompositeForNonTemporalData(Dataset* set);
+        explicit CompositeForNonTemporalData(Data* data);
 
         void shuffle() final;
         void unshuffle() final;

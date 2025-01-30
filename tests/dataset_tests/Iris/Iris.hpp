@@ -1,7 +1,7 @@
 #pragma once
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class Iris final : public Dataset
+class Iris final : public TestDataset
 {
     public:
         Iris(std::string folderPath);

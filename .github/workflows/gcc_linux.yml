@@ -1,7 +1,10 @@
 name: All tests - GCC Linux
-
+xxx
 on:
   pull_request:
+    branches:
+      - '*'
+  push:
     branches:
       - master
 
@@ -11,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - name: Checkout the project
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: CMake
       run: |
         mkdir build
@@ -22,12 +25,12 @@ jobs:
         cd ./build
         make
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: compiled-tests
         path: build/tests/
     - name: Upload models artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: compiled-tests
         path: build/tests/
@@ -38,7 +41,7 @@ jobs:
     needs: build
     steps:
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: compiled-tests
         path: ./build/tests/
@@ -55,7 +58,7 @@ jobs:
     - name: Checkout the project
       uses: actions/checkout@v2
     - name: Download build artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: compiled-tests
         path: ./build/tests/

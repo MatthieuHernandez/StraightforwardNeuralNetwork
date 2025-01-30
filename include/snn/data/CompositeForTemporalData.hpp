@@ -9,7 +9,7 @@ class CompositeForTemporalData : public TemporalComposite
         std::vector<int> indexesForShuffles;
 
     public:
-        explicit CompositeForTemporalData(Dataset* set);
+        explicit CompositeForTemporalData(Data* data);
 
         void shuffle() final;
         void unshuffle() final;

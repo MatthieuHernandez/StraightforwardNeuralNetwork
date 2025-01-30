@@ -10,35 +10,35 @@ class Cifar10Test : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            Cifar10 dataset("./resources/datasets/CIFAR-10");
-            data = move(dataset.data);
+            Cifar10 datasetTest("./resources/datasets/CIFAR-10");
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> Cifar10Test::data = nullptr;
+std::unique_ptr<Dataset> Cifar10Test::dataset = nullptr;
 
 TEST_F(Cifar10Test, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 3072);
-    ASSERT_EQ(data->numberOfLabels, 10);
-    ASSERT_EQ((int)data->set.training.inputs.size(), 50000);
-    ASSERT_EQ((int)data->set.training.labels.size(), 50000);
-    ASSERT_EQ((int)data->set.testing.inputs.size(), 10000);
-    ASSERT_EQ((int)data->set.testing.labels.size(), 10000);
-    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, 3072);
+    ASSERT_EQ(dataset->numberOfLabels, 10);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 50000);
+    ASSERT_EQ(dataset->data.training.labels.size(), 50000);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 10000);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 10000);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3072), FullyConnected(100), FullyConnected(40), FullyConnected(10, activation::identity, Softmax())});
-    neuralNetwork.train(*data, 1_ep || 45_s);
+    neuralNetwork.train(*dataset, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.26F);
 }
@@ -54,7 +54,7 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.62_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.62_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20F);
@@ -64,7 +64,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*data);
+    neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
     ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
@@ -137,13 +137,12 @@ TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
 
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 15);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 16);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 14);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 15);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 16);
 
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *data, 13);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *data, 14);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 15);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 16);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *dataset, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *dataset, 14);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *dataset, 15);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *dataset, 16);
 }

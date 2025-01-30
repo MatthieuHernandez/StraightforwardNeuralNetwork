@@ -10,35 +10,35 @@ class MnistTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            Mnist dataset("./resources/datasets/MNIST");
-            data = move(dataset.data);
+            Mnist datasetTest("./resources/datasets/MNIST");
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> MnistTest::data = nullptr;
+std::unique_ptr<Dataset> MnistTest::dataset = nullptr;
 
 TEST_F(MnistTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 784);
-    ASSERT_EQ(data->numberOfLabels, 10);
-    ASSERT_EQ((int)data->set.training.inputs.size(), 60000);
-    ASSERT_EQ((int)data->set.training.labels.size(), 60000);
-    ASSERT_EQ((int)data->set.testing.inputs.size(), 10000);
-    ASSERT_EQ((int)data->set.testing.labels.size(), 10000);
-    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, 784);
+    ASSERT_EQ(dataset->numberOfLabels, 10);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 60000);
+    ASSERT_EQ(dataset->data.training.labels.size(), 60000);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 10000);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 10000);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(MnistTest, simplierNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), MaxPooling(2), FullyConnected(10)},
                                                StochasticGradientDescent(0.02F, 0.1F));
-    neuralNetwork.train(*data, 1_ep || 2_s);
+    neuralNetwork.train(*dataset, 1_ep || 2_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.86F);
 }
@@ -47,7 +47,7 @@ TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(784), FullyConnected(150, activation::sigmoid, Dropout(0.1F)), FullyConnected(70), FullyConnected(10)});
-    neuralNetwork.startTrainingAsync(*data);
+    neuralNetwork.startTrainingAsync(*dataset);
     neuralNetwork.waitFor(1_ep || 15_s);
     neuralNetwork.stopTrainingAsync();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
@@ -59,7 +59,7 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
     StraightforwardNeuralNetwork neuralNetwork({Input(784),
                                                 FullyConnected(100, activation::sigmoid, L2Regularization(1e-4F)),
                                                 GruLayer(15), FullyConnected(10)});
-    neuralNetwork.train(*data, 1_ep || 12_s);
+    neuralNetwork.train(*dataset, 1_ep || 12_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.90F);
 }
@@ -69,7 +69,7 @@ TEST_F(MnistTest, LocallyConnected1D)
     StraightforwardNeuralNetwork neuralNetwork({Input(784), LocallyConnected(1, 7),
                                                 FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),
                                                 FullyConnected(70), FullyConnected(10)});
-    neuralNetwork.train(*data, 2_ep || 15_s);
+    neuralNetwork.train(*dataset, 2_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.84F);
 }
@@ -78,7 +78,7 @@ TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1, 28, 28), LocallyConnected(2, 2), FullyConnected(150), FullyConnected(70), FullyConnected(10)});
-    neuralNetwork.train(*data, 3_ep || 20_s);
+    neuralNetwork.train(*dataset, 3_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70F);
 }
@@ -87,7 +87,7 @@ TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1, 28, 28), Convolution(4, 3, activation::ReLU), FullyConnected(10)});
-    neuralNetwork.train(*data, 1_ep || 15_s);
+    neuralNetwork.train(*dataset, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.87F);
 }
@@ -97,14 +97,14 @@ TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
     StraightforwardNeuralNetwork nn1Filter(
         {Input(1, 28, 28), Convolution(1, 5, activation::sigmoid), FullyConnected(10, activation::identity, Softmax())},
         StochasticGradientDescent(0.0002F, 0.8F));
-    nn1Filter.train(*data, 1_ep || 10_s);
+    nn1Filter.train(*dataset, 1_ep || 10_s);
     auto accuracy1Filter = nn1Filter.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy1Filter, 0.6F);
 
     StraightforwardNeuralNetwork nn8Filters(
         {Input(1, 28, 28), Convolution(4, 5, activation::sigmoid), FullyConnected(10, activation::identity, Softmax())},
         StochasticGradientDescent(0.0002F, 0.8F));
-    nn8Filters.train(*data, 1_ep || 30_s);
+    nn8Filters.train(*dataset, 1_ep || 30_s);
     auto accuracy10Filters = nn8Filters.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy10Filters, 0.8F);
 
@@ -122,7 +122,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.9860_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.9860_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
@@ -132,7 +132,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForMNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*data);
+    neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 261206);
     ASSERT_FLOAT_EQ(accuracy, 0.9871F);
@@ -194,10 +194,10 @@ TEST_F(MnistTest, DISABLED_SaveFeatureMap)
         {Input(1, 28, 28), Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0F)),
          LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0F)), FullyConnected(10)},
         StochasticGradientDescent(0.005F, 0.1F));
-    neuralNetwork.saveData2DAsBitmap("./bitmap/data", *data, 13);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before", *data, 13);
-    neuralNetwork.train(*data, 1_ep);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/data", *dataset, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before", *dataset, 13);
+    neuralNetwork.train(*dataset, 1_ep);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.90F);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/after", *data, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/after", *dataset, 13);
 }

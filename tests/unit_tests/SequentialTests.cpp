@@ -18,13 +18,14 @@ TEST(Sequential, TestGruLayer)
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}, {1, 0}, {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0},
                                        {0, 1}, {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0}, {1, 0}, {0, 1}, {0, 1},
                                        {0, 1}, {0, 1}, {0, 1}, {1, 0}, {1, 0}, {1, 0}, {1, 0}, {1, 0}};
-    auto data = std::make_unique<Data>(problem::classification, inputData, expectedOutputs, nature::sequential, 2);
+    auto dataset =
+        std::make_unique<Dataset>(problem::classification, inputData, expectedOutputs, nature::sequential, 2);
 
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), GruLayer(20), FullyConnected(2, activation::identity, Softmax())},
         StochasticGradientDescent(0.003F, 0.97F));
 
-    neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 1);
+    neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 1);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0F);

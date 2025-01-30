@@ -3,7 +3,7 @@
 #include <thread>
 #include <vector>
 
-#include "../data/Data.hpp"
+#include "../data/Dataset.hpp"
 #include "../tools/Error.hpp"
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
@@ -26,18 +26,18 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         void resetTrainingValues();
 
-        void trainSync(Data& data, Wait wait, int batchSize, int evaluationFrequency);
+        void trainSync(Dataset& dataset, Wait wait, int batchSize, int evaluationFrequency);
         void saveSync(const std::string& filePath);
-        void evaluate(const Data& data, Wait& wait);
-        void evaluateOnce(const Data& data);
+        void evaluate(const Dataset& dataset, Wait& wait);
+        void evaluateOnce(const Dataset& dataset);
 
         auto continueTraining(Wait wait) const -> bool;
-        void validData(const Data& data, int batchSize) const;
+        void validData(const Dataset& dataset, int batchSize) const;
 
         template <logLevel T>
         void logAccuracy(Wait& wait, bool hasSaved) const;
         template <logLevel T>
-        void logInProgress(Wait& wait, const Data& data, setType set) const;
+        void logInProgress(Wait& wait, const Dataset& dataset, setType set) const;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -58,13 +58,13 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         [[nodiscard]] auto isValid() const -> errorType;
 
-        void startTrainingAsync(Data& data, int batchSize = 1, int evaluationFrequency = 1);
+        void startTrainingAsync(Dataset& dataset, int batchSize = 1, int evaluationFrequency = 1);
         void stopTrainingAsync();
 
         void waitFor(Wait wait) const;
-        void train(Data& data, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
+        void train(Dataset& dataset, Wait wait, int batchSize = 1, int evaluationFrequency = 1);
 
-        void evaluate(const Data& data);
+        void evaluate(const Dataset& dataset);
 
         auto computeOutput(const std::vector<float>& inputs, bool temporalReset = false) -> std::vector<float>;
         auto computeCluster(const std::vector<float>& inputs, bool temporalReset = false) -> int;
@@ -73,8 +73,8 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         void saveAs(const std::string& filePath);
         void saveFeatureMapsAsBitmap(const std::string& filePath);
-        void saveData2DAsBitmap(const std::string& filePath, const Data& data, int dataIndex);
-        void saveFilterLayersAsBitmap(const std::string& filePath, const Data& data, int dataIndex);
+        void saveData2DAsBitmap(const std::string& filePath, const Dataset& dataset, int dataIndex);
+        void saveFilterLayersAsBitmap(const std::string& filePath, const Dataset& dataset, int dataIndex);
         static auto loadFrom(const std::string& filePath) -> StraightforwardNeuralNetwork&;
 
         [[nodiscard]] auto summary() const -> std::string;
@@ -113,7 +113,7 @@ void StraightforwardNeuralNetwork::logAccuracy(Wait& wait, const bool hasSaved) 
 }
 
 template <logLevel T>
-void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, setType set) const
+void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Dataset& dataset, setType set) const
 {
     if constexpr (T > none && T <= verbose)  // NOLINT(misc-redundant-expression)
     {
@@ -122,7 +122,7 @@ void StraightforwardNeuralNetwork::logInProgress(Wait& wait, const Data& data, s
         {
             const std::string name =
                 set == setType::training ? "Training in progress...  " : "Evaluation in progress...";
-            const size_t size = set == setType::training ? data.set.training.size : data.set.testing.size;
+            const size_t size = set == setType::training ? dataset.data.training.size : dataset.data.testing.size;
             const int progress = this->index * 100 / static_cast<int>(size);
             tools::log<T, false>("\rEpoch: ", tools::toConstSizeString(this->epoch, 2), " - ", name,
                                  tools::toConstSizeString(progress, 5), "%",  // NOLINT(*magic-numbers)

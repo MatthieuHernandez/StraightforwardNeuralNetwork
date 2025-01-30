@@ -12,6 +12,8 @@ struct binaryClassification
         float falseNegative{};
         float totalError{};
 
+        auto operator==(const binaryClassification&) const -> bool = default;
+
         template <typename Archive>
         void serialize(Archive& archive, [[maybe_unused]] uint32_t version)
         {

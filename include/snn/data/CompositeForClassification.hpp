@@ -7,7 +7,7 @@ namespace snn::internal
 class CompositeForClassification : public ProblemComposite
 {
     public:
-        CompositeForClassification(Dataset* set, int numberOfLabels);
+        CompositeForClassification(Data* data, int numberOfLabels);
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

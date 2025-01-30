@@ -1,9 +1,9 @@
 #pragma once
 #include <snn/tools/Tools.hpp>
 
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class FashionMnist final : public Dataset
+class FashionMnist final : public TestDataset
 {
     public:
         FashionMnist(std::string folderPath);

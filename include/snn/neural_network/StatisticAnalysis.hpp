@@ -76,8 +76,8 @@ class StatisticAnalysis
         [[nodiscard]] auto getMeanAbsoluteErrorMin() const -> float;
         [[nodiscard]] auto getRootMeanSquaredErrorMin() const -> float;
 
-        auto operator==(const StatisticAnalysis& sa) const -> bool;
-        auto operator!=(const StatisticAnalysis& sa) const -> bool;
+        auto operator==(const StatisticAnalysis& other) const -> bool;
+        auto operator!=(const StatisticAnalysis& other) const -> bool;
 };
 
 template <class Archive>

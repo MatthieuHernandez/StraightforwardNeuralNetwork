@@ -4,16 +4,16 @@
 
 namespace snn::internal
 {
-CompositeForNonTemporalData::CompositeForNonTemporalData(Dataset* set)
-    : TemporalComposite(set)
+CompositeForNonTemporalData::CompositeForNonTemporalData(Data* data)
+    : TemporalComposite(data)
 {
-    this->set->training.numberOfTemporalSequence = 0;
-    this->set->testing.numberOfTemporalSequence = 0;
+    this->data->training.numberOfTemporalSequence = 0;
+    this->data->testing.numberOfTemporalSequence = 0;
 }
 
 void CompositeForNonTemporalData::shuffle()  // TODO(matth): also need learning to shuffle
 {
-    std::ranges::shuffle(this->set->training.shuffledIndexes, tools::rng);
+    std::ranges::shuffle(this->data->training.shuffledIndexes, tools::rng);
 }
 
 void CompositeForNonTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
@@ -34,10 +34,10 @@ auto CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] i
 
 auto CompositeForNonTemporalData::isValid() const -> errorType
 {
-    if (!this->set->training.areFirstDataOfTemporalSequence.empty() ||
-        !this->set->testing.areFirstDataOfTemporalSequence.empty() || !this->set->training.needToTrainOnData.empty() ||
-        !this->set->testing.needToTrainOnData.empty() || !this->set->training.needToEvaluateOnData.empty() ||
-        !this->set->testing.needToEvaluateOnData.empty())
+    if (!this->data->training.areFirstDataOfTemporalSequence.empty() ||
+        !this->data->testing.areFirstDataOfTemporalSequence.empty() ||
+        !this->data->training.needToTrainOnData.empty() || !this->data->testing.needToTrainOnData.empty() ||
+        !this->data->training.needToEvaluateOnData.empty() || !this->data->testing.needToEvaluateOnData.empty())
     {
         return errorType::compositeForNonTemporalDataEmpty;
     }

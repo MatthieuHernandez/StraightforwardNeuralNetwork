@@ -15,7 +15,7 @@ class CompositeForTimeSeries : public TemporalComposite
         int rest;
 
     public:
-        CompositeForTimeSeries(Dataset* set, int numberOfRecurrences);
+        CompositeForTimeSeries(Data* data, int numberOfRecurrences);
 
         void shuffle() final;
         void unshuffle() final;

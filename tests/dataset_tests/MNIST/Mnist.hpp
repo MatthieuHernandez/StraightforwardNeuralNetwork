@@ -1,9 +1,9 @@
 #pragma once
 #include <snn/tools/Tools.hpp>
 
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class Mnist final : public Dataset
+class Mnist final : public TestDataset
 {
     public:
         Mnist(std::string folderPath);

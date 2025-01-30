@@ -1,7 +1,7 @@
 #include "FashionMnist.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
 using namespace snn;
@@ -15,9 +15,9 @@ void FashionMnist::loadData(std::string folderPath)
     vector2D<float> testingInputs = readImages(folderPath + "/t10k-images-idx3-ubyte", 10000);
     vector2D<float> testingLabels = readLabels(folderPath + "/t10k-labels-idx1-ubyte", 10000);
 
-    this->data =
-        std::make_unique<Data>(problem::classification, trainingInputs, trainingLabels, testingInputs, testingLabels);
-    this->data->normalize(0, 1);
+    this->dataset = std::make_unique<Dataset>(problem::classification, trainingInputs, trainingLabels, testingInputs,
+                                              testingLabels);
+    this->dataset->normalize(0, 1);
 }
 
 auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>

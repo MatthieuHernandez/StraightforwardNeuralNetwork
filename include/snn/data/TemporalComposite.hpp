@@ -1,20 +1,20 @@
 #pragma once
 #include "../tools/Error.hpp"
-#include "Set.hpp"
+#include "Data.hpp"
 
 namespace snn::internal
 {
 class TemporalComposite
 {
     protected:
-        Dataset* set;
+        Data* data;
 
     public:
         TemporalComposite(const TemporalComposite&) = default;
         TemporalComposite(TemporalComposite&&) = delete;
         auto operator=(const TemporalComposite&) -> TemporalComposite& = default;
         auto operator=(TemporalComposite&&) -> TemporalComposite& = delete;
-        explicit TemporalComposite(Dataset* set);
+        explicit TemporalComposite(Data* data);
         virtual ~TemporalComposite() = default;
 
         virtual void shuffle() = 0;

@@ -1,17 +1,18 @@
-#include <snn/data/Data.hpp>
-#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
+#include <gtest/gtest.h>
 
-#include "../ExtendedGTest.hpp"
+#include <snn/data/Dataset.hpp>
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 
 using namespace snn;
 
+// NOLINTBEGIN(cppcoreguidelines-owning-memory)
 TEST(Memory, passingArgByCopy)
 {
     try
     {
-        auto inputData = new vector2D<float>{{0, 0, 0}, {1, 1, 1}};
-        auto expectedOutputs = new vector2D<float>{{0}, {1}};
-        auto data = new Data(problem::regression, *inputData, *expectedOutputs);
+        auto* inputData = new vector2D<float>{{0, 0, 0}, {1, 1, 1}};
+        auto* expectedOutputs = new vector2D<float>{{0}, {1}};
+        auto* dataset = new Dataset(problem::regression, *inputData, *expectedOutputs);
         const std::vector<LayerModel> achitecture = {Input(1, 3),          Convolution(500, 1), FullyConnected(3000),
                                                      FullyConnected(3000), Convolution(1, 4),   FullyConnected(1)};
         StraightforwardNeuralNetwork neuralNetwork(achitecture);
@@ -19,7 +20,7 @@ TEST(Memory, passingArgByCopy)
         delete inputData;
         delete expectedOutputs;
 
-        neuralNetwork.startTrainingAsync(*data);
+        neuralNetwork.startTrainingAsync(*dataset);
         neuralNetwork.waitFor(3_ms);
         neuralNetwork.stopTrainingAsync();
     }
@@ -36,14 +37,14 @@ TEST(Memory, copyOperator)
     {
         vector2D<float> inputData = {{0, 0, 0}, {1, 1, 1}};
         vector2D<float> expectedOutputs = {{0}, {1}};
-        Data data(problem::regression, inputData, expectedOutputs);
-        auto neuralNetwork = new StraightforwardNeuralNetwork(
+        Dataset dataset(problem::regression, inputData, expectedOutputs);
+        auto* neuralNetwork = new StraightforwardNeuralNetwork(
             {Input(1, 3), Convolution(500, 1), FullyConnected(250), FullyConnected(1)});
 
         StraightforwardNeuralNetwork neuralNetworkCopy = *neuralNetwork;
         delete neuralNetwork;
 
-        neuralNetworkCopy.startTrainingAsync(data);
+        neuralNetworkCopy.startTrainingAsync(dataset);
         neuralNetworkCopy.waitFor(3_ms);
         neuralNetworkCopy.stopTrainingAsync();
     }
@@ -53,3 +54,4 @@ TEST(Memory, copyOperator)
     }
     EXPECT_TRUE(true);
 }
+// NOLINTEND(cppcoreguidelines-owning-memory)

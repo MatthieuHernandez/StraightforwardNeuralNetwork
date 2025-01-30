@@ -1,9 +1,9 @@
 #pragma once
 #include <snn/tools/Tools.hpp>
 
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class Cifar10 final : public Dataset
+class Cifar10 final : public TestDataset
 {
     public:
         Cifar10(std::string folderPath);

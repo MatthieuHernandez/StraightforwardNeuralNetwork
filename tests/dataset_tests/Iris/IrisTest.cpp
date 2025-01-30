@@ -10,28 +10,28 @@ class IrisTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            Iris dataset("./resources/datasets/Iris");
-            data = move(dataset.data);
+            Iris datasetTest("./resources/datasets/Iris");
+            dataset = move(datasetTest.dataset);
         }
 
-        void SetUp() final { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-std::unique_ptr<Data> IrisTest::data = nullptr;
+std::unique_ptr<Dataset> IrisTest::dataset = nullptr;
 
 TEST_F(IrisTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 4);
-    ASSERT_EQ(data->numberOfLabels, 3);
-    ASSERT_EQ((int)data->set.training.inputs.size(), 150);
-    ASSERT_EQ((int)data->set.training.labels.size(), 150);
-    ASSERT_EQ((int)data->set.testing.inputs.size(), 150);
-    ASSERT_EQ((int)data->set.testing.labels.size(), 150);
-    ASSERT_EQ(data->set.training.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->set.testing.numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->sizeOfData, 4);
+    ASSERT_EQ(dataset->numberOfLabels, 3);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 150);
+    ASSERT_EQ(dataset->data.training.labels.size(), 150);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 150);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 150);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(IrisTest, trainNeuralNetwork)
@@ -40,7 +40,7 @@ TEST_F(IrisTest, trainNeuralNetwork)
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.train(*data, 0.98_acc || 2_s);
+    neuralNetwork.train(*dataset, 0.98_acc || 2_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
 }

@@ -1,7 +1,7 @@
 #include "Iris.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <stdexcept>
@@ -72,5 +72,5 @@ void Iris::loadData(std::string folderPath)
             throw std::runtime_error("Cannot load iris dataset");
         }
     }
-    this->data = std::make_unique<Data>(problem::classification, inputs, labels);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs, labels);
 }

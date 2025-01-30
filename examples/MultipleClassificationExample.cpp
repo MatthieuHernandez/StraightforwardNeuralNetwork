@@ -1,4 +1,4 @@
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 
 #include "Examples.hpp"
@@ -16,21 +16,22 @@ auto multipleClassificationExample() -> int
     std::vector<std::vector<float>> expectedOutputs = {{0, 1, 0}, {0, 1, 1}, {0, 1, 1}, {1, 0, 1}};
 
     const float separator = 0.5F;
-    Data data(problem::multipleClassification, inputData, expectedOutputs);
-    data.setSeparator(separator);
+    Dataset dataset(problem::multipleClassification, inputData, expectedOutputs);
+    dataset.setSeparator(separator);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
-    neuralNetwork.train(data, 1.00_acc || 2_s);  // train neural network until 100% accuracy or 3s on a parallel thread
+    neuralNetwork.train(dataset,
+                        1.00_acc || 2_s);  // Train neural network until 100% accuracy or 3s on a parallel thread.
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =
-        neuralNetwork.computeOutput(data.getTestingData(0));  // consult neural network to test it
+        neuralNetwork.computeOutput(dataset.getTestingData(0));  // consult neural network to test it
 
-    if (accuracy == 100 && output[0] < separator && output[1] > separator &&  // NOLINT(*magic-numbers)
-        output[2] < separator && neuralNetwork.isValid() == snn::errorType::noError)
+    if (accuracy == 100 && output[0] < separator && output[1] > separator && output[2] < separator &&
+        neuralNetwork.isValid() == snn::errorType::noError)
     {
-        return EXIT_SUCCESS;  // the neural network has learned
+        return EXIT_SUCCESS;  // The neural network has learned.
     }
     return EXIT_FAILURE;
 }

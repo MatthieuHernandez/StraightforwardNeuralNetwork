@@ -5,60 +5,60 @@
 
 using namespace snn;
 
-auto createDataForAdditionTests() -> std::unique_ptr<Data>;
-auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
-    -> std::unique_ptr<Data>;
-void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn);
+static auto createDataForAdditionTests() -> std::unique_ptr<Dataset>;
+static auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
+    -> std::unique_ptr<Dataset>;
+static void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn);
 
 TEST(Addition, WithMPL)
 {
-    auto data = createDataForAdditionTests();
+    auto dataset = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), FullyConnected(16, activation::sigmoid), FullyConnected(1, activation::identity)},
         StochasticGradientDescent(0.01F));
-    neuralNetwork.train(*data, 1.0_acc || 1_s, 3, 4);
+    neuralNetwork.train(*dataset, 1.0_acc || 1_s, 3, 4);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithCNN)
 {
-    auto data = createDataForAdditionTests();
+    auto dataset = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), Convolution(6, 1, activation::sigmoid), FullyConnected(1, activation::identity)},
         StochasticGradientDescent(0.01F));
 
-    neuralNetwork.train(*data, 1.0_acc || 2_s);
+    neuralNetwork.train(*dataset, 1.0_acc || 2_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithLCNN)
 {
-    auto data = createDataForAdditionTests();
+    auto dataset = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), LocallyConnected(6, 1, activation::sigmoid), FullyConnected(1, activation::identity)},
         StochasticGradientDescent(0.01F));
 
-    neuralNetwork.train(*data, 1.0_acc || 5_s);
+    neuralNetwork.train(*dataset, 1.0_acc || 5_s);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithRNN)
 {
-    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3F);
+    auto dataset = createRecurrentDataForAdditionTests(100, 3, 0.3F);
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(12), Recurrence(5), FullyConnected(1)},
                                                StochasticGradientDescent(0.01F, 0.4F));
 
-    neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 2);
+    neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 2);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
 TEST(Addition, WithGRU)
 {
-    auto data = createRecurrentDataForAdditionTests(100, 3, 0.3F);
+    auto dataset = createRecurrentDataForAdditionTests(100, 3, 0.3F);
     StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(16), GruLayer(12), FullyConnected(1)},
                                                StochasticGradientDescent(0.005F, 0.95F));
 
-    neuralNetwork.train(*data, 1.0_acc || 3_s, 1, 3);
+    neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 3);
     testNeuralNetworkForAddition(neuralNetwork);
 }
 
@@ -70,7 +70,7 @@ void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn)
     ASSERT_MAE(mae, 0.4F);
 }
 
-auto createDataForAdditionTests() -> std::unique_ptr<Data>
+auto createDataForAdditionTests() -> std::unique_ptr<Dataset>
 {
     vector2D<float> inputData = {{3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2}, {2, 4}, {4, 1}, {1, 4}, {4, 3},
                                  {3, 0}, {0, 0}, {0, 4}, {4, 3}, {3, 2}, {2, 1}, {1, 2}, {2, 0}, {0, 1},
@@ -79,13 +79,13 @@ auto createDataForAdditionTests() -> std::unique_ptr<Data>
                                        {5}, {3}, {3}, {2}, {1}, {3}, {10}, {8}, {2}, {8}, {6}, {4}};
 
     const float precision = 0.4F;
-    std::unique_ptr<Data> data = std::make_unique<Data>(problem::regression, inputData, expectedOutputs);
-    data->setPrecision(precision);
-    return data;
+    std::unique_ptr<Dataset> dataset = std::make_unique<Dataset>(problem::regression, inputData, expectedOutputs);
+    dataset->setPrecision(precision);
+    return dataset;
 }
 
 auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
-    -> std::unique_ptr<Data>
+    -> std::unique_ptr<Dataset>
 {
     vector2D<float> inputData;
     vector2D<float> expectedOutputs;
@@ -94,17 +94,20 @@ auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrenc
 
     for (int i = 0; i < numberOfData; ++i)
     {
-        auto r = tools::randomBetween(0.0F, 1.0F / (numberOfRecurrences + 1));
-        inputData.push_back({r});
+        auto rnd = tools::randomBetween(0.0F, 1.0F / (numberOfRecurrences + 1));
+        inputData.push_back({rnd});
 
         for (int j = 0; j < numberOfRecurrences + 1; ++j)
         {
-            if (i + j < numberOfData) expectedOutputs[(i + j)][0] += r;
+            if (i + j < numberOfData)
+            {
+                expectedOutputs[(i + j)][0] += rnd;
+            }
         }
     }
 
-    auto data = std::make_unique<Data>(problem::regression, inputData, expectedOutputs, nature::timeSeries,
-                                       numberOfRecurrences);
-    data->setPrecision(precision);
-    return data;
+    auto dataset = std::make_unique<Dataset>(problem::regression, inputData, expectedOutputs, nature::timeSeries,
+                                             numberOfRecurrences);
+    dataset->setPrecision(precision);
+    return dataset;
 }

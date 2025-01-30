@@ -1,6 +1,6 @@
 #pragma once
 #include "../tools/Error.hpp"
-#include "Set.hpp"
+#include "Data.hpp"
 
 namespace snn::internal
 {
@@ -11,10 +11,10 @@ class ProblemComposite
 
     protected:
         const int numberOfLabels;
-        Dataset* set;
+        Data* data;
 
     public:
-        ProblemComposite(Dataset* set, int numberOfLabels);
+        ProblemComposite(Data* data, int numberOfLabels);
         virtual ~ProblemComposite() = default;
 
         [[nodiscard]] virtual auto isValid() const -> errorType;

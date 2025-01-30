@@ -1,0 +1,16 @@
+Checks: >
+    *,
+    -llvmlibc-implementation-in-namespace,
+    -llvmlibc-inline-function-decl,
+    -llvmlibc-callee-namespace,
+    -llvmlibc-restrict-system-libc-headers,
+    -fuchsia-trailing-return,
+    -fuchsia-default-arguments-declarations,
+    -fuchsia-default-arguments-calls,
+    -misc-non-private-member-variables-in-classes,
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+
+    -cppcoreguidelines-avoid-magic-numbers,
+    -google-build-using-namespace,
+    -readability-magic-numbers
+WarningsAsErrors: '.*'

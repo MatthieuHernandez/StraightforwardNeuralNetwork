@@ -175,6 +175,6 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             inputs[i].push_back(dataSound);
         }
     }
-    this->data =
-        std::make_unique<Data>(problem::classification, inputs[0], labels[0], inputs[1], labels[1], nature::sequential);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs[0], labels[0], inputs[1], labels[1],
+                                              nature::sequential);
 }

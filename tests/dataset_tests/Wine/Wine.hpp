@@ -1,7 +1,7 @@
 #pragma once
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class Wine final : public Dataset
+class Wine final : public TestDataset
 {
     private:
         void loadData(std::string folderPath) final;

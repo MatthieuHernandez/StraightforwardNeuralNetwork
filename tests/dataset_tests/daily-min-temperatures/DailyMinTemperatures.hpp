@@ -1,7 +1,7 @@
 #pragma once
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class DailyMinTemperatures final : public Dataset
+class DailyMinTemperatures final : public TestDataset
 {
     private:
         int numberOfRecurrences;

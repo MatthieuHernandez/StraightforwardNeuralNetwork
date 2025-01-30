@@ -4,14 +4,14 @@
 
 namespace snn::internal
 {
-CompositeForClassification::CompositeForClassification(Dataset* set, int numberOfLabels)
-    : ProblemComposite(set, numberOfLabels)
+CompositeForClassification::CompositeForClassification(Data* data, int numberOfLabels)
+    : ProblemComposite(data, numberOfLabels)
 {
 }
 
 auto CompositeForClassification::isValid() const -> errorType
 {
-    if (this->set->training.labels[0].size() < 2)
+    if (this->data->training.labels[0].size() < 2)
     {
         return errorType::dataWrongLabelSize;
     };
@@ -20,9 +20,9 @@ auto CompositeForClassification::isValid() const -> errorType
 
 auto CompositeForClassification::getTrainingLabel(const int index) -> int
 {
-    for (int i = 0; i < static_cast<int>(this->set->training.labels[index].size()); i++)
+    for (int i = 0; i < static_cast<int>(this->data->training.labels[index].size()); i++)
     {
-        if (this->set->training.labels[index][i] == 1)
+        if (this->data->training.labels[index][i] == 1)
         {
             return i;
         }
@@ -32,9 +32,9 @@ auto CompositeForClassification::getTrainingLabel(const int index) -> int
 
 auto CompositeForClassification::getTestingLabel(const int index) -> int
 {
-    for (int i = 0; i < static_cast<int>(this->set->testing.labels[index].size()); i++)
+    for (int i = 0; i < static_cast<int>(this->data->testing.labels[index].size()); i++)
     {
-        if (this->set->testing.labels[index][i] == 1)
+        if (this->data->testing.labels[index][i] == 1)
         {
             return i;
         }

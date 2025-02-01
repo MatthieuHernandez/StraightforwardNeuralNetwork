@@ -1,12 +1,19 @@
 Checks: >
     *,
+    -boost-use-ranges,
     -llvmlibc-implementation-in-namespace,
     -llvmlibc-inline-function-decl,
     -llvmlibc-callee-namespace,
     -llvmlibc-restrict-system-libc-headers,
+    -llvm-header-guard,
     -fuchsia-trailing-return,
     -fuchsia-default-arguments-declarations,
     -fuchsia-default-arguments-calls,
     -misc-non-private-member-variables-in-classes,
     -cppcoreguidelines-non-private-member-variables-in-classes
-WarningsAsErrors: '.*'
+WarningsAsErrors: >
+    *,
+    -altera-unroll-loops,
+    -altera-id-dependent-backward-branch,
+    -bugprone-easily-swappable-parameters,
+    -misc-include-cleaner

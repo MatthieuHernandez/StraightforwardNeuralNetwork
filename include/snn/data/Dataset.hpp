@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -23,6 +24,9 @@ enum class nature : uint8_t
     timeSeries,
 };
 
+const float defaultPrecision = 0.1F;
+const float defaultSeparator = 0.5F;
+
 class Dataset
 {
     private:
@@ -35,9 +39,9 @@ class Dataset
 
         std::unique_ptr<internal::ProblemComposite> problemComposite;
         std::unique_ptr<internal::TemporalComposite> temporalComposite;
-        int numberOfRecurrences;
-        float precision;
-        float separator;
+        int numberOfRecurrences{};
+        float precision = defaultPrecision;
+        float separator = defaultSeparator;
 
         std::vector<float> batchedData;
 
@@ -46,6 +50,10 @@ class Dataset
                 std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
                 std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal = nature::nonTemporal,
                 int numberOfRecurrences = 0);
+        Dataset(const Dataset&) = delete;
+        Dataset(Dataset&&) = delete;
+        auto operator=(const Dataset&) -> Dataset& = delete;
+        auto operator=(Dataset&&) -> Dataset& = delete;
 
         Dataset(problem typeOfProblem, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& labels,
                 nature temporal = nature::nonTemporal, int numberOfRecurrences = 0);

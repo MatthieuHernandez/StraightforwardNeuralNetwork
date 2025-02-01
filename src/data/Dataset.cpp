@@ -1,7 +1,7 @@
 #include "Dataset.hpp"
 
 #include <algorithm>
-#include <functional>
+#include <memory>
 #include <numeric>
 #include <stdexcept>
 #include <string>
@@ -77,8 +77,6 @@ void Dataset::initialize(std::vector<std::vector<float>>& trainingInputs,
                          std::vector<std::vector<float>>& trainingLabels,
                          std::vector<std::vector<float>>& testingInputs, std::vector<std::vector<float>>& testingLabels)
 {
-    this->precision = 0.1F;
-    this->separator = 0.5F;
     this->data.training.inputs = trainingInputs;
     this->data.training.labels = trainingLabels;
     this->data.testing.inputs = testingInputs;
@@ -88,6 +86,8 @@ void Dataset::initialize(std::vector<std::vector<float>>& trainingInputs,
     this->numberOfLabels = static_cast<int>(trainingLabels.back().size());
     this->data.training.size = static_cast<int>(trainingLabels.size());
     this->data.testing.size = static_cast<int>(testingLabels.size());
+
+    batchedData.resize(this->sizeOfData, 0.0F);
 
     this->data.training.shuffledIndexes.resize(this->data.training.size);
     for (int i = 0; i < static_cast<int>(this->data.training.shuffledIndexes.size()); i++)
@@ -142,8 +142,8 @@ void Dataset::initialize(std::vector<std::vector<float>>& trainingInputs,
 void Dataset::flatten(internal::Set& set, std::vector<std::vector<std::vector<float>>>& input3D)
 {
     set.numberOfTemporalSequence = static_cast<int>(input3D.size());
-    size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
-                             [](size_t sum, vector2D<float>& v) { return sum + v.size(); });
+    const size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
+                                   [](size_t sum, vector2D<float>& val) { return sum + val.size(); });
     set.inputs.reserve(size);
     set.areFirstDataOfTemporalSequence.resize(size, false);
     if (set.type == setType::testing)
@@ -170,8 +170,8 @@ void Dataset::flatten(std::vector<std::vector<std::vector<float>>>& input3D)
 {
     this->data.training.numberOfTemporalSequence = static_cast<int>(input3D.size());
     this->data.testing.numberOfTemporalSequence = static_cast<int>(input3D.size());
-    size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
-                             [](size_t sum, vector2D<float>& v) { return sum + v.size(); });
+    const size_t size = accumulate(input3D.begin(), input3D.end(), static_cast<size_t>(0),
+                                   [](size_t sum, vector2D<float>& val) { return sum + val.size(); });
     this->data.training.inputs.reserve(size);
     this->data.training.areFirstDataOfTemporalSequence.resize(size, false);
     this->data.testing.areFirstDataOfTemporalSequence.resize(size, false);
@@ -200,12 +200,12 @@ void Dataset::normalize(const float min, const float max)
         vector2D<float>& inputsTesting = this->data.testing.inputs;
         // TODO(matth): if the first pixel of images is always black, normalization will be wrong if testing set is
         // different
-        for (int j = 0; j < this->sizeOfData; j++)
+        for (int j = 0; j < this->sizeOfData; ++j)
         {
             float minValueOfvector = inputsTraining[0][j];
             float maxValueOfvector = inputsTraining[0][j];
 
-            for (size_t i = 1; i < inputsTraining.size(); i++)
+            for (size_t i = 1; i < inputsTraining.size(); ++i)
             {
                 if (inputsTraining[i][j] < minValueOfvector)
                 {
@@ -303,23 +303,18 @@ auto Dataset::getTrainingData(const int index, const int batchSize) -> const std
     {
         return this->data.training.inputs[idx];
     }
-
-    batchedData.resize(this->sizeOfData);
-
     idx = this->data.training.shuffledIndexes[index];
-    const auto data0 = this->data.training.inputs[idx];
-    idx = this->data.training.shuffledIndexes[index + 1];
-    const auto data1 = this->data.training.inputs[idx];
-    std::ranges::transform(data0, data1, batchedData.begin(), std::plus<float>());
-
-    for (int j = index + 2; j < index + batchSize; ++j)
+    const auto firstData = this->data.training.inputs[idx];
+    std::ranges::copy(firstData, batchedData.begin());
+    for (int j = 0; j < batchSize; ++j)
     {
-        idx = this->data.training.shuffledIndexes[j];
+        idx = this->data.training.shuffledIndexes[batchSize + j];
         const auto data = this->data.training.inputs[idx];
-        std::ranges::transform(batchedData, data, batchedData.begin(), std::plus<float>());
+        std::ranges::transform(batchedData, data, batchedData.begin(),
+                               [](float total, float data) { return total + data; });
     }
     std::ranges::transform(batchedData, batchedData.begin(),
-                           bind(std::divides<float>(), std::placeholders::_1, static_cast<float>(batchSize)));
+                           [&batchSize](float total) { return total / static_cast<float>(batchSize); });
     return batchedData;
 }
 

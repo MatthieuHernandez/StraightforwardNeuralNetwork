@@ -250,15 +250,15 @@ void Dataset::unshuffle() { this->temporalComposite->unshuffle(); }
 auto Dataset::isValid() const -> errorType
 {
     if (!this->data.testing.shuffledIndexes.empty() &&
-        this->data.training.size != this->data.training.shuffledIndexes.size())
+        this->data.training.size != static_cast<int>(this->data.training.shuffledIndexes.size()))
     {
         return errorType::dataWrongIdexes;
     }
 
-    if (this->data.training.size != this->data.training.inputs.size() &&
-        this->data.training.size != this->data.training.labels.size() &&
-        this->data.testing.size != this->data.training.inputs.size() &&
-        this->data.testing.size != this->data.training.labels.size())
+    if (this->data.training.size != static_cast<int>(this->data.training.inputs.size()) &&
+        this->data.training.size != static_cast<int>(this->data.training.labels.size()) &&
+        this->data.testing.size != static_cast<int>(this->data.training.inputs.size()) &&
+        this->data.testing.size != static_cast<int>(this->data.training.labels.size()))
     {
         return errorType::dataWrongSize;
     }
@@ -305,12 +305,14 @@ auto Dataset::getTrainingData(const int index, const int batchSize) -> const std
     }
     idx = this->data.training.shuffledIndexes[index];
     const auto firstData = this->data.training.inputs[idx];
+
     std::ranges::copy(firstData, batchedData.begin());
-    for (int j = 0; j < batchSize; ++j)
+    const auto end = index + batchSize;
+    for (int j = index + 1; j < end; ++j)
     {
-        idx = this->data.training.shuffledIndexes[batchSize + j];
-        const auto data = this->data.training.inputs[idx];
-        std::ranges::transform(batchedData, data, batchedData.begin(),
+        idx = this->data.training.shuffledIndexes[j];
+        const auto dataToAdd = this->data.training.inputs[idx];
+        std::ranges::transform(batchedData, dataToAdd, batchedData.begin(),
                                [](float total, float data) { return total + data; });
     }
     std::ranges::transform(batchedData, batchedData.begin(),

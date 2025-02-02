@@ -26,7 +26,8 @@ class Convolution2D final : public FilterLayer
         Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~Convolution2D() final = default;
         Convolution2D(const Convolution2D&) = default;
-        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

@@ -2,14 +2,16 @@
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
+#include <string>
 #include <thread>
+#include <vector>
 
 #include "ExtendedExpection.hpp"
 #include "NeuralNetworkVisualization.hpp"
+#include "layer/LayerModel.hpp"
 
 namespace snn
 {
@@ -95,7 +97,10 @@ void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const 
     this->numberOfTrainingsBetweenTwoEvaluations = static_cast<int>(dataset.data.training.size);
     this->wantToStopTraining = false;
     this->isIdle = false;
-    if (evaluationFrequency > 0) this->evaluate(dataset, wait);
+    if (evaluationFrequency > 0)
+    {
+        this->evaluate(dataset, wait);
+    }
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
         dataset.shuffle();
@@ -123,7 +128,10 @@ void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const 
             }
             this->logInProgress<minimal>(wait, dataset, setType::training);
         }
-        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0) this->evaluate(dataset, wait);
+        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
+        {
+            this->evaluate(dataset, wait);
+        }
     }
     this->resetTrainingValues();
     tools::log<minimal>("Stop training");
@@ -218,7 +226,10 @@ inline auto StraightforwardNeuralNetwork::continueTraining(Wait wait) const -> b
     const auto accuracy = this->getGlobalClusteringRate();
     const auto mae = this->getMeanAbsoluteError();
 
-    if (this->hasNan()) tools::log<minimal>("A NaN value has been detected");
+    if (this->hasNan())
+    {
+        tools::log<minimal>("A NaN value has been detected");
+    }
 
     return !this->wantToStopTraining && !wait.isOver(epochs, accuracy, mae) && !this->hasNan();
 }
@@ -280,11 +291,11 @@ void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(const std::string& fi
     {
         throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
     }
-    for (size_t l = 0; l < this->layers.size(); ++l)
+    for (size_t layer = 0; layer < this->layers.size(); ++layer)
     {
-        const auto filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[l].get());
+        auto* filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[layer].get());
         internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer,
-                                                           filePath + "_layer_" + std::to_string(l) + ".bmp");
+                                                           filePath + "_layer_" + std::to_string(layer) + ".bmp");
     }
 }
 
@@ -306,12 +317,11 @@ void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(const std::string& f
 
     auto outputs = this->getLayerOutputs(dataset.getTestingData(dataIndex));
 
-    for (size_t l = 0; l < this->layers.size(); ++l)
+    for (size_t layer = 0; layer < this->layers.size(); ++layer)
     {
-        const auto filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[l].get());
-
-        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[l],
-                                                           filePath + "_layer_" + std::to_string(l) + ".bmp");
+        auto* filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[layer].get());
+        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[layer],
+                                                           filePath + "_layer_" + std::to_string(layer) + ".bmp");
     }
 }
 

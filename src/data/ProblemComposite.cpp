@@ -38,8 +38,8 @@ auto ProblemComposite::getTrainingOutputs(const int index, const int batchSize) 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
         idx = this->data->training.shuffledIndexes[j];
-        const auto data = this->data->training.labels[idx];
-        std::ranges::transform(batchedLabels, data, batchedLabels.begin(), std::plus<float>());
+        const auto dataToAdd = this->data->training.labels[idx];
+        std::ranges::transform(batchedLabels, dataToAdd, batchedLabels.begin(), std::plus<float>());
     }
     std::ranges::transform(batchedLabels, batchedLabels.begin(),
                            bind(std::divides<float>(), std::placeholders::_1, static_cast<float>(batchSize)));

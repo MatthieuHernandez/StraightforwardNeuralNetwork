@@ -63,7 +63,7 @@ auto Softmax::operator==(const LayerOptimizer& optimizer) const -> bool
 {
     try
     {
-        dynamic_cast<const Softmax&>(optimizer);
+        [[maybe_unused]] auto opti = dynamic_cast<const Softmax&>(optimizer);
         return this->LayerOptimizer::operator==(optimizer);
     }
     catch (std::bad_cast&)

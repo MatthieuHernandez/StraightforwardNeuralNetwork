@@ -103,7 +103,7 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
             clusters[i].trueNegative++;
         }
 
-        clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
+        clusters[i].totalError += std::abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
     {
@@ -140,7 +140,7 @@ void StatisticAnalysis::evaluateOnceForMultipleClassification(const std::vector<
             classifiedWell = false;
         }
 
-        clusters[i].totalError += abs(desiredOutputs[i] - outputs[i]);
+        clusters[i].totalError += std::abs(desiredOutputs[i] - outputs[i]);
     }
     if (classifiedWell)
     {
@@ -167,7 +167,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         }
         if (i == classNumber)
         {
-            clusters[i].totalError += abs(1 - outputs[i]);
+            clusters[i].totalError += std::abs(1 - outputs[i]);
 
             if (outputs[i] > separator)
             {
@@ -180,7 +180,7 @@ void StatisticAnalysis::evaluateOnceForClassification(const std::vector<float>& 
         }
         else
         {
-            clusters[i].totalError += abs(0 - outputs[i]);
+            clusters[i].totalError += std::abs(0 - outputs[i]);
 
             if (outputs[i] > separator)
             {

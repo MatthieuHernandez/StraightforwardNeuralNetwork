@@ -17,10 +17,10 @@ struct binaryClassification
         template <typename Archive>
         void serialize(Archive& archive, [[maybe_unused]] uint32_t version)
         {
-            archive & truePositive;
-            archive & trueNegative;
-            archive & falsePositive;
-            archive & falseNegative;
+            archive& this->truePositive;
+            archive& this->trueNegative;
+            archive& this->falsePositive;
+            archive& this->falseNegative;
         }
-} __attribute__((packed, aligned(32)));  // NOLINT(*magic-numbers)
+};
 }  // namespace snn::internal

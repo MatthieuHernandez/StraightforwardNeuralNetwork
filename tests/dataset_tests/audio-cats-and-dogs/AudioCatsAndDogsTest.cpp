@@ -13,7 +13,7 @@ class AudioCatsAndDogsTest : public testing::Test
         static void SetUpTestSuite()
         {
             AudioCatsAndDogs datasetTest("./resources/datasets/audio-cats-and-dogs", sizeOfOneData);
-            dataset = move(datasetTest.dataset);
+            dataset = std::move(datasetTest.dataset);
         }
 
         void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }

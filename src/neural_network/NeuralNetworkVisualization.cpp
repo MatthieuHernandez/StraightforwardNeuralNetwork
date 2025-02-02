@@ -6,17 +6,26 @@ namespace snn::internal
 {
 void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const std::string& filePath)
 {
-    if (filterLayer == nullptr) return;
+    if (filterLayer == nullptr)
+    {
+        return;
+    }
     auto shape = filterLayer->getShapeOfInput();
-    if (shape.size() != 3) return;
+    if (shape.size() != 3)
+    {
+        return;
+    }
     auto numberOfFilters = filterLayer->getShapeOfOutput()[C];
     float length = sqrt(static_cast<float>(numberOfFilters));
     int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 
-    if (numberOfFilters <= filterX * filterY - filterX) filterY--;
+    if (numberOfFilters <= filterX * filterY - filterX)
+    {
+        filterY--;
+    }
 
-    bitmap_image image((shape[X] + 1) * filterX - 1, (shape[Y] + 1) * filterY - 1);
+    bitmap_image image(((shape[X] + 1) * filterX) - 1, ((shape[Y] + 1) * filterY) - 1);
     image.set_all_channels(0, 0, 0);
     for (int x = 0; x < filterX; ++x)
     {
@@ -24,16 +33,16 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
         {
             if (y * filterX + x < numberOfFilters)
             {
-                auto filterNumber = filterX * y + x;
+                auto filterNumber = (filterX * y) + x;
                 auto weights = getWeights(filterLayer, filterNumber);
                 for (int i = 0; i < shape[X]; ++i)
                 {
                     for (int j = 0; j < shape[Y]; ++j)
                     {
                         int index = tools::flatten(i, j, shape[X]);
-                        const unsigned char color =
+                        const auto color =
                             static_cast<unsigned char>(round((tanhf(weights[index] / 2.0F) + 1.0F) * 127.5F));
-                        image.set_pixel(x * (shape[X] + 1) + i, y * (shape[Y] + 1) + j, color, color, color);
+                        image.set_pixel((x * (shape[X] + 1)) + i, (y * (shape[Y] + 1)) + j, color, color, color);
                     }
                 }
             }
@@ -71,16 +80,25 @@ auto NeuralNetworkVisualization::getWeights(FilterLayer* filterLayer, int filter
 void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vector<float> outputs,
                                               const std::string& filePath)
 {
-    if (filterLayer == nullptr) return;
+    if (filterLayer == nullptr)
+    {
+        return;
+    }
     auto shape = filterLayer->getShapeOfOutput();
-    if (shape.size() != 3) return;
+    if (shape.size() != 3)
+    {
+        return;
+    }
     float length = sqrt(static_cast<float>(shape[C]));
     int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 
-    if (shape[C] <= filterX * filterY - filterX) filterY--;
+    if (shape[C] <= filterX * filterY - filterX)
+    {
+        filterY--;
+    }
 
-    bitmap_image image((shape[X] + 1) * filterX - 1, (shape[Y] + 1) * filterY - 1);
+    bitmap_image image(((shape[X] + 1) * filterX) - 1, ((shape[Y] + 1) * filterY) - 1);
     image.set_all_channels(0, 0, 0);
     int index = 0;
     for (int j = 0; j < shape[Y]; ++j)
@@ -94,7 +112,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
                     if (y * filterX + x < shape[C])
                     {
                         const auto color = static_cast<unsigned char>(outputs[index++] * 255.0F);
-                        image.set_pixel(x * (shape[X] + 1) + i, y * (shape[Y] + 1) + j, color, color, color);
+                        image.set_pixel((x * (shape[X] + 1)) + i, (y * (shape[Y] + 1)) + j, color, color, color);
                     }
                 }
             }
@@ -127,7 +145,7 @@ void NeuralNetworkVisualization::saveAsBitmap(std::vector<float> inputs, std::ve
                 const auto red = static_cast<unsigned char>(inputs[index++] * 255.0F);
                 const auto blue = static_cast<unsigned char>(inputs[index++] * 255.0F);
                 const auto green = static_cast<unsigned char>(inputs[index++] * 255.0F);
-                image.set_pixel(x, y, red, blue, green);
+                image.set_pixel(x, y, red, blue, green);  // NOLINT(readability-suspicious-call-argument)
             }
         }
     }

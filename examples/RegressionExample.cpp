@@ -29,7 +29,7 @@ auto regressionExample() -> int
         neuralNetwork.computeOutput(dataset.getTestingData(0));  // Consult neural network to test it.
     std::vector<float> expectedOutput = dataset.getTestingOutputs(0);
 
-    if (accuracy == 100 && abs(output[0] - expectedOutput[0]) < precision &&
+    if (accuracy == 100 && std::abs(output[0] - expectedOutput[0]) < precision &&
         neuralNetwork.isValid() == errorType::noError)
     {
         return EXIT_SUCCESS;  // The neural network has learned.

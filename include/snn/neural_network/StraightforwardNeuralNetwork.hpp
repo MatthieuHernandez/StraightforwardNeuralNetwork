@@ -7,9 +7,10 @@
 #include "../tools/Error.hpp"
 #include "NeuralNetwork.hpp"
 #include "Wait.hpp"
-#include "layer/LayerFactory.hpp"
+#include "layer/LayerFactory.hpp"  // IWYU pragma: keep
 #include "layer/LayerModel.hpp"
-#include "optimizer/NeuralNetworkOptimizerFactory.hpp"
+#include "optimizer/LayerOptimizerFactory.hpp"          // IWYU pragma: keep
+#include "optimizer/NeuralNetworkOptimizerFactory.hpp"  // IWYU pragma: keep
 
 namespace snn
 {

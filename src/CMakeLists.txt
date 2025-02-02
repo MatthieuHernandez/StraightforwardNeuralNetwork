@@ -12,7 +12,6 @@ file(GLOB SOURCES
     "neural_network/layer/neuron/activation_function/*.cpp"
 )
 
-include_directories(external_library/boost_1_80_0_minimal)
 add_subdirectory(external_library/boost_1_80_0_minimal/libs/serialization)
 
 include_directories(external_library/bitmap)
@@ -32,6 +31,6 @@ target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/neural_network/optimizer")
 target_include_directories(StraightforwardNeuralNetwork PRIVATE "../include/snn/tools")
 target_include_directories(StraightforwardNeuralNetwork INTERFACE "../include")
-target_include_directories(StraightforwardNeuralNetwork INTERFACE "external_library/boost_1_80_0_minimal")
+target_include_directories(StraightforwardNeuralNetwork SYSTEM PUBLIC "external_library/boost_1_80_0_minimal")
 
 target_link_libraries(StraightforwardNeuralNetwork Boost Bitmap cpp-static-block)

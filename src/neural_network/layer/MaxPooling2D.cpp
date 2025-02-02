@@ -74,7 +74,6 @@ auto MaxPooling2D::isValid() const -> errorType
         return errorType::maxPooling2DWrongNumberOfInputs;
     }
     return errorType::noError;
-    return errorType::noError;
 }
 
 auto MaxPooling2D::summary() const -> std::string

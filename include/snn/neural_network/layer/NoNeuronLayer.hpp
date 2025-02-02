@@ -25,7 +25,7 @@ class NoNeuronLayer : public BaseLayer
             this->numberOfInputs = model.numberOfInputs;
             this->numberOfOutputs = model.numberOfOutputs;
         }
-        ~NoNeuronLayer() final = default;
+        ~NoNeuronLayer() override = default;
 
         [[nodiscard]] auto getNumberOfOutput() const -> int;
         [[nodiscard]] auto getAverageOfAbsNeuronWeights() const -> float final;

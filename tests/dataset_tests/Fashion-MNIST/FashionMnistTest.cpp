@@ -11,7 +11,7 @@ class FashionMnistTest : public testing::Test
         static void SetUpTestSuite()
         {
             FashionMnist datasetTest("./resources/datasets/Fashion-MNIST");
-            dataset = move(datasetTest.dataset);
+            dataset = std::move(datasetTest.dataset);
         }
 
         void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }

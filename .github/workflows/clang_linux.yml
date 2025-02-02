@@ -35,6 +35,7 @@ jobs:
         find ./src ./tests ./include ./examples \
           -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
           ! -path "./src/external_library/*" \
+          ! -path "./tests/audiofile/*" \
           -exec clang-format-19 --dry-run --Werror --verbose \
           {} +
     - name: Clang-Tidy
@@ -42,7 +43,8 @@ jobs:
         find ./src ./tests ./include ./examples \
           -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
           ! -path "./src/external_library/*" \
-          -exec clang-tidy-19 -p .\build\ \
+          ! -path "./tests/audiofile/*" \
+          -exec clang-tidy-19 -p ./build/ \
           {} +
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4

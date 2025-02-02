@@ -17,7 +17,9 @@ auto StochasticGradientDescent::clone() const -> std::shared_ptr<NeuralNetworkOp
 {
     return std::make_shared<StochasticGradientDescent>(*this);
 }
-
+// #ifdef _MSC_VER
+// #pragma warning(disable : 4701)
+// #endif
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
 {
     auto w = 0;
@@ -28,7 +30,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     std::vector<float> deltaWeights(neuron.weights.size());
     const auto lr_error = lr * error;
-#pragma omp simd
+    // #pragma omp simd
     for (w = 0; w < numberOfInputs; ++w)
     {
         deltaWeights[w] = lr_error * lastInputs[w] + m * previousDeltaWeights[w];
@@ -39,9 +41,6 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     neuron.previousDeltaWeights.pushBack(deltaWeights);
 }
 
-#ifdef _MSC_VER
-#pragma warning(disable : 4701)
-#endif
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     auto w = 0;
@@ -51,7 +50,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     const auto& lastInputs = *neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     std::vector<float> deltaWeights(neuron.weights.size());
-#pragma omp simd  // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
+    // #pragma omp simd  // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < numberOfInputs; ++w)
     {
         deltaWeights[w] = lr * error * lastInputs[w] + m * previousDeltaWeights[w];
@@ -65,10 +64,10 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     deltaWeights[w] = lr * neuron.recurrentError * neuron.previousOutput + m * previousDeltaWeights[w];
     neuron.weights[w] += deltaWeights[w];
     neuron.previousDeltaWeights.pushBack(deltaWeights);
-#ifdef _MSC_VER
-#pragma warning(default : 4701)
-#endif
 }
+// #ifdef _MSC_VER
+// #pragma warning(default : 4701)
+// #endif
 
 auto StochasticGradientDescent::isValid() const -> errorType
 {

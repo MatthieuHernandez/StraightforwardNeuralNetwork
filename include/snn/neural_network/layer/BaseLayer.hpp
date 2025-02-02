@@ -1,11 +1,12 @@
 #pragma once
 #include <boost/serialization/access.hpp>
-#include <boost/serialization/export.hpp>
+#include <cstdint>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "../../tools/Error.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
-#include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
 {
@@ -14,11 +15,16 @@ class BaseLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize([[maybe_unused]] Archive& ar, [[maybe_unused]] const uint32_t version)
+        void serialize([[maybe_unused]] Archive& archive, [[maybe_unused]] const uint32_t version)
         {
         }
 
     public:
+        BaseLayer() = default;
+        BaseLayer(const BaseLayer&) = default;
+        BaseLayer(BaseLayer&&) = delete;
+        auto operator=(const BaseLayer&) -> BaseLayer& = default;
+        auto operator=(BaseLayer&&) -> BaseLayer& = delete;
         virtual ~BaseLayer() = default;
         [[nodiscard]] virtual auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
             -> std::unique_ptr<BaseLayer> = 0;

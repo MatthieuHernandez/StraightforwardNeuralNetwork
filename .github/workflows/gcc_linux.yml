@@ -1,5 +1,5 @@
 name: All tests - GCC Linux
-xxx
+
 on:
   pull_request:
     branches:
@@ -25,11 +25,6 @@ jobs:
         cd ./build
         make
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: compiled-tests
-        path: build/tests/
-    - name: Upload models artifacts
       uses: actions/upload-artifact@v4
       with:
         name: compiled-tests

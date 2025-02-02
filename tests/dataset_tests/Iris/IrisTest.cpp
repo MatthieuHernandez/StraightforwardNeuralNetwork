@@ -11,7 +11,7 @@ class IrisTest : public testing::Test
         static void SetUpTestSuite()
         {
             Iris datasetTest("./resources/datasets/Iris");
-            dataset = move(datasetTest.dataset);
+            dataset = std::move(datasetTest.dataset);
         }
 
         void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }

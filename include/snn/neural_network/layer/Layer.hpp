@@ -1,7 +1,10 @@
 #pragma once
 #include <boost/serialization/access.hpp>
-#include <boost/serialization/unique_ptr.hpp>
+#include <cstdint>
+#include <memory>
+#include <vector>
 
+#include "../../tools/Error.hpp"
 #include "../optimizer/Dropout.hpp"
 #include "../optimizer/ErrorMultiplier.hpp"
 #include "../optimizer/L1Regularization.hpp"
@@ -11,6 +14,7 @@
 #include "../optimizer/Softmax.hpp"
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
+#include "neuron/BaseNeuron.hpp"
 
 namespace snn::internal
 {
@@ -41,12 +45,12 @@ class Layer : public BaseLayer
         [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
             -> std::unique_ptr<BaseLayer> override = 0;
 
-        std::vector<N> neurons;
+        std::vector<N> neurons{};
         std::vector<std::unique_ptr<LayerOptimizer>> optimizers;
 
         auto output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float> final;
         auto outputForTraining(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float> final;
-        std::vector<float> backOutput(std::vector<float>& inputErrors) final;
+        auto backOutput(std::vector<float>& inputErrors) -> std::vector<float> final;
 
         [[nodiscard]] auto getNeuron(int index) -> void* final;
         [[nodiscard]] auto getAverageOfAbsNeuronWeights() const -> float final;

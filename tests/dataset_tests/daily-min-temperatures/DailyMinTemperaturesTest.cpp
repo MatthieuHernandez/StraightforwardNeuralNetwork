@@ -11,7 +11,7 @@ class DailyMinTemperaturesTest : public testing::Test
         static void SetUpTestSuite()
         {
             DailyMinTemperatures datasetTest("./resources/datasets/daily-min-temperatures", 5);
-            dataset = move(datasetTest.dataset);
+            dataset = std::move(datasetTest.dataset);
         }
 
         void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }

@@ -1,6 +1,7 @@
 #include "AudioCatsAndDogs.hpp"
 
 #include <AudioFile.hpp>
+#include <array>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <string>
@@ -13,10 +14,10 @@ AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
     this->loadData(folderPath);
 }
 
-void AudioCatsAndDogs::loadData(std::string folderPath)
+void AudioCatsAndDogs::loadData(const std::string& folderPath)
 {
-    std::vector<std::string> fileNames[2]{
-        {
+    std::array<std::vector<std::string>, 2> fileNames{
+        std::vector<std::string>({
             "/train/cats/cat_1.wav",           "/train/cats/cat_10.wav",          "/train/cats/cat_100.wav",
             "/train/cats/cat_101.wav",         "/train/cats/cat_102.wav",         "/train/cats/cat_103.wav",
             "/train/cats/cat_105.wav",         "/train/cats/cat_106.wav",         "/train/cats/cat_107.wav",
@@ -87,8 +88,8 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/train/dogs/dog_barking_87.wav",  "/train/dogs/dog_barking_88.wav",  "/train/dogs/dog_barking_92.wav",
             "/train/dogs/dog_barking_93.wav",  "/train/dogs/dog_barking_94.wav",  "/train/dogs/dog_barking_95.wav",
             "/train/dogs/dog_barking_96.wav",  "/train/dogs/dog_barking_97.wav",  "/train/dogs/dog_barking_98.wav",
-        },
-        {
+        }),
+        std::vector<std::string>({
             "/test/cats/cat_110.wav",         "/test/cats/cat_112.wav",        "/test/cats/cat_115.wav",
             "/test/cats/cat_126.wav",         "/test/cats/cat_129.wav",        "/test/cats/cat_130.wav",
             "/test/cats/cat_133.wav",         "/test/cats/cat_135.wav",        "/test/cats/cat_137.wav",
@@ -112,16 +113,16 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             "/test/dogs/dog_barking_8.wav",   "/test/dogs/dog_barking_82.wav", "/test/dogs/dog_barking_89.wav",
             "/test/dogs/dog_barking_9.wav",   "/test/dogs/dog_barking_90.wav", "/test/dogs/dog_barking_91.wav",
             "/test/dogs/dog_barking_99.wav",
-        }};
+        })};
+    const int numberOfSet = 2;
+    std::array<vector2D<float>, numberOfSet> labels;
+    std::array<vector3D<float>, numberOfSet> inputs;
 
-    vector2D<float> labels[2];
-    vector3D<float> inputs[2];
-
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < numberOfSet; ++i)
     {
-        for (auto fileName : fileNames[i])
+        for (const auto& fileName : fileNames[i])
         {
-            bool isCat;
+            bool isCat{};
             if (fileName.find("cat") != std::string::npos)
             {
                 isCat = true;
@@ -144,10 +145,10 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             const int numberOfSamples = audioFile.getNumSamplesPerChannel();
 
             vector2D<float> dataSound;
-            const int rest = (numberOfSamples % this->sizeOfOneData) != 0;
-            const int numberOfData = numberOfSamples / this->sizeOfOneData + rest;
+            const int rest = static_cast<const int>((numberOfSamples % this->sizeOfOneData) != 0);
+            const int numberOfData = (numberOfSamples / this->sizeOfOneData) + rest;
             dataSound.reserve(numberOfData);
-            labels->reserve(numberOfData);
+            labels.at(i).reserve(numberOfData);
 
             for (int j = 0; j < numberOfSamples; j++)  // Sample Rate 16000
             {
@@ -158,11 +159,11 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
 
                     if (isCat)
                     {
-                        labels[i].push_back({1, 0});
+                        labels.at(i).push_back({1, 0});
                     }
                     else
                     {
-                        labels[i].push_back({0, 1});
+                        labels.at(i).push_back({0, 1});
                     }
                 }
                 const float sample = audioFile.samples[channel][j];
@@ -172,7 +173,7 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
             {
                 dataSound.back().push_back(0.0F);
             }
-            inputs[i].push_back(dataSound);
+            inputs.at(i).push_back(dataSound);
         }
     }
     this->dataset = std::make_unique<Dataset>(problem::classification, inputs[0], labels[0], inputs[1], labels[1],

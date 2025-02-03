@@ -11,7 +11,7 @@ using namespace snn;
 
 Iris::Iris(std::string folderPath) { this->loadData(folderPath); }
 
-void Iris::loadData(std::string folderPath)
+void Iris::loadData(const std::string& folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;

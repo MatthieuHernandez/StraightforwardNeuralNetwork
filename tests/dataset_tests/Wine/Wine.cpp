@@ -11,7 +11,7 @@ using namespace snn;
 
 Wine::Wine(std::string folderPath) { this->loadData(folderPath); }
 
-void Wine::loadData(std::string folderPath)
+void Wine::loadData(const std::string& folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
@@ -29,7 +29,7 @@ void Wine::loadData(std::string folderPath)
         std::vector<float> label;
         std::vector<float> values;
 
-        float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
+        auto value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
         label.resize(3, 0);
         label[static_cast<int>(value - 1.0)] = 1;

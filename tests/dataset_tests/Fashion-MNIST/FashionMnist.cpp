@@ -8,7 +8,7 @@ using namespace snn;
 
 FashionMnist::FashionMnist(std::string folderPath) { this->loadData(folderPath); }
 
-void FashionMnist::loadData(std::string folderPath)
+void FashionMnist::loadData(const std::string& folderPath)
 {
     vector2D<float> trainingInputs = readImages(folderPath + "/train-images-idx3-ubyte", 60000);
     vector2D<float> trainingLabels = readLabels(folderPath + "/train-labels-idx1-ubyte", 60000);
@@ -45,7 +45,7 @@ auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>
             c = static_cast<char>(file.get());
             if (shift >= 16)
             {
-                float value = static_cast<float>(static_cast<int>(c));
+                auto value = static_cast<float>(static_cast<int>(c));
                 images.back().push_back(value);
                 j++;
             }

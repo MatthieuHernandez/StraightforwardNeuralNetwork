@@ -9,7 +9,7 @@ class Mnist final : public TestDataset
         Mnist(std::string folderPath);
 
     private:
-        void loadData(std::string folderPath) final;
+        void loadData(const std::string& folderPath) final;
         static auto readImages(std::string filePath, int size) -> snn::vector2D<float>;
         auto readLabels(std::string filePath, int size) -> snn::vector2D<float>;
 };

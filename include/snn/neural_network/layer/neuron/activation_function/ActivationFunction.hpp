@@ -6,7 +6,7 @@
 
 namespace snn
 {
-enum class activation
+enum class activation : uint8_t
 {
     sigmoid = 0,
     iSigmoid,

@@ -94,7 +94,7 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)  // TODO: do a forward to be sure that the network is the same.
+TEST(SaveNeuralNetwork, Save)  // TODO(matth): do a forward to be sure that the network is the same.
 {
     StraightforwardNeuralNetwork A(
         {Input(45), MaxPooling(3), Convolution(2, 2, activation::ReLU),

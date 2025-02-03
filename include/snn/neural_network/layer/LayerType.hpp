@@ -1,7 +1,9 @@
 #pragma once
+#include <cstdint>
+
 namespace snn
 {
-enum layerType
+enum layerType : uint8_t
 {
     input = 0,
     fullyConnected = 1,

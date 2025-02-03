@@ -21,8 +21,7 @@ auto multipleClassificationExample() -> int
 
     StraightforwardNeuralNetwork neuralNetwork({Input(2), FullyConnected(8), FullyConnected(3)});
 
-    neuralNetwork.train(dataset,
-                        1.00_acc || 2_s);  // Train neural network until 100% accuracy or 3s on a parallel thread.
+    neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =

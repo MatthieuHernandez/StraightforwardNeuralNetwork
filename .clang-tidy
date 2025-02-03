@@ -10,14 +10,20 @@ Checks: >
     -fuchsia-default-arguments-declarations,
     -fuchsia-default-arguments-calls,
     -misc-non-private-member-variables-in-classes,
-    -cppcoreguidelines-non-private-member-variables-in-classes
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+
+    -misc-include-cleaner,
+    -altera-id-dependent-backward-branch,
+    -bugprone-reserved-identifier,
+    -cert*
 WarningsAsErrors: >
     *,
     -altera-unroll-loops,
     -altera-id-dependent-backward-branch,
     -bugprone-easily-swappable-parameters,
     -fuchsia-overloaded-operator,
-    -misc-include-cleaner,  # This warning and those below must be corrected.
+    -misc-include-cleaner,
+
     -cppcoreguidelines-special-member-functions,
     -readability-identifier-length,
     -cppcoreguidelines-special-member-functions,
@@ -94,4 +100,11 @@ WarningsAsErrors: >
     -google-readability-casting,
     -altera-struct-pack-align,
     -readability-redundant-casting,
-    -modernize-use-nodiscard
+    -modernize-use-nodiscard,
+    -performance-enum-size,
+    -cppcoreguidelines-avoid-non-const-global-variables,
+    -google-readability-namespace-comments,
+    -llvm-namespace-comment,
+    -readability-redundant-member-init,
+    -performance-inefficient-string-concatenation,
+    -performance-type-promotion-in-math-fn

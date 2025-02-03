@@ -20,8 +20,7 @@ auto classificationExample() -> int
 
     snn::StraightforwardNeuralNetwork neuralNetwork({snn::Input(3), snn::FullyConnected(5), snn::FullyConnected(2)});
 
-    neuralNetwork.train(dataset,
-                        1.00_acc || 2_s);  // Train neural network until 100% accuracy or 3s on a parallel thread.
+    neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     int classNumber = neuralNetwork.computeCluster(dataset.getTestingData(0));  // consult neural network to test it

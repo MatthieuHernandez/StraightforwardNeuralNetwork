@@ -40,12 +40,11 @@ jobs:
           {} +
     - name: Clang-Tidy
       run: |
-        find ./src ./tests ./include ./examples \
+        clang-tidy-19 -p ./build/ --exclude-header-filter=* --use-color --quiet \
+          $(find  ./src ./tests ./include ./examples \
           -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
           ! -path "./src/external_library/*" \
-          ! -path "./tests/audiofile/*" \
-          -exec clang-tidy-19 -p ./build/ \
-          {} +
+          ! -path "./tests/audiofile/*")
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:

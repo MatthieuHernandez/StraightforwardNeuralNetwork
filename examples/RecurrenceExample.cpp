@@ -26,8 +26,7 @@ auto recurrenceExample() -> int
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(10), FullyConnected(1, activation::sigmoid)},
                                                StochasticGradientDescent(0.01F, 0.8F));
 
-    neuralNetwork.train(dataset,
-                        1.00_acc || 2_s);  // Train neural network until 100% accuracy or 3s on a parallel thread.
+    neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteError();

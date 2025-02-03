@@ -15,14 +15,13 @@ auto regressionExample() -> int
     std::vector<std::vector<float>> inputData = {{0, 1, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}, {0, 0, 0}, {1, 1, 1}};
     std::vector<std::vector<float>> expectedOutputs = {{0.333F}, {0.666F}, {0.666F}, {0.666F}, {0.0F}, {1.0F}};
 
-    float precision = 0.1F;
+    const float precision = 0.1F;
     Dataset dataset(problem::regression, inputData, expectedOutputs);
     dataset.setPrecision(precision);
 
     snn::StraightforwardNeuralNetwork neuralNetwork({Input(3), FullyConnected(5), FullyConnected(1)});
 
-    neuralNetwork.train(dataset,
-                        1.00_acc || 2_s);  // Train neural network until 100% accuracy or 3s on a parallel thread.
+    neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
     float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =

@@ -4,15 +4,15 @@
 #include "neuron/RecurrentNeuron.hpp"
 #include "neuron/SimpleNeuron.hpp"
 
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 extern template class internal::SimpleLayer<SimpleNeuron>;  // must use a nested-name-specifier for GCC compiler
 extern template class internal::SimpleLayer<RecurrentNeuron>;
 extern template class internal::SimpleLayer<GatedRecurrentUnit>;
 
 template <>
-std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+auto SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -23,7 +23,8 @@ std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector
 }
 
 template <>
-std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+auto SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -32,3 +33,4 @@ std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vec
     }
     return outputs;
 }
+}  // namespace snn::internal

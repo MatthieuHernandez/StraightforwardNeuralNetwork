@@ -3,16 +3,14 @@
 
 #include "ActivationFunction.hpp"
 
-using namespace std;
-
 namespace snn::internal
 {
 class Tanh final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::tanh; }
+        auto getType() const -> activation final { return activation::tanh; }
 
-        string getName() const override { return "tanh"; }
+        auto getName() const -> std::string final { return "tanh"; }
 
     public:
         Tanh()
@@ -20,8 +18,8 @@ class Tanh final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return tanhf(x); }
+        [[nodiscard]] auto function(const float x) const -> float final { return tanhf(x); }
 
-        float derivative(const float x) const override { return 1 - powf(tanhf(x), 2); }
+        [[nodiscard]] auto derivative(const float x) const -> float final { return 1 - powf(tanhf(x), 2); }
 };
 }  // namespace snn::internal

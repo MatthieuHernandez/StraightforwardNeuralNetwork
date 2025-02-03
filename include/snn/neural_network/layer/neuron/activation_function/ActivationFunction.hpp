@@ -24,7 +24,7 @@ class ActivationFunction
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         static std::vector<std::shared_ptr<ActivationFunction>> activationFunctions;
 
@@ -34,17 +34,17 @@ class ActivationFunction
 
         ActivationFunction(float min, float max);
         virtual ~ActivationFunction() = default;
-        static std::vector<std::shared_ptr<ActivationFunction>> initialize();
-        static std::shared_ptr<ActivationFunction> get(activation type);
+        static auto initialize() -> std::vector<std::shared_ptr<ActivationFunction>>;
+        static auto get(activation type) -> std::shared_ptr<ActivationFunction>;
 
-        [[nodiscard]] virtual float function(const float) const = 0;
-        [[nodiscard]] virtual float derivative(const float) const = 0;
+        [[nodiscard]] virtual auto function(const float) const -> float = 0;
+        [[nodiscard]] virtual auto derivative(const float) const -> float = 0;
 
-        [[nodiscard]] virtual activation getType() const = 0;
+        [[nodiscard]] virtual auto getType() const -> activation = 0;
 
-        [[nodiscard]] virtual std::string getName() const = 0;
+        [[nodiscard]] virtual auto getName() const -> std::string = 0;
 
-        virtual bool operator==(const ActivationFunction& activationFunction) const;
-        virtual bool operator!=(const ActivationFunction& activationFunction) const;
+        virtual auto operator==(const ActivationFunction& activationFunction) const -> bool;
+        virtual auto operator!=(const ActivationFunction& activationFunction) const -> bool;
 };
 }  // namespace snn::internal

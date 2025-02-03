@@ -1,8 +1,8 @@
-#include "Examples.hpp"
+#include <snn/data/Dataset.hpp>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
-#include <snn/data/Data.hpp>
 
-using namespace std;
+#include "Examples.hpp"
+
 using namespace snn;
 
 /*
@@ -10,38 +10,30 @@ This is a simple example how to use neural network for a time series.
 In this neural network return the sum of 2 inputs.
 For more explanation go to wiki.
 */
-int recurrenceExample()
+auto recurrenceExample() -> int
 {
-    vector<vector<float>> inputData = {
-        {0.3f}, {0.5f}, {0.4f}, {0.2f}, {0.0f}, {0.2f}, {0.2f}, {0.4f}, {0.1f}, {0.3f}, {0.4f}, {0.0f}, {0.0f}, {0.4f},
-        {0.4f}, {0.3f}, {0.2f}, {0.1f}, {0.2f}, {0.0f}, {0.1f}, {0.5f}, {0.5f}, {0.3f}, {0.3f}
-    };
-    vector<vector<float>> expectedOutputs = {
-        {0.3f}, {0.8f}, {0.9f}, {0.6f}, {0.2f}, {0.2f}, {0.4f}, {0.6f}, {0.5f}, {0.4f}, {0.7f}, {0.4f}, {0.0f}, {0.4f},
-        {0.8f}, {0.7f}, {0.5f}, {0.3f}, {0.3f}, {0.2f}, {0.1f}, {0.6f}, {0.10f}, {0.8f}, {0.6f}
-    };
+    std::vector<std::vector<float>> inputData = {{0.3F}, {0.5F}, {0.4F}, {0.2F}, {0.0F}, {0.2F}, {0.2F}, {0.4F}, {0.1F},
+                                                 {0.3F}, {0.4F}, {0.0F}, {0.0F}, {0.4F}, {0.4F}, {0.3F}, {0.2F}, {0.1F},
+                                                 {0.2F}, {0.0F}, {0.1F}, {0.5F}, {0.5F}, {0.3F}, {0.3F}};
+    std::vector<std::vector<float>> expectedOutputs = {
+        {0.3F}, {0.8F}, {0.9F}, {0.6F}, {0.2F}, {0.2F}, {0.4F}, {0.6F}, {0.5F}, {0.4F},  {0.7F}, {0.4F}, {0.0F},
+        {0.4F}, {0.8F}, {0.7F}, {0.5F}, {0.3F}, {0.3F}, {0.2F}, {0.1F}, {0.6F}, {0.10F}, {0.8F}, {0.6F}};
 
-    const float precision = 0.5f;
-    Data data(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    data.setPrecision(precision);
+    const float precision = 0.5F;
+    Dataset dataset(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
+    dataset.setPrecision(precision);
 
-    StraightforwardNeuralNetwork neuralNetwork({
-            Input(1),
-            Recurrence(10),
-            FullyConnected(1, activation::sigmoid)
-        },
-        StochasticGradientDescent(0.01f, 0.8f));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(10), FullyConnected(1, activation::sigmoid)},
+                                               StochasticGradientDescent(0.01F, 0.8F));
 
-    neuralNetwork.train(data, 1.00_acc || 2_s); // train neural network until 100% accuracy or 3s on a parallel thread
+    neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0f;
+    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     float mae = neuralNetwork.getMeanAbsoluteError();
 
-    if (accuracy == 100
-        && mae < precision
-        && neuralNetwork.isValid() == 0)
+    if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == errorType::noError)
     {
-        return EXIT_SUCCESS; // the neural network has learned
+        return EXIT_SUCCESS;  // The neural network has learned.
     }
     return EXIT_FAILURE;
 }

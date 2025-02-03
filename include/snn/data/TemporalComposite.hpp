@@ -1,25 +1,30 @@
 #pragma once
-#include "Set.hpp"
+#include "../tools/Error.hpp"
+#include "Data.hpp"
 
 namespace snn::internal
 {
 class TemporalComposite
 {
     protected:
-        Set* sets;
+        Data* data;
 
     public:
-        TemporalComposite(snn::Set sets[2]);
+        TemporalComposite(const TemporalComposite&) = default;
+        TemporalComposite(TemporalComposite&&) = delete;
+        auto operator=(const TemporalComposite&) -> TemporalComposite& = default;
+        auto operator=(TemporalComposite&&) -> TemporalComposite& = delete;
+        explicit TemporalComposite(Data* data);
         virtual ~TemporalComposite() = default;
 
         virtual void shuffle() = 0;
         virtual void unshuffle();
 
-        [[nodiscard]] virtual bool isFirstTrainingDataOfTemporalSequence(int index) const = 0;
-        [[nodiscard]] virtual bool isFirstTestingDataOfTemporalSequence(int index) const = 0;
-        [[nodiscard]] virtual bool needToTrainOnTrainingData(int index) const = 0;
-        [[nodiscard]] virtual bool needToEvaluateOnTestingData(int index) const = 0;
+        [[nodiscard]] virtual auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto isFirstTestingDataOfTemporalSequence(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto needToTrainOnTrainingData(int index) const -> bool = 0;
+        [[nodiscard]] virtual auto needToEvaluateOnTestingData(int index) const -> bool = 0;
 
-        [[nodiscard]] virtual int isValid();
+        [[nodiscard]] virtual auto isValid() const -> errorType;
 };
 }  // namespace snn::internal

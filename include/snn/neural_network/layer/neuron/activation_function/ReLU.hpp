@@ -3,16 +3,14 @@
 
 #include "ActivationFunction.hpp"
 
-using namespace std;
-
 namespace snn::internal
 {
 class RectifiedLinearUnit final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::ReLU; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::ReLU; }
 
-        string getName() const override { return "ReLU"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "ReLU"; }
 
     public:
         RectifiedLinearUnit()
@@ -20,8 +18,8 @@ class RectifiedLinearUnit final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return (x > 0.0f) ? x : 0.0f; }
+        [[nodiscard]] auto function(const float x) const -> float final { return (x > 0.0F) ? x : 0.0F; }
 
-        float derivative(const float x) const override { return (x > 0.0f) ? 1.0f : 0.0f; }
+        [[nodiscard]] auto derivative(const float x) const -> float final { return (x > 0.0F) ? 1.0F : 0.0F; }
 };
 }  // namespace snn::internal

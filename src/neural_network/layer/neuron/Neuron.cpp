@@ -1,71 +1,79 @@
 #include "Neuron.hpp"
 
-#include <cmath>
-
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-Neuron::Neuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
       batchSize(model.batchSize),
+      bias(model.bias),
       activationFunction(model.activationFunction),
-      optimizer(optimizer)
+      optimizer(std::move(optimizer))
 
 {
     this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
-    for (auto& w : this->weights)
+    for (auto& weight : this->weights)
     {
-        w = randomInitializeWeight(model.numberOfWeights);
+        weight = randomInitializeWeight(model.numberOfWeights);
     }
     this->weights.back() = std::abs(this->weights.back());
-    this->bias = model.bias;
     this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
     this->previousDeltaWeights.initialize(this->batchSize, model.numberOfWeights);
 }
 
-float Neuron::randomInitializeWeight(int numberOfWeights)
+auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
 {
-    const float valueMax = 2.4f / sqrtf(static_cast<float>(numberOfWeights));
+    const float valueMax = 2.4F / sqrtf(static_cast<float>(numberOfWeights));
     return tools::randomBetween(-valueMax, valueMax);
 }
 
-int Neuron::isValid() const
+auto Neuron::isValid() const -> errorType
 {
-    if (this->bias < -100000.0f || this->bias > 10000.0f) return 301;
-
-    if (this->weights.empty() || this->weights.size() > 1000000)
+    const auto outlier_float = 100000.0F;
+    const size_t outlier_size = 1000000;
+    if (this->bias < -outlier_float || this->bias > outlier_float)
     {
-        return 302;
+        return errorType::neuronWrongBias;
     }
-    for (auto& weight : this->weights)
-        if (weight < -100000.0f || weight > 10000.0f) return 303;
 
-    return 0;
+    if (this->weights.empty() || this->weights.size() > outlier_size)
+    {
+        return errorType::neuronTooMuchWeigths;
+    }
+    for (const auto& weight : this->weights)
+    {
+        if (weight < -outlier_float || weight > outlier_float)
+        {
+            return errorType::neuronWrongWeight;
+        }
+    }
+    return errorType::noError;
 }
 
-vector<float> Neuron::getWeights() const { return this->weights; }
+auto Neuron::getWeights() const -> std::vector<float> { return this->weights; }
 
 void Neuron::setWeights(std::vector<float> w)
 {
-    if (this->weights.size() != w.size()) throw std::runtime_error("The size of weights does not match.");
+    if (this->weights.size() != w.size())
+    {
+        throw std::runtime_error("The size of weights does not match.");
+    }
     this->weights = std::move(w);
 }
 
-int Neuron::getNumberOfParameters() const { return static_cast<int>(this->weights.size()); }
+auto Neuron::getNumberOfParameters() const -> int { return static_cast<int>(this->weights.size()); }
 
-int Neuron::getNumberOfInputs() const { return this->numberOfInputs; }
+auto Neuron::getNumberOfInputs() const -> int { return this->numberOfInputs; }
 
-NeuralNetworkOptimizer* Neuron::getOptimizer() const { return this->optimizer.get(); }
+auto Neuron::getOptimizer() const -> NeuralNetworkOptimizer* { return this->optimizer.get(); }
 
 void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
     this->optimizer = std::move(newOptimizer);
 }
 
-bool Neuron::operator==(const Neuron& neuron) const
+auto Neuron::operator==(const Neuron& neuron) const -> bool
 {
     return typeid(*this).hash_code() == typeid(neuron).hash_code() && this->numberOfInputs == neuron.numberOfInputs &&
            this->weights == neuron.weights && this->bias == neuron.bias &&
@@ -76,4 +84,5 @@ bool Neuron::operator==(const Neuron& neuron) const
            && *this->optimizer == *neuron.optimizer;
 }
 
-bool Neuron::operator!=(const Neuron& Neuron) const { return !(*this == Neuron); }
+auto Neuron::operator!=(const Neuron& Neuron) const -> bool { return !(*this == Neuron); }
+}  // namespace snn::internal

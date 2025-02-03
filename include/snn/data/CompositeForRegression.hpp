@@ -6,12 +6,12 @@ namespace snn::internal
 class CompositeForRegression : public ProblemComposite
 {
     public:
-        CompositeForRegression(Set sets[2], int numberOfLabels);
+        CompositeForRegression(Data* data, int numberOfLabels);
 
-        [[nodiscard]] int isValid() override;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
-        [[nodiscard]] const std::vector<float>& getTestingOutputs(const int) const override;
-        [[nodiscard]] int getTrainingLabel(const int) override;
-        [[nodiscard]] int getTestingLabel(const int) override;
+        [[nodiscard]] auto getTestingOutputs(int index) const -> const std::vector<float>& final;
+        [[nodiscard]] auto getTrainingLabel(int index) -> int final;
+        [[nodiscard]] auto getTestingLabel(int index) -> int final;
 };
 }  // namespace snn::internal

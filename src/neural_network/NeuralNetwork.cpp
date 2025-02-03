@@ -8,11 +8,9 @@
 #include "layer/LayerModel.hpp"
 #include "optimizer/NeuralNetworkOptimizerFactory.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOptimizerModel optimizer)
+namespace snn::internal
+{
+NeuralNetwork::NeuralNetwork(std::vector<snn::LayerModel>& architecture, snn::NeuralNetworkOptimizerModel optimizer)
 {
     this->optimizer = NeuralNetworkOptimizerFactory::build(optimizer);
     LayerFactory::build(this->layers, architecture, this->optimizer);
@@ -21,93 +19,117 @@ NeuralNetwork::NeuralNetwork(vector<LayerModel>& architecture, NeuralNetworkOpti
 
 NeuralNetwork::NeuralNetwork(const NeuralNetwork& neuralNetwork)
     : StatisticAnalysis(neuralNetwork),
+      outputNan(neuralNetwork.outputNan),
+      numberOfTraining(neuralNetwork.numberOfTraining),
       optimizer(neuralNetwork.optimizer->clone())
 {
-    this->outputNan = neuralNetwork.outputNan;
-    this->numberOfTraining = neuralNetwork.numberOfTraining;
     this->layers.reserve(neuralNetwork.layers.size());
-    for (const auto& layer : neuralNetwork.layers) this->layers.push_back(layer->clone(this->optimizer));
+    for (const auto& layer : neuralNetwork.layers)
+    {
+        this->layers.push_back(layer->clone(this->optimizer));
+    }
     this->StatisticAnalysis::initialize(this->layers.back()->getNumberOfNeurons());
 }
 
-void NeuralNetwork::evaluateOnceForRegression(const vector<float>& inputs, const vector<float>& desired,
+void NeuralNetwork::evaluateOnceForRegression(const std::vector<float>& inputs, const std::vector<float>& desired,
                                               const float precision, bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForRegression(outputs, desired, precision);
 }
 
-void NeuralNetwork::evaluateOnceForMultipleClassification(const vector<float>& inputs, const vector<float>& desired,
-                                                          const float separator, bool temporalReset)
+void NeuralNetwork::evaluateOnceForMultipleClassification(const std::vector<float>& inputs,
+                                                          const std::vector<float>& desired, const float separator,
+                                                          bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForMultipleClassification(outputs, desired, separator);
 }
 
-void NeuralNetwork::evaluateOnceForClassification(const vector<float>& inputs, const int classNumber,
+void NeuralNetwork::evaluateOnceForClassification(const std::vector<float>& inputs, const int classNumber,
                                                   const float separator, bool temporalReset)
 {
     const auto outputs = this->output(inputs, temporalReset);
     this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber, separator);
 }
 
-void NeuralNetwork::trainOnce(const vector<float>& inputs, const vector<float>& desired, bool temporalReset)
+void NeuralNetwork::trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset)
 {
     this->backpropagationAlgorithm(inputs, desired, temporalReset);
     this->numberOfTraining++;
 }
 
-vector<float> NeuralNetwork::output(const vector<float>& inputs, bool temporalReset)
+auto NeuralNetwork::output(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>
 {
     auto outputs = layers[0]->output(inputs, temporalReset);
-
-    for (size_t l = 1; l < this->layers.size(); ++l) outputs = layers[l]->output(outputs, temporalReset);
-
-    if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->output(outputs, temporalReset);
+    }
+    if (std::ranges::any_of(
+            outputs, [](const float& v) { return std::fpclassify(v) != FP_NORMAL && std::fpclassify(v) != FP_ZERO; }))
+    {
         this->outputNan = true;
-
+    }
     return outputs;
 }
 
-std::vector<float> NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
+auto NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool temporalReset) -> std::vector<float>
 {
     auto outputs = layers[0]->outputForTraining(inputs, temporalReset);
 
-    for (size_t l = 1; l < this->layers.size(); ++l) outputs = layers[l]->outputForTraining(outputs, temporalReset);
+    for (size_t l = 1; l < this->layers.size(); ++l)
+    {
+        outputs = layers[l]->outputForTraining(outputs, temporalReset);
+    }
 
-    if (ranges::any_of(outputs, [](const float& v) { return fpclassify(v) != FP_NORMAL && fpclassify(v) != FP_ZERO; }))
+    if (std::ranges::any_of(
+            outputs, [](const float& v) { return std::fpclassify(v) != FP_NORMAL && std::fpclassify(v) != FP_ZERO; }))
+    {
         this->outputNan = true;
+    }
 
     return outputs;
 }
 
-void NeuralNetwork::backpropagationAlgorithm(const vector<float>& inputs, const vector<float>& desired,
+void NeuralNetwork::backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
                                              bool temporalReset)
 {
     const auto outputs = this->outputForTraining(inputs, temporalReset);
-    if (this->outputNan) return;
+    if (this->outputNan)
+    {
+        return;
+    }
     auto errors = this->calculateError(outputs, desired);
 
-    for (size_t l = this->layers.size() - 1; l > 0; --l) errors = layers[l]->backOutput(errors);
+    for (size_t l = this->layers.size() - 1; l > 0; --l)
+    {
+        errors = layers[l]->backOutput(errors);
+    }
     layers[0]->train(errors);
 }
 
-inline vector<float> NeuralNetwork::calculateError(const vector<float>& outputs, const vector<float>& desired) const
+inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const
+    -> std::vector<float>
 {
-    vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
+    std::vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
     for (size_t n = 0; n < errors.size(); ++n)
     {
-        if (fpclassify(desired[n]) != FP_NORMAL && fpclassify(desired[n]) != FP_ZERO)
-            errors[n] = 0.0f;
+        if (std::fpclassify(desired[n]) != FP_NORMAL && std::fpclassify(desired[n]) != FP_ZERO)
+        {
+            errors[n] = 0.0F;
+        }
         else
-            errors[n] = 2.0f * (desired[n] - outputs[n]);
+        {
+            errors[n] = 2.0F * (desired[n] - outputs[n]);
+        }
     }
     return errors;
 }
 
-vector2D<float> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
+auto NeuralNetwork::getLayerOutputs(const std::vector<float>& inputs) -> snn::vector2D<float>
 {
-    vector2D<float> filterOutputs;
+    snn::vector2D<float> filterOutputs;
     auto outputs = layers[0]->output(inputs, true);
     filterOutputs.push_back(outputs);
 
@@ -119,17 +141,17 @@ vector2D<float> NeuralNetwork::getLayerOutputs(const vector<float>& inputs)
     return filterOutputs;
 }
 
-bool NeuralNetwork::hasNan() const { return this->outputNan; }
+auto NeuralNetwork::hasNan() const -> bool { return this->outputNan; }
 
-int64_t NeuralNetwork::getNumberOfTraining() const { return this->numberOfTraining; }
+auto NeuralNetwork::getNumberOfTraining() const -> int64_t { return this->numberOfTraining; }
 
-int NeuralNetwork::getNumberOfLayers() const { return (int)this->layers.size(); }
+auto NeuralNetwork::getNumberOfLayers() const -> int { return static_cast<int>(this->layers.size()); }
 
-int NeuralNetwork::getNumberOfInputs() const { return this->layers[0]->getNumberOfInputs(); }
+auto NeuralNetwork::getNumberOfInputs() const -> int { return this->layers[0]->getNumberOfInputs(); }
 
-int NeuralNetwork::getNumberOfOutputs() const { return this->layers.back()->getNumberOfNeurons(); }
+auto NeuralNetwork::getNumberOfOutputs() const -> int { return this->layers.back()->getNumberOfNeurons(); }
 
-int NeuralNetwork::getNumberOfNeurons() const
+auto NeuralNetwork::getNumberOfNeurons() const -> int
 {
     int sum = 0;
     for (auto& layer : this->layers)
@@ -139,33 +161,43 @@ int NeuralNetwork::getNumberOfNeurons() const
     return sum;
 }
 
-int NeuralNetwork::getNumberOfParameters() const
+auto NeuralNetwork::getNumberOfParameters() const -> int
 {
     int sum = 0;
     for (const auto& layer : this->layers) sum += layer->getNumberOfParameters();
     return sum;
 }
 
-int NeuralNetwork::isValid() const
+auto NeuralNetwork::isValid() const -> errorType
 {
-    // TODO: rework isValid
-    if (this->getNumberOfInputs() < 1 || this->getNumberOfInputs() > 2073600)  // 1920 * 1080
-        return 101;
-
-    if (this->getNumberOfLayers() < 1 || this->getNumberOfLayers() > 1000) return 102;
-
-    int err = this->optimizer->isValid();
-    if (err != 0) return err;
-
+    // TODO(matth): rework isValid
+    constexpr int big_image_size = 1920 * 1080;  // 2073600
+    if (this->getNumberOfInputs() < 1 || this->getNumberOfInputs() > big_image_size)
+    {
+        return errorType::neuralNetworkInputTooLarge;
+    }
+    constexpr int lot_of_layers = 100;
+    if (this->getNumberOfLayers() < 1 || this->getNumberOfLayers() > lot_of_layers)
+    {
+        return errorType::neuralNetworkTooMuchLayers;
+    }
+    auto err = this->optimizer->isValid();
+    if (err != errorType::noError)
+    {
+        return err;
+    }
     for (const auto& layer : this->layers)
     {
         err = layer->isValid();
-        if (err != 0) return err;
+        if (err != errorType::noError)
+        {
+            return err;
+        }
     }
-    return 0;
+    return errorType::noError;
 }
 
-bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
+auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
 {
     return *this->optimizer == *neuralNetwork.optimizer && this->layers.size() == neuralNetwork.layers.size() &&
            [this, &neuralNetwork]()
@@ -178,4 +210,5 @@ bool NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const
     }();
 }
 
-bool NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const { return !(*this == neuralNetwork); }
+auto NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const -> bool { return !(*this == neuralNetwork); }
+}  // namespace snn::internal

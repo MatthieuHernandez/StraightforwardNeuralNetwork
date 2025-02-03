@@ -2,28 +2,27 @@
 
 #include "ExtendedExpection.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForRegression::CompositeForRegression(Set sets[2], int numberOfLabels)
-    : ProblemComposite(sets, numberOfLabels)
+namespace snn::internal
+{
+CompositeForRegression::CompositeForRegression(Data* data, int numberOfLabels)
+    : ProblemComposite(data, numberOfLabels)
 {
 }
 
-int CompositeForRegression::isValid() { return this->ProblemComposite::isValid(); }
+auto CompositeForRegression::isValid() const -> errorType { return this->ProblemComposite::isValid(); }
 
-const std::vector<float>& CompositeForRegression::getTestingOutputs(const int index) const
+auto CompositeForRegression::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
-    return this->sets[testing].labels[index];
+    return this->data->testing.labels[index];
 }
 
-int CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index)
+auto CompositeForRegression::getTrainingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForRegression::getTestingLabel([[maybe_unused]] const int index)
+auto CompositeForRegression::getTestingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }
+}  // namespace snn::internal

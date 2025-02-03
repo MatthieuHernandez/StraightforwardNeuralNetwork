@@ -1,25 +1,23 @@
 #include "Wine.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <string>
 #include <vector>
 
-using namespace std;
 using namespace snn;
-using namespace internal;
 
-Wine::Wine(string folderPath) { this->loadData(folderPath); }
+Wine::Wine(std::string folderPath) { this->loadData(folderPath); }
 
-void Wine::loadData(string folderPath)
+void Wine::loadData(std::string folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
 
-    string line;
-    ifstream file(folderPath + "/wine.data", ios::in);
+    std::string line;
+    std::ifstream file(folderPath + "/wine.data", std::ios::in);
 
     if (!file.is_open()) throw FileOpeningFailedException();
 
@@ -28,8 +26,8 @@ void Wine::loadData(string folderPath)
 
     while (getline(file, line))
     {
-        vector<float> label;
-        vector<float> values;
+        std::vector<float> label;
+        std::vector<float> values;
 
         float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
@@ -48,6 +46,6 @@ void Wine::loadData(string folderPath)
         inputs.push_back(values);
     }
     file.close();
-    this->data = make_unique<Data>(problem::classification, inputs, labels);
-    this->data->normalize(0, 1);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs, labels);
+    this->dataset->normalize(0, 1);
 }

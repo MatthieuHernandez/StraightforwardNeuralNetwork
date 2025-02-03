@@ -1,10 +1,8 @@
-#include <cstddef>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/tools/Tools.hpp>
 
 #include "../ExtendedGTest.hpp"
 
-using namespace std;
 using namespace snn;
 
 TEST(Train, WithoutError)
@@ -14,10 +12,10 @@ TEST(Train, WithoutError)
             Input(4),
             FullyConnected(4, activation::sigmoid),
         },
-        StochasticGradientDescent(0.1f));
+        StochasticGradientDescent(0.1F));
     auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
 
-    vector<float> input = {0.9f, 0.0f, -0.7f, 0.1f};
+    std::vector<float> input = {0.9F, 0.0F, -0.7F, 0.1F};
     auto expected = neuralNetwork.computeOutput(input);
     neuralNetwork.trainOnce(input, expected);
 
@@ -32,11 +30,11 @@ TEST(Train, WithNanAsExpected)
             Input(4),
             FullyConnected(4, activation::sigmoid),
         },
-        StochasticGradientDescent(0.2f));
+        StochasticGradientDescent(0.2F));
 
-    vector<float> input = {1, 0, 1, 0};
-    vector<float> expected1 = {NAN, NAN, NAN, NAN};
-    vector<float> expected2 = {1, NAN, NAN, 0};
+    std::vector<float> input = {1, 0, 1, 0};
+    std::vector<float> expected1 = {NAN, NAN, NAN, NAN};
+    std::vector<float> expected2 = {1, NAN, NAN, 0};
 
     auto valueBeforeTrain = neuralNetwork.layers[0]->getAverageOfAbsNeuronWeights();
     neuralNetwork.trainOnce(input, expected1);
@@ -46,5 +44,5 @@ TEST(Train, WithNanAsExpected)
 
     ASSERT_EQ(valueBeforeTrain, valueAfterTrain1);
     ASSERT_NE(valueBeforeTrain, valueAfterTrain2);
-    ASSERT_FALSE(isnan(valueAfterTrain2));
+    ASSERT_FALSE(std::isnan(valueAfterTrain2));
 }

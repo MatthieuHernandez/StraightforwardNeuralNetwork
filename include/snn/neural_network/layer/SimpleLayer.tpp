@@ -1,4 +1,8 @@
+#pragma once
+#include "SimpleLayer.hpp"
 
+namespace snn::internal
+{
 template <BaseNeuron N>
 SimpleLayer<N>::SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer<N>(model, optimizer)
@@ -47,29 +51,36 @@ std::vector<int> SimpleLayer<N>::getShapeOfOutput() const
 }
 
 template <BaseNeuron N>
-int SimpleLayer<N>::isValid() const
+auto SimpleLayer<N>::isValid() const -> errorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
     for (int s : shape) numberOfOutput *= s;
 
-    if (numberOfOutput != this->getNumberOfNeurons()) return 202;
+    if (numberOfOutput != this->getNumberOfNeurons())
+    {
+        return errorType::layerWrongNumberOfOutputs;
+    }
 
     for (auto& neuron : this->neurons)
     {
-        if (neuron.getNumberOfInputs() != this->getNumberOfInputs()) return 203;
+        if (neuron.getNumberOfInputs() != this->getNumberOfInputs())
+        {
+            return errorType::layerWrongNumberOfInputs;
+        }
     }
     return Layer<N>::isValid();
 }
 
 template <BaseNeuron N>
-bool SimpleLayer<N>::operator==(const BaseLayer& layer) const
+auto SimpleLayer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     return Layer<N>::operator==(layer);
 }
 
 template <BaseNeuron N>
-bool SimpleLayer<N>::operator!=(const BaseLayer& layer) const
+auto SimpleLayer<N>::operator!=(const BaseLayer& layer) const -> bool
 {
     return !(*this == layer);
 }
+}  // namespace snn::internal

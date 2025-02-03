@@ -1,15 +1,15 @@
 #pragma once
 #include <snn/tools/Tools.hpp>
 
-#include "../Dataset.hpp"
+#include "../TestDataset.hpp"
 
-class Mnist final : public Dataset
+class Mnist final : public TestDataset
 {
     public:
         Mnist(std::string folderPath);
 
     private:
-        void loadData(std::string folderPath) override;
-        static snn::vector2D<float> readImages(std::string filePath, int size);
-        snn::vector2D<float> readLabels(std::string filePath, int size);
+        void loadData(std::string folderPath) final;
+        static auto readImages(std::string filePath, int size) -> snn::vector2D<float>;
+        auto readLabels(std::string filePath, int size) -> snn::vector2D<float>;
 };

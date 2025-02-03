@@ -5,10 +5,8 @@
 #include "LayerModel.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
+namespace snn::internal
+{
 MaxPooling2D::MaxPooling2D(LayerModel& model)
     : FilterLayer(model, nullptr)
 {
@@ -51,69 +49,81 @@ void MaxPooling2D::buildKernelIndexes()
                 const int inputIndex = inputIndexY + inputIndexX + c;
                 const int kernelIndex = kernelIndexY + x;
                 if (inputIndexX + c < this->shapeOfInput[X] * maxC && inputIndex < this->numberOfInputs)
+                {
                     this->kernelIndexes[k][kernelIndex] = inputIndex;
+                }
                 else
+                {
                     this->kernelIndexes[k][kernelIndex] = -1;
+                }
             }
         }
     }
 }
 
-inline unique_ptr<BaseLayer> MaxPooling2D::clone(shared_ptr<NeuralNetworkOptimizer>) const
+inline auto MaxPooling2D::clone(std::shared_ptr<NeuralNetworkOptimizer>) const -> std::unique_ptr<BaseLayer>
 {
-    return make_unique<MaxPooling2D>(*this);
+    return std::make_unique<MaxPooling2D>(*this);
 }
 
-int MaxPooling2D::isValid() const
+auto MaxPooling2D::isValid() const -> errorType
 {
     if (this->maxValueIndexes.size() != static_cast<size_t>(this->numberOfOutputs) &&
         this->numberOfKernels != this->numberOfOutputs)
-        return 204;
-    return 0;
+    {
+        return errorType::maxPooling2DWrongNumberOfInputs;
+    }
+    return errorType::noError;
 }
 
-std::string MaxPooling2D::summary() const
+auto MaxPooling2D::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " MaxPooling2D" << endl;
-    ss << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", "
-       << this->shapeOfInput[2] << "]" << endl;
-    ss << "                Kernel size:  " << this->kernelSize << "x" << this->kernelSize << endl;
-    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", "
-       << this->shapeOfOutput[2] << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " MaxPooling2D\n";
+    summary << "                Input shape:  [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", "
+            << this->shapeOfInput[2] << "]\n";
+    summary << "                Kernel size:  " << this->kernelSize << "x" << this->kernelSize << '\n';
+    summary << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", "
+            << this->shapeOfOutput[2] << "]\n";
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary();
     }
     for (size_t o = 1; o < this->optimizers.size(); ++o)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[o]->summary();
     }
-    return ss.str();
+    return summary.str();
 }
 
-inline vector<float> MaxPooling2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline auto MaxPooling2D::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
-    vector<float> outputs(this->numberOfKernels);
+    std::vector<float> outputs(this->numberOfKernels);
     for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
     {
         this->maxValueIndexes[k] = -1;
         for (int i = 0; i < this->sizeOfNeuronInputs; ++i)
         {
             const auto& index = this->kernelIndexes[k][i];
-            if (index >= 0) [[likely]]
+            if (index >= 0)
+            {
+                [[likely]]
                 if (this->maxValueIndexes[k] == -1 || inputs[index] >= inputs[this->maxValueIndexes[k]])
+                {
                     this->maxValueIndexes[k] = index;
+                }
+            }
         }
         outputs[k] = inputs[this->maxValueIndexes[k]];
     }
     return outputs;
 }
 
-inline vector<float> MaxPooling2D::computeBackOutput(vector<float>& inputErrors)
+inline auto MaxPooling2D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t e = 0; e < inputErrors.size(); ++e)
     {
         errors[this->maxValueIndexes[e]] = inputErrors[e];
@@ -121,7 +131,7 @@ inline vector<float> MaxPooling2D::computeBackOutput(vector<float>& inputErrors)
     return errors;
 }
 
-inline bool MaxPooling2D::operator==(const BaseLayer& layer) const
+inline auto MaxPooling2D::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -136,4 +146,5 @@ inline bool MaxPooling2D::operator==(const BaseLayer& layer) const
     }
 }
 
-inline bool MaxPooling2D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+inline auto MaxPooling2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

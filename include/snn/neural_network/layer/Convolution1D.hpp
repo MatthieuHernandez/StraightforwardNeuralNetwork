@@ -13,33 +13,34 @@ class Convolution1D final : public FilterLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
-        void computeTrain(std::vector<float>& inputErrors) override;
-        void buildKernelIndexes() override;
+        [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> final;
+        [[nodiscard]] auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> final;
+        void computeTrain(std::vector<float>& inputErrors) final;
+        void buildKernelIndexes() final;
 
     public:
         Convolution1D() = default;  // use restricted to Boost library only
         Convolution1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        ~Convolution1D() override = default;
+        ~Convolution1D() final = default;
         Convolution1D(const Convolution1D&) = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
-            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const BaseLayer& layer) const override;
-        bool operator!=(const BaseLayer& layer) const override;
+        auto operator==(const BaseLayer& layer) const -> bool final;
+        auto operator!=(const BaseLayer& layer) const -> bool final;
 };
 
 template <class Archive>
-void Convolution1D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Convolution1D::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Convolution1D, FilterLayer>();
-    ar& boost::serialization::base_object<FilterLayer>(*this);
+    archive& boost::serialization::base_object<FilterLayer>(*this);
 }
 }  // namespace snn::internal

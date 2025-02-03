@@ -4,11 +4,11 @@
 
 #include "LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
+namespace snn::internal
+{
+using std::bad_cast;
 
-FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+FilterLayer::FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Layer(model, optimizer)
 {
     this->numberOfFilters = model.numberOfFilters;
@@ -19,24 +19,29 @@ FilterLayer::FilterLayer(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> o
     this->sizeOfNeuronInputs = model.neuron.numberOfInputs;
 }
 
-std::vector<int> FilterLayer::getShapeOfInput() const { return this->shapeOfInput; }
+auto FilterLayer::getShapeOfInput() const -> std::vector<int> { return this->shapeOfInput; }
 
-std::vector<int> FilterLayer::getShapeOfOutput() const { return this->shapeOfOutput; }
+auto FilterLayer::getShapeOfOutput() const -> std::vector<int> { return this->shapeOfOutput; }
 
-int FilterLayer::getKernelSize() const { return this->kernelSize; }
+auto FilterLayer::getKernelSize() const -> int { return this->kernelSize; }
 
-int FilterLayer::isValid() const
+auto FilterLayer::isValid() const -> errorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
-    for (int s : shape) numberOfOutput *= s;
-
-    if (numberOfOutput != this->numberOfKernels) return 202;
+    for (int s : shape)
+    {
+        numberOfOutput *= s;
+    }
+    if (numberOfOutput != this->numberOfKernels)
+    {
+        return errorType::filterLayerWrongNumberOfOutputs;
+    }
 
     return this->Layer::isValid();
 }
 
-bool FilterLayer::operator==(const BaseLayer& layer) const
+auto FilterLayer::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -48,10 +53,11 @@ bool FilterLayer::operator==(const BaseLayer& layer) const
                this->sizeOfNeuronInputs == f.sizeOfNeuronInputs && this->shapeOfInput == f.shapeOfInput &&
                this->shapeOfOutput == f.shapeOfOutput && this->kernelIndexes == f.kernelIndexes;
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
 }
 
-bool FilterLayer::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+auto FilterLayer::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

@@ -6,14 +6,14 @@
 
 namespace snn
 {
-extern NeuralNetworkOptimizerModel StochasticGradientDescent(float learningRate = 0.03f, float momentum = 0.0f);
+extern auto StochasticGradientDescent(float learningRate = 0.03F, float momentum = 0.0F) -> NeuralNetworkOptimizerModel;
 
 namespace internal
 {
 class NeuralNetworkOptimizerFactory
 {
     public:
-        static std::shared_ptr<NeuralNetworkOptimizer> build(const NeuralNetworkOptimizerModel& model);
+        static auto build(const NeuralNetworkOptimizerModel& model) -> std::shared_ptr<NeuralNetworkOptimizer>;
 };
 }  // namespace internal
 }  // namespace snn

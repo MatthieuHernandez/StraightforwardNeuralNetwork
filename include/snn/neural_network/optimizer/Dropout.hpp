@@ -13,7 +13,7 @@ class Dropout final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         float value;
         float reverseValue;
@@ -24,28 +24,28 @@ class Dropout final : public LayerOptimizer
         Dropout() = default;  // use restricted to Boost library only
         Dropout(float value, const BaseLayer* layer);
         Dropout(const Dropout& dropout, const BaseLayer* layer);
-        ~Dropout() override = default;
+        ~Dropout() final = default;
 
-        std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
+        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> final;
 
-        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) override;
-        void applyAfterOutputForTesting(std::vector<float>& outputs) override;
+        void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) final;
+        void applyAfterOutputForTesting(std::vector<float>& outputs) final;
 
-        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const LayerOptimizer& optimizer) const override;
-        bool operator!=(const LayerOptimizer& optimizer) const override;
+        auto operator==(const LayerOptimizer& optimizer) const -> bool final;
+        auto operator!=(const LayerOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>
-void Dropout::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Dropout::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Dropout, LayerOptimizer>();
-    ar& boost::serialization::base_object<LayerOptimizer>(*this);
-    ar& this->value;
-    ar& this->reverseValue;
-    ar& this->presenceProbabilities;
+    archive& boost::serialization::base_object<LayerOptimizer>(*this);
+    archive& this->value;
+    archive& this->reverseValue;
+    archive& this->presenceProbabilities;
 }
 }  // namespace snn::internal

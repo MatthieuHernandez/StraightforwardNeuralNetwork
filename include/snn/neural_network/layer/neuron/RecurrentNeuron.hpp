@@ -13,7 +13,7 @@ class RecurrentNeuron final : public Neuron
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         float lastOutput = 0;
         float previousOutput = 0;
@@ -28,24 +28,24 @@ class RecurrentNeuron final : public Neuron
         RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
         ~RecurrentNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
         void train(float error);
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> errorType;
 
-        bool operator==(const RecurrentNeuron& neuron) const;
-        bool operator!=(const RecurrentNeuron& neuron) const;
+        auto operator==(const RecurrentNeuron& neuron) const -> bool;
+        auto operator!=(const RecurrentNeuron& neuron) const -> bool;
 };
 
 template <class Archive>
-void RecurrentNeuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void RecurrentNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
-    ar& boost::serialization::base_object<Neuron>(*this);
-    ar& this->lastOutput;
-    ar& this->previousOutput;
-    ar& this->recurrentError;
-    ar& this->previousSum;
+    archive& boost::serialization::base_object<Neuron>(*this);
+    archive& this->lastOutput;
+    archive& this->previousOutput;
+    archive& this->recurrentError;
+    archive& this->previousSum;
 }
 }  // namespace snn::internal

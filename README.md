@@ -49,20 +49,21 @@
  ## Use
 Create, train and use a neural network in few lines of code.
 ```cpp
-using namespace snn;
+#include <snn/data/Dataset.hpp>
+#include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 
-Data data(problem::classification, inputData, expectedOutputs);
+snn::Dataset dataset(snn::problem::classification, inputData, expectedOutputs);
 
-StraightforwardNeuralNetwork neuralNetwork({
-    Input(1, 28, 28), // (C, X, Y)
-    Convolution(16, 3, activation::ReLU), // 16 filters and (3, 3) kernels
-    FullyConnected(92),
+snn::StraightforwardNeuralNetwork neuralNetwork({
+    Input(1, 28, 28),  // The input shape is (C, X, Y).
+    Convolution(16, 3, activation::ReLU),  // The layer has 16 filters and (3, 3) kernels.
+    FullyConnected(92),  // The layer has 92 neurons.
     FullyConnected(10, activation::identity, Softmax())
 });
 
-neuralNetwork.train(data, 0.90_acc || 20_s); // Train neural network on data until 90% accuracy or 20s
+neuralNetwork.train(dataset, 0.90_acc || 20_s);  // Train neural network on data until 90% accuracy or 20s.
 
-float accuracy = neuralNetwork.getGlobalClusteringRate(); // Retrieve the accuracy
+float accuracy = neuralNetwork.getGlobalClusteringRate();  // Retrieve the accuracy.
 ```
 [see more details](https://github.com/MatthieuHernandez/StraightforwardNeuralNetwork/wiki/)
 ## License

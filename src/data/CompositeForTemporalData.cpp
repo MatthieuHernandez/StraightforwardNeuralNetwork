@@ -1,18 +1,15 @@
 #include "CompositeForTemporalData.hpp"
 
 #include <algorithm>
-#include <random>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
-    : TemporalComposite(sets)
+namespace snn::internal
 {
-    for (int i = 0; i > this->sets[training].size; ++i)
+CompositeForTemporalData::CompositeForTemporalData(Data* data)
+    : TemporalComposite(data)
+{
+    for (int i = 0; i > this->data->training.size; ++i)
     {
-        if (this->sets[training].areFirstDataOfTemporalSequence[i])
+        if (this->data->training.areFirstDataOfTemporalSequence[i])
         {
             this->indexesForShuffles.push_back(i);
         }
@@ -21,47 +18,50 @@ CompositeForTemporalData::CompositeForTemporalData(Set sets[2])
 
 void CompositeForTemporalData::shuffle()
 {
-    ranges::shuffle(this->indexesForShuffles, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffles, tools::rng);
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {
-        this->sets[training].shuffledIndexes[j++] = this->indexesForShuffles[i];
+        this->data->training.shuffledIndexes[j++] = this->indexesForShuffles[i];
 
         int index = this->indexesForShuffles[i] + 1;
-        while (!this->sets[training].areFirstDataOfTemporalSequence[index])
+        while (!this->data->training.areFirstDataOfTemporalSequence[index])
         {
-            this->sets[training].shuffledIndexes[j++] = index++;
+            this->data->training.shuffledIndexes[j++] = index++;
         }
     }
 }
 
 void CompositeForTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
 
-bool CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const
+auto CompositeForTemporalData::isFirstTrainingDataOfTemporalSequence(int index) const -> bool
 {
-    return this->sets[training].areFirstDataOfTemporalSequence[index];
+    return this->data->training.areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) const
+auto CompositeForTemporalData::isFirstTestingDataOfTemporalSequence(int index) const -> bool
 {
-    return this->sets[testing].areFirstDataOfTemporalSequence[index];
+    return this->data->testing.areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const -> bool { return true; }
 
-bool CompositeForTemporalData::needToEvaluateOnTestingData(int index) const
+auto CompositeForTemporalData::needToEvaluateOnTestingData(int index) const -> bool
 {
-    return this->sets[testing].needToEvaluateOnData[index];
+    return this->data->testing.needToEvaluateOnData[index];
 }
 
-int CompositeForTemporalData::isValid()
+auto CompositeForTemporalData::isValid() const -> errorType
 {
-    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
-        (int)this->sets[testing].areFirstDataOfTemporalSequence.size() != this->sets[testing].size ||
-        !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
-        !this->sets[training].needToEvaluateOnData.empty() ||
-        (int)this->sets[testing].needToEvaluateOnData.size() != this->sets[testing].size)
-        return 404;
+    if (static_cast<int>(this->data->training.areFirstDataOfTemporalSequence.size()) != this->data->training.size ||
+        static_cast<int>(this->data->testing.areFirstDataOfTemporalSequence.size()) != this->data->testing.size ||
+        !this->data->training.needToTrainOnData.empty() || !this->data->testing.needToTrainOnData.empty() ||
+        !this->data->training.needToEvaluateOnData.empty() ||
+        static_cast<int>(this->data->testing.needToEvaluateOnData.size()) != this->data->testing.size)
+    {
+        return errorType::compositeForTemporalDataEmpty;
+    }
 
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

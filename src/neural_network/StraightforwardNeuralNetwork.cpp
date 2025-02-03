@@ -2,38 +2,41 @@
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/serialization/export.hpp>
-#include <boost/serialization/vector.hpp>
 #include <fstream>
+#include <sstream>
 #include <stdexcept>
+#include <string>
 #include <thread>
+#include <vector>
 
 #include "ExtendedExpection.hpp"
 #include "NeuralNetworkVisualization.hpp"
+#include "layer/LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-using namespace tools;
-
+namespace snn
+{
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork() { this->stopTrainingAsync(); }
 
-StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(vector<LayerModel> architecture,
+StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(std::vector<LayerModel> architecture,
                                                            NeuralNetworkOptimizerModel optimizer)
     : NeuralNetwork(architecture, optimizer)
 {
-    int err = this->isValid();
-    if (err != 0)
+    const auto err = this->isValid();
+    if (err != errorType::noError)
     {
-        string message = string("Error ") + to_string(err) + ": Wrong parameter in the creation of neural networks";
-        throw runtime_error(message);
+        const std::string message =
+            std::string("Error ") + tools::toString(err) + ": Wrong parameter in the creation of neural networks";
+        throw std::runtime_error(message);
     }
 }
 
 StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const StraightforwardNeuralNetwork& neuralNetwork)
     : NeuralNetwork(neuralNetwork)
 {
-    if (!this->isIdle) throw runtime_error("StraightforwardNeuralNetwork must be idle to be copy");
+    if (!this->isIdle)
+    {
+        throw std::runtime_error("StraightforwardNeuralNetwork must be idle to be copy");
+    }
     this->autoSaveFilePath = neuralNetwork.autoSaveFilePath;
     this->autoSaveWhenBetter = neuralNetwork.autoSaveWhenBetter;
     this->index = neuralNetwork.index;
@@ -41,17 +44,18 @@ StraightforwardNeuralNetwork::StraightforwardNeuralNetwork(const Straightforward
     this->numberOfTrainingsBetweenTwoEvaluations = neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-vector<float> StraightforwardNeuralNetwork::computeOutput(const vector<float>& inputs, bool temporalReset)
+auto StraightforwardNeuralNetwork::computeOutput(const std::vector<float>& inputs, bool temporalReset)
+    -> std::vector<float>
 {
     return this->output(inputs, temporalReset);
 }
 
-int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bool temporalReset)
+auto StraightforwardNeuralNetwork::computeCluster(const std::vector<float>& inputs, bool temporalReset) -> int
 {
     const auto outputs = this->output(inputs, temporalReset);
     float maxOutputValue = -2;
     int maxOutputIndex = -1;
-    for (int i = 0; i < (int)outputs.size(); i++)
+    for (int i = 0; i < static_cast<int>(outputs.size()); i++)
     {
         if (maxOutputValue < outputs[i])
         {
@@ -62,37 +66,44 @@ int StraightforwardNeuralNetwork::computeCluster(const vector<float>& inputs, bo
     return maxOutputIndex;
 }
 
-bool StraightforwardNeuralNetwork::isTraining() const { return !this->isIdle; }
+auto StraightforwardNeuralNetwork::isTraining() const -> bool { return !this->isIdle; }
 
-void StraightforwardNeuralNetwork::startTrainingAsync(Data& data, int batchSize, int evaluationFrequency)
+void StraightforwardNeuralNetwork::startTrainingAsync(Dataset& dataset, int batchSize, int evaluationFrequency)
 {
-    this->validData(data, batchSize);
+    this->validData(dataset, batchSize);
     this->stopTrainingAsync();
-    log<complete>("Start a new thread");
-    this->thread =
-        std::thread(&StraightforwardNeuralNetwork::trainSync, this, ref(data), Wait(), batchSize, evaluationFrequency);
+    tools::log<complete>("Start a new thread");
+    this->thread = std::thread(&StraightforwardNeuralNetwork::trainSync, this, std::ref(dataset), Wait(), batchSize,
+                               evaluationFrequency);
 }
 
-void StraightforwardNeuralNetwork::train(Data& data, Wait wait, int batchSize, int evaluationFrequency)
+void StraightforwardNeuralNetwork::train(Dataset& dataset, Wait wait, int batchSize, int evaluationFrequency)
 {
-    this->validData(data, batchSize);
-    if (!this->isIdle) throw runtime_error("Neural network is already training");
+    this->validData(dataset, batchSize);
+    if (!this->isIdle)
+    {
+        throw std::runtime_error("Neural network is already training");
+    }
     this->stopTrainingAsync();
-    this->trainSync(data, wait, batchSize, evaluationFrequency);
+    this->trainSync(dataset, wait, batchSize, evaluationFrequency);
 }
 
-void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int batchSize, const int evaluationFrequency)
+void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const int batchSize,
+                                             const int evaluationFrequency)
 {
-    log<minimal>("Start training");
+    tools::log<minimal>("Start training");
     wait.startClock();
     this->epoch = 0;
-    this->numberOfTrainingsBetweenTwoEvaluations = data.sets[training].size;
+    this->numberOfTrainingsBetweenTwoEvaluations = static_cast<int>(dataset.data.training.size);
     this->wantToStopTraining = false;
     this->isIdle = false;
-    if (evaluationFrequency > 0) this->evaluate(data, wait);
+    if (evaluationFrequency > 0)
+    {
+        this->evaluate(dataset, wait);
+    }
     for (this->epoch = 1; this->continueTraining(wait); this->epoch++)
     {
-        data.shuffle();
+        dataset.shuffle();
         for (this->index = 0;
              index + batchSize <= this->numberOfTrainingsBetweenTwoEvaluations && this->continueTraining(wait);
              this->index += batchSize)
@@ -104,31 +115,38 @@ void StraightforwardNeuralNetwork::trainSync(Data& data, Wait wait, const int ba
                 return;
             }
 
-            if (data.needToLearnOnTrainingData(this->index))
-                this->trainOnce(data.getTrainingData(this->index, batchSize),
-                                data.getTrainingOutputs(this->index, batchSize),
-                                data.isFirstTrainingDataOfTemporalSequence(this->index));
+            if (dataset.needToLearnOnTrainingData(this->index))
+            {
+                this->trainOnce(dataset.getTrainingData(this->index, batchSize),
+                                dataset.getTrainingOutputs(this->index, batchSize),
+                                dataset.isFirstTrainingDataOfTemporalSequence(this->index));
+            }
             else
-                this->outputForTraining(data.getTrainingData(this->index, batchSize),
-                                        data.isFirstTrainingDataOfTemporalSequence(this->index));
-            this->logInProgress<minimal>(wait, data, training);
+            {
+                this->outputForTraining(dataset.getTrainingData(this->index, batchSize),
+                                        dataset.isFirstTrainingDataOfTemporalSequence(this->index));
+            }
+            this->logInProgress<minimal>(wait, dataset, setType::training);
         }
-        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0) this->evaluate(data, wait);
+        if (evaluationFrequency > 0 && this->epoch % evaluationFrequency == 0)
+        {
+            this->evaluate(dataset, wait);
+        }
     }
     this->resetTrainingValues();
-    log<minimal>("Stop training");
+    tools::log<minimal>("Stop training");
 }
 
-void StraightforwardNeuralNetwork::evaluate(const Data& data)
+void StraightforwardNeuralNetwork::evaluate(const Dataset& dataset)
 {
     auto wait = Wait();
-    this->evaluate(data, wait);
+    this->evaluate(dataset, wait);
 }
 
-void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait& wait)
+void StraightforwardNeuralNetwork::evaluate(const Dataset& dataset, Wait& wait)
 {
     this->startTesting();
-    for (this->index = 0; this->index < data.sets[testing].size; this->index++)
+    for (this->index = 0; this->index < dataset.data.testing.size; this->index++)
     {
         if (this->hasNan())
         {
@@ -137,11 +155,16 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait& wait)
             return;
         }
 
-        if (data.needToEvaluateOnTestingData(this->index))
-            this->evaluateOnce(data);
+        if (dataset.needToEvaluateOnTestingData(this->index))
+        {
+            this->evaluateOnce(dataset);
+        }
         else
-            this->output(data.getTestingData(this->index), data.isFirstTestingDataOfTemporalSequence(this->index));
-        this->logInProgress<minimal>(wait, data, testing);
+        {
+            this->output(dataset.getTestingData(this->index),
+                         dataset.isFirstTestingDataOfTemporalSequence(this->index));
+        }
+        this->logInProgress<minimal>(wait, dataset, setType::testing);
     }
     this->stopTesting();
     if (this->autoSaveWhenBetter && this->globalClusteringRateIsBetterThanMax)
@@ -155,24 +178,24 @@ void StraightforwardNeuralNetwork::evaluate(const Data& data, Wait& wait)
     }
 }
 
-inline void StraightforwardNeuralNetwork::evaluateOnce(const Data& data)
+inline void StraightforwardNeuralNetwork::evaluateOnce(const Dataset& dataset)
 {
-    switch (data.typeOfProblem)
+    switch (dataset.typeOfProblem)
     {
         case problem::classification:
-            this->evaluateOnceForClassification(data.getTestingData(this->index), data.getTestingLabel(this->index),
-                                                data.getSeparator(),
-                                                data.isFirstTestingDataOfTemporalSequence(this->index));
+            this->evaluateOnceForClassification(dataset.getTestingData(this->index),
+                                                dataset.getTestingLabel(this->index), dataset.getSeparator(),
+                                                dataset.isFirstTestingDataOfTemporalSequence(this->index));
             break;
         case problem::multipleClassification:
-            this->evaluateOnceForMultipleClassification(data.getTestingData(this->index),
-                                                        data.getTestingOutputs(this->index), data.getSeparator(),
-                                                        data.isFirstTestingDataOfTemporalSequence(this->index));
+            this->evaluateOnceForMultipleClassification(dataset.getTestingData(this->index),
+                                                        dataset.getTestingOutputs(this->index), dataset.getSeparator(),
+                                                        dataset.isFirstTestingDataOfTemporalSequence(this->index));
             break;
         case problem::regression:
-            this->evaluateOnceForRegression(data.getTestingData(this->index), data.getTestingOutputs(this->index),
-                                            data.getPrecision(),
-                                            data.isFirstTestingDataOfTemporalSequence(this->index));
+            this->evaluateOnceForRegression(dataset.getTestingData(this->index), dataset.getTestingOutputs(this->index),
+                                            dataset.getPrecision(),
+                                            dataset.isFirstTestingDataOfTemporalSequence(this->index));
             break;
         default:
             throw NotImplementedException();
@@ -184,9 +207,9 @@ void StraightforwardNeuralNetwork::stopTrainingAsync()
     this->wantToStopTraining = true;
     if (this->thread.joinable())
     {
-        log<minimal>("Stop training");
+        tools::log<minimal>("Stop training");
         this->thread.join();
-        log<complete>("Thread closed");
+        tools::log<complete>("Thread closed");
     }
 }
 
@@ -197,13 +220,16 @@ void StraightforwardNeuralNetwork::resetTrainingValues()
     this->isIdle = true;
 }
 
-inline bool StraightforwardNeuralNetwork::continueTraining(Wait wait) const
+inline auto StraightforwardNeuralNetwork::continueTraining(Wait wait) const -> bool
 {
     const auto epochs = this->getCurrentEpoch();
     const auto accuracy = this->getGlobalClusteringRate();
     const auto mae = this->getMeanAbsoluteError();
 
-    if (this->hasNan()) log<minimal>("A NaN value has been detected");
+    if (this->hasNan())
+    {
+        tools::log<minimal>("A NaN value has been detected");
+    }
 
     return !this->wantToStopTraining && !wait.isOver(epochs, accuracy, mae) && !this->hasNan();
 }
@@ -213,108 +239,135 @@ void StraightforwardNeuralNetwork::waitFor(Wait wait) const
     wait.startClock();
     while (!this->hasNan())
     {
-        this_thread::sleep_for(1ms);
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(1ms);
 
         const auto epochs = this->getCurrentEpoch();
         const auto accuracy = this->getGlobalClusteringRate();
         const auto mae = this->getMeanAbsoluteError();
 
-        if (wait.isOver(epochs, accuracy, mae)) break;
+        if (wait.isOver(epochs, accuracy, mae))
+        {
+            break;
+        }
     }
 }
 
-int StraightforwardNeuralNetwork::isValid() const { return this->NeuralNetwork::isValid(); }
+auto StraightforwardNeuralNetwork::isValid() const -> errorType { return this->NeuralNetwork::isValid(); }
 
-void StraightforwardNeuralNetwork::validData(const Data& data, int batchSize) const
+void StraightforwardNeuralNetwork::validData(const Dataset& dataset, int batchSize) const
 {
-    if (data.numberOfLabels != this->getNumberOfOutputs() || data.sizeOfData != this->getNumberOfInputs())
-        throw runtime_error("Data has not the same format as the neural network");
-    if (batchSize != 1 && data.typeOfTemporal != nature::nonTemporal)
-        throw runtime_error("Non temporal data cannot have batch size");
-    if (batchSize < 1) throw runtime_error("Wrong batch size");
-    if (batchSize > data.sets[training].size) throw runtime_error("Batch size is too large");
+    if (dataset.numberOfLabels != this->getNumberOfOutputs() || dataset.sizeOfData != this->getNumberOfInputs())
+    {
+        throw std::runtime_error("Data has not the same format as the neural network");
+    }
+    if (batchSize != 1 && dataset.typeOfTemporal != nature::nonTemporal)
+    {
+        throw std::runtime_error("Non temporal data cannot have batch size");
+    }
+    if (batchSize < 1)
+    {
+        throw std::runtime_error("Wrong batch size");
+    }
+    if (batchSize > dataset.data.training.size)
+    {
+        throw std::runtime_error("Batch size is too large");
+    }
 }
 
-void StraightforwardNeuralNetwork::saveAs(const string filePath)
+void StraightforwardNeuralNetwork::saveAs(const std::string& filePath)
 {
     if (!this->isIdle)
-        throw runtime_error(
+    {
+        throw std::runtime_error(
             "Neural network cannot be saved during training, stop training before saving or use auto save");
+    }
     saveSync(filePath);
 }
 
-void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(string filePath)
+void StraightforwardNeuralNetwork::saveFeatureMapsAsBitmap(const std::string& filePath)
 {
     if (!this->isIdle)
-        throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
-    for (size_t l = 0; l < this->layers.size(); ++l)
     {
-        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
-        NeuralNetworkVisualization::saveAsBitmap(filterLayer, filePath + "_layer_" + to_string(l) + ".bmp");
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    }
+    for (size_t layer = 0; layer < this->layers.size(); ++layer)
+    {
+        auto* filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[layer].get());
+        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer,
+                                                           filePath + "_layer_" + std::to_string(layer) + ".bmp");
     }
 }
 
-void StraightforwardNeuralNetwork::saveData2DAsBitmap(string filePath, const Data& data, int dataIndex)
+void StraightforwardNeuralNetwork::saveData2DAsBitmap(const std::string& filePath, const Dataset& dataset,
+                                                      int dataIndex)
 {
-    NeuralNetworkVisualization::saveAsBitmap(data.getTestingData(dataIndex), this->layers[0]->getShapeOfInput(),
-                                             filePath + "_input" + to_string(dataIndex) + ".bmp");
+    internal::NeuralNetworkVisualization::saveAsBitmap(dataset.getTestingData(dataIndex),
+                                                       this->layers[0]->getShapeOfInput(),
+                                                       filePath + "_input" + std::to_string(dataIndex) + ".bmp");
 }
 
-void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(string filePath, const Data& data, int dataIndex)
+void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(const std::string& filePath, const Dataset& dataset,
+                                                            int dataIndex)
 {
     if (!this->isIdle)
-        throw runtime_error("Filter layers cannot be saved during training, stop training before saving");
-
-    auto outputs = this->getLayerOutputs(data.getTestingData(dataIndex));
-
-    for (size_t l = 0; l < this->layers.size(); ++l)
     {
-        const auto filterLayer = dynamic_cast<FilterLayer*>(this->layers[l].get());
+        throw std::runtime_error("Filter layers cannot be saved during training, stop training before saving");
+    }
 
-        NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[l], filePath + "_layer_" + to_string(l) + ".bmp");
+    auto outputs = this->getLayerOutputs(dataset.getTestingData(dataIndex));
+
+    for (size_t layer = 0; layer < this->layers.size(); ++layer)
+    {
+        auto* filterLayer = dynamic_cast<internal::FilterLayer*>(this->layers[layer].get());
+        internal::NeuralNetworkVisualization::saveAsBitmap(filterLayer, outputs[layer],
+                                                           filePath + "_layer_" + std::to_string(layer) + ".bmp");
     }
 }
 
-void StraightforwardNeuralNetwork::saveSync(const string filePath)
+void StraightforwardNeuralNetwork::saveSync(const std::string& filePath)
 {
     this->autoSaveFilePath = filePath;
-    ofstream ofs(filePath);
+    std::ofstream ofs(filePath);
     boost::archive::text_oarchive archive(ofs);
     archive << this;
 }
 
-StraightforwardNeuralNetwork& StraightforwardNeuralNetwork::loadFrom(const string filePath)
+auto StraightforwardNeuralNetwork::loadFrom(const std::string& filePath) -> StraightforwardNeuralNetwork&
 {
     StraightforwardNeuralNetwork* neuralNetwork = nullptr;
-    ifstream ifs(filePath);
+    std::ifstream ifs(filePath);
     boost::archive::text_iarchive archive(ifs);
     archive >> neuralNetwork;
     return *neuralNetwork;
 }
 
-string StraightforwardNeuralNetwork::summary() const
+auto StraightforwardNeuralNetwork::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "============================================================" << endl;
-    ss << "| SNN Model Summary                                        |" << endl;
-    ss << "============================================================" << endl;
-    ss << " Name:       " << this->autoSaveFilePath << endl;
-    ss << " Parameters: " << this->getNumberOfParameters() << endl;
-    ss << " Epochs:     " << this->epoch << endl;
-    ss << " Trainnig:   " << this->getNumberOfTraining() << endl;
-    ss << "============================================================" << endl;
-    ss << "| Layers                                                   |" << endl;
-    ss << "============================================================" << endl;
-    for (auto& layer : this->layers) ss << layer->summary();
-    ss << "============================================================" << endl;
-    ss << "|  Optimizer                                               |" << endl;
-    ss << "============================================================" << endl;
-    ss << optimizer->summary();
-    ss << "============================================================" << endl;
-    return ss.str();
+    std::stringstream summary;
+    summary << "============================================================\n";
+    summary << "| SNN Model Summary                                        |\n";
+    summary << "============================================================\n";
+    summary << " Name:       " << this->autoSaveFilePath << '\n';
+    summary << " Parameters: " << this->getNumberOfParameters() << '\n';
+    summary << " Epochs:     " << this->epoch << '\n';
+    summary << " Trainnig:   " << this->getNumberOfTraining() << '\n';
+    summary << "============================================================\n";
+    summary << "| Layers                                                   |\n";
+    summary << "============================================================\n";
+    for (const auto& layer : this->layers)
+    {
+        summary << layer->summary();
+    }
+    summary << "============================================================\n";
+    summary << "|  Optimizer                                               |\n";
+    summary << "============================================================\n";
+    summary << optimizer->summary();
+    summary << "============================================================\n";
+    return summary.str();
 }
 
-bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const
+auto StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
 {
     return this->NeuralNetwork::operator==(neuralNetwork) && this->autoSaveFilePath == neuralNetwork.autoSaveFilePath &&
            this->autoSaveWhenBetter == neuralNetwork.autoSaveWhenBetter &&
@@ -323,7 +376,8 @@ bool StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork
            this->numberOfTrainingsBetweenTwoEvaluations == neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
 
-bool StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const
+auto StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
 {
     return !(*this == neuralNetwork);
 }
+}  // namespace snn

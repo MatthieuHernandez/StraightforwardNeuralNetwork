@@ -1,12 +1,8 @@
 #pragma once
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/vector.hpp>
-#include <queue>
-#include <vector>
 
-#include "../../../tools/Tools.hpp"
 #include "../../optimizer/StochasticGradientDescent.hpp"
-#include "BaseNeuron.hpp"
 #include "CircularData.hpp"
 #include "NeuronModel.hpp"
 #include "activation_function/ActivationFunction.hpp"
@@ -18,13 +14,13 @@ class Neuron
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
-        int numberOfInputs;
-        int batchSize;
+        int numberOfInputs{};
+        int batchSize{};
         std::vector<float> weights;
-        float bias;
+        float bias{};
 
         CircularData previousDeltaWeights;
         CircularData lastInputs;
@@ -35,44 +31,47 @@ class Neuron
         activation activationFunction;
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        static float randomInitializeWeight(int numberOfInputs);
+        static auto randomInitializeWeight(int numberOfWeights) -> float;
 
     public:
         Neuron() = default;  // use restricted to Boost library only
+        Neuron(Neuron&&) = delete;
+        auto operator=(const Neuron&) -> Neuron& = default;
+        auto operator=(Neuron&&) -> Neuron& = delete;
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
         ~Neuron() = default;
 
         std::shared_ptr<ActivationFunction> outputFunction;
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> errorType;
 
-        [[nodiscard]] std::vector<float> getWeights() const;
+        [[nodiscard]] auto getWeights() const -> std::vector<float>;
         void setWeights(std::vector<float> w);
-        [[nodiscard]] int getNumberOfParameters() const;
-        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] auto getNumberOfParameters() const -> int;
+        [[nodiscard]] auto getNumberOfInputs() const -> int;
 
-        NeuralNetworkOptimizer* getOptimizer() const;
+        auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
-        bool operator==(const Neuron& neuron) const;
-        bool operator!=(const Neuron& neuron) const;
+        auto operator==(const Neuron& neuron) const -> bool;
+        auto operator!=(const Neuron& neuron) const -> bool;
 };
 
 template <class Archive>
-void Neuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar.template register_type<StochasticGradientDescent>();
-    ar& this->optimizer;
-    ar& this->numberOfInputs;
-    ar& this->batchSize;
-    ar& this->weights;
-    ar& this->bias;
-    ar& this->previousDeltaWeights;
-    ar& this->lastInputs;
-    ar& this->errors;
-    ar& this->sum;
-    ar& this->activationFunction;
+    archive.template register_type<StochasticGradientDescent>();
+    archive& this->optimizer;
+    archive& this->numberOfInputs;
+    archive& this->batchSize;
+    archive& this->weights;
+    archive& this->bias;
+    archive& this->previousDeltaWeights;
+    archive& this->lastInputs;
+    archive& this->errors;
+    archive& this->sum;
+    archive& this->activationFunction;
     this->outputFunction = ActivationFunction::get(activationFunction);
 }
 }  // namespace snn::internal

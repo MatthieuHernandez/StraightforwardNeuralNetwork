@@ -12,7 +12,7 @@ class SimpleNeuron final : public Neuron
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         SimpleNeuron() = default;  // use restricted to Boost library only
@@ -20,21 +20,21 @@ class SimpleNeuron final : public Neuron
         SimpleNeuron(const SimpleNeuron& neuron) = default;
         ~SimpleNeuron() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
 
         void train(float error);
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> errorType;
 
-        bool operator==(const SimpleNeuron& neuron) const;
-        bool operator!=(const SimpleNeuron& neuron) const;
+        auto operator==(const SimpleNeuron& neuron) const -> bool;
+        auto operator!=(const SimpleNeuron& neuron) const -> bool;
 };
 
 template <class Archive>
-void SimpleNeuron::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void SimpleNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<SimpleNeuron, Neuron>();
-    ar& boost::serialization::base_object<Neuron>(*this);
+    archive& boost::serialization::base_object<Neuron>(*this);
 }
 }  // namespace snn::internal

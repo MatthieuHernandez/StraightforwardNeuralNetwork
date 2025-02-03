@@ -5,9 +5,7 @@
 #include <snn/tools/Tools.hpp>
 #include <string>
 
-using namespace std;
 using namespace snn;
-using namespace internal;
 
 AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
     : sizeOfOneData(sizeOfOneData)
@@ -17,7 +15,7 @@ AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
 
 void AudioCatsAndDogs::loadData(std::string folderPath)
 {
-    vector<string> fileNames[2]{
+    std::vector<std::string> fileNames[2]{
         {
             "/train/cats/cat_1.wav",           "/train/cats/cat_10.wav",          "/train/cats/cat_100.wav",
             "/train/cats/cat_101.wav",         "/train/cats/cat_102.wav",         "/train/cats/cat_103.wav",
@@ -125,11 +123,17 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
         {
             bool isCat;
             if (fileName.find("cat") != std::string::npos)
+            {
                 isCat = true;
+            }
             else if (fileName.find("dog") != std::string::npos)
+            {
                 isCat = false;
+            }
             else
-                throw runtime_error("Wrong file name: " + fileName);
+            {
+                throw std::runtime_error("Wrong file name: " + fileName);
+            }
 
             AudioFile<float> audioFile;
             audioFile.load(folderPath + fileName);
@@ -153,20 +157,24 @@ void AudioCatsAndDogs::loadData(std::string folderPath)
                     dataSound.back().reserve(this->sizeOfOneData);
 
                     if (isCat)
+                    {
                         labels[i].push_back({1, 0});
+                    }
                     else
+                    {
                         labels[i].push_back({0, 1});
+                    }
                 }
                 const float sample = audioFile.samples[channel][j];
                 dataSound.back().push_back(sample);
             }
-            while (this->sizeOfOneData > (int)dataSound.back().size())
+            while (this->sizeOfOneData > static_cast<int>(dataSound.back().size()))
             {
-                dataSound.back().push_back(0.0f);
+                dataSound.back().push_back(0.0F);
             }
             inputs[i].push_back(dataSound);
         }
     }
-    this->data =
-        make_unique<Data>(problem::classification, inputs[0], labels[0], inputs[1], labels[1], nature::sequential);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs[0], labels[0], inputs[1], labels[1],
+                                              nature::sequential);
 }

@@ -1,36 +1,34 @@
 #include "Iris.hpp"
 
 #include <fstream>
-#include <snn/data/Data.hpp>
+#include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 #include <snn/tools/Tools.hpp>
 #include <stdexcept>
 #include <string>
 
-using namespace std;
 using namespace snn;
-using namespace internal;
 
-Iris::Iris(string folderPath) { this->loadData(folderPath); }
+Iris::Iris(std::string folderPath) { this->loadData(folderPath); }
 
-void Iris::loadData(string folderPath)
+void Iris::loadData(std::string folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
 
-    string line;
-    ifstream file(folderPath + "/bezdekIris.data");
+    std::string line;
+    std::ifstream file(folderPath + "/bezdekIris.data");
     int size = 0;
-    vector2D<string> individuals;
+    vector2D<std::string> individuals;
     individuals.reserve(150);
 
     if (!file.is_open()) throw FileOpeningFailedException();
 
     while (getline(file, line) && line.size() > 4)
     {
-        const vector<string> temp;
+        const std::vector<std::string> temp;
         individuals.push_back(temp);
-        for (int i = 0; line != line.substr(line.find(',') + 1); i++)
+        while (line != line.substr(line.find(',') + 1))
         {
             individuals[size].push_back(line.substr(0, line.find(',')));
             line = line.substr(line.find(',') + 1);
@@ -70,7 +68,9 @@ void Iris::loadData(string folderPath)
             labels[i][2] = 1;
         }
         else
-            throw runtime_error("Cannot load iris dataset");
+        {
+            throw std::runtime_error("Cannot load iris dataset");
+        }
     }
-    this->data = make_unique<Data>(problem::classification, inputs, labels);
+    this->dataset = std::make_unique<Dataset>(problem::classification, inputs, labels);
 }

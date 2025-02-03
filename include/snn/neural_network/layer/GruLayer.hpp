@@ -14,23 +14,23 @@ class GruLayer final : public SimpleLayer<GatedRecurrentUnit>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         GruLayer() = default;  // use restricted to Boost library only
         GruLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         GruLayer(const GruLayer&) = default;
-        ~GruLayer() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
-            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        ~GruLayer() final = default;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 };
 
 template <class Archive>
-void GruLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void GruLayer::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<GruLayer, SimpleLayer>();
-    ar& boost::serialization::base_object<SimpleLayer>(*this);
+    archive& boost::serialization::base_object<SimpleLayer>(*this);
 }
 }  // namespace snn::internal

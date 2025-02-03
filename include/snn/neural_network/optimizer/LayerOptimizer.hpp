@@ -12,7 +12,7 @@ class LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         const BaseLayer* layer;
@@ -22,22 +22,22 @@ class LayerOptimizer
         LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
-        virtual std::unique_ptr<LayerOptimizer> clone(const BaseLayer* layer) const = 0;
+        virtual auto clone(const BaseLayer* layer) const -> std::unique_ptr<LayerOptimizer> = 0;
 
         virtual void applyAfterOutputForTraining(std::vector<float>& outputs, bool temporalReset) = 0;
         virtual void applyAfterOutputForTesting(std::vector<float>& outputs) = 0;
 
         virtual void applyBeforeBackpropagation(std::vector<float>& inputErrors) = 0;
 
-        [[nodiscard]] virtual std::string summary() const = 0;
+        [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
-        virtual bool operator==(const LayerOptimizer& optimizer) const;
-        virtual bool operator!=(const LayerOptimizer& optimizer) const;
+        virtual auto operator==(const LayerOptimizer& optimizer) const -> bool;
+        virtual auto operator!=(const LayerOptimizer& optimizer) const -> bool;
 };
 
 template <class Archive>
-void LayerOptimizer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void LayerOptimizer::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar& this->layer;
+    archive& this->layer;
 }
 }  // namespace snn::internal

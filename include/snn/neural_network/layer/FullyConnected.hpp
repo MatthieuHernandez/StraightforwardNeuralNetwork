@@ -14,23 +14,23 @@ class FullyConnected final : public SimpleLayer<SimpleNeuron>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         FullyConnected() = default;  // use restricted to Boost library only
         FullyConnected(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         FullyConnected(const FullyConnected&) = default;
-        ~FullyConnected() = default;
-        [[nodiscard]] std::unique_ptr<BaseLayer> clone(
-            std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        ~FullyConnected() final = default;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 };
 
 template <class Archive>
-void FullyConnected::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void FullyConnected::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<FullyConnected, SimpleLayer>();
-    ar& boost::serialization::base_object<SimpleLayer>(*this);
+    archive& boost::serialization::base_object<SimpleLayer>(*this);
 }
 }  // namespace snn::internal

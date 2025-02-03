@@ -2,28 +2,27 @@
 
 #include "ExtendedExpection.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForMultipleClassification::CompositeForMultipleClassification(Set sets[2], int numberOfLabels)
-    : ProblemComposite(sets, numberOfLabels)
+namespace snn::internal
+{
+CompositeForMultipleClassification::CompositeForMultipleClassification(Data* data, int numberOfLabels)
+    : ProblemComposite(data, numberOfLabels)
 {
 }
 
-int CompositeForMultipleClassification::isValid() { return this->ProblemComposite::isValid(); }
+auto CompositeForMultipleClassification::isValid() const -> errorType { return this->ProblemComposite::isValid(); }
 
-const std::vector<float>& CompositeForMultipleClassification::getTestingOutputs(const int index) const
+auto CompositeForMultipleClassification::getTestingOutputs(const int index) const -> const std::vector<float>&
 {
-    return this->sets[testing].labels[index];
+    return this->data->testing.labels[index];
 }
 
-int CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index)
+auto CompositeForMultipleClassification::getTrainingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTrainingLabel");
 }
 
-int CompositeForMultipleClassification::getTestingLabel([[maybe_unused]] const int index)
+auto CompositeForMultipleClassification::getTestingLabel([[maybe_unused]] const int index) -> int
 {
     throw ShouldNeverBeCalledException("getTestingLabel");
 }
+}  // namespace snn::internal

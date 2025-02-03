@@ -2,7 +2,7 @@
 
 #include "../ExtendedGTest.hpp"
 
-int main(int ac, char* av[])
+auto main(int ac, char* av[]) -> int
 {
     testing::InitGoogleTest(&ac, av);
     const auto tests = RUN_ALL_TESTS();

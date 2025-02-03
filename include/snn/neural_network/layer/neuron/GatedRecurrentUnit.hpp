@@ -12,7 +12,7 @@ class GatedRecurrentUnit final
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         friend class RecurrentNeuron;
 
@@ -37,33 +37,33 @@ class GatedRecurrentUnit final
         GatedRecurrentUnit(const GatedRecurrentUnit& recurrentNeuron) = default;
         ~GatedRecurrentUnit() = default;
 
-        [[nodiscard]] float output(const std::vector<float>& inputs, bool reset);
-        [[nodiscard]] std::vector<float>& backOutput(float error);
+        [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
         void train(float error);
 
-        [[nodiscard]] std::vector<float> getWeights() const;
-        [[nodiscard]] int getNumberOfParameters() const;
-        [[nodiscard]] int getNumberOfInputs() const;
+        [[nodiscard]] auto getWeights() const -> std::vector<float>;
+        [[nodiscard]] auto getNumberOfParameters() const -> int;
+        [[nodiscard]] auto getNumberOfInputs() const -> int;
 
-        [[nodiscard]] int isValid() const;
+        [[nodiscard]] auto isValid() const -> errorType;
 
-        NeuralNetworkOptimizer* getOptimizer() const;
+        auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
-        bool operator==(const GatedRecurrentUnit& neuron) const;
-        bool operator!=(const GatedRecurrentUnit& neuron) const;
+        auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
+        auto operator!=(const GatedRecurrentUnit& neuron) const -> bool;
 };
 
 template <class Archive>
-void GatedRecurrentUnit::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar& this->numberOfInputs;
-    ar& this->previousOutput;
-    ar& this->recurrentError;
-    ar& this->updateGateOutput;
-    ar& this->outputGateOutput;
-    ar& this->resetGate;
-    ar& this->updateGate;
-    ar& this->outputGate;
+    archive& this->numberOfInputs;
+    archive& this->previousOutput;
+    archive& this->recurrentError;
+    archive& this->updateGateOutput;
+    archive& this->outputGateOutput;
+    archive& this->resetGate;
+    archive& this->updateGate;
+    archive& this->outputGate;
 }
 }  // namespace snn::internal

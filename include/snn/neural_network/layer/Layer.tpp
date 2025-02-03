@@ -1,7 +1,13 @@
+#pragma once
+#include "../optimizer/LayerOptimizerFactory.hpp"
+#include "Layer.hpp"
+
+namespace snn::internal
+{
 template <BaseNeuron N>
 Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    : numberOfInputs(model.numberOfInputs)
 {
-    this->numberOfInputs = model.numberOfInputs;
     this->neurons.reserve(model.numberOfNeurons);
     for (int n = 0; n < model.numberOfNeurons; ++n)
     {
@@ -12,19 +18,24 @@ Layer<N>::Layer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optim
 
 template <BaseNeuron N>
 Layer<N>::Layer(const Layer& layer)
+    : numberOfInputs(layer.numberOfInputs),
+      neurons(layer.neurons)
 {
-    this->numberOfInputs = layer.numberOfInputs;
-    this->neurons = layer.neurons;
-
     this->optimizers.reserve(layer.optimizers.size());
-    for (auto& optimizer : layer.optimizers) this->optimizers.emplace_back(optimizer->clone(this));
+    for (auto& optimizer : layer.optimizers)
+    {
+        this->optimizers.emplace_back(optimizer->clone(this));
+    }
 }
 
 template <BaseNeuron N>
 std::vector<float> Layer<N>::output(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for (auto& optimizer : this->optimizers) optimizer->applyAfterOutputForTesting(output);
+    for (auto& optimizer : this->optimizers)
+    {
+        optimizer->applyAfterOutputForTesting(output);
+    }
     return output;
 }
 
@@ -32,14 +43,20 @@ template <BaseNeuron N>
 std::vector<float> Layer<N>::outputForTraining(const std::vector<float>& inputs, bool temporalReset)
 {
     auto output = this->computeOutput(inputs, temporalReset);
-    for (auto& optimizer : this->optimizers) optimizer->applyAfterOutputForTraining(output, temporalReset);
+    for (auto& optimizer : this->optimizers)
+    {
+        optimizer->applyAfterOutputForTraining(output, temporalReset);
+    }
     return output;
 }
 
 template <BaseNeuron N>
 std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 {
-    for (auto& optimizer : this->optimizers) optimizer->applyBeforeBackpropagation(inputErrors);
+    for (auto& optimizer : this->optimizers)
+    {
+        optimizer->applyBeforeBackpropagation(inputErrors);
+    }
     auto error = this->computeBackOutput(inputErrors);
     return error;
 }
@@ -47,65 +64,77 @@ std::vector<float> Layer<N>::backOutput(std::vector<float>& inputErrors)
 template <BaseNeuron N>
 void Layer<N>::train(std::vector<float>& inputErrors)
 {
-    for (auto& optimizer : this->optimizers) optimizer->applyBeforeBackpropagation(inputErrors);
+    for (auto& optimizer : this->optimizers)
+    {
+        optimizer->applyBeforeBackpropagation(inputErrors);
+    }
     this->computeTrain(inputErrors);
 }
 
 template <BaseNeuron N>
-int Layer<N>::isValid() const
+auto Layer<N>::isValid() const -> errorType
 {
     if (this->getNumberOfNeurons() != (int)this->neurons.size() || this->getNumberOfNeurons() < 1 ||
         this->getNumberOfNeurons() > 1000000)
-        return 201;
+    {
+        return errorType::layerTooMuchNeurons;
+    }
 
     for (auto& neuron : this->neurons)
     {
-        int err = neuron.isValid();
-        if (err != 0) return err;
+        const auto err = neuron.isValid();
+        if (err != errorType::noError)
+        {
+            return err;
+        }
     }
-    return 0;
+    return errorType::noError;
 }
 
 template <BaseNeuron N>
-void* Layer<N>::getNeuron(int index)
+auto Layer<N>::getNeuron(int index) -> void*
 {
     return static_cast<void*>(&this->neurons[index]);
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfAbsNeuronWeights() const
+auto Layer<N>::getAverageOfAbsNeuronWeights() const -> float
 {
-    auto sum = 0.0f;
+    auto sum = 0.0F;
     for (auto& n : this->neurons)
+    {
         for (auto w : n.getWeights()) sum += std::abs(w);
+    }
     sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
 
 template <BaseNeuron N>
-float Layer<N>::getAverageOfSquareNeuronWeights() const
+auto Layer<N>::getAverageOfSquareNeuronWeights() const -> float
 {
-    auto sum = 0.0f;
+    auto sum = 0.0F;
     for (auto& n : this->neurons)
+    {
         for (auto w : n.getWeights()) sum += w * w;
+    }
     sum /= static_cast<float>(this->neurons.size());
     return sum;
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfInputs() const
+auto Layer<N>::getNumberOfInputs() const -> int
 {
     return this->numberOfInputs;
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfNeurons() const
+auto Layer<N>::getNumberOfNeurons() const -> int
 {
     return (int)this->neurons.size();
 }
 
 template <BaseNeuron N>
-int Layer<N>::getNumberOfParameters() const
+auto Layer<N>::getNumberOfParameters() const -> int
 {
     int sum = 0;
     for (auto& neuron : this->neurons)
@@ -116,7 +145,7 @@ int Layer<N>::getNumberOfParameters() const
 }
 
 template <BaseNeuron N>
-bool Layer<N>::operator==(const BaseLayer& layer) const
+auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
@@ -139,7 +168,8 @@ bool Layer<N>::operator==(const BaseLayer& layer) const
 }
 
 template <BaseNeuron N>
-bool Layer<N>::operator!=(const BaseLayer& layer) const
+auto Layer<N>::operator!=(const BaseLayer& layer) const -> bool
 {
     return !(*this == layer);
 }
+}  // namespace snn::internal

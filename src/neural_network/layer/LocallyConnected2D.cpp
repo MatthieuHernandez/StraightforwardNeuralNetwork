@@ -4,11 +4,9 @@
 
 #include "LayerModel.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-LocallyConnected2D::LocallyConnected2D(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+LocallyConnected2D::LocallyConnected2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : FilterLayer(model, optimizer)
 {
     const int restX = shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
@@ -45,18 +43,23 @@ void LocallyConnected2D::buildKernelIndexes()
                     const int inputIndex = inputIndexY + inputIndexX + c;
                     const int kernelIndex = kernelIndexY + kernelIndexX + c;
                     if (inputIndexX + c < this->shapeOfInput[X] * maxC && inputIndex < this->numberOfInputs)
+                    {
                         this->kernelIndexes[k][kernelIndex] = inputIndex;
+                    }
                     else
+                    {
                         this->kernelIndexes[k][kernelIndex] = -1;
+                    }
                 }
             }
         }
     }
 }
 
-inline unique_ptr<BaseLayer> LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+inline auto LocallyConnected2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+    -> std::unique_ptr<BaseLayer>
 {
-    auto layer = make_unique<LocallyConnected2D>(*this);
+    auto layer = std::make_unique<LocallyConnected2D>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].setOptimizer(optimizer);
@@ -64,52 +67,60 @@ inline unique_ptr<BaseLayer> LocallyConnected2D::clone(std::shared_ptr<NeuralNet
     return layer;
 }
 
-int LocallyConnected2D::isValid() const
+auto LocallyConnected2D::isValid() const -> errorType
 {
-    for (auto& neuron : neurons)
+    for (const auto& neuron : neurons)
     {
-        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs) return 203;
+        if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs)
+        {
+            return errorType::locallyConnected2DWrongNumberOfInputs;
+        }
     }
     return this->FilterLayer::isValid();
 }
 
-std::string LocallyConnected2D::summary() const
+auto LocallyConnected2D::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " LocallyConnected2D";
-    ss << "                Input shape: [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", "
-       << this->shapeOfInput[2] << "]" << endl;
-    ss << "                Filters: " << this->numberOfFilters << endl;
-    ss << "                Kernel size: " << this->kernelSize << "x" << this->kernelSize << endl;
-    ss << "                Parameters: " << this->getNumberOfParameters() << endl;
-    ss << "                Activation: " << this->neurons[0].outputFunction->getName() << endl;
-    ss << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", "
-       << this->shapeOfOutput[2] << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " LocallyConnected2D";
+    summary << "                Input shape: [" << this->shapeOfInput[0] << ", " << this->shapeOfInput[1] << ", "
+            << this->shapeOfInput[2] << "]\n";
+    summary << "                Filters: " << this->numberOfFilters;
+    summary << "                Kernel size: " << this->kernelSize << "x" << this->kernelSize << '\n';
+    summary << "                Parameters: " << this->getNumberOfParameters() << '\n';
+    summary << "                Activation: " << this->neurons[0].outputFunction->getName() << '\n';
+    summary << "                Output shape: [" << this->shapeOfOutput[0] << ", " << this->shapeOfOutput[1] << ", "
+            << this->shapeOfOutput[2] << "]\n";
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
     }
     for (size_t o = 1; o < this->optimizers.size(); ++o)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[o]->summary() << '\n';
     }
-    return ss.str();
+    return summary.str();
 }
 
-inline vector<float> LocallyConnected2D::computeOutput(const vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+inline auto LocallyConnected2D::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
-    vector<float> outputs(this->numberOfKernels);
-    vector<float> neuronInputs(this->sizeOfNeuronInputs);
+    std::vector<float> outputs(this->numberOfKernels);
+    std::vector<float> neuronInputs(this->sizeOfNeuronInputs);
     for (size_t k = 0, o = 0; k < this->kernelIndexes.size(); ++k)
     {
         for (size_t i = 0; i < neuronInputs.size(); ++i)
         {
             const auto& index = this->kernelIndexes[k][i];
-            if (index >= 0) [[likely]]
-                neuronInputs[i] = inputs[index];
-            else [[unlikely]]
-                neuronInputs[i] = 0;
+            if (index >= 0)
+            {
+                [[likely]] neuronInputs[i] = inputs[index];
+            }
+            else
+            {
+                [[unlikely]] neuronInputs[i] = 0;
+            }
         }
         for (int n = 0; n < this->numberOfFilters; ++n, ++o)
         {
@@ -119,9 +130,9 @@ inline vector<float> LocallyConnected2D::computeOutput(const vector<float>& inpu
     return outputs;
 }
 
-inline vector<float> LocallyConnected2D::computeBackOutput(vector<float>& inputErrors)
+inline auto LocallyConnected2D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
-    vector<float> errors(this->numberOfInputs, 0);
+    std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
@@ -129,8 +140,10 @@ inline vector<float> LocallyConnected2D::computeBackOutput(vector<float>& inputE
         for (size_t e = 0; e < error.size(); ++e)
         {
             const auto& index = kernelIndexes[k][e];
-            if (index >= 0) [[likely]]
-                errors[index] += error[e];
+            if (index >= 0)
+            {
+                [[likely]] errors[index] += error[e];
+            }
         }
     }
     return errors;
@@ -138,20 +151,24 @@ inline vector<float> LocallyConnected2D::computeBackOutput(vector<float>& inputE
 
 inline void LocallyConnected2D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (size_t n = 0; n < this->neurons.size(); ++n) this->neurons[n].train(inputErrors[n]);
+    for (size_t n = 0; n < this->neurons.size(); ++n)
+    {
+        this->neurons[n].train(inputErrors[n]);
+    }
 }
 
-inline bool LocallyConnected2D::operator==(const BaseLayer& layer) const
+inline auto LocallyConnected2D::operator==(const BaseLayer& layer) const -> bool
 {
     try
     {
         const auto& f = dynamic_cast<const LocallyConnected2D&>(layer);
         return this->FilterLayer::operator==(layer) && this->sizeOfNeuronInputs == f.sizeOfNeuronInputs;
     }
-    catch (bad_cast&)
+    catch (std::bad_cast&)
     {
         return false;
     }
 }
 
-inline bool LocallyConnected2D::operator!=(const BaseLayer& layer) const { return !(*this == layer); }
+inline auto LocallyConnected2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
+}  // namespace snn::internal

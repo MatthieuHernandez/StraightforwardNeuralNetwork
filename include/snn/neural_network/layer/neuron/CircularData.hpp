@@ -13,7 +13,7 @@ class CircularData final
         friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         vector2D<float> queue;
         size_t indexPush = 0;
@@ -24,18 +24,18 @@ class CircularData final
         void initialize(size_t queueSize, size_t dataSize);  // should be call after the ctor
         ~CircularData() = default;
 
-        [[nodiscard]] const std::vector<float>* getBack();
+        [[nodiscard]] auto getBack() -> const std::vector<float>*;
         void pushBack(const std::vector<float>& data);
 
-        bool operator==(const CircularData& other) const;
-        bool operator!=(const CircularData& other) const;
+        auto operator==(const CircularData& other) const -> bool;
+        auto operator!=(const CircularData& other) const -> bool;
 };
 
 template <class Archive>
-void CircularData::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void CircularData::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    ar & queue;
-    ar & indexGet;
-    ar & indexPush;
+    archive & queue;
+    archive & indexGet;
+    archive & indexPush;
 }
 }  // namespace snn::internal

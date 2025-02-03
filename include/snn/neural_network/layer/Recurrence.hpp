@@ -3,7 +3,6 @@
 #include <boost/serialization/base_object.hpp>
 #include <memory>
 
-#include "../optimizer/StochasticGradientDescent.hpp"
 #include "SimpleLayer.hpp"
 #include "neuron/RecurrentNeuron.hpp"
 
@@ -14,22 +13,23 @@ class Recurrence final : public SimpleLayer<RecurrentNeuron>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         Recurrence() = default;  // use restricted to Boost library only
         Recurrence(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Recurrence(const Recurrence&) = default;
-        ~Recurrence() = default;
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        ~Recurrence() final = default;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 };
 
 template <class Archive>
-void Recurrence::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void Recurrence::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<Recurrence, SimpleLayer>();
-    ar& boost::serialization::base_object<SimpleLayer>(*this);
+    archive& boost::serialization::base_object<SimpleLayer>(*this);
 }
 }  // namespace snn::internal

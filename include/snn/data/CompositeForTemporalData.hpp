@@ -9,16 +9,16 @@ class CompositeForTemporalData : public TemporalComposite
         std::vector<int> indexesForShuffles;
 
     public:
-        CompositeForTemporalData(snn::Set sets[2]);
+        explicit CompositeForTemporalData(Data* data);
 
-        void shuffle() override;
-        void unshuffle() override;
+        void shuffle() final;
+        void unshuffle() final;
 
-        [[nodiscard]] bool isFirstTrainingDataOfTemporalSequence(int index) const override;
-        [[nodiscard]] bool isFirstTestingDataOfTemporalSequence(int index) const override;
-        [[nodiscard]] bool needToTrainOnTrainingData(int index) const override;
-        [[nodiscard]] bool needToEvaluateOnTestingData(int index) const override;
+        [[nodiscard]] auto isFirstTrainingDataOfTemporalSequence(int index) const -> bool final;
+        [[nodiscard]] auto isFirstTestingDataOfTemporalSequence(int index) const -> bool final;
+        [[nodiscard]] auto needToTrainOnTrainingData(int index) const -> bool final;
+        [[nodiscard]] auto needToEvaluateOnTestingData(int index) const -> bool final;
 
-        [[nodiscard]] int isValid() override;
+        [[nodiscard]] auto isValid() const -> errorType final;
 };
 }  // namespace snn::internal

@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "FashionMnist.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class FashionMnistTest : public testing::Test
@@ -12,47 +10,47 @@ class FashionMnistTest : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            FashionMnist dataset("./resources/datasets/Fashion-MNIST");
-            data = move(dataset.data);
+            FashionMnist datasetTest("./resources/datasets/Fashion-MNIST");
+            dataset = std::move(datasetTest.dataset);
         }
 
-        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-unique_ptr<Data> FashionMnistTest::data = nullptr;
+std::unique_ptr<Dataset> FashionMnistTest::dataset = nullptr;
 
 TEST_F(FashionMnistTest, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 784);
-    ASSERT_EQ(data->numberOfLabels, 10);
-    ASSERT_EQ((int)data->sets[training].inputs.size(), 60000);
-    ASSERT_EQ((int)data->sets[training].labels.size(), 60000);
-    ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
-    ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 10000);
-    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), 0);
+    ASSERT_EQ(dataset->sizeOfData, 784);
+    ASSERT_EQ(dataset->numberOfLabels, 10);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 60000);
+    ASSERT_EQ(dataset->data.training.labels.size(), 60000);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 10000);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 10000);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(784), FullyConnected(150), FullyConnected(70), FullyConnected(10)});
-    neuralNetwork.train(*data, 1_ep || 20_s);
+    neuralNetwork.train(*dataset, 1_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.76f);
+    ASSERT_ACCURACY(accuracy, 0.76F);
 }
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), Convolution(6, 3, activation::ReLU),
                                                 Convolution(4, 5, activation::ReLU), FullyConnected(10)},
-                                               StochasticGradientDescent(0.0002f, 0.80f));
-    neuralNetwork.train(*data, 1_ep || 1_min);
+                                               StochasticGradientDescent(0.0002F, 0.80F));
+    neuralNetwork.train(*dataset, 1_ep || 1_min);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70f);
+    ASSERT_ACCURACY(accuracy, 0.70F);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
@@ -60,28 +58,28 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1, 28, 28), Convolution(12, 3, activation::ReLU), MaxPooling(2), Convolution(24, 3, activation::ReLU),
          FullyConnected(92), FullyConnected(10)},
-        StochasticGradientDescent(0.005f, 0.93f));
+        StochasticGradientDescent(0.005F, 0.93F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.92_acc);  // Reach after 109 epochs of 2 sec.
+    neuralNetwork.train(*dataset, 0.92_acc);  // Reach after 109 epochs of 2 sec.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20f);
+    ASSERT_ACCURACY(accuracy, 0.20F);
 }
 
 TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForFashion-MNIST.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*data);
+    neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 270926);
-    ASSERT_FLOAT_EQ(accuracy, 0.8965f);
+    ASSERT_FLOAT_EQ(accuracy, 0.8965F);
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -135,6 +133,6 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
                 Momentum:      0.93
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }

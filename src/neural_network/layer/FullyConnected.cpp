@@ -1,19 +1,18 @@
 #include "FullyConnected.hpp"
 
 #include <boost/serialization/export.hpp>
+#include <utility>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-FullyConnected::FullyConnected(LayerModel& model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : SimpleLayer(model, optimizer)
+namespace snn::internal
+{
+FullyConnected::FullyConnected(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    : SimpleLayer(model, std::move(optimizer))
 {
 }
 
-unique_ptr<BaseLayer> FullyConnected::clone(shared_ptr<NeuralNetworkOptimizer> optimizer) const
+auto FullyConnected::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer>
 {
-    auto layer = make_unique<FullyConnected>(*this);
+    auto layer = std::make_unique<FullyConnected>(*this);
     for (int n = 0; n < layer->getNumberOfNeurons(); ++n)
     {
         layer->neurons[n].setOptimizer(optimizer);
@@ -21,23 +20,24 @@ unique_ptr<BaseLayer> FullyConnected::clone(shared_ptr<NeuralNetworkOptimizer> o
     return layer;
 }
 
-string FullyConnected::summary() const
+auto FullyConnected::summary() const -> std::string
 {
-    stringstream ss;
-    ss << "------------------------------------------------------------" << endl;
-    ss << " FullyConnected" << endl;
-    ss << "                Input shape:  [" << this->getNumberOfInputs() << "]" << endl;
-    ss << "                Neurons:      " << this->getNumberOfNeurons() << endl;
-    ss << "                Parameters:   " << this->getNumberOfParameters() << endl;
-    ss << "                Activation:   " << this->neurons[0].outputFunction->getName() << endl;
-    ss << "                Output shape: [" << this->getNumberOfNeurons() << "]" << endl;
+    std::stringstream summary;
+    summary << "------------------------------------------------------------\n";
+    summary << " FullyConnected\n";
+    summary << "                Input shape:  [" << this->getNumberOfInputs() << "]\n";
+    summary << "                Neurons:      " << this->getNumberOfNeurons() << '\n';
+    summary << "                Parameters:   " << this->getNumberOfParameters() << '\n';
+    summary << "                Activation:   " << this->neurons[0].outputFunction->getName() << '\n';
+    summary << "                Output shape: [" << this->getNumberOfNeurons() << "]\n";
     if (!optimizers.empty())
     {
-        ss << "                Optimizers:   " << optimizers[0]->summary() << endl;
+        summary << "                Optimizers:   " << optimizers[0]->summary() << '\n';
     }
-    for (size_t o = 1; o < this->optimizers.size(); ++o)
+    for (size_t opti = 1; opti < this->optimizers.size(); ++opti)
     {
-        ss << "                              " << optimizers[o]->summary() << endl;
+        summary << "                              " << optimizers[opti]->summary() << '\n';
     }
-    return ss.str();
+    return summary.str();
 }
+}  // namespace snn::internal

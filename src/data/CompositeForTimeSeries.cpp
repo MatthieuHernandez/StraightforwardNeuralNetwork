@@ -1,77 +1,84 @@
 #include "CompositeForTimeSeries.hpp"
 
 #include <algorithm>
-#include <random>
 
-#include "ExtendedExpection.hpp"
 #include "Tools.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForTimeSeries::CompositeForTimeSeries(Set sets[2], int numberOfRecurrences)
-    : TemporalComposite(sets),
+namespace snn::internal
+{
+CompositeForTimeSeries::CompositeForTimeSeries(Data* data, int numberOfRecurrences)
+    : TemporalComposite(data),
       numberOfRecurrences(numberOfRecurrences)
 {
-    if (this->numberOfRecurrences < 1) throw runtime_error("The number of recurrence must be >= 1 for time series.");
+    if (this->numberOfRecurrences < 1)
+    {
+        throw std::runtime_error("The number of recurrence must be >= 1 for time series.");
+    }
 
-    this->sets[training].numberOfTemporalSequence = 1;
-    this->sets[testing].numberOfTemporalSequence = 1;
+    this->data->training.numberOfTemporalSequence = 1;
+    this->data->testing.numberOfTemporalSequence = 1;
 
-    this->divide = this->sets[training].size / (this->numberOfRecurrences + 1);
-    this->rest = this->sets[training].size % (this->numberOfRecurrences + 1);
+    this->divide = static_cast<int>(this->data->training.size) / (this->numberOfRecurrences + 1);
+    this->rest = this->data->training.size % (this->numberOfRecurrences + 1);
 
     this->indexesForShuffling.resize(this->divide);
     for (int i = 0; i < this->divide; ++i)
     {
         this->indexesForShuffling[i] = i;
     }
-    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
-    this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
-    this->sets[training].areFirstDataOfTemporalSequence[0] = true;
+    this->data->training.needToTrainOnData = std::vector(this->data->training.size, true);
+    this->data->training.areFirstDataOfTemporalSequence = std::vector(this->data->training.size, false);
+    this->data->training.areFirstDataOfTemporalSequence[0] = true;
     this->offset = 0;
 }
 
 void CompositeForTimeSeries::shuffle()
 {
-    ranges::shuffle(this->indexesForShuffling, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffling, tools::rng);
 
-    for (int i = this->sets[training].size - (this->numberOfRecurrences + 1); i < this->sets[training].size; ++i)
+    for (auto i = this->data->training.size - (this->numberOfRecurrences + 1); i < this->data->training.size; ++i)
     {
-        this->sets[training].needToTrainOnData[i] = false;
+        this->data->training.needToTrainOnData[i] = false;
     }
 
     for (int i = 0; i < offset; ++i)
     {
-        this->sets[training].shuffledIndexes[i] = i;
-        this->sets[training].needToTrainOnData[i] = true;
-        this->sets[training].areFirstDataOfTemporalSequence[i] = false;
+        this->data->training.shuffledIndexes[i] = i;
+        this->data->training.needToTrainOnData[i] = true;
+        this->data->training.areFirstDataOfTemporalSequence[i] = false;
     }
-    this->sets[training].areFirstDataOfTemporalSequence[0] = true;
+    this->data->training.areFirstDataOfTemporalSequence[0] = true;
 
     int iForIndex = 0;
     for (size_t i = 0; i < this->indexesForShuffling.size(); ++i)
     {
         const int maxIndex =
-            this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + this->numberOfRecurrences + offset;
-        if (maxIndex < this->sets[training].size)
+            (this->indexesForShuffling[i] * (this->numberOfRecurrences + 1)) + this->numberOfRecurrences + offset;
+        if (maxIndex < this->data->training.size)
         {
             for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
             {
-                const int index = iForIndex * (this->numberOfRecurrences + 1) + j + offset;
-                this->sets[training].shuffledIndexes[index] =
+                const int index = (iForIndex * (this->numberOfRecurrences + 1)) + j + offset;
+                this->data->training.shuffledIndexes[index] =
                     this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
 
                 if (j != 0)
-                    this->sets[training].areFirstDataOfTemporalSequence[index] = false;
+                {
+                    this->data->training.areFirstDataOfTemporalSequence[index] = false;
+                }
                 else
-                    this->sets[training].areFirstDataOfTemporalSequence[index] = true;
+                {
+                    this->data->training.areFirstDataOfTemporalSequence[index] = true;
+                }
 
                 if (j == this->numberOfRecurrences && index >= offset)
-                    this->sets[training].needToTrainOnData[index] = true;
+                {
+                    this->data->training.needToTrainOnData[index] = true;
+                }
                 else
-                    this->sets[training].needToTrainOnData[index] = false;
+                {
+                    this->data->training.needToTrainOnData[index] = false;
+                }
             }
             iForIndex++;
         }
@@ -82,24 +89,24 @@ void CompositeForTimeSeries::shuffle()
 void CompositeForTimeSeries::unshuffle()
 {
     this->TemporalComposite::unshuffle();
-    this->sets[training].needToTrainOnData = vector(this->sets[training].size, true);
-    this->sets[training].areFirstDataOfTemporalSequence = vector(this->sets[training].size, false);
-    this->sets[training].areFirstDataOfTemporalSequence[0] = true;
+    this->data->training.needToTrainOnData = std::vector(this->data->training.size, true);
+    this->data->training.areFirstDataOfTemporalSequence = std::vector(this->data->training.size, false);
+    this->data->training.areFirstDataOfTemporalSequence[0] = true;
 }
 
-bool CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) const
+auto CompositeForTimeSeries::isFirstTrainingDataOfTemporalSequence(int index) const -> bool
 {
-    return this->sets[training].areFirstDataOfTemporalSequence[index];
+    return this->data->training.areFirstDataOfTemporalSequence[index];
 }
 
-bool CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const { return index == 0 ? true : false; }
+auto CompositeForTimeSeries::isFirstTestingDataOfTemporalSequence(int index) const -> bool { return index == 0; }
 
-bool CompositeForTimeSeries::needToTrainOnTrainingData(int index) const
+auto CompositeForTimeSeries::needToTrainOnTrainingData(int index) const -> bool
 {
-    return this->sets[training].needToTrainOnData[index];
+    return this->data->training.needToTrainOnData[index];
 }
 
-bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const
+auto CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int index) const -> bool
 {
     // Skip firsts testing data can be distort the accuracy
     /*if(index < this->numberOfRecurrences)
@@ -107,14 +114,17 @@ bool CompositeForTimeSeries::needToEvaluateOnTestingData([[maybe_unused]] int in
     return true;
 }
 
-int CompositeForTimeSeries::isValid()
+auto CompositeForTimeSeries::isValid() const -> errorType
 {
-    if ((int)this->sets[training].areFirstDataOfTemporalSequence.size() != this->sets[training].size ||
-        !this->sets[testing].areFirstDataOfTemporalSequence.empty() ||
-        (int)this->sets[training].needToTrainOnData.size() != this->sets[training].size ||
-        !this->sets[testing].needToTrainOnData.empty() || !this->sets[training].needToEvaluateOnData.empty() ||
-        !this->sets[testing].needToEvaluateOnData.empty())
-        return 404;
+    if (static_cast<int>(this->data->training.areFirstDataOfTemporalSequence.size()) != this->data->training.size ||
+        !this->data->testing.areFirstDataOfTemporalSequence.empty() ||
+        static_cast<int>(this->data->training.needToTrainOnData.size()) != this->data->training.size ||
+        !this->data->testing.needToTrainOnData.empty() || !this->data->training.needToEvaluateOnData.empty() ||
+        !this->data->testing.needToEvaluateOnData.empty())
+    {
+        return errorType::compositeForTimeSeriesEmpty;
+    }
 
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

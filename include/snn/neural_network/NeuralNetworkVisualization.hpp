@@ -6,7 +6,7 @@ namespace snn::internal
 class NeuralNetworkVisualization
 {
     private:
-        static std::vector<float> getWeights(FilterLayer* filterLayer, int filterNumber);
+        static auto getWeights(FilterLayer* filterLayer, int filterNumber) -> std::vector<float>;
 
     public:
         static void saveAsBitmap(FilterLayer* filterLayer, const std::string& filePath);

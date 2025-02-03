@@ -1,20 +1,19 @@
 #include "SimpleNeuron.hpp"
 
 #include <boost/serialization/export.hpp>
+#include <utility>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-SimpleNeuron::SimpleNeuron(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : Neuron(model, optimizer)
+namespace snn::internal
+{
+SimpleNeuron::SimpleNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
+    : Neuron(model, std::move(optimizer))
 {
 }
 
-float SimpleNeuron::output(const vector<float>& inputs)
+auto SimpleNeuron::output(const std::vector<float>& inputs) -> float
 {
     this->lastInputs.pushBack(inputs);
-    float tmp = 0.0f;  // to activate the SIMD optimization
+    float tmp = 0.0F;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 1);
     size_t w = 0;
 #pragma omp simd
@@ -26,7 +25,7 @@ float SimpleNeuron::output(const vector<float>& inputs)
     return this->outputFunction->function(this->sum);
 }
 
-vector<float>& SimpleNeuron::backOutput(float error)
+auto SimpleNeuron::backOutput(float error) -> std::vector<float>&
 {
     error = error * this->outputFunction->derivative(this->sum);
     assert(this->weights.size() == this->errors.size() + 1);
@@ -45,8 +44,9 @@ void SimpleNeuron::train(float error)
     this->optimizer->updateWeights(*this, error);
 }
 
-int SimpleNeuron::isValid() const { return this->Neuron::isValid(); }
+auto SimpleNeuron::isValid() const -> errorType { return this->Neuron::isValid(); }
 
-bool SimpleNeuron::operator==(const SimpleNeuron& neuron) const { return this->Neuron::operator==(neuron); }
+auto SimpleNeuron::operator==(const SimpleNeuron& neuron) const -> bool { return this->Neuron::operator==(neuron); }
 
-bool SimpleNeuron::operator!=(const SimpleNeuron& neuron) const { return !(*this == neuron); }
+auto SimpleNeuron::operator!=(const SimpleNeuron& neuron) const -> bool { return !(*this == neuron); }
+}  // namespace snn::internal

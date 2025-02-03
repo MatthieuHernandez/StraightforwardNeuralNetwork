@@ -13,37 +13,38 @@ class MaxPooling2D final : public FilterLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         int numberOfOutputs;
         std::vector<int> maxValueIndexes;
 
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) override;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) override;
-        void computeTrain([[maybe_unused]] std::vector<float>& inputErrors) override {}
-        void buildKernelIndexes() override;
+        [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> final;
+        [[nodiscard]] auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> final;
+        void computeTrain([[maybe_unused]] std::vector<float>& inputErrors) final {}
+        void buildKernelIndexes() final;
 
     public:
         MaxPooling2D() = default;  // use restricted to Boost library only
         MaxPooling2D(LayerModel& model);
-        ~MaxPooling2D() override = default;
+        ~MaxPooling2D() final = default;
         MaxPooling2D(const MaxPooling2D&) = default;
-        std::unique_ptr<BaseLayer> clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const override;
+        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
 
-        [[nodiscard]] int isValid() const override;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const BaseLayer& layer) const override;
-        bool operator!=(const BaseLayer& layer) const override;
+        auto operator==(const BaseLayer& layer) const -> bool final;
+        auto operator!=(const BaseLayer& layer) const -> bool final;
 };
 
 template <class Archive>
-void MaxPooling2D::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void MaxPooling2D::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<MaxPooling2D, FilterLayer>();
-    ar& boost::serialization::base_object<FilterLayer>(*this);
-    ar& this->numberOfOutputs;
-    ar& this->maxValueIndexes;
+    archive& boost::serialization::base_object<FilterLayer>(*this);
+    archive& this->numberOfOutputs;
+    archive& this->maxValueIndexes;
 }
 }  // namespace snn::internal

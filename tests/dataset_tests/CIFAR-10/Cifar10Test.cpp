@@ -3,8 +3,6 @@
 #include "Cifar10.hpp"
 #include "ExtendedGTest.hpp"
 
-using namespace std;
-using namespace chrono;
 using namespace snn;
 
 class Cifar10Test : public testing::Test
@@ -12,37 +10,37 @@ class Cifar10Test : public testing::Test
     protected:
         static void SetUpTestSuite()
         {
-            Cifar10 dataset("./resources/datasets/CIFAR-10");
-            data = move(dataset.data);
+            Cifar10 datasetTest("./resources/datasets/CIFAR-10");
+            dataset = std::move(datasetTest.dataset);
         }
 
-        void SetUp() override { ASSERT_TRUE(data) << "Don't forget to download dataset"; }
+        void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static unique_ptr<Data> data;
+        static std::unique_ptr<Dataset> dataset;
 };
 
-unique_ptr<Data> Cifar10Test::data = nullptr;
+std::unique_ptr<Dataset> Cifar10Test::dataset = nullptr;
 
 TEST_F(Cifar10Test, loadData)
 {
-    ASSERT_EQ(data->sizeOfData, 3072);
-    ASSERT_EQ(data->numberOfLabels, 10);
-    ASSERT_EQ((int)data->sets[training].inputs.size(), 50000);
-    ASSERT_EQ((int)data->sets[training].labels.size(), 50000);
-    ASSERT_EQ((int)data->sets[snn::testing].inputs.size(), 10000);
-    ASSERT_EQ((int)data->sets[snn::testing].labels.size(), 10000);
-    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->sets[snn::testing].numberOfTemporalSequence, 0);
-    ASSERT_EQ(data->isValid(), 0);
+    ASSERT_EQ(dataset->sizeOfData, 3072);
+    ASSERT_EQ(dataset->numberOfLabels, 10);
+    ASSERT_EQ(dataset->data.training.inputs.size(), 50000);
+    ASSERT_EQ(dataset->data.training.labels.size(), 50000);
+    ASSERT_EQ(dataset->data.testing.inputs.size(), 10000);
+    ASSERT_EQ(dataset->data.testing.labels.size(), 10000);
+    ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
+    ASSERT_EQ(dataset->isValid(), errorType::noError);
 }
 
 TEST_F(Cifar10Test, trainNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3072), FullyConnected(80), FullyConnected(30), FullyConnected(10, activation::identity, Softmax())});
-    neuralNetwork.train(*data, 1_ep || 45_s);
+        {Input(3072), FullyConnected(100), FullyConnected(40), FullyConnected(10, activation::identity, Softmax())});
+    neuralNetwork.train(*dataset, 1_ep || 45_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.26f);
+    ASSERT_ACCURACY(accuracy, 0.26F);
 }
 
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
@@ -50,28 +48,28 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3, 32, 32), Convolution(16, 3, activation::ReLU), MaxPooling(2), Convolution(32, 3, activation::ReLU),
          MaxPooling(2), FullyConnected(128), FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.001f, 0.8f));
+        StochasticGradientDescent(0.001F, 0.8F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*data, 0.62_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.62_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20f);
+    ASSERT_ACCURACY(accuracy, 0.20F);
 }
 
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*data);
+    neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6196f);  // Reach after 55 epochs of 770 sec.
+    ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
 
-    string expectedSummary =
+    std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -131,7 +129,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Momentum:      0.8
 ============================================================
 )";
-    string summary = neuralNetwork.summary();
+    std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }
 
@@ -139,13 +137,12 @@ TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
 
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 13);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 14);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 15);
-    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *data, 16);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 14);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 15);
+    neuralNetwork.saveData2DAsBitmap("./bitmap/before", *dataset, 16);
 
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *data, 13);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *data, 14);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 15);
-    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *data, 16);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_13", *dataset, 13);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_14", *dataset, 14);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *dataset, 15);
+    neuralNetwork.saveFilterLayersAsBitmap("./bitmap/before_15", *dataset, 16);
 }

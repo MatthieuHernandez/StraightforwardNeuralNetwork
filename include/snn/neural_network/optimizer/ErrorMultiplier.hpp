@@ -12,7 +12,7 @@ class ErrorMultiplier final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         float factor;
 
@@ -20,26 +20,26 @@ class ErrorMultiplier final : public LayerOptimizer
         ErrorMultiplier() = default;  // use restricted to Boost library only
         ErrorMultiplier(float value, BaseLayer* layer);
         ErrorMultiplier(const ErrorMultiplier& errorMultiplier, const BaseLayer* layer);
-        ~ErrorMultiplier() override = default;
+        ~ErrorMultiplier() final = default;
 
-        std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
+        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> final;
 
-        void applyAfterOutputForTraining(std::vector<float>&, bool) override {}
-        void applyAfterOutputForTesting(std::vector<float>&) override {}
+        void applyAfterOutputForTraining(std::vector<float>&, bool) final {}
+        void applyAfterOutputForTesting(std::vector<float>&) final {}
 
-        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const LayerOptimizer& optimizer) const override;
-        bool operator!=(const LayerOptimizer& optimizer) const override;
+        auto operator==(const LayerOptimizer& optimizer) const -> bool final;
+        auto operator!=(const LayerOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>
-void ErrorMultiplier::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void ErrorMultiplier::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<ErrorMultiplier, LayerOptimizer>();
-    ar& boost::serialization::base_object<LayerOptimizer>(*this);
-    ar& this->factor;
+    archive& boost::serialization::base_object<LayerOptimizer>(*this);
+    archive& this->factor;
 }
 }  // namespace snn::internal

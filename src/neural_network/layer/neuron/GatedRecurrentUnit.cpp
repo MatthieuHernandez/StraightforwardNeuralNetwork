@@ -1,12 +1,11 @@
 #include "GatedRecurrentUnit.hpp"
 
+#include <algorithm>
 #include <boost/serialization/export.hpp>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetworkOptimizer> optimizer)
+namespace snn::internal
+{
+GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
       resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
                 optimizer),
@@ -17,9 +16,12 @@ GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, shared_ptr<NeuralNetwo
 {
 }
 
-float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset)
+auto GatedRecurrentUnit::output(const std::vector<float>& inputs, bool temporalReset) -> float
 {
-    if (temporalReset) this->reset();
+    if (temporalReset)
+    {
+        this->reset();
+    }
     float resetGateOutput = this->resetGate.output(inputs, temporalReset);
     this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
     this->outputGate.lastOutput *= resetGateOutput;
@@ -34,7 +36,7 @@ float GatedRecurrentUnit::output(const vector<float>& inputs, bool temporalReset
     return output;
 }
 
-std::vector<float>& GatedRecurrentUnit::backOutput(float error)
+auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 {
     float d3 = error;
     float d8 = d3 * this->updateGateOutput;
@@ -47,8 +49,8 @@ std::vector<float>& GatedRecurrentUnit::backOutput(float error)
     float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
-    ranges::transform(this->errors, e2, this->errors.begin(), plus<float>());
-    ranges::transform(this->errors, e3, this->errors.begin(), plus<float>());
+    std::ranges::transform(this->errors, e2, this->errors.begin(), std::plus<float>());
+    std::ranges::transform(this->errors, e3, this->errors.begin(), std::plus<float>());
     return this->errors;
 }
 
@@ -66,22 +68,22 @@ void GatedRecurrentUnit::train(float error)
     auto e3 = this->resetGate.backOutput(d16);
 }
 
-vector<float> GatedRecurrentUnit::getWeights() const
+auto GatedRecurrentUnit::getWeights() const -> std::vector<float>
 {
-    vector<float> allWeights;
+    std::vector<float> allWeights;
     allWeights.insert(allWeights.end(), this->resetGate.weights.begin(), this->resetGate.weights.end());
     allWeights.insert(allWeights.end(), this->updateGate.weights.begin(), this->updateGate.weights.end());
     allWeights.insert(allWeights.end(), this->outputGate.weights.begin(), this->outputGate.weights.end());
     return allWeights;
 }
 
-int GatedRecurrentUnit::getNumberOfParameters() const
+auto GatedRecurrentUnit::getNumberOfParameters() const -> int
 {
     return this->resetGate.getNumberOfParameters() + this->updateGate.getNumberOfParameters() +
            this->outputGate.getNumberOfParameters();
 }
 
-int GatedRecurrentUnit::getNumberOfInputs() const { return this->numberOfInputs; }
+auto GatedRecurrentUnit::getNumberOfInputs() const -> int { return this->numberOfInputs; }
 
 inline void GatedRecurrentUnit::reset()
 {
@@ -90,18 +92,27 @@ inline void GatedRecurrentUnit::reset()
     this->updateGateOutput = 0;
 }
 
-int GatedRecurrentUnit::isValid() const
+auto GatedRecurrentUnit::isValid() const -> errorType
 {
     auto err = resetGate.isValid();
-    if (err != 0) return err;
+    if (err != errorType::noError)
+    {
+        return err;
+    }
     err = updateGate.isValid();
-    if (err != 0) return err;
+    if (err != errorType::noError)
+    {
+        return err;
+    }
     err = outputGate.isValid();
-    if (err != 0) return err;
-    return 0;
+    if (err != errorType::noError)
+    {
+        return err;
+    }
+    return errorType::noError;
 }
 
-NeuralNetworkOptimizer* GatedRecurrentUnit::getOptimizer() const { return this->resetGate.getOptimizer(); }
+auto GatedRecurrentUnit::getOptimizer() const -> NeuralNetworkOptimizer* { return this->resetGate.getOptimizer(); }
 
 void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
@@ -110,7 +121,7 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
     this->outputGate.setOptimizer(newOptimizer);
 }
 
-bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
+auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> bool
 {
     return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&
            this->recurrentError == neuron.recurrentError && this->updateGateOutput == neuron.updateGateOutput &&
@@ -118,4 +129,5 @@ bool GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const
            this->updateGate == neuron.updateGate && this->outputGate == neuron.outputGate;
 }
 
-bool GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const { return !(*this == neuron); }
+auto GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const -> bool { return !(*this == neuron); }
+}  // namespace snn::internal

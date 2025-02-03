@@ -9,15 +9,13 @@
 #include "Sigmoid.hpp"
 #include "Tanh.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-vector<shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
-
-inline vector<shared_ptr<ActivationFunction>> ActivationFunction::initialize()
+namespace snn::internal
 {
-    vector<shared_ptr<ActivationFunction>> activations;
+std::vector<std::shared_ptr<ActivationFunction>> ActivationFunction::activationFunctions = initialize();
+
+inline auto ActivationFunction::initialize() -> std::vector<std::shared_ptr<ActivationFunction>>
+{
+    std::vector<std::shared_ptr<ActivationFunction>> activations;
     activations.reserve(6);
     activations.emplace_back(new Sigmoid());
     activations.emplace_back(new ImprovedSigmoid());
@@ -35,7 +33,7 @@ ActivationFunction::ActivationFunction(float min, float max)
 {
 }
 
-shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
+auto ActivationFunction::get(activation type) -> std::shared_ptr<ActivationFunction>
 {
     switch (type)
     {
@@ -58,12 +56,13 @@ shared_ptr<ActivationFunction> ActivationFunction::get(activation type)
     }
 }
 
-bool ActivationFunction::operator==(const ActivationFunction& activationFunction) const
+auto ActivationFunction::operator==(const ActivationFunction& activationFunction) const -> bool
 {
     return this->getType() == activationFunction.getType();
 }
 
-bool ActivationFunction::operator!=(const ActivationFunction& activationFunction) const
+auto ActivationFunction::operator!=(const ActivationFunction& activationFunction) const -> bool
 {
     return !this->operator==(activationFunction);
 }
+}  // namespace snn::internal

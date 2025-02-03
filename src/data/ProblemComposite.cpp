@@ -3,42 +3,46 @@
 #include <algorithm>
 #include <functional>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-ProblemComposite::ProblemComposite(Set sets[2], const int numberOfLabels)
-    : numberOfLabels(numberOfLabels)
+namespace snn::internal
 {
-    this->sets = sets;
+ProblemComposite::ProblemComposite(Data* data, const int numberOfLabels)
+    : numberOfLabels(numberOfLabels),
+      data(data)
+{
 }
 
-int ProblemComposite::isValid()
+auto ProblemComposite::isValid() const -> errorType
 {
-    if (this->sets == nullptr) return 402;
-    return 0;
+    if (this->data == nullptr)
+    {
+        return errorType::dataSetNull;
+    }
+    return errorType::noError;
 }
 
-const std::vector<float>& ProblemComposite::getTrainingOutputs(const int index, const int batchSize)
+auto ProblemComposite::getTrainingOutputs(const int index, const int batchSize) -> const std::vector<float>&
 {
-    int i = this->sets[training].shuffledIndexes[index];
-    if (batchSize <= 1) return this->sets[training].labels[i];
-
+    int idx = this->data->training.shuffledIndexes[index];
+    if (batchSize <= 1)
+    {
+        return this->data->training.labels[idx];
+    }
     batchedLabels.resize(numberOfLabels);
 
-    i = this->sets[training].shuffledIndexes[index];
-    const auto data0 = this->sets[training].labels[i];
-    i = this->sets[training].shuffledIndexes[index + 1];
-    const auto data1 = this->sets[training].labels[i];
-    ranges::transform(data0, data1, batchedLabels.begin(), plus<float>());
+    idx = this->data->training.shuffledIndexes[index];
+    const auto data0 = this->data->training.labels[idx];
+    idx = this->data->training.shuffledIndexes[index + 1];
+    const auto data1 = this->data->training.labels[idx];
+    std::ranges::transform(data0, data1, batchedLabels.begin(), std::plus<float>());
 
     for (int j = index + 2; j < index + batchSize; ++j)
     {
-        i = this->sets[training].shuffledIndexes[j];
-        const auto data = this->sets[training].labels[i];
-        ranges::transform(batchedLabels, data, batchedLabels.begin(), std::plus<float>());
+        idx = this->data->training.shuffledIndexes[j];
+        const auto dataToAdd = this->data->training.labels[idx];
+        std::ranges::transform(batchedLabels, dataToAdd, batchedLabels.begin(), std::plus<float>());
     }
-    ranges::transform(batchedLabels, batchedLabels.begin(),
-                      bind(divides<float>(), placeholders::_1, static_cast<float>(batchSize)));
+    std::ranges::transform(batchedLabels, batchedLabels.begin(),
+                           bind(std::divides<float>(), std::placeholders::_1, static_cast<float>(batchSize)));
     return batchedLabels;
 }
+}  // namespace snn::internal

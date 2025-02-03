@@ -16,7 +16,7 @@ class SimpleLayer : public Layer<N>
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) final;
@@ -25,24 +25,27 @@ class SimpleLayer : public Layer<N>
 
     public:
         SimpleLayer() = default;  // use restricted to Boost library only
+        SimpleLayer(SimpleLayer&&) = delete;
+        auto operator=(const SimpleLayer&) -> SimpleLayer& = delete;
+        auto operator=(SimpleLayer&&) -> SimpleLayer& = delete;
         SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         SimpleLayer(const SimpleLayer&) = default;
-        virtual ~SimpleLayer() = default;
+        ~SimpleLayer() override = default;
 
         [[nodiscard]] std::vector<int> getShapeOfInput() const final;
         [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
-        [[nodiscard]] int isValid() const final;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
-        bool operator==(const BaseLayer& layer) const final;
-        bool operator!=(const BaseLayer& layer) const final;
+        auto operator==(const BaseLayer& layer) const -> bool override;
+        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <BaseNeuron N>
 template <class Archive>
-void SimpleLayer<N>::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void SimpleLayer<N>::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<SimpleLayer<N>, Layer<N>>();
-    ar& boost::serialization::base_object<Layer<N>>(*this);
+    archive& boost::serialization::base_object<Layer<N>>(*this);
 }
 
 template <>
@@ -51,5 +54,5 @@ std::vector<float> SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector
 template <>
 std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vector<float>& inputs, bool temporalReset);
 
-#include "SimpleLayer.tpp"
 }  // namespace snn::internal
+#include "SimpleLayer.tpp"  // IWYU pragma: keep

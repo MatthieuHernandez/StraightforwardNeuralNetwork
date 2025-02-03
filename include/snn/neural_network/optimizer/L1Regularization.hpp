@@ -13,7 +13,7 @@ class L1Regularization final : public LayerOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
         float value;
 
@@ -23,26 +23,26 @@ class L1Regularization final : public LayerOptimizer
         L1Regularization() = default;  // use restricted to Boost library only
         L1Regularization(float value, BaseLayer* layer);
         L1Regularization(const L1Regularization& regularization, const BaseLayer* layer);
-        ~L1Regularization() override = default;
+        ~L1Regularization() final = default;
 
-        std::unique_ptr<LayerOptimizer> clone(const BaseLayer* newLayer) const override;
+        auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> final;
 
-        void applyAfterOutputForTraining(std::vector<float>&, bool) override {}
-        void applyAfterOutputForTesting(std::vector<float>&) override {}
+        void applyAfterOutputForTraining(std::vector<float>&, bool) final {}
+        void applyAfterOutputForTesting(std::vector<float>&) final {}
 
-        void applyBeforeBackpropagation(std::vector<float>& inputErrors) override;
+        void applyBeforeBackpropagation(std::vector<float>& inputErrors) final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const LayerOptimizer& optimizer) const override;
-        bool operator!=(const LayerOptimizer& optimizer) const override;
+        auto operator==(const LayerOptimizer& optimizer) const -> bool final;
+        auto operator!=(const LayerOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>
-void L1Regularization::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void L1Regularization::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<L1Regularization, LayerOptimizer>();
-    ar& boost::serialization::base_object<LayerOptimizer>(*this);
-    ar& this->value;
+    archive& boost::serialization::base_object<LayerOptimizer>(*this);
+    archive& this->value;
 }
 }  // namespace snn::internal

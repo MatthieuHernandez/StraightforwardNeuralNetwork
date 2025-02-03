@@ -2,40 +2,48 @@
 
 #include "ExtendedExpection.hpp"
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForClassification::CompositeForClassification(Set sets[2], int numberOfLabels)
-    : ProblemComposite(sets, numberOfLabels)
+namespace snn::internal
+{
+CompositeForClassification::CompositeForClassification(Data* data, int numberOfLabels)
+    : ProblemComposite(data, numberOfLabels)
 {
 }
 
-int CompositeForClassification::isValid()
+auto CompositeForClassification::isValid() const -> errorType
 {
-    if (this->sets[training].labels[0].size() < 2) return 406;
+    if (this->data->training.labels[0].size() < 2)
+    {
+        return errorType::dataWrongLabelSize;
+    };
     return this->ProblemComposite::isValid();
 }
 
-int CompositeForClassification::getTrainingLabel(const int index)
+auto CompositeForClassification::getTrainingLabel(const int index) -> int
 {
-    for (int i = 0; i < (int)this->sets[training].labels[index].size(); i++)
+    for (int i = 0; i < static_cast<int>(this->data->training.labels[index].size()); i++)
     {
-        if (this->sets[training].labels[index][i] == 1) return i;
+        if (this->data->training.labels[index][i] == 1)
+        {
+            return i;
+        }
     }
     throw std::runtime_error("wrong label");
 }
 
-int CompositeForClassification::getTestingLabel(const int index)
+auto CompositeForClassification::getTestingLabel(const int index) -> int
 {
-    for (int i = 0; i < (int)this->sets[testing].labels[index].size(); i++)
+    for (int i = 0; i < static_cast<int>(this->data->testing.labels[index].size()); i++)
     {
-        if (this->sets[testing].labels[index][i] == 1) return i;
+        if (this->data->testing.labels[index][i] == 1)
+        {
+            return i;
+        }
     }
     throw std::runtime_error("wrong label");
 }
 
-const std::vector<float>& CompositeForClassification::getTestingOutputs(const int) const
+auto CompositeForClassification::getTestingOutputs([[maybe_unused]] const int index) const -> const std::vector<float>&
 {
     throw ShouldNeverBeCalledException("getTestingOutputs");
 }
+}  // namespace snn::internal

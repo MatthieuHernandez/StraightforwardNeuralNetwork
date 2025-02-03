@@ -3,16 +3,14 @@
 
 #include "ActivationFunction.hpp"
 
-using namespace std;
-
 namespace snn::internal
 {
 class Identity final : public ActivationFunction
 {
     private:
-        activation getType() const override { return activation::identity; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::identity; }
 
-        string getName() const override { return "identity"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "identity"; }
 
     public:
         Identity()
@@ -20,8 +18,8 @@ class Identity final : public ActivationFunction
         {
         }
 
-        float function(const float x) const override { return x; }
+        auto function(const float x) const -> float final { return x; }
 
-        float derivative([[maybe_unused]] const float x) const override { return 1.0f; }
+        auto derivative([[maybe_unused]] const float x) const -> float final { return 1.0F; }
 };
 }  // namespace snn::internal

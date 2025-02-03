@@ -12,7 +12,7 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     public:
         float learningRate{};
@@ -21,26 +21,26 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         StochasticGradientDescent() = default;
         StochasticGradientDescent(float learningRate, float momentum);
         StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
-        ~StochasticGradientDescent() = default;
-        [[nodiscard]] std::shared_ptr<NeuralNetworkOptimizer> clone() const override;
+        ~StochasticGradientDescent() final = default;
+        [[nodiscard]] auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> final;
 
-        void updateWeights(SimpleNeuron& neuron, float error) const override;
-        void updateWeights(RecurrentNeuron& neuron, float error) const override;
+        void updateWeights(SimpleNeuron& neuron, float error) const final;
+        void updateWeights(RecurrentNeuron& neuron, float error) const final;
 
-        [[nodiscard]] int isValid() override;
+        [[nodiscard]] auto isValid() const -> errorType final;
 
-        [[nodiscard]] std::string summary() const override;
+        [[nodiscard]] auto summary() const -> std::string final;
 
-        bool operator==(const NeuralNetworkOptimizer& optimizer) const override;
-        bool operator!=(const NeuralNetworkOptimizer& optimizer) const override;
+        auto operator==(const NeuralNetworkOptimizer& optimizer) const -> bool final;
+        auto operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>
-void StochasticGradientDescent::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void StochasticGradientDescent::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<StochasticGradientDescent, NeuralNetworkOptimizer>();
-    ar& boost::serialization::base_object<NeuralNetworkOptimizer>(*this);
-    ar& this->learningRate;
-    ar& this->momentum;
+    archive& boost::serialization::base_object<NeuralNetworkOptimizer>(*this);
+    archive& this->learningRate;
+    archive& this->momentum;
 }
 }  // namespace snn::internal

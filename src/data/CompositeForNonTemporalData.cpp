@@ -1,47 +1,46 @@
 #include "CompositeForNonTemporalData.hpp"
 
 #include <algorithm>
-#include <random>
-#include <ranges>
 
-using namespace std;
-using namespace snn;
-using namespace internal;
-
-CompositeForNonTemporalData::CompositeForNonTemporalData(Set sets[2])
-    : TemporalComposite(sets)
+namespace snn::internal
 {
-    this->sets[training].numberOfTemporalSequence = 0;
-    this->sets[testing].numberOfTemporalSequence = 0;
+CompositeForNonTemporalData::CompositeForNonTemporalData(Data* data)
+    : TemporalComposite(data)
+{
+    this->data->training.numberOfTemporalSequence = 0;
+    this->data->testing.numberOfTemporalSequence = 0;
 }
 
-void CompositeForNonTemporalData::shuffle()  // TODO: also need learning to shuffle
+void CompositeForNonTemporalData::shuffle()  // TODO(matth): also need learning to shuffle
 {
-    ranges::shuffle(this->sets[training].shuffledIndexes, tools::rng);
+    std::ranges::shuffle(this->data->training.shuffledIndexes, tools::rng);
 }
 
 void CompositeForNonTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }
 
-bool CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence([[maybe_unused]] int index) const
+auto CompositeForNonTemporalData::isFirstTrainingDataOfTemporalSequence([[maybe_unused]] int index) const -> bool
 {
     return true;
 }
 
-bool CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence([[maybe_unused]] int index) const
+auto CompositeForNonTemporalData::isFirstTestingDataOfTemporalSequence([[maybe_unused]] int index) const -> bool
 {
     return false;
 }
 
-bool CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForNonTemporalData::needToTrainOnTrainingData([[maybe_unused]] int index) const -> bool { return true; }
 
-bool CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const { return true; }
+auto CompositeForNonTemporalData::needToEvaluateOnTestingData([[maybe_unused]] int index) const -> bool { return true; }
 
-int CompositeForNonTemporalData::isValid()
+auto CompositeForNonTemporalData::isValid() const -> errorType
 {
-    if (!this->sets[training].areFirstDataOfTemporalSequence.empty() ||
-        !this->sets[testing].areFirstDataOfTemporalSequence.empty() ||
-        !this->sets[training].needToTrainOnData.empty() || !this->sets[testing].needToTrainOnData.empty() ||
-        !this->sets[training].needToEvaluateOnData.empty() || !this->sets[testing].needToEvaluateOnData.empty())
-        return 404;
+    if (!this->data->training.areFirstDataOfTemporalSequence.empty() ||
+        !this->data->testing.areFirstDataOfTemporalSequence.empty() ||
+        !this->data->training.needToTrainOnData.empty() || !this->data->testing.needToTrainOnData.empty() ||
+        !this->data->training.needToEvaluateOnData.empty() || !this->data->testing.needToEvaluateOnData.empty())
+    {
+        return errorType::compositeForNonTemporalDataEmpty;
+    }
     return this->TemporalComposite::isValid();
 }
+}  // namespace snn::internal

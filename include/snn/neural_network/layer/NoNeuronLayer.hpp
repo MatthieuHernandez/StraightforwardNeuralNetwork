@@ -12,7 +12,7 @@ class NoNeuronLayer : public BaseLayer
     private:
         friend class boost::serialization::access;
         template <class Archive>
-        void serialize(Archive& ar, unsigned version);
+        void serialize(Archive& archive, uint32_t version);
 
     protected:
         int numberOfInputs;
@@ -25,22 +25,22 @@ class NoNeuronLayer : public BaseLayer
             this->numberOfInputs = model.numberOfInputs;
             this->numberOfOutputs = model.numberOfOutputs;
         }
-        virtual ~NoNeuronLayer() = default;
+        ~NoNeuronLayer() override = default;
 
-        [[nodiscard]] int getNumberOfOutput() const;
-        [[nodiscard]] float getAverageOfAbsNeuronWeights() const override;
-        [[nodiscard]] float getAverageOfSquareNeuronWeights() const override;
-        [[nodiscard]] void* getNeuron(int index) override;
-        [[nodiscard]] int getNumberOfNeurons() const override;
-        [[nodiscard]] int getNumberOfParameters() const override;
+        [[nodiscard]] auto getNumberOfOutput() const -> int;
+        [[nodiscard]] auto getAverageOfAbsNeuronWeights() const -> float final;
+        [[nodiscard]] auto getAverageOfSquareNeuronWeights() const -> float final;
+        [[nodiscard]] auto getNeuron(int index) -> void* final;
+        [[nodiscard]] auto getNumberOfNeurons() const -> int final;
+        [[nodiscard]] auto getNumberOfParameters() const -> int final;
 };
 
 template <class Archive>
-void NoNeuronLayer::serialize(Archive& ar, [[maybe_unused]] const unsigned version)
+void NoNeuronLayer::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
     boost::serialization::void_cast_register<NoNeuronLayer, BaseLayer>();
-    ar& boost::serialization::base_object<BaseLayer>(*this);
-    ar& this->numberOfInputs;
-    ar& this->numberOfOutputs;
+    archive& boost::serialization::base_object<BaseLayer>(*this);
+    archive& this->numberOfInputs;
+    archive& this->numberOfOutputs;
 }
 }  // namespace snn::internal

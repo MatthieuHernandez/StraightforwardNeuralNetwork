@@ -8,7 +8,7 @@ using namespace snn;
 
 Mnist::Mnist(std::string folderPath) { this->loadData(folderPath); }
 
-void Mnist::loadData(std::string folderPath)
+void Mnist::loadData(const std::string& folderPath)
 {
     vector2D<float> trainingInputs = readImages(folderPath + "/train-images.idx3-ubyte", 60000);
     vector2D<float> trainingLabels = readLabels(folderPath + "/train-labels.idx1-ubyte", 60000);
@@ -28,7 +28,10 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
 
-    if (!file.is_open()) throw FileOpeningFailedException();
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
 
     unsigned char c;
     int shift = 0;
@@ -42,7 +45,7 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
             c = static_cast<char>(file.get());
             if (shift >= 16)
             {
-                float value = static_cast<float>(static_cast<int>(c));
+                auto value = static_cast<float>(static_cast<int>(c));
                 images.back().push_back(value);
                 j++;
             }
@@ -51,7 +54,10 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
                 shift++;
             }
         }
-        if (images.back().size() != sizeOfData) images.resize(images.size() - 1);
+        if (images.back().size() != sizeOfData)
+        {
+            images.resize(images.size() - 1);
+        }
     }
     file.close();
     return images;
@@ -64,8 +70,10 @@ auto Mnist::readLabels(std::string filePath, int size) -> vector2D<float>
     vector2D<float> labels;
     labels.reserve(size);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     unsigned char c;
     int shift = 0;
     while (!file.eof())

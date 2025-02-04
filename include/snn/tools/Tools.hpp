@@ -17,7 +17,7 @@ using vector2D = std::vector<std::vector<T>>;
 template <typename T>
 using vector3D = std::vector<std::vector<std::vector<T>>>;
 
-enum logLevel
+enum logLevel : uint8_t
 {
     none = 0,
     minimal = 1,
@@ -29,7 +29,7 @@ static constexpr logLevel verbose = none;
 
 namespace snn::internal
 {
-enum coordinateIndex
+enum coordinateIndex : uint8_t
 {
     C = 0,
     X = 1,
@@ -117,7 +117,10 @@ constexpr void log([[maybe_unused]] Targs&&... messages)
 inline auto toConstSizeString(int value, size_t length) -> std::string
 {
     auto str = std::to_string(value);
-    while (str.length() < length) str = " " + str;
+    while (str.length() < length)
+    {
+        str = " " + str;
+    }
     return str;
 }
 

@@ -7,7 +7,10 @@ namespace snn
 {
 auto Wait::operator||(const Wait& wait) -> Wait&
 {
-    if (op == waitOperator::andOp) throw std::runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::andOp)
+    {
+        throw std::runtime_error("Cannot mix || and && operator for waitFor.");
+    }
 
     this->op = waitOperator::orOp;
 
@@ -45,7 +48,10 @@ auto Wait::operator||(const Wait& wait) -> Wait&
 
 auto Wait::operator&&(const Wait& wait) -> Wait&
 {
-    if (op == waitOperator::orOp) throw std::runtime_error("Cannot mix || and && operator for waitFor.");
+    if (op == waitOperator::orOp)
+    {
+        throw std::runtime_error("Cannot mix || and && operator for waitFor.");
+    }
 
     this->op = waitOperator::andOp;
 

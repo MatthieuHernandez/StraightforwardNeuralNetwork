@@ -37,9 +37,15 @@ auto toString(std::chrono::milliseconds duration) -> std::string
         return std::to_string(duration.count() / 60000) + "min " + std::to_string(duration.count() / 1000) + "s";
     }
 
-    if (duration.count() > 1000) return std::to_string(duration.count() / 1000) + "s";
+    if (duration.count() > 1000)
+    {
+        return std::to_string(duration.count() / 1000) + "s";
+    }
 
-    if (duration.count() > 0) return std::to_string(duration.count()) + "ms";
+    if (duration.count() > 0)
+    {
+        return std::to_string(duration.count()) + "ms";
+    }
 
     return "";
 }

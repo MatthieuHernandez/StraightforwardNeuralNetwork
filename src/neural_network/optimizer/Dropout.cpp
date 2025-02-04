@@ -11,22 +11,23 @@ namespace snn::internal
 {
 Dropout::Dropout(const float value, const BaseLayer* layer)
     : LayerOptimizer(layer),
-      value(value)
+      value(value),
+      reverseValue(1.0F - this->value)
 {
-    this->reverseValue = 1.0F - this->value;
     auto size = layer->getNumberOfNeurons();
     this->presenceProbabilities.resize(size);
     this->dist = std::uniform_real_distribution<>(0.0, 1.0);
+    // NOLINTNEXTLINE(modernize-use-ranges):  std::ranges::generate doesn't support std::vector<bool>.
     std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                   [&] { return dist(tools::rng) >= this->value; });
 }
 
 Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
-    : LayerOptimizer(layer)
+    : LayerOptimizer(layer),
+      value(dropout.value),
+      reverseValue(dropout.reverseValue),
+      presenceProbabilities(dropout.presenceProbabilities)
 {
-    this->value = dropout.value;
-    this->reverseValue = dropout.reverseValue;
-    this->presenceProbabilities = dropout.presenceProbabilities;
 }
 
 auto Dropout::clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer>
@@ -38,6 +39,7 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
 {
     if (temporalReset)
     {
+        // NOLINTNEXTLINE(modernize-use-ranges):  std::ranges::generate doesn't support std::vector<bool>.
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
                       [&] { return dist(tools::rng) >= this->value; });
     }

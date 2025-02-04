@@ -35,12 +35,10 @@ CompositeForTimeSeries::CompositeForTimeSeries(Data* data, int numberOfRecurrenc
 void CompositeForTimeSeries::shuffle()
 {
     std::ranges::shuffle(this->indexesForShuffling, tools::rng);
-
     for (auto i = this->data->training.size - (this->numberOfRecurrences + 1); i < this->data->training.size; ++i)
     {
         this->data->training.needToTrainOnData[i] = false;
     }
-
     for (int i = 0; i < offset; ++i)
     {
         this->data->training.shuffledIndexes[i] = i;
@@ -48,21 +46,19 @@ void CompositeForTimeSeries::shuffle()
         this->data->training.areFirstDataOfTemporalSequence[i] = false;
     }
     this->data->training.areFirstDataOfTemporalSequence[0] = true;
-
     int iForIndex = 0;
-    for (size_t i = 0; i < this->indexesForShuffling.size(); ++i)
+    for (const auto shuffledIndex : this->indexesForShuffling)
     {
-        const int maxIndex =
-            (this->indexesForShuffling[i] * (this->numberOfRecurrences + 1)) + this->numberOfRecurrences + offset;
+        const int maxIndex = (shuffledIndex * (this->numberOfRecurrences + 1)) + this->numberOfRecurrences + offset;
         if (maxIndex < this->data->training.size)
         {
-            for (int j = 0; j < this->numberOfRecurrences + 1; ++j)
+            for (int r = 0; r < this->numberOfRecurrences + 1; ++r)
             {
-                const int index = (iForIndex * (this->numberOfRecurrences + 1)) + j + offset;
+                const int index = (iForIndex * (this->numberOfRecurrences + 1)) + r + offset;
                 this->data->training.shuffledIndexes[index] =
-                    this->indexesForShuffling[i] * (this->numberOfRecurrences + 1) + j + offset;
+                    shuffledIndex * (this->numberOfRecurrences + 1) + r + offset;
 
-                if (j != 0)
+                if (r != 0)
                 {
                     this->data->training.areFirstDataOfTemporalSequence[index] = false;
                 }
@@ -71,7 +67,7 @@ void CompositeForTimeSeries::shuffle()
                     this->data->training.areFirstDataOfTemporalSequence[index] = true;
                 }
 
-                if (j == this->numberOfRecurrences && index >= offset)
+                if (r == this->numberOfRecurrences && index >= offset)
                 {
                     this->data->training.needToTrainOnData[index] = true;
                 }

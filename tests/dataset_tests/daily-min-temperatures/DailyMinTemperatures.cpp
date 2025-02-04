@@ -15,15 +15,17 @@ DailyMinTemperatures::DailyMinTemperatures(std::string folderPath, int numberOfR
     this->loadData(folderPath);
 }
 
-void DailyMinTemperatures::loadData(std::string folderPath)
+void DailyMinTemperatures::loadData(const std::string& folderPath)
 {
     vector2D<float> inputs;
     vector2D<float> labels;
     std::string line;
     std::ifstream file(folderPath + "/daily-min-temperatures.csv", std::ios::in);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     inputs.reserve(3650);
 
     getline(file, line);  // ignore headers
@@ -32,7 +34,7 @@ void DailyMinTemperatures::loadData(std::string folderPath)
     {
         std::string date = line.substr(0, line.find(','));
         line = line.substr(line.find(',') + 1);
-        float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
+        auto value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
         if (previousValue != -273.15F)
         {

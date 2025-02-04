@@ -85,7 +85,10 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
     {
         throw InvalidArchitectureException("Input of layer has size of 0.");
     }
-    if (model.numberOfInputs > 1000000) throw InvalidArchitectureException("Layer is too big.");
+    if (model.numberOfInputs > 1000000)
+    {
+        throw InvalidArchitectureException("Layer is too big.");
+    }
 
     switch (model.type)
     {
@@ -260,7 +263,10 @@ void LayerFactory::build(std::vector<std::unique_ptr<BaseLayer>>& layers, std::v
         throw InvalidArchitectureException("First LayerModel must be a Input type LayerModel.");
     }
 
-    if (models.size() < 2) throw InvalidArchitectureException("Neural Network must have at least 1 layer.");
+    if (models.size() < 2)
+    {
+        throw InvalidArchitectureException("Neural Network must have at least 1 layer.");
+    }
 
     int numberOfInputs = 1;
     for (auto size : models[0].shapeOfInput)

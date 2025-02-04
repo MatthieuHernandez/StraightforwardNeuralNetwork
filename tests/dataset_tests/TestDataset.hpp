@@ -10,5 +10,5 @@ class TestDataset
         virtual ~TestDataset() = default;
 
     protected:
-        virtual void loadData(std::string folderPath) = 0;
+        virtual void loadData(const std::string& folderPath) = 0;
 };

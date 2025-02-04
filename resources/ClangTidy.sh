@@ -1,7 +1,7 @@
 #!/bin/bash
 
-clang-tidy -p ./build_clang/ --exclude-header-filter=* --use-color --quiet \
-  -checks='-*, hicpp-no-array-decay,' \
+clang-tidy -p ./build_clang/ --exclude-header-filter=* --use-color --quiet --fix \
+  -checks='-*, bugprone-narrowing-conversions, hicpp-braces-around-statements' \
   $(find  ./src ./tests ./include ./examples \
   -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.tpp" \) \
   ! -path "./src/external_library/*" \

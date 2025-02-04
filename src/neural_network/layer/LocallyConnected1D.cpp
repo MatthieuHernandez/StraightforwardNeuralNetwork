@@ -142,7 +142,10 @@ inline auto LocallyConnected1D::computeBackOutput(std::vector<float>& inputError
 
 inline void LocallyConnected1D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (size_t n = 0; n < this->neurons.size(); ++n) this->neurons[n].train(inputErrors[n]);
+    for (size_t n = 0; n < this->neurons.size(); ++n)
+    {
+        this->neurons[n].train(inputErrors[n]);
+    }
 }
 
 inline auto LocallyConnected1D::operator==(const BaseLayer& layer) const -> bool

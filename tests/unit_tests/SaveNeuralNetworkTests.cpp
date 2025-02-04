@@ -52,12 +52,16 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -0.77F;
     const std::vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
-    for (int i = 0; i < 10; ++i) A.trainOnce(inputs, desired);
-
+    for (int i = 0; i < 10; ++i)
+    {
+        A.trainOnce(inputs, desired);
+    }
     EXPECT_TRUE(A != B);
 
-    for (int i = 0; i < 10; ++i) B.trainOnce(inputs, desired);
-
+    for (int i = 0; i < 10; ++i)
+    {
+        B.trainOnce(inputs, desired);
+    }
     EXPECT_TRUE(A == B);
 
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";

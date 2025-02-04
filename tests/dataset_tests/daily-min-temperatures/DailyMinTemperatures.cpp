@@ -22,8 +22,10 @@ void DailyMinTemperatures::loadData(const std::string& folderPath)
     std::string line;
     std::ifstream file(folderPath + "/daily-min-temperatures.csv", std::ios::in);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     inputs.reserve(3650);
 
     getline(file, line);  // ignore headers

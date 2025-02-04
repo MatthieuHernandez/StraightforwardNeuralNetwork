@@ -54,7 +54,10 @@ auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>
                 shift++;
             }
         }
-        if (images.back().size() != sizeOfData) images.resize(images.size() - 1);
+        if (images.back().size() != sizeOfData)
+        {
+            images.resize(images.size() - 1);
+        }
     }
     file.close();
     return images;
@@ -67,9 +70,11 @@ auto FashionMnist::readLabels(std::string filePath, int size) -> vector2D<float>
     vector2D<float> labels;
     labels.reserve(size);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
-    unsigned char c;
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
+    unsigned char c{};
     int shift = 0;
     while (!file.eof())
     {

@@ -28,7 +28,10 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
 
-    if (!file.is_open()) throw FileOpeningFailedException();
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
 
     unsigned char c;
     int shift = 0;
@@ -51,7 +54,10 @@ auto Mnist::readImages(std::string filePath, int size) -> vector2D<float>
                 shift++;
             }
         }
-        if (images.back().size() != sizeOfData) images.resize(images.size() - 1);
+        if (images.back().size() != sizeOfData)
+        {
+            images.resize(images.size() - 1);
+        }
     }
     file.close();
     return images;
@@ -64,8 +70,10 @@ auto Mnist::readLabels(std::string filePath, int size) -> vector2D<float>
     vector2D<float> labels;
     labels.reserve(size);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     unsigned char c;
     int shift = 0;
     while (!file.eof())

@@ -117,7 +117,10 @@ constexpr void log([[maybe_unused]] Targs&&... messages)
 inline auto toConstSizeString(int value, size_t length) -> std::string
 {
     auto str = std::to_string(value);
-    while (str.length() < length) str = " " + str;
+    while (str.length() < length)
+    {
+        str = " " + str;
+    }
     return str;
 }
 

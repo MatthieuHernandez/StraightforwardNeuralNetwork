@@ -31,8 +31,10 @@ void Cifar10::readImages(const std::string& filePath, vector2D<float>& images, v
     std::ifstream file;
     file.open(filePath, std::ios::in | std::ios::binary);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     while (!file.eof())
     {
         unsigned char c = static_cast<char>(file.get());

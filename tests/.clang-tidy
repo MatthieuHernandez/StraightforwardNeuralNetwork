@@ -1,16 +1,17 @@
 Checks: >
     *,
     -boost-use-ranges,
+    -cppcoreguidelines-non-private-member-variables-in-classes,
+    -fuchsia-default-arguments-calls,
+    -fuchsia-default-arguments-declarations,
+    -fuchsia-trailing-return,
+    -llvmlibc-callee-namespace,
     -llvmlibc-implementation-in-namespace,
     -llvmlibc-inline-function-decl,
-    -llvmlibc-callee-namespace,
     -llvmlibc-restrict-system-libc-headers,
     -llvm-header-guard,
-    -fuchsia-trailing-return,
-    -fuchsia-default-arguments-declarations,
-    -fuchsia-default-arguments-calls,
     -misc-non-private-member-variables-in-classes,
-    -cppcoreguidelines-non-private-member-variables-in-classes,
+    -readability-identifier-length,
 
     -misc-include-cleaner,
     -altera-id-dependent-backward-branch,
@@ -29,17 +30,13 @@ WarningsAsErrors: >
     -misc-include-cleaner,
 
     -cppcoreguidelines-special-member-functions,
-    -readability-identifier-length,
     -cppcoreguidelines-special-member-functions,
-    -modernize-loop-convert,
-    -bugprone-narrowing-conversions,
     -misc-header-include-cycle,
     -performance-unnecessary-value-param,
     -misc-const-correctness,
     -bugprone-unused-local-non-trivial-variable,
     -cppcoreguidelines-avoid-magic-numbers,
     -readability-magic-numbers,
-    -hicpp-braces-around-statements,
     -readability-braces-around-statements,
     -cppcoreguidelines-prefer-member-initializer,
     -readability-math-missing-parentheses,
@@ -105,3 +102,6 @@ WarningsAsErrors: >
     -readability-redundant-member-init,
     -performance-inefficient-string-concatenation,
     -performance-type-promotion-in-math-fn
+CheckOptions:
+  - key:             readability-identifier-naming.MinimumLoopCounterNameLength
+    value:           '1'

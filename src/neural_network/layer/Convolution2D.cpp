@@ -52,7 +52,10 @@ void Convolution2D::buildKernelIndexes()
 inline auto Convolution2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer>
 {
     auto layer = std::make_unique<Convolution2D>(*this);
-    for (auto& neuron : layer->neurons) neuron.setOptimizer(optimizer);
+    for (auto& neuron : layer->neurons)
+    {
+        neuron.setOptimizer(optimizer);
+    }
     return layer;
 }
 
@@ -133,7 +136,10 @@ inline auto Convolution2D::computeBackOutput(std::vector<float>& inputErrors) ->
 
 inline void Convolution2D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (size_t n = 0; n < this->neurons.size(); ++n) this->neurons[n].train(inputErrors[n]);
+    for (size_t n = 0; n < this->neurons.size(); ++n)
+    {
+        this->neurons[n].train(inputErrors[n]);
+    }
 }
 
 inline auto Convolution2D::operator==(const BaseLayer& layer) const -> bool

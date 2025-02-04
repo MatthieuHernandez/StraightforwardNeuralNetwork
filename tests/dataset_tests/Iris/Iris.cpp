@@ -22,8 +22,10 @@ void Iris::loadData(const std::string& folderPath)
     vector2D<std::string> individuals;
     individuals.reserve(150);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     while (getline(file, line) && line.size() > 4)
     {
         const std::vector<std::string> temp;
@@ -47,7 +49,10 @@ void Iris::loadData(const std::string& folderPath)
 
     for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < 4; j++) inputs[i].push_back(stof(individuals[i][j]));
+        for (int j = 0; j < 4; j++)
+        {
+            inputs[i].push_back(stof(individuals[i][j]));
+        }
 
         if (individuals[i][4][8] == 'o')  // Iris-setosa
         {

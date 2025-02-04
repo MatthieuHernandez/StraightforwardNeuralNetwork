@@ -15,7 +15,10 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetwor
 #endif
 auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalReset) -> float
 {
-    if (temporalReset) this->reset();
+    if (temporalReset)
+    {
+        this->reset();
+    }
     this->lastInputs.pushBack(inputs);
     this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;

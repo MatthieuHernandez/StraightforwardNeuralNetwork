@@ -127,7 +127,10 @@ inline auto Convolution1D::computeBackOutput(std::vector<float>& inputErrors) ->
 
 inline void Convolution1D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (int n = 0; n < this->numberOfFilters; ++n) this->neurons[n].train(inputErrors[n]);
+    for (int n = 0; n < this->numberOfFilters; ++n)
+    {
+        this->neurons[n].train(inputErrors[n]);
+    }
 }
 
 inline auto Convolution1D::operator==(const BaseLayer& layer) const -> bool

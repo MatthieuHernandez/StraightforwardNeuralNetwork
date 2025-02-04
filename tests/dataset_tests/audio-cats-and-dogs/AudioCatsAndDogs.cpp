@@ -139,7 +139,10 @@ void AudioCatsAndDogs::loadData(const std::string& folderPath)
             AudioFile<float> audioFile;
             audioFile.load(folderPath + fileName);
 
-            if (audioFile.getNumSamplesPerChannel() == 0) throw FileOpeningFailedException();
+            if (audioFile.getNumSamplesPerChannel() == 0)
+            {
+                throw FileOpeningFailedException();
+            }
 
             const int channel = 0;  // only one
             const int numberOfSamples = audioFile.getNumSamplesPerChannel();

@@ -19,8 +19,10 @@ void Wine::loadData(const std::string& folderPath)
     std::string line;
     std::ifstream file(folderPath + "/wine.data", std::ios::in);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw FileOpeningFailedException();
+    }
     inputs.reserve(178);
     labels.reserve(178);
 

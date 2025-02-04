@@ -6,7 +6,7 @@
 class FashionMnist final : public TestDataset
 {
     public:
-        FashionMnist(std::string folderPath);
+        explicit FashionMnist(std::string folderPath);
 
     private:
         void loadData(const std::string& folderPath) final;

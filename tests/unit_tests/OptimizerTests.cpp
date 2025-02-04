@@ -30,7 +30,7 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::uniqu
     expectedOutputs.reserve(numberOfData);
     for (int i = 0; i < numberOfData; ++i)
     {
-        inputData.push_back(std::vector<float>());
+        inputData.emplace_back();
         inputData.back().reserve(sizeOfData);
         for (int j = 0; j < sizeOfData; ++j)
         {

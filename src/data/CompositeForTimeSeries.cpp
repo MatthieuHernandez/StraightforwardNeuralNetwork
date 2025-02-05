@@ -18,7 +18,7 @@ CompositeForTimeSeries::CompositeForTimeSeries(Data* data, int numberOfRecurrenc
     this->data->training.numberOfTemporalSequence = 1;
     this->data->testing.numberOfTemporalSequence = 1;
 
-    this->divide = static_cast<int>(this->data->training.size) / (this->numberOfRecurrences + 1);
+    this->divide = this->data->training.size / (this->numberOfRecurrences + 1);
     this->rest = this->data->training.size % (this->numberOfRecurrences + 1);
 
     this->indexesForShuffling.resize(this->divide);

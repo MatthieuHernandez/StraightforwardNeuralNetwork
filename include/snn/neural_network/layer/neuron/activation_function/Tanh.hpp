@@ -8,9 +8,9 @@ namespace snn::internal
 class Tanh final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation final { return activation::tanh; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::tanh; }
 
-        auto getName() const -> std::string final { return "tanh"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "tanh"; }
 
     public:
         Tanh()

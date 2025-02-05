@@ -18,8 +18,8 @@ class Identity final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float final { return x; }
+        [[nodiscard]] auto function(const float x) const -> float final { return x; }
 
-        auto derivative([[maybe_unused]] const float x) const -> float final { return 1.0F; }
+        [[nodiscard]] auto derivative([[maybe_unused]] const float x) const -> float final { return 1.0F; }
 };
 }  // namespace snn::internal

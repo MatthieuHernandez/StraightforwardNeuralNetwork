@@ -17,7 +17,7 @@ TEST(SaveNeuralNetwork, EqualTest)
                                GruLayer(3),
                                Recurrence(4)};
     StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
-    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
+    const StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), errorType::noError);

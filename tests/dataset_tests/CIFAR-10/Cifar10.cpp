@@ -11,10 +11,10 @@ Cifar10::Cifar10(std::string folderPath) { this->loadData(folderPath); }
 
 void Cifar10::loadData(const std::string& folderPath)
 {
-    std::array<std::string, 5> filePaths = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
-                                            folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
-                                            folderPath + "/data_batch_5.bin"};
-    std::array<std::string, 1> testFilePaths = {folderPath + "/test_batch.bin"};
+    std::array<std::string, 5> const filePaths = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
+                                                  folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
+                                                  folderPath + "/data_batch_5.bin"};
+    std::array<std::string, 1> const testFilePaths = {folderPath + "/test_batch.bin"};
     vector2D<float> trainingLabels;
     vector2D<float> testingLabels;
     vector2D<float> trainingInputs = this->readImages(filePaths, trainingLabels);
@@ -29,7 +29,7 @@ void Cifar10::readImages(const std::string& filePath, vector2D<float>& images, v
 {
     static constexpr int sizeOfData = 32 * 32 * 3;
     std::ifstream file;
-    file.open(filePath, std::ios::in | std::ios::binary);
+    file.open(filePath, std::ios::in | std::ios::binary);  // NOLINT(hicpp-signed-bitwise)
 
     if (!file.is_open())
     {

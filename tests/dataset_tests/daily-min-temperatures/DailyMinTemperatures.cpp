@@ -32,7 +32,7 @@ void DailyMinTemperatures::loadData(const std::string& folderPath)
     float previousValue = -273.15F;
     while (getline(file, line))
     {
-        std::string date = line.substr(0, line.find(','));
+        const std::string date = line.substr(0, line.find(','));
         line = line.substr(line.find(',') + 1);
         auto value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 

@@ -8,9 +8,9 @@ namespace snn::internal
 class Sigmoid final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation final { return activation::sigmoid; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::sigmoid; }
 
-        auto getName() const -> std::string final { return "sigmoid"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "sigmoid"; }
 
     public:
         Sigmoid()

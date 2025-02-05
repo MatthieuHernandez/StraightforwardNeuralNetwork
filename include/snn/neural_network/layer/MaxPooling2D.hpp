@@ -29,7 +29,8 @@ class MaxPooling2D final : public FilterLayer
         MaxPooling2D(LayerModel& model);
         ~MaxPooling2D() final = default;
         MaxPooling2D(const MaxPooling2D&) = default;
-        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

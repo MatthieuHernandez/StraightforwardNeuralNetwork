@@ -23,7 +23,7 @@ void FashionMnist::loadData(const std::string& folderPath)
 auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>
 {
     std::ifstream file;
-    file.open(filePath, std::ios::in | std::ios::binary);
+    file.open(filePath, std::ios::in | std::ios::binary);  // NOLINT(hicpp-signed-bitwise)
     vector2D<float> images;
     images.reserve(size);
     constexpr int sizeOfData = 28 * 28;
@@ -66,7 +66,7 @@ auto FashionMnist::readImages(std::string filePath, int size) -> vector2D<float>
 auto FashionMnist::readLabels(std::string filePath, int size) -> vector2D<float>
 {
     std::ifstream file;
-    file.open(filePath, std::ios::in | std::ios::binary);
+    file.open(filePath, std::ios::in | std::ios::binary);  // NOLINT(hicpp-signed-bitwise)
     vector2D<float> labels;
     labels.reserve(size);
 
@@ -83,7 +83,7 @@ auto FashionMnist::readLabels(std::string filePath, int size) -> vector2D<float>
         {
             if (!file.eof())
             {
-                std::vector<float> labelsTemp(10, 0);
+                const std::vector<float> labelsTemp(10, 0);
                 labels.push_back(labelsTemp);
                 labels.back()[c] = 1.0;
             }

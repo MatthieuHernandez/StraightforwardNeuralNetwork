@@ -8,9 +8,9 @@ namespace snn::internal
 class Gaussian final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation final { return activation::gaussian; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::gaussian; }
 
-        auto getName() const -> std::string final { return "gaussian"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "gaussian"; }
 
     public:
         Gaussian()
@@ -18,8 +18,8 @@ class Gaussian final : public ActivationFunction
         {
         }
 
-        auto function(const float x) const -> float final { return std::exp(-powf(x, 2)); }
+        [[nodiscard]] auto function(const float x) const -> float final { return std::exp(-powf(x, 2)); }
 
-        auto derivative(const float x) const -> float final { return -2 * x * std::exp(-powf(x, 2)); }
+        [[nodiscard]] auto derivative(const float x) const -> float final { return -2 * x * std::exp(-powf(x, 2)); }
 };
 }  // namespace snn::internal

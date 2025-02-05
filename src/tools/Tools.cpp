@@ -25,7 +25,7 @@ auto randomVector(const float min, const float max, const size_t size) -> std::v
 }
 auto toString(std::chrono::milliseconds duration) -> std::string
 {
-    std::string str;
+    const std::string str;
 
     if (duration.count() > 3600000)
     {

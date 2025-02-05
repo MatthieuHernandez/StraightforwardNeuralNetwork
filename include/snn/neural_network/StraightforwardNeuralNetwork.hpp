@@ -32,7 +32,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         void evaluate(const Dataset& dataset, Wait& wait);
         void evaluateOnce(const Dataset& dataset);
 
-        auto continueTraining(Wait wait) const -> bool;
+        [[nodiscard]] auto continueTraining(Wait wait) const -> bool;
         void validData(const Dataset& dataset, int batchSize) const;
 
         template <logLevel T>
@@ -70,7 +70,7 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         auto computeOutput(const std::vector<float>& inputs, bool temporalReset = false) -> std::vector<float>;
         auto computeCluster(const std::vector<float>& inputs, bool temporalReset = false) -> int;
 
-        auto isTraining() const -> bool;
+        [[nodiscard]] auto isTraining() const -> bool;
 
         void saveAs(const std::string& filePath);
         void saveFeatureMapsAsBitmap(const std::string& filePath);
@@ -80,9 +80,9 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
 
         [[nodiscard]] auto summary() const -> std::string;
 
-        auto getCurrentIndex() const -> int { return this->index; }
-        auto getCurrentEpoch() const -> int { return this->epoch; }
-        auto getNumberOfTrainingsBetweenTwoEvaluations() const -> int
+        [[nodiscard]] auto getCurrentIndex() const -> int { return this->index; }
+        [[nodiscard]] auto getCurrentEpoch() const -> int { return this->epoch; }
+        [[nodiscard]] auto getNumberOfTrainingsBetweenTwoEvaluations() const -> int
         {
             return this->numberOfTrainingsBetweenTwoEvaluations;
         }

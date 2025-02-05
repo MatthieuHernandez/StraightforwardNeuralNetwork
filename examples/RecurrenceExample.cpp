@@ -28,8 +28,8 @@ auto recurrenceExample() -> int
 
     neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
-    float mae = neuralNetwork.getMeanAbsoluteError();
+    const float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
+    const float mae = neuralNetwork.getMeanAbsoluteError();
 
     if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == errorType::noError)
     {

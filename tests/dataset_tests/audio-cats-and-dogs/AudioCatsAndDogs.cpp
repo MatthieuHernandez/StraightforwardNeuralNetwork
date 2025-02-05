@@ -120,7 +120,7 @@ void AudioCatsAndDogs::loadData(const std::string& folderPath)
 
     for (int i = 0; i < numberOfSet; ++i)
     {
-        for (const auto& fileName : fileNames[i])
+        for (const auto& fileName : fileNames.at(i))
         {
             bool isCat{};
             if (fileName.find("cat") != std::string::npos)

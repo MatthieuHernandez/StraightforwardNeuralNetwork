@@ -26,7 +26,8 @@ class LocallyConnected1D final : public FilterLayer
         LocallyConnected1D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         ~LocallyConnected1D() final = default;
         LocallyConnected1D(const LocallyConnected1D&) = default;
-        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

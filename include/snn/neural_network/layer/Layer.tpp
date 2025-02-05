@@ -74,7 +74,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
 template <BaseNeuron N>
 auto Layer<N>::isValid() const -> errorType
 {
-    if (this->getNumberOfNeurons() != (int)this->neurons.size() || this->getNumberOfNeurons() < 1 ||
+    if (this->getNumberOfNeurons() != static_cast<int>(this->neurons.size()) || this->getNumberOfNeurons() < 1 ||
         this->getNumberOfNeurons() > 1000000)
     {
         return errorType::layerTooMuchNeurons;
@@ -136,7 +136,7 @@ auto Layer<N>::getNumberOfInputs() const -> int
 template <BaseNeuron N>
 auto Layer<N>::getNumberOfNeurons() const -> int
 {
-    return (int)this->neurons.size();
+    return static_cast<int>(this->neurons.size());
 }
 
 template <BaseNeuron N>

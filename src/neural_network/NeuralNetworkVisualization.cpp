@@ -16,8 +16,8 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
         return;
     }
     auto numberOfFilters = filterLayer->getShapeOfOutput()[C];
-    float length = sqrt(static_cast<float>(numberOfFilters));
-    int filterX = static_cast<int>(ceil(length));
+    const float length = sqrt(static_cast<float>(numberOfFilters));
+    const int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 
     if (numberOfFilters <= filterX * filterY - filterX)
@@ -39,7 +39,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
                 {
                     for (int j = 0; j < shape[Y]; ++j)
                     {
-                        int index = tools::flatten(i, j, shape[X]);
+                        const int index = tools::flatten(i, j, shape[X]);
                         const auto color =
                             static_cast<unsigned char>(round((tanhf(weights[index] / 2.0F) + 1.0F) * 127.5F));
                         image.set_pixel((x * (shape[X] + 1)) + i, (y * (shape[Y] + 1)) + j, color, color, color);
@@ -89,8 +89,8 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
     {
         return;
     }
-    float length = sqrt(static_cast<float>(shape[C]));
-    int filterX = static_cast<int>(ceil(length));
+    const float length = sqrt(static_cast<float>(shape[C]));
+    const int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 
     if (shape[C] <= filterX * filterY - filterX)

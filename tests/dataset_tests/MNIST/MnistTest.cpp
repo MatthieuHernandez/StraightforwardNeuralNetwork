@@ -137,7 +137,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 261206);
     ASSERT_FLOAT_EQ(accuracy, 0.9871F);
 
-    std::string expectedSummary =
+    const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -184,7 +184,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
                 Momentum:      0
 ============================================================
 )";
-    std::string summary = neuralNetwork.summary();
+    const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }
 

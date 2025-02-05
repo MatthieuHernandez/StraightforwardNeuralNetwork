@@ -18,7 +18,7 @@ TEST(Identity, WorksWithSmallNumbers)
 
     neuralNetwork.train(dataset, 0.01_mae || 2_s);
 
-    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
+    const float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (mae <= 0.01)
     {
@@ -44,7 +44,7 @@ TEST(Identity, WorksWithBigNumbers)
 
     neuralNetwork.train(dataset, 1.0_mae || 3_s);
 
-    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
+    const float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     ASSERT_MAE(mae, 2);
 }
@@ -56,7 +56,7 @@ TEST(Identity, WorksWithLotsOfNumbers)
     vector2D<float> expectedOutputs = {{18}, {4}, {14}, {10}, {2}, {16}, {12}, {6}, {8}, {0},
                                        {19}, {5}, {15}, {11}, {3}, {17}, {13}, {7}, {9}, {1}};
 
-    float precision = 0.4F;
+    const float precision = 0.4F;
     Dataset dataset(problem::regression, inputData, expectedOutputs);
     dataset.setPrecision(precision);
 
@@ -65,8 +65,8 @@ TEST(Identity, WorksWithLotsOfNumbers)
 
     neuralNetwork.train(dataset, 1.00_acc || 2_s);
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
-    float mae = neuralNetwork.getMeanAbsoluteErrorMin();
+    const float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
+    const float mae = neuralNetwork.getMeanAbsoluteErrorMin();
 
     if (accuracy == 100 && mae < precision && neuralNetwork.isValid() == errorType::noError)
     {

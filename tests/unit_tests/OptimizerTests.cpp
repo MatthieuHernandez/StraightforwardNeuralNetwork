@@ -9,7 +9,7 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::uniqu
 
 TEST(Optimizer, FindRightValueIn20)
 {
-    std::unique_ptr<Dataset> dataset = createDataForOptimizerTests(1000, 20);
+    const std::unique_ptr<Dataset> dataset = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(20), FullyConnected(8, activation::tanh), FullyConnected(1, activation::sigmoid)},
         StochasticGradientDescent(0.05F, 0.9F));

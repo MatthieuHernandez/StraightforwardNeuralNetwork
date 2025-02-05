@@ -13,14 +13,14 @@ auto createDataForLocallyConnectedTests() -> Dataset;
 TEST(LocallyConnected, LayerLocallyConnected1D)
 {
     std::vector<float> input{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::vector<float> kernel0{1, 3, 5, 7, 9, 11, 1};
-    std::vector<float> kernel1{2, 4, 6, 8, 10, 12, 1};
-    std::vector<float> kernel2{13, 15, 17, 19, 21, 23, 1};
-    std::vector<float> kernel3{14, 16, 18, 20, 22, 24, 1};
-    std::vector<float> error{1, 2, 3, 4};
+    const std::vector<float> kernel0{1, 3, 5, 7, 9, 11, 1};
+    const std::vector<float> kernel1{2, 4, 6, 8, 10, 12, 1};
+    const std::vector<float> kernel2{13, 15, 17, 19, 21, 23, 1};
+    const std::vector<float> kernel3{14, 16, 18, 20, 22, 24, 1};
+    const std::vector<float> error{1, 2, 3, 4};
 
-    std::vector<float> expectedOutput{162, 183, 555, 589};
-    std::vector<float> expectedBackOutput{40, 48, 56, 64, 72, 80, 60, 72, 84, 96};
+    const std::vector<float> expectedOutput{162, 183, 555, 589};
+    const std::vector<float> expectedBackOutput{40, 48, 56, 64, 72, 80, 60, 72, 84, 96};
     LayerModel model{locallyConnected, 10, 4, 5, {6, 1, 7, 1.0F, activation::identity}, 2, 4, 2, 3, {2, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected1D conv(model, sgd);
@@ -41,8 +41,8 @@ TEST(LocallyConnected, SimpleLayerLocallyConnected2D)
     std::vector<float> error(9);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    std::vector<float> expectedOutput{2, 5, 10, 17};
-    std::vector<float> expectedBackOutput{1, 4, 9, 16};
+    const std::vector<float> expectedOutput{2, 5, 10, 17};
+    const std::vector<float> expectedBackOutput{1, 4, 9, 16};
     LayerModel model{locallyConnected, 4, 4, 4, {1, 1, 2, 1.0F, activation::identity}, 1, 4, 4, 1, {1, 2, 2}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected2D conv(model, sgd);
@@ -73,11 +73,11 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
     std::iota(std::begin(input), std::end(input), 1.0F);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    std::vector<float> expectedOutput{5920, 6163, 12535, 12757, 39239, 39701, 41325, 41673};
-    std::vector<float> expectedBackOutput{5,    11,  17,  23,  29,   35,   263,  277,  291,  305,  41,   47,   53,
-                                          59,   65,  71,  347, 361,  375,  389,  77,   83,   89,   95,   101,  107,
-                                          431,  445, 459, 473, 809,  831,  853,  875,  897,  919,  1643, 1673, 1703,
-                                          1733, 941, 963, 985, 1007, 1029, 1051, 1823, 1853, 1883, 1913};
+    const std::vector<float> expectedOutput{5920, 6163, 12535, 12757, 39239, 39701, 41325, 41673};
+    const std::vector<float> expectedBackOutput{
+        5,   11,  17,   23,   29,   35,   263, 277, 291, 305,  41,   47,   53,   59,   65,   71,  347,
+        361, 375, 389,  77,   83,   89,   95,  101, 107, 431,  445,  459,  473,  809,  831,  853, 875,
+        897, 919, 1643, 1673, 1703, 1733, 941, 963, 985, 1007, 1029, 1051, 1823, 1853, 1883, 1913};
     LayerModel model{locallyConnected, 50, 8, 18, {18, 1, 19, 1.0F, activation::identity}, 2, 8, 4, 3, {2, 5, 5}, {}};
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
     internal::LocallyConnected2D conv(model, sgd);
@@ -99,7 +99,7 @@ TEST(LocallyConnected, SimpleLocallyConnected1D)
         {Input(2, 9), LocallyConnected(4, 2, activation::sigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.05F, 0.1F));
     neuralNetwork.train(dataset, 3000_ep);
-    float accuracy = neuralNetwork.getGlobalClusteringRate();
+    const float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 
@@ -110,7 +110,7 @@ TEST(LocallyConnected, SimpleLocallyConnected2D)
         {Input(2, 3, 3), LocallyConnected(4, 2, activation::sigmoid), FullyConnected(2)},
         StochasticGradientDescent(0.05F, 0.1F));
     neuralNetwork.train(dataset, 3000_ep);
-    float accuracy = neuralNetwork.getGlobalClusteringRate();
+    const float accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 1.0);
 }
 

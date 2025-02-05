@@ -29,7 +29,7 @@ auto FilterLayer::isValid() const -> errorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
-    for (int s : shape)
+    for (const int s : shape)
     {
         numberOfOutput *= s;
     }

@@ -14,7 +14,7 @@ class ErrorMultiplier final : public LayerOptimizer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        float factor;
+        float factor{};
 
     public:
         ErrorMultiplier() = default;  // use restricted to Boost library only

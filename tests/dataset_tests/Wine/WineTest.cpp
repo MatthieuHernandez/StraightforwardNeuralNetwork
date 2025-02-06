@@ -3,8 +3,6 @@
 #include "ExtendedGTest.hpp"
 #include "Wine.hpp"
 
-using namespace snn;
-
 class WineTest : public testing::Test
 {
     protected:
@@ -16,10 +14,10 @@ class WineTest : public testing::Test
 
         void SetUp() final { ASSERT_TRUE(dataset) << "Don't forget to download dataset"; }
 
-        static std::unique_ptr<Dataset> dataset;
+        static std::unique_ptr<snn::Dataset> dataset;
 };
 
-std::unique_ptr<Dataset> WineTest::dataset = nullptr;
+std::unique_ptr<snn::Dataset> WineTest::dataset = nullptr;
 
 TEST_F(WineTest, loadData)
 {
@@ -31,12 +29,13 @@ TEST_F(WineTest, loadData)
     ASSERT_EQ(dataset->data.testing.labels.size(), 178);
     ASSERT_EQ(dataset->data.training.numberOfTemporalSequence, 0);
     ASSERT_EQ(dataset->data.testing.numberOfTemporalSequence, 0);
-    ASSERT_EQ(dataset->isValid(), errorType::noError);
+    ASSERT_EQ(dataset->isValid(), snn::errorType::noError);
 }
 
 TEST_F(WineTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({Input(13), FullyConnected(20), FullyConnected(8), FullyConnected(3)});
+    snn::StraightforwardNeuralNetwork neuralNetwork(
+        {snn::Input(13), snn::FullyConnected(20), snn::FullyConnected(8), snn::FullyConnected(3)});
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 

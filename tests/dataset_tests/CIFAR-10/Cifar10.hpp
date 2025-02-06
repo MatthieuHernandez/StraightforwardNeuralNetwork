@@ -6,7 +6,7 @@
 class Cifar10 final : public TestDataset
 {
     public:
-        explicit Cifar10(std::string folderPath);
+        explicit Cifar10(const std::string& folderPath);
 
     private:
         void loadData(const std::string& folderPath) final;

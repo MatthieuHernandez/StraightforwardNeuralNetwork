@@ -15,7 +15,7 @@ class LayerOptimizer
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        const BaseLayer* layer;
+        const BaseLayer* layer{};
 
     public:
         LayerOptimizer() = default;  // use restricted to Boost library only

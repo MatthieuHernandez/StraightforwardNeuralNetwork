@@ -5,7 +5,7 @@
 
 using namespace snn;
 
-auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Dataset>;
+static auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Dataset>;
 
 TEST(Optimizer, FindRightValueIn20)
 {

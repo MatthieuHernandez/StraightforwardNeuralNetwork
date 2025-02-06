@@ -154,7 +154,7 @@ auto NeuralNetwork::getNumberOfOutputs() const -> int { return this->layers.back
 auto NeuralNetwork::getNumberOfNeurons() const -> int
 {
     int sum = 0;
-    for (auto& layer : this->layers)
+    for (const auto& layer : this->layers)
     {
         sum += layer->getNumberOfNeurons();
     }

@@ -6,9 +6,7 @@
 #include <snn/tools/Tools.hpp>
 #include <string>
 
-using namespace snn;
-
-AudioCatsAndDogs::AudioCatsAndDogs(std::string folderPath, int sizeOfOneData)
+AudioCatsAndDogs::AudioCatsAndDogs(const std::string& folderPath, int sizeOfOneData)
     : sizeOfOneData(sizeOfOneData)
 {
     this->loadData(folderPath);
@@ -115,8 +113,8 @@ void AudioCatsAndDogs::loadData(const std::string& folderPath)
             "/test/dogs/dog_barking_99.wav",
         })};
     const int numberOfSet = 2;
-    std::array<vector2D<float>, numberOfSet> labels;
-    std::array<vector3D<float>, numberOfSet> inputs;
+    std::array<snn::vector2D<float>, numberOfSet> labels;
+    std::array<snn::vector3D<float>, numberOfSet> inputs;
 
     for (int i = 0; i < numberOfSet; ++i)
     {
@@ -141,13 +139,13 @@ void AudioCatsAndDogs::loadData(const std::string& folderPath)
 
             if (audioFile.getNumSamplesPerChannel() == 0)
             {
-                throw FileOpeningFailedException();
+                throw snn::FileOpeningFailedException();
             }
 
             const int channel = 0;  // only one
             const int numberOfSamples = audioFile.getNumSamplesPerChannel();
 
-            vector2D<float> dataSound;
+            snn::vector2D<float> dataSound;
             const auto rest = static_cast<int>((numberOfSamples % this->sizeOfOneData) != 0);
             const auto numberOfData = (numberOfSamples / this->sizeOfOneData) + rest;
             dataSound.reserve(numberOfData);
@@ -179,6 +177,6 @@ void AudioCatsAndDogs::loadData(const std::string& folderPath)
             inputs.at(i).push_back(dataSound);
         }
     }
-    this->dataset = std::make_unique<Dataset>(problem::classification, inputs[0], labels[0], inputs[1], labels[1],
-                                              nature::sequential);
+    this->dataset = std::make_unique<snn::Dataset>(snn::problem::classification, inputs[0], labels[0], inputs[1],
+                                                   labels[1], snn::nature::sequential);
 }

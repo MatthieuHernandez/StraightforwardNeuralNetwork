@@ -4,7 +4,7 @@
 class Iris final : public TestDataset
 {
     public:
-        explicit Iris(std::string folderPath);
+        explicit Iris(const std::string& folderPath);
 
     private:
         void loadData(const std::string& folderPath) final;

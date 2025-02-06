@@ -7,9 +7,7 @@
 #include <string>
 #include <vector>
 
-using namespace snn;
-
-DailyMinTemperatures::DailyMinTemperatures(std::string folderPath, int numberOfRecurrences)
+DailyMinTemperatures::DailyMinTemperatures(const std::string& folderPath, int numberOfRecurrences)
     : numberOfRecurrences(numberOfRecurrences)
 {
     this->loadData(folderPath);
@@ -17,14 +15,14 @@ DailyMinTemperatures::DailyMinTemperatures(std::string folderPath, int numberOfR
 
 void DailyMinTemperatures::loadData(const std::string& folderPath)
 {
-    vector2D<float> inputs;
-    vector2D<float> labels;
+    snn::vector2D<float> inputs;
+    snn::vector2D<float> labels;
     std::string line;
     std::ifstream file(folderPath + "/daily-min-temperatures.csv", std::ios::in);
 
     if (!file.is_open())
     {
-        throw FileOpeningFailedException();
+        throw snn::FileOpeningFailedException();
     }
     inputs.reserve(3650);
 
@@ -32,7 +30,7 @@ void DailyMinTemperatures::loadData(const std::string& folderPath)
     float previousValue = -273.15F;
     while (getline(file, line))
     {
-        const std::string date = line.substr(0, line.find(','));
+        [[maybe_unused]] const std::string date = line.substr(0, line.find(','));
         line = line.substr(line.find(',') + 1);
         auto value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
@@ -44,7 +42,7 @@ void DailyMinTemperatures::loadData(const std::string& folderPath)
         previousValue = value;
     }
     file.close();
-    this->dataset =
-        std::make_unique<Dataset>(problem::regression, inputs, labels, nature::timeSeries, this->numberOfRecurrences);
+    this->dataset = std::make_unique<snn::Dataset>(snn::problem::regression, inputs, labels, snn::nature::timeSeries,
+                                                   this->numberOfRecurrences);
     this->dataset->normalize(0, 1);
 }

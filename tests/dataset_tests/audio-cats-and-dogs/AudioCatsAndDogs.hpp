@@ -8,5 +8,5 @@ class AudioCatsAndDogs final : public TestDataset
 
     public:
         const int sizeOfOneData;
-        AudioCatsAndDogs(std::string folderPath, int sizeOfOneData);
+        AudioCatsAndDogs(const std::string& folderPath, int sizeOfOneData);
 };

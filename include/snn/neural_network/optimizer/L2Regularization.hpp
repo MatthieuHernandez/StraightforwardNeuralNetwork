@@ -15,7 +15,7 @@ class L2Regularization final : public LayerOptimizer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        float value;
+        float value{};
 
     public:
         L2Regularization() = default;  // use restricted to Boost library only

@@ -5,9 +5,7 @@
 #include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
-using namespace snn;
-
-Cifar10::Cifar10(std::string folderPath) { this->loadData(folderPath); }
+Cifar10::Cifar10(const std::string& folderPath) { this->loadData(folderPath); }
 
 void Cifar10::loadData(const std::string& folderPath)
 {
@@ -15,17 +13,17 @@ void Cifar10::loadData(const std::string& folderPath)
                                                   folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
                                                   folderPath + "/data_batch_5.bin"};
     std::array<std::string, 1> const testFilePaths = {folderPath + "/test_batch.bin"};
-    vector2D<float> trainingLabels;
-    vector2D<float> testingLabels;
-    vector2D<float> trainingInputs = this->readImages(filePaths, trainingLabels);
-    vector2D<float> testingInputs = this->readImages(testFilePaths, testingLabels);
+    snn::vector2D<float> trainingLabels;
+    snn::vector2D<float> testingLabels;
+    snn::vector2D<float> trainingInputs = this->readImages(filePaths, trainingLabels);
+    snn::vector2D<float> testingInputs = this->readImages(testFilePaths, testingLabels);
 
-    this->dataset = std::make_unique<Dataset>(problem::classification, trainingInputs, trainingLabels, testingInputs,
-                                              testingLabels);
+    this->dataset = std::make_unique<snn::Dataset>(snn::problem::classification, trainingInputs, trainingLabels,
+                                                   testingInputs, testingLabels);
     this->dataset->normalize(0, 1);
 }
 
-void Cifar10::readImages(const std::string& filePath, vector2D<float>& images, vector2D<float>& labels)
+void Cifar10::readImages(const std::string& filePath, snn::vector2D<float>& images, snn::vector2D<float>& labels)
 {
     static constexpr int sizeOfData = 32 * 32 * 3;
     std::ifstream file;
@@ -33,7 +31,7 @@ void Cifar10::readImages(const std::string& filePath, vector2D<float>& images, v
 
     if (!file.is_open())
     {
-        throw FileOpeningFailedException();
+        throw snn::FileOpeningFailedException();
     }
     while (!file.eof())
     {
@@ -64,11 +62,11 @@ void Cifar10::readImages(const std::string& filePath, vector2D<float>& images, v
             }
             else if (j < 2048)
             {
-                imageTemp[(j - 1024) * 3 + 1] = c;
+                imageTemp[((j - 1024) * 3) + 1] = c;
             }
             else
             {
-                imageTemp[(j - 2048) * 3 + 2] = c;
+                imageTemp[((j - 2048) * 3) + 2] = c;
             }
         }
 

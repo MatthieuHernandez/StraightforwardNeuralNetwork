@@ -8,5 +8,5 @@ class DailyMinTemperatures final : public TestDataset
         void loadData(const std::string& folderPath) final;
 
     public:
-        DailyMinTemperatures(std::string folderPath, int numberOfRecurrences);
+        DailyMinTemperatures(const std::string& folderPath, int numberOfRecurrences);
 };

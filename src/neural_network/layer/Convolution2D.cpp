@@ -61,7 +61,7 @@ inline auto Convolution2D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimiz
 
 auto Convolution2D::isValid() const -> errorType
 {
-    for (auto& neuron : neurons)
+    for (const auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->sizeOfNeuronInputs)
         {

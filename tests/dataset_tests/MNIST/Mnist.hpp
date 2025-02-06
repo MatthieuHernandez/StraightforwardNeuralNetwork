@@ -6,7 +6,7 @@
 class Mnist final : public TestDataset
 {
     public:
-        explicit Mnist(std::string folderPath);
+        explicit Mnist(const std::string& folderPath);
 
     private:
         void loadData(const std::string& folderPath) final;

@@ -94,7 +94,7 @@ auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrenc
 
     for (int i = 0; i < numberOfData; ++i)
     {
-        auto rnd = tools::randomBetween(0.0F, 1.0F / (numberOfRecurrences + 1));
+        auto rnd = tools::randomBetween(0.0F, 1.0F / static_cast<float>(numberOfRecurrences + 1));
         inputData.push_back({rnd});
 
         for (int j = 0; j < numberOfRecurrences + 1; ++j)

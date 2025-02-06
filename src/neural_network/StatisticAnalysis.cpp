@@ -232,7 +232,7 @@ auto StatisticAnalysis::computeWeightedClusteringRate() const -> float
             result += c.truePositive / (c.truePositive + c.falseNegative);
         }
     }
-    return result / clusters.size();
+    return result / static_cast<float>(clusters.size());
 }
 
 auto StatisticAnalysis::computeF1Score() const -> float
@@ -247,7 +247,7 @@ auto StatisticAnalysis::computeF1Score() const -> float
             result += (precision * recall) / (precision + recall);
         }
     }
-    return 2.0F * result / clusters.size();
+    return 2.0F * result / static_cast<float>(clusters.size());
 }
 
 auto StatisticAnalysis::computeMeanAbsoluteError() const -> float

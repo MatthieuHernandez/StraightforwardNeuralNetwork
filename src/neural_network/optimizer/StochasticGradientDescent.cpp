@@ -23,7 +23,7 @@ auto StochasticGradientDescent::clone() const -> std::shared_ptr<NeuralNetworkOp
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
 {
     auto w = 0;
-    const auto lr = this->learningRate / neuron.batchSize;  // to activate the SIMD optimization
+    const auto lr = this->learningRate / static_cast<float>(neuron.batchSize);  // to activate the SIMD optimization
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();
@@ -44,7 +44,7 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
 {
     auto w = 0;
-    const auto lr = this->learningRate / neuron.batchSize;
+    const auto lr = this->learningRate / static_cast<float>(neuron.batchSize);
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();

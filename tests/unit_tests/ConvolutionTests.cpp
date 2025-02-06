@@ -8,7 +8,7 @@
 
 using namespace snn;
 
-auto createDataForConvolutionTests() -> Dataset;
+static auto createDataForConvolutionTests() -> Dataset;
 
 TEST(Convolution, LayerConvolution1D)
 {
@@ -111,5 +111,5 @@ auto createDataForConvolutionTests() -> Dataset
          0.91F, 0.92F}};
     vector2D<float> expectedOutputs = {{0, 1}, {0, 1}, {1, 0}};
 
-    return Dataset(problem::classification, inputData, expectedOutputs);
+    return {problem::classification, inputData, expectedOutputs};
 }

@@ -15,7 +15,7 @@ class MaxPooling1D final : public FilterLayer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        int numberOfOutputs;
+        int numberOfOutputs{};
         std::vector<int> maxValueIndexes;
 
         [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> final;

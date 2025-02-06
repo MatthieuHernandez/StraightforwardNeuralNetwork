@@ -53,7 +53,7 @@ inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimiz
 
 auto Convolution1D::isValid() const -> errorType
 {
-    for (auto& neuron : neurons)
+    for (const auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
         {

@@ -15,7 +15,7 @@ class L1Regularization final : public LayerOptimizer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        float value;
+        float value{};
 
         void applyAfterOutput(std::vector<float>& outputs);
 

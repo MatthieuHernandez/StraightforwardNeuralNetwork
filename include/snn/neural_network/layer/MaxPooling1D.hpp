@@ -26,7 +26,7 @@ class MaxPooling1D final : public FilterLayer
 
     public:
         MaxPooling1D() = default;  // use restricted to Boost library only
-        MaxPooling1D(LayerModel& model);
+        explicit MaxPooling1D(LayerModel& model);
         ~MaxPooling1D() final = default;
         MaxPooling1D(const MaxPooling1D&) = default;
         [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const

@@ -24,8 +24,11 @@ class ErrorMultiplier final : public LayerOptimizer
 
         auto clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer> final;
 
-        void applyAfterOutputForTraining(std::vector<float>&, bool) final {}
-        void applyAfterOutputForTesting(std::vector<float>&) final {}
+        void applyAfterOutputForTraining([[maybe_unused]] std::vector<float>& /*outputs*/,
+                                         [[maybe_unused]] bool /*temporalReset*/) final
+        {
+        }
+        void applyAfterOutputForTesting([[maybe_unused]] std::vector<float>& /*outputs*/) final {}
 
         void applyBeforeBackpropagation(std::vector<float>& inputErrors) final;
 

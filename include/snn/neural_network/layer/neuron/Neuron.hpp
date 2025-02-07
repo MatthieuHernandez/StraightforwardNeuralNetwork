@@ -28,7 +28,7 @@ class Neuron
 
         float sum = 0;
 
-        activation activationFunction;
+        activation activationFunction{};
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         static auto randomInitializeWeight(int numberOfWeights) -> float;

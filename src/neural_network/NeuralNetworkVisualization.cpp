@@ -16,7 +16,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, const st
         return;
     }
     auto numberOfFilters = filterLayer->getShapeOfOutput()[C];
-    const float length = sqrt(static_cast<float>(numberOfFilters));
+    const float length = std::sqrtf(static_cast<float>(numberOfFilters));
     const int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 
@@ -89,7 +89,7 @@ void NeuralNetworkVisualization::saveAsBitmap(FilterLayer* filterLayer, std::vec
     {
         return;
     }
-    const float length = sqrt(static_cast<float>(shape[C]));
+    const float length = std::sqrtf(static_cast<float>(shape[C]));
     const int filterX = static_cast<int>(ceil(length));
     int filterY = static_cast<int>(ceil(length));
 

@@ -18,7 +18,7 @@ class Softmax final : public LayerOptimizer
 
     public:
         Softmax() = default;  // use restricted to Boost library only
-        Softmax(const BaseLayer* layer);
+        explicit Softmax(const BaseLayer* layer);
         Softmax(const Softmax& Softmax, const BaseLayer* layer);
         ~Softmax() final = default;
 

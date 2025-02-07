@@ -19,7 +19,7 @@ class LayerOptimizer
 
     public:
         LayerOptimizer() = default;  // use restricted to Boost library only
-        LayerOptimizer(const BaseLayer* layer);
+        explicit LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
         virtual auto clone(const BaseLayer* layer) const -> std::unique_ptr<LayerOptimizer> = 0;

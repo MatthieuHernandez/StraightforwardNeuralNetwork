@@ -70,7 +70,7 @@ class NeuralNetwork : public StatisticAnalysis
 
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
-        std::vector<std::unique_ptr<BaseLayer>> layers{};
+        std::vector<std::unique_ptr<BaseLayer>> layers;
 
         [[nodiscard]] auto isValid() const -> errorType;
 

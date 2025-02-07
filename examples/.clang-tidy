@@ -37,7 +37,6 @@ WarningsAsErrors: >
     -cppcoreguidelines-avoid-magic-numbers,
     -readability-magic-numbers,
     -readability-braces-around-statements,
-    -cppcoreguidelines-prefer-member-initializer,
     -readability-math-missing-parentheses,
     -hicpp-named-parameter,
     -readability-named-parameter,
@@ -45,8 +44,6 @@ WarningsAsErrors: >
     -clang-diagnostic-unused-command-line-argument,
     -modernize-use-trailing-return-type,
     -readability-convert-member-functions-to-static,
-    -cppcoreguidelines-pro-type-member-init,
-    -cppcoreguidelines-narrowing-conversions,
     -modernize-use-transparent-functors,
     -modernize-avoid-bind,
     -cppcoreguidelines-owning-memory,-warnings-as-errors,
@@ -74,6 +71,4 @@ WarningsAsErrors: >
     -cppcoreguidelines-avoid-non-const-global-variables,
     -google-readability-namespace-comments,
     -llvm-namespace-comment,
-    -readability-redundant-member-init,
-    -performance-inefficient-string-concatenation,
-    -performance-type-promotion-in-math-fn
+    -performance-inefficient-string-concatenation

@@ -12,9 +12,9 @@ ErrorMultiplier::ErrorMultiplier(float factor, BaseLayer* layer)
 }
 
 ErrorMultiplier::ErrorMultiplier(const ErrorMultiplier& errorMultiplier, const BaseLayer* layer)
-    : LayerOptimizer(layer)
+    : LayerOptimizer(layer),
+      factor(errorMultiplier.factor)
 {
-    this->factor = errorMultiplier.factor;
 }
 
 auto ErrorMultiplier::clone(const BaseLayer* newLayer) const -> std::unique_ptr<LayerOptimizer>

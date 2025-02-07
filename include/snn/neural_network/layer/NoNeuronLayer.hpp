@@ -20,10 +20,10 @@ class NoNeuronLayer : public BaseLayer
 
     public:
         NoNeuronLayer() = default;  // use restricted to Boost library only
-        NoNeuronLayer(LayerModel& model)
+        explicit NoNeuronLayer(LayerModel& model)
+            : numberOfInputs(model.numberOfInputs),
+              numberOfOutputs(model.numberOfOutputs)
         {
-            this->numberOfInputs = model.numberOfInputs;
-            this->numberOfOutputs = model.numberOfOutputs;
         }
         ~NoNeuronLayer() override = default;
 

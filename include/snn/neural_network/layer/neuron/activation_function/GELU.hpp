@@ -21,14 +21,16 @@ class GaussianErrorLinearUnit final : public ActivationFunction
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return x * (tanh(1.702F * x / 2.0F) + 1.0F) / 2.0F;  // NOLINT(*magic-numbers)
+            return x * (std::tanhf(1.702F * x / 2.0F) + 1.0F) / 2.0F;  // NOLINT(*magic-numbers)
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final
         {
+            // NOLINTBEGIN(*magic-numbers)
             // 1.702 * x * sigmoid.derivative(x) + sigmoid.function(1.702 * x)
-            return (1.702F * x * (1.0F - powf(tanhf(1.702F * x / 2.0F), 2.0F)) / 4.0F) +  // NOLINT(*magic-numbers)
-                   ((tanh(1.702F * x / 2.0F) + 1.0F) / 2.0F);                             // NOLINT(*magic-numbers)
+            return (1.702F * x * (1.0F - std::powf(std::tanhf(1.702F * x / 2.0F), 2.0F)) / 4.0F) +
+                   ((std::tanhf(1.702F * x / 2.0F) + 1.0F) / 2.0F);
+            // NOLINTEND(*magic-numbers)
         }
 };
 }  // namespace snn::internal

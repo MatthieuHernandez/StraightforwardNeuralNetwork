@@ -28,9 +28,9 @@ class NeuralNetwork : public StatisticAnalysis
         int64_t numberOfTraining = 0;
 
         void backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
-                                      bool temporalReset);
-        [[nodiscard]] auto calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const
-            -> std::vector<float>;
+                                      const std::vector<float>& weighting, bool temporalReset);
+        [[nodiscard]] auto calculateError(const std::vector<float>& outputs, const std::vector<float>& desired,
+                                          const std::vector<float>& weighting) const -> std::vector<float>;
 
         friend class boost::serialization::access;
         template <class Archive>
@@ -74,7 +74,8 @@ class NeuralNetwork : public StatisticAnalysis
 
         [[nodiscard]] auto isValid() const -> errorType;
 
-        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset = true);
+        void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired,
+                       const std::vector<float>& weighting = {}, bool temporalReset = true);
 
         auto operator==(const NeuralNetwork& neuralNetwork) const -> bool;
         auto operator!=(const NeuralNetwork& neuralNetwork) const -> bool;

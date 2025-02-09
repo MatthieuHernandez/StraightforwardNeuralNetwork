@@ -118,7 +118,7 @@ void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const 
             if (dataset.needToLearnOnTrainingData(this->index))
             {
                 this->trainOnce(dataset.getTrainingData(this->index, batchSize),
-                                dataset.getTrainingOutputs(this->index, batchSize),
+                                dataset.getTrainingOutputs(this->index, batchSize), {},
                                 dataset.isFirstTrainingDataOfTemporalSequence(this->index));
             }
             else

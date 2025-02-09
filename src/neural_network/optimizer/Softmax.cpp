@@ -32,7 +32,7 @@ inline void Softmax::computeSoftmax(std::vector<float>& outputs)
                                         [max](float sumExp, float& value)
                                         {
                                             value -= max;
-                                            return sumExp + exp(value);
+                                            return sumExp + expf(value);
                                         });
     for (auto& output : outputs)
     {

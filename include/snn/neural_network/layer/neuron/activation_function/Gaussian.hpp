@@ -18,8 +18,8 @@ class Gaussian final : public ActivationFunction
         {
         }
 
-        [[nodiscard]] auto function(const float x) const -> float final { return std::exp(-powf(x, 2)); }
+        [[nodiscard]] auto function(const float x) const -> float final { return expf(-powf(x, 2)); }
 
-        [[nodiscard]] auto derivative(const float x) const -> float final { return -2 * x * std::exp(-powf(x, 2)); }
+        [[nodiscard]] auto derivative(const float x) const -> float final { return -2 * x * expf(-powf(x, 2)); }
 };
 }  // namespace snn::internal

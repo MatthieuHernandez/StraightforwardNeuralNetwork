@@ -13,8 +13,8 @@ FilterLayer::FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimiz
       numberOfKernels(model.numberOfKernels),
       numberOfKernelsPerFilter(model.numberOfKernelsPerFilter),
       kernelSize(model.kernelSize),
-      shapeOfInput(model.shapeOfInput),
-      sizeOfNeuronInputs(model.neuron.numberOfInputs)
+      sizeOfNeuronInputs(model.neuron.numberOfInputs),
+      shapeOfInput(model.shapeOfInput)
 {
 }
 

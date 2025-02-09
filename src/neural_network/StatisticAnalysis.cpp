@@ -268,7 +268,7 @@ auto StatisticAnalysis::computeRootMeanSquaredError() const -> float
         totalError += c.totalError * c.totalError;
     }
     const float meanSquaredError = totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
-    return std::sqrtf(meanSquaredError);
+    return sqrtf(meanSquaredError);
 }
 
 auto StatisticAnalysis::getGlobalClusteringRate() const -> float { return this->globalClusteringRate; }

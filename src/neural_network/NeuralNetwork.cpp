@@ -53,9 +53,10 @@ void NeuralNetwork::evaluateOnceForClassification(const std::vector<float>& inpu
     this->StatisticAnalysis::evaluateOnceForClassification(outputs, classNumber, separator);
 }
 
-void NeuralNetwork::trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired, bool temporalReset)
+void NeuralNetwork::trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired,
+                              const std::vector<float>& weighting, bool temporalReset)
 {
-    this->backpropagationAlgorithm(inputs, desired, temporalReset);
+    this->backpropagationAlgorithm(inputs, desired, weighting, temporalReset);
     this->numberOfTraining++;
 }
 
@@ -93,14 +94,14 @@ auto NeuralNetwork::outputForTraining(const std::vector<float>& inputs, bool tem
 }
 
 void NeuralNetwork::backpropagationAlgorithm(const std::vector<float>& inputs, const std::vector<float>& desired,
-                                             bool temporalReset)
+                                             const std::vector<float>& weighting, bool temporalReset)
 {
     const auto outputs = this->outputForTraining(inputs, temporalReset);
     if (this->outputNan)
     {
         return;
     }
-    auto errors = this->calculateError(outputs, desired);
+    auto errors = this->calculateError(outputs, desired, weighting);
 
     for (size_t l = this->layers.size() - 1; l > 0; --l)
     {
@@ -109,11 +110,12 @@ void NeuralNetwork::backpropagationAlgorithm(const std::vector<float>& inputs, c
     layers[0]->train(errors);
 }
 
-inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, const std::vector<float>& desired) const
-    -> std::vector<float>
+inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, const std::vector<float>& desired,
+                                          const std::vector<float>& weighting) const -> std::vector<float>
 {
-    std::vector<float> errors(this->layers.back()->getNumberOfNeurons(), 0);
-    for (size_t n = 0; n < errors.size(); ++n)
+    const auto size = outputs.size();
+    std::vector<float> errors(size, 0);
+    for (size_t n = 0; n < size; ++n)
     {
         if (std::fpclassify(desired[n]) != FP_NORMAL && std::fpclassify(desired[n]) != FP_ZERO)
         {
@@ -122,6 +124,13 @@ inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, con
         else
         {
             errors[n] = 2.0F * (desired[n] - outputs[n]);
+        }
+    }
+    if (!weighting.empty())
+    {
+        for (size_t n = 0; n < size; ++n)
+        {
+            errors[n] *= weighting[n];
         }
     }
     return errors;

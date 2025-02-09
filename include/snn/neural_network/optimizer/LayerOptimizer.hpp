@@ -15,11 +15,11 @@ class LayerOptimizer
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        const BaseLayer* layer;
+        const BaseLayer* layer{};
 
     public:
         LayerOptimizer() = default;  // use restricted to Boost library only
-        LayerOptimizer(const BaseLayer* layer);
+        explicit LayerOptimizer(const BaseLayer* layer);
         virtual ~LayerOptimizer() = default;
 
         virtual auto clone(const BaseLayer* layer) const -> std::unique_ptr<LayerOptimizer> = 0;

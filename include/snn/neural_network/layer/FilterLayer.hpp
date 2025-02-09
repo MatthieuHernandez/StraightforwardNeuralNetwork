@@ -16,12 +16,12 @@ class FilterLayer : public Layer<SimpleNeuron>
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        int numberOfFilters;
-        int numberOfKernels;
-        int numberOfKernelsPerFilter;
-        int numberOfNeuronsPerFilter;
-        int kernelSize;
-        int sizeOfNeuronInputs;
+        int numberOfFilters{};
+        int numberOfKernels{};
+        int numberOfKernelsPerFilter{};
+        int numberOfNeuronsPerFilter{};
+        int kernelSize{};
+        int sizeOfNeuronInputs{};
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
         vector2D<int> kernelIndexes;

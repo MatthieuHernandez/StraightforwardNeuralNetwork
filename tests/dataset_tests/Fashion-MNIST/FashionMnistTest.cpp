@@ -79,7 +79,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 270926);
     ASSERT_FLOAT_EQ(accuracy, 0.8965F);
 
-    std::string expectedSummary =
+    const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -133,6 +133,6 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
                 Momentum:      0.93
 ============================================================
 )";
-    std::string summary = neuralNetwork.summary();
+    const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }

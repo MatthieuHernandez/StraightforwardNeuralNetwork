@@ -22,9 +22,10 @@ auto classificationExample() -> int
 
     neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
-    int classNumber = neuralNetwork.computeCluster(dataset.getTestingData(0));  // consult neural network to test it
-    int expectedClassNumber = dataset.getTestingLabel(0);  // return position of neuron with highest output
+    const float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
+    const int classNumber =
+        neuralNetwork.computeCluster(dataset.getTestingData(0));  // consult neural network to test it
+    const int expectedClassNumber = dataset.getTestingLabel(0);   // return position of neuron with highest output
     if (accuracy == 100 && classNumber == expectedClassNumber && neuralNetwork.isValid() == snn::errorType::noError)
     {
         return EXIT_SUCCESS;  // The neural network has learned.

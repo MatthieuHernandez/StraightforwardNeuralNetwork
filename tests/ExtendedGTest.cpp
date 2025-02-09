@@ -4,7 +4,7 @@
 #include <sstream>
 
 template <typename T>
-void ASSERT_BETWEEN(T min, T value, T max)
+static void ASSERT_BETWEEN(T min, T value, T max)
 {
     ASSERT_GE(value, min);
     ASSERT_LE(value, max);

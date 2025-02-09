@@ -1,45 +1,38 @@
 #include "Cifar10.hpp"
 
+#include <array>
 #include <fstream>
 #include <snn/data/Dataset.hpp>
 #include <snn/tools/ExtendedExpection.hpp>
 
-using namespace snn;
+Cifar10::Cifar10(const std::string& folderPath) { this->loadData(folderPath); }
 
-Cifar10::Cifar10(std::string folderPath) { this->loadData(folderPath); }
-
-void Cifar10::loadData(std::string folderPath)
+void Cifar10::loadData(const std::string& folderPath)
 {
-    std::string filePaths[] = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
-                               folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
-                               folderPath + "/data_batch_5.bin"};
-    std::string testFilePaths[] = {folderPath + "/test_batch.bin"};
-    vector2D<float> trainingLabels;
-    vector2D<float> testingLabels;
-    vector2D<float> trainingInputs = readImages(filePaths, 5, trainingLabels);
-    vector2D<float> testingInputs = readImages(testFilePaths, 1, testingLabels);
+    std::array<std::string, 5> const filePaths = {folderPath + "/data_batch_1.bin", folderPath + "/data_batch_2.bin",
+                                                  folderPath + "/data_batch_3.bin", folderPath + "/data_batch_4.bin",
+                                                  folderPath + "/data_batch_5.bin"};
+    std::array<std::string, 1> const testFilePaths = {folderPath + "/test_batch.bin"};
+    snn::vector2D<float> trainingLabels;
+    snn::vector2D<float> testingLabels;
+    snn::vector2D<float> trainingInputs = this->readImages(filePaths, trainingLabels);
+    snn::vector2D<float> testingInputs = this->readImages(testFilePaths, testingLabels);
 
-    this->dataset = std::make_unique<Dataset>(problem::classification, trainingInputs, trainingLabels, testingInputs,
-                                              testingLabels);
+    this->dataset = std::make_unique<snn::Dataset>(snn::problem::classification, trainingInputs, trainingLabels,
+                                                   testingInputs, testingLabels);
     this->dataset->normalize(0, 1);
 }
 
-auto Cifar10::readImages(std::string filePaths[], size_t size, vector2D<float>& labels) const -> vector2D<float>
-{
-    vector2D<float> images;
-    images.reserve(size * 10000);
-    for (size_t i = 0; i < size; i++) readImages(filePaths[i], images, labels);
-    return images;
-}
-
-void Cifar10::readImages(std::string filePath, vector2D<float>& images, vector2D<float>& labels)
+void Cifar10::readImages(const std::string& filePath, snn::vector2D<float>& images, snn::vector2D<float>& labels)
 {
     static constexpr int sizeOfData = 32 * 32 * 3;
     std::ifstream file;
-    file.open(filePath, std::ios::in | std::ios::binary);
+    file.open(filePath, std::ios::in | std::ios::binary);  // NOLINT(hicpp-signed-bitwise)
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw snn::FileOpeningFailedException();
+    }
     while (!file.eof())
     {
         unsigned char c = static_cast<char>(file.get());
@@ -69,11 +62,11 @@ void Cifar10::readImages(std::string filePath, vector2D<float>& images, vector2D
             }
             else if (j < 2048)
             {
-                imageTemp[(j - 1024) * 3 + 1] = c;
+                imageTemp[((j - 1024) * 3) + 1] = c;
             }
             else
             {
-                imageTemp[(j - 2048) * 3 + 2] = c;
+                imageTemp[((j - 2048) * 3) + 2] = c;
             }
         }
 

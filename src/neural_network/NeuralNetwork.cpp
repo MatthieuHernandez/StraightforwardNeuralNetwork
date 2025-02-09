@@ -154,7 +154,7 @@ auto NeuralNetwork::getNumberOfOutputs() const -> int { return this->layers.back
 auto NeuralNetwork::getNumberOfNeurons() const -> int
 {
     int sum = 0;
-    for (auto& layer : this->layers)
+    for (const auto& layer : this->layers)
     {
         sum += layer->getNumberOfNeurons();
     }
@@ -164,7 +164,10 @@ auto NeuralNetwork::getNumberOfNeurons() const -> int
 auto NeuralNetwork::getNumberOfParameters() const -> int
 {
     int sum = 0;
-    for (const auto& layer : this->layers) sum += layer->getNumberOfParameters();
+    for (const auto& layer : this->layers)
+    {
+        sum += layer->getNumberOfParameters();
+    }
     return sum;
 }
 
@@ -204,7 +207,10 @@ auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
     {
         for (size_t l = 0; l < this->layers.size(); ++l)
         {
-            if (*this->layers[l] != *neuralNetwork.layers[l]) return false;
+            if (*this->layers[l] != *neuralNetwork.layers[l])
+            {
+                return false;
+            }
         }
         return true;
     }();

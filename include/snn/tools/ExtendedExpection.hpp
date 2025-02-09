@@ -6,7 +6,7 @@ namespace snn
 class NotImplementedException : public std::runtime_error
 {
     public:
-        NotImplementedException(std::string functionName = "Function")
+        explicit NotImplementedException(const std::string& functionName = "Function")
             : std::runtime_error(functionName + " not yet implemented.")
         {
         }
@@ -15,7 +15,7 @@ class NotImplementedException : public std::runtime_error
 class ShouldNeverBeCalledException : public std::runtime_error
 {
     public:
-        ShouldNeverBeCalledException(std::string functionName = "Function")
+        explicit ShouldNeverBeCalledException(const std::string& functionName = "Function")
             : std::runtime_error(functionName + " should never be called.")
         {
         }
@@ -24,7 +24,7 @@ class ShouldNeverBeCalledException : public std::runtime_error
 class FileOpeningFailedException : public std::runtime_error
 {
     public:
-        FileOpeningFailedException(std::string fileName = "file")
+        explicit FileOpeningFailedException(const std::string& fileName = "file")
             : std::runtime_error("Cannot open " + fileName + ".")
         {
         }
@@ -33,7 +33,7 @@ class FileOpeningFailedException : public std::runtime_error
 class InvalidArchitectureException : public std::runtime_error
 {
     public:
-        InvalidArchitectureException(std::string message)
+        explicit InvalidArchitectureException(const std::string& message)
             : std::runtime_error("Invalid neural network architecture: " + message)
         {
         }

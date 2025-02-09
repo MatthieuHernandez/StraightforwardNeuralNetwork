@@ -94,7 +94,7 @@ void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const 
     tools::log<minimal>("Start training");
     wait.startClock();
     this->epoch = 0;
-    this->numberOfTrainingsBetweenTwoEvaluations = static_cast<int>(dataset.data.training.size);
+    this->numberOfTrainingsBetweenTwoEvaluations = dataset.data.training.size;
     this->wantToStopTraining = false;
     this->isIdle = false;
     if (evaluationFrequency > 0)

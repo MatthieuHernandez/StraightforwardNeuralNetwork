@@ -55,21 +55,36 @@ void StatisticAnalysis::stopTesting()
     const float newRootMeanSquaredError = this->computeRootMeanSquaredError();
 
     this->globalClusteringRateIsBetterThanMax = newGlobalClusteringRate > this->globalClusteringRateMax;
-    if (this->globalClusteringRateIsBetterThanMax) this->globalClusteringRateMax = newGlobalClusteringRate;
+    if (this->globalClusteringRateIsBetterThanMax)
+    {
+        this->globalClusteringRateMax = newGlobalClusteringRate;
+    }
 
     this->weightedClusteringRateIsBetterThanMax = newWeightedClusteringRate > this->weightedClusteringRateMax;
-    if (this->weightedClusteringRateIsBetterThanMax) this->weightedClusteringRateMax = newWeightedClusteringRate;
+    if (this->weightedClusteringRateIsBetterThanMax)
+    {
+        this->weightedClusteringRateMax = newWeightedClusteringRate;
+    }
 
     this->f1ScoreIsBetterThanMax = newF1Score > this->f1ScoreMax;
-    if (this->f1ScoreIsBetterThanMax) this->f1Score = newF1Score;
+    if (this->f1ScoreIsBetterThanMax)
+    {
+        this->f1Score = newF1Score;
+    }
 
     this->meanAbsoluteErrorIsBetterThanMin =
         newMeanAbsoluteError < this->meanAbsoluteErrorMin || this->meanAbsoluteErrorMin < 0;
-    if (this->meanAbsoluteErrorIsBetterThanMin) this->meanAbsoluteErrorMin = newMeanAbsoluteError;
+    if (this->meanAbsoluteErrorIsBetterThanMin)
+    {
+        this->meanAbsoluteErrorMin = newMeanAbsoluteError;
+    }
 
     this->rootMeanSquaredErrorIsBetterThanMin =
         newRootMeanSquaredError < this->rootMeanSquaredErrorMin || this->meanAbsoluteErrorMin < 0;
-    if (this->rootMeanSquaredErrorIsBetterThanMin) this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
+    if (this->rootMeanSquaredErrorIsBetterThanMin)
+    {
+        this->rootMeanSquaredErrorMin = newMeanAbsoluteError;
+    }
 
     this->globalClusteringRate = newGlobalClusteringRate;
     this->weightedClusteringRate = newWeightedClusteringRate;
@@ -212,9 +227,12 @@ auto StatisticAnalysis::computeWeightedClusteringRate() const -> float
     float result = 0;
     for (const auto& c : clusters)
     {
-        if (c.truePositive > 0) result += c.truePositive / (c.truePositive + c.falseNegative);
+        if (c.truePositive > 0)
+        {
+            result += c.truePositive / (c.truePositive + c.falseNegative);
+        }
     }
-    return result / clusters.size();
+    return result / static_cast<float>(clusters.size());
 }
 
 auto StatisticAnalysis::computeF1Score() const -> float
@@ -229,7 +247,7 @@ auto StatisticAnalysis::computeF1Score() const -> float
             result += (precision * recall) / (precision + recall);
         }
     }
-    return 2.0F * result / clusters.size();
+    return 2.0F * result / static_cast<float>(clusters.size());
 }
 
 auto StatisticAnalysis::computeMeanAbsoluteError() const -> float
@@ -250,7 +268,7 @@ auto StatisticAnalysis::computeRootMeanSquaredError() const -> float
         totalError += c.totalError * c.totalError;
     }
     const float meanSquaredError = totalError / (numberOfDataWellClassified + numberOfDataMisclassified);
-    return sqrt(meanSquaredError);
+    return sqrtf(meanSquaredError);
 }
 
 auto StatisticAnalysis::getGlobalClusteringRate() const -> float { return this->globalClusteringRate; }

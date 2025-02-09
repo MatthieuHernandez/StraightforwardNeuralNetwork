@@ -23,7 +23,7 @@ auto regressionExample() -> int
 
     neuralNetwork.train(dataset, 1.00_acc || 3_s);  // Train until 100% accuracy or 3s on a parallel thread.
 
-    float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
+    const float accuracy = neuralNetwork.getGlobalClusteringRateMax() * 100.0F;
     std::vector<float> output =
         neuralNetwork.computeOutput(dataset.getTestingData(0));  // Consult neural network to test it.
     std::vector<float> expectedOutput = dataset.getTestingOutputs(0);

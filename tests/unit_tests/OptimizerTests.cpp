@@ -5,11 +5,11 @@
 
 using namespace snn;
 
-auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Dataset>;
+static auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::unique_ptr<Dataset>;
 
 TEST(Optimizer, FindRightValueIn20)
 {
-    std::unique_ptr<Dataset> dataset = createDataForOptimizerTests(1000, 20);
+    const std::unique_ptr<Dataset> dataset = createDataForOptimizerTests(1000, 20);
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(20), FullyConnected(8, activation::tanh), FullyConnected(1, activation::sigmoid)},
         StochasticGradientDescent(0.05F, 0.9F));
@@ -30,7 +30,7 @@ auto createDataForOptimizerTests(int numberOfData, int sizeOfData) -> std::uniqu
     expectedOutputs.reserve(numberOfData);
     for (int i = 0; i < numberOfData; ++i)
     {
-        inputData.push_back(std::vector<float>());
+        inputData.emplace_back();
         inputData.back().reserve(sizeOfData);
         for (int j = 0; j < sizeOfData; ++j)
         {

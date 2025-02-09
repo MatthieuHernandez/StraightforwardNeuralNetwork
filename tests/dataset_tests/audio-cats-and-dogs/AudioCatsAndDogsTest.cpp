@@ -59,7 +59,7 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 9242);
     ASSERT_FLOAT_EQ(accuracy, 0.91044772F);
 
-    std::string expectedSummary =
+    const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -97,6 +97,6 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
                 Momentum:      0.99
 ============================================================
 )";
-    std::string summary = neuralNetwork.summary();
+    const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }

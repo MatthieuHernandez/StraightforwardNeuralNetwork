@@ -53,7 +53,7 @@ inline auto Convolution1D::clone(std::shared_ptr<NeuralNetworkOptimizer> optimiz
 
 auto Convolution1D::isValid() const -> errorType
 {
-    for (auto& neuron : neurons)
+    for (const auto& neuron : neurons)
     {
         if (neuron.getNumberOfInputs() != this->kernelSize * this->shapeOfInput[C])
         {
@@ -127,7 +127,10 @@ inline auto Convolution1D::computeBackOutput(std::vector<float>& inputErrors) ->
 
 inline void Convolution1D::computeTrain(std::vector<float>& inputErrors)
 {
-    for (int n = 0; n < this->numberOfFilters; ++n) this->neurons[n].train(inputErrors[n]);
+    for (int n = 0; n < this->numberOfFilters; ++n)
+    {
+        this->neurons[n].train(inputErrors[n]);
+    }
 }
 
 inline auto Convolution1D::operator==(const BaseLayer& layer) const -> bool

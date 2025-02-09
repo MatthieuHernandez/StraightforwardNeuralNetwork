@@ -15,8 +15,8 @@ class StatisticAnalysis
         void serialize(Archive& archive, uint32_t version);
 
         std::vector<binaryClassification> clusters;
-        float numberOfDataWellClassified;
-        float numberOfDataMisclassified;
+        float numberOfDataWellClassified{};
+        float numberOfDataMisclassified{};
 
         float globalClusteringRate = -1.0F;
         float weightedClusteringRate = -1.0F;

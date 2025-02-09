@@ -69,7 +69,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 207210);
     ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
 
-    std::string expectedSummary =
+    const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
@@ -129,7 +129,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Momentum:      0.8
 ============================================================
 )";
-    std::string summary = neuralNetwork.summary();
+    const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
 }
 

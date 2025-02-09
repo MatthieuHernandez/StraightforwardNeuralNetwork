@@ -9,6 +9,6 @@ struct NeuronModel
         int batchSize = -1;
         int numberOfWeights = -1;
         float bias = 1.0F;
-        activation activationFunction;
+        activation activationFunction{};
 };
 }  // namespace snn

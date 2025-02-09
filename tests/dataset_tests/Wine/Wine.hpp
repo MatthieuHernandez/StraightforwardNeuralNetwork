@@ -4,8 +4,8 @@
 class Wine final : public TestDataset
 {
     private:
-        void loadData(std::string folderPath) final;
+        void loadData(const std::string& folderPath) final;
 
     public:
-        Wine(std::string folderPath);
+        explicit Wine(const std::string& folderPath);
 };

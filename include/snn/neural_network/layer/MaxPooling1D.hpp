@@ -15,7 +15,7 @@ class MaxPooling1D final : public FilterLayer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        int numberOfOutputs;
+        int numberOfOutputs{};
         std::vector<int> maxValueIndexes;
 
         [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> final;
@@ -26,10 +26,11 @@ class MaxPooling1D final : public FilterLayer
 
     public:
         MaxPooling1D() = default;  // use restricted to Boost library only
-        MaxPooling1D(LayerModel& model);
+        explicit MaxPooling1D(LayerModel& model);
         ~MaxPooling1D() final = default;
         MaxPooling1D(const MaxPooling1D&) = default;
-        auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const -> std::unique_ptr<BaseLayer> final;
+        [[nodiscard]] auto clone(std::shared_ptr<NeuralNetworkOptimizer> optimizer) const
+            -> std::unique_ptr<BaseLayer> final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

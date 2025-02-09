@@ -22,12 +22,13 @@ auto GatedRecurrentUnit::output(const std::vector<float>& inputs, bool temporalR
     {
         this->reset();
     }
-    float resetGateOutput = this->resetGate.output(inputs, temporalReset);
+    const float resetGateOutput = this->resetGate.output(inputs, temporalReset);
     this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
     this->outputGate.lastOutput *= resetGateOutput;
     this->outputGateOutput = this->outputGate.output(inputs, temporalReset);
 
-    float output = (1 - this->updateGateOutput) * this->previousOutput + this->updateGateOutput * outputGateOutput;
+    const float output =
+        (1 - this->updateGateOutput) * this->previousOutput + this->updateGateOutput * outputGateOutput;
 
     this->resetGate.lastOutput = output;
     this->updateGate.lastOutput = output;
@@ -38,15 +39,15 @@ auto GatedRecurrentUnit::output(const std::vector<float>& inputs, bool temporalR
 
 auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 {
-    float d3 = error;
-    float d8 = d3 * this->updateGateOutput;
-    float d7 = d3 * this->outputGateOutput;
-    float d9 = d7 + d8;
+    const float d3 = error;
+    const float d8 = d3 * this->updateGateOutput;
+    const float d7 = d3 * this->outputGateOutput;
+    const float d9 = d7 + d8;
 
     this->errors = this->outputGate.backOutput(d8);
     auto e2 = this->updateGate.backOutput(d9);
-    float d13 = this->errors.back();
-    float d16 = d13 * this->previousOutput;
+    const float d13 = this->errors.back();
+    const float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 
     std::ranges::transform(this->errors, e2, this->errors.begin(), std::plus<float>());
@@ -56,15 +57,15 @@ auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 
 void GatedRecurrentUnit::train(float error)
 {
-    float d3 = error;
-    float d8 = d3 * this->updateGateOutput;
-    float d7 = d3 * this->outputGateOutput;
-    float d9 = d7 + d8;
+    const float d3 = error;
+    const float d8 = d3 * this->updateGateOutput;
+    const float d7 = d3 * this->outputGateOutput;
+    const float d9 = d7 + d8;
 
     this->errors = this->outputGate.backOutput(d8);
     auto e2 = this->updateGate.backOutput(d9);
-    float d13 = this->errors.back();
-    float d16 = d13 * this->previousOutput;
+    const float d13 = this->errors.back();
+    const float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
 }
 

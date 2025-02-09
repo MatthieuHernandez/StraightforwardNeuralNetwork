@@ -17,7 +17,7 @@ TEST(SaveNeuralNetwork, EqualTest)
                                GruLayer(3),
                                Recurrence(4)};
     StraightforwardNeuralNetwork A(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
-    StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
+    const StraightforwardNeuralNetwork C(structureOfNetwork, StochasticGradientDescent(0.9F, 0.78F));
     StraightforwardNeuralNetwork B = A;
 
     ASSERT_EQ(A.isValid(), errorType::noError);
@@ -52,12 +52,16 @@ TEST(SaveNeuralNetwork, EqualTest)
     inputs[150] = -0.77F;
     const std::vector<float> desired{1.0F, 0.0F, 0.5F, 0.07F};
 
-    for (int i = 0; i < 10; ++i) A.trainOnce(inputs, desired);
-
+    for (int i = 0; i < 10; ++i)
+    {
+        A.trainOnce(inputs, desired);
+    }
     EXPECT_TRUE(A != B);
 
-    for (int i = 0; i < 10; ++i) B.trainOnce(inputs, desired);
-
+    for (int i = 0; i < 10; ++i)
+    {
+        B.trainOnce(inputs, desired);
+    }
     EXPECT_TRUE(A == B);
 
     EXPECT_TRUE(A.getF1Score() == B.getF1Score()) << "A == B";
@@ -94,7 +98,7 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)  // TODO: do a forward to be sure that the network is the same.
+TEST(SaveNeuralNetwork, Save)  // TODO(matth): do a forward to be sure that the network is the same.
 {
     StraightforwardNeuralNetwork A(
         {Input(45), MaxPooling(3), Convolution(2, 2, activation::ReLU),

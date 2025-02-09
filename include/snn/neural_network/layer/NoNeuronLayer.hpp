@@ -15,15 +15,15 @@ class NoNeuronLayer : public BaseLayer
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        int numberOfInputs;
-        int numberOfOutputs;
+        int numberOfInputs{};
+        int numberOfOutputs{};
 
     public:
         NoNeuronLayer() = default;  // use restricted to Boost library only
-        NoNeuronLayer(LayerModel& model)
+        explicit NoNeuronLayer(LayerModel& model)
+            : numberOfInputs(model.numberOfInputs),
+              numberOfOutputs(model.numberOfOutputs)
         {
-            this->numberOfInputs = model.numberOfInputs;
-            this->numberOfOutputs = model.numberOfOutputs;
         }
         ~NoNeuronLayer() override = default;
 

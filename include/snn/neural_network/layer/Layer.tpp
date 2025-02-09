@@ -22,7 +22,7 @@ Layer<N>::Layer(const Layer& layer)
       neurons(layer.neurons)
 {
     this->optimizers.reserve(layer.optimizers.size());
-    for (auto& optimizer : layer.optimizers)
+    for (const auto& optimizer : layer.optimizers)
     {
         this->optimizers.emplace_back(optimizer->clone(this));
     }
@@ -74,7 +74,7 @@ void Layer<N>::train(std::vector<float>& inputErrors)
 template <BaseNeuron N>
 auto Layer<N>::isValid() const -> errorType
 {
-    if (this->getNumberOfNeurons() != (int)this->neurons.size() || this->getNumberOfNeurons() < 1 ||
+    if (this->getNumberOfNeurons() != static_cast<int>(this->neurons.size()) || this->getNumberOfNeurons() < 1 ||
         this->getNumberOfNeurons() > 1000000)
     {
         return errorType::layerTooMuchNeurons;
@@ -103,7 +103,10 @@ auto Layer<N>::getAverageOfAbsNeuronWeights() const -> float
     auto sum = 0.0F;
     for (auto& n : this->neurons)
     {
-        for (auto w : n.getWeights()) sum += std::abs(w);
+        for (auto w : n.getWeights())
+        {
+            sum += std::abs(w);
+        }
     }
     sum /= static_cast<float>(this->neurons.size());
     return sum;
@@ -115,7 +118,10 @@ auto Layer<N>::getAverageOfSquareNeuronWeights() const -> float
     auto sum = 0.0F;
     for (auto& n : this->neurons)
     {
-        for (auto w : n.getWeights()) sum += w * w;
+        for (auto w : n.getWeights())
+        {
+            sum += w * w;
+        }
     }
     sum /= static_cast<float>(this->neurons.size());
     return sum;
@@ -130,7 +136,7 @@ auto Layer<N>::getNumberOfInputs() const -> int
 template <BaseNeuron N>
 auto Layer<N>::getNumberOfNeurons() const -> int
 {
-    return (int)this->neurons.size();
+    return static_cast<int>(this->neurons.size());
 }
 
 template <BaseNeuron N>
@@ -156,7 +162,10 @@ auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
         {
             for (size_t o = 0; o < this->optimizers.size(); ++o)
             {
-                if (*this->optimizers[o] != *l.optimizers[o]) return false;
+                if (*this->optimizers[o] != *l.optimizers[o])
+                {
+                    return false;
+                }
             }
             return true;
         }();

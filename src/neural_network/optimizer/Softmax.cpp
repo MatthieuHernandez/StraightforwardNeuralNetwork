@@ -32,11 +32,11 @@ inline void Softmax::computeSoftmax(std::vector<float>& outputs)
                                         [max](float sumExp, float& value)
                                         {
                                             value -= max;
-                                            return sumExp + exp(value);
+                                            return sumExp + expf(value);
                                         });
     for (auto& output : outputs)
     {
-        const auto value = exp(output) / sumExp;
+        const auto value = std::expf(output) / sumExp;
         if (std::fpclassify(value) != FP_NORMAL && std::fpclassify(value) != FP_ZERO)
         {
             output = 0;

@@ -3,7 +3,7 @@
 
 namespace snn
 {
-enum class waitOperator
+enum class waitOperator : uint8_t
 {
     noneOp = 0,
     andOp,

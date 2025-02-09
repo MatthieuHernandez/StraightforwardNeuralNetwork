@@ -47,7 +47,7 @@ class GatedRecurrentUnit final
 
         [[nodiscard]] auto isValid() const -> errorType;
 
-        auto getOptimizer() const -> NeuralNetworkOptimizer*;
+        [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
         auto operator==(const GatedRecurrentUnit& neuron) const -> bool;

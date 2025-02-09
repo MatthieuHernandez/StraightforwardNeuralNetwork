@@ -28,7 +28,7 @@ class Neuron
 
         float sum = 0;
 
-        activation activationFunction;
+        activation activationFunction{};
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
 
         static auto randomInitializeWeight(int numberOfWeights) -> float;
@@ -51,7 +51,7 @@ class Neuron
         [[nodiscard]] auto getNumberOfParameters() const -> int;
         [[nodiscard]] auto getNumberOfInputs() const -> int;
 
-        auto getOptimizer() const -> NeuralNetworkOptimizer*;
+        [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
         auto operator==(const Neuron& neuron) const -> bool;

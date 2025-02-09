@@ -7,20 +7,20 @@
 #include <string>
 #include <vector>
 
-using namespace snn;
+Wine::Wine(const std::string& folderPath) { this->loadData(folderPath); }
 
-Wine::Wine(std::string folderPath) { this->loadData(folderPath); }
-
-void Wine::loadData(std::string folderPath)
+void Wine::loadData(const std::string& folderPath)
 {
-    vector2D<float> inputs;
-    vector2D<float> labels;
+    snn::vector2D<float> inputs;
+    snn::vector2D<float> labels;
 
     std::string line;
     std::ifstream file(folderPath + "/wine.data", std::ios::in);
 
-    if (!file.is_open()) throw FileOpeningFailedException();
-
+    if (!file.is_open())
+    {
+        throw snn::FileOpeningFailedException();
+    }
     inputs.reserve(178);
     labels.reserve(178);
 
@@ -29,7 +29,7 @@ void Wine::loadData(std::string folderPath)
         std::vector<float> label;
         std::vector<float> values;
 
-        float value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
+        auto value = static_cast<float>(atof(line.substr(0, line.find(',')).c_str()));
 
         label.resize(3, 0);
         label[static_cast<int>(value - 1.0)] = 1;
@@ -46,6 +46,6 @@ void Wine::loadData(std::string folderPath)
         inputs.push_back(values);
     }
     file.close();
-    this->dataset = std::make_unique<Dataset>(problem::classification, inputs, labels);
+    this->dataset = std::make_unique<snn::Dataset>(snn::problem::classification, inputs, labels);
     this->dataset->normalize(0, 1);
 }

@@ -8,7 +8,8 @@
 namespace snn::internal
 {
 MaxPooling1D::MaxPooling1D(LayerModel& model)
-    : FilterLayer(model, nullptr)
+    : FilterLayer(model, nullptr),
+      numberOfOutputs(model.numberOfOutputs)
 {
     const int restX = shapeOfInput[X] % this->kernelSize == 0 ? 0 : 1;
 
@@ -18,7 +19,7 @@ MaxPooling1D::MaxPooling1D(LayerModel& model)
     };
     this->sizeOfNeuronInputs = this->kernelSize * 1;
     this->numberOfNeuronsPerFilter = 0;
-    this->numberOfOutputs = model.numberOfOutputs;
+
     this->maxValueIndexes.resize(this->numberOfOutputs);
     this->buildKernelIndexes();
 }

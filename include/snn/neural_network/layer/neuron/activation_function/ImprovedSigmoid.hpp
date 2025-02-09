@@ -9,9 +9,9 @@ namespace snn::internal
 class ImprovedSigmoid final : public ActivationFunction
 {
     private:
-        auto getType() const -> activation final { return activation::iSigmoid; }
+        [[nodiscard]] auto getType() const -> activation final { return activation::iSigmoid; }
 
-        auto getName() const -> std::string final { return "iSigmoid"; }
+        [[nodiscard]] auto getName() const -> std::string final { return "iSigmoid"; }
 
     public:
         ImprovedSigmoid()
@@ -21,12 +21,12 @@ class ImprovedSigmoid final : public ActivationFunction
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return (1.0F / (1.0F + std::exp(-x))) + x * 0.05F;
+            return (1.0F / (1.0F + expf(-x))) + (x * 0.05F);  // NOLINT(*magic-numbers)
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final
         {
-            return std::exp(x) / powf((std::exp(x) + 1.0F), 2);
+            return expf(x) / powf((expf(x) + 1.0F), 2);
         }
 };
 }  // namespace snn::internal

@@ -15,8 +15,8 @@ class Dropout final : public LayerOptimizer
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
-        float value;
-        float reverseValue;
+        float value{};
+        float reverseValue{};
         std::uniform_real_distribution<> dist;
         std::vector<bool> presenceProbabilities;
 

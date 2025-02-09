@@ -6,17 +6,16 @@
 
 namespace snn::internal
 {
-using std::bad_cast;
 
 FilterLayer::FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
-    : Layer(model, optimizer)
+    : Layer(model, optimizer),
+      numberOfFilters(model.numberOfFilters),
+      numberOfKernels(model.numberOfKernels),
+      numberOfKernelsPerFilter(model.numberOfKernelsPerFilter),
+      kernelSize(model.kernelSize),
+      sizeOfNeuronInputs(model.neuron.numberOfInputs),
+      shapeOfInput(model.shapeOfInput)
 {
-    this->numberOfFilters = model.numberOfFilters;
-    this->numberOfKernels = model.numberOfKernels;
-    this->numberOfKernelsPerFilter = model.numberOfKernelsPerFilter;
-    this->kernelSize = model.kernelSize;
-    this->shapeOfInput = model.shapeOfInput;
-    this->sizeOfNeuronInputs = model.neuron.numberOfInputs;
 }
 
 auto FilterLayer::getShapeOfInput() const -> std::vector<int> { return this->shapeOfInput; }
@@ -29,7 +28,7 @@ auto FilterLayer::isValid() const -> errorType
 {
     int numberOfOutput = 1;
     auto shape = this->getShapeOfOutput();
-    for (int s : shape)
+    for (const int s : shape)
     {
         numberOfOutput *= s;
     }

@@ -52,7 +52,7 @@ void Cifar10::readImages(const std::string& filePath, snn::vector2D<float>& imag
 
         std::vector<float> imageTemp;
         imageTemp.resize(sizeOfData, 0);
-        for (int j = 0; !file.eof() && j < sizeOfData; j++)
+        for (size_t j = 0; !file.eof() && j < sizeOfData; j++)
         {
             c = static_cast<char>(file.get());
             // imageTemp[j] = c;

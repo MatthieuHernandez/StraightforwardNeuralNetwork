@@ -45,10 +45,10 @@ TEST_F(FashionMnistTest, feedforwardNeuralNetwork)
 
 TEST_F(FashionMnistTest, convolutionNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), Convolution(6, 3, activation::ReLU),
-                                                Convolution(4, 5, activation::ReLU), FullyConnected(10)},
+    StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), Convolution(6, 3, activation::LeakyReLU),
+                                                Convolution(4, 5, activation::LeakyReLU), FullyConnected(10)},
                                                StochasticGradientDescent(0.0002F, 0.80F));
-    neuralNetwork.train(*dataset, 1_ep || 1_min);
+    neuralNetwork.train(*dataset, 1_ep || 2_min);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.70F);
 }

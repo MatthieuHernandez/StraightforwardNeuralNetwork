@@ -14,7 +14,8 @@ enum class activation : uint8_t
     ReLU,
     GELU,
     gaussian,
-    identity
+    identity,
+    LeakyReLU
 };
 }
 namespace snn::internal

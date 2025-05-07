@@ -24,8 +24,7 @@ auto ErrorMultiplier::clone(const BaseLayer* newLayer) const -> std::unique_ptr<
 
 void ErrorMultiplier::applyBeforeBackpropagation(std::vector<float>& inputErrors)
 {
-    std::ranges::transform(inputErrors, inputErrors.begin(),
-                           bind(std::multiplies<float>(), std::placeholders::_1, this->factor));
+    std::ranges::transform(inputErrors, inputErrors.begin(), [this](auto&& value) { return value * this->factor; });
 }
 
 auto ErrorMultiplier::summary() const -> std::string

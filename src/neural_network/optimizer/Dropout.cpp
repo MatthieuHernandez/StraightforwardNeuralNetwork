@@ -48,8 +48,7 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
 
 void Dropout::applyAfterOutputForTesting(std::vector<float>& outputs)
 {
-    std::ranges::transform(outputs, outputs.begin(),
-                           bind(std::multiplies<float>(), std::placeholders::_1, this->reverseValue));
+    std::ranges::transform(outputs, outputs.begin(), [this](auto&& value) { return value * this->reverseValue; });
 }
 
 void Dropout::applyBeforeBackpropagation(std::vector<float>& inputErrors)

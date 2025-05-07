@@ -27,7 +27,7 @@ void L1Regularization::applyBeforeBackpropagation(std::vector<float>& inputError
 {
     auto regularization = this->layer->getAverageOfAbsNeuronWeights() * this->value;
     std::ranges::transform(inputErrors, inputErrors.begin(),
-                           bind(std::plus<float>(), std::placeholders::_1, regularization));
+                           [regularization](auto&& value) { return value + regularization; });
 }
 
 auto L1Regularization::summary() const -> std::string

@@ -31,7 +31,7 @@ auto FashionMnist::readImages(std::string filePath, int size) -> snn::vector2D<f
         throw snn::FileOpeningFailedException();
     }
 
-    unsigned char c;
+    unsigned char c{};
     int shift = 0;
     while (!file.eof())
     {

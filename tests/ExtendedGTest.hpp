@@ -8,7 +8,7 @@ void ASSERT_SUCCESS();
 
 void ASSERT_FAIL(std::string message = "");
 
-void ASSERT_VECTOR_EQ(const std::vector<float> values, const std::vector<float> expected_values);
+void ASSERT_VECTOR_EQ(std::vector<float> values, std::vector<float> expected_values);
 
 void PRINT_LOG(std::string message);
 

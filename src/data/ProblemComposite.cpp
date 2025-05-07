@@ -42,7 +42,7 @@ auto ProblemComposite::getTrainingOutputs(const int index, const int batchSize) 
         std::ranges::transform(batchedLabels, dataToAdd, batchedLabels.begin(), std::plus<float>());
     }
     std::ranges::transform(batchedLabels, batchedLabels.begin(),
-                           bind(std::divides<float>(), std::placeholders::_1, static_cast<float>(batchSize)));
+                           [batchSize](auto&& value) { return value / static_cast<float>(batchSize); });
     return batchedLabels;
 }
 }  // namespace snn::internal

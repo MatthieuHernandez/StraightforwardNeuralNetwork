@@ -5,6 +5,7 @@
 #include "Gaussian.hpp"
 #include "Identity.hpp"
 #include "ImprovedSigmoid.hpp"
+#include "LeakyReLU.hpp"
 #include "ReLU.hpp"
 #include "Sigmoid.hpp"
 #include "Tanh.hpp"
@@ -16,14 +17,16 @@ std::vector<std::shared_ptr<ActivationFunction>> ActivationFunction::activationF
 inline auto ActivationFunction::initialize() -> std::vector<std::shared_ptr<ActivationFunction>>
 {
     std::vector<std::shared_ptr<ActivationFunction>> activations;
-    activations.reserve(6);
-    activations.emplace_back(new Sigmoid());
-    activations.emplace_back(new ImprovedSigmoid());
-    activations.emplace_back(new Tanh());
-    activations.emplace_back(new RectifiedLinearUnit());
-    activations.emplace_back(new GaussianErrorLinearUnit());
-    activations.emplace_back(new Gaussian());
-    activations.emplace_back(new Identity());
+    constexpr size_t numberOfActivationFunctions = 8;
+    activations.reserve(numberOfActivationFunctions);
+    activations.emplace_back(std::make_shared<Sigmoid>());
+    activations.emplace_back(std::make_shared<ImprovedSigmoid>());
+    activations.emplace_back(std::make_shared<Tanh>());
+    activations.emplace_back(std::make_shared<RectifiedLinearUnit>());
+    activations.emplace_back(std::make_shared<GaussianErrorLinearUnit>());
+    activations.emplace_back(std::make_shared<Gaussian>());
+    activations.emplace_back(std::make_shared<Identity>());
+    activations.emplace_back(std::make_shared<LeakyRectifiedLinearUnit>());
     return activations;
 }
 
@@ -35,25 +38,12 @@ ActivationFunction::ActivationFunction(float min, float max)
 
 auto ActivationFunction::get(activation type) -> std::shared_ptr<ActivationFunction>
 {
-    switch (type)
+    const auto index = static_cast<uint8_t>(type);
+    if (index > activationFunctions.size() - 1)
     {
-        case activation::sigmoid:
-            return activationFunctions[0];
-        case activation::iSigmoid:
-            return activationFunctions[1];
-        case activation::tanh:
-            return activationFunctions[2];
-        case activation::ReLU:
-            return activationFunctions[3];
-        case activation::GELU:
-            return activationFunctions[4];
-        case activation::gaussian:
-            return activationFunctions[5];
-        case activation::identity:
-            return activationFunctions[6];
-        default:
-            throw NotImplementedException("activation");
+        throw NotImplementedException("activation");
     }
+    return activationFunctions[index];
 }
 
 auto ActivationFunction::operator==(const ActivationFunction& activationFunction) const -> bool

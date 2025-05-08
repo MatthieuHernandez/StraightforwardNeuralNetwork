@@ -31,7 +31,7 @@ auto Mnist::readImages(std::string filePath, int size) -> snn::vector2D<float>
         throw snn::FileOpeningFailedException();
     }
 
-    unsigned char c;
+    unsigned char c{};
     int shift = 0;
     while (!file.eof())
     {
@@ -72,7 +72,7 @@ auto Mnist::readLabels(std::string filePath, int size) -> snn::vector2D<float>
     {
         throw snn::FileOpeningFailedException();
     }
-    unsigned char c;
+    unsigned char c{};
     int shift = 0;
     while (!file.eof())
     {

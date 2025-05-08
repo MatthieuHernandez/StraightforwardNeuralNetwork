@@ -111,7 +111,7 @@ void StatisticAnalysis::evaluateOnceForRegression(const std::vector<float>& outp
         }
         else if (outputs[i] >= desiredOutputs[i])
         {
-            clusters[i].trueNegative++;
+            clusters[i].truePositive++;
         }
         else if (outputs[i] <= desiredOutputs[i])
         {

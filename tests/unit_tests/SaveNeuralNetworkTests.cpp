@@ -43,7 +43,8 @@ TEST(SaveNeuralNetwork, EqualTest)
 
     EXPECT_TRUE(A != C);  // Test A == C with same seed
 
-    std::vector<float> inputs(8 * 8 * 3);
+    constexpr auto size = static_cast<size_t>(8 * 8 * 3);
+    std::vector<float> inputs(size);
     inputs[29] = 0.99F;
     inputs[30] = 0.88F;
     inputs[60] = 0.75F;

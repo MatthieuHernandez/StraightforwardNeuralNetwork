@@ -42,9 +42,9 @@ namespace snn::tools
 static std::random_device rd;
 static std::mt19937 rng(rd());
 
-auto randomBetween(const int min, const int max) -> int;  // [min; max[
-auto randomBetween(const float min, const float max) -> float;
-auto randomVector(const float min, const float max, const size_t size) -> std::vector<float>;
+auto randomBetween(int min, int max) -> int;  // [min; max[
+auto randomBetween(float min, float max) -> float;
+auto randomVector(float min, float max, size_t size) -> std::vector<float>;
 
 auto toString(std::chrono::milliseconds duration) -> std::string;
 

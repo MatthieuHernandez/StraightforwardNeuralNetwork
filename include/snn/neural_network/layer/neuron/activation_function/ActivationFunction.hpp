@@ -14,7 +14,8 @@ enum class activation : uint8_t
     ReLU,
     GELU,
     gaussian,
-    identity
+    identity,
+    LeakyReLU
 };
 }
 namespace snn::internal
@@ -37,8 +38,10 @@ class ActivationFunction
         static auto initialize() -> std::vector<std::shared_ptr<ActivationFunction>>;
         static auto get(activation type) -> std::shared_ptr<ActivationFunction>;
 
+        // NOLINTBEGIN(readability-avoid-const-params-in-decls)
         [[nodiscard]] virtual auto function(const float) const -> float = 0;
         [[nodiscard]] virtual auto derivative(const float) const -> float = 0;
+        // NOLINTEND(readability-avoid-const-params-in-decls)
 
         [[nodiscard]] virtual auto getType() const -> activation = 0;
 

@@ -25,8 +25,10 @@ class FilterLayer : public Layer<SimpleNeuron>
         std::vector<int> shapeOfInput;
         std::vector<int> shapeOfOutput;
         vector2D<int> kernelIndexes;
+        vector2D<int> flippedKernelIndexes;
 
         virtual void buildKernelIndexes() = 0;
+        void buildFlippedKernelIndexes();
 
     public:
         FilterLayer() = default;  // use restricted to Boost library only

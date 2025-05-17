@@ -16,6 +16,7 @@ Convolution1D::Convolution1D(LayerModel& model, std::shared_ptr<NeuralNetworkOpt
     };
     this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
+    this->buildFlippedKernelIndexes();
 }
 
 void Convolution1D::buildKernelIndexes()

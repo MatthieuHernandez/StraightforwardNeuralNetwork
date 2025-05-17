@@ -22,6 +22,7 @@ MaxPooling1D::MaxPooling1D(LayerModel& model)
 
     this->maxValueIndexes.resize(this->numberOfOutputs);
     this->buildKernelIndexes();
+    this->buildFlippedKernelIndexes();
 }
 
 void MaxPooling1D::buildKernelIndexes()

@@ -18,6 +18,7 @@ LocallyConnected1D::LocallyConnected1D(LayerModel& model, std::shared_ptr<Neural
     };
     this->numberOfNeuronsPerFilter = this->numberOfKernelsPerFilter;
     this->buildKernelIndexes();
+    this->buildFlippedKernelIndexes();
 }
 
 void LocallyConnected1D::buildKernelIndexes()

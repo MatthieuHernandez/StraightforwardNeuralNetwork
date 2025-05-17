@@ -24,6 +24,7 @@ MaxPooling2D::MaxPooling2D(LayerModel& model)
 
     this->maxValueIndexes.resize(this->numberOfOutputs);
     this->buildKernelIndexes();
+    this->buildFlippedKernelIndexes();
 }
 
 void MaxPooling2D::buildKernelIndexes()

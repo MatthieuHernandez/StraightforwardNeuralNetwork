@@ -43,18 +43,28 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
     ASSERT_ACCURACY(accuracy, 0.26F);
 }
 
-TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
+TEST_F(Cifar10Test, trainSimpleConvNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3, 32, 32), Convolution(16, 3, activation::ReLU), MaxPooling(2), Convolution(32, 3, activation::ReLU),
-         MaxPooling(2), FullyConnected(128), FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.001F, 0.8F));
+        {Input(3, 32, 32), Convolution(32, 3, activation::ReLU), FullyConnected(10, activation::identity, Softmax())});
+    neuralNetwork.train(*dataset, 10_ep);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_ACCURACY(accuracy, 0.26F);
+}
+
+TEST_F(Cifar10Test, trainBestNeuralNetwork)
+{
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(3, 32, 32), Convolution(8, 3, activation::ReLU), MaxPooling(2), Convolution(16, 3, activation::ReLU),
+         MaxPooling(2), Convolution(32, 3, activation::ReLU), MaxPooling(2), FullyConnected(128),
+         FullyConnected(10, activation::identity, Softmax())},
+        StochasticGradientDescent(0.001F, 0.0F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.62_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.80_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20F);

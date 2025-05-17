@@ -24,7 +24,7 @@ enum logLevel : uint8_t
     complete = 2
 };
 
-static constexpr logLevel verbose = none;
+static constexpr logLevel verbose = minimal;
 }  // namespace snn
 
 namespace snn::internal

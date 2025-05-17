@@ -1,6 +1,8 @@
 file(GLOB SOURCES
     "*.hpp"
     "*.cpp"
+    "affNIST/*.hpp"
+    "affNIST/*.cpp"
     "audio-cats-and-dogs/*.hpp"
     "audio-cats-and-dogs/*.cpp"
     "CIFAR-10/*.hpp"

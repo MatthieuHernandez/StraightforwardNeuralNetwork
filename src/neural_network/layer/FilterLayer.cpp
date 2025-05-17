@@ -18,6 +18,16 @@ FilterLayer::FilterLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOptimiz
 {
 }
 
+void FilterLayer::buildFlippedKernelIndexes()
+{
+    this->flippedKernelIndexes = this->kernelIndexes;
+    const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
+    for (int k = 0; k < kIndexSize; ++k)
+    {
+        std::reverse(this->flippedKernelIndexes[k].begin(), this->flippedKernelIndexes[k].end());
+    }
+}
+
 auto FilterLayer::getShapeOfInput() const -> std::vector<int> { return this->shapeOfInput; }
 
 auto FilterLayer::getShapeOfOutput() const -> std::vector<int> { return this->shapeOfOutput; }

@@ -17,6 +17,7 @@ Convolution2D::Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOpt
     };
     this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
+    this->buildFlippedKernelIndexes();
 }
 
 void Convolution2D::buildKernelIndexes()
@@ -33,7 +34,7 @@ void Convolution2D::buildKernelIndexes()
         const int kernelPosY = k / this->shapeOfOutput[X];
         for (int y = 0; y < kSize; ++y)
         {
-            const int inputIndexY = (kernelPosY + y) * maxX + kernelPosX;
+            const int inputIndexY = ((kernelPosY + y) * maxX) + kernelPosX;
             for (int x = 0; x < kSize; ++x)
             {
                 const int inputIndexX = (inputIndexY + x) * maxC;
@@ -125,7 +126,7 @@ inline auto Convolution2D::computeBackOutput(std::vector<float>& inputErrors) ->
             auto& error = neuron.backOutput(inputErrors[i]);
             for (size_t e = 0; e < error.size(); ++e)
             {
-                const auto& index = kernelIndexes[k][e];
+                const auto& index = this->kernelIndexes[k][e];
                 errors[index] += error[e];
             }
             ++i;

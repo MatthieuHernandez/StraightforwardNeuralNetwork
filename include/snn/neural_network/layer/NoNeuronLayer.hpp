@@ -1,6 +1,5 @@
 #pragma once
 #include <boost/serialization/access.hpp>
-#include <memory>
 
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"

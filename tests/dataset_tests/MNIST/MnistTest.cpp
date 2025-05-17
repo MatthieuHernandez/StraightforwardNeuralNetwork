@@ -64,7 +64,7 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
     ASSERT_ACCURACY(accuracy, 0.90F);
 }
 
-TEST_F(MnistTest, LocallyConnected1D)
+TEST_F(MnistTest, locallyConnected1D)
 {
     StraightforwardNeuralNetwork neuralNetwork({Input(784), LocallyConnected(1, 7),
                                                 FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),

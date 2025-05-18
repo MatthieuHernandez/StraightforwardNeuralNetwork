@@ -25,6 +25,7 @@ class CircularData final
         ~CircularData() = default;
 
         [[nodiscard]] auto getBack() -> const std::vector<float>*;
+        [[nodiscard]] auto getSum() -> std::vector<float>;
         void pushBack(const std::vector<float>& data);
 
         auto operator==(const CircularData& other) const -> bool;

@@ -1,7 +1,7 @@
 #include "CircularData.hpp"
 
 #include <cassert>
-#include <utility>
+#include <numeric>
 
 namespace snn::internal
 {
@@ -23,6 +23,18 @@ auto CircularData::getBack() -> const std::vector<float>*
         this->indexGet = 0;
     }
     return &this->queue[this->indexGet++];
+}
+
+auto CircularData::getSum() -> std::vector<float>
+{
+    const std::size_t dataSize = this->queue.front().size();
+    std::vector<float> result(dataSize, 0.0F);
+    for (const auto& data : this->queue)
+    {
+        assert(data.size() == dataSize);
+        std::transform(data.cbegin(), data.cend(), result.begin(), result.begin(), std::plus<>{});
+    }
+    return result;
 }
 
 void CircularData::pushBack(const std::vector<float>& data)

@@ -22,7 +22,7 @@ class Neuron
         std::vector<float> weights;
         float bias{};
 
-        CircularData previousDeltaWeights;
+        std::vector<float> previousDeltaWeights;
         CircularData lastInputs;
         std::vector<float> errors;
 

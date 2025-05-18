@@ -1,6 +1,7 @@
 #include "Convolution2D.hpp"
 
 #include <boost/serialization/export.hpp>
+#include <numeric>
 #include <utility>
 
 #include "LayerModel.hpp"
@@ -118,18 +119,18 @@ inline auto Convolution2D::computeOutput(const std::vector<float>& inputs, [[may
 
 inline auto Convolution2D::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
+    const auto inputError = std::reduce(inputErrors.cbegin(), inputErrors.cend());
     std::vector<float> errors(this->numberOfInputs, 0);
-    for (size_t k = 0, i = 0; k < this->kernelIndexes.size(); ++k)
+    for (auto& neuron : this->neurons)
     {
-        for (auto& neuron : this->neurons)
+        auto outputError = neuron.backOutput(inputError);
+        for (size_t k = 0; k < this->kernelIndexes.size(); ++k)
         {
-            auto& error = neuron.backOutput(inputErrors[i]);
-            for (size_t e = 0; e < error.size(); ++e)
+            for (size_t e = 0; e < this->kernelIndexes.size(); ++e)
             {
                 const auto& index = this->kernelIndexes[k][e];
-                errors[index] += error[e];
+                errors[index] += outputError[e];
             }
-            ++i;
         }
     }
     return errors;

@@ -1,5 +1,4 @@
 #pragma once
-#include <cstddef>
 #include <cstdint>
 #include <vector>
 
@@ -17,6 +16,10 @@ namespace internal
 {
 struct Set
 {
+        explicit Set(setType t)
+            : type(t)
+        {
+        }
         setType type;
         int index{0};
         int size{0};  // number of data inside set
@@ -31,6 +34,11 @@ struct Set
 
 struct Data
 {
+        explicit Data()
+            : training(setType::training),
+              testing(snn::setType::testing)
+        {
+        }
         Set training;
         Set testing;
 };

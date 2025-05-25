@@ -1,6 +1,7 @@
 #include "StochasticGradientDescent.hpp"
 
 #include <boost/serialization/export.hpp>
+#include <sstream>
 
 #include "RecurrentNeuron.hpp"
 #include "SimpleNeuron.hpp"

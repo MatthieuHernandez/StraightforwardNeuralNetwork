@@ -6,9 +6,9 @@
 
 namespace snn::internal
 {
-extern template class internal::SimpleLayer<SimpleNeuron>;  // must use a nested-name-specifier for GCC compiler
-extern template class internal::SimpleLayer<RecurrentNeuron>;
-extern template class internal::SimpleLayer<GatedRecurrentUnit>;
+template class SimpleLayer<SimpleNeuron>;
+template class SimpleLayer<RecurrentNeuron>;
+template class SimpleLayer<GatedRecurrentUnit>;
 
 template <>
 auto SimpleLayer<RecurrentNeuron>::computeOutput(const std::vector<float>& inputs, bool temporalReset)

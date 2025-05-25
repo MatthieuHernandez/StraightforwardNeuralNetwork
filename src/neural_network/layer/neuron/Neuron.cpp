@@ -1,5 +1,9 @@
 #include "Neuron.hpp"
 
+#include <stdexcept>
+
+#include "../../../tools/Tools.hpp"
+
 namespace snn::internal
 {
 Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)

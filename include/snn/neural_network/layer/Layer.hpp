@@ -15,6 +15,9 @@
 #include "BaseLayer.hpp"
 #include "LayerModel.hpp"
 #include "neuron/BaseNeuron.hpp"
+#include "neuron/GatedRecurrentUnit.hpp"
+#include "neuron/RecurrentNeuron.hpp"
+#include "neuron/SimpleNeuron.hpp"
 
 namespace snn::internal
 {
@@ -87,3 +90,7 @@ void Layer<N>::serialize(Archive& archive, [[maybe_unused]] const uint32_t versi
 
 }  // namespace snn::internal
 #include "Layer.tpp"  // IWYU pragma: keep
+
+extern template class snn::internal::Layer<snn::internal::SimpleNeuron>;
+extern template class snn::internal::Layer<snn::internal::RecurrentNeuron>;
+extern template class snn::internal::Layer<snn::internal::GatedRecurrentUnit>;

@@ -10,7 +10,8 @@ SimpleLayer<N>::SimpleLayer(LayerModel& model, std::shared_ptr<NeuralNetworkOpti
 }
 
 template <BaseNeuron N>
-std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+auto SimpleLayer<N>::computeOutput(const std::vector<float>& inputs, [[maybe_unused]] bool temporalReset)
+    -> std::vector<float>
 {
     std::vector<float> outputs(this->neurons.size());
     for (size_t n = 0; n < this->neurons.size(); ++n)
@@ -21,7 +22,7 @@ std::vector<float> SimpleLayer<N>::computeOutput(const std::vector<float>& input
 }
 
 template <BaseNeuron N>
-std::vector<float> SimpleLayer<N>::computeBackOutput(std::vector<float>& inputErrors)
+auto SimpleLayer<N>::computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float>
 {
     std::vector<float> errors(this->numberOfInputs, 0);
     for (size_t n = 0; n < this->neurons.size(); ++n)

@@ -3,10 +3,7 @@
 #include <boost/serialization/base_object.hpp>
 #include <memory>
 
-#include "../optimizer/LayerOptimizer.hpp"
 #include "Layer.hpp"
-#include "neuron/GatedRecurrentUnit.hpp"
-#include "neuron/RecurrentNeuron.hpp"
 
 namespace snn::internal
 {
@@ -19,8 +16,9 @@ class SimpleLayer : public Layer<N>
         void serialize(Archive& archive, uint32_t version);
 
     protected:
-        [[nodiscard]] std::vector<float> computeBackOutput(std::vector<float>& inputErrors) final;
-        [[nodiscard]] std::vector<float> computeOutput(const std::vector<float>& inputs, bool temporalReset) final;
+        [[nodiscard]] auto computeBackOutput(std::vector<float>& inputErrors) -> std::vector<float> final;
+        [[nodiscard]] auto computeOutput(const std::vector<float>& inputs, bool temporalReset)
+            -> std::vector<float> final;
         void computeTrain(std::vector<float>& inputErrors) final;
 
     public:
@@ -32,8 +30,8 @@ class SimpleLayer : public Layer<N>
         SimpleLayer(const SimpleLayer&) = default;
         ~SimpleLayer() override = default;
 
-        [[nodiscard]] std::vector<int> getShapeOfInput() const final;
-        [[nodiscard]] std::vector<int> getShapeOfOutput() const final;
+        [[nodiscard]] auto getShapeOfInput() const -> std::vector<int> final;
+        [[nodiscard]] auto getShapeOfOutput() const -> std::vector<int> final;
         [[nodiscard]] auto isValid() const -> errorType final;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
@@ -56,3 +54,7 @@ std::vector<float> SimpleLayer<GatedRecurrentUnit>::computeOutput(const std::vec
 
 }  // namespace snn::internal
 #include "SimpleLayer.tpp"  // IWYU pragma: keep
+
+extern template class snn::internal::SimpleLayer<snn::internal::SimpleNeuron>;
+extern template class snn::internal::SimpleLayer<snn::internal::RecurrentNeuron>;
+extern template class snn::internal::SimpleLayer<snn::internal::GatedRecurrentUnit>;

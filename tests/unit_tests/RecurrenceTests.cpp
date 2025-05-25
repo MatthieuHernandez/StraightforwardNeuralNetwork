@@ -30,8 +30,8 @@ TEST(Recurrence, RepeatLastInput)
     dataset->setPrecision(0.4F);
 
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1), Recurrence(20), FullyConnected(8), FullyConnected(1, activation::tanh)},
-        StochasticGradientDescent(0.02F, 0.5F));
+        {Input(1), Recurrence(20), FullyConnected(10), FullyConnected(1, activation::tanh)},
+        StochasticGradientDescent(0.01F, 0.7F));
     testNeuralNetworkForRecurrence(neuralNetwork, *dataset);
 }
 

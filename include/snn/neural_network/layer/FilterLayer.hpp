@@ -2,6 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 
+#include "../../tools/Tools.hpp"
 #include "../optimizer/NeuralNetworkOptimizer.hpp"
 #include "Layer.hpp"
 #include "neuron/SimpleNeuron.hpp"

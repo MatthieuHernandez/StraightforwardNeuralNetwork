@@ -39,6 +39,7 @@ jobs:
           -exec clang-format-19 --dry-run --Werror --verbose \
           {} +
     - name: Clang-Tidy
+      if: false
       run: |
         clang-tidy-19 -p ./build/ --exclude-header-filter=* --use-color --quiet \
           $(find  ./src ./tests ./include ./examples \

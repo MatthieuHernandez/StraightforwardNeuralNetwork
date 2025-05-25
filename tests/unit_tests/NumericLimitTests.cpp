@@ -65,7 +65,7 @@ std::unique_ptr<Dataset> NumericLimitTests::dataset = nullptr;
 TEST_F(NumericLimitTests, WithSigmoid)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3), FullyConnected(8, activation::sigmoid), FullyConnected(1, activation::sigmoid)},
+        {Input(3), FullyConnected(10, activation::sigmoid), FullyConnected(1, activation::sigmoid)},
         StochasticGradientDescent(0.01F, 0.99F));
     testNeuralNetwork(neuralNetwork);
 }
@@ -73,7 +73,7 @@ TEST_F(NumericLimitTests, WithSigmoid)
 TEST_F(NumericLimitTests, WithTanh)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3), FullyConnected(8, activation::tanh), FullyConnected(1, activation::tanh)},
+        {Input(3), FullyConnected(10, activation::tanh), FullyConnected(1, activation::tanh)},
         StochasticGradientDescent(0.01F, 0.99F));
     testNeuralNetwork(neuralNetwork);
 }

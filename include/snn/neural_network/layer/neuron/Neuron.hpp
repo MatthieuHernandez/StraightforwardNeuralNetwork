@@ -3,7 +3,7 @@
 #include <boost/serialization/vector.hpp>
 
 #include "../../optimizer/StochasticGradientDescent.hpp"
-#include "CircularData.hpp"
+#include "Circular.hpp"
 #include "NeuronModel.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
@@ -22,8 +22,8 @@ class Neuron
         std::vector<float> weights;
         float bias{};
 
-        CircularData previousDeltaWeights;
-        CircularData lastInputs;
+        Circular<std::vector<float>> previousDeltaWeights;
+        Circular<std::vector<float>> lastInputs;
         std::vector<float> errors;
 
         float sum = 0;

@@ -6,7 +6,7 @@
 
 namespace snn::internal
 {
-extern template class Layer<SimpleNeuron>;
-extern template class Layer<RecurrentNeuron>;
-extern template class Layer<GatedRecurrentUnit>;
+template class Layer<SimpleNeuron>;
+template class Layer<RecurrentNeuron>;
+template class Layer<GatedRecurrentUnit>;
 }  // namespace snn::internal

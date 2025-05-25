@@ -1,4 +1,4 @@
-file(GLOB_RECURSE HEADERS 
+file(GLOB_RECURSE HEADERS
     "../include/*.hpp"
     "../include/*.tpp")
 

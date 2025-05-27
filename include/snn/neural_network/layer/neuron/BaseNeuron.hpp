@@ -18,7 +18,8 @@ concept HasTemporalOuputMethod = requires(N neuron, std::vector<float> inputs) {
 template <class N>
 concept HasCommonMethods = requires(N neuron, float error, std::shared_ptr<NeuralNetworkOptimizer> optimizer) {
     { neuron.backOutput(error) } -> std::same_as<std::vector<float>&>;
-    { neuron.train(error) } -> std::same_as<void>;
+    { neuron.back(error) } -> std::same_as<void>;
+    { neuron.train() } -> std::same_as<void>;
     { neuron.setOptimizer(optimizer) } -> std::same_as<void>;
 };
 

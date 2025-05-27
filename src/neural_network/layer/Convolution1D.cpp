@@ -114,6 +114,7 @@ inline auto Convolution1D::computeBackOutput(std::vector<float>& inputErrors) ->
         for (auto& neuron : this->neurons)
         {
             auto& error = neuron.backOutput(inputErrors[i]);
+            neuron.train();
             for (size_t e = 0; e < error.size(); ++e)
             {
                 const auto& index = kernelIndexes[k][e];
@@ -129,7 +130,8 @@ inline void Convolution1D::computeTrain(std::vector<float>& inputErrors)
 {
     for (int n = 0; n < this->numberOfFilters; ++n)
     {
-        this->neurons[n].train(inputErrors[n]);
+        this->neurons[n].back(inputErrors[n]);
+        this->neurons[n].train();
     }
 }
 

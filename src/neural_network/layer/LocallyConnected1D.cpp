@@ -128,6 +128,7 @@ inline auto LocallyConnected1D::computeBackOutput(std::vector<float>& inputError
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
+        this->neurons[n].train();
         for (size_t e = 0; e < error.size(); ++e)
         {
             const auto& index = kernelIndexes[n % numberOfKernelsPerFilter][e];
@@ -144,7 +145,8 @@ inline void LocallyConnected1D::computeTrain(std::vector<float>& inputErrors)
 {
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
-        this->neurons[n].train(inputErrors[n]);
+        this->neurons[n].back(inputErrors[n]);
+        this->neurons[n].train();
     }
 }
 

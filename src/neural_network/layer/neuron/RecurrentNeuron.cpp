@@ -42,22 +42,24 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
 
 auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 {
-    error = error * this->outputFunction->derivative(this->sum);
+    const auto e = error * this->outputFunction->derivative(this->sum);
+    this->lastError.pushBack(e);
     assert(this->weights.size() == this->errors.size() + 2);
 #pragma omp simd  // seems to do nothing
     for (int w = 0; w < this->numberOfInputs; ++w)
     {
-        this->errors[w] = error * this->weights[w];
+        this->errors[w] = e * this->weights[w];
     }
-    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
-void RecurrentNeuron::train(float error)
+void RecurrentNeuron::back(float error)
 {
-    error = error * this->outputFunction->derivative(this->sum);
-    this->optimizer->updateWeights(*this, error);
+    const auto e = error * this->outputFunction->derivative(this->sum);
+    this->lastError.pushBack(e);
 }
+
+void RecurrentNeuron::train() { this->optimizer->updateWeights(*this); }
 
 inline void RecurrentNeuron::reset()
 {

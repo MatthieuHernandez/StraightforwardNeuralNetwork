@@ -13,7 +13,7 @@ CompositeForNonTemporalData::CompositeForNonTemporalData(Data* data)
 
 void CompositeForNonTemporalData::shuffle()  // TODO(matth): also need learning to shuffle
 {
-    std::ranges::shuffle(this->data->training.shuffledIndexes, tools::rng);
+    std::ranges::shuffle(this->data->training.shuffledIndexes, tools::Rng());
 }
 
 void CompositeForNonTemporalData::unshuffle() { this->TemporalComposite::unshuffle(); }

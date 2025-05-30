@@ -19,7 +19,7 @@ Dropout::Dropout(const float value, const BaseLayer* layer)
     this->dist = std::uniform_real_distribution<>(0.0, 1.0);
     // NOLINTNEXTLINE(modernize-use-ranges):  std::ranges::generate doesn't support std::vector<bool>.
     std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
-                  [&] { return dist(tools::rng) >= this->value; });
+                  [&] { return dist(tools::Rng()) >= this->value; });
 }
 
 Dropout::Dropout(const Dropout& dropout, const BaseLayer* layer)
@@ -41,7 +41,7 @@ void Dropout::applyAfterOutputForTraining(std::vector<float>& outputs, bool temp
     {
         // NOLINTNEXTLINE(modernize-use-ranges):  std::ranges::generate doesn't support std::vector<bool>.
         std::generate(this->presenceProbabilities.begin(), this->presenceProbabilities.end(),
-                      [&] { return dist(tools::rng) >= this->value; });
+                      [&] { return dist(tools::Rng()) >= this->value; });
     }
     std::ranges::transform(outputs, this->presenceProbabilities, outputs.begin(), std::multiplies<float>());
 }

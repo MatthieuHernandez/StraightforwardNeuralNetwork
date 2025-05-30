@@ -19,7 +19,6 @@ TEST(Identity, WorksWithSmallNumbers)
     neuralNetwork.train(dataset, 0.01_mae || 2_s);
 
     const float mae = neuralNetwork.getMeanAbsoluteErrorMin();
-
     ASSERT_MAE(mae, 0.01);
 }
 

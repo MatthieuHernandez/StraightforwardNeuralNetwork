@@ -18,7 +18,7 @@ CompositeForTemporalData::CompositeForTemporalData(Data* data)
 
 void CompositeForTemporalData::shuffle()
 {
-    std::ranges::shuffle(this->indexesForShuffles, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffles, tools::Rng());
 
     for (size_t i = 0, j = 0; i < this->indexesForShuffles.size(); ++i)
     {

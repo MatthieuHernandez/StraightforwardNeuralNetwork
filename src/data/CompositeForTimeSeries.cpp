@@ -34,7 +34,7 @@ CompositeForTimeSeries::CompositeForTimeSeries(Data* data, int numberOfRecurrenc
 
 void CompositeForTimeSeries::shuffle()
 {
-    std::ranges::shuffle(this->indexesForShuffling, tools::rng);
+    std::ranges::shuffle(this->indexesForShuffling, tools::Rng());
     for (auto i = this->data->training.size - (this->numberOfRecurrences + 1); i < this->data->training.size; ++i)
     {
         this->data->training.needToTrainOnData[i] = false;

@@ -25,6 +25,8 @@ enum logLevel : uint8_t
 };
 
 static constexpr logLevel verbose = none;
+
+static constexpr bool useFixedSeed = false;
 }  // namespace snn
 
 namespace snn::internal
@@ -39,8 +41,8 @@ enum coordinateIndex : uint8_t
 
 namespace snn::tools
 {
-static std::random_device rd;
-static std::mt19937 rng(rd());
+
+auto Rng() -> std::mt19937&;
 
 auto randomBetween(int min, int max) -> int;  // [min; max[
 auto randomBetween(float min, float max) -> float;

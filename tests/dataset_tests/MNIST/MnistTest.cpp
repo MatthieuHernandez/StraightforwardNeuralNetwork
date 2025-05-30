@@ -66,9 +66,10 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
 
 TEST_F(MnistTest, locallyConnected1D)
 {
-    StraightforwardNeuralNetwork neuralNetwork({Input(784), LocallyConnected(1, 7),
-                                                FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),
-                                                FullyConnected(70), FullyConnected(10)});
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(784), LocallyConnected(1, 7), FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),
+         FullyConnected(70), FullyConnected(10)},
+        StochasticGradientDescent(0.1F));
     neuralNetwork.train(*dataset, 2_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.84F);
@@ -77,10 +78,11 @@ TEST_F(MnistTest, locallyConnected1D)
 TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), LocallyConnected(2, 2), FullyConnected(150), FullyConnected(70), FullyConnected(10)});
+        {Input(1, 28, 28), LocallyConnected(2, 2), FullyConnected(150), FullyConnected(70), FullyConnected(10)},
+        StochasticGradientDescent(0.1F));
     neuralNetwork.train(*dataset, 3_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70F);
+    ASSERT_ACCURACY(accuracy, 0.84F);
 }
 
 TEST_F(MnistTest, convolutionalNeuralNetwork)

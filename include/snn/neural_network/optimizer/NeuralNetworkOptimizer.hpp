@@ -24,8 +24,8 @@ class NeuralNetworkOptimizer
         virtual ~NeuralNetworkOptimizer() = default;
         [[nodiscard]] virtual auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> = 0;
 
-        virtual void updateWeights(SimpleNeuron& neuron, float error) const = 0;
-        virtual void updateWeights(RecurrentNeuron& neuron, float error) const = 0;
+        virtual void updateWeights(SimpleNeuron& neuron) const = 0;
+        virtual void updateWeights(RecurrentNeuron& neuron) const = 0;
 
         [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 

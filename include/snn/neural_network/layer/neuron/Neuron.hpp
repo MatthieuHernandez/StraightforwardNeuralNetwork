@@ -24,6 +24,7 @@ class Neuron
 
         Circular<std::vector<float>> previousDeltaWeights;
         Circular<std::vector<float>> lastInputs;
+        Circular<float> lastErrors;
         std::vector<float> errors;
 
         float sum = 0;
@@ -69,6 +70,7 @@ void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version
     archive& this->bias;
     archive& this->previousDeltaWeights;
     archive& this->lastInputs;
+    archive& this->lastErrors;
     archive& this->errors;
     archive& this->sum;
     archive& this->activationFunction;

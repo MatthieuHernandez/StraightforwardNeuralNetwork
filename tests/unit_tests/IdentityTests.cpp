@@ -19,15 +19,7 @@ TEST(Identity, WorksWithSmallNumbers)
     neuralNetwork.train(dataset, 0.01_mae || 2_s);
 
     const float mae = neuralNetwork.getMeanAbsoluteErrorMin();
-
-    if (mae <= 0.01)
-    {
-        ASSERT_SUCCESS();
-    }
-    else
-    {
-        ASSERT_FAIL("MAE > 1: " + std::to_string(mae));
-    }
+    ASSERT_MAE(mae, 0.01);
 }
 
 TEST(Identity, WorksWithBigNumbers)

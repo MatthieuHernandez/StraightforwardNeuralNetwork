@@ -21,16 +21,16 @@ auto StochasticGradientDescent::clone() const -> std::shared_ptr<NeuralNetworkOp
 // #ifdef _MSC_VER
 // #pragma warning(disable : 4701)
 // #endif
-void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float error) const
+void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron) const
 {
     auto w = 0;
-    const auto lr = this->learningRate / static_cast<float>(neuron.batchSize);  // to activate the SIMD optimization
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     std::vector<float> deltaWeights(neuron.weights.size());
-    const auto lr_error = lr * error;
+    const auto error = neuron.lastErrors.getAverage();
+    const auto lr_error = this->learningRate * error;
     // #pragma omp simd
     for (w = 0; w < numberOfInputs; ++w)
     {
@@ -42,16 +42,16 @@ void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron, const float 
     neuron.previousDeltaWeights.pushBack(deltaWeights);
 }
 
-void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float error) const
+void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron) const
 {
     auto w = 0;
-    const auto lr = this->learningRate / static_cast<float>(neuron.batchSize);
     const auto& m = this->momentum;
     const auto& numberOfInputs = neuron.numberOfInputs;
     const auto& lastInputs = *neuron.lastInputs.getBack();
     const auto& previousDeltaWeights = *neuron.previousDeltaWeights.getBack();
     std::vector<float> deltaWeights(neuron.weights.size());
-    const auto lr_error = lr * error;
+    const auto error = neuron.lastErrors.getAverage();
+    const auto lr_error = this->learningRate * error;
     // #pragma omp simd  // info C5002: Omp simd loop not vectorized due to reason '1305' (Not enough type information.)
     for (w = 0; w < numberOfInputs; ++w)
     {
@@ -63,7 +63,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron, float err
     neuron.recurrentError =
         error + neuron.recurrentError * neuron.outputFunction->derivative(neuron.previousSum) * neuron.weights[w];
 
-    deltaWeights[w] = lr * neuron.recurrentError * neuron.previousOutput + m * previousDeltaWeights[w];
+    deltaWeights[w] = this->learningRate * neuron.recurrentError * neuron.previousOutput + m * previousDeltaWeights[w];
     neuron.weights[w] += deltaWeights[w];
     neuron.previousDeltaWeights.pushBack(deltaWeights);
 }

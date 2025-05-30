@@ -27,22 +27,24 @@ auto SimpleNeuron::output(const std::vector<float>& inputs) -> float
 
 auto SimpleNeuron::backOutput(float error) -> std::vector<float>&
 {
-    error = error * this->outputFunction->derivative(this->sum);
+    error *= this->outputFunction->derivative(this->sum);
+    this->lastErrors.pushBack(error);
     assert(this->weights.size() == this->errors.size() + 1);
 #pragma omp simd  // seems to do nothing
     for (size_t w = 0; w < this->errors.size(); ++w)
     {
         this->errors[w] = error * this->weights[w];
     }
-    this->optimizer->updateWeights(*this, error);
     return this->errors;
 }
 
-void SimpleNeuron::train(float error)
+void SimpleNeuron::back(float error)
 {
-    error = error * this->outputFunction->derivative(this->sum);
-    this->optimizer->updateWeights(*this, error);
+    error *= this->outputFunction->derivative(this->sum);
+    this->lastErrors.pushBack(error);
 }
+
+void SimpleNeuron::train() { this->optimizer->updateWeights(*this); }
 
 auto SimpleNeuron::isValid() const -> errorType { return this->Neuron::isValid(); }
 

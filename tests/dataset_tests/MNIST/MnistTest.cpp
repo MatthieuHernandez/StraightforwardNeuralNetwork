@@ -116,15 +116,15 @@ TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), Convolution(12, 4, activation::ReLU), MaxPooling(2), FullyConnected(128, activation::ReLU),
-         FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.002F, 0.0F));
+        {Input(1, 28, 28), Convolution(12, 3, activation::GELU), MaxPooling(2), Convolution(24, 3, activation::GELU),
+         MaxPooling(2), FullyConnected(92, activation::GELU), FullyConnected(10, activation::identity, Softmax())},
+        StochasticGradientDescent(0.0005F, 0.8F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.9860_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 30 epochs, ~32 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
@@ -136,45 +136,59 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 261206);
-    ASSERT_FLOAT_EQ(accuracy, 0.9871F);
+
+    ASSERT_EQ(numberOfParameters, 69182);
+    ASSERT_FLOAT_EQ(accuracy, 0.9854F);
 
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
  Name:       ./resources/BestNeuralNetworkForMNIST.snn
- Parameters: 261206
- Epochs:     13
- Trainnig:   0
+ Parameters: 69182
+ Epochs:     17
+ Trainnig:   1020000
 ============================================================
 | Layers                                                   |
 ============================================================
 ------------------------------------------------------------
  Convolution2D
                 Input shape:  [1, 28, 28]
-                Filters:      12
-                Kernel size:  4x4
-                Parameters:   204
-                Activation:   ReLU
-                Output shape: [12, 25, 25]
+                Filters:      10
+                Kernel size:  3x3
+                Parameters:   100
+                Activation:   GELU
+                Output shape: [10, 26, 26]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [12, 25, 25]
+                Input shape:  [10, 26, 26]
                 Kernel size:  2x2
-                Output shape: [12, 13, 13]
+                Output shape: [10, 13, 13]
+------------------------------------------------------------
+ Convolution2D
+                Input shape:  [10, 13, 13]
+                Filters:      20
+                Kernel size:  3x3
+                Parameters:   1820
+                Activation:   GELU
+                Output shape: [20, 11, 11]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [20, 11, 11]
+                Kernel size:  2x2
+                Output shape: [20, 6, 6]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [2028]
-                Neurons:      128
-                Parameters:   259712
-                Activation:   ReLU
-                Output shape: [128]
+                Input shape:  [720]
+                Neurons:      92
+                Parameters:   66332
+                Activation:   GELU
+                Output shape: [92]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [128]
+                Input shape:  [92]
                 Neurons:      10
-                Parameters:   1290
+                Parameters:   930
                 Activation:   identity
                 Output shape: [10]
                 Optimizers:   Softmax
@@ -182,8 +196,8 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 0.002
-                Momentum:      0
+                Learning rate: 0.0005
+                Momentum:      0.8
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();

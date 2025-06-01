@@ -10,6 +10,5 @@ weights = [1, 10, 1, 10, 2, 11, 2, 11, 3, 12, 3, 12, 4, 13, 4, 13, 5,
 layer_info(forward_layer=Conv2D(filters=2, kernel_size=3),
            backward_layer=Conv2DTranspose(filters=2, kernel_size=3),
            weights=weights,
-           input_shape=(5, 5, 2),
-           input=tf.range(1, 51, 1, dtype=tf.float32),
-           error=tf.range(1, 19, 1, dtype=tf.float32))
+           input=tf.reshape(tf.range(1, 51, 1, dtype=tf.float32), (1, 5, 5, 2)),
+           error=tf.reshape(tf.range(1, 19, 1, dtype=tf.float32), (1, 3, 3, 2)))

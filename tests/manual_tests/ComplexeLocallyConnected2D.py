@@ -14,10 +14,12 @@ input = tf.constant([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 0,
                     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], shape=(6, 6, 2), dtype=tf.float32)
 input = tf.reshape(input, (1, 6, 6, 2))
+expected = tf.cast(tf.reshape([5812, 6213, 12452, 12123, 39110, 39123, 41320, 41642],
+                              shape=(1, 2, 2, 2)), tf.float32)
 
 # Print info used on the layer used in the C++ unit tests
 layer_info(forward_layer=LocallyConnected2D(filters=2, kernel_size=3, strides=3,
                                             bias_initializer="ones"),
            weights=weights,
            input=input,
-           error=tf.reshape(tf.range(1, 9, 1, dtype=tf.float32), (1, 2, 2, 2)))
+           expected=expected)

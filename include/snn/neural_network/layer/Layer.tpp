@@ -94,7 +94,7 @@ auto Layer<N>::isValid() const -> errorType
 template <BaseNeuron N>
 auto Layer<N>::getNeuron(int index) -> void*
 {
-    return static_cast<void*>(&this->neurons[index]);
+    return static_cast<void*>(&this->neurons.at(index));
 }
 
 template <BaseNeuron N>

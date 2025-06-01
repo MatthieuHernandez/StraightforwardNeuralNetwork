@@ -1,52 +1,39 @@
-import numpy as np
 import tensorflow as tf
-from keras.layers import *
+
 print("TensorFlow version:", tf.__version__)
 
 
-def __get_layer_output(layer, new_weights, bias, input_shape, input):
-    # Instanciate a model
-    model = tf.keras.models.Sequential([
-        Input(input_shape),
-        layer,
-    ])
+def __get_layer_output(layer, new_weights, input, expected, lr=0.001):
+    # Build the layer
+    layer.build(input.shape)
 
-    # Retrieve the varaibles
-    layer = model.layers[0]
+    # Retrieve the variables
     weights = layer.get_weights()
-    batch_shape = (1,) + input_shape
 
     # Set the weights and bias
     if weights:
         weights[0] = tf.reshape(new_weights, weights[0].shape)
-        new_bias = tf.ones_like(weights[1]) * bias
-        weights[1] = np.reshape(new_bias, weights[1].shape)
-        model.layers[0].set_weights(weights)
+        layer.set_weights(weights)
 
-    # Compute the output
-    input = tf.reshape(input, batch_shape)
-    output = layer.call(input)
-    if not weights:
-        if tf.math.reduce_prod(output.shape) < tf.math.reduce_prod(new_weights.shape):
-            output = tf.concat([output, output], axis=-1)
-        output = tf.reshape(output, new_weights.shape) * new_weights
-        output = tf.math.reduce_sum(output, axis=0)
-    return output, layer.output_shape[1:]
+    # Record gradients
+    with tf.GradientTape() as tape:
+        tape.watch(input)
+        # Compute the output and the loss.
+        output = layer(input)
+        loss = (output - expected)**2
+
+    # Compute gradients
+    grads = tape.gradient(loss, [input, *layer.trainable_variables])
+
+    # Update weights
+    for v, g in zip(layer.trainable_variables, grads[1:]):
+        v.assign_sub(lr * g)
+    return output, grads
 
 
-def layer_info(forward_layer,
-               backward_layer,
-               weights,
-               input_shape,
-               input,
-               error):
+def layer_info(forward_layer, weights, input, expected, lr=0.001):
     # Do a forward propagation
-    forward_output, output_shape = __get_layer_output(
-        forward_layer, weights, 1, input_shape, input)
-
-    # Do a backward propagation
-    backward_output, _ = __get_layer_output(
-        backward_layer, weights, 0, output_shape, error)
+    forward_output, grads = __get_layer_output(forward_layer, weights, input, expected, lr=lr)
 
     # Print the results
     print("============================= input =============================")
@@ -56,4 +43,12 @@ def layer_info(forward_layer,
     print("============================ output =============================")
     print(forward_output)
     print("============================= error =============================")
+    backward_output = grads[0]
     print(backward_output)
+    print("========================== new_weights ==========================")
+    print(forward_layer.weights[0])
+    if getattr(forward_layer, "use_bias", False):
+        print("============================ new_bias ===========================")
+        print(forward_layer.weights[1])
+    print("========================== new_outputs ==========================")
+    print(forward_layer(input))

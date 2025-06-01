@@ -7,7 +7,7 @@ weights = [1, 10, 1, 10, 2, 11, 2, 11, 3, 12, 3, 12, 4, 13, 4, 13, 5,
            14, 5, 14, 6, 15, 6, 15, 7, 16, 7, 16, 8, 17, 8, 17, 9, 18, 9, 18]
 
 # Print info used on the layer used in the C++ unit tests
-layer_info(forward_layer=Conv2D(filters=2, kernel_size=3),
+layer_info(forward_layer=Conv2D(filters=2, kernel_size=3, bias_initializer="ones"),
            backward_layer=Conv2DTranspose(filters=2, kernel_size=3),
            weights=weights,
            input=tf.reshape(tf.range(1, 51, 1, dtype=tf.float32), (1, 5, 5, 2)),

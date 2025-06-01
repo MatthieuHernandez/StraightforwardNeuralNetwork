@@ -13,7 +13,8 @@ input = tf.concat([input_raw, zeros], 0)
 input = tf.reshape(input, (1, 6, 2))
 
 # Print info used on the layer used in the C++ unit tests
-layer_info(forward_layer=LocallyConnected1D(filters=2, kernel_size=3, strides=3),
+layer_info(forward_layer=LocallyConnected1D(filters=2, kernel_size=3, strides=3,
+                                            bias_initializer="ones"),
            backward_layer=UpSampling1D(size=3),
            weights=weights,
            input=input,

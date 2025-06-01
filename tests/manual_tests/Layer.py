@@ -1,11 +1,9 @@
-import numpy as np
 import tensorflow as tf
-from keras.layers import *
 
 print("TensorFlow version:", tf.__version__)
 
 
-def __get_layer_output(layer, new_weights, input):
+def __get_layer_output(layer, new_weights, input, error):
     # Build the layer
     layer.build(input.shape)
 
@@ -17,22 +15,22 @@ def __get_layer_output(layer, new_weights, input):
         weights[0] = tf.reshape(new_weights, weights[0].shape)
         layer.set_weights(weights)
 
-    # Compute the output
-    output = layer(input)
-    if not weights:
-        if tf.math.reduce_prod(output.shape) < tf.math.reduce_prod(new_weights.shape):
-            output = tf.concat([output, output], axis=-1)
-        output = tf.reshape(output, new_weights.shape) * new_weights
-        output = tf.math.reduce_sum(output, axis=0)
-    return output
+    # Record gradients
+    expected = layer(input) - error
+    with tf.GradientTape() as tape:
+        tape.watch(input)
+        # Compute the output and the loss.
+        output = layer(input)
+        loss = (output - expected)**2 / 2
+
+    # Compute gradients
+    grads = tape.gradient(loss, [input, *layer.trainable_variables])
+    return output, grads
 
 
-def layer_info(forward_layer, backward_layer, weights, input, error):
+def layer_info(forward_layer, weights, input, error):
     # Do a forward propagation
-    forward_output = __get_layer_output(forward_layer, weights, input)
-
-    # Do a backward propagation
-    backward_output = __get_layer_output(backward_layer, weights, error)
+    forward_output, grads = __get_layer_output(forward_layer, weights, input, error)
 
     # Print the results
     print("============================= input =============================")
@@ -42,4 +40,5 @@ def layer_info(forward_layer, backward_layer, weights, input, error):
     print("============================ output =============================")
     print(forward_output)
     print("============================= error =============================")
+    backward_output = grads[0]
     print(backward_output)

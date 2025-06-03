@@ -3,10 +3,12 @@ import tensorflow as tf
 from tensorflow.keras import datasets, layers, models, optimizers
 import matplotlib.pyplot as plt
 
-(train_images, train_labels), (test_images,
-                               test_labels) = datasets.cifar10.load_data()
+(train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
 # Normalize pixel values to be between 0 and 1
 train_images, test_images = train_images / 255.0, test_images / 255.0
+# Encode labels
+one_hot_train_labels = tf.one_hot(train_labels, 10)
+one_hot_test_labels = tf.one_hot(test_labels, 10)
 
 model = models.Sequential()
 model.add(layers.Input(shape=(32, 32, 3)))
@@ -22,13 +24,12 @@ model.add(layers.Dense(10))
 
 model.summary()
 
-model.compile(optimizer=optimizers.SGD(learning_rate=0.002, momentum=0.9),
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(
-                  from_logits=True),
+model.compile(optimizer=optimizers.SGD(learning_rate=0.001 * 10, momentum=0.0),
+              loss=tf.keras.losses.MeanSquaredError(),
               metrics=['accuracy'])
 
-history = model.fit(train_images, train_labels, epochs=20,  # batch_size=1
-                    validation_data=(test_images, test_labels))
+history = model.fit(train_images, one_hot_train_labels, epochs=20, batch_size=1,
+                    validation_data=(test_images, one_hot_test_labels))
 
 plt.plot(history.history['accuracy'], label='accuracy')
 plt.plot(history.history['val_accuracy'], label='val_accuracy')

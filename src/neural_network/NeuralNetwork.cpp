@@ -97,6 +97,7 @@ void NeuralNetwork::backpropagationAlgorithm(const std::vector<float>& inputs, c
                                              const std::vector<float>& weighting, bool temporalReset)
 {
     const auto outputs = this->outputForTraining(inputs, temporalReset);
+    assert(outputs.size() == desired.size());
     if (this->outputNan)
     {
         return;
@@ -123,7 +124,7 @@ inline auto NeuralNetwork::calculateError(const std::vector<float>& outputs, con
         }
         else
         {
-            errors[n] = 2.0F * (desired[n] - outputs[n]);
+            errors[n] = (desired[n] - outputs[n]);
         }
     }
     if (!weighting.empty())

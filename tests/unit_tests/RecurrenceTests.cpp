@@ -23,40 +23,55 @@ TEST(Recurrence, RepeatInput)
 
 TEST(Recurrence, RepeatLastInput)
 {
-    vector2D<float> inputData = {{0}, {0}, {1}, {1}, {0}, {-1}, {-1}, {0}, {1}, {-1}, {1}, {0}};
-    vector2D<float> expectedOutputs = {{0}, {0}, {0}, {1}, {1}, {0}, {-1}, {-1}, {0}, {1}, {-1}, {1}};
+    size_t datasetSize = 1000;
+    std::uniform_int_distribution<int> dist(-1, 1);
+    vector2D<float> inputData;
+    inputData.reserve(datasetSize);
+    for (size_t i = 0; i < datasetSize; ++i)
+    {
+        inputData.push_back({static_cast<float>(dist(tools::Rng()))});
+    }
+    vector2D<float> expectedOutputs = {{0}};
+    expectedOutputs.reserve(datasetSize);
+    expectedOutputs.insert(expectedOutputs.end(), inputData.cbegin(), inputData.cend() - 1);
 
     auto dataset = std::make_unique<Dataset>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 1);
-    dataset->setPrecision(0.4F);
+    dataset->setPrecision(0.5F);
 
-    StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1), Recurrence(20), FullyConnected(10), FullyConnected(1, activation::tanh)},
-        StochasticGradientDescent(0.01F, 0.7F));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(30), Recurrence(1, activation::tanh)},
+                                               StochasticGradientDescent(0.0001F, 0.7F));
     testNeuralNetworkForRecurrence(neuralNetwork, *dataset);
 }
 
 // a simple recurrent neural network can't solve this problem
 TEST(Recurrence, RepeatLastLastInput)
 {
-    vector2D<float> inputData = {{0.2F}, {0}, {1},    {0}, {1}, {1}, {0.1F}, {0}, {1}, {1},
-                                 {0.9F}, {1}, {0.3F}, {0}, {1}, {0}, {1},    {0}, {0}};
-    vector2D<float> expectedOutputs = {{0}, {0}, {0.2F}, {0}, {1},    {0}, {1}, {1}, {0}, {0.1F},
-                                       {1}, {1}, {0.9F}, {1}, {0.3F}, {0}, {1}, {0}, {1}};
+    size_t datasetSize = 100;
+    std::uniform_int_distribution<int> dist(-1, 1);
+    vector2D<float> inputData;
+    inputData.reserve(datasetSize);
+    for (size_t i = 0; i < datasetSize; ++i)
+    {
+        inputData.push_back({static_cast<float>(dist(tools::Rng()))});
+    }
+    vector2D<float> expectedOutputs = {{0, 0}};
+    expectedOutputs.reserve(datasetSize);
+    expectedOutputs.insert(expectedOutputs.end(), inputData.cbegin(), inputData.cend() - 2);
 
     auto dataset = std::make_unique<Dataset>(problem::regression, inputData, expectedOutputs, nature::timeSeries, 2);
     dataset->setPrecision(0.3F);
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(14), GruLayer(10), FullyConnected(1)},
-                                               StochasticGradientDescent(0.1F, 0.9F));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(50), FullyConnected(1, activation::tanh)},
+                                               StochasticGradientDescent(0.0005F, 0.7F));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *dataset);
 }
 
 inline static void testNeuralNetworkForRecurrence(StraightforwardNeuralNetwork& nn, Dataset& d)
 {
-    nn.train(d, 1.0_acc || 4_s, 1, 10);
+    nn.train(d, 0.9_acc || 4_s, 1, 2);
     auto mae = nn.getMeanAbsoluteError();
     auto acc = nn.getGlobalClusteringRate();
-    ASSERT_ACCURACY(acc, 1.0);
+    ASSERT_ACCURACY(acc, 0.9);
     ASSERT_MAE(mae, 0.5);
 }

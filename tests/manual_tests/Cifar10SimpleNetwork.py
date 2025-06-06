@@ -12,23 +12,21 @@ one_hot_test_labels = tf.one_hot(test_labels, 10)
 
 model = models.Sequential()
 model.add(layers.Input(shape=(32, 32, 3)))
-model.add(layers.Conv2D(16, (3, 3), padding="valid", activation='relu',
-                        use_bias=True, input_shape=(32, 32, 3)))
+model.add(layers.Conv2D(16, (3, 3), padding="valid", activation='gelu', use_bias=False))
 model.add(layers.MaxPooling2D((2, 2)))
-model.add(layers.Conv2D(32, (3, 3), padding="valid", activation='relu',
-                        use_bias=False))
+model.add(layers.Conv2D(32, (3, 3), padding="valid", activation='gelu', use_bias=False))
 model.add(layers.MaxPooling2D((2, 2)))
 model.add(layers.Flatten())
-model.add(layers.Dense(128, activation='sigmoid'))
-model.add(layers.Dense(10))
+model.add(layers.Dense(150, activation='gelu'))
+model.add(layers.Dense(10, activation='sigmoid'))
 
 model.summary()
 
-model.compile(optimizer=optimizers.SGD(learning_rate=0.001 * 10, momentum=0.0),
+model.compile(optimizer=optimizers.SGD(learning_rate=0.002, momentum=0.8),
               loss=tf.keras.losses.MeanSquaredError(),
               metrics=['accuracy'])
 
-history = model.fit(train_images, one_hot_train_labels, epochs=20, batch_size=1,
+history = model.fit(train_images, one_hot_train_labels, epochs=50, batch_size=1,
                     validation_data=(test_images, one_hot_test_labels))
 
 plt.plot(history.history['accuracy'], label='accuracy')

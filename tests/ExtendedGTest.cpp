@@ -14,12 +14,12 @@ void ASSERT_SUCCESS() { ASSERT_TRUE(true); }
 
 void ASSERT_FAIL(std::string message) { ASSERT_TRUE(false) << message; }
 
-void ASSERT_VECTOR_EQ(const std::vector<float> values, const std::vector<float> expected_values)
+void ASSERT_VECTOR_EQ(const std::vector<float>& values, const std::vector<float>& expected_values, float abs_error)
 {
     ASSERT_EQ(values.size(), expected_values.size());
     for (auto i = 0; i < values.size(); ++i)
     {
-        ASSERT_NEAR(values[i], expected_values[i], 1e-6F);
+        ASSERT_NEAR(values[i], expected_values[i], abs_error) << "First mismatch at index " << i << ".";
     }
 }
 

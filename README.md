@@ -17,11 +17,11 @@
 ## Classification datasets results
 | Dataset Name | Data type | Problem type | Score | Number of Parameters |
 |--------------|-----------|--------------|-------|----------------------|
-| [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | 91.04% Accurracy         | 382    |
+| [Audio Cats and Dogs](https://www.kaggle.com/mmoreaux/audio-cats-and-dogs) | audio        | classification | 76.12% Accurracy         | 15402  |
 | [Daily min temperatures](https://github.com/jbrownlee/Datasets)            | time series  | regression     | 1.42 Mean Absolute Error | 30     |
-| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 61.96% Accurracy         | 207210 |
-| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 89.65% Accurracy         | 270926 |
-| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.71% Accurracy         | 261206 |
+| [CIFAR-10](https://www.cs.toronto.edu/~kriz/cifar.html)                    | image        | classification | 62.01% Accurracy         | 241948 |
+| [Fashion-MNIST](https://github.com/zalandoresearch/fashion-mnist)          | image        | classification | 88.94% Accurracy         | 180382 |
+| [MNIST](http://yann.lecun.com/exdb/mnist)                                  | image        | classification | 98.54% Accurracy         | 69182  |
 | [Wine](https://archive.ics.uci.edu/ml/datasets/wine)                       | multivariate | classification | 100.0% Accurracy         | 444    |
 | [Iris](https://archive.ics.uci.edu/ml/datasets/iris)                       | multivariate | classification | 100.0% Accurracy         | 150    |
 

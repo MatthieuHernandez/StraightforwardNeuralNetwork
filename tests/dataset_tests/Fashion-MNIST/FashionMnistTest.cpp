@@ -48,26 +48,26 @@ TEST_F(FashionMnistTest, convolutionNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork({Input(1, 28, 28), Convolution(6, 3, activation::LeakyReLU),
                                                 Convolution(4, 5, activation::LeakyReLU), FullyConnected(10)},
                                                StochasticGradientDescent(0.0002F, 0.80F));
-    neuralNetwork.train(*dataset, 1_ep || 2_min);
+    neuralNetwork.train(*dataset, 1_ep || 1_min);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70F);
+    ASSERT_ACCURACY(accuracy, 0.74F);
 }
 
 TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), Convolution(12, 3, activation::ReLU), MaxPooling(2), Convolution(24, 3, activation::ReLU),
+        {Input(1, 28, 28), Convolution(8, 3, activation::GELU), MaxPooling(2), Convolution(16, 3, activation::GELU),
          FullyConnected(92), FullyConnected(10)},
-        StochasticGradientDescent(0.005F, 0.93F));
+        StochasticGradientDescent(0.001F, 0.70F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForFashion-MNIST.snn";
+    neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.92_acc);  // Reach after 109 epochs of 2 sec.
+    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 22 epochs, ~53 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20F);
+    ASSERT_ACCURACY(accuracy, 0.85F);
 }
 
 TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
@@ -76,46 +76,46 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 270926);
-    ASSERT_FLOAT_EQ(accuracy, 0.8965F);
+    ASSERT_EQ(numberOfParameters, 180382);
+    ASSERT_FLOAT_EQ(accuracy, 0.8894F);
 
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
- Name:       BestNeuralNetworkForFashion-MNIST.snn
- Parameters: 270926
- Epochs:     15
- Trainnig:   0
+ Name:       ./resources/BestNeuralNetworkForFashion-MNIST.snn
+ Parameters: 180382
+ Epochs:     22
+ Trainnig:   1320000
 ============================================================
 | Layers                                                   |
 ============================================================
 ------------------------------------------------------------
  Convolution2D
                 Input shape:  [1, 28, 28]
-                Filters:      12
+                Filters:      8
                 Kernel size:  3x3
-                Parameters:   120
-                Activation:   ReLU
-                Output shape: [12, 26, 26]
+                Parameters:   80
+                Activation:   GELU
+                Output shape: [8, 26, 26]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [12, 26, 26]
+                Input shape:  [8, 26, 26]
                 Kernel size:  2x2
-                Output shape: [12, 13, 13]
+                Output shape: [8, 13, 13]
 ------------------------------------------------------------
  Convolution2D
-                Input shape:  [12, 13, 13]
-                Filters:      24
+                Input shape:  [8, 13, 13]
+                Filters:      16
                 Kernel size:  3x3
-                Parameters:   2616
-                Activation:   ReLU
-                Output shape: [24, 11, 11]
+                Parameters:   1168
+                Activation:   GELU
+                Output shape: [16, 11, 11]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [2904]
+                Input shape:  [1936]
                 Neurons:      92
-                Parameters:   267260
+                Parameters:   178204
                 Activation:   sigmoid
                 Output shape: [92]
 ------------------------------------------------------------
@@ -130,7 +130,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 ============================================================
  StochasticGradientDescent
                 Learning rate: 0.005
-                Momentum:      0.93
+                Momentum:      0.8
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();

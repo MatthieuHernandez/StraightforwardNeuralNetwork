@@ -39,7 +39,8 @@ class GatedRecurrentUnit final
 
         [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
         [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
-        void train(float error);
+        void back(float error);
+        void train();
 
         [[nodiscard]] auto getWeights() const -> std::vector<float>;
         [[nodiscard]] auto getNumberOfParameters() const -> int;
@@ -57,6 +58,7 @@ class GatedRecurrentUnit final
 template <class Archive>
 void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
+    archive& this->errors;
     archive& this->numberOfInputs;
     archive& this->previousOutput;
     archive& this->recurrentError;

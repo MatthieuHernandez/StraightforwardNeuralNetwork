@@ -35,14 +35,12 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(sizeOfOneData), MaxPooling(160), GruLayer(30), FullyConnected(2, activation::identity, Softmax())},
-        StochasticGradientDescent(1e-6F, 0.99F));
+        {Input(sizeOfOneData), MaxPooling(160), GruLayer(50), FullyConnected(2, activation::identity, Softmax())},
+        StochasticGradientDescent(0.00001F, 0.97F));
     auto optimizer = std::dynamic_pointer_cast<internal::StochasticGradientDescent>(neuralNetwork.optimizer);
-    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForAudioCatsAndDogs.snn";
+    neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForAudioCatsAndDogs.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 2000_ep, 1, 100);
-    optimizer->learningRate *= 5;
-    neuralNetwork.train(*dataset, 1.0_acc, 1, 100);
+    neuralNetwork.train(*dataset, 1.0_acc, 1, 200);
 
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
@@ -55,18 +53,19 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForAudioCatsAndDogs.snn");
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*dataset);
+
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 9242);
-    ASSERT_FLOAT_EQ(accuracy, 0.91044772F);
+    ASSERT_EQ(numberOfParameters, 15402);
+    ASSERT_FLOAT_EQ(accuracy, 0.76119405F);
 
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
- Name:       BestNeuralNetworkForAudioCatsAndDogs.snn
- Parameters: 9242
- Epochs:     6100
- Trainnig:   0
+ Name:       ./resources/BestNeuralNetworkForAudioCatsAndDogs.snn
+ Parameters: 15402
+ Epochs:     7600
+ Trainnig:   12129600
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -77,15 +76,15 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
                 Output shape: [1, 100]
 ------------------------------------------------------------
  GruLayer
-                Input shape:  [30]
-                Neurons:      30
-                Parameters:   9180
+                Input shape:  [50]
+                Neurons:      50
+                Parameters:   15300
                 Output shape: [100]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [30]
+                Input shape:  [50]
                 Neurons:      2
-                Parameters:   62
+                Parameters:   102
                 Activation:   identity
                 Output shape: [2]
                 Optimizers:   Softmax
@@ -93,8 +92,8 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 5e-06
-                Momentum:      0.99
+                Learning rate: 1e-05
+                Momentum:      0.97
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();

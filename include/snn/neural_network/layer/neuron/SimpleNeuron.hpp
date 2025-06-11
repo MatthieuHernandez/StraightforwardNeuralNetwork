@@ -22,8 +22,8 @@ class SimpleNeuron final : public Neuron
 
         [[nodiscard]] auto output(const std::vector<float>& inputs) -> float;
         [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
-
-        void train(float error);
+        void back(float error);
+        void train();
 
         [[nodiscard]] auto isValid() const -> errorType;
 

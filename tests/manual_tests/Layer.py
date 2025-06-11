@@ -20,7 +20,7 @@ def __get_layer_output(layer, new_weights, input, expected, lr=0.001):
         tape.watch(input)
         # Compute the output and the loss.
         output = layer(input)
-        loss = (output - expected)**2
+        loss = 0.5 * (output - expected)**2
 
     # Compute gradients
     grads = tape.gradient(loss, [input, *layer.trainable_variables])

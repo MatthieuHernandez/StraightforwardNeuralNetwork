@@ -136,6 +136,7 @@ inline auto LocallyConnected2D::computeBackOutput(std::vector<float>& inputError
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
         auto& error = this->neurons[n].backOutput(inputErrors[n]);
+        this->neurons[n].train();
         auto k = n / this->numberOfFilters;
         for (size_t e = 0; e < error.size(); ++e)
         {
@@ -153,7 +154,8 @@ inline void LocallyConnected2D::computeTrain(std::vector<float>& inputErrors)
 {
     for (size_t n = 0; n < this->neurons.size(); ++n)
     {
-        this->neurons[n].train(inputErrors[n]);
+        this->neurons[n].back(inputErrors[n]);
+        this->neurons[n].train();
     }
 }
 

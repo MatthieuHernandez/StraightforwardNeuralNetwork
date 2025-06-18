@@ -30,7 +30,7 @@ void Circular<std::vector<float>>::initialize(const size_t size, const size_t da
 }
 
 template <>
-auto Circular<std::vector<float>>::getSum() -> std::vector<float>
+auto Circular<std::vector<float>>::getSum() const -> std::vector<float>
 {
     const std::size_t dataSize = this->queue.front().size();
     std::vector<float> result(dataSize, 0.0F);
@@ -43,14 +43,14 @@ auto Circular<std::vector<float>>::getSum() -> std::vector<float>
 }
 
 template <>
-auto Circular<float>::getSum() -> float
+auto Circular<float>::getSum() const -> float
 {
     auto result = std::reduce(this->queue.cbegin(), this->queue.cend());
     return result;
 }
 
 template <>
-auto Circular<float>::getAverage() -> float
+auto Circular<float>::getAverage() const -> float
 {
     auto result = std::reduce(this->queue.cbegin(), this->queue.cend());
     result /= this->divider;
@@ -58,7 +58,7 @@ auto Circular<float>::getAverage() -> float
 }
 
 template <>
-auto Circular<std::vector<float>>::getAverage() -> std::vector<float>
+auto Circular<std::vector<float>>::getAverage() const -> std::vector<float>
 {
     const std::size_t dataSize = this->queue.front().size();
     std::vector<float> result(dataSize, 0.0F);
@@ -72,7 +72,7 @@ auto Circular<std::vector<float>>::getAverage() -> std::vector<float>
 }
 
 template <>
-auto Circular<std::vector<float>>::MultiplyAndAccumulate(const Circular<float>& multiplier) -> std::vector<float>
+auto Circular<std::vector<float>>::MultiplyAndAccumulate(const Circular<float>& multiplier) const -> std::vector<float>
 {
     const std::size_t dataSize = this->queue.front().size();
     std::vector<float> result(dataSize, 0.0F);

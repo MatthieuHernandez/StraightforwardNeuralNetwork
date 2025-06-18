@@ -31,9 +31,9 @@ class Circular final
         void initialize(size_t queueSize, size_t dataSize = 1);  // Should be call after the ctor.
 
         [[nodiscard]] auto getBack() -> const T*;
-        [[nodiscard]] auto getSum() -> T;
-        [[nodiscard]] auto getAverage() -> T;
-        [[nodiscard]] auto MultiplyAndAccumulate(const Circular<float>& multiplier) -> T;
+        [[nodiscard]] auto getSum() const -> T;
+        [[nodiscard]] auto getAverage() const -> T;
+        [[nodiscard]] auto MultiplyAndAccumulate(const Circular<float>& multiplier) const -> T;
         void pushBack(const T& data);
 
         auto operator<=>(const Circular<T>& other) const = default;
@@ -56,19 +56,19 @@ template <>
 void Circular<std::vector<float>>::initialize(size_t size, size_t dataSize);
 
 template <>
-auto Circular<float>::getSum() -> float;
+auto Circular<float>::getSum() const -> float;
 
 template <>
-auto Circular<std::vector<float>>::getSum() -> std::vector<float>;
+auto Circular<std::vector<float>>::getSum() const -> std::vector<float>;
 
 template <>
-auto Circular<float>::getAverage() -> float;
+auto Circular<float>::getAverage() const -> float;
 
 template <>
-auto Circular<std::vector<float>>::getAverage() -> std::vector<float>;
+auto Circular<std::vector<float>>::getAverage() const -> std::vector<float>;
 
 template <>
-auto Circular<std::vector<float>>::MultiplyAndAccumulate(const Circular<float>& multiplier) -> std::vector<float>;
+auto Circular<std::vector<float>>::MultiplyAndAccumulate(const Circular<float>& multiplier) const -> std::vector<float>;
 
 }  // namespace snn::internal
 #include "Circular.tpp"  // IWYU pragma: keep

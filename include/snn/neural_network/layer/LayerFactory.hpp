@@ -143,7 +143,7 @@ auto LocallyConnected(int numberOfLocallyConnected, int kernelSize, activation a
 
 template <class... TOptimizer>
 auto Convolution(int numberOfConvolution, int kernelSize, activation activation = activation::ReLU,
-                 TOptimizer... optimizers) -> LayerModel
+                 float bias = almostZero, TOptimizer... optimizers) -> LayerModel
 {
     LayerModel model{.type = convolution,
                      .numberOfInputs = -1,
@@ -154,7 +154,7 @@ auto Convolution(int numberOfConvolution, int kernelSize, activation activation 
                              .numberOfInputs = -1,
                              .batchSize = -1,
                              .numberOfWeights = -1,
-                             .bias = almostZero,
+                             .bias = bias,
                              .activationFunction = activation,
                          },
                      .numberOfFilters = numberOfConvolution,

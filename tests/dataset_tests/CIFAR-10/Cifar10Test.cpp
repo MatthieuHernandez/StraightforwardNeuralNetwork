@@ -46,15 +46,15 @@ TEST_F(Cifar10Test, trainNeuralNetwork)
 TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(3, 32, 32), Convolution(16, 3, activation::ReLU), MaxPooling(2), Convolution(32, 3, activation::ReLU),
-         MaxPooling(2), FullyConnected(128), FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.001F, 0.8F));
+        {Input(3, 32, 32), Convolution(24, 3, activation::ReLU), MaxPooling(2), Convolution(48, 3, activation::ReLU),
+         MaxPooling(2), FullyConnected(150, activation::ReLU), FullyConnected(10)},
+        StochasticGradientDescent(1e-5F, 0.95F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.autoSaveFilePath = "BestNeuralNetworkForCIFAR-10.snn";
+    neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.62_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.65_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.20F);
@@ -63,70 +63,69 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
-    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    const auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 207210);
-    ASSERT_FLOAT_EQ(accuracy, 0.6196F);  // Reach after 55 epochs of 770 sec.
+    ASSERT_EQ(numberOfParameters, 365548);
+    ASSERT_FLOAT_EQ(accuracy, 0.6438F);  // Achieved after 16 epochs, ~247 seconds each.
 
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
- Name:       BestNeuralNetworkForCIFAR-10.snn
- Parameters: 207210
- Epochs:     1
- Trainnig:   0
+ Name:       ./resources/BestNeuralNetworkForCIFAR-10.snn
+ Parameters: 365548
+ Epochs:     16
+ Trainnig:   800000
 ============================================================
 | Layers                                                   |
 ============================================================
 ------------------------------------------------------------
  Convolution2D
                 Input shape:  [3, 32, 32]
-                Filters:      16
+                Filters:      24
                 Kernel size:  3x3
-                Parameters:   448
-                Activation:   ReLU
-                Output shape: [16, 30, 30]
+                Parameters:   672
+                Activation:   GELU
+                Output shape: [24, 30, 30]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [16, 30, 30]
+                Input shape:  [24, 30, 30]
                 Kernel size:  2x2
-                Output shape: [16, 15, 15]
+                Output shape: [24, 15, 15]
 ------------------------------------------------------------
  Convolution2D
-                Input shape:  [16, 15, 15]
-                Filters:      32
+                Input shape:  [24, 15, 15]
+                Filters:      48
                 Kernel size:  3x3
-                Parameters:   4640
-                Activation:   ReLU
-                Output shape: [32, 13, 13]
+                Parameters:   10416
+                Activation:   GELU
+                Output shape: [48, 13, 13]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [32, 13, 13]
+                Input shape:  [48, 13, 13]
                 Kernel size:  2x2
-                Output shape: [32, 7, 7]
+                Output shape: [48, 7, 7]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [1568]
-                Neurons:      128
-                Parameters:   200832
-                Activation:   sigmoid
-                Output shape: [128]
+                Input shape:  [2352]
+                Neurons:      150
+                Parameters:   352950
+                Activation:   GELU
+                Output shape: [150]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [128]
+                Input shape:  [150]
                 Neurons:      10
-                Parameters:   1290
-                Activation:   identity
+                Parameters:   1510
+                Activation:   sigmoid
                 Output shape: [10]
-                Optimizers:   Softmax
 ============================================================
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 0.001
-                Momentum:      0.8
+                Learning rate: 0.0005
+                Momentum:      0.85
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();

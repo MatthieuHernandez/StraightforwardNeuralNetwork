@@ -140,6 +140,7 @@ void StraightforwardNeuralNetwork::trainSync(Dataset& dataset, Wait wait, const 
 void StraightforwardNeuralNetwork::evaluate(const Dataset& dataset)
 {
     auto wait = Wait();
+    wait.startClock();
     this->evaluate(dataset, wait);
 }
 

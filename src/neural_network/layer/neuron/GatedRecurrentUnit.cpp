@@ -55,7 +55,7 @@ auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
     return this->errors;
 }
 
-void GatedRecurrentUnit::train(float error)
+void GatedRecurrentUnit::back(float error)
 {
     const float d3 = error;
     const float d8 = d3 * this->updateGateOutput;
@@ -67,6 +67,13 @@ void GatedRecurrentUnit::train(float error)
     const float d13 = this->errors.back();
     const float d16 = d13 * this->previousOutput;
     auto e3 = this->resetGate.backOutput(d16);
+}
+
+void GatedRecurrentUnit::train()
+{
+    this->outputGate.train();
+    this->updateGate.train();
+    this->resetGate.train();
 }
 
 auto GatedRecurrentUnit::getWeights() const -> std::vector<float>

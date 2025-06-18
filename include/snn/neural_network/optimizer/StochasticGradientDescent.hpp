@@ -24,8 +24,8 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         ~StochasticGradientDescent() final = default;
         [[nodiscard]] auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> final;
 
-        void updateWeights(SimpleNeuron& neuron, float error) const final;
-        void updateWeights(RecurrentNeuron& neuron, float error) const final;
+        void updateWeights(SimpleNeuron& neuron) const final;
+        void updateWeights(RecurrentNeuron& neuron) const final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

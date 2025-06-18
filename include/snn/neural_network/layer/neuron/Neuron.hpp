@@ -22,11 +22,12 @@ class Neuron
         std::vector<float> weights;
         float bias{};
 
-        Circular<std::vector<float>> previousDeltaWeights;
+        std::vector<float> deltaWeights;
         Circular<std::vector<float>> lastInputs;
         std::vector<float> errors;
+        Circular<float> lastError;
 
-        float sum = 0;
+        float sum{};
 
         activation activationFunction{};
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
@@ -36,7 +37,7 @@ class Neuron
     public:
         Neuron() = default;  // use restricted to Boost library only
         Neuron(Neuron&&) = delete;
-        auto operator=(const Neuron&) -> Neuron& = default;
+        auto operator=(const Neuron&) -> Neuron& = delete;
         auto operator=(Neuron&&) -> Neuron& = delete;
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
         Neuron(const Neuron& neuron) = default;
@@ -67,8 +68,9 @@ void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version
     archive& this->batchSize;
     archive& this->weights;
     archive& this->bias;
-    archive& this->previousDeltaWeights;
+    archive& this->deltaWeights;
     archive& this->lastInputs;
+    archive& this->lastError;
     archive& this->errors;
     archive& this->sum;
     archive& this->activationFunction;

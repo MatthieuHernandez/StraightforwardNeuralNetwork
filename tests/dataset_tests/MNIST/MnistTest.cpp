@@ -46,7 +46,8 @@ TEST_F(MnistTest, simplierNeuralNetwork)
 TEST_F(MnistTest, feedforwardNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(784), FullyConnected(150, activation::sigmoid, Dropout(0.1F)), FullyConnected(70), FullyConnected(10)});
+        {Input(784), FullyConnected(150, activation::sigmoid, Dropout(0.1F)), FullyConnected(70), FullyConnected(10)},
+        StochasticGradientDescent(0.05F, 0.85F));
     neuralNetwork.startTrainingAsync(*dataset);
     neuralNetwork.waitFor(1_ep || 15_s);
     neuralNetwork.stopTrainingAsync();
@@ -66,9 +67,10 @@ TEST_F(MnistTest, feedforwardNeuralNetworkWithGRU)
 
 TEST_F(MnistTest, locallyConnected1D)
 {
-    StraightforwardNeuralNetwork neuralNetwork({Input(784), LocallyConnected(1, 7),
-                                                FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),
-                                                FullyConnected(70), FullyConnected(10)});
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(784), LocallyConnected(1, 7), FullyConnected(150, activation::sigmoid, L1Regularization(1e-5F)),
+         FullyConnected(70), FullyConnected(10)},
+        StochasticGradientDescent(0.1F));
     neuralNetwork.train(*dataset, 2_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.84F);
@@ -77,16 +79,18 @@ TEST_F(MnistTest, locallyConnected1D)
 TEST_F(MnistTest, locallyConnected2D)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), LocallyConnected(2, 2), FullyConnected(150), FullyConnected(70), FullyConnected(10)});
+        {Input(1, 28, 28), LocallyConnected(2, 2), FullyConnected(150), FullyConnected(70), FullyConnected(10)},
+        StochasticGradientDescent(0.1F, 0.7F));
     neuralNetwork.train(*dataset, 3_ep || 20_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.70F);
+    ASSERT_ACCURACY(accuracy, 0.84F);
 }
 
 TEST_F(MnistTest, convolutionalNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), Convolution(4, 3, activation::ReLU), FullyConnected(10)});
+        {Input(1, 28, 28), Convolution(4, 3, activation::LeakyReLU), FullyConnected(10)},
+        StochasticGradientDescent(0.0001F, 0.8F));
     neuralNetwork.train(*dataset, 1_ep || 15_s);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.87F);
@@ -114,15 +118,15 @@ TEST_F(MnistTest, DISABLED_multipleFilterConvolutionBetterThanOnce)
 TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), Convolution(12, 4, activation::ReLU), MaxPooling(2), FullyConnected(128, activation::ReLU),
-         FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.002F, 0.0F));
+        {Input(1, 28, 28), Convolution(12, 3, activation::GELU), MaxPooling(2), Convolution(24, 3, activation::GELU),
+         MaxPooling(2), FullyConnected(92, activation::GELU), FullyConnected(10, activation::identity, Softmax())},
+        StochasticGradientDescent(0.0005F, 0.8F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.9860_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 3 epochs, ~60 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
@@ -134,17 +138,18 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     auto numberOfParameters = neuralNetwork.getNumberOfParameters();
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 261206);
-    ASSERT_FLOAT_EQ(accuracy, 0.9871F);
+
+    ASSERT_EQ(numberOfParameters, 83246);
+    ASSERT_FLOAT_EQ(accuracy, 0.9834F);
 
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
  Name:       ./resources/BestNeuralNetworkForMNIST.snn
- Parameters: 261206
- Epochs:     13
- Trainnig:   0
+ Parameters: 83246
+ Epochs:     3
+ Trainnig:   180000
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -152,27 +157,40 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
  Convolution2D
                 Input shape:  [1, 28, 28]
                 Filters:      12
-                Kernel size:  4x4
-                Parameters:   204
-                Activation:   ReLU
-                Output shape: [12, 25, 25]
+                Kernel size:  3x3
+                Parameters:   120
+                Activation:   GELU
+                Output shape: [12, 26, 26]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [12, 25, 25]
+                Input shape:  [12, 26, 26]
                 Kernel size:  2x2
                 Output shape: [12, 13, 13]
 ------------------------------------------------------------
- FullyConnected
-                Input shape:  [2028]
-                Neurons:      128
-                Parameters:   259712
-                Activation:   ReLU
-                Output shape: [128]
+ Convolution2D
+                Input shape:  [12, 13, 13]
+                Filters:      24
+                Kernel size:  3x3
+                Parameters:   2616
+                Activation:   GELU
+                Output shape: [24, 11, 11]
+------------------------------------------------------------
+ MaxPooling2D
+                Input shape:  [24, 11, 11]
+                Kernel size:  2x2
+                Output shape: [24, 6, 6]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [128]
+                Input shape:  [864]
+                Neurons:      92
+                Parameters:   79580
+                Activation:   GELU
+                Output shape: [92]
+------------------------------------------------------------
+ FullyConnected
+                Input shape:  [92]
                 Neurons:      10
-                Parameters:   1290
+                Parameters:   930
                 Activation:   identity
                 Output shape: [10]
                 Optimizers:   Softmax
@@ -180,8 +198,8 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 0.002
-                Momentum:      0
+                Learning rate: 0.0005
+                Momentum:      0.8
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();
@@ -191,7 +209,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(1, 28, 28), Convolution(9, 3, activation::sigmoid, ErrorMultiplier(100.0F)),
+        {Input(1, 28, 28), Convolution(9, 3, activation::sigmoid, 0.0F, ErrorMultiplier(100.0F)),
          LocallyConnected(4, 2, activation::sigmoid, ErrorMultiplier(100.0F)), FullyConnected(10)},
         StochasticGradientDescent(0.005F, 0.1F));
     neuralNetwork.saveData2DAsBitmap("./bitmap/data", *dataset, 13);

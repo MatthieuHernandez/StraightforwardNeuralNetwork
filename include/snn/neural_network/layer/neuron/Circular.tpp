@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "../../../tools/ExtendedExpection.hpp"
 #include "Circular.hpp"
 
 namespace snn::internal
@@ -26,5 +27,11 @@ void Circular<T>::pushBack(const T& data)
         this->indexPush = 0;
     }
     this->queue[this->indexPush++] = data;
+}
+
+template <typename T>
+auto Circular<T>::MultiplyAndAccumulate([[maybe_unused]] const Circular<float>& multiplier) const -> T
+{
+    throw NotImplementedException();
 }
 }  // namespace snn::internal

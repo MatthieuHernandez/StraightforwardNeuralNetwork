@@ -1,6 +1,5 @@
 #include <boost/serialization/smart_cast.hpp>
 #include <memory>
-#include <numeric>
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/tools/Tools.hpp>
 
@@ -9,6 +8,30 @@
 using namespace snn;
 
 static auto createDataForConvolutionTests() -> Dataset;
+
+TEST(Convolution, SimplierConvolution1D)
+{
+    const std::vector<float> weights{-1, 1, 1};
+    std::vector<float> input{-1, 2, -3};
+    const std::vector<float> expectedOutput{4, -4};
+    const std::vector<float> desiredOutput{3, -3};
+
+    StraightforwardNeuralNetwork neuralNetwork({Input(1, 3), Convolution(1, 2, activation::identity, 1)},
+                                               StochasticGradientDescent(0.001F, 0.0F));
+    static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->setWeights(weights);
+
+    auto output = neuralNetwork.computeOutput(input);
+
+    ASSERT_EQ(output, expectedOutput);
+
+    neuralNetwork.trainOnce(input, desiredOutput);
+
+    auto trainedWeights = static_cast<internal::Neuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->getWeights();
+
+    EXPECT_NEAR(trainedWeights[0], -0.997F, 1e-6);
+    EXPECT_NEAR(trainedWeights[1], 0.995F, 1e-6);
+    EXPECT_NEAR(trainedWeights[2], 1.0F, 1e-6);
+}
 
 TEST(Convolution, LayerConvolution1D)
 {
@@ -31,6 +54,29 @@ TEST(Convolution, LayerConvolution1D)
     ASSERT_EQ(backOutput, expectedBackOutput);
 }
 
+TEST(Convolution, SimplierConvolution2D)
+{
+    const std::vector<float> weights{-1, 1};
+    std::vector<float> input{-2};
+    const std::vector<float> expectedOutput{3};
+    const std::vector<float> desiredOutput{2};
+
+    StraightforwardNeuralNetwork neuralNetwork({Input(1, 1, 1), Convolution(1, 1, activation::identity, 1)},
+                                               StochasticGradientDescent(0.001F, 0.0F));
+    static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->setWeights(weights);
+
+    auto output = neuralNetwork.computeOutput(input);
+
+    ASSERT_EQ(output, expectedOutput);
+
+    neuralNetwork.trainOnce(input, desiredOutput);
+
+    auto trainedWeights = static_cast<internal::Neuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->getWeights();
+
+    EXPECT_NEAR(trainedWeights[0], -0.998F, 1e-6);
+    EXPECT_NEAR(trainedWeights[1], 0.999F, 1e-6);
+}
+
 TEST(Convolution, LayerConvolution2D)
 {
     const std::vector<float> kernel0{1, 1, 2, 2, 3, 3, -4, -4, -5, 5, 6, -6, 7, 7, -8, -8, 9, 6, 1};
@@ -43,29 +89,14 @@ TEST(Convolution, LayerConvolution2D)
     };
     const std::vector<float> desiredOutput{8,  159, 7,  250, -10,  175, -16, 63, 16,
                                            79, -17, 22, 0,   -140, 21,  -90, 37, -3};
-    const std::vector<float> expectedkernel0{1.00024,  0.99991,  2.00024, 1.99989, 3.00014,  2.99989, -3.99986,
-                                             -4.00014, -4.99979, 4.99973, 6.00029, -6.00018, 6.99988, 7.00009,
-                                             -8.00014, -7.99988, 8.99987, 6.00018, 0.9997};
-    const std::vector<float> expectedkernel1{-10.00005, -9.9999,  10.99997,  -10.99994, 11.99989,  12.00011,  -13.00009,
-                                             13.00006,  13.99986, -13.99986, 14.9999,   -14.99986, -16.00003, 6.99999,
-                                             2.00002,   0.99995,  -7.99995,  0.99989,   0.99996};
+    const std::vector<float> expectedkernel0{1.024, 0.991,  2.024, 1.989, 3.014,  2.989,  -3.986, -4.014, -4.979, 4.973,
+                                             6.029, -6.018, 6.988, 7.009, -8.014, -7.988, 8.987,  6.018,  1.003};
+    const std::vector<float> expectedkernel1{-10.005, -9.99,  10.997,  -10.994, 11.989,  12.011,  -13.009,
+                                             13.006,  13.986, -13.986, 14.99,   -14.986, -16.003, 6.999,
+                                             2.002,   0.995,  -7.995,  0.989,   0.996};
 
-    LayerModel convModel{.type = convolution,
-                         .numberOfInputs = 50,
-                         .numberOfNeurons = 2,
-                         .numberOfOutputs = 18,
-                         .neuron = {.numberOfInputs = 18,
-                                    .batchSize = 9,
-                                    .numberOfWeights = 19,
-                                    .bias = 1.0F,  // Force the bias to 1.0F.
-                                    .activationFunction = activation::identity},
-                         .numberOfFilters = 2,
-                         .numberOfKernels = 18,
-                         .numberOfKernelsPerFilter = 9,
-                         .kernelSize = 3,
-                         .shapeOfInput = {2, 5, 5},
-                         .optimizers = {}};
-    StraightforwardNeuralNetwork neuralNetwork({Input(2, 5, 5), convModel}, StochasticGradientDescent(0.00001F, 0.0F));
+    StraightforwardNeuralNetwork neuralNetwork({Input(2, 5, 5), Convolution(2, 3, activation::identity, 1)},
+                                               StochasticGradientDescent(0.001F, 0.0F));
     static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->setWeights(kernel0);
     static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(1))->setWeights(kernel1);
 
@@ -80,8 +111,8 @@ TEST(Convolution, LayerConvolution2D)
 
     // Gradiant not equal to TensorFlow, must be reworked.
     // ASSERT_EQ(trainedkernel0, expectedkernel0);
-    ASSERT_VECTOR_EQ(trainedkernel0, expectedkernel0, 1e-3F);
-    ASSERT_VECTOR_EQ(trainedkernel1, expectedkernel1, 1e-3F);
+    ASSERT_VECTOR_EQ(trainedkernel0, expectedkernel0, 1.0e-6F);
+    ASSERT_VECTOR_EQ(trainedkernel1, expectedkernel1, 1.0e-6F);
 }
 
 TEST(Convolution, Momentum)

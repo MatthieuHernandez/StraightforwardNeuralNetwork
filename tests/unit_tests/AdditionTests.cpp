@@ -15,7 +15,7 @@ TEST(Addition, WithMPL)
     auto dataset = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), FullyConnected(16, activation::sigmoid), FullyConnected(1, activation::identity)},
-        StochasticGradientDescent(0.01F));
+        StochasticGradientDescent(0.02F));
     neuralNetwork.train(*dataset, 1.0_acc || 1_s, 3, 4);
     testNeuralNetworkForAddition(neuralNetwork);
 }
@@ -25,7 +25,7 @@ TEST(Addition, WithCNN)
     auto dataset = createDataForAdditionTests();
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(2), Convolution(6, 1, activation::sigmoid), FullyConnected(1, activation::identity)},
-        StochasticGradientDescent(0.01F));
+        StochasticGradientDescent(0.004F));
 
     neuralNetwork.train(*dataset, 1.0_acc || 2_s);
     testNeuralNetworkForAddition(neuralNetwork);
@@ -46,7 +46,7 @@ TEST(Addition, WithRNN)
 {
     auto dataset = createRecurrentDataForAdditionTests(100, 3, 0.3F);
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(12), Recurrence(5), FullyConnected(1)},
-                                               StochasticGradientDescent(0.01F, 0.4F));
+                                               StochasticGradientDescent(0.02F, 0.4F));
 
     neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 2);
     testNeuralNetworkForAddition(neuralNetwork);

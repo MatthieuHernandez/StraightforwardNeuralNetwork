@@ -23,4 +23,4 @@ layer_info(forward_layer=Conv2D(filters=2, kernel_size=3, bias_initializer="ones
            weights=weights,
            input=input,
            expected=expected,
-           lr=0.00001)
+           lr=0.001)

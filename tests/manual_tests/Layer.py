@@ -3,7 +3,7 @@ import tensorflow as tf
 print("TensorFlow version:", tf.__version__)
 
 
-def __get_layer_output(layer, new_weights, input, expected, lr=0.001):
+def __get_layer_output(layer, new_weights, input, expected, lr):
     # Build the layer
     layer.build(input.shape)
 
@@ -31,7 +31,7 @@ def __get_layer_output(layer, new_weights, input, expected, lr=0.001):
     return output, grads
 
 
-def layer_info(forward_layer, weights, input, expected, lr=0.001):
+def layer_info(forward_layer, weights, input, expected, lr):
     # Do a forward propagation
     forward_output, grads = __get_layer_output(forward_layer, weights, input, expected, lr=lr)
 
@@ -47,8 +47,17 @@ def layer_info(forward_layer, weights, input, expected, lr=0.001):
     print(backward_output)
     print("========================== new_weights ==========================")
     print(forward_layer.weights[0])
+    print("========================== gradiant_weights ==========================")
+    ww = tf.reshape(tf.constant(weights, dtype=tf.float32), forward_layer.weights[0].shape)
+    gradiant_weights = tf.subtract(forward_layer.weights[0], ww)
+    print(gradiant_weights)
     if getattr(forward_layer, "use_bias", False):
         print("============================ new_bias ===========================")
         print(forward_layer.weights[1])
+        print("========================== gradiant_bias ==========================")
+        bb = tf.reshape(tf.constant([1], dtype=tf.float32), forward_layer.weights[1].shape)
+        gradiant_bias = tf.subtract(forward_layer.weights[1], bb)
+        print(gradiant_bias)
+
     print("========================== new_outputs ==========================")
     print(forward_layer(input))

@@ -20,18 +20,17 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
         this->reset();
     }
     this->lastInputs.pushBack(inputs);
-    this->previousSum = this->sum;
     this->previousOutput = this->lastOutput;
-    this->sum = 0;
+    float sum = 0.0F;  // to activate the SIMD optimization
     size_t w = 0;
-    float tmp = 0.0F;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 2);
 #pragma omp simd
     for (w = 0; w < inputs.size(); ++w)
     {
-        tmp += inputs[w] * this->weights[w];
+        sum += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->previousOutput * this->weights[w] + this->bias * this->weights[w + 1];
+    sum += this->previousOutput * this->weights[w] + this->bias * this->weights[w + 1];
+    this->lastSum.pushBack(sum);
     const float output = outputFunction->function(sum);
     this->lastOutput = output;
     return output;
@@ -42,7 +41,8 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
 
 auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 {
-    const auto e = error * this->outputFunction->derivative(this->sum);
+    const auto& sum = *this->lastSum.getBack();
+    const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
     assert(this->weights.size() == this->errors.size() + 2);
 #pragma omp simd  // seems to do nothing
@@ -55,7 +55,8 @@ auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 
 void RecurrentNeuron::back(float error)
 {
-    const auto e = error * this->outputFunction->derivative(this->sum);
+    const auto& sum = *this->lastSum.getBack();
+    const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
 }
 

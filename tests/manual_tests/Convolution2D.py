@@ -19,8 +19,5 @@ input = tf.cast(tf.reshape([1, -1, 2, -2, 3, -3, 2, -2, 3, -3,
                    dtype=tf.float32)
 
 # Print info used on the layer used in the C++ unit tests
-layer_info(forward_layer=Conv2D(filters=2, kernel_size=3, bias_initializer="ones"),
-           weights=weights,
-           input=input,
-           expected=expected,
-           lr=0.001)
+layer = Conv2D(filters=2, kernel_size=3, bias_initializer="ones", activation="sigmoid")
+layer_info(layer, weights, input, expected, lr=0.01)

@@ -24,6 +24,7 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
     this->weights.back() = std::abs(this->weights.back());
     this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
     this->lastError.initialize(this->batchSize);
+    this->lastSum.initialize(this->batchSize);
     this->deltaWeights.resize(model.numberOfWeights, 0);
 }
 
@@ -83,7 +84,7 @@ auto Neuron::operator==(const Neuron& neuron) const -> bool
     return typeid(*this).hash_code() == typeid(neuron).hash_code() && this->numberOfInputs == neuron.numberOfInputs &&
            this->weights == neuron.weights && this->bias == neuron.bias && this->deltaWeights == neuron.deltaWeights &&
            this->lastInputs == neuron.lastInputs && this->lastError == neuron.lastError &&
-           this->errors == neuron.errors && this->sum == neuron.sum &&
+           this->lastSum == neuron.lastSum && this->errors == neuron.errors &&
            this->activationFunction == neuron.activationFunction &&
            this->outputFunction == neuron.outputFunction  // not really good
            && *this->optimizer == *neuron.optimizer;

@@ -26,8 +26,7 @@ class Neuron
         Circular<std::vector<float>> lastInputs;
         std::vector<float> errors;
         Circular<float> lastError;
-
-        float sum{};
+        Circular<float> lastSum;
 
         activation activationFunction{};
         std::shared_ptr<NeuralNetworkOptimizer> optimizer = nullptr;
@@ -71,8 +70,8 @@ void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version
     archive& this->deltaWeights;
     archive& this->lastInputs;
     archive& this->lastError;
+    archive& this->lastSum;
     archive& this->errors;
-    archive& this->sum;
     archive& this->activationFunction;
     this->outputFunction = ActivationFunction::get(activationFunction);
 }

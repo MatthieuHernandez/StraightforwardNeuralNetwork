@@ -103,7 +103,7 @@ TEST(Convolution, LayerConvolution2D)
 
     auto output = neuralNetwork.computeOutput(input);
 
-    // ASSERT_VECTOR_EQ(output, expectedOutput, 1.0e-6F);
+    ASSERT_VECTOR_EQ(output, expectedOutput, 1.0e-6F);
 
     neuralNetwork.trainOnce(input, desiredOutput);
 

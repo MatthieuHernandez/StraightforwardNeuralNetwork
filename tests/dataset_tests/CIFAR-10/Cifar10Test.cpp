@@ -47,17 +47,17 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(3, 32, 32), Convolution(24, 3, activation::ReLU), MaxPooling(2), Convolution(48, 3, activation::ReLU),
-         MaxPooling(2), FullyConnected(150, activation::ReLU), FullyConnected(10)},
-        StochasticGradientDescent(1e-5F, 0.95F));
+         MaxPooling(2), FullyConnected(150, activation::ReLU), FullyConnected(10, activation::identity)},
+        StochasticGradientDescent(2e-3F, 0.85F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForCIFAR-10.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.65_acc || 100_ep);
+    neuralNetwork.train(*dataset, 0.80_acc || 100_ep);
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_ACCURACY(accuracy, 0.20F);
+    ASSERT_ACCURACY(accuracy, 0.60F);
 }
 
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
@@ -67,7 +67,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 365548);
-    ASSERT_FLOAT_EQ(accuracy, 0.6438F);  // Achieved after 16 epochs, ~247 seconds each.
+    ASSERT_FLOAT_EQ(accuracy, 0.6672F);  // Achieved after 16 epochs, ~247 seconds each.
 
     const std::string expectedSummary =
         R"(============================================================
@@ -75,8 +75,8 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForCIFAR-10.snn
  Parameters: 365548
- Epochs:     16
- Trainnig:   800000
+ Epochs:     3
+ Trainnig:   150000
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -86,7 +86,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Filters:      24
                 Kernel size:  3x3
                 Parameters:   672
-                Activation:   GELU
+                Activation:   ReLU
                 Output shape: [24, 30, 30]
 ------------------------------------------------------------
  MaxPooling2D
@@ -99,7 +99,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Filters:      48
                 Kernel size:  3x3
                 Parameters:   10416
-                Activation:   GELU
+                Activation:   ReLU
                 Output shape: [48, 13, 13]
 ------------------------------------------------------------
  MaxPooling2D
@@ -111,20 +111,20 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Input shape:  [2352]
                 Neurons:      150
                 Parameters:   352950
-                Activation:   GELU
+                Activation:   ReLU
                 Output shape: [150]
 ------------------------------------------------------------
  FullyConnected
                 Input shape:  [150]
                 Neurons:      10
                 Parameters:   1510
-                Activation:   sigmoid
+                Activation:   identity
                 Output shape: [10]
 ============================================================
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 0.0005
+                Learning rate: 0.002
                 Momentum:      0.85
 ============================================================
 )";

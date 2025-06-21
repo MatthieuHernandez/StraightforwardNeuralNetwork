@@ -140,7 +140,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
 
     ASSERT_EQ(numberOfParameters, 83246);
-    ASSERT_FLOAT_EQ(accuracy, 0.9834F);
+    ASSERT_FLOAT_EQ(accuracy, 0.9900F);
 
     const std::string expectedSummary =
         R"(============================================================
@@ -148,8 +148,8 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForMNIST.snn
  Parameters: 83246
- Epochs:     3
- Trainnig:   180000
+ Epochs:     8
+ Trainnig:   480000
 ============================================================
 | Layers                                                   |
 ============================================================

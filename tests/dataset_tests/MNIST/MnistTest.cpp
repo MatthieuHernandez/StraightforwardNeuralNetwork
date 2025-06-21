@@ -126,7 +126,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 3 epochs, ~60 seconds each.
+    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 8 epochs, ~60 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);

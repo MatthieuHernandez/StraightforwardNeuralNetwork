@@ -66,7 +66,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 24 epochs, ~53 seconds each.
+    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 16 epochs, ~53 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.85F);

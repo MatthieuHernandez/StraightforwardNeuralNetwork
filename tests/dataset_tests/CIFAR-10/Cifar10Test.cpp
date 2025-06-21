@@ -67,7 +67,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 365548);
-    ASSERT_FLOAT_EQ(accuracy, 0.6672F);  // Achieved after 16 epochs, ~247 seconds each.
+    ASSERT_FLOAT_EQ(accuracy, 0.6672F);  // Achieved after 3 epochs, ~300 seconds each.
 
     const std::string expectedSummary =
         R"(============================================================

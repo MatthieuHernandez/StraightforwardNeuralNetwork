@@ -126,7 +126,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 3 epochs, ~60 seconds each.
+    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 8 epochs, ~60 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
@@ -140,7 +140,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
 
     ASSERT_EQ(numberOfParameters, 83246);
-    ASSERT_FLOAT_EQ(accuracy, 0.9834F);
+    ASSERT_FLOAT_EQ(accuracy, 0.9900F);
 
     const std::string expectedSummary =
         R"(============================================================
@@ -148,8 +148,8 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForMNIST.snn
  Parameters: 83246
- Epochs:     3
- Trainnig:   180000
+ Epochs:     8
+ Trainnig:   480000
 ============================================================
 | Layers                                                   |
 ============================================================

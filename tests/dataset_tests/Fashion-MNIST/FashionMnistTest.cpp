@@ -66,7 +66,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 24 epochs, ~53 seconds each.
+    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 16 epochs, ~53 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.85F);
@@ -79,7 +79,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 270926);
-    ASSERT_FLOAT_EQ(accuracy, 0.8859F);
+    ASSERT_FLOAT_EQ(accuracy, 0.8955F);
 
     const std::string expectedSummary =
         R"(============================================================
@@ -87,8 +87,8 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForFashion-MNIST.snn
  Parameters: 270926
- Epochs:     24
- Trainnig:   1440000
+ Epochs:     16
+ Trainnig:   960000
 ============================================================
 | Layers                                                   |
 ============================================================

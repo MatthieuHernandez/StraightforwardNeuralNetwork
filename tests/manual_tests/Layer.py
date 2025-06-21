@@ -55,7 +55,7 @@ def layer_info(forward_layer, weights, input, expected, lr):
         print("============================ new_bias ===========================")
         print(forward_layer.weights[1])
         print("========================== gradiant_bias ==========================")
-        bb = tf.reshape(tf.constant([1], dtype=tf.float32), forward_layer.weights[1].shape)
+        bb = tf.ones_like(forward_layer.weights[1])
         gradiant_bias = tf.subtract(forward_layer.weights[1], bb)
         print(gradiant_bias)
 

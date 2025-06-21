@@ -13,21 +13,23 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptim
 auto SimpleNeuron::output(const std::vector<float>& inputs) -> float
 {
     this->lastInputs.pushBack(inputs);
-    float tmp = 0.0F;  // to activate the SIMD optimization
+    float sum = 0.0F;  // to activate the SIMD optimization
     assert(this->weights.size() == inputs.size() + 1);
     size_t w = 0;
 #pragma omp simd
     for (w = 0; w < inputs.size(); ++w)
     {
-        tmp += inputs[w] * this->weights[w];
+        sum += inputs[w] * this->weights[w];
     }
-    this->sum = tmp + this->weights[w] * this->bias;
-    return this->outputFunction->function(this->sum);
+    sum += this->weights[w] * this->bias;
+    this->lastSum.pushBack(sum);
+    return this->outputFunction->function(sum);
 }
 
 auto SimpleNeuron::backOutput(float error) -> std::vector<float>&
 {
-    const auto e = error * this->outputFunction->derivative(this->sum);
+    const auto& sum = *this->lastSum.getBack();
+    const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
     assert(this->weights.size() == this->errors.size() + 1);
 #pragma omp simd  // seems to do nothing
@@ -40,7 +42,8 @@ auto SimpleNeuron::backOutput(float error) -> std::vector<float>&
 
 void SimpleNeuron::back(float error)
 {
-    const auto e = error * this->outputFunction->derivative(this->sum);
+    const auto& sum = *this->lastSum.getBack();
+    const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
 }
 

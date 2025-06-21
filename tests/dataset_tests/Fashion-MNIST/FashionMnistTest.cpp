@@ -79,7 +79,7 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 270926);
-    ASSERT_FLOAT_EQ(accuracy, 0.8859F);
+    ASSERT_FLOAT_EQ(accuracy, 0.8955F);
 
     const std::string expectedSummary =
         R"(============================================================
@@ -87,8 +87,8 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForFashion-MNIST.snn
  Parameters: 270926
- Epochs:     24
- Trainnig:   1440000
+ Epochs:     16
+ Trainnig:   960000
 ============================================================
 | Layers                                                   |
 ============================================================

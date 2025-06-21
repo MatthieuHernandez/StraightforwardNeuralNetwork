@@ -35,8 +35,8 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(sizeOfOneData), MaxPooling(160), GruLayer(10), FullyConnected(2, snn::activation::iSigmoid)},
-        StochasticGradientDescent(3e-5F, 0.98F));
+        {Input(sizeOfOneData), MaxPooling(160), GruLayer(10), FullyConnected(2, snn::activation::sigmoid)},
+        StochasticGradientDescent(1e-5F, 0.99F));
     auto optimizer = std::dynamic_pointer_cast<internal::StochasticGradientDescent>(neuralNetwork.optimizer);
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForAudioCatsAndDogs.snn";
     neuralNetwork.autoSaveWhenBetter = true;
@@ -56,7 +56,7 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_EQ(numberOfParameters, 3082);
-    ASSERT_FLOAT_EQ(accuracy, 0.880597F);
+    ASSERT_FLOAT_EQ(accuracy, 0.91044778F);
 
     const std::string expectedSummary =
         R"(============================================================
@@ -64,8 +64,8 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForAudioCatsAndDogs.snn
  Parameters: 3082
- Epochs:     2400
- Trainnig:   3830400
+ Epochs:     4600
+ Trainnig:   7341600
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -85,14 +85,14 @@ TEST_F(AudioCatsAndDogsTest, evaluateBestNeuralNetwork)
                 Input shape:  [10]
                 Neurons:      2
                 Parameters:   22
-                Activation:   iSigmoid
+                Activation:   sigmoid
                 Output shape: [2]
 ============================================================
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 3e-05
-                Momentum:      0.98
+                Learning rate: 1e-05
+                Momentum:      0.99
 ============================================================
 )";
     const std::string summary = neuralNetwork.summary();

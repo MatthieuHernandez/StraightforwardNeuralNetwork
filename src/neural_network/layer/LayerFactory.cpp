@@ -19,6 +19,7 @@ enum coordinateIndex : uint8_t
     X = 1,
     Y = 2
 };
+
 inline auto computeNumberOfInputs(const std::vector<int>& shapeOfInput) -> int
 {
     int numberOfInputs = 1;
@@ -62,16 +63,14 @@ inline auto computeNumberOfNeuronsForLocallyConnected2D(int numberOfLocallyConne
            ((shapeOfInput[Y] / kernelSize) + restY);
 }
 
-inline auto computeNumberOfKernelsForConvolution1D(int numberOfConvolution, int kernelSize,
-                                                   const std::vector<int>& shapeOfInput) -> int
+inline auto computeNumberOfKernelsForConvolution1D(int numberOfConvolution, const std::vector<int>& shapeOfInput) -> int
 {
-    return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1));
+    return numberOfConvolution * shapeOfInput[X];
 }
 
-inline auto computeNumberOfKernelsForConvolution2D(int numberOfConvolution, int kernelSize,
-                                                   const std::vector<int>& shapeOfInput) -> int
+inline auto computeNumberOfKernelsForConvolution2D(int numberOfConvolution, const std::vector<int>& shapeOfInput) -> int
 {
-    return numberOfConvolution * (shapeOfInput[X] - (kernelSize - 1)) * (shapeOfInput[Y] - (kernelSize - 1));
+    return numberOfConvolution * shapeOfInput[X] * shapeOfInput[Y];
 }
 }  // namespace
 namespace snn::internal
@@ -211,7 +210,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                 model.shapeOfInput = shapeOfInput;
                 model.numberOfNeurons = model.numberOfFilters;
                 model.numberOfKernels =
-                    computeNumberOfKernelsForConvolution1D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+                    computeNumberOfKernelsForConvolution1D(model.numberOfFilters, model.shapeOfInput);
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
                 model.neuron.batchSize = model.numberOfKernelsPerFilter;
@@ -228,7 +227,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                 model.shapeOfInput = shapeOfInput;
                 model.numberOfNeurons = model.numberOfFilters;
                 model.numberOfKernels =
-                    computeNumberOfKernelsForConvolution2D(model.numberOfFilters, model.kernelSize, model.shapeOfInput);
+                    computeNumberOfKernelsForConvolution2D(model.numberOfFilters, model.shapeOfInput);
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
                 model.neuron.batchSize = model.numberOfKernelsPerFilter;

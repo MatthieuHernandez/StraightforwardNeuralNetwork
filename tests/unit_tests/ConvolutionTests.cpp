@@ -13,8 +13,8 @@ TEST(Convolution, SimplierConvolution1D)
 {
     const std::vector<float> weights{-1, 1, 1};
     std::vector<float> input{-1, 2, -3};
-    const std::vector<float> expectedOutput{4, -4};
-    const std::vector<float> desiredOutput{3, -3};
+    const std::vector<float> expectedOutput{4, -4, 4};
+    const std::vector<float> desiredOutput{3, -3, 3};
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1, 3), Convolution(1, 2, activation::identity, 1)},
                                                StochasticGradientDescent(0.001F, 0.0F));
@@ -28,9 +28,9 @@ TEST(Convolution, SimplierConvolution1D)
 
     auto trainedWeights = static_cast<internal::Neuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->getWeights();
 
-    EXPECT_NEAR(trainedWeights[0], -0.997F, 1e-6);
+    EXPECT_NEAR(trainedWeights[0], -0.994F, 1e-6);
     EXPECT_NEAR(trainedWeights[1], 0.995F, 1e-6);
-    EXPECT_NEAR(trainedWeights[2], 1.0F, 1e-6);
+    EXPECT_NEAR(trainedWeights[2], 0.999F, 1e-6);
 }
 
 TEST(Convolution, LayerConvolution1D)
@@ -40,18 +40,22 @@ TEST(Convolution, LayerConvolution1D)
     const std::vector<float> kernel1{7, 8, 9, 10, 11, 12, 1};
     const std::vector<float> error{1, 2, 3, 4, 5, 6};
 
-    const std::vector<float> expectedOutput{92, 218, 134, 332, 176, 446};
-    const std::vector<float> expectedBackOutput{15, 18, 52, 62, 119, 140, 128, 146, 91, 102};
-    LayerModel model{convolution, 10, 2, 6, {6, 3, 7, 1.0F, activation::identity}, 2, 6, 3, 3, {2, 5}, {}};
+    const std::vector<float> expectedOutput{51, 111, 92, 218, 134, 332, 176, 446, 91, 295};
+    const std::vector<float> desiredOutput{50, 110, 93, 219, 134, 330, 178, 445, 92, 294};
+    const std::vector<float> expectedTrainedOutput{53.32,  108.57, 96.84, 213.06, 141.54,
+                                                   324.38, 186.24, 435.7, 99.1,   287.21};
+    StraightforwardNeuralNetwork neuralNetwork({Input(2, 5), Convolution(2, 3, activation::identity, 1.0F)},
+                                               StochasticGradientDescent(0.01F, 0.0F));
     auto sgd = std::make_shared<internal::StochasticGradientDescent>(0.0F, 0.0F);
-    internal::Convolution1D conv(model, sgd);
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(0))->setWeights(kernel0);
-    static_cast<internal::SimpleNeuron*>(conv.getNeuron(1))->setWeights(kernel1);
-    auto output = conv.output(input, false);
-    auto backOutput = conv.backOutput(input);
+    static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->setWeights(kernel0);
+    static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(1))->setWeights(kernel1);
 
+    auto output = neuralNetwork.computeOutput(input, false);
     ASSERT_EQ(output, expectedOutput);
-    ASSERT_EQ(backOutput, expectedBackOutput);
+
+    neuralNetwork.trainOnce(input, desiredOutput);
+    auto trainedOutput = neuralNetwork.computeOutput(input, false);
+    ASSERT_VECTOR_EQ(trainedOutput, expectedTrainedOutput, 1.0e-4F);
 }
 
 TEST(Convolution, SimplierConvolution2D)
@@ -79,24 +83,34 @@ TEST(Convolution, SimplierConvolution2D)
 
 TEST(Convolution, LayerConvolution2D)
 {
-    const std::vector<float> kernel0{1, 1, 2, 2, 3, 3, -4, -4, -5, 5, 6, -6, 7, 7, -8, -8, 9, 6, 1};
-    const std::vector<float> kernel1{-10, -10, 11, -11, 12, 12, -13, 13, 14, -14, 15, -15, -16, 7, 2, 1, -8, 1, 1};
-    std::vector<float> error(18);
+    const std::vector<float> kernel0{0.1, 0.1,  0.2, 0.2, 0.3,  0.3,  -0.4, -0.4, -0.1, 0.3,
+                                     0.6, -0.2, 0.1, 0.1, -0.4, -0.8, 0.5,  0.3,  1};
+    const std::vector<float> kernel1{0.0, -0.1, 0.1,  -0.1, 0.2, 0.2, -0.3, 0.3, 0.4, -0.4,
+                                     0.5, -0.5, -0.6, -0.2, 2,   1,   -0.4, 0.1, 1};
+
     std::vector<float> input{1, -1, 2, -2, 3, -3, 2, -2, 3, -3, 1, -1, 1, -1, 2,  -2, 3,  -3, 2,  -2, -3, 0, -3, 1, -1,
                              1, -1, 2, -2, 3, -3, 2, -2, 3, -3, 1, -1, 0, 1,  -1, 2,  -2, 3,  -3, 2,  -2, 3, -3, 1, -1};
-    const std::vector<float> expectedOutput{9.9908894e-01, 1.0, 9.9752736e-01, 1.0, 2.2603244e-06, 1.0,
-                                            3.0590220e-07, 1.0, 9.9999970e-01, 1.0, 4.1399371e-08, 1.0,
-                                            9.9330717e-01, 0.0, 1.0,           0.0, 1.0,           1.7986210e-02};
-    const std::vector<float> desiredOutput{8,  159, 7,  250, -10,  175, -16, 63, 16,
-                                           79, -17, 22, 0,   -140, 21,  -90, 37, -3};
-    const std::vector<float> expectedkernel0{
-        1.0005572, 0.9996409, 2.0007694, 1.9993628, 3.0005527, 2.9994473, -3.9995906, -4.0003433, -4.999509, 4.9994426,
-        6.000769,  -6.000637, 6.999233,  7.00028,   -8.000537, -7.999591, 8.999657,   6.000491,   1.0001456};
-    const std::vector<float> expectedkernel1{
-        -9.999467, -10.000533, 11.000533,  -11.001066, 12.001066, 11.998401, -12.998401, 12.999467, 14.000533, -14,
-        14.999467, -14.999467, -16.001066, 7.001066,   1.9984008, 1.0015992, -8.000533,  1.0005331, 0.99946696};
+    const std::vector<float> expectedOutput{
+        0.99263155, 0.9996318,  0.9977749,  0.9997978,  0.9926315,  0.9996318,  0.99955034,  0.99990916, 0.53704965,
+        0.9950547,  0.8853517,  -0.935409,  0.9704519,  0.7615942,  0.970452,   0.99999833,  0.09966807, 0.9999945,
+        -0.8617232, 0.6640369,  -0.8336545, -0.9998891, -0.716298,  0.8617232,  0.8336547,   -0.998508,  0.2913126,
+        -0.9757431, 0.9640276,  0.97574323, 0.2913127,  -0.9987782, 0.8853516,  -0.60436803, 0.970452,   -0.379949,
+        0.9997978,  0.9996318,  0.935409,   0.8336546,  0.99100745, 0.99995035, 0.71629786,  0.9959493,  0.9640276,
+        0.9939632,  0.19737516, 0.9950547,  0.4621171,  0.19737512};
+    const std::vector<float> desiredOutput{0.9,  0.5, 0.7,  0.3, 0.8,  0.5, -0.3, -0.6, 1.0, 0.9, -0.7, 0.2, 0.0,
+                                           -0.4, 1.0, -0.9, 0.3, -0.1, 0.0, 0.0,  0.0,  0.0, 0.0, 0.0,  0.0, 0.0,
+                                           8.0,  0.5, 0.7,  0.3, -0.1, 0.7, -0.6, 0.6,  0.6, 0.7, -0.1, 0.3, 0.2,
+                                           -0.4, 0.2, -0.9, 0.3, -0.3, 0.2, 0.2,  0.0,  0.0, 0.0, -1.0};
+    const std::vector<float> expectedkernel0{0.27902007, -0.06096088, 0.44511837,  -0.02778675, 0.45960167,
+                                             0.15179253, -0.46600983, -0.33563125, -0.16942912, 0.42598987,
+                                             0.45864967, 0.00732283,  -0.11940194, 0.17634685,  -0.48385707,
+                                             -0.7650452, 0.546436,    0.26052827,  1.0611302};
+    const std::vector<float> expectedkernel1{-0.04862903, -0.08483574, 0.04416766, -0.06316294, 0.16858868,
+                                             0.2408669,   -0.38272187, 0.39436263, 0.33641678,  -0.34247598,
+                                             0.45953518,  -0.48329076, -0.5451834, -0.24273613, 2.0587895,
+                                             0.9400093,   -0.34894758, 0.05051783, 0.99235386};
 
-    StraightforwardNeuralNetwork neuralNetwork({Input(2, 5, 5), Convolution(2, 3, activation::sigmoid, 1)},
+    StraightforwardNeuralNetwork neuralNetwork({Input(2, 5, 5), Convolution(2, 3, activation::tanh, 1)},
                                                StochasticGradientDescent(0.01F, 0.0F));
     static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(0))->setWeights(kernel0);
     static_cast<internal::SimpleNeuron*>(neuralNetwork.layers.at(0)->getNeuron(1))->setWeights(kernel1);

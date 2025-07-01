@@ -10,11 +10,7 @@ namespace snn::internal
 Convolution2D::Convolution2D(LayerModel& model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : Convolution(model, std::move(optimizer))
 {
-    this->shapeOfOutput = {
-        this->numberOfFilters,
-        this->shapeOfInput[X] - (this->kernelSize - 1),
-        this->shapeOfInput[Y] - (this->kernelSize - 1),
-    };
+    this->shapeOfOutput = {this->numberOfFilters, this->shapeOfInput[X], this->shapeOfInput[Y]};
     this->numberOfNeuronsPerFilter = 1;
     this->buildKernelIndexes();
 }
@@ -24,19 +20,30 @@ void Convolution2D::buildKernelIndexes()
     this->kernelIndexes.resize(this->numberOfKernelsPerFilter);
     const int maxC = this->shapeOfInput[C];
     const int maxX = this->shapeOfInput[X];
+    const int maxY = this->shapeOfInput[Y];
     const int kSize = this->kernelSize;
+    const int pad = (kSize - 1) / 2;
     const int kIndexSize = static_cast<int>(this->kernelIndexes.size());
     for (int k = 0; k < kIndexSize; ++k)
     {
-        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs);
+        this->kernelIndexes[k].resize(this->sizeOfNeuronInputs, -1);
         const int kernelPosX = k % this->shapeOfOutput[X];
         const int kernelPosY = k / this->shapeOfOutput[X];
         for (int y = 0; y < kSize; ++y)
         {
-            const int inputIndexY = (kernelPosY + y) * maxX + kernelPosX;
+            const int inputY = kernelPosY + y - pad;
+            if (inputY < 0 || inputY >= maxY)
+            {
+                continue;
+            }
             for (int x = 0; x < kSize; ++x)
             {
-                const int inputIndexX = (inputIndexY + x) * maxC;
+                const int inputX = kernelPosX + x - pad;
+                if (inputX < 0 || inputX >= maxX)
+                {
+                    continue;
+                }
+                const int inputIndexX = (inputY * maxX + inputX) * maxC;
                 const int kernelIndexX = (y * kSize + x) * maxC;
                 for (int c = 0; c < maxC; ++c)
                 {

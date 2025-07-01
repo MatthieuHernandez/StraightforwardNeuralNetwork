@@ -17,7 +17,14 @@ inline auto Convolution::computeOutput(const std::vector<float>& inputs, [[maybe
         for (size_t i = 0; i < neuronInputs.size(); ++i)
         {
             const auto& index = kernelIndexes[k][i];
-            neuronInputs[i] = inputs[index];
+            if (index >= 0)
+            {
+                [[likely]] neuronInputs[i] = inputs[index];
+            }
+            else
+            {
+                [[unlikely]] neuronInputs[i] = 0;
+            }
         }
         for (size_t n = 0; n < this->neurons.size(); ++n, ++o)
         {
@@ -38,7 +45,10 @@ inline auto Convolution::computeBackOutput(std::vector<float>& inputErrors) -> s
             for (size_t e = 0; e < error.size(); ++e)
             {
                 const auto& index = kernelIndexes[k][e];
-                errors[index] += error[e];
+                if (index >= 0)
+                {
+                    [[likely]] errors[index] += error[e];
+                }
             }
             ++i;
         }

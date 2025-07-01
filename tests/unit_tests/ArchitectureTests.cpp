@@ -71,13 +71,13 @@ TEST(Architecture, NumberOfNeuronesAndParameters1)
     constexpr int numberOfNeurons = 3 + 60 + 1 + 20 + 10 + 5;
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);        // 99
     constexpr int numberOfParameters = 0 +                                 // MaxPooling
-                                       3 * ((4 * 4 * 3) + 1)               // Convolution
-                                       + 60 * (3 * 9 + 1)                  // FullyConnected
+                                       (3 * ((4 * 4 * 3) + 1))             // Convolution
+                                       + (60 * (3 * 36 + 1))               // FullyConnected
                                        + 0                                 // MaxPooling
-                                       + 1 * (3 + 1)                       // Convolution
-                                       + 20 * (18 + 1)                     // FullyConnected
-                                       + 10 * (20 + 2)                     // Recurrence
-                                       + 5 * (10 + 1);                     // FullyConnected
+                                       + (1 * (3 + 1))                     // Convolution
+                                       + (20 * (20 + 1))                   // FullyConnected
+                                       + (10 * (20 + 2))                   // Recurrence
+                                       + (5 * (10 + 1));                   // FullyConnected
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);  // 2390
 }
 
@@ -87,7 +87,7 @@ TEST(Architecture, NumberOfNeuronesAndParameters2)
         {Input(3, 12, 15), LocallyConnected(3, 4), FullyConnected(200), LocallyConnected(1, 7), FullyConnected(2)});
     const int numberOfNeurons = 36 + 200 + 29 + 2;  // = 267
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = 36 * 16 * 3 + 36 * 200 + 29 * 7 + 29 * 2 + 267;  // = 9456
+    const int numberOfParameters = (36 * 16 * 3) + (36 * 200) + (29 * 7) + (29 * 2) + 267;  // = 9456
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 
@@ -96,7 +96,7 @@ TEST(Architecture, NumberOfNeuronesAndParameters3)
     const StraightforwardNeuralNetwork neuralNetwork({Input(10), GruLayer(10), Recurrence(10)});
     const int numberOfNeurons = 10 + 10;  // = 20
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = (10 + 2) * 10 * 3 + (10 + 2) * 10;  // = 480
+    const int numberOfParameters = ((10 + 2) * 10 * 3) + ((10 + 2) * 10);  // = 480
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 
@@ -106,7 +106,7 @@ TEST(Architecture, NumberOfNeuronesAndParameters4)
         {Input(3, 15, 14), Convolution(16, 4, activation::ReLU), FullyConnected(9)});
     const int numberOfNeurons = 16 + 9;  // = 25
     ASSERT_EQ(neuralNetwork.getNumberOfNeurons(), numberOfNeurons);
-    const int numberOfParameters = (16 * (4 * 4 * 3 + 1)) + ((16 * (12 * 11) + 1) * 9);  // = 937
+    const int numberOfParameters = (16 * (4 * 4 * 3 + 1)) + ((16 * (15 * 14) + 1) * 9);  // = 937
     ASSERT_EQ(neuralNetwork.getNumberOfParameters(), numberOfParameters);
 }
 

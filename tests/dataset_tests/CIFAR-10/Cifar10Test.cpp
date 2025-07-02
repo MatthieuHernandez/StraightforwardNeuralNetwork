@@ -63,20 +63,14 @@ TEST_F(Cifar10Test, DISABLED_trainBestNeuralNetwork)
 TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForCIFAR-10.snn");
-    const auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*dataset);
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_EQ(numberOfParameters, 365548);
-    ASSERT_FLOAT_EQ(accuracy, 0.6672F);  // Achieved after 3 epochs, ~300 seconds each.
-
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
  Name:       ./resources/BestNeuralNetworkForCIFAR-10.snn
- Parameters: 365548
- Epochs:     3
- Trainnig:   150000
+ Parameters: 473548
+ Epochs:     4
+ Trainnig:   200000
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -87,30 +81,30 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
                 Kernel size:  3x3
                 Parameters:   672
                 Activation:   ReLU
-                Output shape: [24, 30, 30]
+                Output shape: [24, 32, 32]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [24, 30, 30]
+                Input shape:  [24, 32, 32]
                 Kernel size:  2x2
-                Output shape: [24, 15, 15]
+                Output shape: [24, 16, 16]
 ------------------------------------------------------------
  Convolution2D
-                Input shape:  [24, 15, 15]
+                Input shape:  [24, 16, 16]
                 Filters:      48
                 Kernel size:  3x3
                 Parameters:   10416
                 Activation:   ReLU
-                Output shape: [48, 13, 13]
+                Output shape: [48, 16, 16]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [48, 13, 13]
+                Input shape:  [48, 16, 16]
                 Kernel size:  2x2
-                Output shape: [48, 7, 7]
+                Output shape: [48, 8, 8]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [2352]
+                Input shape:  [3072]
                 Neurons:      150
-                Parameters:   352950
+                Parameters:   460950
                 Activation:   ReLU
                 Output shape: [150]
 ------------------------------------------------------------
@@ -130,6 +124,11 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 )";
     const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
+    const auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    ASSERT_EQ(numberOfParameters, 473548);
+    neuralNetwork.evaluate(*dataset);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_FLOAT_EQ(accuracy, 0.6623F);  // Achieved after 4 epochs, ~630 seconds each.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

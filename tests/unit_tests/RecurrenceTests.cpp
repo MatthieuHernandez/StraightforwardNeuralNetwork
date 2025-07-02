@@ -39,7 +39,7 @@ TEST(Recurrence, RepeatLastInput)
     dataset->setPrecision(0.5F);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(30), Recurrence(1, activation::tanh)},
-                                               StochasticGradientDescent(0.0001F, 0.7F));
+                                               StochasticGradientDescent(0.0002F, 0.7F));
     testNeuralNetworkForRecurrence(neuralNetwork, *dataset);
 }
 
@@ -54,7 +54,7 @@ TEST(Recurrence, RepeatLastLastInput)
     {
         inputData.push_back({static_cast<float>(dist(tools::Rng()))});
     }
-    vector2D<float> expectedOutputs = {{0, 0}};
+    vector2D<float> expectedOutputs = {{0}};
     expectedOutputs.reserve(datasetSize);
     expectedOutputs.insert(expectedOutputs.end(), inputData.cbegin(), inputData.cend() - 2);
 
@@ -62,7 +62,7 @@ TEST(Recurrence, RepeatLastLastInput)
     dataset->setPrecision(0.3F);
 
     StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(50), FullyConnected(1, activation::tanh)},
-                                               StochasticGradientDescent(0.0005F, 0.7F));
+                                               StochasticGradientDescent(0.001F, 0.7F));
 
     testNeuralNetworkForRecurrence(neuralNetwork, *dataset);
 }

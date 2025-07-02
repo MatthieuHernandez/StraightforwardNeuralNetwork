@@ -46,7 +46,7 @@ TEST(Addition, WithRNN)
 {
     auto dataset = createRecurrentDataForAdditionTests(100, 3, 0.3F);
     StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(12), Recurrence(5), FullyConnected(1)},
-                                               StochasticGradientDescent(0.02F, 0.4F));
+                                               StochasticGradientDescent(0.02F, 0.5F));
 
     neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 2);
     testNeuralNetworkForAddition(neuralNetwork);
@@ -56,7 +56,7 @@ TEST(Addition, WithGRU)
 {
     auto dataset = createRecurrentDataForAdditionTests(100, 3, 0.3F);
     StraightforwardNeuralNetwork neuralNetwork({Input(1), GruLayer(16), GruLayer(12), FullyConnected(1)},
-                                               StochasticGradientDescent(0.005F, 0.95F));
+                                               StochasticGradientDescent(0.005F, 0.96F));
 
     neuralNetwork.train(*dataset, 1.0_acc || 3_s, 1, 3);
     testNeuralNetworkForAddition(neuralNetwork);

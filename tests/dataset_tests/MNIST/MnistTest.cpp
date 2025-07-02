@@ -120,7 +120,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
     StraightforwardNeuralNetwork neuralNetwork(
         {Input(1, 28, 28), Convolution(12, 3, activation::GELU), MaxPooling(2), Convolution(24, 3, activation::GELU),
          MaxPooling(2), FullyConnected(92, activation::GELU), FullyConnected(10, activation::identity, Softmax())},
-        StochasticGradientDescent(0.0005F, 0.8F));
+        StochasticGradientDescent(0.001F, 0.8F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
@@ -135,19 +135,12 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 TEST_F(MnistTest, evaluateBestNeuralNetwork)
 {
     auto neuralNetwork = StraightforwardNeuralNetwork::loadFrom("./resources/BestNeuralNetworkForMNIST.snn");
-    auto numberOfParameters = neuralNetwork.getNumberOfParameters();
-    neuralNetwork.evaluate(*dataset);
-    auto accuracy = neuralNetwork.getGlobalClusteringRate();
-
-    ASSERT_EQ(numberOfParameters, 83246);
-    ASSERT_FLOAT_EQ(accuracy, 0.9900F);
-
     const std::string expectedSummary =
         R"(============================================================
 | SNN Model Summary                                        |
 ============================================================
  Name:       ./resources/BestNeuralNetworkForMNIST.snn
- Parameters: 83246
+ Parameters: 111950
  Epochs:     8
  Trainnig:   480000
 ============================================================
@@ -160,30 +153,30 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
                 Kernel size:  3x3
                 Parameters:   120
                 Activation:   GELU
-                Output shape: [12, 26, 26]
+                Output shape: [12, 28, 28]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [12, 26, 26]
+                Input shape:  [12, 28, 28]
                 Kernel size:  2x2
-                Output shape: [12, 13, 13]
+                Output shape: [12, 14, 14]
 ------------------------------------------------------------
  Convolution2D
-                Input shape:  [12, 13, 13]
+                Input shape:  [12, 14, 14]
                 Filters:      24
                 Kernel size:  3x3
                 Parameters:   2616
                 Activation:   GELU
-                Output shape: [24, 11, 11]
+                Output shape: [24, 14, 14]
 ------------------------------------------------------------
  MaxPooling2D
-                Input shape:  [24, 11, 11]
+                Input shape:  [24, 14, 14]
                 Kernel size:  2x2
-                Output shape: [24, 6, 6]
+                Output shape: [24, 7, 7]
 ------------------------------------------------------------
  FullyConnected
-                Input shape:  [864]
+                Input shape:  [1176]
                 Neurons:      92
-                Parameters:   79580
+                Parameters:   108284
                 Activation:   GELU
                 Output shape: [92]
 ------------------------------------------------------------
@@ -204,6 +197,11 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 )";
     const std::string summary = neuralNetwork.summary();
     ASSERT_EQ(summary, expectedSummary);
+    const auto numberOfParameters = neuralNetwork.getNumberOfParameters();
+    ASSERT_EQ(numberOfParameters, 111950);
+    neuralNetwork.evaluate(*dataset);
+    auto accuracy = neuralNetwork.getGlobalClusteringRate();
+    ASSERT_FLOAT_EQ(accuracy, 0.9904F);
 }
 
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)

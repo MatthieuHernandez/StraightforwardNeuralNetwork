@@ -38,6 +38,7 @@ class RecurrentNeuron final : public Neuron
         auto operator==(const RecurrentNeuron& neuron) const -> bool;
         auto operator!=(const RecurrentNeuron& neuron) const -> bool;
 };
+static_assert(BaseNeuron<RecurrentNeuron>);
 
 template <class Archive>
 void RecurrentNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)

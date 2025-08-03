@@ -30,6 +30,7 @@ class SimpleNeuron final : public Neuron
         auto operator==(const SimpleNeuron& neuron) const -> bool;
         auto operator!=(const SimpleNeuron& neuron) const -> bool;
 };
+static_assert(BaseNeuron<SimpleNeuron>);
 
 template <class Archive>
 void SimpleNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)

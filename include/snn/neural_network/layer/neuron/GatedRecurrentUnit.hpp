@@ -54,6 +54,7 @@ class GatedRecurrentUnit final
         auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
         auto operator!=(const GatedRecurrentUnit& neuron) const -> bool;
 };
+static_assert(BaseNeuron<GatedRecurrentUnit>);
 
 template <class Archive>
 void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)

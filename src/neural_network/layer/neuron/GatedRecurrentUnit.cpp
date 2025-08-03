@@ -129,6 +129,18 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
     this->outputGate.setOptimizer(newOptimizer);
 }
 
+void GatedRecurrentUnit::resetLearningVariables()
+{
+    std::ranges::fill(this->errors, 0.0F);
+    this->previousOutput = 0;
+    this->recurrentError = 0;
+    this->updateGateOutput = 0;
+    this->outputGateOutput = 0;
+    this->resetGate.resetLearningVariables();
+    this->updateGate.resetLearningVariables();
+    this->outputGate.resetLearningVariables();
+}
+
 auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> bool
 {
     return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&

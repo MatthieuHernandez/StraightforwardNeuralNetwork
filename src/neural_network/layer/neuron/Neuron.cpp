@@ -1,5 +1,6 @@
 #include "Neuron.hpp"
 
+#include <algorithm>
 #include <stdexcept>
 
 #include "../../../tools/Tools.hpp"
@@ -77,6 +78,15 @@ auto Neuron::getOptimizer() const -> NeuralNetworkOptimizer* { return this->opti
 void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
 {
     this->optimizer = std::move(newOptimizer);
+}
+
+void Neuron::resetLearningVariables()
+{
+    std::ranges::fill(this->deltaWeights, 0.0F);
+    std::ranges::fill(this->errors, 0.0F);
+    this->lastInputs.reset();
+    this->lastError.reset();
+    this->lastSum.reset();
 }
 
 auto Neuron::operator==(const Neuron& neuron) const -> bool

@@ -47,6 +47,8 @@ class BaseLayer
 
         [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 
+        virtual void resetLearningVariables() = 0;
+
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
         virtual auto operator==(const BaseLayer& layer) const -> bool = 0;

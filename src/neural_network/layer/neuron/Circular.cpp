@@ -30,6 +30,20 @@ void Circular<std::vector<float>>::initialize(const size_t size, const size_t da
 }
 
 template <>
+void Circular<float>::reset()
+{
+    std::ranges::fill(this->queue, 0.0F);
+}
+template <>
+void Circular<std::vector<float>>::reset()
+{
+    for (auto& d : this->queue)
+    {
+        std::ranges::fill(d, 0.0F);
+    }
+}
+
+template <>
 auto Circular<std::vector<float>>::getSum() const -> std::vector<float>
 {
     const std::size_t dataSize = this->queue.front().size();

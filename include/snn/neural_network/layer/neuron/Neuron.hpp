@@ -54,6 +54,8 @@ class Neuron
         [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
+        void resetLearningVariables();
+
         auto operator==(const Neuron& neuron) const -> bool;
         auto operator!=(const Neuron& neuron) const -> bool;
 };

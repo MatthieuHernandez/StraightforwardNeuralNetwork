@@ -2,6 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 
+#include "BaseNeuron.hpp"
 #include "Neuron.hpp"
 
 namespace snn::internal
@@ -35,6 +36,8 @@ class RecurrentNeuron final : public Neuron
 
         [[nodiscard]] auto isValid() const -> errorType;
 
+        void resetLearningVariables();
+
         auto operator==(const RecurrentNeuron& neuron) const -> bool;
         auto operator!=(const RecurrentNeuron& neuron) const -> bool;
 };
@@ -45,9 +48,5 @@ void RecurrentNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_
 {
     boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
     archive& boost::serialization::base_object<Neuron>(*this);
-    archive& this->lastOutput;
-    archive& this->previousOutput;
-    archive& this->recurrentError;
-    archive& this->previousSum;
 }
 }  // namespace snn::internal

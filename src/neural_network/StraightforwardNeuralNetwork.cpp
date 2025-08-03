@@ -340,6 +340,7 @@ auto StraightforwardNeuralNetwork::loadFrom(const std::string& filePath) -> Stra
     std::ifstream ifs(filePath);
     boost::archive::text_iarchive archive(ifs);
     archive >> neuralNetwork;
+    neuralNetwork->resetLearningVariables();
     return *neuralNetwork;
 }
 

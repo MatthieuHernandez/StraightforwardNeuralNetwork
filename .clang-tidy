@@ -1,5 +1,6 @@
 Checks: >
     *,
+    -altera-unroll-loops,
     -boost-use-ranges,
     -cppcoreguidelines-non-private-member-variables-in-classes,
     -fuchsia-default-arguments-calls,
@@ -19,7 +20,6 @@ Checks: >
     -cert*
 WarningsAsErrors: >
     *,
-    -altera-unroll-loops,
     -altera-id-dependent-backward-branch,
     -bugprone-easily-swappable-parameters,
     -fuchsia-overloaded-operator,

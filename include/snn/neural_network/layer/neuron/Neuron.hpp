@@ -54,6 +54,8 @@ class Neuron
         [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
+        void resetLearningVariables();
+
         auto operator==(const Neuron& neuron) const -> bool;
         auto operator!=(const Neuron& neuron) const -> bool;
 };
@@ -67,11 +69,6 @@ void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version
     archive& this->batchSize;
     archive& this->weights;
     archive& this->bias;
-    archive& this->deltaWeights;
-    archive& this->lastInputs;
-    archive& this->lastError;
-    archive& this->lastSum;
-    archive& this->errors;
     archive& this->activationFunction;
     this->outputFunction = ActivationFunction::get(activationFunction);
 }

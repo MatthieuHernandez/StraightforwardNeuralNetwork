@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "../../optimizer/NeuralNetworkOptimizer.hpp"
+#include "LearningObject.hpp"
 
 namespace snn::internal
 {
@@ -36,6 +37,6 @@ concept HasCommonConstMethods = requires(const N neuron) {
 };
 
 template <class N>
-concept BaseNeuron =
-    HasCommonMethods<N> && HasCommonConstMethods<N> && (HasNonTemporalOuputMethod<N> || HasTemporalOuputMethod<N>);
+concept BaseNeuron = HasCommonMethods<N> && HasCommonConstMethods<N> &&
+                     (HasNonTemporalOuputMethod<N> || HasTemporalOuputMethod<N>) && LearningObject<N>;
 }  // namespace snn::internal

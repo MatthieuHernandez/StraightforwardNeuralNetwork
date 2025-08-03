@@ -14,7 +14,6 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
       optimizer(std::move(optimizer))
 
 {
-    this->errors.resize(model.numberOfInputs, 0);
     this->outputFunction = ActivationFunction::get(this->activationFunction);
     this->weights.resize(model.numberOfWeights);
     for (auto& weight : this->weights)
@@ -22,10 +21,7 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
         weight = randomInitializeWeight(model.numberOfWeights);
     }
     this->weights.back() = std::abs(this->weights.back());
-    this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
-    this->lastError.initialize(this->batchSize);
-    this->lastSum.initialize(this->batchSize);
-    this->deltaWeights.resize(model.numberOfWeights, 0);
+    this->resetLearningVariables();
 }
 
 auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
@@ -79,15 +75,23 @@ void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
     this->optimizer = std::move(newOptimizer);
 }
 
+void Neuron::resetLearningVariables()
+{
+    this->deltaWeights.assign(this->weights.size(), 0.0F);
+    this->errors.assign(this->numberOfInputs, 0.0F);
+    this->lastInputs.initialize(this->batchSize, this->numberOfInputs);
+    this->lastError.initialize(this->batchSize);
+    this->lastSum.initialize(this->batchSize);
+}
+
 auto Neuron::operator==(const Neuron& neuron) const -> bool
 {
     return typeid(*this).hash_code() == typeid(neuron).hash_code() && this->numberOfInputs == neuron.numberOfInputs &&
            this->weights == neuron.weights && this->bias == neuron.bias && this->deltaWeights == neuron.deltaWeights &&
            this->lastInputs == neuron.lastInputs && this->lastError == neuron.lastError &&
            this->lastSum == neuron.lastSum && this->errors == neuron.errors &&
-           this->activationFunction == neuron.activationFunction &&
-           this->outputFunction == neuron.outputFunction  // not really good
-           && *this->optimizer == *neuron.optimizer;
+           this->activationFunction == neuron.activationFunction && this->outputFunction == neuron.outputFunction &&
+           *this->optimizer == *neuron.optimizer;
 }
 
 auto Neuron::operator!=(const Neuron& Neuron) const -> bool { return !(*this == Neuron); }

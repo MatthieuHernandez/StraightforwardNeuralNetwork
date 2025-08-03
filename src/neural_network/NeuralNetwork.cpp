@@ -210,6 +210,14 @@ auto NeuralNetwork::isValid() const -> errorType
     return errorType::noError;
 }
 
+void NeuralNetwork::resetLearningVariables()
+{
+    for (const auto& layer : this->layers)
+    {
+        layer->resetLearningVariables();
+    }
+}
+
 auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
 {
     return *this->optimizer == *neuralNetwork.optimizer && this->layers.size() == neuralNetwork.layers.size() &&

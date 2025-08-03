@@ -78,6 +78,15 @@ auto RecurrentNeuron::isValid() const -> errorType
     return this->Neuron::isValid();
 }
 
+void RecurrentNeuron::resetLearningVariables()
+{
+    this->Neuron::resetLearningVariables();
+    this->lastOutput = 0;
+    this->previousOutput = 0;
+    this->recurrentError = 0;
+    this->previousSum = 0;
+}
+
 auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
 {
     return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&

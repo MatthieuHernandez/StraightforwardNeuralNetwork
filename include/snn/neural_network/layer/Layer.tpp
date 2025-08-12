@@ -184,10 +184,4 @@ auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
         return false;
     }
 }
-
-template <BaseNeuron N>
-auto Layer<N>::operator!=(const BaseLayer& layer) const -> bool
-{
-    return !(*this == layer);
-}
 }  // namespace snn::internal

@@ -29,7 +29,6 @@ class SimpleNeuron final : public Neuron
         [[nodiscard]] auto isValid() const -> errorType;
 
         auto operator==(const SimpleNeuron& neuron) const -> bool;
-        auto operator!=(const SimpleNeuron& neuron) const -> bool;
 };
 static_assert(BaseNeuron<SimpleNeuron>);
 

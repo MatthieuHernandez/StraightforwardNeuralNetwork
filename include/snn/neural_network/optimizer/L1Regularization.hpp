@@ -35,7 +35,6 @@ class L1Regularization final : public LayerOptimizer
         [[nodiscard]] auto summary() const -> std::string final;
 
         auto operator==(const LayerOptimizer& optimizer) const -> bool final;
-        auto operator!=(const LayerOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>

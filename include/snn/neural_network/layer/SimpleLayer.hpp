@@ -35,7 +35,6 @@ class SimpleLayer : public Layer<N>
         [[nodiscard]] auto isValid() const -> errorType final;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
-        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <BaseNeuron N>

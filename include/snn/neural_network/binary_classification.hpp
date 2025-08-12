@@ -21,6 +21,7 @@ struct binaryClassification
             archive& this->trueNegative;
             archive& this->falsePositive;
             archive& this->falseNegative;
+            archive& this->totalError;
         }
 };
 }  // namespace snn::internal

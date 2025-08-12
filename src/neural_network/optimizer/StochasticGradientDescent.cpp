@@ -107,9 +107,4 @@ auto StochasticGradientDescent::operator==(const NeuralNetworkOptimizer& optimiz
         return false;
     }
 }
-
-auto StochasticGradientDescent::operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool
-{
-    return !(*this == optimizer);
-}
 }  // namespace snn::internal

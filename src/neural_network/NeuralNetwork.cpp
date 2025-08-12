@@ -233,6 +233,4 @@ auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
         return true;
     }();
 }
-
-auto NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const -> bool { return !(*this == neuralNetwork); }
 }  // namespace snn::internal

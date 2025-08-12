@@ -71,7 +71,6 @@ class Layer : public BaseLayer
         void resetLearningVariables() final;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
-        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <BaseNeuron N>

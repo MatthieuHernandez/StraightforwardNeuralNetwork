@@ -144,6 +144,4 @@ auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> b
            this->resetGate == neuron.resetGate && this->updateGate == neuron.updateGate &&
            this->outputGate == neuron.outputGate;
 }
-
-auto GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

@@ -89,10 +89,4 @@ auto SimpleLayer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     return Layer<N>::operator==(layer);
 }
-
-template <BaseNeuron N>
-auto SimpleLayer<N>::operator!=(const BaseLayer& layer) const -> bool
-{
-    return !(*this == layer);
-}
 }  // namespace snn::internal

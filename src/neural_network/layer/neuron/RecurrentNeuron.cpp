@@ -86,13 +86,4 @@ void RecurrentNeuron::resetLearningVariables()
     this->recurrentError = 0;
     this->previousSum = 0;
 }
-
-auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
-{
-    return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
-           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
-           this->previousSum == neuron.previousSum;
-}
-
-auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

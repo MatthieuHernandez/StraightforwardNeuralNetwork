@@ -50,9 +50,4 @@ auto ActivationFunction::operator==(const ActivationFunction& activationFunction
 {
     return this->getType() == activationFunction.getType();
 }
-
-auto ActivationFunction::operator!=(const ActivationFunction& activationFunction) const -> bool
-{
-    return !this->operator==(activationFunction);
-}
 }  // namespace snn::internal

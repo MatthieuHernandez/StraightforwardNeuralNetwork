@@ -135,6 +135,4 @@ inline auto MaxPooling1D::operator==(const BaseLayer& layer) const -> bool
         return false;
     }
 }
-
-inline auto MaxPooling1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
 }  // namespace snn::internal

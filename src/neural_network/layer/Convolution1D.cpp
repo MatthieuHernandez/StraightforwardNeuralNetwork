@@ -94,6 +94,4 @@ inline auto Convolution1D::operator==(const BaseLayer& layer) const -> bool
 {
     return this->FilterLayer::operator==(layer);
 }
-
-inline auto Convolution1D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
 }  // namespace snn::internal

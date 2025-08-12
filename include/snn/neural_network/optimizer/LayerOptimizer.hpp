@@ -32,7 +32,6 @@ class LayerOptimizer
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
         virtual auto operator==(const LayerOptimizer& optimizer) const -> bool;
-        virtual auto operator!=(const LayerOptimizer& optimizer) const -> bool;
 };
 
 template <class Archive>

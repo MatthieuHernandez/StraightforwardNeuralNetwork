@@ -32,7 +32,6 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         [[nodiscard]] auto summary() const -> std::string final;
 
         auto operator==(const NeuralNetworkOptimizer& optimizer) const -> bool final;
-        auto operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool final;
 };
 
 template <class Archive>

@@ -38,8 +38,7 @@ class RecurrentNeuron final : public Neuron
 
         void resetLearningVariables();
 
-        auto operator==(const RecurrentNeuron& neuron) const -> bool;
-        auto operator!=(const RecurrentNeuron& neuron) const -> bool;
+        auto operator==(const RecurrentNeuron& neuron) const -> bool = default;
 };
 static_assert(BaseNeuron<RecurrentNeuron>);
 

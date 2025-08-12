@@ -377,9 +377,4 @@ auto StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork
            this->isIdle == neuralNetwork.isIdle && this->epoch == neuralNetwork.epoch &&
            this->numberOfTrainingsBetweenTwoEvaluations == neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
 }
-
-auto StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
-{
-    return !(*this == neuralNetwork);
-}
 }  // namespace snn

@@ -53,7 +53,6 @@ class GatedRecurrentUnit final
         void resetLearningVariables();
 
         auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
-        auto operator!=(const GatedRecurrentUnit& neuron) const -> bool;
 };
 static_assert(BaseNeuron<GatedRecurrentUnit>);
 

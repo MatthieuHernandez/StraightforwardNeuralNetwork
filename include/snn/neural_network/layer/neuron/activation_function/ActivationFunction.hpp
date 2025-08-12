@@ -48,6 +48,5 @@ class ActivationFunction
         [[nodiscard]] virtual auto getName() const -> std::string = 0;
 
         virtual auto operator==(const ActivationFunction& activationFunction) const -> bool;
-        virtual auto operator!=(const ActivationFunction& activationFunction) const -> bool;
 };
 }  // namespace snn::internal

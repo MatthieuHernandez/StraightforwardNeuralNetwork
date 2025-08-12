@@ -93,7 +93,6 @@ class StraightforwardNeuralNetwork final : public internal::NeuralNetwork
         }
 
         auto operator==(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool;
-        auto operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool;
 };
 
 template <logLevel T>

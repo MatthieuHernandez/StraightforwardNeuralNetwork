@@ -93,6 +93,4 @@ auto Neuron::operator==(const Neuron& neuron) const -> bool
            this->activationFunction == neuron.activationFunction && this->outputFunction == neuron.outputFunction &&
            *this->optimizer == *neuron.optimizer;
 }
-
-auto Neuron::operator!=(const Neuron& Neuron) const -> bool { return !(*this == Neuron); }
 }  // namespace snn::internal

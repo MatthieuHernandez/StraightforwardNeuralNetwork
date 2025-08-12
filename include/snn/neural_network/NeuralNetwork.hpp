@@ -80,7 +80,6 @@ class NeuralNetwork : public StatisticAnalysis
                        const std::vector<float>& weighting = {}, bool temporalReset = true);
 
         auto operator==(const NeuralNetwork& neuralNetwork) const -> bool;
-        auto operator!=(const NeuralNetwork& neuralNetwork) const -> bool;
 };
 static_assert(LearningObject<NeuralNetwork>);
 

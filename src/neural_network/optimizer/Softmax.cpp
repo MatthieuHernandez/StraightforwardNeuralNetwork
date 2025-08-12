@@ -71,6 +71,4 @@ auto Softmax::operator==(const LayerOptimizer& optimizer) const -> bool
         return false;
     }
 }
-
-auto Softmax::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
 }  // namespace snn::internal

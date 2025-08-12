@@ -114,6 +114,4 @@ inline auto Convolution2D::operator==(const BaseLayer& layer) const -> bool
         return false;
     }
 }
-
-inline auto Convolution2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
 }  // namespace snn::internal

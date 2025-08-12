@@ -57,7 +57,6 @@ class Neuron
         void resetLearningVariables();
 
         auto operator==(const Neuron& neuron) const -> bool;
-        auto operator!=(const Neuron& neuron) const -> bool;
 };
 
 template <class Archive>

@@ -33,7 +33,6 @@ concept HasCommonConstMethods = requires(const N neuron) {
     { neuron.getNumberOfInputs() } -> std::same_as<int>;
 
     { neuron.operator==(neuron) } -> std::same_as<bool>;
-    { neuron.operator!=(neuron) } -> std::same_as<bool>;
 };
 
 template <class N>

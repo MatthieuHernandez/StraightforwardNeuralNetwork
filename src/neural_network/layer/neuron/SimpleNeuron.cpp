@@ -52,6 +52,4 @@ void SimpleNeuron::train() { this->optimizer->updateWeights(*this); }
 auto SimpleNeuron::isValid() const -> errorType { return this->Neuron::isValid(); }
 
 auto SimpleNeuron::operator==(const SimpleNeuron& neuron) const -> bool { return this->Neuron::operator==(neuron); }
-
-auto SimpleNeuron::operator!=(const SimpleNeuron& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

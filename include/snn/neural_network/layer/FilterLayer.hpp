@@ -41,7 +41,6 @@ class FilterLayer : public Layer<SimpleNeuron>
         [[nodiscard]] auto isValid() const -> errorType override;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
-        auto operator!=(const BaseLayer& layer) const -> bool override;
 };
 
 template <class Archive>

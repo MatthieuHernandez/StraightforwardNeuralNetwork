@@ -1,7 +1,7 @@
 #include "StraightforwardNeuralNetwork.hpp"
 
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -12,6 +12,7 @@
 #include "ExtendedExpection.hpp"
 #include "NeuralNetworkVisualization.hpp"
 #include "layer/LayerModel.hpp"
+
 
 namespace snn
 {
@@ -329,16 +330,16 @@ void StraightforwardNeuralNetwork::saveFilterLayersAsBitmap(const std::string& f
 void StraightforwardNeuralNetwork::saveSync(const std::string& filePath)
 {
     this->autoSaveFilePath = filePath;
-    std::ofstream ofs(filePath);
-    boost::archive::text_oarchive archive(ofs);
+    std::ofstream ofs(filePath, std::ios::binary);
+    boost::archive::binary_oarchive archive(ofs);
     archive << this;
 }
 
 auto StraightforwardNeuralNetwork::loadFrom(const std::string& filePath) -> StraightforwardNeuralNetwork&
 {
     StraightforwardNeuralNetwork* neuralNetwork = nullptr;
-    std::ifstream ifs(filePath);
-    boost::archive::text_iarchive archive(ifs);
+    std::ifstream ifs(filePath, std::ios::binary);
+    boost::archive::binary_iarchive archive(ifs);
     archive >> neuralNetwork;
     neuralNetwork->resetLearningVariables();
     return *neuralNetwork;

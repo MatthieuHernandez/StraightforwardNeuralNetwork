@@ -8,9 +8,4 @@ auto NeuralNetworkOptimizer::operator==(const NeuralNetworkOptimizer& optimizer)
 {
     return typeid(*this).hash_code() == typeid(optimizer).hash_code();
 }
-
-auto NeuralNetworkOptimizer::operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool
-{
-    return !(*this == optimizer);
-}
 }  // namespace snn::internal

@@ -99,7 +99,7 @@ TEST(SaveNeuralNetwork, EqualTestWithDropout)
     EXPECT_TRUE(A.getWeightedClusteringRate() == B.getWeightedClusteringRate()) << "A == B";
 }
 
-TEST(SaveNeuralNetwork, Save)  // TODO(matth): do a forward to be sure that the network is the same.
+TEST(SaveNeuralNetwork, Save)
 {
     StraightforwardNeuralNetwork A(
         {Input(45), MaxPooling(3), Convolution(2, 2, activation::ReLU),
@@ -110,17 +110,26 @@ TEST(SaveNeuralNetwork, Save)  // TODO(matth): do a forward to be sure that the 
     auto randomInput = tools::randomVector(0, 2, 45);
     auto randomOutput = tools::randomVector(0, 1, 2);
 
+    A.trainOnce(randomInput, randomOutput);  // To update learning variables.
+    A.trainOnce(randomInput, randomOutput);  // To update learning variables of GRUs.
+
     A.saveAs("./testSave.tmp");
+    auto B = StraightforwardNeuralNetwork::loadFrom("./testSave.tmp");
+
+    EXPECT_TRUE(A != B);  // Learning variables are not saved.
+
+    A.resetLearningVariables();
+
+    EXPECT_TRUE(A == B);  // All learning variables should be 0.
+
     A.trainOnce(randomInput, randomOutput);
     auto outputA = A.computeOutput(randomInput);
-
-    StraightforwardNeuralNetwork B = StraightforwardNeuralNetwork::loadFrom("./testSave.tmp");
 
     B.trainOnce(randomInput, randomOutput);
     auto outputB = B.computeOutput(randomInput);
 
     EXPECT_TRUE(A == B);
-    EXPECT_TRUE(sizeof(A) == sizeof(B));  // Don't count pointing objects by pointer
+    EXPECT_TRUE(sizeof(A) == sizeof(B));  // Don't count pointing objects by pointer.
     EXPECT_TRUE(outputA == outputB);
     ASSERT_EQ(B.isValid(), errorType::noError);
 }

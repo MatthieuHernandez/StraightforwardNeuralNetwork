@@ -151,6 +151,15 @@ auto Layer<N>::getNumberOfParameters() const -> int
 }
 
 template <BaseNeuron N>
+void Layer<N>::resetLearningVariables()
+{
+    for (auto& neuron : this->neurons)
+    {
+        neuron.resetLearningVariables();
+    }
+}
+
+template <BaseNeuron N>
 auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
 {
     try
@@ -174,11 +183,5 @@ auto Layer<N>::operator==(const BaseLayer& layer) const -> bool
     {
         return false;
     }
-}
-
-template <BaseNeuron N>
-auto Layer<N>::operator!=(const BaseLayer& layer) const -> bool
-{
-    return !(*this == layer);
 }
 }  // namespace snn::internal

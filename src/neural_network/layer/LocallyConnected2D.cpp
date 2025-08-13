@@ -171,6 +171,4 @@ inline auto LocallyConnected2D::operator==(const BaseLayer& layer) const -> bool
         return false;
     }
 }
-
-inline auto LocallyConnected2D::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
 }  // namespace snn::internal

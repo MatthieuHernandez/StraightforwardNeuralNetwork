@@ -78,12 +78,12 @@ auto RecurrentNeuron::isValid() const -> errorType
     return this->Neuron::isValid();
 }
 
-auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
+void RecurrentNeuron::resetLearningVariables()
 {
-    return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
-           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
-           this->previousSum == neuron.previousSum;
+    this->Neuron::resetLearningVariables();
+    this->lastOutput = 0;
+    this->previousOutput = 0;
+    this->recurrentError = 0;
+    this->previousSum = 0;
 }
-
-auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

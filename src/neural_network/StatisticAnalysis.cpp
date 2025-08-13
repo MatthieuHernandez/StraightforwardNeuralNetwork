@@ -290,25 +290,4 @@ auto StatisticAnalysis::getF1ScoreMax() const -> float { return this->f1ScoreMax
 auto StatisticAnalysis::getMeanAbsoluteErrorMin() const -> float { return this->meanAbsoluteErrorMin; }
 
 auto StatisticAnalysis::getRootMeanSquaredErrorMin() const -> float { return this->rootMeanSquaredErrorMin; }
-
-auto StatisticAnalysis::operator==(const StatisticAnalysis& other) const -> bool
-{
-    return this->clusters == other.clusters && this->numberOfDataWellClassified == other.numberOfDataWellClassified &&
-           this->numberOfDataMisclassified == other.numberOfDataMisclassified &&
-           this->globalClusteringRate == other.globalClusteringRate &&
-           this->weightedClusteringRate == other.weightedClusteringRate && this->f1Score == other.f1Score &&
-           this->meanAbsoluteError == other.meanAbsoluteError &&
-           this->rootMeanSquaredError == other.rootMeanSquaredError &&
-           this->globalClusteringRateMax == other.globalClusteringRateMax &&
-           this->weightedClusteringRateMax == other.weightedClusteringRateMax && this->f1ScoreMax == other.f1ScoreMax &&
-           this->meanAbsoluteErrorMin == other.meanAbsoluteErrorMin &&
-           this->rootMeanSquaredErrorMin == other.rootMeanSquaredErrorMin &&
-           this->globalClusteringRateIsBetterThanMax == other.globalClusteringRateIsBetterThanMax &&
-           this->weightedClusteringRateIsBetterThanMax == other.weightedClusteringRateIsBetterThanMax &&
-           this->f1ScoreIsBetterThanMax == other.f1ScoreIsBetterThanMax &&
-           this->meanAbsoluteErrorIsBetterThanMin == other.meanAbsoluteErrorIsBetterThanMin &&
-           this->rootMeanSquaredErrorIsBetterThanMin == other.rootMeanSquaredErrorIsBetterThanMin;
-}
-
-auto StatisticAnalysis::operator!=(const StatisticAnalysis& other) const -> bool { return !(*this == other); }
 }  // namespace snn::internal

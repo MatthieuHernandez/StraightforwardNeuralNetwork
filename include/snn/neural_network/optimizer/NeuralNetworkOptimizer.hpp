@@ -32,6 +32,5 @@ class NeuralNetworkOptimizer
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 
         virtual auto operator==(const NeuralNetworkOptimizer& optimizer) const -> bool;
-        virtual auto operator!=(const NeuralNetworkOptimizer& optimizer) const -> bool;
 };
 }  // namespace snn::internal

@@ -14,6 +14,4 @@ auto LayerOptimizer::operator==(const LayerOptimizer& optimizer) const -> bool
     return typeid(*this).hash_code() == typeid(optimizer).hash_code() &&
            typeid(this->layer).hash_code() == typeid(optimizer.layer).hash_code();
 }
-
-auto LayerOptimizer::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
 }  // namespace snn::internal

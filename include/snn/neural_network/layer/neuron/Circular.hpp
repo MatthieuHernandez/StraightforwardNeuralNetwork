@@ -29,6 +29,7 @@ class Circular final
         ~Circular() = default;
 
         void initialize(size_t queueSize, size_t dataSize = 1);  // Should be call after the ctor.
+        void reset();                                            // Do the same as initialize.
 
         [[nodiscard]] auto getBack() -> const T*;
         [[nodiscard]] auto getSum() const -> T;
@@ -54,6 +55,12 @@ void Circular<float>::initialize(size_t size, size_t dataSize);
 
 template <>
 void Circular<std::vector<float>>::initialize(size_t size, size_t dataSize);
+
+template <>
+void Circular<float>::reset();
+
+template <>
+void Circular<std::vector<float>>::reset();
 
 template <>
 auto Circular<float>::getSum() const -> float;

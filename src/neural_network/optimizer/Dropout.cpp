@@ -76,6 +76,4 @@ auto Dropout::operator==(const LayerOptimizer& optimizer) const -> bool
         return false;
     }
 }
-
-auto Dropout::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
 }  // namespace snn::internal

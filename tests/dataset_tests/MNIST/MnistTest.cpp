@@ -126,7 +126,7 @@ TEST_F(MnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForMNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.99_acc);  // Achieved after 8 epochs, ~60 seconds each.
+    neuralNetwork.train(*dataset, 0.992_acc);  // Achieved after 8 epochs, ~140 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.98F);
@@ -191,7 +191,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
 |  Optimizer                                               |
 ============================================================
  StochasticGradientDescent
-                Learning rate: 0.0005
+                Learning rate: 0.001
                 Momentum:      0.8
 ============================================================
 )";
@@ -201,7 +201,7 @@ TEST_F(MnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 111950);
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_FLOAT_EQ(accuracy, 0.9904F);
+    ASSERT_FLOAT_EQ(accuracy, 0.9901F);
 }
 
 TEST_F(MnistTest, DISABLED_SaveFeatureMap)

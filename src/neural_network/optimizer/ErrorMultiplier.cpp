@@ -46,6 +46,4 @@ auto ErrorMultiplier::operator==(const LayerOptimizer& optimizer) const -> bool
         return false;
     }
 }
-
-auto ErrorMultiplier::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
 }  // namespace snn::internal

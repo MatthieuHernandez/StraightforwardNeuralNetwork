@@ -13,7 +13,6 @@
 #include "NeuralNetworkVisualization.hpp"
 #include "layer/LayerModel.hpp"
 
-
 namespace snn
 {
 StraightforwardNeuralNetwork::~StraightforwardNeuralNetwork() { this->stopTrainingAsync(); }

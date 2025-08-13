@@ -66,7 +66,7 @@ TEST_F(FashionMnistTest, DISABLED_trainBestNeuralNetwork)
 
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForFashion-MNIST.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 13 epochs, ~120 seconds each.
+    neuralNetwork.train(*dataset, 0.92_acc);  // Achieved after 43 epochs, ~130 seconds each.
 
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
     ASSERT_ACCURACY(accuracy, 0.85F);
@@ -81,8 +81,8 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForFashion-MNIST.snn
  Parameters: 436526
- Epochs:     13
- Trainnig:   780000
+ Epochs:     42
+ Trainnig:   2520000
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -135,5 +135,5 @@ TEST_F(FashionMnistTest, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 436526);
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_FLOAT_EQ(accuracy, 0.8961F);
+    ASSERT_FLOAT_EQ(accuracy, 0.9126F);
 }

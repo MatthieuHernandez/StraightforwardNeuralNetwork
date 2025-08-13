@@ -69,8 +69,8 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
 ============================================================
  Name:       ./resources/BestNeuralNetworkForCIFAR-10.snn
  Parameters: 473548
- Epochs:     4
- Trainnig:   200000
+ Epochs:     6
+ Trainnig:   300000
 ============================================================
 | Layers                                                   |
 ============================================================
@@ -128,7 +128,7 @@ TEST_F(Cifar10Test, evaluateBestNeuralNetwork)
     ASSERT_EQ(numberOfParameters, 473548);
     neuralNetwork.evaluate(*dataset);
     auto accuracy = neuralNetwork.getGlobalClusteringRate();
-    ASSERT_FLOAT_EQ(accuracy, 0.6623F);  // Achieved after 4 epochs, ~630 seconds each.
+    ASSERT_FLOAT_EQ(accuracy, 0.6953F);  // Achieved after 6 epochs, ~800 seconds each.
 }
 
 TEST_F(Cifar10Test, DISABLED_SaveFeatureMap)

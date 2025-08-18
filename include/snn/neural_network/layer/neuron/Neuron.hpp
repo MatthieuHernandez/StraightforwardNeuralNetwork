@@ -18,7 +18,7 @@ class Neuron
 
     protected:
         int numberOfInputs{};
-        int batchSize{};
+        int numberOfUses{};  // Represents the number of times the neuron is used for one output of a layer.
         std::vector<float> weights;
         float bias{};
 
@@ -65,7 +65,7 @@ void Neuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version
     archive.template register_type<StochasticGradientDescent>();
     archive& this->optimizer;
     archive& this->numberOfInputs;
-    archive& this->batchSize;
+    archive& this->numberOfUses;
     archive& this->weights;
     archive& this->bias;
     archive& this->activationFunction;

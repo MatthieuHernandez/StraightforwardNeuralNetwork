@@ -7,11 +7,11 @@ namespace snn::internal
 {
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
-      resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+      resetGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::sigmoid},
                 optimizer),
-      updateGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+      updateGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::sigmoid},
                  optimizer),
-      outputGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::tanh},
+      outputGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::tanh},
                  optimizer)
 {
 }

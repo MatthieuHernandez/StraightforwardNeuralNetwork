@@ -8,7 +8,7 @@ namespace snn::internal
 {
 Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
-      batchSize(model.batchSize),
+      numberOfUses(model.numberOfUses),
       bias(model.bias),
       activationFunction(model.activationFunction),
       optimizer(std::move(optimizer))
@@ -79,9 +79,9 @@ void Neuron::resetLearningVariables()
 {
     this->deltaWeights.assign(this->weights.size(), 0.0F);
     this->errors.assign(this->numberOfInputs, 0.0F);
-    this->lastInputs.initialize(this->batchSize, this->numberOfInputs);
-    this->lastError.initialize(this->batchSize);
-    this->lastSum.initialize(this->batchSize);
+    this->lastInputs.initialize(this->numberOfUses, this->numberOfInputs);
+    this->lastError.initialize(this->numberOfUses);
+    this->lastSum.initialize(this->numberOfUses);
 }
 
 auto Neuron::operator==(const Neuron& neuron) const -> bool

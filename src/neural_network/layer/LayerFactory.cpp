@@ -97,21 +97,21 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                 throw InvalidArchitectureException("Input of layer has size of 0.");
             }
             model.neuron.numberOfInputs = model.numberOfInputs;
-            model.neuron.batchSize = 1;
+            model.neuron.numberOfUses = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;  // for the bias
             model.numberOfOutputs = model.numberOfNeurons;
             return std::make_unique<FullyConnected>(model, optimizer);
 
         case recurrence:
             model.neuron.numberOfInputs = model.numberOfInputs;
-            model.neuron.batchSize = 1;
+            model.neuron.numberOfUses = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
             model.numberOfOutputs = model.numberOfNeurons;
             return std::make_unique<Recurrence>(model, optimizer);
 
         case gruLayer:
             model.neuron.numberOfInputs = model.numberOfInputs;
-            model.neuron.batchSize = 1;
+            model.neuron.numberOfUses = 1;
             model.neuron.numberOfWeights = model.neuron.numberOfInputs + 2;
             model.numberOfOutputs = model.numberOfNeurons;
             return std::make_unique<GruLayer>(model, optimizer);
@@ -168,7 +168,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                 model.numberOfKernels = model.numberOfNeurons;
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
-                model.neuron.batchSize = 1;
+                model.neuron.numberOfUses = 1;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
                 return std::make_unique<LocallyConnected1D>(model, optimizer);
@@ -185,7 +185,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                 model.numberOfKernels = model.numberOfNeurons;
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
-                model.neuron.batchSize = 1;
+                model.neuron.numberOfUses = 1;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
                 return std::make_unique<LocallyConnected2D>(model, optimizer);
@@ -213,7 +213,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                     computeNumberOfKernelsForConvolution1D(model.numberOfFilters, model.shapeOfInput);
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.shapeOfInput[C];
-                model.neuron.batchSize = model.numberOfKernelsPerFilter;
+                model.neuron.numberOfUses = model.numberOfKernelsPerFilter;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
                 return std::make_unique<Convolution1D>(model, optimizer);
@@ -230,7 +230,7 @@ inline auto LayerFactory::build(LayerModel& model, std::vector<int>& shapeOfInpu
                     computeNumberOfKernelsForConvolution2D(model.numberOfFilters, model.shapeOfInput);
                 model.numberOfKernelsPerFilter = model.numberOfKernels / model.numberOfFilters;
                 model.neuron.numberOfInputs = model.kernelSize * model.kernelSize * model.shapeOfInput[C];
-                model.neuron.batchSize = model.numberOfKernelsPerFilter;
+                model.neuron.numberOfUses = model.numberOfKernelsPerFilter;
                 model.neuron.numberOfWeights = model.neuron.numberOfInputs + 1;
                 model.numberOfOutputs = model.numberOfNeurons;
                 return std::make_unique<Convolution2D>(model, optimizer);

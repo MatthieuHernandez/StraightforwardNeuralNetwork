@@ -68,7 +68,7 @@ class Layer : public BaseLayer
 
         [[nodiscard]] auto isValid() const -> errorType override;
 
-        void resetLearningVariables() final;
+        void resetLearningVariables(int batchSize) final;
 
         auto operator==(const BaseLayer& layer) const -> bool override;
 };

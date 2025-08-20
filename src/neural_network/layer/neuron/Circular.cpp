@@ -10,21 +10,21 @@ template class Circular<float>;
 template class Circular<std::vector<float>>;
 
 template <>
-void Circular<float>::initialize(const size_t size, [[maybe_unused]] const size_t dataSize)
+void Circular<float>::initialize(const size_t queueSize, [[maybe_unused]] const size_t dataSize)
 {
     assert(dataSize == 1);
     this->indexPush = 0;
     this->indexGet = 0;
-    this->divider = static_cast<float>(size);
-    this->queue.assign(size, 0.0F);
+    this->divider = static_cast<float>(queueSize);
+    this->queue.assign(queueSize, 0.0F);
 }
 template <>
-void Circular<std::vector<float>>::initialize(const size_t size, const size_t dataSize)
+void Circular<std::vector<float>>::initialize(const size_t queueSize, const size_t dataSize)
 {
     this->indexPush = 0;
     this->indexGet = 0;
-    this->divider = static_cast<float>(size);
-    this->queue.resize(size);
+    this->divider = static_cast<float>(queueSize);
+    this->queue.resize(queueSize);
     for (auto& d : this->queue)
     {
         d = std::vector<float>(dataSize, 0.0F);

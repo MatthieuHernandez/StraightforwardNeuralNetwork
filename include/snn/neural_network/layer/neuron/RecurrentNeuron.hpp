@@ -36,7 +36,7 @@ class RecurrentNeuron final : public Neuron
 
         [[nodiscard]] auto isValid() const -> errorType;
 
-        void resetLearningVariables();
+        void resetLearningVariables(int batchSize);
 
         auto operator==(const RecurrentNeuron& neuron) const -> bool = default;
 };

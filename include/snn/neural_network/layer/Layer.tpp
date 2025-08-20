@@ -151,11 +151,11 @@ auto Layer<N>::getNumberOfParameters() const -> int
 }
 
 template <BaseNeuron N>
-void Layer<N>::resetLearningVariables()
+void Layer<N>::resetLearningVariables(int batchSize)
 {
     for (auto& neuron : this->neurons)
     {
-        neuron.resetLearningVariables();
+        neuron.resetLearningVariables(batchSize);
     }
 }
 

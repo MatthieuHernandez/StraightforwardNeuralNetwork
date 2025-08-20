@@ -78,9 +78,13 @@ auto RecurrentNeuron::isValid() const -> errorType
     return this->Neuron::isValid();
 }
 
-void RecurrentNeuron::resetLearningVariables()
+void RecurrentNeuron::resetLearningVariables(int batchSize)
 {
-    this->Neuron::resetLearningVariables();
+    if (batchSize != 1)
+    {
+        throw std::invalid_argument("The batch size should be 1 for reccurent neurons.");
+    }
+    this->Neuron::resetLearningVariables(batchSize);
     this->lastOutput = 0;
     this->previousOutput = 0;
     this->recurrentError = 0;

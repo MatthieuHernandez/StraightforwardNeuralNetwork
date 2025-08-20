@@ -214,7 +214,7 @@ void NeuralNetwork::resetLearningVariables()
 {
     for (const auto& layer : this->layers)
     {
-        layer->resetLearningVariables();
+        layer->resetLearningVariables(1);
     }
 }
 

@@ -47,7 +47,7 @@ class BaseLayer
 
         [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 
-        virtual void resetLearningVariables() = 0;
+        virtual void resetLearningVariables(int batchSize) = 0;
 
         [[nodiscard]] virtual auto summary() const -> std::string = 0;
 

@@ -34,10 +34,10 @@ class Circular final
 };
 
 template <>
-void Circular<float>::initialize(size_t size, size_t dataSize);
+void Circular<float>::initialize(size_t queueSize, size_t dataSize);
 
 template <>
-void Circular<std::vector<float>>::initialize(size_t size, size_t dataSize);
+void Circular<std::vector<float>>::initialize(size_t queueSize, size_t dataSize);
 
 template <>
 void Circular<float>::reset();

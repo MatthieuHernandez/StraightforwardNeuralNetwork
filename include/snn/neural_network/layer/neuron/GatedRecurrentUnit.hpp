@@ -50,7 +50,7 @@ class GatedRecurrentUnit final
         [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
-        void resetLearningVariables();
+        void resetLearningVariables(int batchSize);
 
         auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
 };

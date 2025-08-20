@@ -21,7 +21,7 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
         weight = randomInitializeWeight(model.numberOfWeights);
     }
     this->weights.back() = std::abs(this->weights.back());
-    this->resetLearningVariables();
+    this->resetLearningVariables(1);
 }
 
 auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
@@ -75,13 +75,18 @@ void Neuron::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer)
     this->optimizer = std::move(newOptimizer);
 }
 
-void Neuron::resetLearningVariables()
+void Neuron::resetLearningVariables(int batchSize)
 {
+    if (batchSize < 1)
+    {
+        throw std::invalid_argument("The batch size must be at least 1.");
+    }
     this->deltaWeights.assign(this->weights.size(), 0.0F);
     this->errors.assign(this->numberOfInputs, 0.0F);
-    this->lastInputs.initialize(this->numberOfUses, this->numberOfInputs);
-    this->lastError.initialize(this->numberOfUses);
-    this->lastSum.initialize(this->numberOfUses);
+    const auto sizeOfCircular = this->numberOfUses * batchSize;
+    this->lastInputs.initialize(sizeOfCircular, this->numberOfInputs);
+    this->lastError.initialize(sizeOfCircular);
+    this->lastSum.initialize(sizeOfCircular);
 }
 
 auto Neuron::operator==(const Neuron& neuron) const -> bool

@@ -37,7 +37,6 @@ class MaxPooling1D final : public FilterLayer
         [[nodiscard]] auto summary() const -> std::string final;
 
         auto operator==(const BaseLayer& layer) const -> bool final;
-        auto operator!=(const BaseLayer& layer) const -> bool final;
 };
 
 template <class Archive>

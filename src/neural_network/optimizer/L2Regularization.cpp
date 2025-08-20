@@ -49,6 +49,4 @@ auto L2Regularization::operator==(const LayerOptimizer& optimizer) const -> bool
         return false;
     }
 }
-
-auto L2Regularization::operator!=(const LayerOptimizer& optimizer) const -> bool { return !(*this == optimizer); }
 }  // namespace snn::internal

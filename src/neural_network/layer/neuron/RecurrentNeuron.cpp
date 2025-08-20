@@ -78,12 +78,16 @@ auto RecurrentNeuron::isValid() const -> errorType
     return this->Neuron::isValid();
 }
 
-auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
+void RecurrentNeuron::resetLearningVariables(int batchSize)
 {
-    return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
-           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
-           this->previousSum == neuron.previousSum;
+    if (batchSize != 1)
+    {
+        throw std::invalid_argument("The batch size should be 1 for reccurent neurons.");
+    }
+    this->Neuron::resetLearningVariables(batchSize);
+    this->lastOutput = 0;
+    this->previousOutput = 0;
+    this->recurrentError = 0;
+    this->previousSum = 0;
 }
-
-auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

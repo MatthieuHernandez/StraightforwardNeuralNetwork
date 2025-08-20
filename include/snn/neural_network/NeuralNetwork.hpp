@@ -74,12 +74,14 @@ class NeuralNetwork : public StatisticAnalysis
 
         [[nodiscard]] auto isValid() const -> errorType;
 
+        void resetLearningVariables();
+
         void trainOnce(const std::vector<float>& inputs, const std::vector<float>& desired,
                        const std::vector<float>& weighting = {}, bool temporalReset = true);
 
         auto operator==(const NeuralNetwork& neuralNetwork) const -> bool;
-        auto operator!=(const NeuralNetwork& neuralNetwork) const -> bool;
 };
+static_assert(LearningObject<NeuralNetwork>);
 
 template <class Archive>
 void NeuralNetwork::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)

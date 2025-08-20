@@ -21,7 +21,6 @@ class GatedRecurrentUnit final
         int numberOfInputs{};
 
         float previousOutput = 0;
-        float recurrentError = 0;
         float updateGateOutput = 0;
         float outputGateOutput = 0;
 
@@ -51,19 +50,16 @@ class GatedRecurrentUnit final
         [[nodiscard]] auto getOptimizer() const -> NeuralNetworkOptimizer*;
         void setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> newOptimizer);
 
+        void resetLearningVariables(int batchSize);
+
         auto operator==(const GatedRecurrentUnit& neuron) const -> bool;
-        auto operator!=(const GatedRecurrentUnit& neuron) const -> bool;
 };
+static_assert(BaseNeuron<GatedRecurrentUnit>);
 
 template <class Archive>
 void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
 {
-    archive& this->errors;
     archive& this->numberOfInputs;
-    archive& this->previousOutput;
-    archive& this->recurrentError;
-    archive& this->updateGateOutput;
-    archive& this->outputGateOutput;
     archive& this->resetGate;
     archive& this->updateGate;
     archive& this->outputGate;

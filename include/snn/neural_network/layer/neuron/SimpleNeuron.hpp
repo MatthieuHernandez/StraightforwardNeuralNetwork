@@ -2,6 +2,7 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 
+#include "BaseNeuron.hpp"
 #include "Neuron.hpp"
 
 namespace snn::internal
@@ -28,8 +29,8 @@ class SimpleNeuron final : public Neuron
         [[nodiscard]] auto isValid() const -> errorType;
 
         auto operator==(const SimpleNeuron& neuron) const -> bool;
-        auto operator!=(const SimpleNeuron& neuron) const -> bool;
 };
+static_assert(BaseNeuron<SimpleNeuron>);
 
 template <class Archive>
 void SimpleNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)

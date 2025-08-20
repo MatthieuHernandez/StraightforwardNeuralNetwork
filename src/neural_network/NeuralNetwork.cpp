@@ -210,6 +210,14 @@ auto NeuralNetwork::isValid() const -> errorType
     return errorType::noError;
 }
 
+void NeuralNetwork::resetLearningVariables()
+{
+    for (const auto& layer : this->layers)
+    {
+        layer->resetLearningVariables(1);
+    }
+}
+
 auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
 {
     return *this->optimizer == *neuralNetwork.optimizer && this->layers.size() == neuralNetwork.layers.size() &&
@@ -225,6 +233,4 @@ auto NeuralNetwork::operator==(const NeuralNetwork& neuralNetwork) const -> bool
         return true;
     }();
 }
-
-auto NeuralNetwork::operator!=(const NeuralNetwork& neuralNetwork) const -> bool { return !(*this == neuralNetwork); }
 }  // namespace snn::internal

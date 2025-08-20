@@ -57,6 +57,4 @@ auto FilterLayer::operator==(const BaseLayer& layer) const -> bool
         return false;
     }
 }
-
-auto FilterLayer::operator!=(const BaseLayer& layer) const -> bool { return !(*this == layer); }
 }  // namespace snn::internal

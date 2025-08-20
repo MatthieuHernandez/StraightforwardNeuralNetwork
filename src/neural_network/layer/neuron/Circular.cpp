@@ -10,22 +10,43 @@ template class Circular<float>;
 template class Circular<std::vector<float>>;
 
 template <>
-void Circular<float>::initialize(const size_t size, [[maybe_unused]] const size_t dataSize)
+void Circular<float>::initialize(const size_t queueSize, [[maybe_unused]] const size_t dataSize)
 {
     assert(dataSize == 1);
-    this->divider = static_cast<float>(size);
-    this->queue.clear();
-    this->queue.resize(size);
+    this->indexPush = 0;
+    this->indexGet = 0;
+    this->divider = static_cast<float>(queueSize);
+    this->queue.assign(queueSize, 0.0F);
 }
 template <>
-void Circular<std::vector<float>>::initialize(const size_t size, const size_t dataSize)
+void Circular<std::vector<float>>::initialize(const size_t queueSize, const size_t dataSize)
 {
-    this->divider = static_cast<float>(size);
-    this->queue.clear();
-    this->queue.resize(size);
+    this->indexPush = 0;
+    this->indexGet = 0;
+    this->divider = static_cast<float>(queueSize);
+    this->queue.resize(queueSize);
     for (auto& d : this->queue)
     {
         d = std::vector<float>(dataSize, 0.0F);
+    }
+}
+
+template <>
+void Circular<float>::reset()
+{
+    this->indexPush = 0;
+    this->indexGet = 0;
+    std::ranges::fill(this->queue, 0.0F);
+}
+
+template <>
+void Circular<std::vector<float>>::reset()
+{
+    this->indexPush = 0;
+    this->indexGet = 0;
+    for (auto& d : this->queue)
+    {
+        std::ranges::fill(d, 0.0F);
     }
 }
 

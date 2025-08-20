@@ -340,6 +340,7 @@ auto StraightforwardNeuralNetwork::loadFrom(const std::string& filePath) -> Stra
     std::ifstream ifs(filePath);
     boost::archive::text_iarchive archive(ifs);
     archive >> neuralNetwork;
+    neuralNetwork->resetLearningVariables();
     return *neuralNetwork;
 }
 
@@ -375,10 +376,5 @@ auto StraightforwardNeuralNetwork::operator==(const StraightforwardNeuralNetwork
            this->wantToStopTraining == neuralNetwork.wantToStopTraining && this->index == neuralNetwork.index &&
            this->isIdle == neuralNetwork.isIdle && this->epoch == neuralNetwork.epoch &&
            this->numberOfTrainingsBetweenTwoEvaluations == neuralNetwork.numberOfTrainingsBetweenTwoEvaluations;
-}
-
-auto StraightforwardNeuralNetwork::operator!=(const StraightforwardNeuralNetwork& neuralNetwork) const -> bool
-{
-    return !(*this == neuralNetwork);
 }
 }  // namespace snn

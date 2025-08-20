@@ -1,7 +1,4 @@
 #pragma once
-#include <boost/serialization/access.hpp>
-#include <boost/serialization/base_object.hpp>
-#include <cstdint>
 #include <vector>
 
 namespace snn::internal
@@ -11,10 +8,6 @@ class Circular final
 {
     private:
         friend class Circular<std::vector<float>>;
-        friend class boost::serialization::access;
-        template <class Archive>
-        void serialize(Archive& archive, uint32_t version);
-
         std::vector<T> queue;
         size_t indexPush = 0;
         size_t indexGet = 0;
@@ -29,6 +22,7 @@ class Circular final
         ~Circular() = default;
 
         void initialize(size_t queueSize, size_t dataSize = 1);  // Should be call after the ctor.
+        void reset();                                            // Do the same as initialize.
 
         [[nodiscard]] auto getBack() -> const T*;
         [[nodiscard]] auto getSum() const -> T;
@@ -39,21 +33,17 @@ class Circular final
         auto operator<=>(const Circular<T>& other) const = default;
 };
 
-template <typename T>
-template <class Archive>
-void Circular<T>::serialize(Archive& archive, [[maybe_unused]] const uint32_t version)
-{
-    archive & queue;
-    archive & indexGet;
-    archive & indexPush;
-    archive & divider;
-}
+template <>
+void Circular<float>::initialize(size_t queueSize, size_t dataSize);
 
 template <>
-void Circular<float>::initialize(size_t size, size_t dataSize);
+void Circular<std::vector<float>>::initialize(size_t queueSize, size_t dataSize);
 
 template <>
-void Circular<std::vector<float>>::initialize(size_t size, size_t dataSize);
+void Circular<float>::reset();
+
+template <>
+void Circular<std::vector<float>>::reset();
 
 template <>
 auto Circular<float>::getSum() const -> float;

@@ -7,11 +7,11 @@ namespace snn::internal
 {
 GatedRecurrentUnit::GatedRecurrentUnit(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer)
     : numberOfInputs(model.numberOfInputs),
-      resetGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+      resetGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::sigmoid},
                 optimizer),
-      updateGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::sigmoid},
+      updateGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::sigmoid},
                  optimizer),
-      outputGate({model.numberOfInputs, model.batchSize, model.numberOfWeights, model.bias, activation::tanh},
+      outputGate({model.numberOfInputs, model.numberOfUses, model.numberOfWeights, model.bias, activation::tanh},
                  optimizer)
 {
 }
@@ -96,8 +96,8 @@ auto GatedRecurrentUnit::getNumberOfInputs() const -> int { return this->numberO
 inline void GatedRecurrentUnit::reset()
 {
     this->previousOutput = 0;
-    this->recurrentError = 0;
     this->updateGateOutput = 0;
+    this->outputGateOutput = 0;
 }
 
 auto GatedRecurrentUnit::isValid() const -> errorType
@@ -129,13 +129,19 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
     this->outputGate.setOptimizer(newOptimizer);
 }
 
+void GatedRecurrentUnit::resetLearningVariables(int batchSize)
+{
+    this->reset();
+    this->resetGate.resetLearningVariables(batchSize);
+    this->updateGate.resetLearningVariables(batchSize);
+    this->outputGate.resetLearningVariables(batchSize);
+}
+
 auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> bool
 {
     return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&
-           this->recurrentError == neuron.recurrentError && this->updateGateOutput == neuron.updateGateOutput &&
-           this->outputGateOutput == neuron.outputGateOutput && this->resetGate == neuron.resetGate &&
-           this->updateGate == neuron.updateGate && this->outputGate == neuron.outputGate;
+           this->updateGateOutput == neuron.updateGateOutput && this->outputGateOutput == neuron.outputGateOutput &&
+           this->resetGate == neuron.resetGate && this->updateGate == neuron.updateGate &&
+           this->outputGate == neuron.outputGate;
 }
-
-auto GatedRecurrentUnit::operator!=(const GatedRecurrentUnit& neuron) const -> bool { return !(*this == neuron); }
 }  // namespace snn::internal

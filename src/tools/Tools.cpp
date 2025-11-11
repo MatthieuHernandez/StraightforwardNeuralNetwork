@@ -1,6 +1,7 @@
 #include "Tools.hpp"
 
 #include <algorithm>
+#include <filesystem>
 
 namespace snn::tools
 {
@@ -59,4 +60,20 @@ auto toString(std::chrono::milliseconds duration) -> std::string
 }
 
 auto toString(const errorType err) -> std::string { return std::to_string(static_cast<uint8_t>(err)); }
+
+auto getFilePaths(const std::string& directory, const std::string& extension) -> std::vector<std::string>
+{
+    auto dd = std::filesystem::path(directory).lexically_normal();
+    std::vector<std::string> files;
+
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(dd))
+    {
+        if (entry.is_regular_file() && entry.path().extension() == extension)
+        {
+            files.push_back(entry.path().string());
+        }
+    }
+    std::ranges::sort(files);
+    return files;
+}
 }  // namespace snn::tools

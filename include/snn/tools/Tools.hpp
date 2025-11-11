@@ -52,6 +52,8 @@ auto toString(std::chrono::milliseconds duration) -> std::string;
 
 auto toString(errorType err) -> std::string;
 
+auto getFilePaths(const std::string& directory, const std::string& extension) -> std::vector<std::string>;
+
 template <typename T>
 static auto getMinValue(std::vector<T> vector) -> T
 {

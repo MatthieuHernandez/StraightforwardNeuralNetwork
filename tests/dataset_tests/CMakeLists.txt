@@ -1,6 +1,8 @@
 file(GLOB SOURCES
     "*.hpp"
     "*.cpp"
+    "KWS/*.hpp"
+    "KWS/*.cpp"
     "audio-cats-and-dogs/*.hpp"
     "audio-cats-and-dogs/*.cpp"
     "CIFAR-10/*.hpp"

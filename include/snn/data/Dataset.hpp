@@ -50,10 +50,6 @@ class Dataset
                 std::vector<std::vector<float>>& trainingLabels, std::vector<std::vector<float>>& testingInputs,
                 std::vector<std::vector<float>>& testingLabels, nature typeOfTemporal = nature::nonTemporal,
                 int numberOfRecurrences = 0);
-        Dataset(const Dataset&) = delete;
-        Dataset(Dataset&&) = delete;
-        auto operator=(const Dataset&) -> Dataset& = delete;
-        auto operator=(Dataset&&) -> Dataset& = delete;
 
         Dataset(problem typeOfProblem, std::vector<std::vector<float>>& inputs, std::vector<std::vector<float>>& labels,
                 nature temporal = nature::nonTemporal, int numberOfRecurrences = 0);
@@ -73,8 +69,6 @@ class Dataset
         int numberOfLabels{};  // the number of class, equal to size of neural network outputs
 
         internal::Data data;
-
-        virtual ~Dataset() = default;
 
         void normalize(float min, float max);
 

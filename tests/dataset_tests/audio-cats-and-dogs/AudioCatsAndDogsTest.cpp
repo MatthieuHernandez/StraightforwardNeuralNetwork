@@ -5,7 +5,7 @@
 
 using namespace snn;
 
-const static int sizeOfOneData = 16000;
+const static int sizeOfOneData = 160;
 
 class AudioCatsAndDogsTest : public testing::Test
 {
@@ -35,12 +35,11 @@ TEST_F(AudioCatsAndDogsTest, loadData)
 TEST_F(AudioCatsAndDogsTest, DISABLED_trainBestNeuralNetwork)
 {
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(sizeOfOneData), MaxPooling(160), GruLayer(10), FullyConnected(2, snn::activation::sigmoid)},
-        StochasticGradientDescent(1e-5F, 0.99F));
-    auto optimizer = std::dynamic_pointer_cast<internal::StochasticGradientDescent>(neuralNetwork.optimizer);
+        {Input(sizeOfOneData), MaxPooling(32), GruLayer(30), FullyConnected(2, snn::activation::sigmoid)},
+        StochasticGradientDescent(1e-3F, 0.0F));
     neuralNetwork.autoSaveFilePath = "./resources/BestNeuralNetworkForAudioCatsAndDogs.snn";
     neuralNetwork.autoSaveWhenBetter = true;
-    neuralNetwork.train(*dataset, 1.0_acc, 1, 200);  // Achieved after 4600 epochs, ~0.1 second each.
+    neuralNetwork.train(*dataset, 1.0_acc, 1, 10);  // Achieved after 4600 epochs, ~0.1 second each.
 
     auto recall = neuralNetwork.getWeightedClusteringRate();
     auto accuracy = neuralNetwork.getGlobalClusteringRate();

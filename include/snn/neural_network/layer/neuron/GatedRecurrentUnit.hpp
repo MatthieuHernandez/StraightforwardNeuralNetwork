@@ -2,7 +2,6 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 
-#include "BaseNeuron.hpp"
 #include "RecurrentNeuron.hpp"
 
 namespace snn::internal
@@ -20,10 +19,9 @@ class GatedRecurrentUnit final
 
         int numberOfInputs{};
 
+        float lastOutput = 0;
         float previousOutput = 0;
         float recurrentError = 0;
-        float updateGateOutput = 0;
-        float outputGateOutput = 0;
 
         RecurrentNeuron resetGate;
         RecurrentNeuron updateGate;
@@ -60,10 +58,9 @@ void GatedRecurrentUnit::serialize(Archive& archive, [[maybe_unused]] const uint
 {
     archive& this->errors;
     archive& this->numberOfInputs;
+    archive& this->lastOutput;
     archive& this->previousOutput;
     archive& this->recurrentError;
-    archive& this->updateGateOutput;
-    archive& this->outputGateOutput;
     archive& this->resetGate;
     archive& this->updateGate;
     archive& this->outputGate;

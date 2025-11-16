@@ -37,12 +37,12 @@ TEST_F(DailyMinTemperaturesTest, loadData)
 
 TEST_F(DailyMinTemperaturesTest, trainNeuralNetwork)
 {
-    StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(20), FullyConnected(1, activation::identity)},
-                                               StochasticGradientDescent(0.004F, 0.2F));
+    StraightforwardNeuralNetwork neuralNetwork({Input(1), Recurrence(30), FullyConnected(1, activation::identity)},
+                                               StochasticGradientDescent(2e-4F, 0.85F));
 
     PRINT_NUMBER_OF_PARAMETERS(neuralNetwork.getNumberOfParameters());
 
-    neuralNetwork.train(*dataset, 4_s || 2.0_mae, 1, 5);
+    neuralNetwork.train(*dataset, 4_s || 1.98_mae, 1, 5);
     auto mae = neuralNetwork.getMeanAbsoluteError();
-    ASSERT_MAE(mae, 2.0);
+    ASSERT_MAE(mae, 1.98);
 }

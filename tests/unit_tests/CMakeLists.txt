@@ -1,7 +1,9 @@
 file(GLOB SOURCES
     "*.hpp"
     "*.cpp"
-    "../../examples/*.hpp"
+    "custom_dataset/*.hpp"
+    "custom_dataset/*.cpp"
+    "../../examples/*.cpp"
     "../../examples/*.cpp"
 )
 

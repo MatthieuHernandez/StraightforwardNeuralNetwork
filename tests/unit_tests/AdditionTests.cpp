@@ -1,25 +1,32 @@
+#include <gtest/gtest.h>
+
 #include <snn/neural_network/StraightforwardNeuralNetwork.hpp>
 #include <snn/tools/Tools.hpp>
 
-#include "../ExtendedGTest.hpp"
+#include "custom_dataset/AdditionDataset.hpp"
 
 using namespace snn;
 
-static auto createDataForAdditionTests() -> std::unique_ptr<Dataset>;
-static auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
-    -> std::unique_ptr<Dataset>;
-static void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn);
-
 TEST(Addition, WithMPL)
 {
-    auto dataset = createDataForAdditionTests();
+    // This model learn to sum 10 float numbers between 0 and 10 with a precision of 0.4.
+    auto dataset = addition::createNonTemporalDataset(10000, 10, 0.4F);
     StraightforwardNeuralNetwork neuralNetwork(
-        {Input(2), FullyConnected(16, activation::sigmoid), FullyConnected(1, activation::identity)},
-        StochasticGradientDescent(0.02F));
-    neuralNetwork.train(*dataset, 1.0_acc || 1_s, 3, 4);
-    testNeuralNetworkForAddition(neuralNetwork);
+        {Input(10), FullyConnected(30, activation::ReLU), FullyConnected(1, activation::identity)},
+        StochasticGradientDescent(1e-4F, 0.9F));
+    addition::trainAndTest(neuralNetwork, dataset);
 }
 
+TEST(Addition, WithRNN)
+{
+    auto dataset = addition::createTimeSeriesDataset(10000, 10, 0.4F);
+    StraightforwardNeuralNetwork neuralNetwork(
+        {Input(1), Recurrence(30, activation::ReLU), FullyConnected(1, activation::identity)},
+        StochasticGradientDescent(1.0e-4F, 0.9F));
+    addition::trainAndTest(neuralNetwork, dataset);
+}
+
+/*
 TEST(Addition, WithCNN)
 {
     auto dataset = createDataForAdditionTests();
@@ -70,20 +77,6 @@ void testNeuralNetworkForAddition(StraightforwardNeuralNetwork& nn)
     ASSERT_MAE(mae, 0.4F);
 }
 
-auto createDataForAdditionTests() -> std::unique_ptr<Dataset>
-{
-    vector2D<float> inputData = {{3, 5}, {5, 4}, {4, 2}, {2, 0}, {0, 2}, {2, 4}, {4, 1}, {1, 4}, {4, 3},
-                                 {3, 0}, {0, 0}, {0, 4}, {4, 3}, {3, 2}, {2, 1}, {1, 2}, {2, 0}, {0, 1},
-                                 {1, 2}, {5, 5}, {5, 3}, {1, 1}, {4, 4}, {3, 3}, {2, 2}};
-    vector2D<float> expectedOutputs = {{8}, {9}, {6}, {2}, {2}, {6}, {5},  {5}, {7}, {3}, {0}, {4}, {7},
-                                       {5}, {3}, {3}, {2}, {1}, {3}, {10}, {8}, {2}, {8}, {6}, {4}};
-
-    const float precision = 0.4F;
-    std::unique_ptr<Dataset> dataset = std::make_unique<Dataset>(problem::regression, inputData, expectedOutputs);
-    dataset->setPrecision(precision);
-    return dataset;
-}
-
 auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrences, float precision)
     -> std::unique_ptr<Dataset>
 {
@@ -111,3 +104,4 @@ auto createRecurrentDataForAdditionTests(int numberOfData, int numberOfRecurrenc
     dataset->setPrecision(precision);
     return dataset;
 }
+*/

@@ -22,26 +22,22 @@ auto GatedRecurrentUnit::output(const std::vector<float>& inputs, bool temporalR
     {
         this->reset();
     }
+    this->previousOutput = this->lastOutput;
     const float resetGateOutput = this->resetGate.output(inputs, temporalReset);
-    this->updateGateOutput = this->updateGate.output(inputs, temporalReset);
+    const float updateGateOutput = this->updateGate.output(inputs, temporalReset);
     this->outputGate.lastOutput *= resetGateOutput;
-    this->outputGateOutput = this->outputGate.output(inputs, temporalReset);
+    const float outputGateOutput = this->outputGate.output(inputs, temporalReset);
 
-    const float output =
-        (1 - this->updateGateOutput) * this->previousOutput + this->updateGateOutput * outputGateOutput;
-
-    this->resetGate.lastOutput = output;
-    this->updateGate.lastOutput = output;
-    this->outputGate.lastOutput = output;
-
+    const float output = ((1 - updateGateOutput) * this->previousOutput) + (updateGateOutput * outputGateOutput);
+    this->lastOutput = output;
     return output;
 }
 
 auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 {
     const float d3 = error;
-    const float d8 = d3 * this->updateGateOutput;
-    const float d7 = d3 * this->outputGateOutput;
+    const float d8 = d3 * this->updateGate.lastOutput;
+    const float d7 = d3 * this->outputGate.lastOutput;
     const float d9 = d7 + d8;
 
     this->errors = this->outputGate.backOutput(d8);
@@ -58,8 +54,8 @@ auto GatedRecurrentUnit::backOutput(float error) -> std::vector<float>&
 void GatedRecurrentUnit::back(float error)
 {
     const float d3 = error;
-    const float d8 = d3 * this->updateGateOutput;
-    const float d7 = d3 * this->outputGateOutput;
+    const float d8 = d3 * this->updateGate.lastOutput;
+    const float d7 = d3 * this->outputGate.lastOutput;
     const float d9 = d7 + d8;
 
     this->errors = this->outputGate.backOutput(d8);
@@ -97,7 +93,6 @@ inline void GatedRecurrentUnit::reset()
 {
     this->previousOutput = 0;
     this->recurrentError = 0;
-    this->updateGateOutput = 0;
 }
 
 auto GatedRecurrentUnit::isValid() const -> errorType
@@ -132,8 +127,7 @@ void GatedRecurrentUnit::setOptimizer(std::shared_ptr<NeuralNetworkOptimizer> ne
 auto GatedRecurrentUnit::operator==(const GatedRecurrentUnit& neuron) const -> bool
 {
     return this->numberOfInputs == neuron.numberOfInputs && this->previousOutput == neuron.previousOutput &&
-           this->recurrentError == neuron.recurrentError && this->updateGateOutput == neuron.updateGateOutput &&
-           this->outputGateOutput == neuron.outputGateOutput && this->resetGate == neuron.resetGate &&
+           this->recurrentError == neuron.recurrentError && this->resetGate == neuron.resetGate &&
            this->updateGate == neuron.updateGate && this->outputGate == neuron.outputGate;
 }
 

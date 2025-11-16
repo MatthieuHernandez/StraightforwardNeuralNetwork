@@ -59,10 +59,13 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron) const
     }
     // TODO(matth): previousOutput should be a Circular like lastInputs and do previousOutput.MultiplyAndAccumulate
     // (neuron.lastError). And also rename previousOutput as lastOutput.
-    deltaWeights[w] = this->learningRate * neuron.recurrentError * neuron.previousOutput + m * neuron.deltaWeights[w];
+
+    deltaWeights[w] = lr * neuron.recurrentError + m * neuron.deltaWeights[w];
+
     weights[w] += deltaWeights[w];
+
     neuron.recurrentError = error;  // + neuron.recurrentError *
-                                    // neuron.outputFunction->derivative(neuron.previousSum) * weights[w];
+    //  neuron.outputFunction->derivative(neuron.previousSum) * weights[w];
 
     w++;
     deltaWeights[w] = lr * error * neuron.bias + m * deltaWeights[w];

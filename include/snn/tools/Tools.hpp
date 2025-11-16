@@ -12,6 +12,9 @@
 namespace snn
 {
 template <typename T>
+using vector1D = std::vector<T>;
+
+template <typename T>
 using vector2D = std::vector<std::vector<T>>;
 
 template <typename T>
@@ -24,7 +27,7 @@ enum logLevel : uint8_t
     complete = 2
 };
 
-static constexpr logLevel verbose = none;
+static constexpr logLevel verbose = minimal;
 
 static constexpr bool useFixedSeed = false;
 }  // namespace snn
@@ -195,4 +198,23 @@ constexpr auto roughenY(const int index, const int maxX, const int maxY) -> int
 }
 
 constexpr auto roughenZ(const int index, const int maxX, const int maxY) -> int { return index % (maxX * maxY); }
+
+template <typename T>
+auto vector1DTo2D(const vector1D<T>& v, std::size_t ySize) -> vector2D<T>
+{
+    if (v.size() % ySize != 0)
+    {
+        throw std::runtime_error("Cannot reshape, invalid dimensions.");
+    }
+    std::size_t xSize = v.size() / ySize;
+    std::vector<std::vector<T>> result(xSize, std::vector<T>(ySize));
+    for (std::size_t x = 0; x < xSize; ++x)
+    {
+        for (std::size_t y = 0; y < ySize; ++y)
+        {
+            result[x][y] = v[(x * ySize) + y];
+        }
+    }
+    return result;
+}
 }  // namespace snn::tools

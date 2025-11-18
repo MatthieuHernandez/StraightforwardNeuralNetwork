@@ -36,14 +36,14 @@ class Neuron
 
     public:
         Neuron() = default;  // use restricted to Boost library only
-        Neuron(Neuron&&) = delete;
-        auto operator=(const Neuron&) -> Neuron& = delete;
-        auto operator=(Neuron&&) -> Neuron& = delete;
         Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        Neuron(const Neuron& neuron) = default;
-        ~Neuron() = default;
 
         std::shared_ptr<ActivationFunction> outputFunction;
+
+        [[nodiscard]] auto computeOutput() -> float;
+        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
+        void back(float error);
+        void train();
 
         [[nodiscard]] auto isValid() const -> errorType;
 

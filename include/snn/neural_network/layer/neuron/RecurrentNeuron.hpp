@@ -28,8 +28,6 @@ class RecurrentNeuron final : public Neuron
         ~RecurrentNeuron() = default;
 
         [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
-        [[nodiscard]] auto backOutput(float error) -> std::vector<float>&;
-        void back(float error);
         void train();
 
         [[nodiscard]] auto isValid() const -> errorType;

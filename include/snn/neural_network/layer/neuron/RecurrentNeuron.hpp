@@ -10,7 +10,6 @@ class RecurrentNeuron final : public Neuron
 {
     private:
         friend class GatedRecurrentUnit;
-        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
@@ -24,8 +23,6 @@ class RecurrentNeuron final : public Neuron
     public:
         RecurrentNeuron() = default;  // use restricted to Boost library only
         RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimizer);
-        RecurrentNeuron(const RecurrentNeuron& recurrentNeuron) = default;
-        ~RecurrentNeuron() = default;
 
         [[nodiscard]] auto output(const std::vector<float>& inputs, bool reset) -> float;
         void train();

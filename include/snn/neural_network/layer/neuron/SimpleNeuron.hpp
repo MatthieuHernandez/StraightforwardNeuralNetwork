@@ -9,7 +9,6 @@ namespace snn::internal
 class SimpleNeuron final : public Neuron
 {
     private:
-        friend class StochasticGradientDescent;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);

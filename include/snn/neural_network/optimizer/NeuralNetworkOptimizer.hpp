@@ -7,8 +7,7 @@
 
 namespace snn::internal
 {
-class SimpleNeuron;
-class RecurrentNeuron;
+class Neuron;
 
 class NeuralNetworkOptimizer
 {
@@ -21,11 +20,14 @@ class NeuralNetworkOptimizer
 
     public:
         NeuralNetworkOptimizer() = default;
+        NeuralNetworkOptimizer(const NeuralNetworkOptimizer&) = default;  // Can cause slicing.
+        NeuralNetworkOptimizer(NeuralNetworkOptimizer&&) = delete;
+        NeuralNetworkOptimizer& operator=(const NeuralNetworkOptimizer&) = delete;
+        NeuralNetworkOptimizer& operator=(NeuralNetworkOptimizer&&) = delete;
         virtual ~NeuralNetworkOptimizer() = default;
         [[nodiscard]] virtual auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> = 0;
 
-        virtual void updateWeights(SimpleNeuron& neuron) const = 0;
-        virtual void updateWeights(RecurrentNeuron& neuron) const = 0;
+        virtual void updateWeights(Neuron& neuron) const = 0;
 
         [[nodiscard]] virtual auto isValid() const -> errorType = 0;
 

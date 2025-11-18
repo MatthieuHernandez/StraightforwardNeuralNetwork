@@ -1,7 +1,6 @@
 #include "RecurrentNeuron.hpp"
 
 #include <boost/serialization/export.hpp>
-#include <cmath>
 
 namespace snn::internal
 {
@@ -20,7 +19,6 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
         this->reset();
     }
     this->lastInputs.pushBack(inputs);
-    this->previousOutput = this->lastOutput;
     float sum = 0.0F;  // to activate the SIMD optimization
     size_t w = 0;
     assert(this->weights.size() == inputs.size() + 2);
@@ -29,7 +27,8 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
     {
         sum += inputs[w] * this->weights[w];
     }
-    sum += this->previousOutput * this->weights[w] + this->bias * this->weights[w + 1];
+    sum += this->lastOutput * this->weights[w];
+    sum += this->bias * this->weights[w + 1];
     this->lastSum.pushBack(sum);
     const float output = outputFunction->function(sum);
     this->lastOutput = output;
@@ -41,7 +40,7 @@ auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalRese
 
 auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 {
-    const auto& sum = *this->lastSum.getBack();
+    const auto& sum = *this->lastSum.popFront();
     const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
     assert(this->weights.size() == this->errors.size() + 2);
@@ -55,7 +54,7 @@ auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
 
 void RecurrentNeuron::back(float error)
 {
-    const auto& sum = *this->lastSum.getBack();
+    const auto& sum = *this->lastSum.popFront();
     const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
 }
@@ -64,7 +63,6 @@ void RecurrentNeuron::train() { this->optimizer->updateWeights(*this); }
 
 inline void RecurrentNeuron::reset()
 {
-    this->previousOutput = 0;
     this->recurrentError = 0;
     this->previousSum = 0;
 }
@@ -81,8 +79,7 @@ auto RecurrentNeuron::isValid() const -> errorType
 auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
 {
     return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
-           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
-           this->previousSum == neuron.previousSum;
+           this->recurrentError == neuron.recurrentError && this->previousSum == neuron.previousSum;
 }
 
 auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }

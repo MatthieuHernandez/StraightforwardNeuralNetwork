@@ -23,22 +23,16 @@ auto StochasticGradientDescent::clone() const -> std::shared_ptr<NeuralNetworkOp
 // #endif
 void StochasticGradientDescent::updateWeights(SimpleNeuron& neuron) const
 {
-    auto w = 0;
     const auto& m = this->momentum;
-    const auto& numberOfInputs = neuron.numberOfInputs;
-    const auto error = neuron.lastError.getSum();
     const auto input_error = neuron.lastInputs.MultiplyAndAccumulate(neuron.lastError);
     auto& deltaWeights = neuron.deltaWeights;
     auto& weights = neuron.weights;
     const auto lr = this->learningRate;
-    // #pragma omp simd
-    for (w = 0; w < numberOfInputs; ++w)
+    for (size_t w = 0; w < neuron.weights.size(); ++w)
     {
-        deltaWeights[w] = lr * input_error[w] + m * deltaWeights[w];
+        deltaWeights[w] = (lr * input_error[w]) + (m * deltaWeights[w]);
         weights[w] += deltaWeights[w];
     }
-    deltaWeights[w] = lr * error * neuron.bias + m * deltaWeights[w];
-    weights[w] += deltaWeights[w];
 }
 
 void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron) const
@@ -59,7 +53,7 @@ void StochasticGradientDescent::updateWeights(RecurrentNeuron& neuron) const
     }
     // TODO(matth): previousOutput should be a Circular like lastInputs and do previousOutput.MultiplyAndAccumulate
     // (neuron.lastError). And also rename previousOutput as lastOutput.
-    deltaWeights[w] = this->learningRate * neuron.recurrentError * neuron.previousOutput + m * neuron.deltaWeights[w];
+    deltaWeights[w] = this->learningRate * neuron.recurrentError * neuron.lastOutput + m * neuron.deltaWeights[w];
     weights[w] += deltaWeights[w];
     neuron.recurrentError = error;  // + neuron.recurrentError *
                                     // neuron.outputFunction->derivative(neuron.previousSum) * weights[w];

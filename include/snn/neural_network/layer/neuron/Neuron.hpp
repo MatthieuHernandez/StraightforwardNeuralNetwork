@@ -4,6 +4,7 @@
 
 #include "../../optimizer/StochasticGradientDescent.hpp"
 #include "Circular.hpp"
+#include "InputCircular.hpp"
 #include "NeuronModel.hpp"
 #include "activation_function/ActivationFunction.hpp"
 
@@ -23,7 +24,7 @@ class Neuron
         float bias{};
 
         std::vector<float> deltaWeights;
-        Circular<std::vector<float>> lastInputs;
+        InputCircular lastInputs;
         std::vector<float> errors;
         Circular<float> lastError;
         Circular<float> lastSum;

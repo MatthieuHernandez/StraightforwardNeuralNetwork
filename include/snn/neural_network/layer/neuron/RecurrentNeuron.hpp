@@ -16,7 +16,6 @@ class RecurrentNeuron final : public Neuron
         void serialize(Archive& archive, uint32_t version);
 
         float lastOutput = 0;
-        float previousOutput = 0;
         float recurrentError = 0;
         float previousSum = 0;
 
@@ -45,7 +44,6 @@ void RecurrentNeuron::serialize(Archive& archive, [[maybe_unused]] const uint32_
     boost::serialization::void_cast_register<RecurrentNeuron, Neuron>();
     archive& boost::serialization::base_object<Neuron>(*this);
     archive& this->lastOutput;
-    archive& this->previousOutput;
     archive& this->recurrentError;
     archive& this->previousSum;
 }

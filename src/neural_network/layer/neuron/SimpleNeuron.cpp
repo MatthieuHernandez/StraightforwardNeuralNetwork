@@ -1,6 +1,8 @@
 #include "SimpleNeuron.hpp"
 
+#include <algorithm>
 #include <boost/serialization/export.hpp>
+#include <numeric>
 #include <utility>
 
 namespace snn::internal
@@ -12,37 +14,27 @@ SimpleNeuron::SimpleNeuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptim
 
 auto SimpleNeuron::output(const std::vector<float>& inputs) -> float
 {
-    this->lastInputs.pushBack(inputs);
-    float sum = 0.0F;  // to activate the SIMD optimization
-    assert(this->weights.size() == inputs.size() + 1);
-    size_t w = 0;
-#pragma omp simd
-    for (w = 0; w < inputs.size(); ++w)
-    {
-        sum += inputs[w] * this->weights[w];
-    }
-    sum += this->weights[w] * this->bias;
+    this->lastInputs.pushBack(inputs, this->bias);
+    const auto fullInput = *this->lastInputs.getBack();
+    assert(this->weights.size() == fullInput.size());
+    const auto sum = std::inner_product(weights.begin(), weights.end(), fullInput.begin(), 0.0F);
     this->lastSum.pushBack(sum);
     return this->outputFunction->function(sum);
 }
 
 auto SimpleNeuron::backOutput(float error) -> std::vector<float>&
 {
-    const auto& sum = *this->lastSum.getBack();
+    const auto& sum = *this->lastSum.popFront();
     const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
     assert(this->weights.size() == this->errors.size() + 1);
-#pragma omp simd  // seems to do nothing
-    for (size_t w = 0; w < this->errors.size(); ++w)
-    {
-        this->errors[w] = e * this->weights[w];
-    }
+    std::ranges::transform(errors, weights, errors.begin(), [e](float, float w) -> float { return e * w; });
     return this->errors;
 }
 
 void SimpleNeuron::back(float error)
 {
-    const auto& sum = *this->lastSum.getBack();
+    const auto& sum = *this->lastSum.popFront();
     const auto e = error * this->outputFunction->derivative(sum);
     this->lastError.pushBack(e);
 }

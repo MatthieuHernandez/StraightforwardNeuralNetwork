@@ -7,17 +7,17 @@
 namespace snn::internal
 {
 template <typename T>
-class Circular final
+class Circular
 {
-    private:
+    protected:
         friend class Circular<std::vector<float>>;
         friend class boost::serialization::access;
         template <class Archive>
         void serialize(Archive& archive, uint32_t version);
 
         std::vector<T> queue;
-        size_t indexPush = 0;
-        size_t indexGet = 0;
+        size_t indexPush = -1;
+        size_t indexGet = -1;
         float divider = 1.0F;
 
     public:
@@ -30,6 +30,7 @@ class Circular final
 
         void initialize(size_t queueSize, size_t dataSize = 1);  // Should be call after the ctor.
 
+        [[nodiscard]] auto popFront() -> const T*;
         [[nodiscard]] auto getBack() -> const T*;
         [[nodiscard]] auto getSum() const -> T;
         [[nodiscard]] auto getAverage() const -> T;

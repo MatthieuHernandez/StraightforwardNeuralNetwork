@@ -24,7 +24,6 @@ class InputCircular final : public Circular<std::vector<float>>
             }
             auto size = data.size();
             auto& inputs = this->queue[this->indexPush];
-            inputs.resize(size + sizeof...(extraValues));
             std::ranges::copy(data, inputs.begin());
             ((inputs[size++] = extraValues), ...);
         }

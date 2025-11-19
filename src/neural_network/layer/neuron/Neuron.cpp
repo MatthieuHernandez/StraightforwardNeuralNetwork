@@ -23,7 +23,7 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
         weight = randomInitializeWeight(model.numberOfWeights);
     }
     this->weights.back() = std::abs(this->weights.back());
-    this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
+    this->lastInputs.initialize(this->batchSize, model.numberOfWeights);
     this->lastError.initialize(this->batchSize);
     this->lastSum.initialize(this->batchSize);
     this->deltaWeights.resize(model.numberOfWeights, 0);

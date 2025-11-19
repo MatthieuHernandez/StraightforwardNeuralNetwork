@@ -16,8 +16,8 @@ class Circular
         void serialize(Archive& archive, uint32_t version);
 
         std::vector<T> queue;
-        size_t indexPush = -1;
-        size_t indexGet = -1;
+        size_t indexPush{};
+        size_t indexGet{};
         float divider = 1.0F;
 
     public:

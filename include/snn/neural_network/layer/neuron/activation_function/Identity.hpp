@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <limits>
 
 #include "ActivationFunction.hpp"
@@ -14,11 +15,11 @@ class Identity final : public ActivationFunction
 
     public:
         Identity()
-            : ActivationFunction(-std::numeric_limits<float>::infinity(), +std::numeric_limits<float>::infinity())
+            : ActivationFunction(-largeFloat, largeFloat)
         {
         }
 
-        [[nodiscard]] auto function(const float x) const -> float final { return x; }
+        [[nodiscard]] auto function(const float x) const -> float final { return std::clamp(x, this->min, this->max); }
 
         [[nodiscard]] auto derivative([[maybe_unused]] const float x) const -> float final { return 1.0F; }
 };

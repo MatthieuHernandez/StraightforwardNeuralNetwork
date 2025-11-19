@@ -15,7 +15,7 @@ class LeakyRectifiedLinearUnit final : public ActivationFunction
 
     public:
         LeakyRectifiedLinearUnit()
-            : ActivationFunction(0, std::numeric_limits<float>::infinity())
+            : ActivationFunction(0, largeFloat)
         {
         }
 
@@ -23,8 +23,8 @@ class LeakyRectifiedLinearUnit final : public ActivationFunction
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return std::clamp(negativeSlopeAngle * x, 0.0F, 1.0e4F);
-            ;
+            const float y = (x > 0.0F) ? x : negativeSlopeAngle * x;
+            return std::min(y, this->max);
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final

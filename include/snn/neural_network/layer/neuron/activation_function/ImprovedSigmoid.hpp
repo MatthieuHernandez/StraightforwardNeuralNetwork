@@ -1,6 +1,6 @@
 ﻿#pragma once
+#include <algorithm>
 #include <cmath>
-#include <limits>
 
 #include "ActivationFunction.hpp"
 
@@ -15,13 +15,14 @@ class ImprovedSigmoid final : public ActivationFunction
 
     public:
         ImprovedSigmoid()
-            : ActivationFunction(-std::numeric_limits<float>::infinity(), +std::numeric_limits<float>::infinity())
+            : ActivationFunction(-largeFloat, largeFloat)
         {
         }
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return (1.0F / (1.0F + expf(-x))) + (x * 0.05F);  // NOLINT(*magic-numbers)
+            const float y = (1.0F / (1.0F + expf(-x))) + (x * 0.05F);  // NOLINT(*magic-numbers)
+            return std::clamp(y, this->min, this->max);
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final

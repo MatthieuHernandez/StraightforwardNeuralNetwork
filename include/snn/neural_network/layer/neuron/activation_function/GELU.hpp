@@ -15,13 +15,14 @@ class GaussianErrorLinearUnit final : public ActivationFunction
 
     public:
         GaussianErrorLinearUnit()
-            : ActivationFunction(0, std::numeric_limits<float>::infinity())
+            : ActivationFunction(0, largeFloat)
         {
         }
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return x * (std::tanhf(1.702F * x / 2.0F) + 1.0F) / 2.0F;  // NOLINT(*magic-numbers)
+            const float y = x * (std::tanhf(1.702F * x / 2.0F) + 1.0F) / 2.0F;  // NOLINT(*magic-numbers)
+            return std::min(y, this->max);
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final

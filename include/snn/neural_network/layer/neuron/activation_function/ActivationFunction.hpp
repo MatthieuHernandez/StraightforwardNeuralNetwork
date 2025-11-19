@@ -29,6 +29,9 @@ class ActivationFunction
 
         static std::vector<std::shared_ptr<ActivationFunction>> activationFunctions;
 
+    protected:
+        static constexpr float largeFloat = 1e4;
+
     public:
         const float min;
         const float max;

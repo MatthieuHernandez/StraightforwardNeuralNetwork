@@ -15,11 +15,11 @@ class RectifiedLinearUnit final : public ActivationFunction
 
     public:
         RectifiedLinearUnit()
-            : ActivationFunction(0, std::numeric_limits<float>::infinity())
+            : ActivationFunction(0, largeFloat)
         {
         }
 
-        [[nodiscard]] auto function(const float x) const -> float final { return std::clamp(x, 0.0F, 1.0e4F); }
+        [[nodiscard]] auto function(const float x) const -> float final { return std::clamp(x, 0.0F, this->max); }
 
         [[nodiscard]] auto derivative(const float x) const -> float final { return (x > 0.0F) ? 1.0F : 0.0F; }
 };

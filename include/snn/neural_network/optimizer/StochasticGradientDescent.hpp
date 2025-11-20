@@ -19,13 +19,16 @@ class StochasticGradientDescent final : public NeuralNetworkOptimizer
         float momentum{};
 
         StochasticGradientDescent() = default;
+        StochasticGradientDescent(const StochasticGradientDescent&) = default;
+        StochasticGradientDescent(StochasticGradientDescent&&) = delete;
+        StochasticGradientDescent& operator=(const StochasticGradientDescent&) = delete;
+        StochasticGradientDescent& operator=(StochasticGradientDescent&&) = delete;
         StochasticGradientDescent(float learningRate, float momentum);
-        StochasticGradientDescent(const StochasticGradientDescent& sgd) = default;
         ~StochasticGradientDescent() final = default;
+
         [[nodiscard]] auto clone() const -> std::shared_ptr<NeuralNetworkOptimizer> final;
 
-        void updateWeights(SimpleNeuron& neuron) const final;
-        void updateWeights(RecurrentNeuron& neuron) const final;
+        void updateWeights(Neuron& neuron) const final;
 
         [[nodiscard]] auto isValid() const -> errorType final;
 

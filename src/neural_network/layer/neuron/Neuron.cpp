@@ -1,5 +1,6 @@
 #include "Neuron.hpp"
 
+#include <numeric>
 #include <stdexcept>
 
 #include "../../../tools/Tools.hpp"
@@ -22,7 +23,7 @@ Neuron::Neuron(NeuronModel model, std::shared_ptr<NeuralNetworkOptimizer> optimi
         weight = randomInitializeWeight(model.numberOfWeights);
     }
     this->weights.back() = std::abs(this->weights.back());
-    this->lastInputs.initialize(this->batchSize, model.numberOfInputs);
+    this->lastInputs.initialize(this->batchSize, model.numberOfWeights);
     this->lastError.initialize(this->batchSize);
     this->lastSum.initialize(this->batchSize);
     this->deltaWeights.resize(model.numberOfWeights, 0);
@@ -32,6 +33,32 @@ auto Neuron::randomInitializeWeight(int numberOfWeights) -> float
 {
     const float valueMax = 2.4F / sqrtf(static_cast<float>(numberOfWeights));
     return tools::randomBetween(-valueMax, valueMax);
+}
+
+auto Neuron::computeOutput() -> float
+{
+    const auto fullInput = *this->lastInputs.getBack();
+    assert(this->weights.size() == fullInput.size());
+    const auto sum = std::inner_product(weights.begin(), weights.end(), fullInput.begin(), 0.0F);
+    this->lastSum.pushBack(sum);
+    return this->outputFunction->function(sum);
+}
+
+auto Neuron::backOutput(float error) -> std::vector<float>&
+{
+    const auto& sum = *this->lastSum.popFront();
+    const auto e = error * this->outputFunction->derivative(sum);
+    this->lastError.pushBack(e);
+    assert(this->weights.size() == this->errors.size() + 1);
+    std::ranges::transform(errors, weights, errors.begin(), [e](float, float w) -> float { return e * w; });
+    return this->errors;
+}
+
+void Neuron::back(float error)
+{
+    const auto& sum = *this->lastSum.popFront();
+    const auto e = error * this->outputFunction->derivative(sum);
+    this->lastError.pushBack(e);
 }
 
 auto Neuron::isValid() const -> errorType

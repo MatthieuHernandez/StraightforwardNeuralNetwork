@@ -16,7 +16,10 @@ void Circular<float>::initialize(const size_t size, [[maybe_unused]] const size_
     this->divider = static_cast<float>(size);
     this->queue.clear();
     this->queue.resize(size);
+    this->indexPush = size;
+    this->indexGet = size;
 }
+
 template <>
 void Circular<std::vector<float>>::initialize(const size_t size, const size_t dataSize)
 {
@@ -27,6 +30,8 @@ void Circular<std::vector<float>>::initialize(const size_t size, const size_t da
     {
         d = std::vector<float>(dataSize, 0.0F);
     }
+    this->indexPush = size;
+    this->indexGet = size;
 }
 
 template <>

@@ -73,7 +73,7 @@ TEST(LocallyConnected, ComplexeLayerLocallyConnected2D)
     std::iota(std::begin(input), std::end(input), 1.0F);
     std::iota(std::begin(error), std::end(error), 1.0F);
 
-    const std::vector<float> expectedOutput{5920, 6163, 12535, 12757, 39239, 39701, 41325, 41673};
+    const std::vector<float> expectedOutput{5920, 6163, 10000, 10000, 10000, 10000, 10000, 10000};
     const std::vector<float> expectedBackOutput{
         5,   11,  17,   23,   29,   35,   263, 277, 291, 305,  41,   47,   53,   59,   65,   71,  347,
         361, 375, 389,  77,   83,   89,   95,  101, 107, 431,  445,  459,  473,  809,  831,  853, 875,

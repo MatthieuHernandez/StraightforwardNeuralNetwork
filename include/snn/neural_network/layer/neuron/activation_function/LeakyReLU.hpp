@@ -1,4 +1,5 @@
 #pragma once
+#include <algorithm>
 #include <limits>
 
 #include "ActivationFunction.hpp"
@@ -14,7 +15,7 @@ class LeakyRectifiedLinearUnit final : public ActivationFunction
 
     public:
         LeakyRectifiedLinearUnit()
-            : ActivationFunction(0, std::numeric_limits<float>::infinity())
+            : ActivationFunction(0, largeFloat)
         {
         }
 
@@ -22,7 +23,8 @@ class LeakyRectifiedLinearUnit final : public ActivationFunction
 
         [[nodiscard]] auto function(const float x) const -> float final
         {
-            return (x > 0.0F) ? x : negativeSlopeAngle * x;
+            const float y = (x > 0.0F) ? x : negativeSlopeAngle * x;
+            return std::min(y, this->max);
         }
 
         [[nodiscard]] auto derivative(const float x) const -> float final

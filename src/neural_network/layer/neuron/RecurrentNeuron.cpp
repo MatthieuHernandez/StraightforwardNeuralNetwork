@@ -1,7 +1,6 @@
 #include "RecurrentNeuron.hpp"
 
 #include <boost/serialization/export.hpp>
-#include <cmath>
 
 namespace snn::internal
 {
@@ -10,61 +9,21 @@ RecurrentNeuron::RecurrentNeuron(NeuronModel model, std::shared_ptr<NeuralNetwor
 {
 }
 
-#ifdef _MSC_VER
-#pragma warning(disable : 4701)
-#endif
 auto RecurrentNeuron::output(const std::vector<float>& inputs, bool temporalReset) -> float
 {
     if (temporalReset)
     {
         this->reset();
     }
-    this->lastInputs.pushBack(inputs);
-    this->previousOutput = this->lastOutput;
-    float sum = 0.0F;  // to activate the SIMD optimization
-    size_t w = 0;
-    assert(this->weights.size() == inputs.size() + 2);
-#pragma omp simd
-    for (w = 0; w < inputs.size(); ++w)
-    {
-        sum += inputs[w] * this->weights[w];
-    }
-    sum += this->previousOutput * this->weights[w] + this->bias * this->weights[w + 1];
-    this->lastSum.pushBack(sum);
-    const float output = outputFunction->function(sum);
-    this->lastOutput = output;
-    return output;
-#ifdef _MSC_VER
-#pragma warning(default : 4701)
-#endif
-}
-
-auto RecurrentNeuron::backOutput(float error) -> std::vector<float>&
-{
-    const auto& sum = *this->lastSum.getBack();
-    const auto e = error * this->outputFunction->derivative(sum);
-    this->lastError.pushBack(e);
-    assert(this->weights.size() == this->errors.size() + 2);
-#pragma omp simd  // seems to do nothing
-    for (int w = 0; w < this->numberOfInputs; ++w)
-    {
-        this->errors[w] = e * this->weights[w];
-    }
-    return this->errors;
-}
-
-void RecurrentNeuron::back(float error)
-{
-    const auto& sum = *this->lastSum.getBack();
-    const auto e = error * this->outputFunction->derivative(sum);
-    this->lastError.pushBack(e);
+    this->lastInputs.pushBack(inputs, this->lastOutput, this->bias);
+    this->lastOutput = Neuron::computeOutput();
+    return this->lastOutput;
 }
 
 void RecurrentNeuron::train() { this->optimizer->updateWeights(*this); }
 
 inline void RecurrentNeuron::reset()
 {
-    this->previousOutput = 0;
     this->recurrentError = 0;
     this->previousSum = 0;
 }
@@ -81,8 +40,7 @@ auto RecurrentNeuron::isValid() const -> errorType
 auto RecurrentNeuron::operator==(const RecurrentNeuron& neuron) const -> bool
 {
     return this->Neuron::operator==(neuron) && this->lastOutput == neuron.lastOutput &&
-           this->previousOutput == neuron.previousOutput && this->recurrentError == neuron.recurrentError &&
-           this->previousSum == neuron.previousSum;
+           this->recurrentError == neuron.recurrentError && this->previousSum == neuron.previousSum;
 }
 
 auto RecurrentNeuron::operator!=(const RecurrentNeuron& neuron) const -> bool { return !(*this == neuron); }

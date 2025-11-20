@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 jobs:
   build:
@@ -74,10 +75,17 @@ jobs:
         ./build/tests/dataset_tests/DatasetTests --gtest_filter=DailyMinTemperaturesTest*
     - name: MNIST
       run: |
-        ./build/tests/dataset_tests/DatasetTests --gtest_filter=MnistTest*
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=MnistTest*:-*evaluateBestNeuralNetwork
     - name: Fashion MNIST
       run: |
-        ./build/tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest*
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=FashionMnistTest*:-*evaluateBestNeuralNetwork
     - name: CIFAR-10
       run: |
-        ./build/tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test*
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=Cifar10Test*:-*evaluateBestNeuralNetwork
+    - name: AudioCatsAndDogs
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=AudioCatsAndDogs*:-*evaluateBestNeuralNetwork
+    - name: Evaluate best models
+      if: github.ref_name == 'master'
+      run: |
+        ./build/tests/dataset_tests/DatasetTests --gtest_filter=*evaluateBestNeuralNetwork
